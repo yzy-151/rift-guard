@@ -169,7 +169,7 @@ func refresh(sim, selected_id: int) -> void:
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
 		wave_label.text = "节点   %02d / 05" % sim.wave
-	count_label.text = "击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions]
+	count_label.text = ("击退 %02d  ·  在场 %02d  ·  强化 %02d" % [sim.kills, sim.enemies.size(), sim.rewards.history.size()]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
 	status_label.text = "按 1/2/3 或点击角色卡选择"
 	if selected_id >= 0 and selected_id < sim.heroes.size():
 		var hero: Dictionary = sim.heroes[selected_id]

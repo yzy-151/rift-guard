@@ -37,6 +37,12 @@ func run(game) -> void:
 	expect(game.sim.state == "reward", "crystal level pauses battle for reward")
 	expect(game.sim.rewards.offered.size() == 3, "reward screen contains exactly three cards")
 	await capture(game, "first-reward")
+	for dimensions in [Vector2i(1280, 720), Vector2i(1600, 900), Vector2i(1920, 1080)]:
+		if DisplayServer.get_name() != "headless":
+			DisplayServer.window_set_size(dimensions)
+			await game.get_tree().process_frame
+			await capture(game, "reward-%dx%d" % [dimensions.x, dimensions.y])
+		expect(game.hud.reward_panel.visible and game.sim.rewards.offered.size() == 3, "reward layout remains active at %dx%d" % [dimensions.x, dimensions.y])
 	var element_index := -1
 	for i in game.sim.rewards.offered.size():
 		if game.sim.rewards.offered[i].effect == "assign_traveler_element":
