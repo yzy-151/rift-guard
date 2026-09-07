@@ -77,9 +77,9 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				shot_flashes[event.hero_id] = 0.12
 				var hero: Dictionary = sim.heroes[event.hero_id]
 				effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25, -20), "life": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0})
-			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "reinforcement", "support_heal", "crossfire", "finale", "barrage":
+			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "boss_pulse", "enemy_shot", "reward_taken", "element_attuned":
 				effects.append({"kind": event.kind, "pos": event.pos, "life": 0.6, "value": event.get("value", 0)})
-				if event.kind in ["death_burst", "crossfire", "finale", "barrage"]:
+				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse"]:
 					shake_trauma = minf(1.0, shake_trauma + 0.42)
 				elif event.kind in ["hit", "slash", "chain"]:
 					shake_trauma = minf(0.42, shake_trauma + 0.045)
@@ -273,6 +273,12 @@ func _draw_hero(hero: Dictionary) -> void:
 	if selected_id == hero.id:
 		draw_arc(hero.pos + Vector2(0, 8), 29, 0, TAU, 36, color, 2)
 	var tint := Color("#67717a") if down else Color.WHITE
+	var traveler_element: String = str(hero.get("element", "")) if hero.get("character_id", "") == "traveler" else ""
+	if traveler_element != "":
+		var aura_color: Color = element_color(traveler_element)
+		draw_circle(hero.pos + Vector2(0, -20), 31.0 + sin(clock * 3.0) * 2.0, Color(aura_color, 0.11))
+		draw_arc(hero.pos + Vector2(0, 7), 31.0, clock * 0.7, clock * 0.7 + PI * 1.45, 30, Color(aura_color, 0.82), 2.2, true)
+		caption(hero.pos + Vector2(-9, -72), element_glyph(traveler_element), aura_color, 16)
 	if hero.flash > 0 and not reduced_effects:
 		tint = Color("#f8a6a1")
 	if is_furina:
@@ -318,18 +324,40 @@ func _draw_furina(hero: Dictionary, tint: Color, bob: float, down: bool) -> void
 		draw_arc(hero.pos + Vector2(29, -45), 10.0, -1.2, 1.2, 14, Color("#a9ecff"), 2.2, true)
 
 func _draw_enemy(enemy: Dictionary) -> void:
-	var bob: float = sin(clock * 8 + enemy.id) * 2
+	var flying: bool = bool(enemy.get("flying", false))
+	var bob: float = sin(clock * (8.0 if not flying else 5.0) + enemy.id) * (2.0 if not flying else 7.0) - (22.0 if flying else 0.0)
 	var tint := Color("#fff5e5") if enemy.flash > 0 and not reduced_effects else Color(enemy.color)
 	var side: float = enemy.size
 	draw_texture_rect_region(atlas, Rect2(enemy.pos + Vector2(-side / 2, -side + 12 + bob), Vector2(side, side)), Rect2(0, 144, 16, 16), tint)
 	var ratio: float = clampf(float(enemy.hp) / float(enemy.max_hp), 0, 1)
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44, 4)), Color("#302b32"))
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44 * ratio, 4)), RED)
+	if float(enemy.get("max_shield", 0.0)) > 0.0 and float(enemy.get("shield", 0.0)) > 0.0:
+		var shield_ratio: float = float(enemy.shield) / float(enemy.max_shield)
+		draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44, 3)), Color("#24394e"))
+		draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44 * shield_ratio, 3)), Color("#66c8ff"))
+		draw_arc(enemy.pos + Vector2(0, -20 + bob), side * 0.48, -2.7, 0.35, 22, Color(0.45, 0.82, 1.0, 0.72), 2.5, true)
 	if enemy.kind == "armored":
 		draw_arc(enemy.pos + Vector2(0, -18), 24, -PI * 0.4, PI * 0.4, 12, Color("#c5b2e3"), 3)
 		caption(enemy.pos + Vector2(-7, 27), "甲", Color("#c5b2e3"), 12)
 	elif enemy.kind == "runner":
 		caption(enemy.pos + Vector2(-7, 27), "疾", Color("#e6c77b"), 12)
+	elif enemy.kind == "flyer":
+		draw_polyline(PackedVector2Array([enemy.pos + Vector2(-31, -25 + bob), enemy.pos + Vector2(-12, -15 + bob), enemy.pos + Vector2(0, -31 + bob), enemy.pos + Vector2(12, -15 + bob), enemy.pos + Vector2(31, -25 + bob)]), Color("#9ef1ed"), 3.0, true)
+		caption(enemy.pos + Vector2(-7, 27), "空", Color("#80d7d7"), 12)
+	elif enemy.kind == "ranged":
+		draw_line(enemy.pos + Vector2(-27, -15), enemy.pos + Vector2(25, -15), Color("#ffab88"), 3.0, true)
+		caption(enemy.pos + Vector2(-7, 27), "远", Color("#e58b73"), 12)
+	elif enemy.kind == "buffer":
+		draw_arc(enemy.pos + Vector2(0, -20), 30.0 + sin(clock * 2.0) * 3.0, 0, TAU, 32, Color(0.85, 0.42, 0.95, 0.5), 2.0, true)
+		caption(enemy.pos + Vector2(-7, 27), "增", Color("#cf7fda"), 12)
+	elif enemy.kind == "shielded":
+		caption(enemy.pos + Vector2(-7, 27), "盾", Color("#76a6d8"), 12)
+	elif enemy.kind == "boss_01":
+		draw_arc(enemy.pos + Vector2(0, -25), 48.0 + sin(clock * 2.2) * 3.0, 0, TAU, 36, Color("#ff5f82"), 3.0, true)
+		caption(enemy.pos + Vector2(-18, 34), "统领", Color("#ff7895"), 14)
+	if enemy.haste_timer > 0:
+		draw_arc(enemy.pos + Vector2(0, -18), side * 0.54, 0, TAU, 28, Color(0.86, 0.45, 0.95, 0.42), 2.0, true)
 	if enemy.blocked_by >= 0:
 		draw_line(enemy.pos + Vector2(-24, 10), enemy.pos + Vector2(24, 10), Color("#c5bd96"), 2)
 	if enemy.slow_timer > 0:
@@ -351,10 +379,13 @@ func _draw_effect(effect: Dictionary) -> void:
 	elif effect.kind == "slash" and not reduced_effects:
 		var frame_index: int = clampi(floori(t * slash_frames.size()), 0, slash_frames.size() - 1)
 		draw_texture_rect(slash_frames[frame_index], Rect2(effect.pos + Vector2(-62, -82), Vector2(124, 124)), false, Color(1, 0.88, 0.78, fade))
-	elif effect.kind == "vaporize":
-		caption(effect.pos + Vector2(-23, -76 - t * 22), "蒸发 ×%.2f" % sim.vapor_multiplier, Color(0.9, 0.85, 0.67, fade), 16)
+	elif effect.kind in ["vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst"]:
+		var reaction_names := {"vaporize": "蒸发", "melt": "融化", "overloaded": "超载", "superconduct": "超导", "electro_charged": "感电", "frozen": "冻结", "swirl": "扩散", "crystallize": "结晶", "element_burst": "元素爆发"}
+		var reaction_colors := {"vaporize": Color("#ffd082"), "melt": Color("#ffb28e"), "overloaded": Color("#ff7188"), "superconduct": Color("#b9a2ff"), "electro_charged": Color("#82bcff"), "frozen": Color("#b9f2ff"), "swirl": Color("#7ef0c5"), "crystallize": Color("#f3ca62"), "element_burst": Color("#ffffff")}
+		var reaction_color: Color = Color(reaction_colors.get(effect.kind, Color.WHITE), fade)
+		caption(effect.pos + Vector2(-27, -76 - t * 22), str(reaction_names.get(effect.kind, effect.kind)), reaction_color, 17)
 		if not reduced_effects:
-			draw_arc(effect.pos + Vector2(0, -17), 14 + t * 32, 0, TAU, 32, Color(0.7, 0.85, 0.95, fade * 0.6), 2)
+			draw_arc(effect.pos + Vector2(0, -17), 14 + t * 38, 0, TAU, 32, Color(reaction_color, fade * 0.7), 2.5)
 	elif effect.kind in ["heal", "hurt"]:
 		var healing: bool = effect.kind == "heal"
 		var color := Color(0.5, 0.95, 0.73, fade) if healing else Color(1, 0.5, 0.5, fade)
@@ -385,8 +416,31 @@ func _draw_effect(effect: Dictionary) -> void:
 			for i in 5:
 				var direction := Vector2.from_angle(i * TAU / 5)
 				draw_line(effect.pos + direction * (5 + t * 18), effect.pos + direction * (10 + t * 22), Color(1, 0.75, 0.4, fade), 2)
+	elif effect.kind == "shield_hit":
+		caption(effect.pos + Vector2(-18, -65 - t * 24), "护盾 -%d" % int(effect.value), Color(0.48, 0.82, 1.0, fade), 14)
+		draw_arc(effect.pos + Vector2(0, -18), 20 + t * 42, -2.7, 0.35, 24, Color(0.48, 0.82, 1.0, fade), 3.0, true)
+	elif effect.kind == "boss_pulse":
+		for ring in 4:
+			draw_arc(effect.pos, 24.0 + ring * 22.0 + t * 95.0, 0, TAU, 48, Color(1.0, 0.20, 0.38, fade * (0.8 - ring * 0.14)), 4.0, true)
+		caption(effect.pos + Vector2(-48, -105 - t * 35), "裂隙震荡", Color(1.0, 0.55, 0.66, fade), 20)
+	elif effect.kind == "enemy_shot":
+		draw_line(effect.pos + Vector2(0, -22), effect.pos + Vector2(-120, -8), Color(1.0, 0.42, 0.30, fade), 3.0, true)
+		draw_circle(effect.pos + Vector2(-120.0 * t, -20.0 + t * 12.0), 4.0, Color(1.0, 0.8, 0.55, fade))
+	elif effect.kind == "reward_taken":
+		caption(effect.pos + Vector2(-70, -92 - t * 28), "强化装载 · " + str(effect.value), Color(1.0, 0.86, 0.54, fade), 18)
+	elif effect.kind == "element_attuned":
+		var attuned_color: Color = Color(element_color(str(effect.value)), fade)
+		for ring in 3:
+			draw_arc(effect.pos + Vector2(0, -20), 22.0 + ring * 13.0 + t * 38.0, 0, TAU, 40, attuned_color, 3.0, true)
+		caption(effect.pos + Vector2(-28, -105 - t * 20), element_glyph(str(effect.value)) + "元素共鸣", attuned_color, 19)
 	elif effect.kind in ["death", "down"]:
 		if not reduced_effects:
 			draw_arc(effect.pos, 10 + t * 27, 0, TAU, 24, Color(0.8, 0.4, 0.42, fade * 0.6), 1.5)
 	elif effect.kind == "move":
 		draw_arc(effect.pos, 7 + t * 19, 0, TAU, 24, Color(0.55, 0.86, 0.78, fade), 1.5)
+
+func element_color(element: String) -> Color:
+	return {"anemo": Color("#63e6c0"), "electro": Color("#bf83ff"), "pyro": Color("#ff745c"), "hydro": Color("#5ab8ff"), "geo": Color("#e8b94d"), "cryo": Color("#9de7f2")}.get(element, Color("#f0dfb8"))
+
+func element_glyph(element: String) -> String:
+	return {"anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, "")

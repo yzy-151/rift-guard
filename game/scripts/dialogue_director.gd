@@ -12,7 +12,7 @@ func _init(config = null) -> void:
 	if parsed is Dictionary:
 		stories = parsed
 	if config != null and config.loaded:
-		stories = config.stories.duplicate(true)
+		stories.merge(config.stories, true)
 
 func begin(scene_key: String) -> bool:
 	if active or seen.has(scene_key) or not stories.has(scene_key):

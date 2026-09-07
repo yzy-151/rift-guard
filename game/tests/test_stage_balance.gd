@@ -13,9 +13,23 @@ const PRIORITY := {
 }
 
 func _initialize() -> void:
-	var sim = Sim.new(909, true)
+	var first: Dictionary = simulate("stage_01", ["traveler"], 909)
+	assert(first.state == "won", "fixed strong build must clear stage one")
+	assert(first.base_hp > 0 and first.choices >= 12)
+	var second: Dictionary = simulate("stage_02", ["traveler", "hero_02"], 910)
+	assert(second.state == "won", "fixed strong build must clear stage two")
+	assert(second.base_hp > 0 and second.choices >= 12)
+	print("STAGE BALANCE PASSED: stage1 base=%d kills=%d; stage2 base=%d kills=%d" % [first.base_hp, first.kills, second.base_hp, second.kills])
+	quit()
+
+func simulate(stage_id: String, squad: Array[String], seed_value: int) -> Dictionary:
+	var sim = Sim.new(seed_value, true)
+	if stage_id != "stage_01":
+		sim.reset_stage(stage_id, squad, seed_value)
 	sim.start()
 	var choices := 0
+	var leak_damage := 0
+	var leak_count := 0
 	for frame in 15000:
 		if sim.state == "reward":
 			var best := 0
@@ -29,12 +43,11 @@ func _initialize() -> void:
 			choices += 1
 		elif sim.state == "running":
 			sim.tick(1.0 / 30.0)
-			sim.drain_events()
+			for event: Dictionary in sim.drain_events():
+				if event.kind == "leak":
+					leak_damage += int(event.value)
+					leak_count += 1
 		elif sim.state in ["won", "lost"]:
 			break
-	print("STAGE BALANCE RESULT: state=%s base=%d choices=%d kills=%d elapsed=%.2f" % [sim.state, sim.base_hp, choices, sim.kills, sim.elapsed])
-	assert(sim.state == "won", "fixed strong build must clear stage one")
-	assert(sim.base_hp > 0)
-	assert(choices >= 12)
-	print("STAGE BALANCE PASSED: base=%d choices=%d kills=%d" % [sim.base_hp, choices, sim.kills])
-	quit()
+	print("STAGE BALANCE RESULT: stage=%s state=%s base=%d choices=%d kills=%d elapsed=%.2f leaks=%d leak_damage=%d" % [stage_id, sim.state, sim.base_hp, choices, sim.kills, sim.elapsed, leak_count, leak_damage])
+	return {"state": sim.state, "base_hp": sim.base_hp, "choices": choices, "kills": sim.kills}

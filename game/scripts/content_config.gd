@@ -1,7 +1,7 @@
 extends RefCounted
 const Reader = preload("res://scripts/xlsx_reader.gd")
 const DISPLAY_FONT = preload("res://assets/fonts/TiejiliSC-Regular.ttf")
-const UI_IDS = ["dialog_background", "dialog_frame", "dialog_name", "dialog_body", "dialog_continue", "dialog_auto", "dialog_history", "dialog_skip", "game_title", "game_subtitle", "pause_button", "restart_button", "hero_card_1", "hero_card_2", "hero_card_3", "menu_frame", "reward_title", "reward_card_1", "reward_card_2", "reward_card_3"]
+const UI_IDS = ["dialog_background", "dialog_frame", "dialog_name", "dialog_body", "dialog_continue", "dialog_auto", "dialog_history", "dialog_skip", "game_title", "game_subtitle", "pause_button", "restart_button", "hero_card_1", "hero_card_2", "hero_card_3", "menu_background", "menu_frame", "reward_title", "reward_card_1", "reward_card_2", "reward_card_3"]
 var base_dir: String = ""
 var path: String = ""
 var errors: Array[String] = []

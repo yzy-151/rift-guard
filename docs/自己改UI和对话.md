@@ -36,7 +36,7 @@ master，透明PNG最合适，白色或棋盘格如果已经画进RGB图片，�
 master，素材名不能重复，缺图、错误路径、非法数值或表头被改动时整份Excel不应用，游戏显示首个错误并在用户数据目录config-errors.txt记录明细。
 
 ## UI 表
-master，UI表采用稳定控件ID，包括dialog_background、dialog_frame、dialog_name、dialog_body、dialog_continue、dialog_auto、dialog_history、dialog_skip、game_title、game_subtitle、pause_button、restart_button、hero_card_1至3、menu_frame、reward_title、reward_card_1至3。
+master，UI表采用稳定控件ID，包括dialog_background、dialog_frame、dialog_name、dialog_body、dialog_continue、dialog_auto、dialog_history、dialog_skip、game_title、game_subtitle、pause_button、restart_button、hero_card_1至3、menu_background、menu_frame、reward_title、reward_card_1至3。
 master，X/Y改位置，宽/高改控件尺寸，素材列引用图片资源名，文字列改静态标题或按钮文案，字号为0时沿用默认。
 master，姓名和对白由对话表驱动，基地生命、暂停状态等动态文字由程序生成，不应在UI表内当固定文案填写。
 master，角色卡和奖励卡的子文字跟随卡片移动，宽高变化不会自动重排所有内部文字，改小后需要预览检查。
@@ -44,6 +44,7 @@ master，menu_frame的X/Y相对菜单容器，其余所列控件使用各自父�
 master，ninepatch适合有花纹边框的对话框，只拉伸中间区域，边距左/上/右/下以原图片像素填写；stretch整图拉伸，可能让装饰变形。
 master，keep会等比缩放素材并居中，stretch会填满控件，ninepatch会按四项边距保护装饰边框；对话框优先使用ninepatch。
 master，替换对话背景时先把图片放入content/images，在图片资源表登记资源名，再把资源名填到UI表dialog_background的素材列；默认位置为X=0、Y=82、宽=1280、高=356、模式=stretch。
+master，替换开始、暂停和结算背景时使用menu_background，默认位置为X=0、Y=0、宽=1280、高=720、模式=stretch。
 master，当前UI由脚本动态生成，在Godot场景编辑器中不能像手工摆好的Control节点那样直接拖拽，日常修改优先使用完成后的配置表。
 master，如果暂时直接改代码，对话布局在game/scripts/dialogue_panel.gd，战斗HUD在battle_hud.gd，三选一在reward_panel.gd，修改后用Godot运行预览，再重新导出EXE。
 

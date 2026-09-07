@@ -6,6 +6,8 @@ const QA = preload("res://scripts/qa_suite.gd")
 const Stage = preload("res://scripts/stage_projection.gd")
 const Story = preload("res://scripts/dialogue_director.gd")
 const Content = preload("res://scripts/content_config.gd")
+const CompendiumState = preload("res://scripts/compendium_state.gd")
+const CompendiumPanel = preload("res://scripts/compendium_panel.gd")
 var content = Content.new()
 var story = Story.new(content)
 var saved_story
@@ -23,6 +25,9 @@ var muted: bool = false
 var sound: AudioStreamPlayer
 var sound_timer: float = 0.0
 var test_mode: bool = false
+var compendium = CompendiumState.new()
+var compendium_panel
+var stage_result_recorded := false
 
 func _ready() -> void:
 	battle = View.new()
@@ -45,6 +50,7 @@ func _ready() -> void:
 	hud.reduce_action.connect(func(enabled: bool):
 		battle.reduced_effects = enabled
 		fx.reduced = enabled)
+	hud.compendium_action.connect(toggle_compendium)
 	sound = AudioStreamPlayer.new()
 	sound.stream = preload("res://assets/hit.ogg")
 	sound.volume_db = -18
@@ -57,6 +63,9 @@ func _ready() -> void:
 	picker = preload("res://scripts/content_preview.gd").new()
 	add_child(picker)
 	picker.build(self)
+	compendium_panel = CompendiumPanel.new()
+	add_child(compendium_panel)
+	compendium_panel.build(hud, sim.database, compendium)
 	dialogue.finished.connect(end_dialogue)
 	refresh()
 	if not content.errors.is_empty():
@@ -72,6 +81,10 @@ func _ready() -> void:
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_phase1_test")
+	elif "--v4-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v4_test")
 	elif "--m9-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
@@ -93,11 +106,16 @@ func _ready() -> void:
 		call_deferred("run_smoke_test")
 
 func _physics_process(dt: float) -> void:
-	if story.active or picker.visible or effect_preview > 0:
+	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open():
 		return
 	sim.tick(dt)
 	check_story()
 	process_events()
+	compendium.observe(sim)
+	if sim.state == "won" and not stage_result_recorded:
+		var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {})
+		compendium.clear_stage(sim.current_stage_id, stage.get("unlocks", []))
+		stage_result_recorded = true
 	if not story.active:
 		hud.refresh(sim, selected_id)
 
@@ -109,7 +127,7 @@ func _process(dt: float) -> void:
 			hud.signature = ""
 			refresh()
 	sound_timer = maxf(0.0, sound_timer - dt)
-	if not story.active and not picker.visible and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
+	if not story.active and not picker.visible and not compendium_panel.is_open() and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
 		battle.advance(dt)
 		fx.advance(dt)
 
@@ -171,6 +189,7 @@ func restart() -> void:
 	battle.shot_flashes.clear()
 	battle.base_flash = 0.0
 	sound.stop()
+	stage_result_recorded = false
 	refresh()
 
 func toggle_pause() -> void:
@@ -192,6 +211,15 @@ func select_hero(id: int) -> void:
 	refresh()
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F2 and not story.active:
+		toggle_compendium()
+		get_viewport().set_input_as_handled()
+		return
+	if compendium_panel.is_open():
+		if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+			compendium_panel.close()
+			get_viewport().set_input_as_handled()
+		return
 	if picker.visible:
 		if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 			picker.hide()
@@ -284,19 +312,54 @@ func end_dialogue() -> void:
 	story_resume = ""
 	if action == "start":
 		sim.start()
+	elif action == "advance_stage":
+		advance_stage()
 	refresh()
 
 func check_story() -> void:
 	if story.active:
 		return
 	if sim.v2_mode:
-		if sim.state in ["won", "lost"]:
-			begin_dialogue("mode1_" + sim.state)
+		if sim.state == "won":
+			if has_next_stage():
+				begin_dialogue("mode1_won", "advance_stage")
+			else:
+				begin_dialogue("mode1_final_won")
+		elif sim.state == "lost":
+			begin_dialogue("mode1_lost")
 		return
 	if sim.state == "reward" and not sim.v2_mode:
 		begin_dialogue("node%d" % sim.wave)
 	elif sim.state in ["won", "lost"]:
 		begin_dialogue(sim.state)
+
+func has_next_stage() -> bool:
+	var mode: Dictionary = sim.database.modes.get(sim.run_state.mode_id, {})
+	var ids: Array = mode.get("stage_ids", [])
+	var index := ids.find(sim.current_stage_id)
+	return index >= 0 and index + 1 < ids.size()
+
+func advance_stage() -> void:
+	var mode: Dictionary = sim.database.modes.get(sim.run_state.mode_id, {})
+	var ids: Array = mode.get("stage_ids", [])
+	var index := ids.find(sim.current_stage_id)
+	if index < 0 or index + 1 >= ids.size():
+		return
+	var completed: Dictionary = sim.database.stages.get(sim.current_stage_id, {})
+	var squad: Array[String] = sim.run_state.squad.duplicate()
+	for id: Variant in completed.get("unlocks", []):
+		if squad.size() < 3 and str(id) not in squad:
+			squad.append(str(id))
+	story.reset()
+	sim.reset_stage(str(ids[index + 1]), squad, sim.run_seed + 1)
+	selected_id = 0
+	stage_result_recorded = false
+	fx.active.clear()
+	battle.effects.clear()
+	battle.shot_flashes.clear()
+	hud.get_child(0).show()
+	if not begin_dialogue("mode1_stage2_opening", "start"):
+		sim.start()
 
 func run_m4_test() -> void:
 	var suite = preload("res://scripts/qa_m4.gd").new()
@@ -334,4 +397,18 @@ func run_config_window_test() -> void:
 
 func run_phase1_test() -> void:
 	var suite = preload("res://scripts/qa_phase1.gd").new()
+	await suite.run(self)
+
+func toggle_compendium() -> void:
+	if story.active:
+		return
+	if compendium_panel.is_open():
+		compendium_panel.close()
+	else:
+		compendium.observe(sim)
+		compendium_panel.open()
+		sound.stop()
+
+func run_v4_test() -> void:
+	var suite = preload("res://scripts/qa_v4.gd").new()
 	await suite.run(self)

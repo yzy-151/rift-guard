@@ -6,6 +6,7 @@ signal restart_action
 signal select_action(hero_id: int)
 signal mute_action(enabled: bool)
 signal reduce_action(enabled: bool)
+signal compendium_action
 
 const WHITE = Color("#f3e9df")
 const MUTED = Color("#ae969f")
@@ -30,6 +31,10 @@ var signature: String = ""
 var reduced: bool = false
 var muted: bool = false
 var background_buttons: Array[Button] = []
+var support_panel: Panel
+var support_labels: Array[Label] = []
+var buff_panel: Panel
+var buff_labels: Array[Label] = []
 
 func _ready() -> void:
 	var root := Control.new()
@@ -47,6 +52,8 @@ func _ready() -> void:
 	bind(label(root, Vector2(207, 40), Vector2(500, 24), "城门之下 · 守至黎明", 14, MUTED), "game_subtitle")
 	progression_label = label(root, Vector2(620, 47), Vector2(625, 22), "", 12, TEAL)
 	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	var archive_btn := button(root, Rect2(740, 8, 156, 36), "图鉴  [F2]", false)
+	archive_btn.pressed.connect(func(): compendium_action.emit())
 	pause_button = button(root, Rect2(911, 8, 156, 36), "暂停  [空格]", false)
 	bind(pause_button, "pause_button")
 	pause_button.pressed.connect(func(): pause_action.emit())
@@ -59,6 +66,16 @@ func _ready() -> void:
 	count_label = label(root, Vector2(535, 75), Vector2(280, 27), "", 14, MUTED)
 	status_label = label(root, Vector2(879, 75), Vector2(340, 27), "", 14, TEAL)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	support_panel = panel(root, Rect2(886, 106, 362, 106), Color(0.07, 0.045, 0.075, 0.92), Color("#864858"))
+	label(support_panel, Vector2(12, 6), Vector2(335, 20), "场 外 支 援  /  SUPPORT", 11, TEAL)
+	for i in 4:
+		support_labels.append(label(support_panel, Vector2(12, 28 + i * 18), Vector2(335, 18), "", 12, WHITE))
+	support_panel.hide()
+	buff_panel = panel(root, Rect2(32, 106, 430, 124), Color(0.07, 0.045, 0.075, 0.92), Color("#65506f"))
+	label(buff_panel, Vector2(12, 6), Vector2(405, 20), "本 局 强 化  /  BUILD", 11, Color("#d6b4f0"))
+	for i in 5:
+		buff_labels.append(label(buff_panel, Vector2(12, 28 + i * 18), Vector2(405, 18), "", 12, WHITE))
+	buff_panel.hide()
 
 	for i in 3:
 		var hero_btn := button(root, Rect2(32 + i * 284, 616, 272, 88), "", true)
@@ -87,12 +104,21 @@ func _ready() -> void:
 		reduced = not reduced
 		reduce_btn.text = "反馈：减弱" if reduced else "反馈：标准"
 		reduce_action.emit(reduced))
-	background_buttons = [pause_button, reset_btn, mute_btn, reduce_btn]
+	background_buttons = [archive_btn, pause_button, reset_btn, mute_btn, reduce_btn]
 	background_buttons.append_array(hero_buttons)
 	overlay = ColorRect.new()
 	overlay.color = Color(0.025, 0.035, 0.05, 0.76)
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.add_child(overlay)
+	var menu_background := TextureRect.new()
+	menu_background.position = Vector2.ZERO
+	menu_background.size = Vector2(1280, 720)
+	menu_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	menu_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	menu_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	menu_background.hide()
+	overlay.add_child(menu_background)
+	bind(menu_background, "menu_background")
 	var card := panel(overlay, Rect2(330, 170, 620, 375), Color("#241a26"), Color("#a34c60"))
 	bind(ornament(card, Rect2(-20, -25, 660, 420)), "menu_frame")
 	panel(card, Rect2(32, 52, 556, 203), Color("#241a26"), Color("#241a26"))
@@ -151,7 +177,7 @@ func button(parent: Node, rect: Rect2, text: String, accent: bool) -> Button:
 	return item
 
 func refresh(sim, selected_id: int) -> void:
-	var next_signature: String = str([sim.state, sim.base_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history])
+	var next_signature: String = str([sim.state, sim.base_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports])
 	if sim.v2_mode:
 		next_signature += str([sim.run_state.traveler_element, sim.run_state.pending_level_ups, floori(sim.stage_runtime.remaining_seconds())])
 	for hero in sim.heroes:
@@ -165,12 +191,14 @@ func refresh(sim, selected_id: int) -> void:
 		var xp_text: String = "MAX" if next_xp < 0 else "%d / %d" % [sim.run_state.crystal_xp, next_xp]
 		var seconds: int = ceili(sim.stage_runtime.remaining_seconds())
 		progression_label.text = "水晶 Lv.%d  ·  EXP %s  ·  旅行者：%s元素  ·  %02d:%02d" % [sim.run_state.crystal_level, xp_text, sim.element_name(sim.run_state.traveler_element), seconds / 60, seconds % 60]
-		wave_label.text = "波次   %02d / 06" % sim.wave
+		wave_label.text = "波次   %02d / %02d" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size()]
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
 		wave_label.text = "节点   %02d / 05" % sim.wave
 	count_label.text = ("击退 %02d  ·  在场 %02d  ·  强化 %02d" % [sim.kills, sim.enemies.size(), sim.rewards.history.size()]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
 	status_label.text = "按 1/2/3 或点击角色卡选择"
+	refresh_supports(sim)
+	refresh_buffs(sim)
 	if selected_id >= 0 and selected_id < sim.heroes.size():
 		var hero: Dictionary = sim.heroes[selected_id]
 		status_label.text = hero.name + (" · 已倒地，波末恢复" if hero.hp <= 0 else (" · 移动中，暂停攻击" if hero.moving else " · 自动攻击 / 右键走位"))
@@ -183,10 +211,12 @@ func refresh(sim, selected_id: int) -> void:
 	for i in sim.heroes.size():
 		var hero: Dictionary = sim.heroes[i]
 		hero_name_labels[i].text = "%d  %s / %s" % [i + 1, hero.name, hero.role]
-		hero_name_labels[i].add_theme_color_override("font_color", Color(hero.color))
+		var hero_color: Color = element_color(str(hero.get("element", ""))) if hero.get("character_id", "") == "traveler" and hero.get("element", "") != "" else Color(hero.color)
+		hero_name_labels[i].add_theme_color_override("font_color", hero_color)
 		hero_buttons[i].modulate = Color.WHITE if i == selected_id else Color("#91a0a8")
 		var status: String = "倒地 · 本波无法行动" if hero.hp <= 0 else ("移动中" if hero.moving else ("阻挡 %d/%d" % [hero.blocked, hero.block] if i == 0 else "就绪"))
-		hero_details[i].text = "攻击 %.1f · 攻速 %.1f · 射程 %d" % [hero.damage, hero.rate, hero.range]
+		var mechanics := "弹道%d · 穿透%d · 连锁%d" % [int(hero.get("projectile_count", 1)), int(hero.get("pierce", 0)), int(hero.get("chain_count", 0))]
+		hero_details[i].text = "%s元素 · ATK %.0f · %.1f/s · %s" % [sim.element_name(str(hero.get("element", "none"))), hero.damage, hero.rate, mechanics]
 		hero_statuses[i].text = "HP %d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
 	var was_visible: bool = overlay.visible
 	overlay.visible = sim.state in ["ready", "paused", "won", "lost"]
@@ -222,6 +252,48 @@ func refresh(sim, selected_id: int) -> void:
 				modal_action.text = "重新布防   →   [Enter]"
 		if not was_visible or get_viewport().gui_get_focus_owner() != modal_action:
 			modal_action.grab_focus()
+
+func refresh_supports(sim) -> void:
+	support_panel.visible = sim.v2_mode and not sim.supports.is_empty() and sim.state in ["running", "between", "paused"]
+	for item in support_labels:
+		item.text = ""
+	if not support_panel.visible:
+		return
+	var names := {
+		"support_barrage": ["赤月炮击", Color("#ff776d")],
+		"support_crossfire": ["交叉火力", Color("#ffc06e")],
+		"support_heal": ["潮汐急救", Color("#71e5d3")],
+		"support_finale": ["终幕齐射", Color("#d89cff")],
+	}
+	var row := 0
+	for key: String in sim.supports:
+		if row >= support_labels.size():
+			break
+		var support: Dictionary = sim.supports[key]
+		var info: Array = names.get(key, [key, WHITE])
+		support_labels[row].text = "◆ %s   ×%d   %.1fs" % [info[0], int(support.stacks), maxf(0.0, float(support.timer))]
+		support_labels[row].add_theme_color_override("font_color", info[1])
+		row += 1
+
+func refresh_buffs(sim) -> void:
+	buff_panel.visible = sim.v2_mode and not sim.run_state.buff_levels.is_empty() and sim.state in ["running", "between", "paused"]
+	for item in buff_labels:
+		item.text = ""
+	if not buff_panel.visible:
+		return
+	var names: Dictionary = {}
+	for card: Dictionary in sim.database.cards:
+		names[str(card.id)] = str(card.get("name", card.id))
+	var ids: Array = sim.run_state.buff_levels.keys()
+	ids.reverse()
+	for i in mini(buff_labels.size(), ids.size()):
+		var id: String = str(ids[i])
+		buff_labels[i].text = "◆ %s   Lv.%d" % [names.get(id, id), int(sim.run_state.buff_levels[id])]
+	if ids.size() > buff_labels.size():
+		buff_labels[-1].text = "◆ 另有 %d 项强化正在生效" % (ids.size() - buff_labels.size() + 1)
+
+func element_color(element: String) -> Color:
+	return {"anemo": Color("#63e6c0"), "electro": Color("#bf83ff"), "pyro": Color("#ff745c"), "hydro": Color("#5ab8ff"), "geo": Color("#e8b94d"), "cryo": Color("#9de7f2")}.get(element, WHITE)
 
 func ornament(parent: Node, rect: Rect2) -> NinePatchRect:
 	var frame := NinePatchRect.new()

@@ -121,8 +121,8 @@ func _initialize() -> void:
 	s = fixture()
 	e = s.spawn_enemy(Vector2(119, 450), "runner")
 	s.tick(0.01)
-	check(s.base_hp == 90 and s.enemies.is_empty(), "runner leaks exactly once with own leak value")
-	s.base_hp = 20
+	check(s.base_hp == 94 and s.enemies.is_empty(), "runner leaks exactly once with own leak value")
+	s.base_hp = 15
 	s.spawn_enemy(Vector2(119, 450), "armored")
 	s.tick(0.01)
 	check(s.base_hp == 0 and s.state == "lost", "armored leak triggers defeat at zero")

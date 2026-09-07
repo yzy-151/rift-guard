@@ -159,7 +159,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 			"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
 			"color": colors[i], "tile": Vector2(i * 16, 112)
 		}
-		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0})
+		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.65, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0})
 		heroes.append(h)
 
 func _add_reinforcement(character_id: String) -> bool:
@@ -206,7 +206,10 @@ func begin_wave() -> void:
 	events.append({"kind": "wave", "value": wave})
 
 func choose_reward(index: int) -> bool:
-	if state != "reward" or not rewards.take(index, self):
+	if state != "reward" or index < 0 or index >= rewards.offered.size():
+		return false
+	var picked_name: String = str(rewards.offered[index].get("name", "强化"))
+	if not rewards.take(index, self):
 		return false
 	if v2_mode:
 		crystal.consume_choice(run_state)
@@ -217,11 +220,11 @@ func choose_reward(index: int) -> bool:
 			state = "reward"
 		else:
 			state = "running"
-		events.append({"kind": "reward_taken"})
+		events.append({"kind": "reward_taken", "pos": heroes[0].pos if not heroes.is_empty() else Vector2(420, 360), "value": picked_name})
 		return true
 	state = "between"
 	wave_timer = 4.0
-	events.append({"kind": "reward_taken"})
+	events.append({"kind": "reward_taken", "pos": heroes[0].pos if not heroes.is_empty() else Vector2(420, 360), "value": picked_name})
 	return true
 
 func toggle_pause() -> void:
@@ -247,8 +250,13 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 		enemy.hp *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
 		enemy.damage *= float(stage_runtime.definition.get("enemy_damage_multiplier", 1.0))
 		enemy.speed *= float(stage_runtime.definition.get("enemy_speed_multiplier", 1.0))
+		enemy.leak = maxi(1, roundi(float(enemy.leak) * float(stage_runtime.definition.get("enemy_leak_multiplier", 1.0))))
 	next_id += 1
-	enemy.merge({"id": next_id, "kind": kind, "pos": point, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "xp": 20 if kind == "armored" else (8 if kind == "runner" else 10)})
+	var shield: float = float(enemy.get("shield", 0.0))
+	if v2_mode and stage_runtime != null:
+		shield *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
+	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 28, "boss_01": 180}
+	enemy.merge({"id": next_id, "kind": kind, "pos": point, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": float(enemy.get("boss_pulse", 0.0)), "xp": int(xp_values.get(kind, 10))})
 	enemies.append(enemy)
 	return enemy
 
@@ -329,6 +337,12 @@ func _stage_spawn_tick(dt: float) -> void:
 			events.append({"kind": "wave", "value": wave})
 
 func _enemy_tick(dt: float) -> void:
+	for source: Dictionary in enemies:
+		if source.hp <= 0 or source.get("kind", "") != "buffer":
+			continue
+		for ally: Dictionary in enemies:
+			if ally.hp > 0 and ally.id != source.id and ally.pos.distance_to(source.pos) <= float(source.get("aura_radius", 0.0)):
+				ally.haste_timer = 0.25
 	for e in enemies:
 		if e.hp <= 0:
 			continue
@@ -337,11 +351,24 @@ func _enemy_tick(dt: float) -> void:
 		e.aura_timer = maxf(0, e.aura_timer - dt)
 		e.reaction_timer = maxf(0, e.reaction_timer - dt)
 		e.slow_timer = maxf(0, e.slow_timer - dt)
+		e.haste_timer = maxf(0, e.haste_timer - dt)
+		e.special_timer = maxf(0, float(e.special_timer) - dt)
 		if e.aura_timer <= 0:
 			e.aura = ""
-		var next_x: float = e.pos.x - e.speed * (0.7 if e.slow_timer > 0 else 1.0) * dt
+		var speed_scale: float = (0.7 if e.slow_timer > 0 else 1.0) * (1.35 if e.haste_timer > 0 else 1.0)
+		var next_x: float = e.pos.x - e.speed * speed_scale * dt
+		var ranged_victim: Dictionary = {}
+		if float(e.get("attack_range", 0.0)) > 0.0:
+			for h: Dictionary in heroes:
+				if h.hp > 0 and e.pos.distance_to(h.pos) <= float(e.attack_range):
+					if ranged_victim.is_empty() or e.pos.distance_to(h.pos) < e.pos.distance_to(ranged_victim.pos):
+						ranged_victim = h
+			if not ranged_victim.is_empty():
+				next_x = e.pos.x
 		e.blocked_by = -1
 		for h in heroes:
+			if bool(e.get("flying", false)):
+				break
 			if h.hp <= 0 or h.moving or h.blocked >= h.block:
 				continue
 			if absf(e.pos.y - h.pos.y) <= 35 and e.pos.x >= h.pos.x - 5 and next_x <= h.pos.x + 40:
@@ -350,17 +377,25 @@ func _enemy_tick(dt: float) -> void:
 				next_x = maxf(next_x, h.pos.x + 40)
 				break
 		e.pos.x = next_x
-		var victim: Dictionary = {}
+		var victim: Dictionary = ranged_victim
 		if e.blocked_by >= 0:
 			victim = heroes[e.blocked_by]
-		else:
+		elif victim.is_empty():
 			for h in heroes:
 				if h.hp > 0 and h.pos.distance_to(e.pos) <= 33:
 					victim = h
 					break
 		if not victim.is_empty() and e.attack_timer <= 0:
 			damage_hero(victim.id, e.damage)
-			e.attack_timer = 1.0 / e.rate
+			if float(e.get("attack_range", 0.0)) > 0.0:
+				events.append({"kind": "enemy_shot", "pos": e.pos, "target": victim.pos, "value": ceili(e.damage)})
+			e.attack_timer = 1.0 / (e.rate * (1.25 if e.haste_timer > 0 else 1.0))
+		if e.get("kind", "") == "boss_01" and e.special_timer <= 0.0:
+			for h: Dictionary in heroes:
+				if h.hp > 0:
+					damage_hero(h.id, e.damage * 0.42)
+			e.special_timer = float(e.get("boss_pulse", 7.0))
+			events.append({"kind": "boss_pulse", "pos": e.pos, "value": ceili(e.damage * 0.42)})
 		if e.pos.x <= 120:
 			e.hp = 0.0
 			base_hp = maxi(0, base_hp - e.leak)
@@ -404,7 +439,8 @@ func _hero_tick() -> void:
 		var target: Dictionary = {}
 		var available: Array[Dictionary] = []
 		for e in enemies:
-			if e.hp > 0 and h.pos.distance_to(e.pos) <= h.range:
+			var can_target_air: bool = bool(h.get("can_hit_air", false)) or (h.get("character_id", "") == "traveler" and h.get("element", "") != "")
+			if e.hp > 0 and (not bool(e.get("flying", false)) or can_target_air) and h.pos.distance_to(e.pos) <= h.range:
 				available.append(e)
 				if target.is_empty() or e.pos.x < target.pos.x:
 					target = e
@@ -422,7 +458,7 @@ func _hero_tick() -> void:
 				var victim: Dictionary = available[strike % available.size()]
 				apply_hit(victim, damage if strike == 0 else damage * 0.72, h.element)
 				if h.cleave:
-					splash_damage(victim, damage * float(h.get("cleave_ratio", 0.5)), 75.0 + float(h.get("pierce", 0)) * 18.0)
+					splash_damage(victim, damage * float(h.get("cleave_ratio", 0.5)), 108.0 + float(h.get("pierce", 0)) * 18.0)
 				events.append({"kind": "slash", "pos": victim.pos})
 				_apply_attack_extras(victim, h, damage)
 		else:
@@ -444,15 +480,32 @@ func _apply_attack_extras(target: Dictionary, hero: Dictionary, damage: float) -
 func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 	if enemy.is_empty() or enemy.hp <= 0:
 		return 0.0
+	if float(enemy.get("shield", 0.0)) > 0.0:
+		var absorbed: float = minf(float(enemy.shield), raw_damage)
+		enemy.shield = float(enemy.shield) - absorbed
+		raw_damage -= absorbed
+		events.append({"kind": "shield_hit", "pos": enemy.pos, "value": ceili(absorbed)})
+		if raw_damage <= 0.0:
+			enemy.flash = 0.08
+			return 0.0
 	var multiplier: float = 1.0
 	if element != "":
 		if enemy.aura != "" and enemy.aura != element and enemy.reaction_timer <= 0:
-			multiplier = vapor_multiplier
+			var reaction: String = reaction_for(str(enemy.aura), element)
+			multiplier = reaction_multiplier(reaction)
 			enemy.aura = ""
 			enemy.aura_timer = 0.0
 			enemy.reaction_timer = REACTION_COOLDOWN
 			reactions += 1
-			events.append({"kind": "vaporize", "pos": enemy.pos})
+			events.append({"kind": reaction, "pos": enemy.pos})
+			match reaction:
+				"overloaded", "swirl": splash_damage(enemy, raw_damage * 0.55, 82.0)
+				"electro_charged": chain_damage(enemy, raw_damage * 0.42, 2)
+				"superconduct":
+					enemy.armor = maxf(0.0, float(enemy.armor) - 18.0)
+					enemy.slow_timer = maxf(float(enemy.slow_timer), 1.6)
+				"frozen": enemy.slow_timer = maxf(float(enemy.slow_timer), 3.0)
+				"crystallize": base_hp = mini(100, base_hp + 2)
 		elif enemy.aura == "" or enemy.aura == element:
 			enemy.aura = element
 			enemy.aura_timer = aura_duration
@@ -478,6 +531,23 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 		grant_xp(enemy.xp)
 		events.append({"kind": "death", "pos": enemy.pos})
 	return damage
+
+func reaction_for(first: String, second: String) -> String:
+	var pair := [normalize_element(first), normalize_element(second)]
+	pair.sort()
+	var key: String = "+".join(pair)
+	return {
+		"hydro+pyro": "vaporize", "cryo+pyro": "melt", "electro+pyro": "overloaded",
+		"cryo+electro": "superconduct", "electro+hydro": "electro_charged", "cryo+hydro": "frozen",
+		"anemo+cryo": "swirl", "anemo+electro": "swirl", "anemo+hydro": "swirl", "anemo+pyro": "swirl",
+		"cryo+geo": "crystallize", "electro+geo": "crystallize", "geo+hydro": "crystallize", "geo+pyro": "crystallize",
+	}.get(key, "element_burst")
+
+func normalize_element(element: String) -> String:
+	return {"fire": "pyro", "water": "hydro"}.get(element, element)
+
+func reaction_multiplier(reaction: String) -> float:
+	return {"vaporize": vapor_multiplier, "melt": 1.65, "overloaded": 1.35, "superconduct": 1.20, "electro_charged": 1.25, "frozen": 1.10, "swirl": 1.22, "crystallize": 1.08, "element_burst": 1.15}.get(reaction, 1.0)
 
 func _projectile_tick(dt: float) -> void:
 	var surviving: Array[Dictionary] = []
@@ -618,6 +688,7 @@ func apply_v2_card_effect(card: Dictionary) -> void:
 		"assign_traveler_element":
 			if not heroes.is_empty() and heroes[0].get("character_id", "") == "traveler":
 				heroes[0].element = str(card.value)
+				events.append({"kind": "element_attuned", "pos": heroes[0].pos, "value": str(card.value)})
 		"attack_multiplier", "squad_attack_multiplier":
 			for hero in targets: hero.damage += hero.base_damage * value
 		"health_multiplier", "squad_health_multiplier":

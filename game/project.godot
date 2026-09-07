@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="第一期核心循环：旅行者 / 水晶经验 / 100张三选一卡牌 / 5分钟关卡"
+config/description="模式一核心循环：双关卡 / 旅行者元素 / 116张三选一卡牌 / 5分钟怪潮 / 永久图鉴"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
