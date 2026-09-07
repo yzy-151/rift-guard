@@ -1,0 +1,45 @@
+extends RefCounted
+
+var definition: Dictionary
+var elapsed := 0.0
+var time_complete := false
+var boss_emitted := false
+var all_spawns_emitted := false
+var wave_cursors: Array[int] = []
+
+func _init(stage_definition: Dictionary) -> void:
+	definition = stage_definition.duplicate(true)
+	wave_cursors.resize(definition.get("waves", []).size())
+	wave_cursors.fill(0)
+
+func tick(dt: float) -> Array[Dictionary]:
+	var events: Array[Dictionary] = []
+	elapsed += maxf(dt, 0.0)
+	var waves: Array = definition.get("waves", [])
+	for i in waves.size():
+		var wave: Dictionary = waves[i]
+		var count: int = int(wave.get("count", 0))
+		var interval: float = maxf(0.01, float(wave.get("interval", 1.0)))
+		while wave_cursors[i] < count and elapsed >= float(wave.get("at", 0.0)) + wave_cursors[i] * interval:
+			events.append({
+				"kind": "spawn",
+				"enemy_id": str(wave.get("enemy_id", "grunt")),
+				"route_id": str(wave.get("route_id", "main")),
+				"sequence": wave_cursors[i]
+			})
+			wave_cursors[i] += 1
+	if not boss_emitted and elapsed >= float(definition.get("boss_at_seconds", INF)):
+		boss_emitted = true
+		events.append({
+			"kind": "boss_wave",
+			"enemy_id": str(definition.get("boss_id", "boss_01")),
+			"route_id": str(definition.get("boss_route_id", "main"))
+		})
+	all_spawns_emitted = boss_emitted
+	for i in waves.size():
+		all_spawns_emitted = all_spawns_emitted and wave_cursors[i] >= int(waves[i].get("count", 0))
+	time_complete = elapsed + 0.0001 >= float(definition.get("duration_seconds", 300.0))
+	return events
+
+func remaining_seconds() -> float:
+	return maxf(0.0, float(definition.get("duration_seconds", 300.0)) - elapsed)
