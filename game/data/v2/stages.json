@@ -1,0 +1,69 @@
+[
+  {
+    "id": "stage_01",
+    "name": "裂隙前哨",
+    "duration_seconds": 330,
+    "boss_at_seconds": 270,
+    "boss_id": "boss_01",
+    "starting_squad": [
+      "traveler"
+    ],
+    "xp_thresholds": [
+      40,
+      90,
+      150,
+      220,
+      300,
+      390,
+      490,
+      600,
+      720,
+      850,
+      990,
+      1140,
+      1300,
+      1470,
+      1650
+    ],
+    "unlocks": [
+      "hero_02"
+    ],
+    "waves": [
+      {
+        "at": 0,
+        "enemy_id": "grunt",
+        "count": 18,
+        "interval": 2.8,
+        "route_id": "main"
+      },
+      {
+        "at": 55,
+        "enemy_id": "runner",
+        "count": 24,
+        "interval": 2.2,
+        "route_id": "upper"
+      },
+      {
+        "at": 115,
+        "enemy_id": "armored",
+        "count": 18,
+        "interval": 3,
+        "route_id": "lower"
+      },
+      {
+        "at": 175,
+        "enemy_id": "grunt",
+        "count": 42,
+        "interval": 1.35,
+        "route_id": "main"
+      },
+      {
+        "at": 230,
+        "enemy_id": "runner",
+        "count": 36,
+        "interval": 1.15,
+        "route_id": "upper"
+      }
+    ]
+  }
+]

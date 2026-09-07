@@ -1,0 +1,74 @@
+{
+  "character.traveler": {
+    "portrait": "res://assets/portraits/jessica.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_02": {
+    "portrait": "res://assets/portraits/jessica.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_03": {
+    "portrait": "res://assets/portraits/muelsyse.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_04": {
+    "portrait": "res://assets/portraits/jessica.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_05": {
+    "portrait": "res://assets/portraits/jessica.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_06": {
+    "portrait": "res://assets/portraits/jessica.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_07": {
+    "portrait": "res://assets/portraits/saria.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_08": {
+    "portrait": "res://assets/portraits/jessica.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  }
+}
