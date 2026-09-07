@@ -1,5 +1,6 @@
 extends CanvasLayer
 signal finished
+const Backdrop = preload("res://scripts/dialogue_backdrop.gd")
 const PORTRAITS = {
 	"saria": preload("res://assets/portraits/saria.png"),
 	"saria-soft": preload("res://assets/portraits/saria-soft.png"),
@@ -26,6 +27,8 @@ var auto_mode: bool = false
 var auto_timer: float = 0.0
 var last_portrait: String = "muelsyse"
 var cue_sound: AudioStreamPlayer
+var background_texture: TextureRect
+var transition_bar: ColorRect
 
 func build(ui, story) -> void:
 	hud = ui
@@ -35,9 +38,20 @@ func build(ui, story) -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.theme = hud.get_child(0).theme
 	add_child(root)
+	var backdrop := Backdrop.new()
+	root.add_child(backdrop)
+	background_texture = TextureRect.new()
+	background_texture.position = Vector2(0, 82)
+	background_texture.size = Vector2(1280, 356)
+	background_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	background_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	background_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	background_texture.hide()
+	root.add_child(background_texture)
+	hud.bind(background_texture, "dialog_background")
 	var shade := ColorRect.new()
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	shade.color = Color(0.025, 0.015, 0.025, 0.86)
+	shade.color = Color(0.025, 0.015, 0.025, 0.23)
 	root.add_child(shade)
 	hud.label(root, Vector2(52, 22), Vector2(800, 28), "R I F T   G U A R D   /   城 门 之 下", 15, Color("#d7a9a2"))
 	hud.label(root, Vector2(52, 55), Vector2(900, 24), "同人试作剧情 · 角色战斗属性为本作玩法设定", 12, Color("#a79a9f"))
@@ -90,6 +104,12 @@ func build(ui, story) -> void:
 	history_text.add_theme_font_size_override("normal_font_size", 18)
 	history_panel.add_child(history_text)
 	history_panel.hide()
+	transition_bar = ColorRect.new()
+	transition_bar.position = Vector2(-1280, 432)
+	transition_bar.size = Vector2(1280, 8)
+	transition_bar.color = Color("#e0525d")
+	transition_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(transition_bar)
 	root.hide()
 	cue_sound = AudioStreamPlayer.new()
 	cue_sound.stream = preload("res://assets/hit.ogg")
@@ -123,6 +143,9 @@ func display() -> void:
 	var opening := create_tween()
 	opening.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	opening.tween_property(root, "modulate", Color.WHITE, 0.13)
+	transition_bar.position.x = -1280.0
+	var wipe := create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	wipe.tween_property(transition_bar, "position:x", 1280.0, 0.34)
 	show_line()
 	advance_button.grab_focus()
 
@@ -179,12 +202,12 @@ func _animate_line_entrance(highlight: String) -> void:
 	partner.modulate = Color(partner_tint.r, partner_tint.g, partner_tint.b, 0.0)
 	var entrance := create_tween().set_parallel(true)
 	entrance.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	entrance.tween_property(portrait, "position", main_target, 0.24)
-	entrance.tween_property(partner, "position", partner_target, 0.24)
-	entrance.tween_property(portrait, "scale", Vector2.ONE, 0.22)
-	entrance.tween_property(partner, "scale", Vector2.ONE, 0.22)
-	entrance.tween_property(portrait, "modulate", main_tint, 0.16)
-	entrance.tween_property(partner, "modulate", partner_tint, 0.16)
+	entrance.tween_property(portrait, "position", main_target, 0.20)
+	entrance.tween_property(partner, "position", partner_target, 0.20)
+	entrance.tween_property(portrait, "scale", Vector2.ONE, 0.18)
+	entrance.tween_property(partner, "scale", Vector2.ONE, 0.18)
+	entrance.tween_property(portrait, "modulate", main_tint, 0.13)
+	entrance.tween_property(partner, "modulate", partner_tint, 0.13)
 	entrance.set_trans(Tween.TRANS_QUART)
 	entrance.tween_property(body, "modulate", Color.WHITE, 0.11).set_delay(0.07)
 	if highlight == "main":

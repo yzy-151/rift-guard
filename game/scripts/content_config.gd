@@ -1,7 +1,7 @@
 extends RefCounted
 const Reader = preload("res://scripts/xlsx_reader.gd")
 const DISPLAY_FONT = preload("res://assets/fonts/TiejiliSC-Regular.ttf")
-const UI_IDS = ["dialog_frame", "dialog_name", "dialog_body", "dialog_continue", "dialog_auto", "dialog_history", "dialog_skip", "game_title", "game_subtitle", "pause_button", "restart_button", "hero_card_1", "hero_card_2", "hero_card_3", "menu_frame", "reward_title", "reward_card_1", "reward_card_2", "reward_card_3"]
+const UI_IDS = ["dialog_background", "dialog_frame", "dialog_name", "dialog_body", "dialog_continue", "dialog_auto", "dialog_history", "dialog_skip", "game_title", "game_subtitle", "pause_button", "restart_button", "hero_card_1", "hero_card_2", "hero_card_3", "menu_frame", "reward_title", "reward_card_1", "reward_card_2", "reward_card_3"]
 var base_dir: String = ""
 var path: String = ""
 var errors: Array[String] = []
@@ -236,3 +236,8 @@ func apply_ui(control: Control, id: String) -> void:
 			display.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 			for state in ["normal", "hover", "pressed"]:
 				control.add_theme_stylebox_override(state, StyleBoxEmpty.new())
+	elif control is TextureRect:
+		control.texture = texture(row.asset) if row.asset != "" else null
+		control.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		control.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED if row.mode == "keep" else TextureRect.STRETCH_SCALE
+		control.visible = control.texture != null

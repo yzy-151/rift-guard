@@ -14,3 +14,13 @@
 5. CC 读取生成的 `research/helltaker-reference/catalog.csv`，分析立绘尺寸、动画帧、UI 切换和音效节奏。
 
 `research/helltaker-reference/` 已被 Git 忽略，也不会进入 Godot 导出。参考素材只用于本地分析；发布版使用原创或许可明确的替代素材。
+
+## 当前解包结果
+
+- 官方压缩包：`research/helltaker-reference/helltaker-official-windows.zip`
+- 游戏目录：`research/helltaker-reference/game`
+- AssetRipper：`research/tools/assetripper-2.0.0/AssetRipper.GUI.Free.exe`
+- 主要资源：`research/helltaker-reference/exported-primary/Assets`
+- 自动索引：`research/helltaker-reference/catalog.csv`
+- 本次共导出 12,412 个文件，包含 1,037 张 PNG、110 个 WAV、9 个 OGG 和 3 个字体文件。
+- 对话背景原始画布主要为 1960×544，项目按等比例映射为 1280×356 的可替换舞台。

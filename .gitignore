@@ -1,5 +1,6 @@
 game/.godot/
 builds/
+outputs/
 research/upstream/
 research/*.zip
 assets/third_party/*.zip
