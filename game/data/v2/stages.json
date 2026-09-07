@@ -5,6 +5,9 @@
     "duration_seconds": 330,
     "boss_at_seconds": 270,
     "boss_id": "boss_01",
+    "enemy_health_multiplier": 0.7,
+    "enemy_damage_multiplier": 0.1,
+    "enemy_speed_multiplier": 0.9,
     "starting_squad": [
       "traveler"
     ],
@@ -32,37 +35,37 @@
       {
         "at": 0,
         "enemy_id": "grunt",
-        "count": 18,
-        "interval": 2.8,
+        "count": 16,
+        "interval": 3.0,
         "route_id": "main"
       },
       {
-        "at": 55,
+        "at": 60,
         "enemy_id": "runner",
-        "count": 24,
-        "interval": 2.2,
-        "route_id": "upper"
+        "count": 16,
+        "interval": 3.0,
+        "route_id": "main"
       },
       {
-        "at": 115,
+        "at": 120,
         "enemy_id": "armored",
-        "count": 18,
-        "interval": 3,
-        "route_id": "lower"
-      },
-      {
-        "at": 175,
-        "enemy_id": "grunt",
-        "count": 42,
-        "interval": 1.35,
+        "count": 10,
+        "interval": 4.0,
         "route_id": "main"
       },
       {
-        "at": 230,
+        "at": 180,
+        "enemy_id": "grunt",
+        "count": 50,
+        "interval": 1.2,
+        "route_id": "main"
+      },
+      {
+        "at": 240,
         "enemy_id": "runner",
-        "count": 36,
-        "interval": 1.15,
-        "route_id": "upper"
+        "count": 45,
+        "interval": 1.0,
+        "route_id": "main"
       }
     ]
   }

@@ -4,6 +4,8 @@ const ELEMENTS := ["anemo", "electro", "pyro", "hydro", "geo", "cryo"]
 
 var cards: Array[Dictionary] = []
 var offered: Array[Dictionary] = []
+var history: Array[String] = []
+var levels: Dictionary = {}
 var rng := RandomNumberGenerator.new()
 
 func _init(source_cards: Array[Dictionary], seed_value: int = 0) -> void:
@@ -54,6 +56,9 @@ func draw_three(run) -> Array[Dictionary]:
 		candidates.erase(selected)
 	return offered.duplicate(true)
 
+func draw(sim) -> void:
+	draw_three(sim.run_state)
+
 func _take_weighted(pool: Array[Dictionary]) -> Dictionary:
 	var total := 0
 	for card: Dictionary in pool:
@@ -83,3 +88,29 @@ func apply_card(card: Dictionary, run) -> bool:
 		run.legendary_count += 1
 	offered.clear()
 	return true
+
+func take(index: int, sim) -> bool:
+	if index < 0 or index >= offered.size():
+		return false
+	var card: Dictionary = offered[index]
+	if not apply_card(card, sim.run_state):
+		return false
+	levels = sim.run_state.buff_levels
+	history.append(str(card.get("name", card.id)))
+	sim.apply_v2_card_effect(card)
+	return true
+
+func preview(card: Dictionary, sim) -> String:
+	var value: Variant = card.get("value", 0)
+	match str(card.get("effect", "")):
+		"assign_traveler_element": return "旅行者本关获得%s元素" % sim.element_name(str(value))
+		"attack_multiplier": return "攻击力 +%d%%" % roundi(float(value) * 100.0)
+		"health_multiplier": return "最大生命 +%d%%" % roundi(float(value) * 100.0)
+		"attack_rate_multiplier": return "攻击速度 +%d%%" % roundi(float(value) * 100.0)
+		"range_flat": return "攻击范围 +%d" % int(value)
+		"armor_flat": return "防御 +%d" % int(value)
+		"move_speed_flat": return "移动速度 +%d" % int(value)
+		"squad_attack_multiplier": return "全队攻击 +%d%%" % roundi(float(value) * 100.0)
+		"squad_health_multiplier": return "全队最大生命 +%d%%" % roundi(float(value) * 100.0)
+		"squad_rate_multiplier": return "全队攻击速度 +%d%%" % roundi(float(value) * 100.0)
+	return str(card.get("description", "获得强化"))

@@ -1,0 +1,43 @@
+{
+  "frame_width": 256,
+  "frame_height": 256,
+  "ground_y": 228,
+  "animations": {
+    "idle": {
+      "frames": 8,
+      "fps": 6.0,
+      "loop": true
+    },
+    "move": {
+      "frames": 8,
+      "fps": 12.0,
+      "loop": true
+    },
+    "attack": {
+      "frames": 8,
+      "fps": 16.0,
+      "loop": false
+    },
+    "hurt": {
+      "frames": 4,
+      "fps": 14.0,
+      "loop": false
+    },
+    "down": {
+      "frames": 8,
+      "fps": 12.0,
+      "loop": false
+    }
+  },
+  "validation": {
+    "passed": true,
+    "minimum_iou": {
+      "idle": 0.9127,
+      "move": 0.8341,
+      "attack": 0.7634,
+      "hurt": 0.7405,
+      "down": 0.5372
+    },
+    "issues": []
+  }
+}

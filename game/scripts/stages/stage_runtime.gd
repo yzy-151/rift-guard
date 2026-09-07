@@ -25,6 +25,7 @@ func tick(dt: float) -> Array[Dictionary]:
 				"kind": "spawn",
 				"enemy_id": str(wave.get("enemy_id", "grunt")),
 				"route_id": str(wave.get("route_id", "main")),
+				"wave": i + 1,
 				"sequence": wave_cursors[i]
 			})
 			wave_cursors[i] += 1
