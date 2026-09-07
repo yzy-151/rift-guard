@@ -60,7 +60,7 @@ func display(sim) -> void:
 				var rarity: String = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}.get(card.get("rarity", "common"), "普通")
 				var rarity_color: Color = {"common": Color("#b8c0cc"), "rare": Color("#69a7e8"), "epic": Color("#b77ae8"), "legendary": Color("#e9b85d")}.get(card.get("rarity", "common"), Color("#b8c0cc"))
 				var current: int = int(sim.run_state.buff_levels.get(card.id, 0))
-				tags[i].text = "%02d  /  %s · %s" % [i + 1, target, rarity]
+				tags[i].text = "%02d  /  %s · %s%s" % [i + 1, target, rarity, " · 机制" if bool(card.get("mechanic", false)) else ""]
 				tags[i].add_theme_color_override("font_color", rarity_color)
 				titles[i].text = str(card.get("name", card.id))
 				previews[i].text = sim.rewards.preview(card, sim)

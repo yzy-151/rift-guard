@@ -26,6 +26,16 @@ var slash_frames: Array[Texture2D] = [
 	preload("res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_05.png"),
 	preload("res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_06.png")
 ]
+var muzzle_fire_frames: Array[Texture2D] = [
+	preload("res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Fire/Muzzle Large Fire_1.png"),
+	preload("res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Fire/Muzzle Large Fire_2.png"),
+	preload("res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Fire/Muzzle Large Fire_3.png")
+]
+var muzzle_ion_frames: Array[Texture2D] = [
+	preload("res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Ion/Muzzle Large Ion_1.png"),
+	preload("res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Ion/Muzzle Large Ion_2.png"),
+	preload("res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Ion/Muzzle Large Ion_3.png")
+]
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -65,6 +75,8 @@ func accept_events(batch: Array[Dictionary]) -> void:
 		match event.kind:
 			"shot":
 				shot_flashes[event.hero_id] = 0.12
+				var hero: Dictionary = sim.heroes[event.hero_id]
+				effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25, -20), "life": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0})
 			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "reinforcement", "support_heal", "crossfire", "finale", "barrage":
 				effects.append({"kind": event.kind, "pos": event.pos, "life": 0.6, "value": event.get("value", 0)})
 				if event.kind in ["death_burst", "crossfire", "finale", "barrage"]:
@@ -331,7 +343,12 @@ func _draw_enemy(enemy: Dictionary) -> void:
 func _draw_effect(effect: Dictionary) -> void:
 	var t: float = 1.0 - effect.life / 0.6
 	var fade: float = minf(1.0, effect.life * 4)
-	if effect.kind == "slash" and not reduced_effects:
+	if effect.kind == "muzzle" and not reduced_effects:
+		var frames: Array[Texture2D] = muzzle_ion_frames if int(effect.value) == 1 else muzzle_fire_frames
+		var muzzle_t: float = 1.0 - effect.life / 0.16
+		var muzzle_index: int = clampi(floori(muzzle_t * frames.size()), 0, frames.size() - 1)
+		draw_texture_rect(frames[muzzle_index], Rect2(effect.pos + Vector2(-32, -32), Vector2(64, 64)), false, Color.WHITE)
+	elif effect.kind == "slash" and not reduced_effects:
 		var frame_index: int = clampi(floori(t * slash_frames.size()), 0, slash_frames.size() - 1)
 		draw_texture_rect(slash_frames[frame_index], Rect2(effect.pos + Vector2(-62, -82), Vector2(124, 124)), false, Color(1, 0.88, 0.78, fade))
 	elif effect.kind == "vaporize":

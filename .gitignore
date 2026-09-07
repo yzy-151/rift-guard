@@ -1,0 +1,9 @@
+game/.godot/
+builds/
+research/upstream/
+research/*.zip
+assets/third_party/*.zip
+research/helltaker-reference/
+game/assets/vfx/third_party/cethiel_weapon_slash/source.zip
+game/assets/vfx/third_party/reactorcore_muzzle/source.zip
+*.tmp
