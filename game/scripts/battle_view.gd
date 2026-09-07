@@ -13,10 +13,19 @@ var effects: Array[Dictionary] = []
 var clock: float = 0.0
 var shot_flashes: Dictionary = {}
 var base_flash: float = 0.0
+var shake_trauma: float = 0.0
 var atlas: Texture2D = preload("res://assets/tiny-dungeon.png")
 var furina_texture: Texture2D = preload("res://assets/characters/furina/furina-chibi-v1-alpha.png")
 var furina_actor
 var font: SystemFont
+var slash_frames: Array[Texture2D] = [
+	preload("res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_01.png"),
+	preload("res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_02.png"),
+	preload("res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_03.png"),
+	preload("res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_04.png"),
+	preload("res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_05.png"),
+	preload("res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_06.png")
+]
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -29,6 +38,8 @@ func advance(dt: float) -> void:
 	for id in shot_flashes:
 		shot_flashes[id] = maxf(0.0, shot_flashes[id] - dt)
 	base_flash = maxf(0.0, base_flash - dt)
+	shake_trauma = maxf(0.0, shake_trauma - dt * 3.8)
+	position = Vector2(sin(clock * 91.0), cos(clock * 73.0)) * shake_trauma * 5.0
 	for effect in effects:
 		effect.life -= dt
 	effects = effects.filter(func(e: Dictionary) -> bool: return e.life > 0.0)
@@ -54,8 +65,12 @@ func accept_events(batch: Array[Dictionary]) -> void:
 		match event.kind:
 			"shot":
 				shot_flashes[event.hero_id] = 0.12
-			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "slash", "splash":
+			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "reinforcement", "support_heal", "crossfire", "finale", "barrage":
 				effects.append({"kind": event.kind, "pos": event.pos, "life": 0.6, "value": event.get("value", 0)})
+				if event.kind in ["death_burst", "crossfire", "finale", "barrage"]:
+					shake_trauma = minf(1.0, shake_trauma + 0.42)
+				elif event.kind in ["hit", "slash", "chain"]:
+					shake_trauma = minf(0.42, shake_trauma + 0.045)
 			"leak":
 				base_flash = 0.3
 
@@ -98,9 +113,10 @@ func _draw() -> void:
 		draw_set_transform(Vector2.ZERO)
 	for projectile in sim.projectiles:
 		var point: Vector2 = Stage.project(projectile.pos) + Vector2(0, -18)
-		var color := Color("#83c7e8") if projectile.element == "water" else Color("#ffd397")
-		draw_line(point - Vector2(14, 0), point, color, 2.5, true)
-		draw_circle(point, 3.5, color)
+		var color: Color = {"hydro": Color("#74c9ff"), "pyro": Color("#ff7d54"), "electro": Color("#c189ff"), "cryo": Color("#b9efff"), "anemo": Color("#82ebc7"), "geo": Color("#f1c45c")}.get(projectile.element, Color("#ffd397"))
+		draw_line(point - Vector2(24, 0), point, Color(color, 0.26), 7.0, true)
+		draw_line(point - Vector2(16, 0), point, color, 2.8, true)
+		draw_circle(point, 4.5, Color.WHITE)
 	for effect in effects:
 		var point: Vector2 = Stage.project(effect.pos)
 		var scale_factor: float = Stage.depth_scale(effect.pos)
@@ -315,7 +331,10 @@ func _draw_enemy(enemy: Dictionary) -> void:
 func _draw_effect(effect: Dictionary) -> void:
 	var t: float = 1.0 - effect.life / 0.6
 	var fade: float = minf(1.0, effect.life * 4)
-	if effect.kind == "vaporize":
+	if effect.kind == "slash" and not reduced_effects:
+		var frame_index: int = clampi(floori(t * slash_frames.size()), 0, slash_frames.size() - 1)
+		draw_texture_rect(slash_frames[frame_index], Rect2(effect.pos + Vector2(-62, -82), Vector2(124, 124)), false, Color(1, 0.88, 0.78, fade))
+	elif effect.kind == "vaporize":
 		caption(effect.pos + Vector2(-23, -76 - t * 22), "蒸发 ×%.2f" % sim.vapor_multiplier, Color(0.9, 0.85, 0.67, fade), 16)
 		if not reduced_effects:
 			draw_arc(effect.pos + Vector2(0, -17), 14 + t * 32, 0, TAU, 32, Color(0.7, 0.85, 0.95, fade * 0.6), 2)
@@ -326,9 +345,23 @@ func _draw_effect(effect: Dictionary) -> void:
 	elif effect.kind == "splash":
 		if not reduced_effects:
 			draw_arc(effect.pos, 15 + t * 50, 0, TAU, 32, Color(1, 0.7, 0.4, fade * 0.5), 2)
-	elif effect.kind == "slash":
-		if not reduced_effects:
-			draw_arc(effect.pos + Vector2(-10, -16), 25, -1.1, 1.1, 18, Color(0.9, 0.86, 0.65, fade), 3)
+	elif effect.kind in ["chain", "pierce", "echo", "multishot"]:
+		var accent := Color(0.73, 0.52, 1.0, fade) if effect.kind == "chain" else Color(1.0, 0.88, 0.56, fade)
+		draw_arc(effect.pos + Vector2(0, -15), 9 + t * 34, -0.8, 0.8, 18, accent, 3.0, true)
+		for ray in 4:
+			var angle: float = -0.7 + ray * 0.45
+			draw_line(effect.pos + Vector2.from_angle(angle) * 8.0, effect.pos + Vector2.from_angle(angle) * (24.0 + t * 28.0), accent, 2.0, true)
+	elif effect.kind in ["barrage", "crossfire", "finale", "death_burst"]:
+		var blast_color := Color(1.0, 0.30, 0.26, fade)
+		for ring in 3:
+			draw_arc(effect.pos, 18.0 + ring * 16.0 + t * 52.0, 0, TAU, 40, Color(blast_color, fade * (0.72 - ring * 0.16)), 4.0 - ring, true)
+		for ray in 12:
+			var direction := Vector2.from_angle(ray * TAU / 12.0)
+			draw_line(effect.pos + direction * (9.0 + t * 25.0), effect.pos + direction * (30.0 + t * 85.0), Color(1.0, 0.76, 0.42, fade), 3.0, true)
+	elif effect.kind in ["support_heal", "reinforcement", "frenzy"]:
+		var support_color := Color(0.48, 0.95, 0.79, fade)
+		draw_arc(effect.pos, 16 + t * 62, 0, TAU, 40, support_color, 3.0, true)
+		caption(effect.pos + Vector2(-42, -58 - t * 20), "支援接入" if effect.kind != "frenzy" else "战意升级", support_color, 18)
 	elif effect.kind == "hit":
 		caption(effect.pos + Vector2(-8, -25 - t * 30), str(effect.value), Color(1, 0.84, 0.58, fade), 16)
 		if not reduced_effects:

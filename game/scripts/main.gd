@@ -136,10 +136,11 @@ func primary() -> void:
 		return
 	match sim.state:
 		"ready":
-			if test_mode or sim.v2_mode:
+			if test_mode:
 				sim.start()
 			else:
-				if not begin_dialogue("opening", "start"):
+				var opening_key := "mode1_opening" if sim.v2_mode else "opening"
+				if not begin_dialogue(opening_key, "start"):
 					sim.start()
 		"paused":
 			sim.toggle_pause()
@@ -289,6 +290,8 @@ func check_story() -> void:
 	if story.active:
 		return
 	if sim.v2_mode:
+		if sim.state in ["won", "lost"]:
+			begin_dialogue("mode1_" + sim.state)
 		return
 	if sim.state == "reward" and not sim.v2_mode:
 		begin_dialogue("node%d" % sim.wave)

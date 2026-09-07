@@ -48,6 +48,12 @@ var spawn_timer: float = 0.0
 var spawn_remaining: int = 0
 var wave_timer: float = 0.0
 var next_id: int = 0
+var supports: Dictionary = {}
+var execute_threshold: float = 0.0
+var death_burst_ratio: float = 0.0
+var elite_damage_bonus: float = 0.0
+var kill_frenzy_step: float = 0.0
+var frenzy_milestone: int = 0
 
 func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 	v2_mode = enable_v2
@@ -78,6 +84,12 @@ func reset(seed_value: int = -1) -> void:
 	spawn_remaining = 0
 	wave_timer = 0.0
 	next_id = 0
+	supports.clear()
+	execute_threshold = 0.0
+	death_burst_ratio = 0.0
+	elite_damage_bonus = 0.0
+	kill_frenzy_step = 0.0
+	frenzy_milestone = 0
 	heroes.clear()
 	enemies.clear()
 	projectiles.clear()
@@ -121,6 +133,12 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	spawn_remaining = 0
 	wave_timer = 0.0
 	next_id = 0
+	supports.clear()
+	execute_threshold = 0.0
+	death_burst_ratio = 0.0
+	elite_damage_bonus = 0.0
+	kill_frenzy_step = 0.0
+	frenzy_milestone = 0
 	heroes.clear()
 	enemies.clear()
 	projectiles.clear()
@@ -141,8 +159,28 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 			"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
 			"color": colors[i], "tile": Vector2(i * 16, 112)
 		}
-		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.45, "splash": false, "slow": false})
+		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0})
 		heroes.append(h)
+
+func _add_reinforcement(character_id: String) -> bool:
+	if heroes.size() >= RunState.MAX_SQUAD_SIZE or not database.characters.has(character_id):
+		return false
+	var starts := [Vector2(505, 360), Vector2(375, 295), Vector2(345, 430)]
+	var colors := ["#e9d7ad", "#eaaa7d", "#83c7e8"]
+	var i: int = heroes.size()
+	var source: Dictionary = database.characters[character_id]
+	var element: String = "" if source.element == "none" else str(source.element)
+	var hero := {
+		"character_id": character_id, "name": source.name, "role": source.role, "element": element,
+		"hp": float(source.max_hp), "armor": float(source.armor), "damage": float(source.attack),
+		"rate": float(source.attack_rate), "range": float(source.attack_range), "speed": float(source.move_speed),
+		"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
+		"color": colors[i], "tile": Vector2(i * 16, 112)
+	}
+	hero.merge({"id": i, "max_hp": hero.hp, "target": hero.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": hero.damage, "base_hp": hero.hp, "base_rate": hero.rate, "cleave": false, "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0})
+	heroes.append(hero)
+	events.append({"kind": "reinforcement", "pos": hero.pos, "value": character_id})
+	return true
 
 func restart_current_stage() -> void:
 	if v2_mode:
@@ -249,6 +287,7 @@ func tick(dt: float) -> void:
 		return
 	_hero_tick()
 	_projectile_tick(dt)
+	_support_tick(dt)
 	enemies = enemies.filter(func(e: Dictionary) -> bool: return e.hp > 0)
 	if v2_mode:
 		if stage_runtime.time_complete and stage_runtime.all_spawns_emitted and enemies.is_empty() and projectiles.is_empty():
@@ -363,8 +402,10 @@ func _hero_tick() -> void:
 		if h.attack_timer > 0:
 			continue
 		var target: Dictionary = {}
+		var available: Array[Dictionary] = []
 		for e in enemies:
 			if e.hp > 0 and h.pos.distance_to(e.pos) <= h.range:
+				available.append(e)
 				if target.is_empty() or e.pos.x < target.pos.x:
 					target = e
 		if target.is_empty():
@@ -374,13 +415,31 @@ func _hero_tick() -> void:
 		shots_fired += 1
 		events.append({"kind": "shot", "pos": h.pos, "hero_id": h.id})
 		var damage: float = h.damage
+		var attack_count: int = maxi(1, int(h.get("projectile_count", 1)))
+		available.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.pos.x < b.pos.x)
 		if h.block > 0:
-			apply_hit(target, damage, h.element)
-			if h.cleave:
-				splash_damage(target, damage * float(h.get("cleave_ratio", 0.5)), 75.0)
-			events.append({"kind": "slash", "pos": target.pos})
+			for strike in attack_count:
+				var victim: Dictionary = available[strike % available.size()]
+				apply_hit(victim, damage if strike == 0 else damage * 0.72, h.element)
+				if h.cleave:
+					splash_damage(victim, damage * float(h.get("cleave_ratio", 0.5)), 75.0 + float(h.get("pierce", 0)) * 18.0)
+				events.append({"kind": "slash", "pos": victim.pos})
+				_apply_attack_extras(victim, h, damage)
 		else:
-			projectiles.append({"pos": h.pos + Vector2(14, -12), "target_id": target.id, "damage": damage, "element": h.element, "source_id": h.id, "splash": h.splash, "slow": h.slow})
+			for shot_index in attack_count:
+				var shot_target: Dictionary = available[shot_index % available.size()]
+				projectiles.append({"pos": h.pos + Vector2(14, -12 + (shot_index - (attack_count - 1) * 0.5) * 6.0), "target_id": shot_target.id, "damage": damage if shot_index == 0 else damage * 0.78, "element": h.element, "source_id": h.id, "splash": h.splash, "slow": h.slow, "pierce": int(h.get("pierce", 0)), "chain_count": int(h.get("chain_count", 0)), "blast_radius": float(h.get("blast_radius", 0.0)), "echo_ratio": float(h.get("echo_ratio", 0.0))})
+		if attack_count > 1:
+			events.append({"kind": "multishot", "pos": h.pos, "value": attack_count})
+
+func _apply_attack_extras(target: Dictionary, hero: Dictionary, damage: float) -> void:
+	if float(hero.get("blast_radius", 0.0)) > 0.0:
+		splash_damage(target, damage * 0.45, float(hero.blast_radius))
+	if int(hero.get("chain_count", 0)) > 0:
+		chain_damage(target, damage * 0.55, int(hero.chain_count))
+	if float(hero.get("echo_ratio", 0.0)) > 0.0 and target.hp > 0:
+		apply_hit(target, damage * float(hero.echo_ratio), hero.element)
+		events.append({"kind": "echo", "pos": target.pos})
 
 func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 	if enemy.is_empty() or enemy.hp <= 0:
@@ -398,11 +457,24 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 			enemy.aura = element
 			enemy.aura_timer = aura_duration
 	var damage: float = raw_damage * multiplier * 100.0 / (100.0 + maxf(0, enemy.armor))
+	if enemy.get("kind", "") in ["armored", "boss_01"]:
+		damage *= 1.0 + elite_damage_bonus
+	if execute_threshold > 0.0 and enemy.hp / enemy.max_hp <= minf(0.65, execute_threshold):
+		damage *= 1.6
 	enemy.hp -= damage
 	enemy.flash = 0.1
 	events.append({"kind": "hit", "pos": enemy.pos + Vector2(0, -12), "value": ceili(damage)})
 	if enemy.hp <= 0:
 		kills += 1
+		if death_burst_ratio > 0.0:
+			splash_damage(enemy, enemy.max_hp * death_burst_ratio, 90.0)
+			events.append({"kind": "death_burst", "pos": enemy.pos})
+		var milestone: int = kills / 10
+		if kill_frenzy_step > 0.0 and milestone > frenzy_milestone:
+			for hero: Dictionary in heroes:
+				hero.rate += hero.base_rate * kill_frenzy_step * (milestone - frenzy_milestone)
+			frenzy_milestone = milestone
+			events.append({"kind": "frenzy", "pos": enemy.pos, "value": milestone})
 		grant_xp(enemy.xp)
 		events.append({"kind": "death", "pos": enemy.pos})
 	return damage
@@ -420,10 +492,85 @@ func _projectile_tick(dt: float) -> void:
 				target.slow_timer = 2.0
 			if shot.get("splash", false):
 				splash_damage(target, shot.damage * 0.5, 65.0)
+			if float(shot.get("blast_radius", 0.0)) > 0.0:
+				splash_damage(target, shot.damage * 0.45, float(shot.blast_radius))
+			if int(shot.get("chain_count", 0)) > 0:
+				chain_damage(target, shot.damage * 0.55, int(shot.chain_count))
+			if float(shot.get("echo_ratio", 0.0)) > 0.0 and target.hp > 0:
+				apply_hit(target, shot.damage * float(shot.echo_ratio), shot.element)
+				events.append({"kind": "echo", "pos": target.pos})
+			if int(shot.get("pierce", 0)) > 0:
+				var next_target: Dictionary = _nearest_enemy_after(target, [target.id])
+				if not next_target.is_empty():
+					shot.target_id = next_target.id
+					shot.pierce = int(shot.pierce) - 1
+					shot.pos = impact
+					surviving.append(shot)
+					events.append({"kind": "pierce", "pos": target.pos})
 		else:
 			shot.pos = shot.pos.move_toward(impact, PROJECTILE_SPEED * dt)
 			surviving.append(shot)
 	projectiles = surviving
+
+func _nearest_enemy_after(origin: Dictionary, excluded: Array) -> Dictionary:
+	var result: Dictionary = {}
+	for enemy: Dictionary in enemies:
+		if enemy.hp <= 0 or enemy.id in excluded:
+			continue
+		if result.is_empty() or enemy.pos.distance_to(origin.pos) < result.pos.distance_to(origin.pos):
+			result = enemy
+	return result
+
+func chain_damage(primary: Dictionary, damage: float, count: int) -> void:
+	var current: Dictionary = primary
+	var excluded: Array = [primary.id]
+	for index in count:
+		var next_target := _nearest_enemy_after(current, excluded)
+		if next_target.is_empty() or next_target.pos.distance_to(current.pos) > 180.0:
+			break
+		apply_hit(next_target, damage, "electro")
+		events.append({"kind": "chain", "pos": next_target.pos})
+		excluded.append(next_target.id)
+		current = next_target
+
+func _support_tick(dt: float) -> void:
+	for key: String in supports:
+		var support: Dictionary = supports[key]
+		support.timer = float(support.timer) - dt
+		if support.timer > 0.0:
+			continue
+		support.timer += float(support.interval)
+		_trigger_support(key, support)
+
+func _trigger_support(kind: String, support: Dictionary) -> void:
+	if kind == "support_heal":
+		for hero: Dictionary in heroes:
+			hero.hp = minf(hero.max_hp, hero.hp + float(support.power))
+		base_hp = mini(100, base_hp + ceili(float(support.power) * 0.35))
+		events.append({"kind": "support_heal", "pos": Vector2(360, 360), "value": ceili(float(support.power))})
+		return
+	if enemies.is_empty():
+		return
+	if kind == "support_crossfire":
+		var lane_y: float = enemies[0].pos.y
+		for enemy: Dictionary in enemies.duplicate():
+			if enemy.hp > 0 and absf(enemy.pos.y - lane_y) < 58.0:
+				apply_hit(enemy, float(support.power), "")
+		events.append({"kind": "crossfire", "pos": Vector2(760, lane_y), "value": int(support.stacks)})
+	elif kind == "support_finale":
+		for volley in int(support.stacks):
+			for enemy: Dictionary in enemies.duplicate():
+				if enemy.hp > 0:
+					apply_hit(enemy, float(support.power), "")
+		events.append({"kind": "finale", "pos": Vector2(760, 360), "value": int(support.stacks)})
+	else:
+		var target: Dictionary = enemies[0]
+		for enemy: Dictionary in enemies:
+			if enemy.hp > target.hp:
+				target = enemy
+		apply_hit(target, float(support.power), "pyro")
+		splash_damage(target, float(support.power) * 0.75, float(support.radius))
+		events.append({"kind": "barrage", "pos": target.pos, "value": int(support.stacks)})
 
 func drain_events() -> Array[Dictionary]:
 	var result: Array[Dictionary] = events.duplicate()
@@ -494,4 +641,30 @@ func apply_v2_card_effect(card: Dictionary) -> void:
 			for hero in targets:
 				hero.damage += hero.base_damage * 0.35
 				hero.rate += hero.base_rate * 0.20
+		"projectile_count_add":
+			for hero in targets: hero.projectile_count = int(hero.get("projectile_count", 1)) + int(value)
+		"pierce_add":
+			for hero in targets: hero.pierce = int(hero.get("pierce", 0)) + int(value)
+		"chain_add":
+			for hero in targets: hero.chain_count = int(hero.get("chain_count", 0)) + int(value)
+		"blast_add":
+			for hero in targets: hero.blast_radius = float(hero.get("blast_radius", 0.0)) + value
+		"echo_add":
+			for hero in targets: hero.echo_ratio = float(hero.get("echo_ratio", 0.0)) + value
+		"deploy_reinforcement":
+			_add_reinforcement(str(card.get("value", "")))
+		"support_barrage", "support_crossfire", "support_heal", "support_finale":
+			var support_id: String = str(card.effect)
+			if not supports.has(support_id):
+				supports[support_id] = {"timer": minf(2.0, float(card.get("interval", 8.0))), "interval": float(card.get("interval", 8.0)), "power": value, "radius": float(card.get("radius", 100.0)), "stacks": 1}
+			else:
+				var support: Dictionary = supports[support_id]
+				support.stacks = int(support.stacks) + 1
+				support.power = float(support.power) + value * 0.65
+				support.radius = float(support.radius) + float(card.get("radius", 20.0)) * 0.18
+				support.interval = maxf(1.5, float(support.interval) * 0.88)
+		"execute_threshold_add": execute_threshold = 0.20 if execute_threshold <= 0.0 else minf(0.65, execute_threshold + value)
+		"death_burst_add": death_burst_ratio += value
+		"elite_damage_add": elite_damage_bonus += value
+		"kill_frenzy_add": kill_frenzy_step += value
 		"crystal_heal": base_hp = mini(100, base_hp + int(value))

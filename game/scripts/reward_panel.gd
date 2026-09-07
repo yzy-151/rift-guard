@@ -60,12 +60,11 @@ func display(sim) -> void:
 				var rarity: String = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}.get(card.get("rarity", "common"), "普通")
 				var rarity_color: Color = {"common": Color("#b8c0cc"), "rare": Color("#69a7e8"), "epic": Color("#b77ae8"), "legendary": Color("#e9b85d")}.get(card.get("rarity", "common"), Color("#b8c0cc"))
 				var current: int = int(sim.run_state.buff_levels.get(card.id, 0))
-				var maximum: int = int(card.get("max_stacks", 1))
 				tags[i].text = "%02d  /  %s · %s" % [i + 1, target, rarity]
 				tags[i].add_theme_color_override("font_color", rarity_color)
 				titles[i].text = str(card.get("name", card.id))
 				previews[i].text = sim.rewards.preview(card, sim)
-				descriptions[i].text = str(card.get("description", "获得强化")) + "\n当前层数 %d / %d" % [current, maximum]
+				descriptions[i].text = str(card.get("description", "获得强化")) + "\n当前层数 %d / ∞" % current
 			else:
 				var target: String = sim.heroes[card.target].name if card.target >= 0 else "全队 / 基地"
 				var current: int = sim.rewards.levels.get(card.id, 0)

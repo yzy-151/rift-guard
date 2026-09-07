@@ -29,5 +29,12 @@ func _initialize() -> void:
 		assert(offer.all(func(card): return card.get("target", "global") == "global" or card.character_id == "traveler"))
 		assert(offer.all(func(card): return card.get("requires_element", chosen_element) == chosen_element))
 	assert(not pool.apply_element(run, "geo" if chosen_element != "geo" else "pyro"))
+	var repeatable: Dictionary = db.cards.filter(func(card): return card.id == "mechanic_twin_arc")[0]
+	for layer in 25:
+		assert(pool.apply_card(repeatable, run))
+	assert(run.buff_levels[repeatable.id] == 25)
+	run.crystal_level = 3
+	pool.reseed(7)
+	assert(pool.draw_three(run).any(func(card): return bool(card.get("mechanic", false))))
 	print("CARD POOL V2 PASSED")
 	quit()

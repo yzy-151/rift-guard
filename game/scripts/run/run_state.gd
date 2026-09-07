@@ -3,6 +3,7 @@ extends RefCounted
 const MAX_SQUAD_SIZE := 3
 
 var stage_id := ""
+var mode_id := "rift_watch"
 var squad: Array[String] = ["traveler"]
 var traveler_element := "none"
 var buff_levels: Dictionary = {}

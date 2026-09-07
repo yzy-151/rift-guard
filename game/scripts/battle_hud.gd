@@ -43,7 +43,7 @@ func _ready() -> void:
 	root.theme = ui_theme
 	add_child(root)
 	label(root, Vector2(34, 7), Vector2(560, 22), "R I F T   G U A R D     /     边 境 防 线", 13, TEAL)
-	bind(label(root, Vector2(32, 27), Vector2(700, 43), "裂隙守望", 32, WHITE), "game_title")
+	bind(label(root, Vector2(32, 27), Vector2(700, 43), "模式一  /  裂隙守望", 32, WHITE), "game_title")
 	bind(label(root, Vector2(207, 40), Vector2(500, 24), "城门之下 · 守至黎明", 14, MUTED), "game_subtitle")
 	progression_label = label(root, Vector2(620, 47), Vector2(625, 22), "", 12, TEAL)
 	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT

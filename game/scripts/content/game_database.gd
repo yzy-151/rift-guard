@@ -3,13 +3,16 @@ extends RefCounted
 var characters: Dictionary = {}
 var cards: Array[Dictionary] = []
 var stages: Dictionary = {}
+var modes: Dictionary = {}
 var assets: Dictionary = {}
 var errors: Array[String] = []
 
 func _init() -> void:
 	characters = _by_id(_read_array("res://data/v2/characters.json"), "character")
 	cards.assign(_read_array("res://data/v2/cards.json"))
+	cards.append_array(_read_array("res://data/v2/mechanic_cards.json"))
 	stages = _by_id(_read_array("res://data/v2/stages.json"), "stage")
+	modes = _by_id(_read_array("res://data/v2/modes.json"), "mode")
 	assets = _read_dictionary("res://data/v2/asset_manifest.json")
 	_validate()
 
@@ -77,3 +80,10 @@ func _validate() -> void:
 		for character_id: String in stage.get("starting_squad", []):
 			if not characters.has(character_id):
 				errors.append("stage squad character missing: " + character_id)
+	for id: String in modes:
+		var mode: Dictionary = modes[id]
+		if int(mode.get("max_squad_size", 0)) != 3:
+			errors.append("mode squad size must be three: " + id)
+		for stage_id: String in mode.get("stage_ids", []):
+			if not stages.has(stage_id):
+				errors.append("mode stage missing: " + stage_id)

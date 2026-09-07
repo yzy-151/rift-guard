@@ -25,6 +25,7 @@ var letters: float = 0.0
 var auto_mode: bool = false
 var auto_timer: float = 0.0
 var last_portrait: String = "muelsyse"
+var cue_sound: AudioStreamPlayer
 
 func build(ui, story) -> void:
 	hud = ui
@@ -90,6 +91,11 @@ func build(ui, story) -> void:
 	history_panel.add_child(history_text)
 	history_panel.hide()
 	root.hide()
+	cue_sound = AudioStreamPlayer.new()
+	cue_sound.stream = preload("res://assets/hit.ogg")
+	cue_sound.volume_db = -22.0
+	cue_sound.max_polyphony = 2
+	add_child(cue_sound)
 
 func art(rect: Rect2) -> TextureRect:
 	var item := TextureRect.new()
@@ -112,7 +118,11 @@ func display() -> void:
 		item.disabled = false
 		item.focus_mode = Control.FOCUS_ALL
 	history_panel.hide()
+	root.modulate = Color(1, 1, 1, 0)
 	root.show()
+	var opening := create_tween()
+	opening.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+	opening.tween_property(root, "modulate", Color.WHITE, 0.13)
 	show_line()
 	advance_button.grab_focus()
 
@@ -145,14 +155,47 @@ func show_line() -> void:
 	name_label.text = line.speaker
 	body.text = line.text
 	body.visible_characters = 0
+	body.modulate = Color(1, 1, 1, 0)
 	letters = 0.0
 	auto_timer = 0.0
 	progress.text = "战场已暂停   ·   %02d / %02d" % [director.index + 1, director.lines.size()]
+	_animate_line_entrance(str(line.get("highlight", "main")))
+	if cue_sound != null:
+		cue_sound.pitch_scale = 1.18 + float(director.index % 3) * 0.08
+		cue_sound.play()
+
+func _animate_line_entrance(highlight: String) -> void:
+	var main_target: Vector2 = portrait.position
+	var partner_target: Vector2 = partner.position
+	var main_tint: Color = portrait.modulate
+	var partner_tint: Color = partner.modulate
+	portrait.pivot_offset = portrait.size * 0.5
+	partner.pivot_offset = partner.size * 0.5
+	portrait.position = main_target + Vector2(-105, 8)
+	partner.position = partner_target + Vector2(105, 8)
+	portrait.scale = Vector2(0.94, 0.94)
+	partner.scale = Vector2(0.94, 0.94)
+	portrait.modulate = Color(main_tint.r, main_tint.g, main_tint.b, 0.0)
+	partner.modulate = Color(partner_tint.r, partner_tint.g, partner_tint.b, 0.0)
+	var entrance := create_tween().set_parallel(true)
+	entrance.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	entrance.tween_property(portrait, "position", main_target, 0.24)
+	entrance.tween_property(partner, "position", partner_target, 0.24)
+	entrance.tween_property(portrait, "scale", Vector2.ONE, 0.22)
+	entrance.tween_property(partner, "scale", Vector2.ONE, 0.22)
+	entrance.tween_property(portrait, "modulate", main_tint, 0.16)
+	entrance.tween_property(partner, "modulate", partner_tint, 0.16)
+	entrance.set_trans(Tween.TRANS_QUART)
+	entrance.tween_property(body, "modulate", Color.WHITE, 0.11).set_delay(0.07)
+	if highlight == "main":
+		portrait.position.x -= 16.0
+	else:
+		partner.position.x += 16.0
 
 func _process(dt: float) -> void:
 	if root == null or not root.visible or history_panel.visible:
 		return
-	letters += dt * 35.0
+	letters += dt * 52.0
 	body.visible_characters = mini(int(letters), body.text.length())
 	if body.visible_characters >= body.text.length() and auto_mode:
 		auto_timer += dt
@@ -167,6 +210,8 @@ func advance() -> void:
 		body.visible_characters = -1
 		return
 	if director.advance():
+		body.visible_characters = 0
+		body.modulate = Color(1, 1, 1, 0)
 		show_line()
 	else:
 		close()
@@ -176,9 +221,14 @@ func skip() -> void:
 	close()
 
 func close() -> void:
-	root.hide()
 	history_panel.hide()
-	finished.emit()
+	var closing := create_tween()
+	closing.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_IN)
+	closing.tween_property(root, "modulate", Color(1, 1, 1, 0), 0.12)
+	closing.tween_callback(func():
+		root.hide()
+		root.modulate = Color.WHITE
+		finished.emit())
 
 func toggle_history() -> void:
 	history_panel.visible = not history_panel.visible
