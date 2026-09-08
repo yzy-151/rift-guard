@@ -20,6 +20,7 @@ const HT_BUTTON_ACTIVE = preload("res://assets/helltaker/ui/button active.png")
 const HT_PANEL = preload("res://assets/helltaker/ui/button on.png")
 const HT_HIGHLIGHT = preload("res://assets/helltaker/audio/button_menu_highlight_01.wav")
 const HT_CONFIRM = preload("res://assets/helltaker/audio/button_menu_confirm_01.wav")
+const HT_BOSS_WARNING = preload("res://assets/helltaker/audio/dialogue_start_epilogue_01.wav")
 var config
 var reward_panel
 var progression_label: Label
@@ -46,6 +47,12 @@ var buff_panel: Panel
 var buff_labels: Array[Label] = []
 var skill_button: Button
 var skill_aiming: bool = false
+var boss_panel: Panel
+var boss_name_label: Label
+var boss_hp_bar: ProgressBar
+var boss_hp_label: Label
+var boss_alert: Label
+var boss_warning: AudioStreamPlayer
 var ui_highlight: AudioStreamPlayer
 var ui_confirm: AudioStreamPlayer
 
@@ -56,6 +63,9 @@ func _ready() -> void:
 	ui_confirm = AudioStreamPlayer.new()
 	ui_confirm.stream = HT_CONFIRM
 	ui_confirm.volume_db = -13.0
+	boss_warning = AudioStreamPlayer.new()
+	boss_warning.stream = HT_BOSS_WARNING
+	boss_warning.volume_db = -9.0
 	var root := Control.new()
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -68,6 +78,7 @@ func _ready() -> void:
 	add_child(root)
 	add_child(ui_highlight)
 	add_child(ui_confirm)
+	add_child(boss_warning)
 	label(root, Vector2(34, 7), Vector2(560, 22), "R I F T   G U A R D     /     边 境 防 线", 13, TEAL)
 	bind(label(root, Vector2(32, 27), Vector2(700, 43), "模式一  /  裂隙守望", 32, WHITE), "game_title")
 	bind(label(root, Vector2(207, 40), Vector2(500, 24), "城门之下 · 守至黎明", 14, MUTED), "game_subtitle")
@@ -103,6 +114,34 @@ func _ready() -> void:
 	for i in 5:
 		buff_labels.append(label(buff_panel, Vector2(12, 28 + i * 18), Vector2(405, 18), "", 12, WHITE))
 	buff_panel.hide()
+	boss_panel = panel(root, Rect2(475, 106, 400, 72), Color(0.055, 0.025, 0.04, 0.96), Color("#be435c"))
+	boss_name_label = label(boss_panel, Vector2(15, 7), Vector2(370, 22), "", 15, Color("#ff9cab"))
+	boss_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	boss_hp_bar = ProgressBar.new()
+	boss_hp_bar.position = Vector2(18, 34)
+	boss_hp_bar.size = Vector2(364, 20)
+	boss_hp_bar.show_percentage = false
+	var boss_bg := StyleBoxFlat.new()
+	boss_bg.bg_color = Color("#26131c")
+	boss_bg.border_color = Color("#64303d")
+	boss_bg.set_border_width_all(2)
+	var boss_fill := StyleBoxFlat.new()
+	boss_fill.bg_color = Color("#d94f66")
+	boss_fill.border_color = Color("#ff9aa7")
+	boss_fill.set_border_width_all(1)
+	boss_hp_bar.add_theme_stylebox_override("background", boss_bg)
+	boss_hp_bar.add_theme_stylebox_override("fill", boss_fill)
+	boss_panel.add_child(boss_hp_bar)
+	boss_hp_label = label(boss_panel, Vector2(18, 34), Vector2(364, 20), "", 12, WHITE)
+	boss_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	boss_panel.hide()
+	boss_alert = label(root, Vector2(270, 248), Vector2(740, 96), "", 40, Color("#fff1ed"))
+	boss_alert.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	boss_alert.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	boss_alert.add_theme_color_override("font_shadow_color", Color("#9e203c"))
+	boss_alert.add_theme_constant_override("shadow_offset_x", 4)
+	boss_alert.add_theme_constant_override("shadow_offset_y", 4)
+	boss_alert.hide()
 	skill_button = button(root, Rect2(900, 540, 348, 62), "旅行者战技  [Q]", true)
 	skill_button.add_theme_font_size_override("font_size", 17)
 	skill_button.pressed.connect(func(): skill_action.emit())
@@ -235,6 +274,9 @@ func button(parent: Node, rect: Rect2, text: String, accent: bool) -> Button:
 
 func refresh(sim, selected_id: int) -> void:
 	var next_signature: String = str([sim.state, sim.base_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming])
+	for enemy: Dictionary in sim.enemies:
+		if str(enemy.get("kind", "")).begins_with("boss_"):
+			next_signature += str([ceili(float(enemy.hp)), ceili(float(enemy.get("shield", 0.0)))])
 	if sim.v2_mode:
 		next_signature += str([sim.run_state.traveler_element, sim.run_state.pending_level_ups, floori(sim.stage_runtime.remaining_seconds())])
 	for hero in sim.heroes:
@@ -257,6 +299,7 @@ func refresh(sim, selected_id: int) -> void:
 	refresh_skill(sim)
 	refresh_supports(sim)
 	refresh_buffs(sim)
+	refresh_boss(sim)
 	if selected_id >= 0 and selected_id < sim.heroes.size():
 		var hero: Dictionary = sim.heroes[selected_id]
 		status_label.text = hero.name + (" · 已倒地，波末恢复" if hero.hp <= 0 else (" · 移动中，暂停攻击" if hero.moving else " · 自动攻击 / 右键走位"))
@@ -303,8 +346,10 @@ func refresh(sim, selected_id: int) -> void:
 				modal_copy.text = "战场、弹体和攻击冷却已冻结。\n准备好后，继续守住你的防线。"
 				modal_action.text = "继续防守   →   [空格]"
 			"won":
+				var grade := result_grade(sim.base_hp, sim.best_streak)
+				var unlock_copy := "下一作战区域已解锁。" if sim.v2_mode and sim.current_stage_id != "stage_03" else "本章作战区域已全部完成。"
 				modal_title.text = "防线守住了"
-				modal_copy.text = "击退 %d 名敌人  ·  基地剩余 %d%%\n触发元素反应 %d 次\n本关构筑将在进入下一关时重置。" % [sim.kills, sim.base_hp, sim.reactions]
+				modal_copy.text = "评级 %s  ·  击退 %d  ·  基地 %d%%  ·  最高连杀 %d\n元素反应 %d 次  ·  %s\n本关构筑将在进入下一关时重置，可按 F4 选择关卡。" % [grade, sim.kills, sim.base_hp, sim.best_streak, sim.reactions, unlock_copy]
 				modal_action.text = "再守一次   →   [Enter]"
 			"lost":
 				modal_title.text = "核心已经失守"
@@ -312,6 +357,54 @@ func refresh(sim, selected_id: int) -> void:
 				modal_action.text = "重新布防   →   [Enter]"
 		if not was_visible or get_viewport().gui_get_focus_owner() != modal_action:
 			modal_action.grab_focus()
+
+func refresh_boss(sim) -> void:
+	var active: Dictionary = {}
+	for enemy: Dictionary in sim.enemies:
+		if str(enemy.get("kind", "")).begins_with("boss_") and float(enemy.get("hp", 0.0)) > 0.0:
+			active = enemy
+			break
+	boss_panel.visible = not active.is_empty() and sim.state in ["running", "paused"]
+	if active.is_empty():
+		return
+	var shield: float = float(active.get("shield", 0.0))
+	var hp: float = maxf(0.0, float(active.hp))
+	boss_name_label.text = "◆  B O S S   /   %s  ◆" % str(active.get("name", "裂隙首领"))
+	boss_hp_bar.max_value = maxf(1.0, float(active.max_hp))
+	boss_hp_bar.value = hp
+	boss_hp_label.text = "%d / %d%s" % [ceili(hp), ceili(float(active.max_hp)), "   ◇ 护盾 %d" % ceili(shield) if shield > 0.0 else ""]
+
+func announce_boss(name: String) -> void:
+	if boss_warning != null and not muted:
+		boss_warning.stop()
+		boss_warning.play()
+	boss_alert.text = "W A R N I N G\n%s  降 临" % name
+	boss_alert.position = Vector2(270, 228)
+	boss_alert.modulate = Color(1, 1, 1, 0)
+	boss_alert.scale = Vector2(1.16, 1.16)
+	boss_alert.pivot_offset = boss_alert.size * 0.5
+	boss_alert.show()
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(boss_alert, "modulate:a", 1.0, 0.16)
+	tween.tween_property(boss_alert, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await tween.finished
+	await get_tree().create_timer(0.72).timeout
+	var out := create_tween()
+	out.set_parallel(true)
+	out.tween_property(boss_alert, "modulate:a", 0.0, 0.28)
+	out.tween_property(boss_alert, "position:y", 210.0, 0.28)
+	await out.finished
+	boss_alert.hide()
+
+func result_grade(base_hp: int, streak: int) -> String:
+	if base_hp >= 85 and streak >= 20:
+		return "S"
+	if base_hp >= 60 and streak >= 10:
+		return "A"
+	if base_hp >= 30:
+		return "B"
+	return "C"
 
 func refresh_supports(sim) -> void:
 	support_panel.visible = sim.v2_mode and not sim.supports.is_empty() and sim.state in ["running", "between", "paused"]

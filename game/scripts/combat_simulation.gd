@@ -385,8 +385,10 @@ func _stage_spawn_tick(dt: float) -> void:
 			spawn_enemy(Vector2(1160, lanes.get(event.route_id, LANES[1])), str(event.enemy_id))
 		elif event.kind == "boss_wave":
 			wave += 1
-			spawn_enemy(Vector2(1160, lanes.get(event.route_id, LANES[1])), str(event.enemy_id))
+			var boss_id := str(event.enemy_id)
+			var boss := spawn_enemy(Vector2(1160, lanes.get(event.route_id, LANES[1])), boss_id)
 			events.append({"kind": "wave", "value": wave})
+			events.append({"kind": "boss_arrival", "pos": boss.pos, "value": str(boss.get("name", boss_id)), "enemy_id": boss.id})
 
 func _enemy_tick(dt: float) -> void:
 	for source: Dictionary in enemies:
