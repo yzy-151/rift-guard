@@ -34,7 +34,7 @@
     ],
     "waves": [
       {
-        "at": 0,
+        "at": 4,
         "enemy_id": "grunt",
         "count": 18,
         "interval": 2.7,
@@ -277,7 +277,7 @@
     ],
     "waves": [
       {
-        "at": 0,
+        "at": 4,
         "enemy_id": "runner",
         "count": 20,
         "interval": 2.1,
@@ -534,7 +534,7 @@
     ],
     "waves": [
       {
-        "at": 0,
+        "at": 4,
         "enemy_id": "charger",
         "count": 18,
         "interval": 1.8,

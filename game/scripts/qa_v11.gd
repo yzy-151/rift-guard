@@ -127,8 +127,9 @@ func run(game) -> void:
 	sim.run_state.buff_levels["squad_attack_rare"] = 3
 	sim.state = "paused"
 	await capture(game, "02-pause-build-and-stats")
-	sim.state = "won"
-	game.stage_clear_sequence.play("宵宫", "火")
+	sim.reset_stage("stage_01", solo, 4404)
+	sim.begin_stage_exit()
+	game.battle.begin_stage_exit("hero_02", "宵宫", "pyro")
 	await game.get_tree().create_timer(0.72).timeout
 	await capture(game, "03-stage-door-unlock")
 

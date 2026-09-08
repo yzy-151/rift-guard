@@ -1,4 +1,5 @@
 extends Node2D
+signal stage_exit_finished
 ## All effects are cosmetic; gameplay remains in CombatSimulation.
 const Stage = preload("res://scripts/stage_projection.gd")
 const WORLD = Rect2(40, 140, 1200, 440)
@@ -12,6 +13,17 @@ var reduced_effects: bool = false
 var effects: Array[Dictionary] = []
 var clock: float = 0.0
 var shot_flashes: Dictionary = {}
+var route_previews: Dictionary = {}
+var spawn_portals: Dictionary = {}
+var stage_exit_active := false
+var stage_exit_phase := ""
+var stage_exit_timer := 0.0
+var stage_exit_character_id := ""
+var stage_exit_character_name := ""
+var stage_exit_element := ""
+var stage_exit_newcomer_pos := Vector2(1125, 360)
+const STAGE_EXIT_DOOR := Vector2(1135, 360)
+const STAGE_EXIT_MEET := Vector2(930, 360)
 var base_flash: float = 0.0
 var shake_trauma: float = 0.0
 var skill_targeting: bool = false
@@ -53,6 +65,8 @@ func advance(dt: float) -> void:
 	clock += dt
 	if sim != null and sim.endless_mode and not sim.heroes.is_empty():
 		camera_center = camera_center.lerp(sim.heroes[0].pos, 1.0 - exp(-dt * 7.0))
+	if stage_exit_active:
+		_advance_stage_exit(dt)
 	for id in shot_flashes:
 		shot_flashes[id] = maxf(0.0, shot_flashes[id] - dt)
 	base_flash = maxf(0.0, base_flash - dt)
@@ -61,6 +75,14 @@ func advance(dt: float) -> void:
 	for effect in effects:
 		effect.life -= dt
 	effects = effects.filter(func(e: Dictionary) -> bool: return e.life > 0.0)
+	for route_id: String in route_previews.keys():
+		route_previews[route_id].life = float(route_previews[route_id].life) - dt
+		if float(route_previews[route_id].life) <= 0.0:
+			route_previews.erase(route_id)
+	for route_id: String in spawn_portals.keys():
+		spawn_portals[route_id].life = float(spawn_portals[route_id].life) - dt
+		if float(spawn_portals[route_id].life) <= 0.0:
+			spawn_portals.erase(route_id)
 	sync_furina_actor(dt)
 	queue_redraw()
 
@@ -98,6 +120,16 @@ func sync_furina_actor(dt: float = 0.0) -> void:
 func accept_events(batch: Array[Dictionary]) -> void:
 	for event in batch:
 		match event.kind:
+			"route_warning":
+				var route_id := str(event.get("route_id", "main"))
+				var total := maxf(0.8, float(event.get("lead_time", 3.2)))
+				route_previews[route_id] = {"life": total, "total": total, "flying": bool(event.get("flying", false)), "boss": bool(event.get("boss", false))}
+				var route: Array = sim.stage_route(route_id)
+				if not route.is_empty():
+					spawn_portals[route_id] = {"pos": route[0], "life": total + 0.9, "total": total + 0.9}
+			"route_spawn":
+				var route_id := str(event.get("route_id", "main"))
+				spawn_portals[route_id] = {"pos": event.pos, "life": 1.15, "total": 1.15}
 			"shot":
 				shot_flashes[event.hero_id] = 0.12
 				var hero: Dictionary = sim.heroes[event.hero_id]
@@ -123,7 +155,9 @@ func _draw() -> void:
 	_draw_stage()
 	if not sim.endless_mode:
 		_draw_base_projected()
-		_draw_portal_projected()
+		_draw_spawn_portals()
+		if stage_exit_active:
+			_draw_stage_exit()
 	for zone: Dictionary in sim.skill_effects:
 		_draw_skill_zone(zone)
 	for construct: Dictionary in sim.geo_constructs:
@@ -181,6 +215,68 @@ func _draw() -> void:
 		caption(Vector2(960, 594), "敌军推进方向   ←", Color("#c99593"), 12)
 	if sim.state == "between":
 		caption(Vector2(548, 127), "队伍休整  %.1fs" % sim.wave_timer, TEAL, 16)
+
+func begin_stage_exit(character_id: String, character_name: String, element: String) -> void:
+	stage_exit_active = true
+	stage_exit_phase = "opening"
+	stage_exit_timer = 0.0
+	stage_exit_character_id = character_id
+	stage_exit_character_name = character_name
+	stage_exit_element = element
+	stage_exit_newcomer_pos = STAGE_EXIT_DOOR
+	spawn_portals["stage_exit"] = {"pos": STAGE_EXIT_DOOR, "life": 999.0, "total": 999.0}
+	queue_redraw()
+
+func reset_transients() -> void:
+	route_previews.clear()
+	spawn_portals.clear()
+	stage_exit_active = false
+	stage_exit_phase = ""
+	stage_exit_timer = 0.0
+
+func _advance_stage_exit(dt: float) -> void:
+	stage_exit_timer += dt
+	if stage_exit_phase == "opening":
+		var progress := clampf(stage_exit_timer / 1.0, 0.0, 1.0)
+		stage_exit_newcomer_pos = STAGE_EXIT_DOOR.lerp(STAGE_EXIT_MEET, progress)
+		if progress >= 1.0:
+			stage_exit_phase = "waiting"
+			stage_exit_timer = 0.0
+	elif stage_exit_phase == "waiting" and not sim.heroes.is_empty():
+		if sim.heroes[0].pos.distance_to(STAGE_EXIT_MEET) <= 78.0:
+			stage_exit_phase = "departing"
+			stage_exit_timer = 0.0
+			sim.heroes[0].target = STAGE_EXIT_DOOR + Vector2(-18, 0)
+	elif stage_exit_phase == "departing":
+		stage_exit_newcomer_pos = STAGE_EXIT_MEET.lerp(STAGE_EXIT_DOOR, clampf(stage_exit_timer / 1.35, 0.0, 1.0))
+		if stage_exit_timer >= 1.35:
+			stage_exit_active = false
+			spawn_portals.erase("stage_exit")
+			stage_exit_finished.emit()
+
+func _draw_stage_exit() -> void:
+	var door := world_to_screen(STAGE_EXIT_DOOR)
+	var open_ratio := clampf(stage_exit_timer / 0.75, 0.0, 1.0) if stage_exit_phase == "opening" else 1.0
+	draw_rect(Rect2(door + Vector2(-48 * open_ratio, -132), Vector2(96 * open_ratio, 145)), Color(0.94, 0.24, 0.36, 0.18))
+	draw_line(door + Vector2(-49 * open_ratio, 12), door + Vector2(-49 * open_ratio, -132), Color("#ff6477"), 7.0)
+	draw_line(door + Vector2(49 * open_ratio, 12), door + Vector2(49 * open_ratio, -132), Color("#ff6477"), 7.0)
+	draw_line(door + Vector2(-49 * open_ratio, -132), door + Vector2(49 * open_ratio, -132), Color("#ff8d99"), 7.0)
+	var actor := world_to_screen(stage_exit_newcomer_pos)
+	draw_ellipse_shadow(actor, 25.0, Color(0, 0, 0, 0.55))
+	var aura_color := element_color(stage_exit_element)
+	draw_circle(actor + Vector2(0, -24), 39.0 + sin(clock * 4.0) * 2.0, Color(aura_color, 0.10))
+	draw_arc(actor + Vector2(0, 5), 31.0, clock, clock + PI * 1.55, 28, Color(aura_color, 0.86), 2.5, true)
+	if stage_exit_character_id == "hero_03":
+		draw_texture_rect(furina_texture, Rect2(actor + Vector2(-34, -87), Vector2(68, 91)), false, Color.WHITE)
+	else:
+		var atlas_index := maxi(0, int(stage_exit_character_id.trim_prefix("hero_")) - 1)
+		var tile := Vector2(atlas_index * 16, 112)
+		draw_texture_rect_region(atlas, Rect2(actor + Vector2(-34, -64), Vector2(68, 68)), Rect2(tile, Vector2(16, 16)), Color.WHITE)
+	caption(actor + Vector2(-34, -91), stage_exit_character_name, aura_color, 15)
+	var instruction := "%s已解锁，正在进入下一关" % stage_exit_character_name if stage_exit_phase == "departing" else "右键移动旅行者，前往迎接 %s" % stage_exit_character_name
+	caption(Vector2(410, 132), instruction, Color("#ffe5df"), 18)
+	if stage_exit_phase == "waiting" and not sim.heroes.is_empty():
+		draw_dashed_line(world_to_screen(sim.heroes[0].pos), actor, Color(1.0, 0.62, 0.67, 0.62), 2.0, 10.0, true)
 
 func _draw_skill_preview() -> void:
 	var element: String = sim.traveler_skill_element()
@@ -242,31 +338,29 @@ func _ground_circle(point: Vector2, radius: float, color: Color) -> void:
 		draw_line(world_to_screen(point + Vector2.from_angle(i * TAU / 40) * radius), world_to_screen(point + Vector2.from_angle((i + 1) * TAU / 40) * radius), color, 1.3, true)
 
 func _draw_range_indicator(hero: Dictionary) -> void:
-	var center: Vector2 = world_to_screen(hero.pos) + Vector2(0, 8)
-	var depth: float = world_depth_scale(hero.pos)
-	var radius_x: float = minf(210.0, 35.0 + hero.range * 0.56 * depth)
-	var radius_y: float = radius_x * 0.30
+	var center: Vector2 = world_to_screen(hero.pos)
 	var color := Color(hero.color)
 	var points := PackedVector2Array()
 	for i in 72:
 		var angle: float = float(i) * TAU / 72.0
-		points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
+		points.append(world_to_screen(hero.pos + Vector2.from_angle(angle) * float(hero.range)))
 	draw_colored_polygon(points, Color(color, 0.055))
 	points.append(points[0])
-	draw_polyline(points, Color(color, 0.48), 1.6, true)
+	draw_polyline(points, Color(color, 0.78), 2.2, true)
 	for segment in 16:
-		var start: float = float(segment) * TAU / 16.0 + 0.035
-		var finish: float = start + TAU / 16.0 * 0.46
+		var start: float = float(segment) * TAU / 16.0 + clock * 0.05
+		var finish: float = start + TAU / 16.0 * 0.52
 		var arc_points := PackedVector2Array()
-		for step in 5:
-			var angle: float = lerpf(start, finish, float(step) / 4.0)
-			arc_points.append(center + Vector2(cos(angle) * radius_x * 0.92, sin(angle) * radius_y * 0.92))
-		draw_polyline(arc_points, Color(color, 0.30), 1.0, true)
+		for step in 6:
+			var angle: float = lerpf(start, finish, float(step) / 5.0)
+			arc_points.append(world_to_screen(hero.pos + Vector2.from_angle(angle) * float(hero.range) * 0.94))
+		draw_polyline(arc_points, Color(color, 0.38), 1.4, true)
 	for angle in [0.0, PI * 0.5, PI, PI * 1.5]:
-		var edge := center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y)
-		var tangent := Vector2(-sin(angle), cos(angle) * radius_y / radius_x).normalized()
+		var edge := world_to_screen(hero.pos + Vector2.from_angle(angle) * float(hero.range))
+		var tangent := (edge - center).rotated(PI * 0.5).normalized()
 		draw_line(edge - tangent * 5.0, edge + tangent * 5.0, Color(color, 0.85), 2.0, true)
 	draw_arc(center, 12.0, 0, TAU, 32, Color(color, 0.28), 1.2, true)
+	caption(points[18] + Vector2(8, -4), "射程 %d" % int(hero.range), Color(color, 0.92), 12)
 
 func _draw_stage() -> void:
 	if sim.endless_mode:
@@ -300,16 +394,9 @@ func _draw_stage() -> void:
 		var route: Array = routes[route_id]
 		if route.size() < 2:
 			continue
-		var projected := PackedVector2Array()
-		for point: Vector2 in route:
-			projected.append(world_to_screen(point))
-		var route_color := Color("#e36a77") if route_id != "air" else Color("#e2c85f")
-		draw_polyline(projected, Color(route_color, 0.25), 2.0, true)
-		for i in range(1, route.size() - 1):
-			var direction: Vector2 = (world_to_screen(route[i + 1]) - world_to_screen(route[i])).normalized()
-			var arrow: Vector2 = world_to_screen(route[i])
-			var side := direction.rotated(PI * 0.5)
-			draw_polyline(PackedVector2Array([arrow - direction * 7 + side * 4, arrow, arrow - direction * 7 - side * 4]), Color(route_color, 0.54), 1.5, true)
+		_draw_route_bed(route)
+		if route_previews.has(route_id):
+			_draw_route_preview(route, route_previews[route_id])
 	# Rear wall has height independent of the floor projection.
 	for i in 12:
 		var ground: Vector2 = world_to_screen(Vector2(45 + i * 105, 140))
@@ -358,20 +445,48 @@ func _draw_base_projected() -> void:
 	draw_rect(Rect2(point + Vector2(-40, 46), Vector2(83 * sim.base_hp / 100.0, 6)), tint)
 	caption(point + Vector2(-35, 72), "基地核心", tint, 13)
 
-func _draw_portal_projected() -> void:
-	var starts: Array[Vector2] = []
-	for route_id: String in sim.stage_routes():
-		var route: Array = sim.stage_routes()[route_id]
-		if not route.is_empty() and not starts.has(route[0]):
-			starts.append(route[0])
-	if starts.is_empty():
-		for lane in Sim.LANES:
-			starts.append(Vector2(1195, lane))
-	for start: Vector2 in starts:
-		var point: Vector2 = world_to_screen(start)
-		draw_set_transform(point + Vector2(0, -23), 0, Vector2(0.55, 1))
-		draw_arc(Vector2.ZERO, 33, 0, TAU, 48, Color("#a64764"), 4, true)
-		draw_arc(Vector2.ZERO, 25, 0, TAU, 48, Color("#ec8a9a"), 1.5, true)
+func _draw_route_bed(route: Array) -> void:
+	for i in range(route.size() - 1):
+		var a := world_to_screen(route[i])
+		var b := world_to_screen(route[i + 1])
+		draw_line(a, b, Color(0.08, 0.045, 0.08, 0.82), 30.0, true)
+		draw_line(a, b, Color(0.46, 0.22, 0.27, 0.32), 2.0, true)
+		for fraction in [0.32, 0.68]:
+			var point: Vector2 = a.lerp(b, fraction)
+			var direction := (b - a).normalized()
+			var side := direction.rotated(PI * 0.5)
+			draw_polyline(PackedVector2Array([point - direction * 10 + side * 6, point, point - direction * 10 - side * 6]), Color(0.58, 0.33, 0.37, 0.40), 2.0, true)
+
+func _draw_route_preview(route: Array, preview: Dictionary) -> void:
+	var color := Color("#f2d26d") if bool(preview.get("flying", false)) else Color("#ff697c")
+	var pulse := 0.58 + sin(clock * 8.0) * 0.18
+	var width := 6.0 if bool(preview.get("boss", false)) else 4.0
+	for i in range(route.size() - 1):
+		var a := world_to_screen(route[i])
+		var b := world_to_screen(route[i + 1])
+		draw_dashed_line(a, b, Color(color, pulse), width, 13.0, true)
+		var direction := (b - a).normalized()
+		var side := direction.rotated(PI * 0.5)
+		for marker in 3:
+			var phase := fposmod(clock * 0.72 + marker / 3.0 + i * 0.13, 1.0)
+			var point := a.lerp(b, phase)
+			draw_polyline(PackedVector2Array([point - direction * 14 + side * 8, point, point - direction * 14 - side * 8]), Color(color, 0.94), 3.0, true)
+	var first := world_to_screen(route[0])
+	caption(first + Vector2(-72, -58), "BOSS 来袭" if bool(preview.get("boss", false)) else ("空中单位" if bool(preview.get("flying", false)) else "敌袭预告"), color, 13)
+
+func _draw_spawn_portals() -> void:
+	for route_id: String in spawn_portals:
+		var portal: Dictionary = spawn_portals[route_id]
+		var point := world_to_screen(portal.pos) + Vector2(0, -23)
+		var ratio := clampf(float(portal.life) / maxf(0.01, float(portal.total)), 0.0, 1.0)
+		var pulse := 1.0 + sin(clock * 10.0 + route_id.hash() % 7) * 0.10
+		draw_set_transform(point, clock * 0.18, Vector2(0.62, 1.0) * pulse)
+		draw_circle(Vector2.ZERO, 31.0, Color(0.28, 0.015, 0.06, 0.42 * ratio))
+		draw_arc(Vector2.ZERO, 36.0, 0, TAU, 48, Color(0.94, 0.23, 0.38, 0.95 * ratio), 5.0, true)
+		draw_arc(Vector2.ZERO, 25.0, -clock * 2.0, TAU - clock * 2.0, 32, Color(1.0, 0.68, 0.72, 0.86 * ratio), 2.0, true)
+		for spark in 6:
+			var angle := clock * 2.4 + spark * TAU / 6.0
+			draw_circle(Vector2.from_angle(angle) * (31.0 + spark % 2 * 8.0), 2.5, Color(1.0, 0.55, 0.63, ratio))
 		draw_set_transform(Vector2.ZERO)
 
 func draw_ellipse_shadow(pos: Vector2, radius: float, color: Color) -> void:

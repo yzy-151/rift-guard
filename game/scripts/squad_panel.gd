@@ -82,6 +82,14 @@ func build(owner_hud, game_database, state) -> void:
 
 func open(stage_id: String, current_squad: Array[String], newly_unlocked: Array = []) -> void:
 	next_stage_id = stage_id
+	var unlocked_changed := false
+	for value: Variant in newly_unlocked:
+		var unlocked_id := str(value)
+		if not unlocked_id.is_empty() and not progress.unlocked_characters.has(unlocked_id):
+			progress.unlocked_characters[unlocked_id] = true
+			unlocked_changed = true
+	if unlocked_changed:
+		progress.save_progress()
 	selected = ["traveler"]
 	for id: String in current_squad:
 		if id != "traveler" and progress.unlocked_characters.has(id) and selected.size() < 3:

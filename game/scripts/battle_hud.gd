@@ -391,9 +391,11 @@ func refresh(sim, selected_id: int) -> void:
 	if selected_id >= 0 and selected_id < sim.heroes.size():
 		var hero: Dictionary = sim.heroes[selected_id]
 		status_label.text = hero.name + (" · 已倒地，波末恢复" if hero.hp <= 0 else (" · 移动中，暂停攻击" if hero.moving else " · 自动攻击 / 右键走位"))
+	if sim.state == "stage_exit":
+		status_label.text = "通关区域 · 右键移动旅行者前往迎接新角色"
 	if sim.state == "between":
 		status_label.text = "队伍休整 · %d 秒后继续" % ceili(sim.wave_timer)
-	pause_button.disabled = sim.state in ["ready", "won", "lost", "reward"]
+	pause_button.disabled = sim.state in ["ready", "won", "lost", "reward", "stage_exit"]
 	pause_button.text = "继续  [空格]" if sim.state == "paused" else "暂停  [空格]"
 	for i in hero_buttons.size():
 		hero_buttons[i].visible = i < sim.heroes.size()

@@ -9,6 +9,7 @@ const StageRuntime = preload("res://scripts/stages/stage_runtime.gd")
 const XP_THRESHOLDS = [80, 190, 330, 500]
 const Catalog = preload("res://scripts/combat_catalog.gd")
 const MOVE_AREA = Rect2(185, 215, 475, 320)
+const STAGE_EXIT_AREA = Rect2(185, 215, 900, 320)
 const ENDLESS_ARENA = Rect2(80, 80, 2400, 1280)
 const LANES = [270.0, 360.0, 450.0]
 const PROJECTILE_SPEED: float = 720.0
@@ -293,12 +294,12 @@ func toggle_pause() -> void:
 		state = "paused"
 
 func command_move(hero_id: int, point: Vector2) -> void:
-	if state not in ["running", "between"] or hero_id < 0 or hero_id >= heroes.size():
+	if state not in ["running", "between", "stage_exit"] or hero_id < 0 or hero_id >= heroes.size():
 		return
 	var hero: Dictionary = heroes[hero_id]
 	if hero.hp <= 0:
 		return
-	var area := ENDLESS_ARENA if endless_mode else MOVE_AREA
+	var area := ENDLESS_ARENA if endless_mode else (STAGE_EXIT_AREA if state == "stage_exit" else MOVE_AREA)
 	hero.target = Vector2(clampf(point.x, area.position.x, area.end.x), clampf(point.y, area.position.y, area.end.y))
 	events.append({"kind": "move", "pos": hero.target, "hero_id": hero_id})
 
@@ -336,7 +337,7 @@ func tick(dt: float) -> void:
 		kill_streak_timer = maxf(0.0, kill_streak_timer - dt)
 		if kill_streak_timer <= 0.0:
 			kill_streak = 0
-	if state not in ["running", "between"]:
+	if state not in ["running", "between", "stage_exit"]:
 		return
 	elapsed += dt
 	traveler_skill_cooldown = maxf(0.0, traveler_skill_cooldown - dt)
@@ -352,6 +353,8 @@ func tick(dt: float) -> void:
 			h.pos = h.pos.move_toward(h.target, h.speed * dt)
 		h.attack_timer = maxf(0.0, h.attack_timer - dt)
 		h.heal_timer = maxf(0.0, h.heal_timer - dt)
+	if state == "stage_exit":
+		return
 	if state == "between":
 		wave_timer -= dt
 		if wave_timer <= 0:
@@ -434,9 +437,20 @@ func _spawn_tick(dt: float) -> void:
 		spawn_remaining -= 1
 		spawn_timer += 1.50 - wave * 0.10
 
+func begin_stage_exit() -> void:
+	state = "stage_exit"
+	projectiles.clear()
+	enemies.clear()
+	skill_effects.clear()
+	geo_constructs.clear()
+	if not heroes.is_empty():
+		heroes[0].target = heroes[0].pos
+
 func _stage_spawn_tick(dt: float) -> void:
 	for event: Dictionary in stage_runtime.tick(dt):
-		if event.kind == "spawn":
+		if event.kind == "route_warning":
+			events.append(event)
+		elif event.kind == "spawn":
 			wave = maxi(wave, int(event.get("wave", wave)))
 			spawn_on_route(str(event.enemy_id), str(event.route_id))
 		elif event.kind == "boss_wave":

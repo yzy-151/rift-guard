@@ -18,6 +18,9 @@ func _init(folder: String = "") -> void:
 		if argument.begins_with("--content-dir="):
 			base_dir = argument.trim_prefix("--content-dir=")
 	path = base_dir.path_join("game_config.xlsx")
+	if not FileAccess.file_exists(path) and FileAccess.file_exists("res://data/game_config.xlsx"):
+		path = "res://data/game_config.xlsx"
+		base_dir = "res://data"
 	load_config()
 func num(c: Dictionary, col: String, fallback: float, loc: String, low: float = -10000, high: float = 10000) -> float:
 	var value: String = str(c.get(col, "")).strip_edges()
