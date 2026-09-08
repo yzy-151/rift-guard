@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="模式一 V9：Boss警报与血条 / 关卡选择 / 永久战绩 / 八人解锁编队 / 深度元素构筑"
+config/description="模式一 V10：Boss三阶段狂暴 / Boss警报与血条 / 关卡选择 / 永久战绩 / 深度元素构筑"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

@@ -302,7 +302,7 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 		shield *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
 	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 28, "charger": 20, "healer": 30, "splitter": 34, "warder": 32, "boss_01": 180, "boss_02": 240}
 	var first_special: float = float(enemy.get("boss_pulse", enemy.get("heal_interval", enemy.get("ward_interval", 0.0))))
-	enemy.merge({"id": next_id, "kind": kind, "pos": point, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "xp": int(xp_values.get(kind, 10))})
+	enemy.merge({"id": next_id, "kind": kind, "pos": point, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "xp": int(xp_values.get(kind, 10))})
 	enemies.append(enemy)
 	return enemy
 
@@ -739,6 +739,8 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 	enemy.hp -= damage
 	enemy.flash = 0.1
 	events.append({"kind": "hit", "pos": enemy.pos + Vector2(0, -12), "value": ceili(damage)})
+	if enemy.hp > 0.0 and str(enemy.get("kind", "")).begins_with("boss_"):
+		_update_boss_phase(enemy)
 	if enemy.hp <= 0:
 		if enemy.get("kind", "") == "splitter" and not bool(enemy.get("split_done", false)):
 			enemy.split_done = true
@@ -766,6 +768,29 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 		grant_xp(enemy.xp)
 		events.append({"kind": "death", "pos": enemy.pos})
 	return damage
+
+func _update_boss_phase(enemy: Dictionary) -> void:
+	var ratio: float = float(enemy.hp) / maxf(1.0, float(enemy.max_hp))
+	var target_phase := 3 if ratio <= 0.35 else (2 if ratio <= 0.70 else 1)
+	var current_phase := int(enemy.get("boss_phase", 1))
+	if target_phase <= current_phase:
+		return
+	var jumps := target_phase - current_phase
+	enemy.boss_phase = target_phase
+	enemy.damage *= pow(1.18, jumps)
+	enemy.speed *= pow(1.12, jumps)
+	enemy.rate *= pow(1.10, jumps)
+	enemy.boss_pulse = maxf(2.8, float(enemy.get("boss_pulse", 7.0)) * pow(0.82, jumps))
+	enemy.special_timer = minf(float(enemy.special_timer), 0.8)
+	var restored: float = float(enemy.get("max_shield", 0.0)) * (0.28 if target_phase == 2 else 0.42)
+	enemy.shield = minf(float(enemy.get("max_shield", 0.0)), float(enemy.get("shield", 0.0)) + restored)
+	var reinforcements := target_phase if enemy.get("kind", "") == "boss_02" else target_phase - 1
+	for i in reinforcements:
+		var kind := "charger" if target_phase == 3 and i == 0 else "runner"
+		var minion := spawn_enemy(enemy.pos + Vector2(55.0 + i * 28.0, (i - 1) * 54.0), kind)
+		minion.hp *= 0.70
+		minion.max_hp = minion.hp
+	events.append({"kind": "boss_phase", "pos": enemy.pos, "value": target_phase, "name": str(enemy.name), "shield": ceili(restored)})
 
 func reaction_for(first: String, second: String) -> String:
 	var pair := [normalize_element(first), normalize_element(second)]

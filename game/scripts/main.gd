@@ -91,7 +91,11 @@ func _ready() -> void:
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	elif not content.loaded:
 		hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 28), "未找到 content/game_config.xlsx，当前使用内置内容。", 13, Color("#d6bd98"))
-	if "--v9-test" in OS.get_cmdline_user_args():
+	if "--v10-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v10_test")
+	elif "--v9-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v9_test")
@@ -179,6 +183,8 @@ func process_events() -> void:
 			sound.stop()
 		if event.kind == "boss_arrival":
 			hud.announce_boss(str(event.value))
+		if event.kind == "boss_phase":
+			hud.announce_boss_phase(str(event.name), int(event.value))
 		if event.kind == "hit" and not muted and not test_mode and sound_timer <= 0.0:
 			sound.pitch_scale = 0.94 + float(sim.shots_fired % 3) * 0.06
 			sound.play()
@@ -561,4 +567,8 @@ func run_v8_test() -> void:
 
 func run_v9_test() -> void:
 	var suite = preload("res://scripts/qa_v9.gd").new()
+	await suite.run(self)
+
+func run_v10_test() -> void:
+	var suite = preload("res://scripts/qa_v10.gd").new()
 	await suite.run(self)

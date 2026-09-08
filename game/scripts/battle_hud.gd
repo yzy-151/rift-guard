@@ -369,7 +369,7 @@ func refresh_boss(sim) -> void:
 		return
 	var shield: float = float(active.get("shield", 0.0))
 	var hp: float = maxf(0.0, float(active.hp))
-	boss_name_label.text = "◆  B O S S   /   %s  ◆" % str(active.get("name", "裂隙首领"))
+	boss_name_label.text = "◆  B O S S   /   %s   PHASE %s  ◆" % [str(active.get("name", "裂隙首领")), ["I", "II", "III"][clampi(int(active.get("boss_phase", 1)) - 1, 0, 2)]]
 	boss_hp_bar.max_value = maxf(1.0, float(active.max_hp))
 	boss_hp_bar.value = hp
 	boss_hp_label.text = "%d / %d%s" % [ceili(hp), ceili(float(active.max_hp)), "   ◇ 护盾 %d" % ceili(shield) if shield > 0.0 else ""]
@@ -396,6 +396,30 @@ func announce_boss(name: String) -> void:
 	out.tween_property(boss_alert, "position:y", 210.0, 0.28)
 	await out.finished
 	boss_alert.hide()
+
+func announce_boss_phase(name: String, phase: int) -> void:
+	if boss_warning != null and not muted:
+		boss_warning.stop()
+		boss_warning.pitch_scale = 1.08 if phase == 2 else 0.88
+		boss_warning.play()
+	boss_alert.text = "%s\n%s  狂 暴 阶 段" % ["P H A S E   II" if phase == 2 else "F I N A L   P H A S E", name]
+	boss_alert.position = Vector2(270, 228)
+	boss_alert.modulate = Color(1, 1, 1, 0)
+	boss_alert.scale = Vector2(1.20, 1.20)
+	boss_alert.pivot_offset = boss_alert.size * 0.5
+	boss_alert.show()
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(boss_alert, "modulate:a", 1.0, 0.14)
+	tween.tween_property(boss_alert, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await tween.finished
+	await get_tree().create_timer(0.72).timeout
+	var out := create_tween()
+	out.tween_property(boss_alert, "modulate:a", 0.0, 0.26)
+	await out.finished
+	boss_alert.hide()
+	if boss_warning != null:
+		boss_warning.pitch_scale = 1.0
 
 func result_grade(base_hp: int, streak: int) -> String:
 	if base_hp >= 85 and streak >= 20:
