@@ -161,7 +161,7 @@
     "lanes": {"upper":235,"main":355,"lower":485},
     "starting_squad": ["traveler", "hero_02", "hero_03"],
     "xp_thresholds": [40,90,150,220,300,390,490,600,720,850,990,1140,1300,1470,1650],
-    "unlocks": ["hero_04"],
+    "unlocks": ["hero_04", "hero_05", "hero_06", "hero_07", "hero_08"],
     "waves": [
       {"at":0,"enemy_id":"charger","count":18,"interval":1.8,"route_id":"main"},
       {"at":28,"enemy_id":"grunt","count":26,"interval":1.7,"route_id":"upper"},

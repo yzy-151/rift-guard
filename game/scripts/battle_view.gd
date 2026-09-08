@@ -69,11 +69,15 @@ func build_furina_actor() -> void:
 	call_deferred("sync_furina_actor")
 
 func sync_furina_actor(dt: float = 0.0) -> void:
-	if furina_actor == null or sim == null or sim.heroes.size() < 3:
+	if furina_actor == null or sim == null:
 		return
-	var hero: Dictionary = sim.heroes[2]
-	var shot_life: float = shot_flashes.get(hero.id, 0.0)
-	furina_actor.sync(hero, Stage.project(hero.pos), Stage.depth_scale(hero.pos), shot_life, reduced_effects, dt)
+	for hero: Dictionary in sim.heroes:
+		if hero.get("character_id", "") == "hero_03":
+			furina_actor.visible = true
+			var shot_life: float = shot_flashes.get(hero.id, 0.0)
+			furina_actor.sync(hero, Stage.project(hero.pos), Stage.depth_scale(hero.pos), shot_life, reduced_effects, dt)
+			return
+	furina_actor.visible = false
 
 func accept_events(batch: Array[Dictionary]) -> void:
 	for event in batch:
@@ -81,10 +85,13 @@ func accept_events(batch: Array[Dictionary]) -> void:
 			"shot":
 				shot_flashes[event.hero_id] = 0.12
 				var hero: Dictionary = sim.heroes[event.hero_id]
-				effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25, -20), "life": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0})
-			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "crystal_guard", "enemy_heal", "enemy_guard", "split", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break":
+				if effects.size() < 260:
+					effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25, -20), "life": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0})
+			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "crystal_guard", "enemy_heal", "enemy_guard", "split", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break":
+				if effects.size() >= 320 and event.kind in ["hit", "death", "move", "muzzle"]:
+					continue
 				effects.append({"kind": event.kind, "pos": event.pos, "life": 0.6, "value": event.get("value", 0)})
-				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "skill_pyro", "skill_electro", "geo_break"]:
+				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "skill_pyro", "skill_electro", "geo_break", "kill_streak"]:
 					shake_trauma = minf(1.0, shake_trauma + 0.42)
 				elif event.kind in ["hit", "slash", "chain"]:
 					shake_trauma = minf(0.42, shake_trauma + 0.045)
@@ -492,6 +499,12 @@ func _draw_effect(effect: Dictionary) -> void:
 		var support_color := Color(0.48, 0.95, 0.79, fade)
 		draw_arc(effect.pos, 16 + t * 62, 0, TAU, 40, support_color, 3.0, true)
 		caption(effect.pos + Vector2(-42, -58 - t * 20), "支援接入" if effect.kind != "frenzy" else "战意升级", support_color, 18)
+	elif effect.kind == "kill_streak":
+		var streak_color := Color(1.0, 0.35, 0.30, fade)
+		caption(effect.pos + Vector2(-72, -105 - t * 38), "%d 连杀" % int(effect.value), streak_color, 28)
+		if not reduced_effects:
+			for ring in 3:
+				draw_arc(effect.pos + Vector2(0, -18), 22.0 + ring * 15.0 + t * 58.0, 0, TAU, 36, Color(streak_color, fade * (0.8 - ring * 0.18)), 4.0 - ring, true)
 	elif effect.kind == "hit":
 		caption(effect.pos + Vector2(-8, -25 - t * 30), str(effect.value), Color(1, 0.84, 0.58, fade), 16)
 		if not reduced_effects:

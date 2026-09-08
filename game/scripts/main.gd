@@ -8,6 +8,7 @@ const Story = preload("res://scripts/dialogue_director.gd")
 const Content = preload("res://scripts/content_config.gd")
 const CompendiumState = preload("res://scripts/compendium_state.gd")
 const CompendiumPanel = preload("res://scripts/compendium_panel.gd")
+const SquadPanel = preload("res://scripts/squad_panel.gd")
 var content = Content.new()
 var story = Story.new(content)
 var saved_story
@@ -27,6 +28,9 @@ var sound_timer: float = 0.0
 var test_mode: bool = false
 var compendium = CompendiumState.new()
 var compendium_panel
+var squad_panel
+var pending_stage_id := ""
+var pending_stage_number := 0
 var stage_result_recorded := false
 var skill_aiming := false
 
@@ -52,6 +56,7 @@ func _ready() -> void:
 		battle.reduced_effects = enabled
 		fx.reduced = enabled)
 	hud.compendium_action.connect(toggle_compendium)
+	hud.squad_action.connect(open_current_squad)
 	hud.skill_action.connect(toggle_skill_aiming)
 	sound = AudioStreamPlayer.new()
 	sound.stream = preload("res://assets/hit.ogg")
@@ -68,6 +73,10 @@ func _ready() -> void:
 	compendium_panel = CompendiumPanel.new()
 	add_child(compendium_panel)
 	compendium_panel.build(hud, sim.database, compendium)
+	squad_panel = SquadPanel.new()
+	add_child(squad_panel)
+	squad_panel.build(hud, sim.database, compendium)
+	squad_panel.confirmed.connect(confirm_next_squad)
 	dialogue.finished.connect(end_dialogue)
 	refresh()
 	if not content.errors.is_empty():
@@ -79,6 +88,10 @@ func _ready() -> void:
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v6_test")
+	elif "--v7-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v7_test")
 	elif "--v5-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
@@ -116,7 +129,7 @@ func _ready() -> void:
 		call_deferred("run_smoke_test")
 
 func _physics_process(dt: float) -> void:
-	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open():
+	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open():
 		return
 	sim.tick(dt)
 	check_story()
@@ -137,7 +150,7 @@ func _process(dt: float) -> void:
 			hud.signature = ""
 			refresh()
 	sound_timer = maxf(0.0, sound_timer - dt)
-	if not story.active and not picker.visible and not compendium_panel.is_open() and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
+	if not story.active and not picker.visible and not compendium_panel.is_open() and not squad_panel.is_open() and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
 		battle.advance(dt)
 		fx.advance(dt)
 
@@ -226,10 +239,19 @@ func _input(event: InputEvent) -> void:
 		toggle_compendium()
 		get_viewport().set_input_as_handled()
 		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3 and not story.active:
+		open_current_squad()
+		get_viewport().set_input_as_handled()
+		return
 	if compendium_panel.is_open():
 		if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 			compendium_panel.close()
 			get_viewport().set_input_as_handled()
+		return
+	if squad_panel.is_open():
+		if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ENTER:
+			squad_panel.confirm()
+		get_viewport().set_input_as_handled()
 		return
 	if picker.visible:
 		if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
@@ -279,7 +301,7 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if story.active or picker.visible or effect_preview > 0:
+	if story.active or picker.visible or effect_preview > 0 or squad_panel.is_open():
 		return
 	if sim.state not in ["running", "between"]:
 		return
@@ -376,12 +398,31 @@ func advance_stage() -> void:
 	if index < 0 or index + 1 >= ids.size():
 		return
 	var completed: Dictionary = sim.database.stages.get(sim.current_stage_id, {})
-	var squad: Array[String] = sim.run_state.squad.duplicate()
-	for id: Variant in completed.get("unlocks", []):
-		if squad.size() < 3 and str(id) not in squad:
-			squad.append(str(id))
+	var unlocks: Array = completed.get("unlocks", [])
+	compendium.clear_stage(sim.current_stage_id, unlocks)
+	pending_stage_id = str(ids[index + 1])
+	pending_stage_number = index + 2
+	squad_panel.open(pending_stage_id, sim.run_state.squad, unlocks)
+	sound.stop()
+
+func open_current_squad() -> void:
+	if story.active or compendium_panel.is_open() or squad_panel.is_open() or sim.state not in ["ready", "won"]:
+		return
+	var mode: Dictionary = sim.database.modes.get(sim.run_state.mode_id, {})
+	var ids: Array = mode.get("stage_ids", [])
+	var index := ids.find(sim.current_stage_id)
+	if index < 0:
+		return
+	pending_stage_id = sim.current_stage_id
+	pending_stage_number = index + 1
+	squad_panel.open(pending_stage_id, sim.run_state.squad)
+	sound.stop()
+
+func confirm_next_squad(squad: Array[String]) -> void:
+	if pending_stage_id.is_empty():
+		return
 	story.reset()
-	sim.reset_stage(str(ids[index + 1]), squad, sim.run_seed + 1)
+	sim.reset_stage(pending_stage_id, squad, sim.run_seed + 1)
 	selected_id = 0
 	set_skill_aiming(false)
 	stage_result_recorded = false
@@ -389,8 +430,10 @@ func advance_stage() -> void:
 	battle.effects.clear()
 	battle.shot_flashes.clear()
 	hud.get_child(0).show()
-	var next_number: int = index + 2
-	if not begin_dialogue("mode1_stage%d_opening" % next_number, "start"):
+	var dialogue_key := "mode1_opening" if pending_stage_number == 1 else "mode1_stage%d_opening" % pending_stage_number
+	pending_stage_id = ""
+	pending_stage_number = 0
+	if not begin_dialogue(dialogue_key, "start"):
 		sim.start()
 
 func run_m4_test() -> void:
@@ -432,7 +475,7 @@ func run_phase1_test() -> void:
 	await suite.run(self)
 
 func toggle_compendium() -> void:
-	if story.active:
+	if story.active or squad_panel.is_open():
 		return
 	if compendium_panel.is_open():
 		compendium_panel.close()
@@ -442,7 +485,7 @@ func toggle_compendium() -> void:
 		sound.stop()
 
 func toggle_skill_aiming() -> void:
-	if story.active or compendium_panel.is_open() or sim.state != "running" or sim.traveler_skill_cooldown > 0.0:
+	if story.active or compendium_panel.is_open() or squad_panel.is_open() or sim.state != "running" or sim.traveler_skill_cooldown > 0.0:
 		return
 	set_skill_aiming(not skill_aiming)
 
@@ -464,4 +507,8 @@ func run_v5_test() -> void:
 
 func run_v6_test() -> void:
 	var suite = preload("res://scripts/qa_v6.gd").new()
+	await suite.run(self)
+
+func run_v7_test() -> void:
+	var suite = preload("res://scripts/qa_v7.gd").new()
 	await suite.run(self)

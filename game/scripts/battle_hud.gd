@@ -7,6 +7,7 @@ signal select_action(hero_id: int)
 signal mute_action(enabled: bool)
 signal reduce_action(enabled: bool)
 signal compendium_action
+signal squad_action
 signal skill_action
 
 const WHITE = Color("#f3e9df")
@@ -71,6 +72,9 @@ func _ready() -> void:
 	bind(label(root, Vector2(207, 40), Vector2(500, 24), "城门之下 · 守至黎明", 14, MUTED), "game_subtitle")
 	progression_label = label(root, Vector2(620, 47), Vector2(625, 22), "", 12, TEAL)
 	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	var squad_btn := button(root, Rect2(570, 8, 156, 36), "编队  [F3]", false)
+	bind(squad_btn, "squad_button")
+	squad_btn.pressed.connect(func(): squad_action.emit())
 	var archive_btn := button(root, Rect2(740, 8, 156, 36), "图鉴  [F2]", false)
 	archive_btn.pressed.connect(func(): compendium_action.emit())
 	pause_button = button(root, Rect2(911, 8, 156, 36), "暂停  [空格]", false)
@@ -126,7 +130,7 @@ func _ready() -> void:
 		reduced = not reduced
 		reduce_btn.text = "反馈：减弱" if reduced else "反馈：标准"
 		reduce_action.emit(reduced))
-	background_buttons = [archive_btn, pause_button, reset_btn, mute_btn, reduce_btn, skill_button]
+	background_buttons = [squad_btn, archive_btn, pause_button, reset_btn, mute_btn, reduce_btn, skill_button]
 	background_buttons.append_array(hero_buttons)
 	overlay = ColorRect.new()
 	overlay.color = Color(0.025, 0.035, 0.05, 0.76)
@@ -226,7 +230,7 @@ func button(parent: Node, rect: Rect2, text: String, accent: bool) -> Button:
 	return item
 
 func refresh(sim, selected_id: int) -> void:
-	var next_signature: String = str([sim.state, sim.base_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming])
+	var next_signature: String = str([sim.state, sim.base_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming])
 	if sim.v2_mode:
 		next_signature += str([sim.run_state.traveler_element, sim.run_state.pending_level_ups, floori(sim.stage_runtime.remaining_seconds())])
 	for hero in sim.heroes:
@@ -244,7 +248,7 @@ func refresh(sim, selected_id: int) -> void:
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
 		wave_label.text = "节点   %02d / 05" % sim.wave
-	count_label.text = ("击退 %02d  ·  在场 %02d  ·  强化 %02d" % [sim.kills, sim.enemies.size(), sim.rewards.history.size()]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
+	count_label.text = ("击退 %02d  ·  在场 %02d  ·  连杀 %02d" % [sim.kills, sim.enemies.size(), sim.kill_streak]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
 	status_label.text = "按 1/2/3 或点击角色卡选择"
 	refresh_skill(sim)
 	refresh_supports(sim)

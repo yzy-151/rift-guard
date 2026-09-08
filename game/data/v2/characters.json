@@ -17,7 +17,7 @@
   },
   {
     "id": "hero_02",
-    "name": "角色02",
+    "name": "宵宫",
     "role": "火系远程",
     "element": "pyro",
     "max_hp": 130,
@@ -33,7 +33,7 @@
   },
   {
     "id": "hero_03",
-    "name": "角色03",
+    "name": "芙宁娜",
     "role": "水系辅助",
     "element": "hydro",
     "max_hp": 145,
@@ -49,7 +49,7 @@
   },
   {
     "id": "hero_04",
-    "name": "角色04",
+    "name": "刻晴",
     "role": "雷系术士",
     "element": "electro",
     "max_hp": 125,
@@ -65,7 +65,7 @@
   },
   {
     "id": "hero_05",
-    "name": "角色05",
+    "name": "甘雨",
     "role": "冰系控场",
     "element": "cryo",
     "max_hp": 155,
@@ -81,7 +81,7 @@
   },
   {
     "id": "hero_06",
-    "name": "角色06",
+    "name": "温迪",
     "role": "风系先锋",
     "element": "anemo",
     "max_hp": 205,
@@ -97,7 +97,7 @@
   },
   {
     "id": "hero_07",
-    "name": "角色07",
+    "name": "钟离",
     "role": "岩系守卫",
     "element": "geo",
     "max_hp": 330,
@@ -113,7 +113,7 @@
   },
   {
     "id": "hero_08",
-    "name": "角色08",
+    "name": "白露",
     "role": "多元素支援",
     "element": "hydro",
     "max_hp": 165,

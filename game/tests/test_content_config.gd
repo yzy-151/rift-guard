@@ -11,7 +11,7 @@ func _initialize() -> void:
 	var root: String = ProjectSettings.globalize_path("res://../research/m5-fixtures")
 	var original = Config.new(ProjectSettings.globalize_path("res://../content"))
 	check(original.loaded and original.errors.is_empty(), "real authored xlsx loads")
-	check(original.stories.get("opening", []).size() == 4 and original.ui.size() == 21, "story and UI sheets parsed")
+	check(original.stories.get("opening", []).size() == 4 and original.stories.get("mode1_opening", []).size() == 3 and original.ui.size() == 35, "legacy and Mode 1 stories plus all UI controls parsed")
 	if original.loaded:
 		check(original.texture("saria") != null, "built-in texture resolves")
 	var modified = Config.new(root.path_join("modified"))

@@ -66,6 +66,9 @@ var skill_cooldown_reduction: float = 0.0
 var skill_area_bonus: float = 0.0
 var skill_duration_bonus: float = 0.0
 var crystal_shield: float = 0.0
+var kill_streak: int = 0
+var best_streak: int = 0
+var kill_streak_timer: float = 0.0
 
 func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 	v2_mode = enable_v2
@@ -114,6 +117,9 @@ func reset(seed_value: int = -1) -> void:
 	skill_area_bonus = 0.0
 	skill_duration_bonus = 0.0
 	crystal_shield = 0.0
+	kill_streak = 0
+	best_streak = 0
+	kill_streak_timer = 0.0
 	heroes.clear()
 	enemies.clear()
 	projectiles.clear()
@@ -175,6 +181,9 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	skill_area_bonus = 0.0
 	skill_duration_bonus = 0.0
 	crystal_shield = 0.0
+	kill_streak = 0
+	best_streak = 0
+	kill_streak_timer = 0.0
 	heroes.clear()
 	enemies.clear()
 	projectiles.clear()
@@ -193,9 +202,9 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 			"hp": float(source.max_hp), "armor": float(source.armor), "damage": float(source.attack),
 			"rate": float(source.attack_rate), "range": float(source.attack_range), "speed": float(source.move_speed),
 			"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
-			"color": colors[i], "tile": Vector2(i * 16, 112)
+			"color": colors[i], "tile": Vector2(i * 16, 112), "visual": "furina" if id == "hero_03" else ""
 		}
-		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.65, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0})
+		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.65, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0})
 		heroes.append(h)
 
 func _add_reinforcement(character_id: String) -> bool:
@@ -211,9 +220,9 @@ func _add_reinforcement(character_id: String) -> bool:
 		"hp": float(source.max_hp), "armor": float(source.armor), "damage": float(source.attack),
 		"rate": float(source.attack_rate), "range": float(source.attack_range), "speed": float(source.move_speed),
 		"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
-		"color": colors[i], "tile": Vector2(i * 16, 112)
+		"color": colors[i], "tile": Vector2(i * 16, 112), "visual": "furina" if character_id == "hero_03" else ""
 	}
-	hero.merge({"id": i, "max_hp": hero.hp, "target": hero.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": hero.damage, "base_hp": hero.hp, "base_rate": hero.rate, "cleave": false, "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0})
+	hero.merge({"id": i, "max_hp": hero.hp, "target": hero.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": hero.damage, "base_hp": hero.hp, "base_rate": hero.rate, "cleave": false, "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0})
 	heroes.append(hero)
 	events.append({"kind": "reinforcement", "pos": hero.pos, "value": character_id})
 	return true
@@ -304,6 +313,10 @@ func find_enemy(id: int) -> Dictionary:
 	return {}
 
 func tick(dt: float) -> void:
+	if kill_streak_timer > 0.0:
+		kill_streak_timer = maxf(0.0, kill_streak_timer - dt)
+		if kill_streak_timer <= 0.0:
+			kill_streak = 0
 	if state not in ["running", "between"]:
 		return
 	elapsed += dt
@@ -616,16 +629,16 @@ func _hero_tick() -> void:
 	for h in heroes:
 		if h.hp <= 0 or h.moving:
 			continue
-		if h.element == "water" and h.heal_timer <= 0:
+		if normalize_element(str(h.element)) == "hydro" and h.heal_timer <= 0:
 			var ally: Dictionary = {}
 			for other in heroes:
 				if other.hp > 0 and other.hp < other.max_hp and h.pos.distance_to(other.pos) <= HEAL_RANGE:
 					if ally.is_empty() or other.hp / other.max_hp < ally.hp / ally.max_hp:
 						ally = other
 			if not ally.is_empty():
-				var healing: float = minf(heal_amount, ally.max_hp - ally.hp)
+				var healing: float = minf(float(h.get("heal_power", heal_amount)), ally.max_hp - ally.hp)
 				ally.hp += healing
-				h.heal_timer = heal_interval
+				h.heal_timer = float(h.get("personal_heal_interval", heal_interval))
 				events.append({"kind": "heal", "pos": ally.pos, "value": ceili(healing)})
 		if h.attack_timer > 0:
 			continue
@@ -734,6 +747,11 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 				child.xp = 4
 			events.append({"kind": "split", "pos": enemy.pos, "value": int(enemy.get("split_count", 2))})
 		kills += 1
+		kill_streak += 1
+		kill_streak_timer = 2.5
+		best_streak = maxi(best_streak, kill_streak)
+		if kill_streak == 10 or kill_streak == 25 or kill_streak % 50 == 0:
+			events.append({"kind": "kill_streak", "pos": enemy.pos, "value": kill_streak})
 		if death_burst_ratio > 0.0:
 			splash_damage(enemy, enemy.max_hp * death_burst_ratio, 90.0)
 			events.append({"kind": "death_burst", "pos": enemy.pos})
@@ -943,12 +961,50 @@ func apply_v2_card_effect(card: Dictionary) -> void:
 			for hero in targets: hero.speed += value
 		"special_upgrade":
 			for hero in targets:
-				hero.cleave = true
-				hero.cleave_ratio = maxf(float(hero.get("cleave_ratio", 0.5)), 0.75)
+				match str(hero.get("character_id", "")):
+					"hero_02": hero.projectile_count = int(hero.projectile_count) + 1
+					"hero_03": hero.heal_power = float(hero.heal_power) + 18.0
+					"hero_04": hero.chain_count = int(hero.chain_count) + 2
+					"hero_05":
+						hero.slow = true
+						hero.blast_radius = maxf(float(hero.blast_radius), 72.0)
+					"hero_06": hero.pierce = int(hero.pierce) + 2
+					"hero_07":
+						hero.cleave = true
+						hero.armor += 28.0
+					"hero_08": hero.personal_heal_interval = maxf(0.65, float(hero.personal_heal_interval) * 0.72)
+					_:
+						hero.cleave = true
+						hero.cleave_ratio = maxf(float(hero.get("cleave_ratio", 0.5)), 0.75)
 		"signature_upgrade":
 			for hero in targets:
-				hero.damage += hero.base_damage * 0.35
-				hero.rate += hero.base_rate * 0.20
+				match str(hero.get("character_id", "")):
+					"hero_02":
+						hero.projectile_count = int(hero.projectile_count) + 2
+						hero.blast_radius = maxf(float(hero.blast_radius), 82.0)
+					"hero_03":
+						hero.echo_ratio = maxf(float(hero.echo_ratio), 0.48)
+						hero.heal_power = float(hero.heal_power) + 26.0
+					"hero_04":
+						hero.chain_count = int(hero.chain_count) + 4
+						hero.rate += hero.base_rate * 0.28
+					"hero_05":
+						hero.blast_radius = maxf(float(hero.blast_radius), 125.0)
+						hero.damage += hero.base_damage * 0.42
+					"hero_06":
+						hero.projectile_count = int(hero.projectile_count) + 1
+						hero.pierce = int(hero.pierce) + 4
+					"hero_07":
+						hero.cleave = true
+						hero.cleave_ratio = 1.0
+						hero.max_hp += hero.base_hp * 0.55
+						hero.hp += hero.base_hp * 0.55
+					"hero_08":
+						hero.heal_power = float(hero.heal_power) + 48.0
+						hero.personal_heal_interval = maxf(0.55, float(hero.personal_heal_interval) * 0.62)
+					_:
+						hero.damage += hero.base_damage * 0.35
+						hero.rate += hero.base_rate * 0.20
 		"projectile_count_add":
 			for hero in targets: hero.projectile_count = int(hero.get("projectile_count", 1)) + int(value)
 		"pierce_add":

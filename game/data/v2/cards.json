@@ -85,8 +85,8 @@
   },
   {
     "id": "traveler_special_epic",
-    "name": "战技改造",
-    "description": "旅行者：攻击方式获得角色专属强化",
+    "name": "剑术扩展",
+    "description": "旅行者：普攻获得大范围顺劈。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
@@ -100,7 +100,7 @@
   {
     "id": "traveler_signature_legendary",
     "name": "命之座共鸣",
-    "description": "旅行者：解锁角色传奇核心效果",
+    "description": "旅行者：攻击力提高35%，攻击速度提高20%。",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
@@ -114,7 +114,7 @@
   {
     "id": "hero_02_attack_common",
     "name": "锋刃强化",
-    "description": "角色02：攻击力提高12%",
+    "description": "宵宫：攻击力提高12%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -128,7 +128,7 @@
   {
     "id": "hero_02_health_common",
     "name": "生命训练",
-    "description": "角色02：最大生命提高15%",
+    "description": "宵宫：最大生命提高15%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -142,7 +142,7 @@
   {
     "id": "hero_02_speed_common",
     "name": "节奏训练",
-    "description": "角色02：攻击速度提高10%",
+    "description": "宵宫：攻击速度提高10%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -156,7 +156,7 @@
   {
     "id": "hero_02_range_rare",
     "name": "延伸战线",
-    "description": "角色02：攻击范围提高40",
+    "description": "宵宫：攻击范围提高40",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -170,7 +170,7 @@
   {
     "id": "hero_02_armor_rare",
     "name": "战术装甲",
-    "description": "角色02：防御提高20",
+    "description": "宵宫：防御提高20",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -184,7 +184,7 @@
   {
     "id": "hero_02_move_rare",
     "name": "快速调位",
-    "description": "角色02：移动速度提高25",
+    "description": "宵宫：移动速度提高25",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -197,8 +197,8 @@
   },
   {
     "id": "hero_02_special_epic",
-    "name": "战技改造",
-    "description": "角色02：攻击方式获得角色专属强化",
+    "name": "烟火轮舞",
+    "description": "宵宫：每次攻击额外发射1枚火矢。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
@@ -211,8 +211,8 @@
   },
   {
     "id": "hero_02_signature_legendary",
-    "name": "命之座共鸣",
-    "description": "角色02：解锁角色传奇核心效果",
+    "name": "琉金云间草",
+    "description": "宵宫：额外发射2枚火矢，命中产生范围爆炸。",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
@@ -226,7 +226,7 @@
   {
     "id": "hero_03_attack_common",
     "name": "锋刃强化",
-    "description": "角色03：攻击力提高12%",
+    "description": "芙宁娜：攻击力提高12%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -240,7 +240,7 @@
   {
     "id": "hero_03_health_common",
     "name": "生命训练",
-    "description": "角色03：最大生命提高15%",
+    "description": "芙宁娜：最大生命提高15%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -254,7 +254,7 @@
   {
     "id": "hero_03_speed_common",
     "name": "节奏训练",
-    "description": "角色03：攻击速度提高10%",
+    "description": "芙宁娜：攻击速度提高10%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -268,7 +268,7 @@
   {
     "id": "hero_03_range_rare",
     "name": "延伸战线",
-    "description": "角色03：攻击范围提高40",
+    "description": "芙宁娜：攻击范围提高40",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -282,7 +282,7 @@
   {
     "id": "hero_03_armor_rare",
     "name": "战术装甲",
-    "description": "角色03：防御提高20",
+    "description": "芙宁娜：防御提高20",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -296,7 +296,7 @@
   {
     "id": "hero_03_move_rare",
     "name": "快速调位",
-    "description": "角色03：移动速度提高25",
+    "description": "芙宁娜：移动速度提高25",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -309,8 +309,8 @@
   },
   {
     "id": "hero_03_special_epic",
-    "name": "战技改造",
-    "description": "角色03：攻击方式获得角色专属强化",
+    "name": "万众狂欢",
+    "description": "芙宁娜：每次治疗量提高18。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
@@ -323,8 +323,8 @@
   },
   {
     "id": "hero_03_signature_legendary",
-    "name": "命之座共鸣",
-    "description": "角色03：解锁角色传奇核心效果",
+    "name": "众水的颂诗",
+    "description": "芙宁娜：攻击追加48%回响伤害，治疗量提高26。",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
@@ -338,7 +338,7 @@
   {
     "id": "hero_04_attack_common",
     "name": "锋刃强化",
-    "description": "角色04：攻击力提高12%",
+    "description": "刻晴：攻击力提高12%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -352,7 +352,7 @@
   {
     "id": "hero_04_health_common",
     "name": "生命训练",
-    "description": "角色04：最大生命提高15%",
+    "description": "刻晴：最大生命提高15%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -366,7 +366,7 @@
   {
     "id": "hero_04_speed_common",
     "name": "节奏训练",
-    "description": "角色04：攻击速度提高10%",
+    "description": "刻晴：攻击速度提高10%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -380,7 +380,7 @@
   {
     "id": "hero_04_range_rare",
     "name": "延伸战线",
-    "description": "角色04：攻击范围提高40",
+    "description": "刻晴：攻击范围提高40",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -394,7 +394,7 @@
   {
     "id": "hero_04_armor_rare",
     "name": "战术装甲",
-    "description": "角色04：防御提高20",
+    "description": "刻晴：防御提高20",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -408,7 +408,7 @@
   {
     "id": "hero_04_move_rare",
     "name": "快速调位",
-    "description": "角色04：移动速度提高25",
+    "description": "刻晴：移动速度提高25",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -421,8 +421,8 @@
   },
   {
     "id": "hero_04_special_epic",
-    "name": "战技改造",
-    "description": "角色04：攻击方式获得角色专属强化",
+    "name": "星斗归位",
+    "description": "刻晴：雷击额外弹射2名敌人。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
@@ -435,8 +435,8 @@
   },
   {
     "id": "hero_04_signature_legendary",
-    "name": "命之座共鸣",
-    "description": "角色04：解锁角色传奇核心效果",
+    "name": "雷楔风暴",
+    "description": "刻晴：雷击额外弹射4名敌人，攻击速度提高28%。",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
@@ -450,7 +450,7 @@
   {
     "id": "hero_05_attack_common",
     "name": "锋刃强化",
-    "description": "角色05：攻击力提高12%",
+    "description": "甘雨：攻击力提高12%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -464,7 +464,7 @@
   {
     "id": "hero_05_health_common",
     "name": "生命训练",
-    "description": "角色05：最大生命提高15%",
+    "description": "甘雨：最大生命提高15%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -478,7 +478,7 @@
   {
     "id": "hero_05_speed_common",
     "name": "节奏训练",
-    "description": "角色05：攻击速度提高10%",
+    "description": "甘雨：攻击速度提高10%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -492,7 +492,7 @@
   {
     "id": "hero_05_range_rare",
     "name": "延伸战线",
-    "description": "角色05：攻击范围提高40",
+    "description": "甘雨：攻击范围提高40",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -506,7 +506,7 @@
   {
     "id": "hero_05_armor_rare",
     "name": "战术装甲",
-    "description": "角色05：防御提高20",
+    "description": "甘雨：防御提高20",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -520,7 +520,7 @@
   {
     "id": "hero_05_move_rare",
     "name": "快速调位",
-    "description": "角色05：移动速度提高25",
+    "description": "甘雨：移动速度提高25",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -533,8 +533,8 @@
   },
   {
     "id": "hero_05_special_epic",
-    "name": "战技改造",
-    "description": "角色05：攻击方式获得角色专属强化",
+    "name": "霜华矢",
+    "description": "甘雨：箭矢附带减速并产生72范围冰爆。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
@@ -547,8 +547,8 @@
   },
   {
     "id": "hero_05_signature_legendary",
-    "name": "命之座共鸣",
-    "description": "角色05：解锁角色传奇核心效果",
+    "name": "麒麟巡游",
+    "description": "甘雨：冰爆范围扩大至125，攻击力提高42%。",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
@@ -562,7 +562,7 @@
   {
     "id": "hero_06_attack_common",
     "name": "锋刃强化",
-    "description": "角色06：攻击力提高12%",
+    "description": "温迪：攻击力提高12%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -576,7 +576,7 @@
   {
     "id": "hero_06_health_common",
     "name": "生命训练",
-    "description": "角色06：最大生命提高15%",
+    "description": "温迪：最大生命提高15%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -590,7 +590,7 @@
   {
     "id": "hero_06_speed_common",
     "name": "节奏训练",
-    "description": "角色06：攻击速度提高10%",
+    "description": "温迪：攻击速度提高10%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -604,7 +604,7 @@
   {
     "id": "hero_06_range_rare",
     "name": "延伸战线",
-    "description": "角色06：攻击范围提高40",
+    "description": "温迪：攻击范围提高40",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -618,7 +618,7 @@
   {
     "id": "hero_06_armor_rare",
     "name": "战术装甲",
-    "description": "角色06：防御提高20",
+    "description": "温迪：防御提高20",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -632,7 +632,7 @@
   {
     "id": "hero_06_move_rare",
     "name": "快速调位",
-    "description": "角色06：移动速度提高25",
+    "description": "温迪：移动速度提高25",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -645,8 +645,8 @@
   },
   {
     "id": "hero_06_special_epic",
-    "name": "战技改造",
-    "description": "角色06：攻击方式获得角色专属强化",
+    "name": "高天之歌",
+    "description": "温迪：箭矢额外穿透2名敌人。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
@@ -659,8 +659,8 @@
   },
   {
     "id": "hero_06_signature_legendary",
-    "name": "命之座共鸣",
-    "description": "角色06：解锁角色传奇核心效果",
+    "name": "风神之诗",
+    "description": "温迪：额外发射1枚箭矢并穿透4名敌人。",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
@@ -674,7 +674,7 @@
   {
     "id": "hero_07_attack_common",
     "name": "锋刃强化",
-    "description": "角色07：攻击力提高12%",
+    "description": "钟离：攻击力提高12%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -688,7 +688,7 @@
   {
     "id": "hero_07_health_common",
     "name": "生命训练",
-    "description": "角色07：最大生命提高15%",
+    "description": "钟离：最大生命提高15%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -702,7 +702,7 @@
   {
     "id": "hero_07_speed_common",
     "name": "节奏训练",
-    "description": "角色07：攻击速度提高10%",
+    "description": "钟离：攻击速度提高10%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -716,7 +716,7 @@
   {
     "id": "hero_07_range_rare",
     "name": "延伸战线",
-    "description": "角色07：攻击范围提高40",
+    "description": "钟离：攻击范围提高40",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -730,7 +730,7 @@
   {
     "id": "hero_07_armor_rare",
     "name": "战术装甲",
-    "description": "角色07：防御提高20",
+    "description": "钟离：防御提高20",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -744,7 +744,7 @@
   {
     "id": "hero_07_move_rare",
     "name": "快速调位",
-    "description": "角色07：移动速度提高25",
+    "description": "钟离：移动速度提高25",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -757,8 +757,8 @@
   },
   {
     "id": "hero_07_special_epic",
-    "name": "战技改造",
-    "description": "角色07：攻击方式获得角色专属强化",
+    "name": "地心",
+    "description": "钟离：普攻获得顺劈，防御提高28。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
@@ -771,8 +771,8 @@
   },
   {
     "id": "hero_07_signature_legendary",
-    "name": "命之座共鸣",
-    "description": "角色07：解锁角色传奇核心效果",
+    "name": "天星",
+    "description": "钟离：顺劈伤害提升至100%，最大生命提高55%。",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
@@ -786,7 +786,7 @@
   {
     "id": "hero_08_attack_common",
     "name": "锋刃强化",
-    "description": "角色08：攻击力提高12%",
+    "description": "白露：攻击力提高12%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -800,7 +800,7 @@
   {
     "id": "hero_08_health_common",
     "name": "生命训练",
-    "description": "角色08：最大生命提高15%",
+    "description": "白露：最大生命提高15%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -814,7 +814,7 @@
   {
     "id": "hero_08_speed_common",
     "name": "节奏训练",
-    "description": "角色08：攻击速度提高10%",
+    "description": "白露：攻击速度提高10%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
@@ -828,7 +828,7 @@
   {
     "id": "hero_08_range_rare",
     "name": "延伸战线",
-    "description": "角色08：攻击范围提高40",
+    "description": "白露：攻击范围提高40",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -842,7 +842,7 @@
   {
     "id": "hero_08_armor_rare",
     "name": "战术装甲",
-    "description": "角色08：防御提高20",
+    "description": "白露：防御提高20",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -856,7 +856,7 @@
   {
     "id": "hero_08_move_rare",
     "name": "快速调位",
-    "description": "角色08：移动速度提高25",
+    "description": "白露：移动速度提高25",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
@@ -869,8 +869,8 @@
   },
   {
     "id": "hero_08_special_epic",
-    "name": "战技改造",
-    "description": "角色08：攻击方式获得角色专属强化",
+    "name": "云吟乍涌",
+    "description": "白露：治疗间隔缩短28%。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
@@ -883,8 +883,8 @@
   },
   {
     "id": "hero_08_signature_legendary",
-    "name": "命之座共鸣",
-    "description": "角色08：解锁角色传奇核心效果",
+    "name": "持明医术",
+    "description": "白露：治疗量提高48，治疗间隔再缩短38%。",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
