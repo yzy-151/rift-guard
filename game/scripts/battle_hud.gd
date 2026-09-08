@@ -8,6 +8,7 @@ signal mute_action(enabled: bool)
 signal reduce_action(enabled: bool)
 signal compendium_action
 signal squad_action
+signal stage_action
 signal skill_action
 
 const WHITE = Color("#f3e9df")
@@ -72,6 +73,9 @@ func _ready() -> void:
 	bind(label(root, Vector2(207, 40), Vector2(500, 24), "城门之下 · 守至黎明", 14, MUTED), "game_subtitle")
 	progression_label = label(root, Vector2(620, 47), Vector2(625, 22), "", 12, TEAL)
 	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	var stage_btn := button(root, Rect2(400, 8, 156, 36), "关卡  [F4]", false)
+	bind(stage_btn, "stage_button")
+	stage_btn.pressed.connect(func(): stage_action.emit())
 	var squad_btn := button(root, Rect2(570, 8, 156, 36), "编队  [F3]", false)
 	bind(squad_btn, "squad_button")
 	squad_btn.pressed.connect(func(): squad_action.emit())
@@ -130,7 +134,7 @@ func _ready() -> void:
 		reduced = not reduced
 		reduce_btn.text = "反馈：减弱" if reduced else "反馈：标准"
 		reduce_action.emit(reduced))
-	background_buttons = [squad_btn, archive_btn, pause_button, reset_btn, mute_btn, reduce_btn, skill_button]
+	background_buttons = [stage_btn, squad_btn, archive_btn, pause_button, reset_btn, mute_btn, reduce_btn, skill_button]
 	background_buttons.append_array(hero_buttons)
 	overlay = ColorRect.new()
 	overlay.color = Color(0.025, 0.035, 0.05, 0.76)

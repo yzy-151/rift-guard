@@ -5,6 +5,7 @@ var unlocked_characters: Dictionary = {"traveler": true}
 var discovered_cards: Dictionary = {}
 var encountered_enemies: Dictionary = {}
 var cleared_stages: Dictionary = {}
+var stage_records: Dictionary = {}
 
 func _init(path: String = "user://compendium.json") -> void:
 	save_path = path
@@ -28,6 +29,15 @@ func clear_stage(stage_id: String, unlocks: Array) -> void:
 	if changed:
 		save_progress()
 
+func record_result(stage_id: String, kills: int, base_hp: int, best_streak: int) -> void:
+	var previous: Dictionary = stage_records.get(stage_id, {})
+	stage_records[stage_id] = {
+		"best_kills": maxi(kills, int(previous.get("best_kills", 0))),
+		"best_base_hp": maxi(base_hp, int(previous.get("best_base_hp", 0))),
+		"best_streak": maxi(best_streak, int(previous.get("best_streak", 0))),
+	}
+	save_progress()
+
 func _mark(collection: Dictionary, id: String) -> bool:
 	if id.is_empty() or collection.has(id):
 		return false
@@ -43,6 +53,7 @@ func save_progress() -> void:
 		"discovered_cards": discovered_cards.keys(),
 		"encountered_enemies": encountered_enemies.keys(),
 		"cleared_stages": cleared_stages.keys(),
+		"stage_records": stage_records,
 	}, "\t"))
 
 func load_progress() -> void:
@@ -55,6 +66,8 @@ func load_progress() -> void:
 	_load_set(discovered_cards, data.get("discovered_cards", []))
 	_load_set(encountered_enemies, data.get("encountered_enemies", []))
 	_load_set(cleared_stages, data.get("cleared_stages", []))
+	if data.get("stage_records", {}) is Dictionary:
+		stage_records = data.get("stage_records", {}).duplicate(true)
 	unlocked_characters["traveler"] = true
 
 func _load_set(target: Dictionary, values: Array) -> void:
