@@ -10,6 +10,7 @@ const CompendiumState = preload("res://scripts/compendium_state.gd")
 const CompendiumPanel = preload("res://scripts/compendium_panel.gd")
 const SquadPanel = preload("res://scripts/squad_panel.gd")
 const StageSelectPanel = preload("res://scripts/stage_select_panel.gd")
+const StageClearSequence = preload("res://scripts/stage_clear_sequence.gd")
 var content = Content.new()
 var story = Story.new(content)
 var saved_story
@@ -31,6 +32,7 @@ var compendium = CompendiumState.new()
 var compendium_panel
 var squad_panel
 var stage_select_panel
+var stage_clear_sequence
 var pending_stage_id := ""
 var pending_stage_number := 0
 var stage_result_recorded := false
@@ -84,6 +86,10 @@ func _ready() -> void:
 	add_child(stage_select_panel)
 	stage_select_panel.build(hud, sim.database, compendium)
 	stage_select_panel.chosen.connect(choose_stage)
+	stage_clear_sequence = StageClearSequence.new()
+	add_child(stage_clear_sequence)
+	stage_clear_sequence.build(hud)
+	stage_clear_sequence.finished.connect(advance_stage)
 	dialogue.finished.connect(end_dialogue)
 	refresh()
 	if not content.errors.is_empty():
@@ -91,7 +97,11 @@ func _ready() -> void:
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	elif not content.loaded:
 		hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 28), "未找到 content/game_config.xlsx，当前使用内置内容。", 13, Color("#d6bd98"))
-	if "--v10-test" in OS.get_cmdline_user_args():
+	if "--v11-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v11_test")
+	elif "--v10-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v10_test")
@@ -148,7 +158,7 @@ func _ready() -> void:
 		call_deferred("run_smoke_test")
 
 func _physics_process(dt: float) -> void:
-	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open():
+	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or stage_clear_sequence.is_playing():
 		return
 	sim.tick(dt)
 	check_story()
@@ -340,13 +350,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseMotion and skill_aiming:
 		var hover_screen: Vector2 = battle.get_global_transform().affine_inverse() * event.position
-		battle.skill_point = Stage.unproject(hover_screen)
+		battle.skill_point = battle.screen_to_world(hover_screen)
 		battle.queue_redraw()
 		return
 	if event is InputEventMouseButton and event.pressed:
 		var screen_point: Vector2 = battle.get_global_transform().affine_inverse() * event.position
-		var point: Vector2 = Stage.unproject(screen_point)
-		if not View.WORLD.has_point(point):
+		var point: Vector2 = battle.screen_to_world(screen_point)
+		var playable_area: Rect2 = Sim.ENDLESS_ARENA if sim.endless_mode else View.WORLD
+		if not playable_area.has_point(point):
 			return
 		if event.button_index == MOUSE_BUTTON_LEFT and skill_aiming:
 			if sim.activate_traveler_skill(point):
@@ -358,7 +369,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			selected_id = -1
 			var closest: float = 48.0
 			for h in sim.heroes:
-				var distance: float = screen_point.distance_to(Stage.project(h.pos) + Vector2(0, -18))
+				var distance: float = screen_point.distance_to(battle.world_to_screen(h.pos) + Vector2(0, -18))
 				if distance < closest:
 					closest = distance
 					selected_id = h.id
@@ -397,8 +408,8 @@ func end_dialogue() -> void:
 	story_resume = ""
 	if action == "start":
 		sim.start()
-	elif action == "advance_stage":
-		advance_stage()
+	elif action == "stage_exit":
+		play_stage_exit()
 	refresh()
 
 func check_story() -> void:
@@ -407,7 +418,7 @@ func check_story() -> void:
 	if sim.v2_mode:
 		if sim.state == "won":
 			if has_next_stage():
-				begin_dialogue("mode1_won", "advance_stage")
+				begin_dialogue("mode1_won", "stage_exit")
 			else:
 				begin_dialogue("mode1_final_won")
 		elif sim.state == "lost":
@@ -423,6 +434,17 @@ func has_next_stage() -> bool:
 	var ids: Array = mode.get("stage_ids", [])
 	var index := ids.find(sim.current_stage_id)
 	return index >= 0 and index + 1 < ids.size()
+
+func play_stage_exit() -> void:
+	var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {})
+	var unlocks: Array = stage.get("unlocks", [])
+	var character_name := "新同行者"
+	var element_name := "未知"
+	if not unlocks.is_empty() and sim.database.characters.has(str(unlocks[0])):
+		var character: Dictionary = sim.database.characters[str(unlocks[0])]
+		character_name = str(character.name)
+		element_name = sim.element_name(str(character.element))
+	stage_clear_sequence.play(character_name, element_name)
 
 func advance_stage() -> void:
 	var mode: Dictionary = sim.database.modes.get(sim.run_state.mode_id, {})
@@ -458,19 +480,26 @@ func open_stage_select() -> void:
 	sound.stop()
 
 func choose_stage(stage_id: String) -> void:
-	var ids: Array = sim.database.modes.get(sim.run_state.mode_id, {}).get("stage_ids", [])
+	var selected_mode := "endless_survival" if stage_id == "stage_endless" else "rift_watch"
+	var ids: Array = sim.database.modes.get(selected_mode, {}).get("stage_ids", [])
 	var index := ids.find(stage_id)
 	if index < 0:
 		return
+	sim.run_state.mode_id = selected_mode
 	pending_stage_id = stage_id
 	pending_stage_number = index + 1
-	squad_panel.open(stage_id, sim.run_state.squad)
+	if selected_mode == "endless_survival":
+		confirm_next_squad(["traveler"])
+	else:
+		squad_panel.open(stage_id, sim.run_state.squad)
 
 func confirm_next_squad(squad: Array[String]) -> void:
 	if pending_stage_id.is_empty():
 		return
 	story.reset()
 	sim.reset_stage(pending_stage_id, squad, sim.run_seed + 1)
+	if sim.endless_mode and not sim.heroes.is_empty():
+		battle.camera_center = sim.heroes[0].pos
 	selected_id = 0
 	set_skill_aiming(false)
 	stage_result_recorded = false
@@ -478,10 +507,10 @@ func confirm_next_squad(squad: Array[String]) -> void:
 	battle.effects.clear()
 	battle.shot_flashes.clear()
 	hud.get_child(0).show()
-	var dialogue_key := "mode1_opening" if pending_stage_number == 1 else "mode1_stage%d_opening" % pending_stage_number
+	var dialogue_key := "" if sim.endless_mode else ("mode1_opening" if pending_stage_number == 1 else "mode1_stage%d_opening" % pending_stage_number)
 	pending_stage_id = ""
 	pending_stage_number = 0
-	if not begin_dialogue(dialogue_key, "start"):
+	if dialogue_key.is_empty() or not begin_dialogue(dialogue_key, "start"):
 		sim.start()
 
 func run_m4_test() -> void:
@@ -508,6 +537,10 @@ func preview_effects() -> void:
 
 func run_m5_test() -> void:
 	var suite = preload("res://scripts/qa_m5.gd").new()
+	await suite.run(self)
+
+func run_v11_test() -> void:
+	var suite = preload("res://scripts/qa_v11.gd").new()
 	await suite.run(self)
 
 func run_m9_test() -> void:

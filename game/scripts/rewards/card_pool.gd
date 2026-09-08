@@ -16,7 +16,7 @@ func reseed(seed_value: int) -> void:
 	rng.seed = seed_value
 
 func eligible(card: Dictionary, run) -> bool:
-	if card.get("target", "global") == "character" and str(card.get("character_id", "")) not in run.squad:
+	if card.get("target", "global") == "character" and not _character_is_present(str(card.get("character_id", "")), run):
 		return false
 	if card.get("effect", "") == "assign_traveler_element":
 		return run.traveler_element == "none"
@@ -32,6 +32,14 @@ func eligible(card: Dictionary, run) -> bool:
 		if run.buff_levels.has(excluded_id):
 			return false
 	return true
+
+func _character_is_present(character_id: String, run) -> bool:
+	if character_id in run.squad:
+		return true
+	for card: Dictionary in cards:
+		if card.get("effect", "") == "deploy_reinforcement" and str(card.get("value", "")) == character_id and int(run.buff_levels.get(card.id, 0)) > 0:
+			return true
+	return false
 
 func _reinforcement_count(run) -> int:
 	var count := 0

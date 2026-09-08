@@ -3,9 +3,24 @@
     "id": "rift_watch",
     "name": "模式一：裂隙守望",
     "description": "最多三名角色守卫水晶，在五分半的怪潮中通过无限叠加卡牌形成构筑。",
-    "stage_ids": ["stage_01", "stage_02", "stage_03"],
+    "stage_ids": [
+      "stage_01",
+      "stage_02",
+      "stage_03"
+    ],
     "max_squad_size": 3,
     "buff_stack_limit": 0,
     "starting_stage_id": "stage_01"
+  },
+  {
+    "id": "endless_survival",
+    "name": "模式二：无尽生存",
+    "description": "在四屏荒原中持续移动，抵抗从地图边缘追来的无尽怪潮。",
+    "stage_ids": [
+      "stage_endless"
+    ],
+    "max_squad_size": 3,
+    "buff_stack_limit": 0,
+    "starting_stage_id": "stage_endless"
   }
 ]

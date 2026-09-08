@@ -34,6 +34,7 @@ var hero_buttons: Array[Button] = []
 var hero_name_labels: Array[Label] = []
 var hero_statuses: Array[Label] = []
 var overlay: ColorRect
+var modal_card: Panel
 var modal_title: Label
 var modal_copy: Label
 var modal_action: Button
@@ -45,7 +46,9 @@ var support_panel: Panel
 var support_labels: Array[Label] = []
 var buff_panel: Panel
 var buff_labels: Array[Label] = []
+var buff_icons: Array[TextureRect] = []
 var skill_button: Button
+var skill_icon: TextureRect
 var skill_aiming: bool = false
 var boss_panel: Panel
 var boss_name_label: Label
@@ -53,6 +56,10 @@ var boss_hp_bar: ProgressBar
 var boss_hp_label: Label
 var boss_alert: Label
 var boss_warning: AudioStreamPlayer
+var pause_details: Panel
+var pause_buff_labels: Array[Label] = []
+var pause_hero_labels: Array[Label] = []
+var hero_hp_bars: Array[ProgressBar] = []
 var ui_highlight: AudioStreamPlayer
 var ui_confirm: AudioStreamPlayer
 
@@ -73,7 +80,7 @@ func _ready() -> void:
 	var font := SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
 	ui_theme.default_font = preload("res://assets/fonts/TiejiliSC-Regular.ttf")
-	ui_theme.default_font_size = 15
+	ui_theme.default_font_size = 13
 	root.theme = ui_theme
 	add_child(root)
 	add_child(ui_highlight)
@@ -112,7 +119,8 @@ func _ready() -> void:
 	buff_panel = panel(root, Rect2(32, 106, 430, 124), Color(0.07, 0.045, 0.075, 0.92), Color("#65506f"))
 	label(buff_panel, Vector2(12, 6), Vector2(405, 20), "本 局 强 化  /  BUILD", 11, Color("#d6b4f0"))
 	for i in 5:
-		buff_labels.append(label(buff_panel, Vector2(12, 28 + i * 18), Vector2(405, 18), "", 12, WHITE))
+		buff_icons.append(icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(12, 29 + i * 18, 14, 14), Color("#d6b4f0")))
+		buff_labels.append(label(buff_panel, Vector2(32, 28 + i * 18), Vector2(370, 18), "", 10, WHITE))
 	buff_panel.hide()
 	boss_panel = panel(root, Rect2(475, 106, 400, 72), Color(0.055, 0.025, 0.04, 0.96), Color("#be435c"))
 	boss_name_label = label(boss_panel, Vector2(15, 7), Vector2(370, 22), "", 15, Color("#ff9cab"))
@@ -143,7 +151,14 @@ func _ready() -> void:
 	boss_alert.add_theme_constant_override("shadow_offset_y", 4)
 	boss_alert.hide()
 	skill_button = button(root, Rect2(900, 540, 348, 62), "旅行者战技  [Q]", true)
-	skill_button.add_theme_font_size_override("font_size", 17)
+	skill_button.add_theme_font_size_override("font_size", 14)
+	var skill_icon_back := ColorRect.new()
+	skill_icon_back.position = Vector2(12, 10)
+	skill_icon_back.size = Vector2(40, 40)
+	skill_icon_back.color = Color("#ead9dc")
+	skill_icon_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	skill_button.add_child(skill_icon_back)
+	skill_icon = icon(skill_button, "res://assets/ui/icons/temporary/nieobie/skill.svg", Rect2(16, 14, 32, 32), WHITE)
 	skill_button.pressed.connect(func(): skill_action.emit())
 
 	for i in 3:
@@ -157,10 +172,30 @@ func _ready() -> void:
 		hero_btn.add_child(trim)
 		hero_btn.pressed.connect(func(): select_action.emit(i))
 		hero_buttons.append(hero_btn)
-		hero_name_labels.append(label(hero_btn, Vector2(14, 7), Vector2(250, 28), "%d  未部署" % [i + 1], 16, WHITE))
-		hero_statuses.append(label(hero_btn, Vector2(14, 34), Vector2(250, 23), "", 13, WHITE))
+		var portrait := panel(hero_btn, Rect2(10, 9, 48, 48), Color("#33232d"), TEAL)
+		var portrait_back := ColorRect.new()
+		portrait_back.position = Vector2(5, 5)
+		portrait_back.size = Vector2(38, 38)
+		portrait_back.color = Color("#ead9dc")
+		portrait_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		portrait.add_child(portrait_back)
+		icon(portrait, "res://assets/ui/icons/temporary/nieobie/character.svg", Rect2(9, 9, 30, 30), WHITE)
+		hero_name_labels.append(label(hero_btn, Vector2(66, 5), Vector2(192, 23), "%d  未部署" % [i + 1], 14, WHITE))
+		var hp_bar := ProgressBar.new()
+		hp_bar.position = Vector2(66, 31)
+		hp_bar.size = Vector2(190, 12)
+		hp_bar.show_percentage = false
+		var hp_bg := StyleBoxFlat.new()
+		hp_bg.bg_color = Color("#251923")
+		var hp_fill := StyleBoxFlat.new()
+		hp_fill.bg_color = Color("#be5364")
+		hp_bar.add_theme_stylebox_override("background", hp_bg)
+		hp_bar.add_theme_stylebox_override("fill", hp_fill)
+		hero_btn.add_child(hp_bar)
+		hero_hp_bars.append(hp_bar)
+		hero_statuses.append(label(hero_btn, Vector2(66, 43), Vector2(192, 18), "", 11, WHITE))
 		var details: String = "阻挡 2 人 · 移动会放行" if i == 0 else ("火系普攻 · 与水触发蒸发" if i == 1 else "水系普攻 · 自动治疗队友")
-		hero_details.append(label(hero_btn, Vector2(14, 62), Vector2(250, 20), details, 12, MUTED))
+		hero_details.append(label(hero_btn, Vector2(10, 64), Vector2(250, 18), details, 10, MUTED))
 	label(root, Vector2(900, 656), Vector2(348, 23), "1/2/3 选人 · 右键移动", 13, TEAL)
 	label(root, Vector2(900, 684), Vector2(348, 21), "M5 · F6 对话预览 / F7 特效预览", 12, MUTED)
 	var mute_btn := button(root, Rect2(900, 617, 155, 32), "声音：开", false)
@@ -189,15 +224,46 @@ func _ready() -> void:
 	menu_background.show()
 	overlay.add_child(menu_background)
 	bind(menu_background, "menu_background")
-	var card := panel(overlay, Rect2(330, 170, 620, 375), Color("#241a26"), Color("#a34c60"))
-	bind(ornament(card, Rect2(-20, -25, 660, 420)), "menu_frame")
-	panel(card, Rect2(32, 52, 556, 203), Color("#241a26"), Color("#241a26"))
-	label(card, Vector2(48, 63), Vector2(472, 22), "RIFT GUARD   /   防线指令", 12, TEAL)
-	modal_title = label(card, Vector2(42, 112), Vector2(536, 45), "", 29, WHITE)
-	modal_copy = label(card, Vector2(42, 167), Vector2(536, 86), "", 16, Color("#b6c2c8"))
+	modal_card = panel(overlay, Rect2(330, 170, 620, 375), Color("#241a26"), Color("#a34c60"))
+	bind(ornament(modal_card, Rect2(-20, -25, 660, 420)), "menu_frame")
+	panel(modal_card, Rect2(32, 52, 556, 203), Color("#241a26"), Color("#241a26"))
+	label(modal_card, Vector2(48, 63), Vector2(472, 22), "RIFT GUARD   /   防线指令", 12, TEAL)
+	modal_title = label(modal_card, Vector2(42, 112), Vector2(536, 45), "", 29, WHITE)
+	modal_copy = label(modal_card, Vector2(42, 167), Vector2(536, 86), "", 16, Color("#b6c2c8"))
 	modal_copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	modal_action = button(card, Rect2(42, 281, 536, 47), "", true)
+	modal_action = button(modal_card, Rect2(42, 281, 536, 47), "", true)
 	modal_action.pressed.connect(func(): primary_action.emit())
+	pause_details = panel(overlay, Rect2(82, 72, 1116, 576), Color("#171119"), Color("#a34c60"))
+	ornament(pause_details, Rect2(-18, -18, 1152, 612))
+	var pause_scrim := ColorRect.new()
+	pause_scrim.position = Vector2(18, 12)
+	pause_scrim.size = Vector2(1080, 546)
+	pause_scrim.color = Color(0.035, 0.025, 0.045, 0.94)
+	pause_scrim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pause_details.add_child(pause_scrim)
+	var build_column := ColorRect.new()
+	build_column.position = Vector2(22, 92)
+	build_column.size = Vector2(510, 408)
+	build_column.color = Color(0.10, 0.065, 0.11, 0.96)
+	build_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pause_details.add_child(build_column)
+	var stats_column := ColorRect.new()
+	stats_column.position = Vector2(548, 92)
+	stats_column.size = Vector2(526, 408)
+	stats_column.color = Color(0.12, 0.055, 0.075, 0.96)
+	stats_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pause_details.add_child(stats_column)
+	label(pause_details, Vector2(34, 22), Vector2(600, 20), "T A C T I C A L   R E C O R D   /   战 术 档 案", 11, TEAL)
+	label(pause_details, Vector2(34, 50), Vector2(500, 36), "本关构筑与队伍数值", 25, WHITE)
+	label(pause_details, Vector2(34, 100), Vector2(500, 22), "已 获 得 强 化", 13, Color("#d6b4f0"))
+	for i in 12:
+		pause_buff_labels.append(label(pause_details, Vector2(34, 132 + i * 27), Vector2(490, 24), "", 12, WHITE))
+	label(pause_details, Vector2(560, 100), Vector2(500, 22), "当 前 角 色 数 值", 13, Color("#ffb0b7"))
+	for i in 3:
+		pause_hero_labels.append(label(pause_details, Vector2(560, 135 + i * 105), Vector2(510, 94), "", 12, WHITE))
+	var pause_continue := button(pause_details, Rect2(560, 468, 510, 48), "继续防守   [空格]", true)
+	pause_continue.pressed.connect(func(): primary_action.emit())
+	pause_details.hide()
 	reward_panel = preload("res://scripts/reward_panel.gd").new()
 	root.add_child(reward_panel)
 	reward_panel.build(self)
@@ -256,7 +322,7 @@ func button(parent: Node, rect: Rect2, text: String, accent: bool) -> Button:
 	item.text = text
 	item.add_theme_color_override("font_color", WHITE)
 	item.add_theme_color_override("font_hover_color", Color.WHITE)
-	item.add_theme_font_size_override("font_size", 14)
+	item.add_theme_font_size_override("font_size", 12)
 	item.add_theme_stylebox_override("normal", button_style(HT_BUTTON, Color("#fff0f0") if accent else Color.WHITE))
 	item.add_theme_stylebox_override("hover", button_style(HT_BUTTON_HOVER))
 	item.add_theme_stylebox_override("pressed", button_style(HT_BUTTON_ACTIVE))
@@ -272,30 +338,52 @@ func button(parent: Node, rect: Rect2, text: String, accent: bool) -> Button:
 	parent.add_child(item)
 	return item
 
+func icon(parent: Node, path: String, rect: Rect2, color: Color = Color.WHITE) -> TextureRect:
+	var item := TextureRect.new()
+	item.texture = load(path)
+	item.position = rect.position
+	item.size = rect.size
+	item.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	item.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	item.modulate = color
+	item.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	parent.add_child(item)
+	return item
+
 func refresh(sim, selected_id: int) -> void:
 	var next_signature: String = str([sim.state, sim.base_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming])
 	for enemy: Dictionary in sim.enemies:
 		if str(enemy.get("kind", "")).begins_with("boss_"):
 			next_signature += str([ceili(float(enemy.hp)), ceili(float(enemy.get("shield", 0.0)))])
 	if sim.v2_mode:
-		next_signature += str([sim.run_state.traveler_element, sim.run_state.pending_level_ups, floori(sim.stage_runtime.remaining_seconds())])
+		var stage_clock := floori(sim.elapsed) if sim.endless_mode else floori(sim.stage_runtime.remaining_seconds())
+		next_signature += str([sim.run_state.traveler_element, sim.run_state.pending_level_ups, stage_clock])
 	for hero in sim.heroes:
 		next_signature += str([ceili(hero.hp), hero.moving, hero.blocked])
 	if next_signature == signature:
 		return
 	signature = next_signature
-	base_label.text = "◆ 基地 %03d/100   ◇ 结晶盾 %03d" % [sim.base_hp, ceili(sim.crystal_shield)] if sim.v2_mode else "◆  基地完整度    %03d / 100" % sim.base_hp
+	if sim.endless_mode:
+		var traveler: Dictionary = sim.heroes[0] if not sim.heroes.is_empty() else {}
+		base_label.text = "◆ 旅行者 HP %d/%d   ◇ 护盾 %03d" % [ceili(float(traveler.get("hp", 0.0))), ceili(float(traveler.get("max_hp", 0.0))), ceili(sim.crystal_shield)]
+	else:
+		base_label.text = "◆ 基地 %03d/100   ◇ 结晶盾 %03d" % [sim.base_hp, ceili(sim.crystal_shield)] if sim.v2_mode else "◆  基地完整度    %03d / 100" % sim.base_hp
 	if sim.v2_mode:
-		var next_xp: int = sim.crystal.next_threshold(sim.run_state)
+		var next_xp: int = sim.endless_next_threshold() if sim.endless_mode else sim.crystal.next_threshold(sim.run_state)
 		var xp_text: String = "MAX" if next_xp < 0 else "%d / %d" % [sim.run_state.crystal_xp, next_xp]
-		var seconds: int = ceili(sim.stage_runtime.remaining_seconds())
-		progression_label.text = "水晶 Lv.%d  ·  EXP %s  ·  旅行者：%s元素  ·  %02d:%02d" % [sim.run_state.crystal_level, xp_text, sim.element_name(sim.run_state.traveler_element), seconds / 60, seconds % 60]
-		wave_label.text = "波次   %02d / %02d" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size()]
+		var seconds: int = floori(sim.elapsed) if sim.endless_mode else ceili(sim.stage_runtime.remaining_seconds())
+		var queued := "  ·  待选 ×%d" % sim.run_state.pending_level_ups if sim.run_state.pending_level_ups > 0 and sim.state != "reward" else ""
+		if sim.endless_mode:
+			progression_label.text = "旅行者 Lv.%d  ·  EXP %s%s  ·  %s元素  ·  生存 %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.element_name(sim.run_state.traveler_element), seconds / 60, seconds % 60]
+			wave_label.text = "威胁等级   %02d" % maxi(1, floori(sim.elapsed / 45.0) + 1)
+		else:
+			progression_label.text = "水晶 Lv.%d  ·  EXP %s%s  ·  %s元素  ·  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.element_name(sim.run_state.traveler_element), seconds / 60, seconds % 60]
+			wave_label.text = "波次   %02d / %02d" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size()]
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
 		wave_label.text = "节点   %02d / 05" % sim.wave
 	count_label.text = ("击退 %02d  ·  在场 %02d  ·  连杀 %02d" % [sim.kills, sim.enemies.size(), sim.kill_streak]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
-	status_label.text = "按 1/2/3 或点击角色卡选择"
+	status_label.text = "无尽生存 · 右键移动 · 同行者自动跟随" if sim.endless_mode else "按 1/2/3 或点击角色卡选择"
 	refresh_skill(sim)
 	refresh_supports(sim)
 	refresh_buffs(sim)
@@ -311,6 +399,8 @@ func refresh(sim, selected_id: int) -> void:
 		hero_buttons[i].visible = i < sim.heroes.size()
 	for i in sim.heroes.size():
 		var hero: Dictionary = sim.heroes[i]
+		hero_hp_bars[i].max_value = maxf(1.0, float(hero.max_hp))
+		hero_hp_bars[i].value = maxf(0.0, float(hero.hp))
 		hero_name_labels[i].text = "%d  %s / %s" % [i + 1, hero.name, hero.role]
 		var hero_color: Color = element_color(str(hero.get("element", ""))) if hero.get("character_id", "") == "traveler" and hero.get("element", "") != "" else Color(hero.color)
 		hero_name_labels[i].add_theme_color_override("font_color", hero_color)
@@ -318,7 +408,7 @@ func refresh(sim, selected_id: int) -> void:
 		var status: String = "倒地 · 本波无法行动" if hero.hp <= 0 else ("移动中" if hero.moving else ("阻挡 %d/%d" % [hero.blocked, hero.block] if i == 0 else "就绪"))
 		var mechanics := "弹道%d · 穿透%d · 连锁%d" % [int(hero.get("projectile_count", 1)), int(hero.get("pierce", 0)), int(hero.get("chain_count", 0))]
 		hero_details[i].text = "%s元素 · ATK %.0f · %.1f/s · %s" % [sim.element_name(str(hero.get("element", "none"))), hero.damage, hero.rate, mechanics]
-		hero_statuses[i].text = "HP %d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
+		hero_statuses[i].text = "%d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
 	var was_visible: bool = overlay.visible
 	overlay.visible = sim.state in ["ready", "paused", "won", "lost"]
 	for control in background_buttons:
@@ -328,6 +418,10 @@ func refresh(sim, selected_id: int) -> void:
 	else:
 		reward_panel.hide()
 	if overlay.visible:
+		pause_details.visible = sim.state == "paused"
+		modal_card.visible = sim.state != "paused"
+		if sim.state == "paused":
+			refresh_pause_details(sim)
 		modal_action.focus_next = modal_action.get_path()
 		modal_action.focus_previous = modal_action.get_path()
 		modal_action.focus_neighbor_top = modal_action.get_path()
@@ -338,9 +432,12 @@ func refresh(sim, selected_id: int) -> void:
 			"ready":
 				var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {}) if sim.v2_mode else {}
 				var duration: int = int(stage.get("duration_seconds", 330))
-				modal_title.text = "守住最后一道防线"
-				modal_copy.text = "%s  ·  %d分%02d秒\n击杀敌人升级水晶，三选一强化可无限叠加。\n选定元素后按 Q 释放战技，守住三条路线。" % [stage.get("name", "裂隙防线"), duration / 60, duration % 60] if sim.v2_mode else "1 守卫阻挡 · 2 火系输出 · 3 水系治疗\n火水交替命中，触发蒸发增伤。\n守住 5 个节点，节点之间三选一强化。"
-				modal_action.text = "开始防守   →   [Enter]"
+				modal_title.text = "活下去" if sim.endless_mode else "守住最后一道防线"
+				if sim.endless_mode:
+					modal_copy.text = "猩红荒原 · 四屏开放战场\n敌人从四周追击旅行者，击杀升级并无限构筑。\n右键移动，同行者会跟随并在移动中攻击。"
+				else:
+					modal_copy.text = "%s  ·  %d分%02d秒\n击杀敌人升级水晶，三选一强化可无限叠加。\n选定元素后按 Q 释放战技，守住三条路线。" % [stage.get("name", "裂隙防线"), duration / 60, duration % 60] if sim.v2_mode else "1 守卫阻挡 · 2 火系输出 · 3 水系治疗\n火水交替命中，触发蒸发增伤。\n守住 5 个节点，节点之间三选一强化。"
+				modal_action.text = "进入荒原   →   [Enter]" if sim.endless_mode else "开始防守   →   [Enter]"
 			"paused":
 				modal_title.text = "战术暂停"
 				modal_copy.text = "战场、弹体和攻击冷却已冻结。\n准备好后，继续守住你的防线。"
@@ -452,10 +549,32 @@ func refresh_supports(sim) -> void:
 		support_labels[row].add_theme_color_override("font_color", info[1])
 		row += 1
 
+func refresh_pause_details(sim) -> void:
+	for item in pause_buff_labels:
+		item.text = ""
+	var card_names: Dictionary = {}
+	if sim.database != null:
+		for card: Dictionary in sim.database.cards:
+			card_names[str(card.id)] = str(card.name)
+	var ids: Array = sim.run_state.buff_levels.keys()
+	ids.sort()
+	for i in mini(ids.size(), pause_buff_labels.size()):
+		var id := str(ids[i])
+		pause_buff_labels[i].text = "◆  %s     Lv.%d" % [card_names.get(id, id), int(sim.run_state.buff_levels[id])]
+	if ids.is_empty():
+		pause_buff_labels[0].text = "尚未获得强化卡牌"
+	for i in pause_hero_labels.size():
+		pause_hero_labels[i].text = ""
+		if i >= sim.heroes.size():
+			continue
+		var hero: Dictionary = sim.heroes[i]
+		pause_hero_labels[i].text = "%d  %s  /  %s\nHP %d/%d    ATK %.0f    ASPD %.2f/s\n射程 %.0f    护甲 %.0f    移速 %.0f    弹道 %d" % [i + 1, hero.name, hero.role, ceili(hero.hp), ceili(hero.max_hp), hero.damage, hero.rate, hero.range, hero.armor, hero.speed, int(hero.get("projectile_count", 1))]
+
 func refresh_buffs(sim) -> void:
 	buff_panel.visible = sim.v2_mode and not sim.run_state.buff_levels.is_empty() and sim.state in ["running", "between", "paused"]
-	for item in buff_labels:
-		item.text = ""
+	for i in buff_labels.size():
+		buff_labels[i].text = ""
+		buff_icons[i].hide()
 	if not buff_panel.visible:
 		return
 	var names: Dictionary = {}
@@ -465,6 +584,7 @@ func refresh_buffs(sim) -> void:
 	ids.reverse()
 	for i in mini(buff_labels.size(), ids.size()):
 		var id: String = str(ids[i])
+		buff_icons[i].show()
 		buff_labels[i].text = "◆ %s   Lv.%d" % [names.get(id, id), int(sim.run_state.buff_levels[id])]
 	if ids.size() > buff_labels.size():
 		buff_labels[-1].text = "◆ 另有 %d 项强化正在生效" % (ids.size() - buff_labels.size() + 1)
@@ -480,6 +600,9 @@ func refresh_skill(sim) -> void:
 	var element: String = sim.traveler_skill_element()
 	var glyph: String = str({"none": "剑", "anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, "技"))
 	var color := element_color(element)
+	var icon_name: String = {"none": "attack", "anemo": "anemo", "electro": "electro", "pyro": "pyro", "hydro": "hydro", "geo": "geo", "cryo": "cryo"}.get(element, "skill")
+	skill_icon.texture = load("res://assets/ui/icons/temporary/nieobie/%s.svg" % icon_name)
+	skill_icon.modulate = color
 	var growth := ""
 	if sim.skill_power_bonus > 0.0 or sim.skill_area_bonus > 0.0:
 		growth = "  威力+%d%% 范围+%d%%" % [roundi(sim.skill_power_bonus * 100.0), roundi(sim.skill_area_bonus * 100.0)]

@@ -9,6 +9,7 @@ const StageRuntime = preload("res://scripts/stages/stage_runtime.gd")
 const XP_THRESHOLDS = [80, 190, 330, 500]
 const Catalog = preload("res://scripts/combat_catalog.gd")
 const MOVE_AREA = Rect2(185, 215, 475, 320)
+const ENDLESS_ARENA = Rect2(80, 80, 2400, 1280)
 const LANES = [270.0, 360.0, 450.0]
 const PROJECTILE_SPEED: float = 720.0
 const AURA_DURATION: float = 3.0
@@ -69,6 +70,9 @@ var crystal_shield: float = 0.0
 var kill_streak: int = 0
 var best_streak: int = 0
 var kill_streak_timer: float = 0.0
+var reward_cooldown: float = 0.0
+var endless_mode: bool = false
+var endless_spawn_timer: float = 0.0
 
 func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 	v2_mode = enable_v2
@@ -78,6 +82,8 @@ func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 		reset(seed_value)
 
 func reset(seed_value: int = -1) -> void:
+	endless_mode = false
+	endless_spawn_timer = 0.0
 	run_seed = seed_value if seed_value >= 0 else int(Time.get_ticks_usec() % 2147483647)
 	rewards = Rewards.new(run_seed)
 	team_xp = 0
@@ -120,6 +126,7 @@ func reset(seed_value: int = -1) -> void:
 	kill_streak = 0
 	best_streak = 0
 	kill_streak_timer = 0.0
+	reward_cooldown = 0.0
 	heroes.clear()
 	enemies.clear()
 	projectiles.clear()
@@ -132,6 +139,8 @@ func reset(seed_value: int = -1) -> void:
 func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: int = -1) -> void:
 	v2_mode = true
 	current_stage_id = stage_id
+	endless_mode = stage_id == "stage_endless"
+	endless_spawn_timer = 0.25
 	database = Database.new()
 	if not database.errors.is_empty() or not database.stages.has(stage_id):
 		push_error("Cannot start configured stage: " + str(database.errors))
@@ -184,11 +193,15 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	kill_streak = 0
 	best_streak = 0
 	kill_streak_timer = 0.0
+	reward_cooldown = 0.0
 	heroes.clear()
 	enemies.clear()
 	projectiles.clear()
 	events.clear()
 	var starts := [Vector2(505, 360), Vector2(375, 295), Vector2(345, 430)]
+	if endless_mode:
+		var center := ENDLESS_ARENA.get_center()
+		starts = [center, center + Vector2(-86, -68), center + Vector2(-86, 68)]
 	var colors := ["#e9d7ad", "#eaaa7d", "#83c7e8"]
 	for i in run_state.squad.size():
 		var id: String = run_state.squad[i]
@@ -211,6 +224,9 @@ func _add_reinforcement(character_id: String) -> bool:
 	if heroes.size() >= RunState.MAX_SQUAD_SIZE or not database.characters.has(character_id):
 		return false
 	var starts := [Vector2(505, 360), Vector2(375, 295), Vector2(345, 430)]
+	if endless_mode:
+		var center: Vector2 = heroes[0].pos if not heroes.is_empty() else ENDLESS_ARENA.get_center()
+		starts = [center, center + Vector2(-86, -68), center + Vector2(-86, 68)]
 	var colors := ["#e9d7ad", "#eaaa7d", "#83c7e8"]
 	var i: int = heroes.size()
 	var source: Dictionary = database.characters[character_id]
@@ -260,11 +276,8 @@ func choose_reward(index: int) -> bool:
 		crystal.consume_choice(run_state)
 		team_level = run_state.crystal_level
 		team_xp = run_state.crystal_xp
-		if run_state.pending_level_ups > 0:
-			rewards.draw(self)
-			state = "reward"
-		else:
-			state = "running"
+		reward_cooldown = 14.0
+		state = "running"
 		events.append({"kind": "reward_taken", "pos": heroes[0].pos if not heroes.is_empty() else Vector2(420, 360), "value": picked_name})
 		return true
 	state = "between"
@@ -285,7 +298,8 @@ func command_move(hero_id: int, point: Vector2) -> void:
 	var hero: Dictionary = heroes[hero_id]
 	if hero.hp <= 0:
 		return
-	hero.target = Vector2(clampf(point.x, MOVE_AREA.position.x, MOVE_AREA.end.x), clampf(point.y, MOVE_AREA.position.y, MOVE_AREA.end.y))
+	var area := ENDLESS_ARENA if endless_mode else MOVE_AREA
+	hero.target = Vector2(clampf(point.x, area.position.x, area.end.x), clampf(point.y, area.position.y, area.end.y))
 	events.append({"kind": "move", "pos": hero.target, "hero_id": hero_id})
 
 func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
@@ -302,7 +316,7 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 		shield *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
 	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 28, "charger": 20, "healer": 30, "splitter": 34, "warder": 32, "boss_01": 180, "boss_02": 240}
 	var first_special: float = float(enemy.get("boss_pulse", enemy.get("heal_interval", enemy.get("ward_interval", 0.0))))
-	enemy.merge({"id": next_id, "kind": kind, "pos": point, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "xp": int(xp_values.get(kind, 10))})
+	enemy.merge({"id": next_id, "kind": kind, "pos": point, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10))})
 	enemies.append(enemy)
 	return enemy
 
@@ -313,6 +327,11 @@ func find_enemy(id: int) -> Dictionary:
 	return {}
 
 func tick(dt: float) -> void:
+	if reward_cooldown > 0.0:
+		reward_cooldown = maxf(0.0, reward_cooldown - dt)
+	if v2_mode and state == "running" and run_state.pending_level_ups > 0 and reward_cooldown <= 0.0:
+		rewards.draw(self)
+		state = "reward"
 	if kill_streak_timer > 0.0:
 		kill_streak_timer = maxf(0.0, kill_streak_timer - dt)
 		if kill_streak_timer <= 0.0:
@@ -321,6 +340,10 @@ func tick(dt: float) -> void:
 		return
 	elapsed += dt
 	traveler_skill_cooldown = maxf(0.0, traveler_skill_cooldown - dt)
+	if endless_mode and not heroes.is_empty():
+		for i in range(1, heroes.size()):
+			var follow_angle := PI + (i - 1) * 1.15
+			heroes[i].target = heroes[0].pos + Vector2.from_angle(follow_angle) * (82.0 + i * 12.0)
 	for h in heroes:
 		h.blocked = 0
 		h.flash = maxf(0.0, h.flash - dt)
@@ -334,13 +357,16 @@ func tick(dt: float) -> void:
 		if wave_timer <= 0:
 			begin_wave()
 		return
-	if v2_mode:
+	if endless_mode:
+		_endless_spawn_tick(dt)
+	elif v2_mode:
 		_stage_spawn_tick(dt)
 	else:
 		_spawn_tick(dt)
 	_skill_effect_tick(dt)
 	_enemy_tick(dt)
-	if base_hp <= 0:
+	var traveler_down := endless_mode and (heroes.is_empty() or float(heroes[0].hp) <= 0.0)
+	if base_hp <= 0 or traveler_down:
 		state = "lost"
 		projectiles.clear()
 		events.append({"kind": "lost"})
@@ -349,11 +375,42 @@ func tick(dt: float) -> void:
 	_projectile_tick(dt)
 	_support_tick(dt)
 	enemies = enemies.filter(func(e: Dictionary) -> bool: return e.hp > 0)
-	if v2_mode:
+	if v2_mode and not endless_mode:
 		if stage_runtime.time_complete and stage_runtime.all_spawns_emitted and enemies.is_empty() and projectiles.is_empty():
 			state = "won"
 			events.append({"kind": "won"})
 		return
+
+func _endless_spawn_tick(dt: float) -> void:
+	endless_spawn_timer -= dt
+	if endless_spawn_timer > 0.0 or enemies.size() >= 180:
+		return
+	var tier := maxi(1, floori(elapsed / 45.0) + 1)
+	var pool := ["grunt", "runner"]
+	if tier >= 2:
+		pool.append_array(["ranged", "flyer"])
+	if tier >= 3:
+		pool.append_array(["armored", "buffer", "charger"])
+	if tier >= 5:
+		pool.append_array(["shielded", "healer", "splitter", "warder"])
+	var batch := mini(7, 1 + floori(tier / 2.0))
+	for i in batch:
+		var side := (kills + next_id + i * 3) % 4
+		var ratio := fposmod(sin(float(next_id + i * 19) * 12.9898) * 43758.5453, 1.0)
+		var point := Vector2.ZERO
+		match side:
+			0: point = Vector2(ENDLESS_ARENA.position.x, lerpf(ENDLESS_ARENA.position.y, ENDLESS_ARENA.end.y, ratio))
+			1: point = Vector2(ENDLESS_ARENA.end.x, lerpf(ENDLESS_ARENA.position.y, ENDLESS_ARENA.end.y, ratio))
+			2: point = Vector2(lerpf(ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x, ratio), ENDLESS_ARENA.position.y)
+			_: point = Vector2(lerpf(ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x, ratio), ENDLESS_ARENA.end.y)
+		var kind: String = pool[(next_id + i * 5 + tier) % pool.size()]
+		var enemy := spawn_enemy(point, kind)
+		var health_scale := 1.0 + elapsed / 210.0 + pow(float(tier), 1.18) * 0.08
+		enemy.hp *= health_scale
+		enemy.max_hp = enemy.hp
+		enemy.damage *= 1.0 + elapsed / 360.0
+		events.append({"kind": "route_spawn", "pos": point, "route_id": "edge_%d" % side, "flying": bool(enemy.get("flying", false))})
+	endless_spawn_timer += maxf(0.18, 1.25 - elapsed * 0.0024)
 	if spawn_remaining == 0 and enemies.is_empty() and projectiles.is_empty():
 		if wave == Catalog.WAVES.size():
 			state = "won"
@@ -378,17 +435,26 @@ func _spawn_tick(dt: float) -> void:
 		spawn_timer += 1.50 - wave * 0.10
 
 func _stage_spawn_tick(dt: float) -> void:
-	var lanes := stage_lane_map()
 	for event: Dictionary in stage_runtime.tick(dt):
 		if event.kind == "spawn":
 			wave = maxi(wave, int(event.get("wave", wave)))
-			spawn_enemy(Vector2(1160, lanes.get(event.route_id, LANES[1])), str(event.enemy_id))
+			spawn_on_route(str(event.enemy_id), str(event.route_id))
 		elif event.kind == "boss_wave":
 			wave += 1
 			var boss_id := str(event.enemy_id)
-			var boss := spawn_enemy(Vector2(1160, lanes.get(event.route_id, LANES[1])), boss_id)
+			var boss := spawn_on_route(boss_id, str(event.route_id))
 			events.append({"kind": "wave", "value": wave})
 			events.append({"kind": "boss_arrival", "pos": boss.pos, "value": str(boss.get("name", boss_id)), "enemy_id": boss.id})
+
+func spawn_on_route(kind: String, route_id: String) -> Dictionary:
+	var points := stage_route(route_id)
+	var start := points[0] if not points.is_empty() else Vector2(1160, stage_lane_map().get(route_id, LANES[1]))
+	var enemy := spawn_enemy(start, kind)
+	enemy.route_points = points
+	enemy.route_index = 1 if points.size() > 1 else 0
+	enemy.route_id = route_id
+	events.append({"kind": "route_spawn", "pos": start, "route_id": route_id, "flying": bool(enemy.get("flying", false))})
+	return enemy
 
 func _enemy_tick(dt: float) -> void:
 	for source: Dictionary in enemies:
@@ -413,15 +479,25 @@ func _enemy_tick(dt: float) -> void:
 		var speed_scale: float = (0.0 if e.frozen_timer > 0.0 else (0.7 if e.slow_timer > 0 else 1.0)) * (1.35 if e.haste_timer > 0 else 1.0)
 		if e.get("kind", "") == "charger" and e.pos.x > 650.0 and e.frozen_timer <= 0.0:
 			speed_scale *= float(e.get("charge_multiplier", 2.0))
-		var next_x: float = e.pos.x - e.speed * speed_scale * dt
+		var route: Array = e.get("route_points", [])
+		var route_index: int = int(e.get("route_index", 0))
+		var destination: Vector2 = heroes[0].pos if endless_mode and not heroes.is_empty() else Vector2(100, e.pos.y)
+		if not endless_mode and not route.is_empty() and route_index < route.size():
+			destination = route[route_index]
+		var next_pos: Vector2 = e.pos.move_toward(destination, e.speed * speed_scale * dt)
+		if not endless_mode and e.pos.distance_to(destination) <= maxf(4.0, e.speed * speed_scale * dt + 1.0):
+			e.pos = destination
+			e.route_index = route_index + 1
+			route_index += 1
+			next_pos = e.pos
 		var construct_victim: Dictionary = {}
 		if not bool(e.get("flying", false)):
 			for construct: Dictionary in geo_constructs:
 				if construct.hp <= 0.0 or absf(e.pos.y - construct.pos.y) > 48.0:
 					continue
-				if e.pos.x >= construct.pos.x - 5.0 and next_x <= construct.pos.x + 46.0:
+				if next_pos.distance_to(construct.pos) <= 52.0:
 					construct_victim = construct
-					next_x = maxf(next_x, construct.pos.x + 46.0)
+					next_pos = e.pos
 					break
 		var ranged_victim: Dictionary = {}
 		if float(e.get("attack_range", 0.0)) > 0.0:
@@ -430,19 +506,19 @@ func _enemy_tick(dt: float) -> void:
 					if ranged_victim.is_empty() or e.pos.distance_to(h.pos) < e.pos.distance_to(ranged_victim.pos):
 						ranged_victim = h
 			if not ranged_victim.is_empty():
-				next_x = e.pos.x
+				next_pos = e.pos
 		e.blocked_by = -1
 		for h in heroes:
 			if bool(e.get("flying", false)):
 				break
-			if h.hp <= 0 or h.moving or h.blocked >= h.block:
+			if h.hp <= 0 or (h.moving and not endless_mode) or h.blocked >= h.block:
 				continue
-			if absf(e.pos.y - h.pos.y) <= 35 and e.pos.x >= h.pos.x - 5 and next_x <= h.pos.x + 40:
+			if next_pos.distance_to(h.pos) <= 43.0 or e.pos.distance_to(h.pos) <= 43.0:
 				e.blocked_by = h.id
 				h.blocked += 1
-				next_x = maxf(next_x, h.pos.x + 40)
+				next_pos = e.pos
 				break
-		e.pos.x = next_x
+		e.pos = next_pos
 		var victim: Dictionary = ranged_victim
 		if not construct_victim.is_empty():
 			victim = {}
@@ -489,7 +565,8 @@ func _enemy_tick(dt: float) -> void:
 					ally.max_shield = maxf(float(ally.get("max_shield", 0.0)), float(ally.shield))
 			e.special_timer = float(e.get("ward_interval", 6.5))
 			events.append({"kind": "enemy_guard", "pos": e.pos, "value": 55})
-		if e.pos.x <= 120:
+		var completed_route: bool = not route.is_empty() and int(e.route_index) >= route.size() and e.pos.distance_to(route[-1]) <= 5.0
+		if not endless_mode and (completed_route or (route.is_empty() and e.pos.x <= 108.0)):
 			e.hp = 0.0
 			base_hp = maxi(0, base_hp - e.leak)
 			events.append({"kind": "leak", "pos": e.pos, "value": e.leak})
@@ -629,7 +706,7 @@ func damage_hero(id: int, raw_damage: float) -> void:
 
 func _hero_tick() -> void:
 	for h in heroes:
-		if h.hp <= 0 or h.moving:
+		if h.hp <= 0 or (h.moving and not endless_mode):
 			continue
 		if normalize_element(str(h.element)) == "hydro" and h.heal_timer <= 0:
 			var ally: Dictionary = {}
@@ -925,12 +1002,12 @@ func splash_damage(primary: Dictionary, damage: float, radius: float) -> void:
 
 func grant_xp(amount: int) -> void:
 	if v2_mode:
-		var gained: int = crystal.grant(run_state, amount)
+		var gained: int = _grant_endless_xp(amount) if endless_mode else crystal.grant(run_state, amount)
 		team_xp = run_state.crystal_xp
 		team_level = run_state.crystal_level
 		if gained > 0:
 			events.append({"kind": "level_up", "value": run_state.crystal_level})
-			if state == "running":
+			if state == "running" and reward_cooldown <= 0.0:
 				state = "reward"
 				rewards.draw(self)
 		return
@@ -940,7 +1017,22 @@ func grant_xp(amount: int) -> void:
 		for h in heroes:
 			h.damage += h.base_damage * 0.08
 			rewards.increase_health(h, h.base_hp * 0.08)
-		events.append({"kind": "level_up", "value": team_level})
+			events.append({"kind": "level_up", "value": team_level})
+
+func _grant_endless_xp(amount: int) -> int:
+	if amount <= 0:
+		return 0
+	run_state.crystal_xp += amount
+	var gained := 0
+	while run_state.crystal_xp >= endless_next_threshold():
+		run_state.crystal_level += 1
+		run_state.pending_level_ups += 1
+		gained += 1
+	return gained
+
+func endless_next_threshold() -> int:
+	var level := maxi(1, run_state.crystal_level)
+	return roundi(55.0 * level + 25.0 * pow(float(level), 1.32))
 
 func element_name(element: String) -> String:
 	return {"none": "无", "anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, element)
@@ -956,6 +1048,24 @@ func stage_lane_map() -> Dictionary:
 func stage_lanes() -> Array:
 	var mapping := stage_lane_map()
 	return [mapping.upper, mapping.main, mapping.lower]
+
+func stage_route(route_id: String) -> Array[Vector2]:
+	var result: Array[Vector2] = []
+	if not v2_mode or stage_runtime == null:
+		return result
+	var configured: Dictionary = stage_runtime.definition.get("routes", {})
+	for value in configured.get(route_id, []):
+		if value is Array and value.size() >= 2:
+			result.append(Vector2(float(value[0]), float(value[1])))
+	return result
+
+func stage_routes() -> Dictionary:
+	var result := {}
+	if not v2_mode or stage_runtime == null:
+		return result
+	for route_id: String in stage_runtime.definition.get("routes", {}):
+		result[route_id] = stage_route(route_id)
+	return result
 
 func apply_v2_card_effect(card: Dictionary) -> void:
 	var targets: Array[Dictionary] = []

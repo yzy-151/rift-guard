@@ -16,6 +16,7 @@ var base_flash: float = 0.0
 var shake_trauma: float = 0.0
 var skill_targeting: bool = false
 var skill_point: Vector2 = Vector2(760, 360)
+var camera_center: Vector2 = Vector2(640, 360)
 var atlas: Texture2D = preload("res://assets/tiny-dungeon.png")
 var hell_stage_one: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0002.png")
 var hell_stage_two: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0003.png")
@@ -50,6 +51,8 @@ func _ready() -> void:
 
 func advance(dt: float) -> void:
 	clock += dt
+	if sim != null and sim.endless_mode and not sim.heroes.is_empty():
+		camera_center = camera_center.lerp(sim.heroes[0].pos, 1.0 - exp(-dt * 7.0))
 	for id in shot_flashes:
 		shot_flashes[id] = maxf(0.0, shot_flashes[id] - dt)
 	base_flash = maxf(0.0, base_flash - dt)
@@ -60,6 +63,19 @@ func advance(dt: float) -> void:
 	effects = effects.filter(func(e: Dictionary) -> bool: return e.life > 0.0)
 	sync_furina_actor(dt)
 	queue_redraw()
+
+func world_to_screen(point: Vector2) -> Vector2:
+	if sim != null and sim.endless_mode:
+		return point - camera_center + Vector2(640, 360)
+	return Stage.project(point)
+
+func screen_to_world(point: Vector2) -> Vector2:
+	if sim != null and sim.endless_mode:
+		return point + camera_center - Vector2(640, 360)
+	return Stage.unproject(point)
+
+func world_depth_scale(point: Vector2) -> float:
+	return 1.0 if sim != null and sim.endless_mode else Stage.depth_scale(point)
 
 func build_furina_actor() -> void:
 	if furina_actor != null:
@@ -75,7 +91,7 @@ func sync_furina_actor(dt: float = 0.0) -> void:
 		if hero.get("character_id", "") == "hero_03":
 			furina_actor.visible = true
 			var shot_life: float = shot_flashes.get(hero.id, 0.0)
-			furina_actor.sync(hero, Stage.project(hero.pos), Stage.depth_scale(hero.pos), shot_life, reduced_effects, dt)
+			furina_actor.sync(hero, world_to_screen(hero.pos), world_depth_scale(hero.pos), shot_life, reduced_effects, dt)
 			return
 	furina_actor.visible = false
 
@@ -105,8 +121,9 @@ func _draw() -> void:
 	if sim == null or font == null:
 		return
 	_draw_stage()
-	_draw_base_projected()
-	_draw_portal_projected()
+	if not sim.endless_mode:
+		_draw_base_projected()
+		_draw_portal_projected()
 	for zone: Dictionary in sim.skill_effects:
 		_draw_skill_zone(zone)
 	for construct: Dictionary in sim.geo_constructs:
@@ -119,7 +136,7 @@ func _draw() -> void:
 			_draw_range_indicator(hero)
 	for hero in sim.heroes:
 		if hero.hp > 0 and hero.pos.distance_to(hero.target) > 3.0:
-			draw_dashed_line(Stage.project(hero.pos), Stage.project(hero.target), Color(hero.color, 0.6), 1.0, 7.0)
+			draw_dashed_line(world_to_screen(hero.pos), world_to_screen(hero.target), Color(hero.color, 0.6), 1.0, 7.0)
 			_ground_circle(hero.target, 13.0, Color(hero.color))
 	var actors: Array[Dictionary] = []
 	for enemy in sim.enemies:
@@ -129,8 +146,8 @@ func _draw() -> void:
 	actors.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.unit.pos.y < b.unit.pos.y)
 	for actor in actors:
 		var unit: Dictionary = actor.unit
-		var point: Vector2 = Stage.project(unit.pos)
-		var scale_factor: float = Stage.depth_scale(unit.pos)
+		var point: Vector2 = world_to_screen(unit.pos)
+		var scale_factor: float = world_depth_scale(unit.pos)
 		draw_set_transform(point, 0, Vector2(scale_factor, scale_factor))
 		draw_ellipse_shadow(Vector2.ZERO, 28.0 if actor.hero else unit.size * 0.48, Color(0, 0, 0, 0.5))
 		draw_set_transform(point, 0, Vector2(scale_factor, scale_factor))
@@ -142,25 +159,26 @@ func _draw() -> void:
 			_draw_enemy(visual)
 		draw_set_transform(Vector2.ZERO)
 	for projectile in sim.projectiles:
-		var point: Vector2 = Stage.project(projectile.pos) + Vector2(0, -18)
+		var point: Vector2 = world_to_screen(projectile.pos) + Vector2(0, -18)
 		var color: Color = {"hydro": Color("#74c9ff"), "pyro": Color("#ff7d54"), "electro": Color("#c189ff"), "cryo": Color("#b9efff"), "anemo": Color("#82ebc7"), "geo": Color("#f1c45c")}.get(projectile.element, Color("#ffd397"))
 		draw_line(point - Vector2(24, 0), point, Color(color, 0.26), 7.0, true)
 		draw_line(point - Vector2(16, 0), point, color, 2.8, true)
 		draw_circle(point, 4.5, Color.WHITE)
 	for effect in effects:
-		var point: Vector2 = Stage.project(effect.pos)
-		var scale_factor: float = Stage.depth_scale(effect.pos)
+		var point: Vector2 = world_to_screen(effect.pos)
+		var scale_factor: float = world_depth_scale(effect.pos)
 		draw_set_transform(point, 0, Vector2(scale_factor, scale_factor))
 		var visual: Dictionary = effect.duplicate()
 		visual.pos = Vector2.ZERO
 		_draw_effect(visual)
 		draw_set_transform(Vector2.ZERO)
-	# Foreground parapet gives the stage a solid front edge.
-	var front := PackedVector2Array([Stage.project(Vector2(40, 580)), Stage.project(Vector2(1240, 580)), Vector2(1240, 609), Vector2(40, 609)])
-	draw_colored_polygon(front, Color("#151018"))
-	draw_line(front[0], front[1], Color("#725054"), 2.0)
-	caption(Vector2(47, 595), "C I T A D E L   /   0 1", Color("#a68b91"), 11)
-	caption(Vector2(960, 594), "敌军推进方向   ←", Color("#c99593"), 12)
+	if not sim.endless_mode:
+		# Foreground parapet gives the stage a solid front edge.
+		var front := PackedVector2Array([world_to_screen(Vector2(40, 580)), world_to_screen(Vector2(1240, 580)), Vector2(1240, 609), Vector2(40, 609)])
+		draw_colored_polygon(front, Color("#151018"))
+		draw_line(front[0], front[1], Color("#725054"), 2.0)
+		caption(Vector2(47, 595), "C I T A D E L   /   0 1", Color("#a68b91"), 11)
+		caption(Vector2(960, 594), "敌军推进方向   ←", Color("#c99593"), 12)
 	if sim.state == "between":
 		caption(Vector2(548, 127), "队伍休整  %.1fs" % sim.wave_timer, TEAL, 16)
 
@@ -168,8 +186,8 @@ func _draw_skill_preview() -> void:
 	var element: String = sim.traveler_skill_element()
 	var color: Color = element_color(element)
 	var radius: float = sim.traveler_skill_radius()
-	var center := Stage.project(skill_point)
-	var radius_x := radius * 0.62 * Stage.depth_scale(skill_point)
+	var center := world_to_screen(skill_point)
+	var radius_x := radius * 0.62 * world_depth_scale(skill_point)
 	var radius_y := radius_x * 0.32
 	var points := PackedVector2Array()
 	for i in 64:
@@ -185,7 +203,7 @@ func _draw_skill_preview() -> void:
 	caption(center + Vector2(-58, -radius_y - 18), sim.traveler_skill_name(), color, 15)
 
 func _draw_skill_zone(zone: Dictionary) -> void:
-	var center := Stage.project(zone.pos)
+	var center := world_to_screen(zone.pos)
 	var pulse := sin(clock * 7.0) * 5.0
 	if zone.kind == "anemo_tornado":
 		for ring in 5:
@@ -205,8 +223,8 @@ func _draw_skill_zone(zone: Dictionary) -> void:
 		draw_arc(center, 82.0 + pulse, 0, TAU, 48, Color(0.72, 0.96, 1.0, 0.56), 2.4, true)
 
 func _draw_geo_construct(construct: Dictionary) -> void:
-	var center := Stage.project(construct.pos)
-	var depth := Stage.depth_scale(construct.pos)
+	var center := world_to_screen(construct.pos)
+	var depth := world_depth_scale(construct.pos)
 	draw_set_transform(center, 0, Vector2(depth, depth))
 	draw_ellipse_shadow(Vector2.ZERO, 34.0, Color(0, 0, 0, 0.52))
 	var stone := PackedVector2Array([Vector2(-31, 8), Vector2(-24, -48), Vector2(-6, -78), Vector2(19, -66), Vector2(34, -28), Vector2(28, 10)])
@@ -221,11 +239,11 @@ func _draw_geo_construct(construct: Dictionary) -> void:
 
 func _ground_circle(point: Vector2, radius: float, color: Color) -> void:
 	for i in 40:
-		draw_line(Stage.project(point + Vector2.from_angle(i * TAU / 40) * radius), Stage.project(point + Vector2.from_angle((i + 1) * TAU / 40) * radius), color, 1.3, true)
+		draw_line(world_to_screen(point + Vector2.from_angle(i * TAU / 40) * radius), world_to_screen(point + Vector2.from_angle((i + 1) * TAU / 40) * radius), color, 1.3, true)
 
 func _draw_range_indicator(hero: Dictionary) -> void:
-	var center: Vector2 = Stage.project(hero.pos) + Vector2(0, 8)
-	var depth: float = Stage.depth_scale(hero.pos)
+	var center: Vector2 = world_to_screen(hero.pos) + Vector2(0, 8)
+	var depth: float = world_depth_scale(hero.pos)
 	var radius_x: float = minf(210.0, 35.0 + hero.range * 0.56 * depth)
 	var radius_y: float = radius_x * 0.30
 	var color := Color(hero.color)
@@ -251,6 +269,9 @@ func _draw_range_indicator(hero: Dictionary) -> void:
 	draw_arc(center, 12.0, 0, TAU, 32, Color(color, 0.28), 1.2, true)
 
 func _draw_stage() -> void:
+	if sim.endless_mode:
+		_draw_endless_stage()
+		return
 	var backgrounds := {"stage_01": hell_stage_one, "stage_02": hell_stage_two, "stage_03": hell_stage_three}
 	var hell_background: Texture2D = backgrounds.get(sim.current_stage_id, hell_stage_one)
 	draw_texture_rect(hell_background, Rect2(0, 0, 1280, 720), false, Color.WHITE)
@@ -274,27 +295,58 @@ func _draw_stage() -> void:
 	var border: PackedVector2Array = Stage.polygon(Sim.MOVE_AREA)
 	border.append(border[0])
 	draw_polyline(border, Color("#9a5961"), 1.4, true)
-	for lane in sim.stage_lanes():
-		draw_line(Stage.project(Vector2(160, lane + 35)), Stage.project(Vector2(1200, lane + 35)), Color(0.72, 0.61, 0.62, 0.13), 1.0)
-		for x in range(740, 1150, 110):
-			var arrow: Vector2 = Stage.project(Vector2(x, lane))
-			draw_polyline(PackedVector2Array([arrow + Vector2(5, -4), arrow, arrow + Vector2(5, 4)]), Color("#6f555e"), 1.5)
+	var routes: Dictionary = sim.stage_routes()
+	for route_id: String in routes:
+		var route: Array = routes[route_id]
+		if route.size() < 2:
+			continue
+		var projected := PackedVector2Array()
+		for point: Vector2 in route:
+			projected.append(world_to_screen(point))
+		var route_color := Color("#e36a77") if route_id != "air" else Color("#e2c85f")
+		draw_polyline(projected, Color(route_color, 0.25), 2.0, true)
+		for i in range(1, route.size() - 1):
+			var direction: Vector2 = (world_to_screen(route[i + 1]) - world_to_screen(route[i])).normalized()
+			var arrow: Vector2 = world_to_screen(route[i])
+			var side := direction.rotated(PI * 0.5)
+			draw_polyline(PackedVector2Array([arrow - direction * 7 + side * 4, arrow, arrow - direction * 7 - side * 4]), Color(route_color, 0.54), 1.5, true)
 	# Rear wall has height independent of the floor projection.
 	for i in 12:
-		var ground: Vector2 = Stage.project(Vector2(45 + i * 105, 140))
+		var ground: Vector2 = world_to_screen(Vector2(45 + i * 105, 140))
 		draw_rect(Rect2(ground - Vector2(17, 48), Vector2(62, 48)), Color("#3e303c"))
 		draw_rect(Rect2(ground - Vector2(17, 48), Vector2(62, 5)), Color("#69505a"))
 		draw_colored_polygon(PackedVector2Array([ground + Vector2(-5, 0), ground + Vector2(-5, -28), ground + Vector2(14, -40), ground + Vector2(33, -28), ground + Vector2(33, 0)]), Color("#211923"))
 	for point in [Vector2(220, 145), Vector2(670, 145), Vector2(1120, 145)]:
-		var screen: Vector2 = Stage.project(point)
+		var screen: Vector2 = world_to_screen(point)
 		draw_line(screen, screen + Vector2(0, -45), Color("#89737a"), 4)
 		draw_circle(screen + Vector2(0, -46), 5, Color("#e8967c"))
 		if not reduced_effects:
 			draw_circle(screen + Vector2(0, -46), 12 + sin(clock * 2) * 1.5, Color(0.9, 0.4, 0.3, 0.1))
-	caption(Stage.project(Vector2(205, 525)), "自由部署区", Color("#c79398"), 12)
+	caption(world_to_screen(Vector2(205, 525)), "自由部署区", Color("#c79398"), 12)
+
+func _draw_endless_stage() -> void:
+	draw_rect(Rect2(0, 0, 1280, 720), Color("#110c13"))
+	var top_left := screen_to_world(Vector2.ZERO)
+	var bottom_right := screen_to_world(Vector2(1280, 720))
+	var cell := 96.0
+	var first_x := floorf(top_left.x / cell) * cell
+	var first_y := floorf(top_left.y / cell) * cell
+	for x in range(int(first_x), int(bottom_right.x + cell), int(cell)):
+		for y in range(int(first_y), int(bottom_right.y + cell), int(cell)):
+			var world_rect := Rect2(Vector2(x, y), Vector2(cell - 2.0, cell - 2.0))
+			var checker := (floori(x / cell) + floori(y / cell)) % 2
+			draw_rect(Rect2(world_to_screen(world_rect.position), world_rect.size), Color("#29212c") if checker == 0 else Color("#251d28"))
+	var arena_screen := Rect2(world_to_screen(Sim.ENDLESS_ARENA.position), Sim.ENDLESS_ARENA.size)
+	draw_rect(arena_screen, Color("#b05261"), false, 5.0)
+	for i in 18:
+		var angle := float(i) * TAU / 18.0
+		var radius := 230.0 + float((i * 73) % 260)
+		var rune := world_to_screen(Sim.ENDLESS_ARENA.get_center() + Vector2.from_angle(angle) * radius)
+		draw_arc(rune, 12.0 + float(i % 3) * 5.0, angle, angle + PI * 1.35, 16, Color(0.74, 0.27, 0.35, 0.24), 2.0)
+	caption(Vector2(36, 126), "E N D L E S S   F I E L D   /   猩红荒原", Color("#c99593"), 12)
 
 func _draw_base_projected() -> void:
-	var point: Vector2 = Stage.project(Vector2(100, 365))
+	var point: Vector2 = world_to_screen(Vector2(100, 365))
 	draw_ellipse_shadow(point + Vector2(0, 13), 54, Color(0, 0, 0, 0.45))
 	var tint: Color = RED if base_flash > 0.0 and not reduced_effects else Color("#e3b7ba")
 	draw_colored_polygon(PackedVector2Array([point + Vector2(-36, 20), point + Vector2(-36, -97), point + Vector2(5, -120), point + Vector2(41, -95), point + Vector2(41, 18)]), Color("#59414d"))
@@ -307,8 +359,16 @@ func _draw_base_projected() -> void:
 	caption(point + Vector2(-35, 72), "基地核心", tint, 13)
 
 func _draw_portal_projected() -> void:
-	for lane in Sim.LANES:
-		var point: Vector2 = Stage.project(Vector2(1195, lane))
+	var starts: Array[Vector2] = []
+	for route_id: String in sim.stage_routes():
+		var route: Array = sim.stage_routes()[route_id]
+		if not route.is_empty() and not starts.has(route[0]):
+			starts.append(route[0])
+	if starts.is_empty():
+		for lane in Sim.LANES:
+			starts.append(Vector2(1195, lane))
+	for start: Vector2 in starts:
+		var point: Vector2 = world_to_screen(start)
 		draw_set_transform(point + Vector2(0, -23), 0, Vector2(0.55, 1))
 		draw_arc(Vector2.ZERO, 33, 0, TAU, 48, Color("#a64764"), 4, true)
 		draw_arc(Vector2.ZERO, 25, 0, TAU, 48, Color("#ec8a9a"), 1.5, true)

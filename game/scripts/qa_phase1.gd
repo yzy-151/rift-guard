@@ -31,7 +31,7 @@ func run(game) -> void:
 	game.primary()
 	expect(game.sim.state == "running", "start action begins configured stage")
 	await capture(game, "battle-start")
-	game.sim.grant_xp(40)
+	game.sim.grant_xp(int(game.sim.database.stages.stage_01.xp_thresholds[0]))
 	game.refresh()
 	await game.get_tree().process_frame
 	expect(game.sim.state == "reward", "crystal level pauses battle for reward")

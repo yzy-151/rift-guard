@@ -136,8 +136,18 @@ func _add_row(name: String, body: String, color: Color, known: bool, badge: Stri
 	mark.color = color
 	mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(mark)
-	hud.label(row, Vector2(24, 8), Vector2(350, 26), name, 18, color)
-	hud.label(row, Vector2(24, 35), Vector2(890, 22), body, 13, WHITE if known else MUTED)
+	var icon_name := "character" if active_tab == "characters" else ("card" if active_tab == "cards" else ("boss" if "Boss" in body else "skull"))
+	var icon_path := "res://assets/ui/icons/temporary/nieobie/%s.svg" % icon_name
+	if ResourceLoader.exists(icon_path):
+		var icon_back := ColorRect.new()
+		icon_back.position = Vector2(15, 12)
+		icon_back.size = Vector2(40, 40)
+		icon_back.color = Color("#ead9dc") if known else Color("#55474d")
+		icon_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_child(icon_back)
+		hud.icon(row, icon_path, Rect2(18, 15, 34, 34), color if known else MUTED)
+	hud.label(row, Vector2(66, 8), Vector2(350, 26), name, 16, color)
+	hud.label(row, Vector2(66, 35), Vector2(850, 22), body, 11, WHITE if known else MUTED)
 	if not badge.is_empty():
 		var tag: Label = hud.label(row, Vector2(920, 19), Vector2(132, 27), badge, 13, color)
 		tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT

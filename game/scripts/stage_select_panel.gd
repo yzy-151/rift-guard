@@ -58,7 +58,13 @@ func build(owner_hud, game_database, state) -> void:
 		var record: Label = owner_hud.label(button, Vector2(20, 164), Vector2(290, 78), "", 14, WHITE)
 		status_labels[id] = record
 		owner_hud.label(button, Vector2(20, 266), Vector2(290, 24), "点击选择并前往编队  →", 13, ACCENT)
-	owner_hud.label(frame, Vector2(38, 525), Vector2(1040, 22), "F4 打开关卡选择 · ESC 返回战场", 12, MUTED)
+	var endless: Dictionary = database.modes.get("endless_survival", {})
+	var endless_id := str(endless.get("starting_stage_id", "stage_endless"))
+	var endless_button: Button = owner_hud.button(frame, Rect2(38, 475, 1038, 48), "∞  无尽生存 / 猩红荒原    四屏地图 · 四边追击 · 旅行者升级 · 无限构筑     →", true)
+	owner_hud.bind(endless_button, "stage_endless")
+	endless_button.pressed.connect(select.bind(endless_id))
+	buttons[endless_id] = endless_button
+	owner_hud.label(frame, Vector2(38, 540), Vector2(1040, 22), "F4 打开关卡选择 · ESC 返回战场", 11, MUTED)
 	root.hide()
 
 func open() -> void:
@@ -78,6 +84,8 @@ func select(id: String) -> void:
 	chosen.emit(id)
 
 func _is_unlocked(id: String) -> bool:
+	if id == "stage_endless":
+		return true
 	var ids: Array = database.modes.get("rift_watch", {}).get("stage_ids", [])
 	var index := ids.find(id)
 	return index == 0 or (index > 0 and progress.cleared_stages.has(str(ids[index - 1])))
@@ -88,6 +96,8 @@ func _refresh() -> void:
 		var button: Button = buttons[id]
 		button.disabled = not unlocked
 		button.modulate = Color.WHITE if unlocked else Color("#352c31")
+		if not status_labels.has(id):
+			continue
 		var record: Dictionary = progress.stage_records.get(id, {})
 		var label: Label = status_labels[id]
 		if not unlocked:

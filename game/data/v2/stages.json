@@ -8,25 +8,26 @@
     "enemy_health_multiplier": 0.9,
     "enemy_damage_multiplier": 0.22,
     "enemy_speed_multiplier": 1.02,
+    "enemy_leak_multiplier": 0.18,
     "starting_squad": [
       "traveler"
     ],
     "xp_thresholds": [
-      40,
-      90,
-      150,
-      220,
+      80,
+      180,
       300,
-      390,
-      490,
+      440,
       600,
-      720,
-      850,
-      990,
-      1140,
-      1300,
-      1470,
-      1650
+      780,
+      980,
+      1200,
+      1440,
+      1700,
+      1980,
+      2280,
+      2600,
+      2940,
+      3300
     ],
     "unlocks": [
       "hero_02"
@@ -88,7 +89,13 @@
         "interval": 1.4,
         "route_id": "upper"
       },
-      {"at":190,"enemy_id":"healer","count":5,"interval":7.0,"route_id":"main"},
+      {
+        "at": 190,
+        "enemy_id": "healer",
+        "count": 5,
+        "interval": 7.0,
+        "route_id": "main"
+      },
       {
         "at": 215,
         "enemy_id": "shielded",
@@ -96,7 +103,13 @@
         "interval": 3.0,
         "route_id": "main"
       },
-      {"at":225,"enemy_id":"charger","count":16,"interval":1.65,"route_id":"upper"},
+      {
+        "at": 225,
+        "enemy_id": "charger",
+        "count": 16,
+        "interval": 1.65,
+        "route_id": "upper"
+      },
       {
         "at": 240,
         "enemy_id": "runner",
@@ -111,9 +124,121 @@
         "interval": 1.5,
         "route_id": "upper"
       },
-      {"at":255,"enemy_id":"splitter","count":6,"interval":5.2,"route_id":"lower"},
-      {"at":278,"enemy_id":"warder","count":5,"interval":5.8,"route_id":"main"}
-    ]
+      {
+        "at": 255,
+        "enemy_id": "splitter",
+        "count": 6,
+        "interval": 5.2,
+        "route_id": "lower"
+      },
+      {
+        "at": 278,
+        "enemy_id": "warder",
+        "count": 5,
+        "interval": 5.8,
+        "route_id": "main"
+      }
+    ],
+    "routes": {
+      "upper": [
+        [
+          980,
+          145
+        ],
+        [
+          940,
+          230
+        ],
+        [
+          790,
+          230
+        ],
+        [
+          720,
+          315
+        ],
+        [
+          520,
+          360
+        ],
+        [
+          430,
+          265
+        ],
+        [
+          280,
+          320
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          355
+        ],
+        [
+          1010,
+          355
+        ],
+        [
+          880,
+          430
+        ],
+        [
+          690,
+          430
+        ],
+        [
+          590,
+          360
+        ],
+        [
+          390,
+          360
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "lower": [
+        [
+          1040,
+          555
+        ],
+        [
+          980,
+          485
+        ],
+        [
+          820,
+          485
+        ],
+        [
+          735,
+          405
+        ],
+        [
+          520,
+          360
+        ],
+        [
+          420,
+          470
+        ],
+        [
+          260,
+          410
+        ],
+        [
+          115,
+          360
+        ]
+      ]
+    }
   },
   {
     "id": "stage_02",
@@ -123,29 +248,244 @@
     "boss_id": "boss_01",
     "boss_route_id": "upper",
     "enemy_health_multiplier": 0.55,
-	"enemy_damage_multiplier": 0.12,
-	"enemy_speed_multiplier": 0.96,
-	"enemy_leak_multiplier": 0.10,
-    "starting_squad": ["traveler", "hero_02"],
-    "xp_thresholds": [40, 90, 150, 220, 300, 390, 490, 600, 720, 850, 990, 1140, 1300, 1470, 1650],
-    "unlocks": ["hero_03"],
+    "enemy_damage_multiplier": 0.12,
+    "enemy_speed_multiplier": 0.96,
+    "enemy_leak_multiplier": 0.1,
+    "starting_squad": [
+      "traveler",
+      "hero_02"
+    ],
+    "xp_thresholds": [
+      80,
+      180,
+      300,
+      440,
+      600,
+      780,
+      980,
+      1200,
+      1440,
+      1700,
+      1980,
+      2280,
+      2600,
+      2940,
+      3300
+    ],
+    "unlocks": [
+      "hero_03"
+    ],
     "waves": [
-      {"at":0,"enemy_id":"runner","count":20,"interval":2.1,"route_id":"upper"},
-      {"at":24,"enemy_id":"grunt","count":24,"interval":2.0,"route_id":"lower"},
-      {"at":65,"enemy_id":"flyer","count":18,"interval":2.1,"route_id":"main"},
-      {"at":92,"enemy_id":"ranged","count":14,"interval":2.7,"route_id":"upper"},
-      {"at":125,"enemy_id":"buffer","count":8,"interval":5.2,"route_id":"lower"},
-      {"at":130,"enemy_id":"armored","count":15,"interval":2.8,"route_id":"main"},
-      {"at":175,"enemy_id":"shielded","count":14,"interval":2.8,"route_id":"upper"},
-      {"at":205,"enemy_id":"runner","count":48,"interval":1.05,"route_id":"lower"},
-      {"at":214,"enemy_id":"charger","count":20,"interval":1.4,"route_id":"upper"},
-      {"at":240,"enemy_id":"flyer","count":30,"interval":1.35,"route_id":"main"},
-      {"at":248,"enemy_id":"healer","count":7,"interval":5.0,"route_id":"lower"},
-      {"at":268,"enemy_id":"ranged","count":18,"interval":1.9,"route_id":"upper"},
-      {"at":276,"enemy_id":"splitter","count":8,"interval":3.6,"route_id":"main"},
-      {"at":285,"enemy_id":"grunt","count":44,"interval":1.05,"route_id":"lower"},
-      {"at":292,"enemy_id":"warder","count":7,"interval":4.3,"route_id":"upper"}
-    ]
+      {
+        "at": 0,
+        "enemy_id": "runner",
+        "count": 20,
+        "interval": 2.1,
+        "route_id": "upper"
+      },
+      {
+        "at": 24,
+        "enemy_id": "grunt",
+        "count": 24,
+        "interval": 2.0,
+        "route_id": "lower"
+      },
+      {
+        "at": 65,
+        "enemy_id": "flyer",
+        "count": 18,
+        "interval": 2.1,
+        "route_id": "main"
+      },
+      {
+        "at": 92,
+        "enemy_id": "ranged",
+        "count": 14,
+        "interval": 2.7,
+        "route_id": "upper"
+      },
+      {
+        "at": 125,
+        "enemy_id": "buffer",
+        "count": 8,
+        "interval": 5.2,
+        "route_id": "lower"
+      },
+      {
+        "at": 130,
+        "enemy_id": "armored",
+        "count": 15,
+        "interval": 2.8,
+        "route_id": "main"
+      },
+      {
+        "at": 175,
+        "enemy_id": "shielded",
+        "count": 14,
+        "interval": 2.8,
+        "route_id": "upper"
+      },
+      {
+        "at": 205,
+        "enemy_id": "runner",
+        "count": 48,
+        "interval": 1.05,
+        "route_id": "lower"
+      },
+      {
+        "at": 214,
+        "enemy_id": "charger",
+        "count": 20,
+        "interval": 1.4,
+        "route_id": "upper"
+      },
+      {
+        "at": 240,
+        "enemy_id": "flyer",
+        "count": 30,
+        "interval": 1.35,
+        "route_id": "main"
+      },
+      {
+        "at": 248,
+        "enemy_id": "healer",
+        "count": 7,
+        "interval": 5.0,
+        "route_id": "lower"
+      },
+      {
+        "at": 268,
+        "enemy_id": "ranged",
+        "count": 18,
+        "interval": 1.9,
+        "route_id": "upper"
+      },
+      {
+        "at": 276,
+        "enemy_id": "splitter",
+        "count": 8,
+        "interval": 3.6,
+        "route_id": "main"
+      },
+      {
+        "at": 285,
+        "enemy_id": "grunt",
+        "count": 44,
+        "interval": 1.05,
+        "route_id": "lower"
+      },
+      {
+        "at": 292,
+        "enemy_id": "warder",
+        "count": 7,
+        "interval": 4.3,
+        "route_id": "upper"
+      }
+    ],
+    "routes": {
+      "upper": [
+        [
+          1195,
+          220
+        ],
+        [
+          1040,
+          220
+        ],
+        [
+          930,
+          300
+        ],
+        [
+          790,
+          300
+        ],
+        [
+          680,
+          220
+        ],
+        [
+          520,
+          360
+        ],
+        [
+          390,
+          315
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "main": [
+        [
+          930,
+          145
+        ],
+        [
+          900,
+          250
+        ],
+        [
+          1010,
+          350
+        ],
+        [
+          850,
+          430
+        ],
+        [
+          680,
+          390
+        ],
+        [
+          520,
+          360
+        ],
+        [
+          330,
+          400
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "lower": [
+        [
+          1195,
+          505
+        ],
+        [
+          1020,
+          505
+        ],
+        [
+          900,
+          420
+        ],
+        [
+          760,
+          500
+        ],
+        [
+          610,
+          500
+        ],
+        [
+          520,
+          360
+        ],
+        [
+          300,
+          455
+        ],
+        [
+          115,
+          360
+        ]
+      ]
+    }
   },
   {
     "id": "stage_03",
@@ -156,30 +496,290 @@
     "boss_route_id": "main",
     "enemy_health_multiplier": 0.44,
     "enemy_damage_multiplier": 0.14,
-    "enemy_speed_multiplier": 0.90,
+    "enemy_speed_multiplier": 0.9,
     "enemy_leak_multiplier": 0.08,
-    "lanes": {"upper":235,"main":355,"lower":485},
-    "starting_squad": ["traveler", "hero_02", "hero_03"],
-    "xp_thresholds": [40,90,150,220,300,390,490,600,720,850,990,1140,1300,1470,1650],
-    "unlocks": ["hero_04", "hero_05", "hero_06", "hero_07", "hero_08"],
+    "lanes": {
+      "upper": 235,
+      "main": 355,
+      "lower": 485
+    },
+    "starting_squad": [
+      "traveler",
+      "hero_02",
+      "hero_03"
+    ],
+    "xp_thresholds": [
+      80,
+      180,
+      300,
+      440,
+      600,
+      780,
+      980,
+      1200,
+      1440,
+      1700,
+      1980,
+      2280,
+      2600,
+      2940,
+      3300
+    ],
+    "unlocks": [
+      "hero_04",
+      "hero_05",
+      "hero_06",
+      "hero_07",
+      "hero_08"
+    ],
     "waves": [
-      {"at":0,"enemy_id":"charger","count":18,"interval":1.8,"route_id":"main"},
-      {"at":28,"enemy_id":"grunt","count":26,"interval":1.7,"route_id":"upper"},
-      {"at":52,"enemy_id":"splitter","count":7,"interval":4.6,"route_id":"lower"},
-      {"at":78,"enemy_id":"flyer","count":22,"interval":1.75,"route_id":"upper"},
-      {"at":102,"enemy_id":"healer","count":7,"interval":5.4,"route_id":"main"},
-      {"at":108,"enemy_id":"armored","count":18,"interval":2.5,"route_id":"lower"},
-      {"at":148,"enemy_id":"warder","count":8,"interval":4.8,"route_id":"upper"},
-      {"at":154,"enemy_id":"ranged","count":20,"interval":2.0,"route_id":"main"},
-      {"at":190,"enemy_id":"runner","count":58,"interval":0.92,"route_id":"lower"},
-      {"at":218,"enemy_id":"buffer","count":10,"interval":4.2,"route_id":"main"},
-      {"at":226,"enemy_id":"charger","count":30,"interval":1.05,"route_id":"upper"},
-      {"at":252,"enemy_id":"shielded","count":18,"interval":2.3,"route_id":"lower"},
-      {"at":276,"enemy_id":"splitter","count":12,"interval":2.8,"route_id":"main"},
-      {"at":292,"enemy_id":"healer","count":9,"interval":3.8,"route_id":"lower"},
-      {"at":300,"enemy_id":"warder","count":9,"interval":3.7,"route_id":"upper"},
-      {"at":326,"enemy_id":"flyer","count":38,"interval":0.95,"route_id":"upper"},
-      {"at":334,"enemy_id":"runner","count":64,"interval":0.78,"route_id":"lower"}
-    ]
+      {
+        "at": 0,
+        "enemy_id": "charger",
+        "count": 18,
+        "interval": 1.8,
+        "route_id": "main"
+      },
+      {
+        "at": 28,
+        "enemy_id": "grunt",
+        "count": 26,
+        "interval": 1.7,
+        "route_id": "upper"
+      },
+      {
+        "at": 52,
+        "enemy_id": "splitter",
+        "count": 7,
+        "interval": 4.6,
+        "route_id": "lower"
+      },
+      {
+        "at": 78,
+        "enemy_id": "flyer",
+        "count": 22,
+        "interval": 1.75,
+        "route_id": "upper"
+      },
+      {
+        "at": 102,
+        "enemy_id": "healer",
+        "count": 7,
+        "interval": 5.4,
+        "route_id": "main"
+      },
+      {
+        "at": 108,
+        "enemy_id": "armored",
+        "count": 18,
+        "interval": 2.5,
+        "route_id": "lower"
+      },
+      {
+        "at": 148,
+        "enemy_id": "warder",
+        "count": 8,
+        "interval": 4.8,
+        "route_id": "upper"
+      },
+      {
+        "at": 154,
+        "enemy_id": "ranged",
+        "count": 20,
+        "interval": 2.0,
+        "route_id": "main"
+      },
+      {
+        "at": 190,
+        "enemy_id": "runner",
+        "count": 58,
+        "interval": 0.92,
+        "route_id": "lower"
+      },
+      {
+        "at": 218,
+        "enemy_id": "buffer",
+        "count": 10,
+        "interval": 4.2,
+        "route_id": "main"
+      },
+      {
+        "at": 226,
+        "enemy_id": "charger",
+        "count": 30,
+        "interval": 1.05,
+        "route_id": "upper"
+      },
+      {
+        "at": 252,
+        "enemy_id": "shielded",
+        "count": 18,
+        "interval": 2.3,
+        "route_id": "lower"
+      },
+      {
+        "at": 276,
+        "enemy_id": "splitter",
+        "count": 12,
+        "interval": 2.8,
+        "route_id": "main"
+      },
+      {
+        "at": 292,
+        "enemy_id": "healer",
+        "count": 9,
+        "interval": 3.8,
+        "route_id": "lower"
+      },
+      {
+        "at": 300,
+        "enemy_id": "warder",
+        "count": 9,
+        "interval": 3.7,
+        "route_id": "upper"
+      },
+      {
+        "at": 326,
+        "enemy_id": "flyer",
+        "count": 38,
+        "interval": 0.95,
+        "route_id": "upper"
+      },
+      {
+        "at": 334,
+        "enemy_id": "runner",
+        "count": 64,
+        "interval": 0.78,
+        "route_id": "lower"
+      }
+    ],
+    "routes": {
+      "upper": [
+        [
+          1040,
+          145
+        ],
+        [
+          1000,
+          245
+        ],
+        [
+          850,
+          245
+        ],
+        [
+          790,
+          365
+        ],
+        [
+          630,
+          365
+        ],
+        [
+          520,
+          360
+        ],
+        [
+          390,
+          310
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          350
+        ],
+        [
+          1020,
+          350
+        ],
+        [
+          920,
+          455
+        ],
+        [
+          760,
+          455
+        ],
+        [
+          650,
+          335
+        ],
+        [
+          520,
+          360
+        ],
+        [
+          360,
+          420
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "lower": [
+        [
+          1010,
+          555
+        ],
+        [
+          950,
+          485
+        ],
+        [
+          1080,
+          410
+        ],
+        [
+          900,
+          330
+        ],
+        [
+          760,
+          500
+        ],
+        [
+          590,
+          485
+        ],
+        [
+          520,
+          360
+        ],
+        [
+          260,
+          430
+        ],
+        [
+          115,
+          360
+        ]
+      ]
+    }
+  },
+  {
+    "id": "stage_endless",
+    "name": "猩红荒原",
+    "duration_seconds": 86400,
+    "boss_at_seconds": 999999,
+    "boss_id": "boss_01",
+    "enemy_health_multiplier": 1.0,
+    "enemy_damage_multiplier": 0.34,
+    "enemy_speed_multiplier": 1.0,
+    "enemy_leak_multiplier": 1.0,
+    "starting_squad": [
+      "traveler"
+    ],
+    "xp_thresholds": [
+      80
+    ],
+    "unlocks": [],
+    "waves": [],
+    "routes": {}
   }
 ]
