@@ -12,8 +12,15 @@ var offer_key: String = ""
 func build(hud) -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	var hell_background := TextureRect.new()
+	hell_background.texture = preload("res://assets/helltaker/backgrounds/chapterBG0004.png")
+	hell_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	hell_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	hell_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	hell_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(hell_background)
 	var backdrop := ColorRect.new()
-	backdrop.color = Color(0.025, 0.035, 0.05, 0.93)
+	backdrop.color = Color(0.025, 0.012, 0.025, 0.82)
 	backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(backdrop)

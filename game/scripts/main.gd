@@ -28,6 +28,7 @@ var test_mode: bool = false
 var compendium = CompendiumState.new()
 var compendium_panel
 var stage_result_recorded := false
+var skill_aiming := false
 
 func _ready() -> void:
 	battle = View.new()
@@ -51,6 +52,7 @@ func _ready() -> void:
 		battle.reduced_effects = enabled
 		fx.reduced = enabled)
 	hud.compendium_action.connect(toggle_compendium)
+	hud.skill_action.connect(toggle_skill_aiming)
 	sound = AudioStreamPlayer.new()
 	sound.stream = preload("res://assets/hit.ogg")
 	sound.volume_db = -18
@@ -73,7 +75,11 @@ func _ready() -> void:
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	elif not content.loaded:
 		hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 28), "未找到 content/game_config.xlsx，当前使用内置内容。", 13, Color("#d6bd98"))
-	if "--config-window-test" in OS.get_cmdline_user_args():
+	if "--v5-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v5_test")
+	elif "--config-window-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_config_window_test")
@@ -189,6 +195,7 @@ func restart() -> void:
 	battle.shot_flashes.clear()
 	battle.base_flash = 0.0
 	sound.stop()
+	set_skill_aiming(false)
 	stage_result_recorded = false
 	refresh()
 
@@ -241,6 +248,14 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_Q:
+			toggle_skill_aiming()
+			get_viewport().set_input_as_handled()
+			return
+		if event.keycode == KEY_ESCAPE and skill_aiming:
+			set_skill_aiming(false)
+			get_viewport().set_input_as_handled()
+			return
 		match event.keycode:
 			KEY_SPACE, KEY_ESCAPE:
 				toggle_pause()
@@ -264,12 +279,23 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if sim.state not in ["running", "between"]:
 		return
+	if event is InputEventMouseMotion and skill_aiming:
+		var hover_screen: Vector2 = battle.get_global_transform().affine_inverse() * event.position
+		battle.skill_point = Stage.unproject(hover_screen)
+		battle.queue_redraw()
+		return
 	if event is InputEventMouseButton and event.pressed:
 		var screen_point: Vector2 = battle.get_global_transform().affine_inverse() * event.position
 		var point: Vector2 = Stage.unproject(screen_point)
 		if not View.WORLD.has_point(point):
 			return
-		if event.button_index == MOUSE_BUTTON_LEFT:
+		if event.button_index == MOUSE_BUTTON_LEFT and skill_aiming:
+			if sim.activate_traveler_skill(point):
+				set_skill_aiming(false)
+				process_events()
+				refresh()
+			return
+		elif event.button_index == MOUSE_BUTTON_LEFT:
 			selected_id = -1
 			var closest: float = 48.0
 			for h in sim.heroes:
@@ -353,6 +379,7 @@ func advance_stage() -> void:
 	story.reset()
 	sim.reset_stage(str(ids[index + 1]), squad, sim.run_seed + 1)
 	selected_id = 0
+	set_skill_aiming(false)
 	stage_result_recorded = false
 	fx.active.clear()
 	battle.effects.clear()
@@ -409,6 +436,23 @@ func toggle_compendium() -> void:
 		compendium_panel.open()
 		sound.stop()
 
+func toggle_skill_aiming() -> void:
+	if story.active or compendium_panel.is_open() or sim.state != "running" or sim.traveler_skill_cooldown > 0.0:
+		return
+	set_skill_aiming(not skill_aiming)
+
+func set_skill_aiming(enabled: bool) -> void:
+	skill_aiming = enabled
+	battle.skill_targeting = enabled
+	if enabled and not sim.heroes.is_empty():
+		battle.skill_point = sim.heroes[0].pos + Vector2(260, 0)
+	hud.set_skill_aiming(enabled)
+	refresh()
+
 func run_v4_test() -> void:
 	var suite = preload("res://scripts/qa_v4.gd").new()
+	await suite.run(self)
+
+func run_v5_test() -> void:
+	var suite = preload("res://scripts/qa_v5.gd").new()
 	await suite.run(self)

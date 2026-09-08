@@ -237,7 +237,8 @@ func apply_ui(control: Control, id: String) -> void:
 			for state in ["normal", "hover", "pressed"]:
 				control.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	elif control is TextureRect:
-		control.texture = texture(row.asset) if row.asset != "" else null
+		if row.asset != "":
+			control.texture = texture(row.asset)
 		control.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		control.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED if row.mode == "keep" else TextureRect.STRETCH_SCALE
 		control.visible = control.texture != null

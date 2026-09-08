@@ -29,6 +29,12 @@ var last_portrait: String = "muelsyse"
 var cue_sound: AudioStreamPlayer
 var background_texture: TextureRect
 var transition_bar: ColorRect
+var transition_texture: TextureRect
+var transition_time: float = 0.0
+var line_ended: bool = false
+var end_sound: AudioStreamPlayer
+var dialogue_highlight: AudioStreamPlayer
+var dialogue_confirm: AudioStreamPlayer
 
 func build(ui, story) -> void:
 	hud = ui
@@ -41,31 +47,30 @@ func build(ui, story) -> void:
 	var backdrop := Backdrop.new()
 	root.add_child(backdrop)
 	background_texture = TextureRect.new()
+	background_texture.texture = preload("res://assets/helltaker/backgrounds/dialogueBG_hell.png")
 	background_texture.position = Vector2(0, 82)
 	background_texture.size = Vector2(1280, 356)
 	background_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	background_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	background_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	background_texture.hide()
+	background_texture.show()
 	root.add_child(background_texture)
 	hud.bind(background_texture, "dialog_background")
 	var shade := ColorRect.new()
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	shade.color = Color(0.025, 0.015, 0.025, 0.23)
 	root.add_child(shade)
-	hud.label(root, Vector2(52, 22), Vector2(800, 28), "R I F T   G U A R D   /   城 门 之 下", 15, Color("#d7a9a2"))
-	hud.label(root, Vector2(52, 55), Vector2(900, 24), "同人试作剧情 · 角色战斗属性为本作玩法设定", 12, Color("#a79a9f"))
 	partner = art(Rect2(685, 80, 490, 650))
 	partner.modulate = Color(0.36, 0.28, 0.34, 0.8)
 	portrait = art(Rect2(115, 75, 520, 665))
 	var box := NinePatchRect.new()
-	box.texture = preload("res://assets/gothic/panel_main_horned.png")
+	box.texture = preload("res://assets/helltaker/ui/button0003.png")
 	box.position = Vector2(75, 455)
 	box.size = Vector2(1130, 250)
-	box.patch_margin_left = 95
-	box.patch_margin_right = 95
-	box.patch_margin_top = 130
-	box.patch_margin_bottom = 60
+	box.patch_margin_left = 115
+	box.patch_margin_right = 115
+	box.patch_margin_top = 36
+	box.patch_margin_bottom = 36
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(box)
 	hud.bind(box, "dialog_frame")
@@ -110,12 +115,31 @@ func build(ui, story) -> void:
 	transition_bar.color = Color("#e0525d")
 	transition_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(transition_bar)
+	transition_texture = TextureRect.new()
+	transition_texture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	transition_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	transition_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	transition_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	transition_texture.hide()
+	root.add_child(transition_texture)
 	root.hide()
 	cue_sound = AudioStreamPlayer.new()
-	cue_sound.stream = preload("res://assets/hit.ogg")
-	cue_sound.volume_db = -22.0
+	cue_sound.stream = preload("res://assets/helltaker/audio/dialogue_start_01.wav")
+	cue_sound.volume_db = -15.0
 	cue_sound.max_polyphony = 2
 	add_child(cue_sound)
+	end_sound = AudioStreamPlayer.new()
+	end_sound.stream = preload("res://assets/helltaker/audio/dialogue_text_end_01.wav")
+	end_sound.volume_db = -13.0
+	add_child(end_sound)
+	dialogue_highlight = AudioStreamPlayer.new()
+	dialogue_highlight.stream = preload("res://assets/helltaker/audio/button_dialogue_highlight_01.wav")
+	dialogue_highlight.volume_db = -11.0
+	add_child(dialogue_highlight)
+	dialogue_confirm = AudioStreamPlayer.new()
+	dialogue_confirm.stream = preload("res://assets/helltaker/audio/button_dialogue_confirm_01.wav")
+	dialogue_confirm.volume_db = -10.0
+	add_child(dialogue_confirm)
 
 func art(rect: Rect2) -> TextureRect:
 	var item := TextureRect.new()
@@ -129,7 +153,16 @@ func art(rect: Rect2) -> TextureRect:
 
 func action(rect: Rect2, text: String, callback: Callable) -> Button:
 	var item: Button = hud.button(root, rect, text, false)
+	item.set_meta("dialogue_sound", true)
 	item.pressed.connect(callback)
+	item.mouse_entered.connect(func():
+		if dialogue_highlight != null:
+			dialogue_highlight.stop()
+			dialogue_highlight.play())
+	item.pressed.connect(func():
+		if dialogue_confirm != null:
+			dialogue_confirm.stop()
+			dialogue_confirm.play())
 	controls.append(item)
 	return item
 
@@ -140,6 +173,8 @@ func display() -> void:
 	history_panel.hide()
 	root.modulate = Color(1, 1, 1, 0)
 	root.show()
+	transition_time = 0.52
+	transition_texture.show()
 	var opening := create_tween()
 	opening.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	opening.tween_property(root, "modulate", Color.WHITE, 0.13)
@@ -180,11 +215,12 @@ func show_line() -> void:
 	body.visible_characters = 0
 	body.modulate = Color(1, 1, 1, 0)
 	letters = 0.0
+	line_ended = false
 	auto_timer = 0.0
 	progress.text = "战场已暂停   ·   %02d / %02d" % [director.index + 1, director.lines.size()]
 	_animate_line_entrance(str(line.get("highlight", "main")))
 	if cue_sound != null:
-		cue_sound.pitch_scale = 1.18 + float(director.index % 3) * 0.08
+		cue_sound.pitch_scale = 0.98 + float(director.index % 3) * 0.035
 		cue_sound.play()
 
 func _animate_line_entrance(highlight: String) -> void:
@@ -218,8 +254,17 @@ func _animate_line_entrance(highlight: String) -> void:
 func _process(dt: float) -> void:
 	if root == null or not root.visible or history_panel.visible:
 		return
+	if transition_time > 0.0:
+		transition_time = maxf(0.0, transition_time - dt)
+		var frame := clampi(28 - floori(transition_time / 0.52 * 28.0), 0, 28)
+		transition_texture.texture = load("res://assets/helltaker/transitions/transition%04d.png" % (frame + 2))
+		if transition_time <= 0.0:
+			transition_texture.hide()
 	letters += dt * 52.0
 	body.visible_characters = mini(int(letters), body.text.length())
+	if not line_ended and body.visible_characters >= body.text.length():
+		line_ended = true
+		end_sound.play()
 	if body.visible_characters >= body.text.length() and auto_mode:
 		auto_timer += dt
 		if auto_timer > 2.0:
@@ -231,6 +276,9 @@ func advance() -> void:
 	if letters < body.text.length():
 		letters = body.text.length()
 		body.visible_characters = -1
+		if not line_ended:
+			line_ended = true
+			end_sound.play()
 		return
 	if director.advance():
 		body.visible_characters = 0

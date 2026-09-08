@@ -2,6 +2,7 @@ extends Control
 ## Original black-red dialogue stage.  A configured TextureRect can replace it.
 
 var clock: float = 0.0
+var background: Texture2D = preload("res://assets/helltaker/backgrounds/dialBG_darkHell.png")
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -14,7 +15,8 @@ func _process(delta: float) -> void:
 func _draw() -> void:
 	var size := get_viewport_rect().size
 	draw_rect(Rect2(Vector2.ZERO, size), Color("#09070b"))
-	draw_rect(Rect2(0, 78, size.x, 360), Color("#2b101b"))
+	draw_texture_rect(background, Rect2(0, 0, size.x, size.y), false, Color.WHITE)
+	draw_rect(Rect2(0, 78, size.x, 360), Color(0.18, 0.03, 0.07, 0.28))
 	# Layered distant architecture keeps the portraits readable while giving the scene depth.
 	for i in 13:
 		var x := float(i) * 112.0 - 58.0

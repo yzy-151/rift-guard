@@ -25,8 +25,15 @@ func build(owner_hud, game_database, state) -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.theme = owner_hud.get_child(0).theme
 	add_child(root)
+	var hell_background := TextureRect.new()
+	hell_background.texture = preload("res://assets/helltaker/backgrounds/chapterBG0008.png")
+	hell_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	hell_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	hell_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	hell_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(hell_background)
 	var veil := ColorRect.new()
-	veil.color = Color(0.025, 0.012, 0.02, 0.97)
+	veil.color = Color(0.025, 0.012, 0.02, 0.84)
 	veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.add_child(veil)
 	var frame: Panel = owner_hud.panel(root, Rect2(54, 40, 1172, 640), Color("#171119"), Color("#9f4f60"))

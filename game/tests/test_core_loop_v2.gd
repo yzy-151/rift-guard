@@ -14,10 +14,10 @@ func _initialize() -> void:
 	var armored: Dictionary = sim.spawn_enemy(Vector2(900, 360), "armored")
 	sim.apply_hit(grunt, 10000.0, "")
 	sim.apply_hit(armored, 10000.0, "")
-	assert(sim.team_xp == 30 and sim.state == "running")
+	assert(sim.team_xp == 32 and sim.state == "running")
 	var second_armored: Dictionary = sim.spawn_enemy(Vector2(900, 360), "armored")
 	sim.apply_hit(second_armored, 10000.0, "")
-	assert(sim.team_xp == 50 and sim.team_level == 2)
+	assert(sim.team_xp == 54 and sim.team_level == 2)
 	assert(sim.state == "reward" and sim.rewards.offered.size() == 3)
 	assert(sim.rewards.offered.any(func(card): return card.effect == "assign_traveler_element"))
 	var element_index := -1

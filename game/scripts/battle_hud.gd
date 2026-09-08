@@ -7,10 +7,17 @@ signal select_action(hero_id: int)
 signal mute_action(enabled: bool)
 signal reduce_action(enabled: bool)
 signal compendium_action
+signal skill_action
 
 const WHITE = Color("#f3e9df")
 const MUTED = Color("#ae969f")
 const TEAL = Color("#e3a2a5")
+const HT_BUTTON = preload("res://assets/helltaker/ui/button.png")
+const HT_BUTTON_HOVER = preload("res://assets/helltaker/ui/button hover.png")
+const HT_BUTTON_ACTIVE = preload("res://assets/helltaker/ui/button active.png")
+const HT_PANEL = preload("res://assets/helltaker/ui/button on.png")
+const HT_HIGHLIGHT = preload("res://assets/helltaker/audio/button_menu_highlight_01.wav")
+const HT_CONFIRM = preload("res://assets/helltaker/audio/button_menu_confirm_01.wav")
 var config
 var reward_panel
 var progression_label: Label
@@ -35,8 +42,18 @@ var support_panel: Panel
 var support_labels: Array[Label] = []
 var buff_panel: Panel
 var buff_labels: Array[Label] = []
+var skill_button: Button
+var skill_aiming: bool = false
+var ui_highlight: AudioStreamPlayer
+var ui_confirm: AudioStreamPlayer
 
 func _ready() -> void:
+	ui_highlight = AudioStreamPlayer.new()
+	ui_highlight.stream = HT_HIGHLIGHT
+	ui_highlight.volume_db = -15.0
+	ui_confirm = AudioStreamPlayer.new()
+	ui_confirm.stream = HT_CONFIRM
+	ui_confirm.volume_db = -13.0
 	var root := Control.new()
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -47,6 +64,8 @@ func _ready() -> void:
 	ui_theme.default_font_size = 15
 	root.theme = ui_theme
 	add_child(root)
+	add_child(ui_highlight)
+	add_child(ui_confirm)
 	label(root, Vector2(34, 7), Vector2(560, 22), "R I F T   G U A R D     /     边 境 防 线", 13, TEAL)
 	bind(label(root, Vector2(32, 27), Vector2(700, 43), "模式一  /  裂隙守望", 32, WHITE), "game_title")
 	bind(label(root, Vector2(207, 40), Vector2(500, 24), "城门之下 · 守至黎明", 14, MUTED), "game_subtitle")
@@ -76,13 +95,16 @@ func _ready() -> void:
 	for i in 5:
 		buff_labels.append(label(buff_panel, Vector2(12, 28 + i * 18), Vector2(405, 18), "", 12, WHITE))
 	buff_panel.hide()
+	skill_button = button(root, Rect2(900, 540, 348, 62), "旅行者战技  [Q]", true)
+	skill_button.add_theme_font_size_override("font_size", 17)
+	skill_button.pressed.connect(func(): skill_action.emit())
 
 	for i in 3:
 		var hero_btn := button(root, Rect2(32 + i * 284, 616, 272, 88), "", true)
 		bind(hero_btn, "hero_card_%d" % (i + 1))
 		hero_btn.name = "HeroCard%d" % (i + 1)
 		var trim := Sprite2D.new()
-		trim.texture = preload("res://assets/gothic/tab_trident.png")
+		trim.texture = preload("res://assets/helltaker/ui/W_selection.png")
 		trim.position = Vector2(242, 19)
 		trim.scale = Vector2(0.10, 0.10)
 		hero_btn.add_child(trim)
@@ -104,19 +126,20 @@ func _ready() -> void:
 		reduced = not reduced
 		reduce_btn.text = "反馈：减弱" if reduced else "反馈：标准"
 		reduce_action.emit(reduced))
-	background_buttons = [archive_btn, pause_button, reset_btn, mute_btn, reduce_btn]
+	background_buttons = [archive_btn, pause_button, reset_btn, mute_btn, reduce_btn, skill_button]
 	background_buttons.append_array(hero_buttons)
 	overlay = ColorRect.new()
 	overlay.color = Color(0.025, 0.035, 0.05, 0.76)
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.add_child(overlay)
 	var menu_background := TextureRect.new()
+	menu_background.texture = preload("res://assets/helltaker/backgrounds/chapterBG0001.png")
 	menu_background.position = Vector2.ZERO
 	menu_background.size = Vector2(1280, 720)
 	menu_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	menu_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	menu_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	menu_background.hide()
+	menu_background.show()
 	overlay.add_child(menu_background)
 	bind(menu_background, "menu_background")
 	var card := panel(overlay, Rect2(330, 170, 620, 375), Color("#241a26"), Color("#a34c60"))
@@ -144,12 +167,30 @@ func label(parent: Node, at: Vector2, dimensions: Vector2, text: String, size: i
 	parent.add_child(item)
 	return item
 
-func style(fill: Color, border: Color) -> StyleBoxFlat:
-	var box := StyleBoxFlat.new()
-	box.bg_color = fill
-	box.border_color = border
-	box.set_border_width_all(1)
-	box.set_corner_radius_all(1)
+func style(fill: Color, border: Color) -> StyleBoxTexture:
+	var box := StyleBoxTexture.new()
+	box.texture = HT_PANEL
+	box.modulate_color = fill.lightened(0.32)
+	box.texture_margin_left = 5.0
+	box.texture_margin_top = 5.0
+	box.texture_margin_right = 5.0
+	box.texture_margin_bottom = 5.0
+	box.content_margin_left = 8.0
+	box.content_margin_top = 6.0
+	box.content_margin_right = 8.0
+	box.content_margin_bottom = 6.0
+	return box
+
+func button_style(texture: Texture2D, tint: Color = Color.WHITE) -> StyleBoxTexture:
+	var box := StyleBoxTexture.new()
+	box.texture = texture
+	box.modulate_color = tint
+	box.texture_margin_left = 5.0
+	box.texture_margin_top = 5.0
+	box.texture_margin_right = 5.0
+	box.texture_margin_bottom = 5.0
+	box.content_margin_left = 9.0
+	box.content_margin_right = 9.0
 	return box
 
 func panel(parent: Node, rect: Rect2, fill: Color, border: Color) -> Panel:
@@ -169,15 +210,23 @@ func button(parent: Node, rect: Rect2, text: String, accent: bool) -> Button:
 	item.add_theme_color_override("font_color", WHITE)
 	item.add_theme_color_override("font_hover_color", Color.WHITE)
 	item.add_theme_font_size_override("font_size", 14)
-	item.add_theme_stylebox_override("normal", style(Color("#432530") if accent else Color("#281e29"), Color("#a35364") if accent else Color("#633d4a")))
-	item.add_theme_stylebox_override("hover", style(Color("#613443"), TEAL))
-	item.add_theme_stylebox_override("pressed", style(Color("#301822"), TEAL))
-	item.add_theme_stylebox_override("focus", style(Color(0, 0, 0, 0), Color("#f5cdb4")))
+	item.add_theme_stylebox_override("normal", button_style(HT_BUTTON, Color("#fff0f0") if accent else Color.WHITE))
+	item.add_theme_stylebox_override("hover", button_style(HT_BUTTON_HOVER))
+	item.add_theme_stylebox_override("pressed", button_style(HT_BUTTON_ACTIVE))
+	item.add_theme_stylebox_override("focus", button_style(HT_BUTTON_HOVER, Color("#ffdddd")))
+	item.mouse_entered.connect(func():
+		if ui_highlight != null and not bool(item.get_meta("dialogue_sound", false)):
+			ui_highlight.stop()
+			ui_highlight.play())
+	item.pressed.connect(func():
+		if ui_confirm != null and not bool(item.get_meta("dialogue_sound", false)):
+			ui_confirm.stop()
+			ui_confirm.play())
 	parent.add_child(item)
 	return item
 
 func refresh(sim, selected_id: int) -> void:
-	var next_signature: String = str([sim.state, sim.base_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports])
+	var next_signature: String = str([sim.state, sim.base_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming])
 	if sim.v2_mode:
 		next_signature += str([sim.run_state.traveler_element, sim.run_state.pending_level_ups, floori(sim.stage_runtime.remaining_seconds())])
 	for hero in sim.heroes:
@@ -197,6 +246,7 @@ func refresh(sim, selected_id: int) -> void:
 		wave_label.text = "节点   %02d / 05" % sim.wave
 	count_label.text = ("击退 %02d  ·  在场 %02d  ·  强化 %02d" % [sim.kills, sim.enemies.size(), sim.rewards.history.size()]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
 	status_label.text = "按 1/2/3 或点击角色卡选择"
+	refresh_skill(sim)
 	refresh_supports(sim)
 	refresh_buffs(sim)
 	if selected_id >= 0 and selected_id < sim.heroes.size():
@@ -292,18 +342,38 @@ func refresh_buffs(sim) -> void:
 	if ids.size() > buff_labels.size():
 		buff_labels[-1].text = "◆ 另有 %d 项强化正在生效" % (ids.size() - buff_labels.size() + 1)
 
+func set_skill_aiming(enabled: bool) -> void:
+	skill_aiming = enabled
+	signature = ""
+
+func refresh_skill(sim) -> void:
+	skill_button.visible = sim.v2_mode and sim.state in ["running", "between", "paused"]
+	if not skill_button.visible:
+		return
+	var element: String = sim.traveler_skill_element()
+	var glyph: String = str({"none": "剑", "anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, "技"))
+	var color := element_color(element)
+	skill_button.add_theme_color_override("font_color", color)
+	if skill_aiming:
+		skill_button.text = "%s  %s    ·    点击战场释放" % [glyph, sim.traveler_skill_name()]
+	elif sim.traveler_skill_cooldown > 0.0:
+		skill_button.text = "%s  %s    ·    冷却 %.1fs" % [glyph, sim.traveler_skill_name(), sim.traveler_skill_cooldown]
+	else:
+		skill_button.text = "%s  %s    ·    [Q] 瞄准" % [glyph, sim.traveler_skill_name()]
+	skill_button.disabled = sim.state != "running" or sim.traveler_skill_cooldown > 0.0
+
 func element_color(element: String) -> Color:
 	return {"anemo": Color("#63e6c0"), "electro": Color("#bf83ff"), "pyro": Color("#ff745c"), "hydro": Color("#5ab8ff"), "geo": Color("#e8b94d"), "cryo": Color("#9de7f2")}.get(element, WHITE)
 
 func ornament(parent: Node, rect: Rect2) -> NinePatchRect:
 	var frame := NinePatchRect.new()
-	frame.texture = preload("res://assets/gothic/panel_main_horned.png")
+	frame.texture = preload("res://assets/helltaker/ui/button0003.png")
 	frame.position = rect.position
 	frame.size = rect.size
-	frame.patch_margin_left = 90
-	frame.patch_margin_right = 90
-	frame.patch_margin_top = 85
-	frame.patch_margin_bottom = 55
+	frame.patch_margin_left = 115
+	frame.patch_margin_right = 115
+	frame.patch_margin_top = 36
+	frame.patch_margin_bottom = 36
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	parent.add_child(frame)
 	return frame

@@ -14,7 +14,11 @@ var clock: float = 0.0
 var shot_flashes: Dictionary = {}
 var base_flash: float = 0.0
 var shake_trauma: float = 0.0
+var skill_targeting: bool = false
+var skill_point: Vector2 = Vector2(760, 360)
 var atlas: Texture2D = preload("res://assets/tiny-dungeon.png")
+var hell_stage_one: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0002.png")
+var hell_stage_two: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0003.png")
 var furina_texture: Texture2D = preload("res://assets/characters/furina/furina-chibi-v1-alpha.png")
 var furina_actor
 var font: SystemFont
@@ -77,9 +81,9 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				shot_flashes[event.hero_id] = 0.12
 				var hero: Dictionary = sim.heroes[event.hero_id]
 				effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25, -20), "life": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0})
-			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "boss_pulse", "enemy_shot", "reward_taken", "element_attuned":
+			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "boss_pulse", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break":
 				effects.append({"kind": event.kind, "pos": event.pos, "life": 0.6, "value": event.get("value", 0)})
-				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse"]:
+				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "skill_pyro", "skill_electro", "geo_break"]:
 					shake_trauma = minf(1.0, shake_trauma + 0.42)
 				elif event.kind in ["hit", "slash", "chain"]:
 					shake_trauma = minf(0.42, shake_trauma + 0.045)
@@ -95,6 +99,12 @@ func _draw() -> void:
 	_draw_stage()
 	_draw_base_projected()
 	_draw_portal_projected()
+	for zone: Dictionary in sim.skill_effects:
+		_draw_skill_zone(zone)
+	for construct: Dictionary in sim.geo_constructs:
+		_draw_geo_construct(construct)
+	if skill_targeting:
+		_draw_skill_preview()
 	if selected_id >= 0:
 		var hero: Dictionary = sim.heroes[selected_id]
 		if hero.hp > 0:
@@ -146,6 +156,61 @@ func _draw() -> void:
 	if sim.state == "between":
 		caption(Vector2(548, 127), "队伍休整  %.1fs" % sim.wave_timer, TEAL, 16)
 
+func _draw_skill_preview() -> void:
+	var element: String = sim.traveler_skill_element()
+	var color: Color = element_color(element)
+	var radius: float = sim.traveler_skill_radius()
+	var center := Stage.project(skill_point)
+	var radius_x := radius * 0.62 * Stage.depth_scale(skill_point)
+	var radius_y := radius_x * 0.32
+	var points := PackedVector2Array()
+	for i in 64:
+		var angle := i * TAU / 64.0
+		points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
+	draw_colored_polygon(points, Color(color, 0.10))
+	for segment in 12:
+		var start := segment * TAU / 12.0 + clock * 0.35
+		draw_arc(center, radius_x, start, start + 0.28, 5, Color(color, 0.92), 2.4, true)
+	draw_circle(center, 6.0 + sin(clock * 6.0) * 1.5, Color(color, 0.9))
+	draw_line(center - Vector2(13, 0), center + Vector2(13, 0), Color.WHITE, 1.2, true)
+	draw_line(center - Vector2(0, 13), center + Vector2(0, 13), Color.WHITE, 1.2, true)
+	caption(center + Vector2(-58, -radius_y - 18), sim.traveler_skill_name(), color, 15)
+
+func _draw_skill_zone(zone: Dictionary) -> void:
+	var center := Stage.project(zone.pos)
+	var pulse := sin(clock * 7.0) * 5.0
+	if zone.kind == "anemo_tornado":
+		for ring in 5:
+			draw_arc(center + Vector2(0, -20 - ring * 12), 24.0 + ring * 9.0 + pulse, -2.8 + clock * 2.0, 2.4 + clock * 2.0, 28, Color(0.42, 0.95, 0.78, 0.68 - ring * 0.08), 3.5, true)
+		for mote in 8:
+			var angle := clock * 3.0 + mote * TAU / 8.0
+			var point := center + Vector2(cos(angle) * (38 + mote * 3), sin(angle) * 16 - 42 - mote * 3)
+			draw_circle(point, 3.0, Color("#d5fff0"))
+	elif zone.kind == "hydro_field":
+		draw_circle(center, 65.0 + pulse, Color(0.25, 0.67, 1.0, 0.08))
+		for ring in 3:
+			draw_arc(center, 42.0 + ring * 22.0 + pulse, 0, TAU, 42, Color(0.35, 0.75, 1.0, 0.42 - ring * 0.08), 2.0, true)
+	elif zone.kind == "cryo_field":
+		for spoke in 12:
+			var direction := Vector2.from_angle(spoke * TAU / 12.0)
+			draw_line(center + direction * 12.0, center + direction * (78.0 + pulse), Color(0.68, 0.93, 1.0, 0.38), 2.0, true)
+		draw_arc(center, 82.0 + pulse, 0, TAU, 48, Color(0.72, 0.96, 1.0, 0.56), 2.4, true)
+
+func _draw_geo_construct(construct: Dictionary) -> void:
+	var center := Stage.project(construct.pos)
+	var depth := Stage.depth_scale(construct.pos)
+	draw_set_transform(center, 0, Vector2(depth, depth))
+	draw_ellipse_shadow(Vector2.ZERO, 34.0, Color(0, 0, 0, 0.52))
+	var stone := PackedVector2Array([Vector2(-31, 8), Vector2(-24, -48), Vector2(-6, -78), Vector2(19, -66), Vector2(34, -28), Vector2(28, 10)])
+	draw_colored_polygon(stone, Color("#5b4631"))
+	draw_polyline(PackedVector2Array([stone[0], stone[1], stone[2], stone[3], stone[4], stone[5], stone[0]]), Color("#e7bd5b"), 3.0, true)
+	draw_line(Vector2(-8, -62), Vector2(13, -22), Color("#ffd978"), 3.0, true)
+	draw_line(Vector2(13, -22), Vector2(-4, -4), Color("#ffd978"), 3.0, true)
+	var ratio := clampf(float(construct.hp) / float(construct.max_hp), 0.0, 1.0)
+	draw_rect(Rect2(-30, 17, 60, 5), Color("#352a27"))
+	draw_rect(Rect2(-30, 17, 60 * ratio, 5), Color("#efc75f"))
+	draw_set_transform(Vector2.ZERO)
+
 func _ground_circle(point: Vector2, radius: float, color: Color) -> void:
 	for i in 40:
 		draw_line(Stage.project(point + Vector2.from_angle(i * TAU / 40) * radius), Stage.project(point + Vector2.from_angle((i + 1) * TAU / 40) * radius), color, 1.3, true)
@@ -178,8 +243,10 @@ func _draw_range_indicator(hero: Dictionary) -> void:
 	draw_arc(center, 12.0, 0, TAU, 32, Color(color, 0.28), 1.2, true)
 
 func _draw_stage() -> void:
-	draw_rect(Rect2(0, 0, 1280, 720), Color("#110e17"))
-	draw_rect(Rect2(0, 94, 1280, 512), Color("#211b2b"))
+	var hell_background: Texture2D = hell_stage_two if sim.v2_mode and sim.current_stage_id == "stage_02" else hell_stage_one
+	draw_texture_rect(hell_background, Rect2(0, 0, 1280, 720), false, Color.WHITE)
+	draw_rect(Rect2(0, 0, 1280, 720), Color(0.05, 0.02, 0.06, 0.42))
+	draw_rect(Rect2(0, 94, 1280, 512), Color(0.13, 0.08, 0.16, 0.72))
 	# Distant skyline, behind the wall.
 	for i in 14:
 		var x: float = i * 100 - 40
@@ -187,7 +254,7 @@ func _draw_stage() -> void:
 		draw_rect(Rect2(x, top, 66, 100), Color("#302532"))
 		draw_colored_polygon(PackedVector2Array([Vector2(x - 7, top), Vector2(x + 33, top - 26), Vector2(x + 73, top)]), Color("#302532"))
 	var floor: PackedVector2Array = Stage.polygon(WORLD)
-	draw_colored_polygon(floor, Color("#302b34"))
+	draw_colored_polygon(floor, Color(0.19, 0.15, 0.20, 0.90))
 	# Alternating stone tiles with perspective-correct seams.
 	for row in 11:
 		for col in 20:
@@ -433,6 +500,21 @@ func _draw_effect(effect: Dictionary) -> void:
 		for ring in 3:
 			draw_arc(effect.pos + Vector2(0, -20), 22.0 + ring * 13.0 + t * 38.0, 0, TAU, 40, attuned_color, 3.0, true)
 		caption(effect.pos + Vector2(-28, -105 - t * 20), element_glyph(str(effect.value)) + "元素共鸣", attuned_color, 19)
+	elif effect.kind.begins_with("skill_"):
+		var element: String = str(effect.kind).trim_prefix("skill_")
+		var skill_color := Color(element_color(element), fade)
+		if element == "none": skill_color = Color(1.0, 0.86, 0.58, fade)
+		for ring in 4:
+			draw_arc(effect.pos, 18.0 + ring * 18.0 + t * 78.0, 0, TAU, 42, Color(skill_color, fade * (0.82 - ring * 0.14)), 4.0 - ring * 0.5, true)
+		for ray in 10:
+			var direction := Vector2.from_angle(ray * TAU / 10.0 + t)
+			draw_line(effect.pos + direction * 12.0, effect.pos + direction * (42.0 + t * 78.0), skill_color, 2.5, true)
+		caption(effect.pos + Vector2(-48, -92 - t * 28), sim.traveler_skill_name(), skill_color, 18)
+	elif effect.kind in ["geo_hit", "geo_break"]:
+		var geo_color := Color(1.0, 0.76, 0.31, fade)
+		for shard in 7:
+			var direction := Vector2.from_angle(-2.8 + shard * 0.45)
+			draw_line(effect.pos + direction * 8.0, effect.pos + direction * (22.0 + t * 45.0), geo_color, 3.0, true)
 	elif effect.kind in ["death", "down"]:
 		if not reduced_effects:
 			draw_arc(effect.pos, 10 + t * 27, 0, TAU, 24, Color(0.8, 0.4, 0.42, fade * 0.6), 1.5)

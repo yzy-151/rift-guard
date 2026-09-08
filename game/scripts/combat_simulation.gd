@@ -54,6 +54,11 @@ var death_burst_ratio: float = 0.0
 var elite_damage_bonus: float = 0.0
 var kill_frenzy_step: float = 0.0
 var frenzy_milestone: int = 0
+var traveler_skill_cooldown: float = 0.0
+var traveler_skill_cooldown_max: float = 0.0
+var skill_effects: Array[Dictionary] = []
+var geo_constructs: Array[Dictionary] = []
+var next_construct_id: int = 0
 
 func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 	v2_mode = enable_v2
@@ -90,6 +95,11 @@ func reset(seed_value: int = -1) -> void:
 	elite_damage_bonus = 0.0
 	kill_frenzy_step = 0.0
 	frenzy_milestone = 0
+	traveler_skill_cooldown = 0.0
+	traveler_skill_cooldown_max = 0.0
+	skill_effects.clear()
+	geo_constructs.clear()
+	next_construct_id = 0
 	heroes.clear()
 	enemies.clear()
 	projectiles.clear()
@@ -139,6 +149,11 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	elite_damage_bonus = 0.0
 	kill_frenzy_step = 0.0
 	frenzy_milestone = 0
+	traveler_skill_cooldown = 0.0
+	traveler_skill_cooldown_max = 0.0
+	skill_effects.clear()
+	geo_constructs.clear()
+	next_construct_id = 0
 	heroes.clear()
 	enemies.clear()
 	projectiles.clear()
@@ -270,6 +285,7 @@ func tick(dt: float) -> void:
 	if state not in ["running", "between"]:
 		return
 	elapsed += dt
+	traveler_skill_cooldown = maxf(0.0, traveler_skill_cooldown - dt)
 	for h in heroes:
 		h.blocked = 0
 		h.flash = maxf(0.0, h.flash - dt)
@@ -287,6 +303,7 @@ func tick(dt: float) -> void:
 		_stage_spawn_tick(dt)
 	else:
 		_spawn_tick(dt)
+	_skill_effect_tick(dt)
 	_enemy_tick(dt)
 	if base_hp <= 0:
 		state = "lost"
@@ -357,6 +374,15 @@ func _enemy_tick(dt: float) -> void:
 			e.aura = ""
 		var speed_scale: float = (0.7 if e.slow_timer > 0 else 1.0) * (1.35 if e.haste_timer > 0 else 1.0)
 		var next_x: float = e.pos.x - e.speed * speed_scale * dt
+		var construct_victim: Dictionary = {}
+		if not bool(e.get("flying", false)):
+			for construct: Dictionary in geo_constructs:
+				if construct.hp <= 0.0 or absf(e.pos.y - construct.pos.y) > 48.0:
+					continue
+				if e.pos.x >= construct.pos.x - 5.0 and next_x <= construct.pos.x + 46.0:
+					construct_victim = construct
+					next_x = maxf(next_x, construct.pos.x + 46.0)
+					break
 		var ranged_victim: Dictionary = {}
 		if float(e.get("attack_range", 0.0)) > 0.0:
 			for h: Dictionary in heroes:
@@ -378,6 +404,8 @@ func _enemy_tick(dt: float) -> void:
 				break
 		e.pos.x = next_x
 		var victim: Dictionary = ranged_victim
+		if not construct_victim.is_empty():
+			victim = {}
 		if e.blocked_by >= 0:
 			victim = heroes[e.blocked_by]
 		elif victim.is_empty():
@@ -385,7 +413,10 @@ func _enemy_tick(dt: float) -> void:
 				if h.hp > 0 and h.pos.distance_to(e.pos) <= 33:
 					victim = h
 					break
-		if not victim.is_empty() and e.attack_timer <= 0:
+		if not construct_victim.is_empty() and e.attack_timer <= 0:
+			damage_construct(int(construct_victim.id), e.damage)
+			e.attack_timer = 1.0 / (e.rate * (1.25 if e.haste_timer > 0 else 1.0))
+		elif not victim.is_empty() and e.attack_timer <= 0:
 			damage_hero(victim.id, e.damage)
 			if float(e.get("attack_range", 0.0)) > 0.0:
 				events.append({"kind": "enemy_shot", "pos": e.pos, "target": victim.pos, "value": ceili(e.damage)})
@@ -401,6 +432,108 @@ func _enemy_tick(dt: float) -> void:
 			base_hp = maxi(0, base_hp - e.leak)
 			events.append({"kind": "leak", "pos": e.pos, "value": e.leak})
 	enemies = enemies.filter(func(e: Dictionary) -> bool: return e.hp > 0)
+	geo_constructs = geo_constructs.filter(func(item: Dictionary) -> bool: return item.hp > 0.0)
+
+func damage_construct(id: int, damage: float) -> void:
+	for construct: Dictionary in geo_constructs:
+		if construct.id != id or construct.hp <= 0.0:
+			continue
+		construct.hp = maxf(0.0, float(construct.hp) - damage)
+		events.append({"kind": "geo_hit", "pos": construct.pos, "value": ceili(damage)})
+		if construct.hp <= 0.0:
+			events.append({"kind": "geo_break", "pos": construct.pos})
+		return
+
+func traveler_skill_element() -> String:
+	if heroes.is_empty() or heroes[0].get("character_id", "") != "traveler":
+		return "none"
+	var element := normalize_element(str(heroes[0].get("element", "")))
+	return "none" if element.is_empty() else element
+
+func traveler_skill_name() -> String:
+	return {
+		"none": "无锋剑气", "anemo": "风涡龙卷", "electro": "雷罚连星", "pyro": "烈焰星坠",
+		"hydro": "水泽恩典", "geo": "岩脊壁垒", "cryo": "霜封领域"
+	}.get(traveler_skill_element(), "元素战技")
+
+func traveler_skill_radius() -> float:
+	return {"none": 145.0, "anemo": 135.0, "electro": 380.0, "pyro": 215.0, "hydro": 250.0, "geo": 58.0, "cryo": 225.0}.get(traveler_skill_element(), 160.0)
+
+func activate_traveler_skill(target: Vector2) -> bool:
+	if not v2_mode or state != "running" or heroes.is_empty() or heroes[0].hp <= 0.0 or traveler_skill_cooldown > 0.0:
+		return false
+	target.x = clampf(target.x, 170.0, 1140.0)
+	target.y = clampf(target.y, 225.0, 515.0)
+	var element := traveler_skill_element()
+	traveler_skill_cooldown_max = {"none": 9.0, "anemo": 16.0, "electro": 14.0, "pyro": 15.0, "hydro": 18.0, "geo": 13.0, "cryo": 17.0}.get(element, 15.0)
+	traveler_skill_cooldown = traveler_skill_cooldown_max
+	match element:
+		"anemo":
+			skill_effects.append({"kind": "anemo_tornado", "pos": target, "life": 4.2, "pulse": 0.0})
+			events.append({"kind": "skill_anemo", "pos": target, "value": traveler_skill_name()})
+		"electro":
+			var targets: Array[Dictionary] = enemies.filter(func(e: Dictionary) -> bool: return e.hp > 0.0 and e.pos.distance_to(target) <= 380.0)
+			targets.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.pos.distance_to(target) < b.pos.distance_to(target))
+			for i in mini(8, targets.size()):
+				apply_hit(targets[i], 155.0 * (1.0 - i * 0.055), "electro")
+			events.append({"kind": "skill_electro", "pos": target, "value": targets.size()})
+		"pyro":
+			for enemy: Dictionary in enemies.duplicate():
+				if enemy.hp > 0.0 and enemy.pos.distance_to(target) <= 215.0:
+					apply_hit(enemy, 235.0, "pyro")
+			events.append({"kind": "skill_pyro", "pos": target, "value": traveler_skill_name()})
+		"hydro":
+			for hero: Dictionary in heroes:
+				var healing: float = float(hero.max_hp) * 0.38
+				hero.hp = minf(hero.max_hp, hero.hp + healing)
+				events.append({"kind": "heal", "pos": hero.pos, "value": ceili(healing)})
+			base_hp = mini(100, base_hp + 12)
+			skill_effects.append({"kind": "hydro_field", "pos": target, "life": 5.0, "pulse": 0.0})
+			events.append({"kind": "skill_hydro", "pos": target, "value": 12})
+		"geo":
+			next_construct_id += 1
+			geo_constructs.append({"id": next_construct_id, "pos": target, "hp": 620.0, "max_hp": 620.0})
+			if geo_constructs.size() > 3:
+				geo_constructs.pop_front()
+			events.append({"kind": "skill_geo", "pos": target, "value": 620})
+		"cryo":
+			for enemy: Dictionary in enemies.duplicate():
+				if enemy.hp > 0.0 and enemy.pos.distance_to(target) <= 225.0:
+					enemy.slow_timer = maxf(float(enemy.slow_timer), 5.5)
+					apply_hit(enemy, 105.0, "cryo")
+			skill_effects.append({"kind": "cryo_field", "pos": target, "life": 5.5, "pulse": 0.0})
+			events.append({"kind": "skill_cryo", "pos": target, "value": traveler_skill_name()})
+		_:
+			for enemy: Dictionary in enemies.duplicate():
+				if enemy.hp > 0.0 and enemy.pos.distance_to(target) <= 145.0:
+					apply_hit(enemy, 125.0, "")
+					enemy.pos.x += 45.0
+			events.append({"kind": "skill_none", "pos": target, "value": traveler_skill_name()})
+	return true
+
+func _skill_effect_tick(dt: float) -> void:
+	var surviving: Array[Dictionary] = []
+	for effect: Dictionary in skill_effects:
+		effect.life = float(effect.life) - dt
+		effect.pulse = float(effect.pulse) - dt
+		if effect.kind == "anemo_tornado":
+			effect.pos.x = minf(1140.0, effect.pos.x + 52.0 * dt)
+		if effect.pulse <= 0.0:
+			effect.pulse += 0.42 if effect.kind == "anemo_tornado" else 0.85
+			for enemy: Dictionary in enemies.duplicate():
+				if enemy.hp <= 0.0:
+					continue
+				if effect.kind == "anemo_tornado" and enemy.pos.distance_to(effect.pos) <= 135.0:
+					enemy.pos.x += 34.0
+					enemy.pos.y = move_toward(float(enemy.pos.y), float(effect.pos.y), 24.0)
+					apply_hit(enemy, 42.0, "anemo")
+				elif effect.kind == "hydro_field" and enemy.pos.distance_to(effect.pos) <= 250.0:
+					apply_hit(enemy, 28.0, "hydro")
+				elif effect.kind == "cryo_field" and enemy.pos.distance_to(effect.pos) <= 225.0:
+					enemy.slow_timer = maxf(float(enemy.slow_timer), 1.2)
+		if effect.life > 0.0:
+			surviving.append(effect)
+	skill_effects = surviving
 
 func damage_hero(id: int, raw_damage: float) -> void:
 	var h: Dictionary = heroes[id]
