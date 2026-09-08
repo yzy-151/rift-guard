@@ -132,6 +132,12 @@ func preview(card: Dictionary, sim) -> String:
 		"chain_add": return "连锁目标 +%d" % int(value)
 		"blast_add": return "爆炸半径 +%d" % int(value)
 		"echo_add": return "追击伤害 +%d%%" % roundi(float(value) * 100.0)
+		"skill_power_add": return "旅行者战技威力 +%d%%" % roundi(float(value) * 100.0)
+		"skill_cooldown_add": return "旅行者战技冷却 -%d%%" % roundi(float(value) * 100.0)
+		"skill_area_add": return "旅行者战技范围 +%d%%" % roundi(float(value) * 100.0)
+		"skill_duration_add": return "旅行者持续战技时间 +%d%%" % roundi(float(value) * 100.0)
+		"reaction_damage_add": return "元素反应伤害 +%d%%" % roundi(float(value) * 100.0)
+		"reaction_radius_add": return "元素反应范围 +%d" % int(value)
 		"support_barrage", "support_crossfire", "support_heal", "support_finale": return "自动支援已接入，可重复强化"
 		"deploy_reinforcement": return "立即增加1名场上角色"
 		"execute_threshold_add": return "处决线 +%d%%" % roundi(float(value) * 100.0)

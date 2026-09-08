@@ -96,7 +96,7 @@ func _initialize() -> void:
 	e = s.spawn_enemy(Vector2(900, 360))
 	s.apply_hit(e, 1.0, "fire")
 	actual = s.apply_hit(e, 10.0, "water")
-	check(is_equal_approx(actual, 15.0), "fire then water also vaporizes")
+	check(is_equal_approx(actual, 20.0), "hydro trigger uses 2.0x forward vaporize")
 	s = fixture()
 	e = s.spawn_enemy(Vector2(1000, 360))
 	s.apply_hit(e, 1.0, "fire")

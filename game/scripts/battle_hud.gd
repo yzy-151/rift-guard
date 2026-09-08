@@ -234,7 +234,7 @@ func refresh(sim, selected_id: int) -> void:
 	if next_signature == signature:
 		return
 	signature = next_signature
-	base_label.text = "◆  基地完整度    %03d / 100" % sim.base_hp
+	base_label.text = "◆ 基地 %03d/100   ◇ 结晶盾 %03d" % [sim.base_hp, ceili(sim.crystal_shield)] if sim.v2_mode else "◆  基地完整度    %03d / 100" % sim.base_hp
 	if sim.v2_mode:
 		var next_xp: int = sim.crystal.next_threshold(sim.run_state)
 		var xp_text: String = "MAX" if next_xp < 0 else "%d / %d" % [sim.run_state.crystal_xp, next_xp]
@@ -285,8 +285,10 @@ func refresh(sim, selected_id: int) -> void:
 		modal_action.focus_neighbor_right = modal_action.get_path()
 		match sim.state:
 			"ready":
+				var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {}) if sim.v2_mode else {}
+				var duration: int = int(stage.get("duration_seconds", 330))
 				modal_title.text = "守住最后一道防线"
-				modal_copy.text = "旅行者初始为无元素。\n击杀敌人为水晶积累经验，升级时三选一强化。\n本关持续 5 分 30 秒，最终迎战裂隙统领。" if sim.v2_mode else "1 守卫阻挡 · 2 火系输出 · 3 水系治疗\n火水交替命中，触发蒸发增伤。\n守住 5 个节点，节点之间三选一强化。"
+				modal_copy.text = "%s  ·  %d分%02d秒\n击杀敌人升级水晶，三选一强化可无限叠加。\n选定元素后按 Q 释放战技，守住三条路线。" % [stage.get("name", "裂隙防线"), duration / 60, duration % 60] if sim.v2_mode else "1 守卫阻挡 · 2 火系输出 · 3 水系治疗\n火水交替命中，触发蒸发增伤。\n守住 5 个节点，节点之间三选一强化。"
 				modal_action.text = "开始防守   →   [Enter]"
 			"paused":
 				modal_title.text = "战术暂停"
@@ -294,7 +296,7 @@ func refresh(sim, selected_id: int) -> void:
 				modal_action.text = "继续防守   →   [空格]"
 			"won":
 				modal_title.text = "防线守住了"
-				modal_copy.text = "击退 %d 名敌人  ·  基地剩余 %d%%\n触发蒸发 %d 次\n已完成 5 个节点，本局强化将在重开后重置。" % [sim.kills, sim.base_hp, sim.reactions]
+				modal_copy.text = "击退 %d 名敌人  ·  基地剩余 %d%%\n触发元素反应 %d 次\n本关构筑将在进入下一关时重置。" % [sim.kills, sim.base_hp, sim.reactions]
 				modal_action.text = "再守一次   →   [Enter]"
 			"lost":
 				modal_title.text = "核心已经失守"
@@ -353,13 +355,16 @@ func refresh_skill(sim) -> void:
 	var element: String = sim.traveler_skill_element()
 	var glyph: String = str({"none": "剑", "anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, "技"))
 	var color := element_color(element)
+	var growth := ""
+	if sim.skill_power_bonus > 0.0 or sim.skill_area_bonus > 0.0:
+		growth = "  威力+%d%% 范围+%d%%" % [roundi(sim.skill_power_bonus * 100.0), roundi(sim.skill_area_bonus * 100.0)]
 	skill_button.add_theme_color_override("font_color", color)
 	if skill_aiming:
-		skill_button.text = "%s  %s    ·    点击战场释放" % [glyph, sim.traveler_skill_name()]
+		skill_button.text = "%s  %s%s  ·  点击战场释放" % [glyph, sim.traveler_skill_name(), growth]
 	elif sim.traveler_skill_cooldown > 0.0:
-		skill_button.text = "%s  %s    ·    冷却 %.1fs" % [glyph, sim.traveler_skill_name(), sim.traveler_skill_cooldown]
+		skill_button.text = "%s  %s%s  ·  %.1fs" % [glyph, sim.traveler_skill_name(), growth, sim.traveler_skill_cooldown]
 	else:
-		skill_button.text = "%s  %s    ·    [Q] 瞄准" % [glyph, sim.traveler_skill_name()]
+		skill_button.text = "%s  %s%s  ·  [Q]" % [glyph, sim.traveler_skill_name(), growth]
 	skill_button.disabled = sim.state != "running" or sim.traveler_skill_cooldown > 0.0
 
 func element_color(element: String) -> Color:

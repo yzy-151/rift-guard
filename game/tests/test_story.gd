@@ -1,9 +1,9 @@
 extends SceneTree
 func _initialize() -> void:
 	var story = preload("res://scripts/dialogue_director.gd").new()
-	var valid: bool = story.stories.size() == 12
+	var valid: bool = story.stories.size() == 13
 	var count: int = 0
-	var scene_keys := ["mode1_opening", "mode1_won", "mode1_stage2_opening", "mode1_final_won", "mode1_lost", "opening", "node1", "node2", "node3", "node4", "won", "lost"]
+	var scene_keys := ["mode1_opening", "mode1_won", "mode1_stage2_opening", "mode1_stage3_opening", "mode1_final_won", "mode1_lost", "opening", "node1", "node2", "node3", "node4", "won", "lost"]
 	for key in scene_keys:
 		valid = valid and story.begin(key)
 		valid = valid and not story.begin(key)

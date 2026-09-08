@@ -5,6 +5,16 @@ const PRIORITY := {
 	"assign_traveler_element": 100,
 	"attack_multiplier": 90,
 	"attack_rate_multiplier": 85,
+	"projectile_count_add": 96,
+	"chain_add": 92,
+	"blast_add": 90,
+	"pierce_add": 88,
+	"echo_add": 86,
+	"support_finale": 84,
+	"support_barrage": 82,
+	"support_crossfire": 80,
+	"death_burst_add": 78,
+	"kill_frenzy_add": 76,
 	"special_upgrade": 80,
 	"health_multiplier": 70,
 	"armor_flat": 65,
@@ -19,7 +29,10 @@ func _initialize() -> void:
 	var second: Dictionary = simulate("stage_02", ["traveler", "hero_02"], 910)
 	assert(second.state == "won", "fixed strong build must clear stage two")
 	assert(second.base_hp > 0 and second.choices >= 12)
-	print("STAGE BALANCE PASSED: stage1 base=%d kills=%d; stage2 base=%d kills=%d" % [first.base_hp, first.kills, second.base_hp, second.kills])
+	var third: Dictionary = simulate("stage_03", ["traveler", "hero_02", "hero_03"], 911)
+	assert(third.state == "won", "fixed strong build must clear stage three")
+	assert(third.base_hp > 0 and third.choices >= 12)
+	print("STAGE BALANCE PASSED: stage1 base=%d kills=%d; stage2 base=%d kills=%d; stage3 base=%d kills=%d" % [first.base_hp, first.kills, second.base_hp, second.kills, third.base_hp, third.kills])
 	quit()
 
 func simulate(stage_id: String, squad: Array[String], seed_value: int) -> Dictionary:

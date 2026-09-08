@@ -75,7 +75,11 @@ func _ready() -> void:
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	elif not content.loaded:
 		hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 28), "未找到 content/game_config.xlsx，当前使用内置内容。", 13, Color("#d6bd98"))
-	if "--v5-test" in OS.get_cmdline_user_args():
+	if "--v6-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v6_test")
+	elif "--v5-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v5_test")
@@ -385,7 +389,8 @@ func advance_stage() -> void:
 	battle.effects.clear()
 	battle.shot_flashes.clear()
 	hud.get_child(0).show()
-	if not begin_dialogue("mode1_stage2_opening", "start"):
+	var next_number: int = index + 2
+	if not begin_dialogue("mode1_stage%d_opening" % next_number, "start"):
 		sim.start()
 
 func run_m4_test() -> void:
@@ -455,4 +460,8 @@ func run_v4_test() -> void:
 
 func run_v5_test() -> void:
 	var suite = preload("res://scripts/qa_v5.gd").new()
+	await suite.run(self)
+
+func run_v6_test() -> void:
+	var suite = preload("res://scripts/qa_v6.gd").new()
 	await suite.run(self)

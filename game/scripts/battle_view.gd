@@ -19,6 +19,7 @@ var skill_point: Vector2 = Vector2(760, 360)
 var atlas: Texture2D = preload("res://assets/tiny-dungeon.png")
 var hell_stage_one: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0002.png")
 var hell_stage_two: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0003.png")
+var hell_stage_three: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0005.png")
 var furina_texture: Texture2D = preload("res://assets/characters/furina/furina-chibi-v1-alpha.png")
 var furina_actor
 var font: SystemFont
@@ -81,7 +82,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				shot_flashes[event.hero_id] = 0.12
 				var hero: Dictionary = sim.heroes[event.hero_id]
 				effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25, -20), "life": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0})
-			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "boss_pulse", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break":
+			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "crystal_guard", "enemy_heal", "enemy_guard", "split", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break":
 				effects.append({"kind": event.kind, "pos": event.pos, "life": 0.6, "value": event.get("value", 0)})
 				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "skill_pyro", "skill_electro", "geo_break"]:
 					shake_trauma = minf(1.0, shake_trauma + 0.42)
@@ -243,7 +244,8 @@ func _draw_range_indicator(hero: Dictionary) -> void:
 	draw_arc(center, 12.0, 0, TAU, 32, Color(color, 0.28), 1.2, true)
 
 func _draw_stage() -> void:
-	var hell_background: Texture2D = hell_stage_two if sim.v2_mode and sim.current_stage_id == "stage_02" else hell_stage_one
+	var backgrounds := {"stage_01": hell_stage_one, "stage_02": hell_stage_two, "stage_03": hell_stage_three}
+	var hell_background: Texture2D = backgrounds.get(sim.current_stage_id, hell_stage_one)
 	draw_texture_rect(hell_background, Rect2(0, 0, 1280, 720), false, Color.WHITE)
 	draw_rect(Rect2(0, 0, 1280, 720), Color(0.05, 0.02, 0.06, 0.42))
 	draw_rect(Rect2(0, 94, 1280, 512), Color(0.13, 0.08, 0.16, 0.72))
@@ -265,7 +267,7 @@ func _draw_stage() -> void:
 	var border: PackedVector2Array = Stage.polygon(Sim.MOVE_AREA)
 	border.append(border[0])
 	draw_polyline(border, Color("#9a5961"), 1.4, true)
-	for lane in Sim.LANES:
+	for lane in sim.stage_lanes():
 		draw_line(Stage.project(Vector2(160, lane + 35)), Stage.project(Vector2(1200, lane + 35)), Color(0.72, 0.61, 0.62, 0.13), 1.0)
 		for x in range(740, 1150, 110):
 			var arrow: Vector2 = Stage.project(Vector2(x, lane))
@@ -420,20 +422,33 @@ func _draw_enemy(enemy: Dictionary) -> void:
 		caption(enemy.pos + Vector2(-7, 27), "增", Color("#cf7fda"), 12)
 	elif enemy.kind == "shielded":
 		caption(enemy.pos + Vector2(-7, 27), "盾", Color("#76a6d8"), 12)
-	elif enemy.kind == "boss_01":
+	elif enemy.kind == "charger":
+		draw_line(enemy.pos + Vector2(-34, -18), enemy.pos + Vector2(28, -18), Color("#ff8b61"), 4.0, true)
+		caption(enemy.pos + Vector2(-7, 27), "冲", Color("#ef795b"), 12)
+	elif enemy.kind == "healer":
+		draw_arc(enemy.pos + Vector2(0, -20), 27.0 + sin(clock * 3.0) * 3.0, 0, TAU, 28, Color(0.45, 0.95, 0.66, 0.6), 2.0, true)
+		caption(enemy.pos + Vector2(-7, 27), "疗", Color("#75d6a2"), 12)
+	elif enemy.kind == "splitter":
+		caption(enemy.pos + Vector2(-7, 27), "裂", Color("#d77aa9"), 12)
+	elif enemy.kind == "warder":
+		draw_arc(enemy.pos + Vector2(0, -20), 31.0, 0, TAU, 6, Color(0.55, 0.67, 1.0, 0.72), 2.5, true)
+		caption(enemy.pos + Vector2(-7, 27), "护", Color("#8ba4e8"), 12)
+	elif enemy.kind in ["boss_01", "boss_02"]:
 		draw_arc(enemy.pos + Vector2(0, -25), 48.0 + sin(clock * 2.2) * 3.0, 0, TAU, 36, Color("#ff5f82"), 3.0, true)
-		caption(enemy.pos + Vector2(-18, 34), "统领", Color("#ff7895"), 14)
+		caption(enemy.pos + Vector2(-18, 34), "母巢" if enemy.kind == "boss_02" else "统领", Color("#ff7895"), 14)
 	if enemy.haste_timer > 0:
 		draw_arc(enemy.pos + Vector2(0, -18), side * 0.54, 0, TAU, 28, Color(0.86, 0.45, 0.95, 0.42), 2.0, true)
 	if enemy.blocked_by >= 0:
 		draw_line(enemy.pos + Vector2(-24, 10), enemy.pos + Vector2(24, 10), Color("#c5bd96"), 2)
 	if enemy.slow_timer > 0:
 		caption(enemy.pos + Vector2(19, 27), "缓", Color("#83c7e8"), 12)
+	if float(enemy.get("frozen_timer", 0.0)) > 0.0:
+		draw_arc(enemy.pos + Vector2(0, -18), side * 0.58, 0, TAU, 8, Color(0.66, 0.93, 1.0, 0.86), 3.0, true)
 	if enemy.aura != "":
-		var is_water: bool = enemy.aura == "water"
-		var color := Color("#83c7e8") if is_water else Color("#eaaa7d")
+		var aura_element: String = sim.normalize_element(str(enemy.aura))
+		var color := element_color(aura_element)
 		draw_circle(enemy.pos + Vector2(30, -side), 11, Color("#10202b"))
-		caption(enemy.pos + Vector2(24, -side + 5), "水" if is_water else "火", color, 12)
+		caption(enemy.pos + Vector2(24, -side + 5), element_glyph(aura_element), color, 12)
 
 func _draw_effect(effect: Dictionary) -> void:
 	var t: float = 1.0 - effect.life / 0.6
@@ -446,9 +461,9 @@ func _draw_effect(effect: Dictionary) -> void:
 	elif effect.kind == "slash" and not reduced_effects:
 		var frame_index: int = clampi(floori(t * slash_frames.size()), 0, slash_frames.size() - 1)
 		draw_texture_rect(slash_frames[frame_index], Rect2(effect.pos + Vector2(-62, -82), Vector2(124, 124)), false, Color(1, 0.88, 0.78, fade))
-	elif effect.kind in ["vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst"]:
-		var reaction_names := {"vaporize": "蒸发", "melt": "融化", "overloaded": "超载", "superconduct": "超导", "electro_charged": "感电", "frozen": "冻结", "swirl": "扩散", "crystallize": "结晶", "element_burst": "元素爆发"}
-		var reaction_colors := {"vaporize": Color("#ffd082"), "melt": Color("#ffb28e"), "overloaded": Color("#ff7188"), "superconduct": Color("#b9a2ff"), "electro_charged": Color("#82bcff"), "frozen": Color("#b9f2ff"), "swirl": Color("#7ef0c5"), "crystallize": Color("#f3ca62"), "element_burst": Color("#ffffff")}
+	elif effect.kind in ["vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread"]:
+		var reaction_names := {"vaporize": "蒸发", "melt": "融化", "overloaded": "超载", "superconduct": "超导", "electro_charged": "感电", "frozen": "冻结", "swirl": "扩散", "swirl_spread": "扩散传播", "crystallize": "结晶", "shatter": "碎冰", "element_burst": "元素爆发"}
+		var reaction_colors := {"vaporize": Color("#ffd082"), "melt": Color("#ffb28e"), "overloaded": Color("#ff7188"), "superconduct": Color("#b9a2ff"), "electro_charged": Color("#82bcff"), "frozen": Color("#b9f2ff"), "swirl": Color("#7ef0c5"), "swirl_spread": Color("#7ef0c5"), "crystallize": Color("#f3ca62"), "shatter": Color("#e8fbff"), "element_burst": Color("#ffffff")}
 		var reaction_color: Color = Color(reaction_colors.get(effect.kind, Color.WHITE), fade)
 		caption(effect.pos + Vector2(-27, -76 - t * 22), str(reaction_names.get(effect.kind, effect.kind)), reaction_color, 17)
 		if not reduced_effects:
@@ -466,7 +481,7 @@ func _draw_effect(effect: Dictionary) -> void:
 		for ray in 4:
 			var angle: float = -0.7 + ray * 0.45
 			draw_line(effect.pos + Vector2.from_angle(angle) * 8.0, effect.pos + Vector2.from_angle(angle) * (24.0 + t * 28.0), accent, 2.0, true)
-	elif effect.kind in ["barrage", "crossfire", "finale", "death_burst"]:
+	elif effect.kind in ["barrage", "crossfire", "finale", "death_burst", "boss_summon"]:
 		var blast_color := Color(1.0, 0.30, 0.26, fade)
 		for ring in 3:
 			draw_arc(effect.pos, 18.0 + ring * 16.0 + t * 52.0, 0, TAU, 40, Color(blast_color, fade * (0.72 - ring * 0.16)), 4.0 - ring, true)
@@ -486,6 +501,12 @@ func _draw_effect(effect: Dictionary) -> void:
 	elif effect.kind == "shield_hit":
 		caption(effect.pos + Vector2(-18, -65 - t * 24), "护盾 -%d" % int(effect.value), Color(0.48, 0.82, 1.0, fade), 14)
 		draw_arc(effect.pos + Vector2(0, -18), 20 + t * 42, -2.7, 0.35, 24, Color(0.48, 0.82, 1.0, fade), 3.0, true)
+	elif effect.kind in ["crystal_guard", "enemy_guard", "enemy_heal", "split"]:
+		var helpful: bool = effect.kind in ["crystal_guard", "enemy_heal"]
+		var status_color := Color(0.50, 0.95, 0.70, fade) if helpful else Color(0.55, 0.68, 1.0, fade)
+		var status_name: String = str({"crystal_guard": "结晶护盾", "enemy_guard": "敌方加盾", "enemy_heal": "敌方治疗", "split": "分裂"}.get(effect.kind, effect.kind))
+		draw_arc(effect.pos + Vector2(0, -18), 18 + t * 48, 0, TAU, 24, status_color, 3.0, true)
+		caption(effect.pos + Vector2(-38, -70 - t * 20), status_name, status_color, 15)
 	elif effect.kind == "boss_pulse":
 		for ring in 4:
 			draw_arc(effect.pos, 24.0 + ring * 22.0 + t * 95.0, 0, TAU, 48, Color(1.0, 0.20, 0.38, fade * (0.8 - ring * 0.14)), 4.0, true)

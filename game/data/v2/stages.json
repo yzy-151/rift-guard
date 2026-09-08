@@ -88,6 +88,7 @@
         "interval": 1.4,
         "route_id": "upper"
       },
+      {"at":190,"enemy_id":"healer","count":5,"interval":7.0,"route_id":"main"},
       {
         "at": 215,
         "enemy_id": "shielded",
@@ -95,6 +96,7 @@
         "interval": 3.0,
         "route_id": "main"
       },
+      {"at":225,"enemy_id":"charger","count":16,"interval":1.65,"route_id":"upper"},
       {
         "at": 240,
         "enemy_id": "runner",
@@ -108,7 +110,9 @@
         "count": 24,
         "interval": 1.5,
         "route_id": "upper"
-      }
+      },
+      {"at":255,"enemy_id":"splitter","count":6,"interval":5.2,"route_id":"lower"},
+      {"at":278,"enemy_id":"warder","count":5,"interval":5.8,"route_id":"main"}
     ]
   },
   {
@@ -134,9 +138,48 @@
       {"at":130,"enemy_id":"armored","count":15,"interval":2.8,"route_id":"main"},
       {"at":175,"enemy_id":"shielded","count":14,"interval":2.8,"route_id":"upper"},
       {"at":205,"enemy_id":"runner","count":48,"interval":1.05,"route_id":"lower"},
+      {"at":214,"enemy_id":"charger","count":20,"interval":1.4,"route_id":"upper"},
       {"at":240,"enemy_id":"flyer","count":30,"interval":1.35,"route_id":"main"},
+      {"at":248,"enemy_id":"healer","count":7,"interval":5.0,"route_id":"lower"},
       {"at":268,"enemy_id":"ranged","count":18,"interval":1.9,"route_id":"upper"},
-      {"at":285,"enemy_id":"grunt","count":44,"interval":1.05,"route_id":"lower"}
+      {"at":276,"enemy_id":"splitter","count":8,"interval":3.6,"route_id":"main"},
+      {"at":285,"enemy_id":"grunt","count":44,"interval":1.05,"route_id":"lower"},
+      {"at":292,"enemy_id":"warder","count":7,"interval":4.3,"route_id":"upper"}
+    ]
+  },
+  {
+    "id": "stage_03",
+    "name": "黑曜母巢",
+    "duration_seconds": 375,
+    "boss_at_seconds": 318,
+    "boss_id": "boss_02",
+    "boss_route_id": "main",
+    "enemy_health_multiplier": 0.44,
+    "enemy_damage_multiplier": 0.14,
+    "enemy_speed_multiplier": 0.90,
+    "enemy_leak_multiplier": 0.08,
+    "lanes": {"upper":235,"main":355,"lower":485},
+    "starting_squad": ["traveler", "hero_02", "hero_03"],
+    "xp_thresholds": [40,90,150,220,300,390,490,600,720,850,990,1140,1300,1470,1650],
+    "unlocks": ["hero_04"],
+    "waves": [
+      {"at":0,"enemy_id":"charger","count":18,"interval":1.8,"route_id":"main"},
+      {"at":28,"enemy_id":"grunt","count":26,"interval":1.7,"route_id":"upper"},
+      {"at":52,"enemy_id":"splitter","count":7,"interval":4.6,"route_id":"lower"},
+      {"at":78,"enemy_id":"flyer","count":22,"interval":1.75,"route_id":"upper"},
+      {"at":102,"enemy_id":"healer","count":7,"interval":5.4,"route_id":"main"},
+      {"at":108,"enemy_id":"armored","count":18,"interval":2.5,"route_id":"lower"},
+      {"at":148,"enemy_id":"warder","count":8,"interval":4.8,"route_id":"upper"},
+      {"at":154,"enemy_id":"ranged","count":20,"interval":2.0,"route_id":"main"},
+      {"at":190,"enemy_id":"runner","count":58,"interval":0.92,"route_id":"lower"},
+      {"at":218,"enemy_id":"buffer","count":10,"interval":4.2,"route_id":"main"},
+      {"at":226,"enemy_id":"charger","count":30,"interval":1.05,"route_id":"upper"},
+      {"at":252,"enemy_id":"shielded","count":18,"interval":2.3,"route_id":"lower"},
+      {"at":276,"enemy_id":"splitter","count":12,"interval":2.8,"route_id":"main"},
+      {"at":292,"enemy_id":"healer","count":9,"interval":3.8,"route_id":"lower"},
+      {"at":300,"enemy_id":"warder","count":9,"interval":3.7,"route_id":"upper"},
+      {"at":326,"enemy_id":"flyer","count":38,"interval":0.95,"route_id":"upper"},
+      {"at":334,"enemy_id":"runner","count":64,"interval":0.78,"route_id":"lower"}
     ]
   }
 ]

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="模式一核心循环：双关卡 / 六元素主动技能 / 116张三选一卡牌 / 5分钟怪潮 / 永久图鉴"
+config/description="模式一核心循环：三关卡 / 深度元素反应 / 152张无限叠加卡牌 / 专职怪潮 / Helltaker演出"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

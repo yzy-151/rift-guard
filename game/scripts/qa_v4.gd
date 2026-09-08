@@ -41,13 +41,13 @@ func run(game) -> void:
 	game.sim.heroes[0].element = "electro"
 	game.sim.run_state.buff_levels = {"mechanic_twin_arc": 3, "mechanic_chain_arc": 2, "support_red_moon": 2}
 	game.sim.supports = {"support_barrage": {"stacks": 2, "timer": 4.2}}
-	var kinds := ["grunt", "runner", "armored", "flyer", "ranged", "buffer", "shielded", "boss_01"]
+	var kinds: Array = preload("res://scripts/combat_catalog.gd").ENEMIES.keys()
 	for i in kinds.size():
 		game.sim.spawn_enemy(Vector2(700 + (i % 4) * 105, 270 + (i / 4) * 145), kinds[i])
 	game.compendium.observe(game.sim)
 	game.refresh()
 	expect(game.sim.run_state.traveler_element == "electro", "Traveler element state is visible in runtime and HUD")
-	expect(game.sim.enemies.size() == 8, "all eight enemy archetypes can coexist")
+	expect(game.sim.enemies.size() == preload("res://scripts/combat_catalog.gd").ENEMIES.size(), "all enemy archetypes can coexist")
 	expect(not game.sim.run_state.buff_levels.is_empty() and not game.sim.supports.is_empty(), "selected buffs and off-field support are visible")
 	await capture(game, "05-element-buffs-enemy-roster")
 	game.advance_stage()

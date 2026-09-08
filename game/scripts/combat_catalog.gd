@@ -13,7 +13,12 @@ const ENEMIES = {
 	"ranged": {"name": "蚀骨弩手", "hp": 128.0, "armor": 12.0, "speed": 43.0, "damage": 21.0, "rate": 0.72, "leak": 12, "color": "#e58b73", "size": 48.0, "attack_range": 275.0},
 	"buffer": {"name": "咏唱祭司", "hp": 155.0, "armor": 18.0, "speed": 38.0, "damage": 9.0, "rate": 0.65, "leak": 14, "color": "#cf7fda", "size": 54.0, "aura_radius": 155.0},
 	"shielded": {"name": "壁垒卫士", "hp": 210.0, "armor": 38.0, "speed": 31.0, "damage": 31.0, "rate": 0.78, "leak": 20, "color": "#76a6d8", "size": 66.0, "shield": 180.0},
-	"boss_01": {"name": "裂隙统领", "hp": 3600.0, "armor": 125.0, "speed": 25.0, "damage": 58.0, "rate": 0.8, "leak": 100, "color": "#d05b78", "size": 102.0, "shield": 700.0, "boss_pulse": 7.0}
+	"charger": {"name": "裂蹄冲锋者", "hp": 145.0, "armor": 18.0, "speed": 48.0, "damage": 34.0, "rate": 0.92, "leak": 16, "color": "#ef795b", "size": 58.0, "charge_multiplier": 2.15},
+	"healer": {"name": "血契医师", "hp": 175.0, "armor": 14.0, "speed": 34.0, "damage": 10.0, "rate": 0.62, "leak": 16, "color": "#75d6a2", "size": 55.0, "heal_radius": 190.0, "heal_interval": 5.5},
+	"splitter": {"name": "孳生母体", "hp": 240.0, "armor": 26.0, "speed": 32.0, "damage": 20.0, "rate": 0.82, "leak": 22, "color": "#d77aa9", "size": 72.0, "split_count": 2},
+	"warder": {"name": "黑曜司祭", "hp": 205.0, "armor": 32.0, "speed": 30.0, "damage": 15.0, "rate": 0.70, "leak": 19, "color": "#8ba4e8", "size": 62.0, "ward_radius": 205.0, "ward_interval": 6.5},
+	"boss_01": {"name": "裂隙统领", "hp": 3600.0, "armor": 125.0, "speed": 25.0, "damage": 58.0, "rate": 0.8, "leak": 100, "color": "#d05b78", "size": 102.0, "shield": 700.0, "boss_pulse": 7.0},
+	"boss_02": {"name": "黑曜母巢", "hp": 4800.0, "armor": 145.0, "speed": 21.0, "damage": 66.0, "rate": 0.72, "leak": 100, "color": "#9a4f92", "size": 116.0, "shield": 980.0, "boss_pulse": 6.2, "summon_count": 3}
 }
 # Fixed encounters make changes in positioning directly comparable.
 const WAVES = [
