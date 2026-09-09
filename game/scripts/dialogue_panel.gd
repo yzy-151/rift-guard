@@ -13,6 +13,7 @@ var director
 var hud
 var root: Control
 var portrait: TextureRect
+var dialogue_box: NinePatchRect
 var partner: TextureRect
 var name_label: Label
 var body: RichTextLabel
@@ -64,22 +65,22 @@ func build(ui, story) -> void:
 	root.add_child(shade)
 	partner = art(Rect2(685, 80, 490, 650))
 	partner.modulate = Color(0.36, 0.28, 0.34, 0.8)
-	portrait = art(Rect2(115, 75, 520, 665))
-	var box := NinePatchRect.new()
-	box.texture = preload("res://assets/helltaker/ui/button0003.png")
-	box.position = Vector2(75, 455)
-	box.size = Vector2(1130, 250)
-	box.patch_margin_left = 115
-	box.patch_margin_right = 115
-	box.patch_margin_top = 36
-	box.patch_margin_bottom = 36
-	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(box)
-	hud.bind(box, "dialog_frame")
-	name_label = hud.label(root, Vector2(170, 530), Vector2(550, 32), "", 23, Color("#f0b4ae"))
+	portrait = art(Rect2(650, 34, 570, 686))
+	dialogue_box = NinePatchRect.new()
+	dialogue_box.texture = preload("res://assets/helltaker/ui/button0003.png")
+	dialogue_box.position = Vector2(56, 454)
+	dialogue_box.size = Vector2(710, 238)
+	dialogue_box.patch_margin_left = 115
+	dialogue_box.patch_margin_right = 115
+	dialogue_box.patch_margin_top = 36
+	dialogue_box.patch_margin_bottom = 36
+	dialogue_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(dialogue_box)
+	hud.bind(dialogue_box, "dialog_frame")
+	name_label = hud.label(root, Vector2(105, 506), Vector2(580, 34), "", 24, Color("#f0b4ae"))
 	body = RichTextLabel.new()
-	body.position = Vector2(152, 578)
-	body.size = Vector2(970, 62)
+	body.position = Vector2(88, 552)
+	body.size = Vector2(620, 78)
 	body.add_theme_font_size_override("normal_font_size", 20)
 	body.add_theme_color_override("default_color", Color("#f5ece4"))
 	body.scroll_following = true
@@ -87,21 +88,23 @@ func build(ui, story) -> void:
 	hud.bind(name_label, "dialog_name")
 	hud.bind(body, "dialog_body")
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	progress = hud.label(root, Vector2(153, 649), Vector2(245, 25), "", 12, Color("#b9a2a9"))
+	progress = hud.label(root, Vector2(89, 645), Vector2(275, 25), "", 12, Color("#b9a2a9"))
 	for i in 2:
-		var choice_button := action(Rect2(280, 350 + i * 52, 720, 44), "", choose_option.bind(i))
-		choice_button.add_theme_font_size_override("font_size", 15)
+		var choice_button := action(Rect2(72, 448 + i * 68, 650, 58), "", choose_option.bind(i))
+		choice_button.add_theme_font_size_override("font_size", 17)
+		choice_button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		choice_button.set_meta("home_position", choice_button.position)
 		choice_button.hide()
 		choice_button.disabled = true
 		choice_button.focus_mode = Control.FOCUS_NONE
 		choice_buttons.append(choice_button)
-	advance_button = action(Rect2(965, 645, 172, 32), "继续  [Enter]", advance)
-	auto_button = action(Rect2(800, 645, 150, 32), "自动：关", func():
+	advance_button = action(Rect2(1034, 650, 172, 32), "继续  [Enter]", advance)
+	auto_button = action(Rect2(869, 650, 150, 32), "自动：关", func():
 		auto_mode = not auto_mode
 		auto_timer = 0.0
 		auto_button.text = "自动：开" if auto_mode else "自动：关")
-	history_button = action(Rect2(651, 645, 132, 32), "历史  [H]", toggle_history)
-	var skip_button: Button = action(Rect2(489, 645, 146, 32), "跳过本段 [Esc]", skip)
+	history_button = action(Rect2(720, 650, 132, 32), "历史  [H]", toggle_history)
+	var skip_button: Button = action(Rect2(558, 650, 146, 32), "跳过本段 [Esc]", skip)
 	hud.bind(advance_button, "dialog_continue")
 	hud.bind(auto_button, "dialog_auto")
 	hud.bind(history_button, "dialog_history")
@@ -134,19 +137,23 @@ func build(ui, story) -> void:
 	root.hide()
 	cue_sound = AudioStreamPlayer.new()
 	cue_sound.stream = preload("res://assets/helltaker/audio/dialogue_start_01.wav")
+	cue_sound.bus = "SFX"
 	cue_sound.volume_db = -15.0
 	cue_sound.max_polyphony = 2
 	add_child(cue_sound)
 	end_sound = AudioStreamPlayer.new()
 	end_sound.stream = preload("res://assets/helltaker/audio/dialogue_text_end_01.wav")
+	end_sound.bus = "SFX"
 	end_sound.volume_db = -13.0
 	add_child(end_sound)
 	dialogue_highlight = AudioStreamPlayer.new()
 	dialogue_highlight.stream = preload("res://assets/helltaker/audio/button_dialogue_highlight_01.wav")
+	dialogue_highlight.bus = "SFX"
 	dialogue_highlight.volume_db = -11.0
 	add_child(dialogue_highlight)
 	dialogue_confirm = AudioStreamPlayer.new()
 	dialogue_confirm.stream = preload("res://assets/helltaker/audio/button_dialogue_confirm_01.wav")
+	dialogue_confirm.bus = "SFX"
 	dialogue_confirm.volume_db = -10.0
 	add_child(dialogue_confirm)
 
@@ -244,22 +251,28 @@ func _animate_line_entrance(highlight: String) -> void:
 	var partner_tint: Color = partner.modulate
 	portrait.pivot_offset = portrait.size * 0.5
 	partner.pivot_offset = partner.size * 0.5
-	portrait.position = main_target + Vector2(-105, 8)
-	partner.position = partner_target + Vector2(105, 8)
-	portrait.scale = Vector2(0.94, 0.94)
-	partner.scale = Vector2(0.94, 0.94)
+	portrait.position = main_target + Vector2(56, 52)
+	partner.position = partner_target + Vector2(-42, 36)
+	portrait.scale = Vector2(0.86, 0.86)
+	partner.scale = Vector2(0.91, 0.91)
+	portrait.rotation = deg_to_rad(2.8)
+	partner.rotation = deg_to_rad(-1.8)
 	portrait.modulate = Color(main_tint.r, main_tint.g, main_tint.b, 0.0)
 	partner.modulate = Color(partner_tint.r, partner_tint.g, partner_tint.b, 0.0)
+	dialogue_box.position.x = -680.0
 	var entrance := create_tween().set_parallel(true)
 	entrance.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	entrance.tween_property(portrait, "position", main_target, 0.20)
-	entrance.tween_property(partner, "position", partner_target, 0.20)
-	entrance.tween_property(portrait, "scale", Vector2.ONE, 0.18)
-	entrance.tween_property(partner, "scale", Vector2.ONE, 0.18)
-	entrance.tween_property(portrait, "modulate", main_tint, 0.13)
-	entrance.tween_property(partner, "modulate", partner_tint, 0.13)
-	entrance.set_trans(Tween.TRANS_QUART)
-	entrance.tween_property(body, "modulate", Color.WHITE, 0.11).set_delay(0.07)
+	entrance.tween_property(portrait, "position", main_target, 0.34)
+	entrance.tween_property(partner, "position", partner_target, 0.30)
+	entrance.tween_property(portrait, "scale", Vector2.ONE, 0.32)
+	entrance.tween_property(partner, "scale", Vector2.ONE, 0.28)
+	entrance.tween_property(portrait, "rotation", 0.0, 0.30)
+	entrance.tween_property(partner, "rotation", 0.0, 0.28)
+	entrance.tween_property(portrait, "modulate", main_tint, 0.16)
+	entrance.tween_property(partner, "modulate", partner_tint, 0.16)
+	entrance.set_trans(Tween.TRANS_EXPO)
+	entrance.tween_property(dialogue_box, "position:x", 56.0, 0.22)
+	entrance.tween_property(body, "modulate", Color.WHITE, 0.13).set_delay(0.10)
 	if highlight == "main":
 		portrait.position.x -= 16.0
 	else:
@@ -302,9 +315,16 @@ func _reveal_choices() -> void:
 		return
 	var options: Array = director.current().get("choices", [])
 	for i in mini(choice_buttons.size(), options.size()):
-		choice_buttons[i].show()
-		choice_buttons[i].disabled = false
-		choice_buttons[i].focus_mode = Control.FOCUS_ALL
+		var item: Button = choice_buttons[i]
+		var home: Vector2 = item.get_meta("home_position", item.position)
+		item.position = home + Vector2(-92, 0)
+		item.modulate = Color(1, 1, 1, 0)
+		item.show()
+		item.disabled = false
+		item.focus_mode = Control.FOCUS_ALL
+		var reveal := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		reveal.tween_property(item, "position", home, 0.24).set_delay(i * 0.075)
+		reveal.tween_property(item, "modulate", Color.WHITE, 0.13).set_delay(i * 0.075)
 	if not options.is_empty():
 		choice_buttons[0].grab_focus()
 

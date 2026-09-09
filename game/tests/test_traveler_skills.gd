@@ -59,6 +59,15 @@ func _initialize() -> void:
 	geo.damage_construct(1, 700.0)
 	check(geo.geo_constructs[0].hp == 0.0, "enemy damage can break geo construct")
 
+	var endless_geo = Sim.new(701, true)
+	endless_geo.reset_stage("stage_endless", ["traveler"], 701)
+	endless_geo.start()
+	endless_geo.heroes[0].element = "geo"
+	endless_geo.run_state.traveler_element = "geo"
+	var distant_target := Vector2(2050, 1080)
+	check(endless_geo.activate_traveler_skill(distant_target), "endless geo construct casts at a distant world position")
+	check(endless_geo.geo_constructs.size() == 1 and endless_geo.geo_constructs[0].pos.distance_to(distant_target) < 0.1, "endless geo construct preserves the aimed world position")
+
 	var cryo = make_sim("cryo")
 	var ice_enemy: Dictionary = cryo.spawn_enemy(Vector2(720, 360), "shielded")
 	cryo.activate_traveler_skill(Vector2(720, 360))

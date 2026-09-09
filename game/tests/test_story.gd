@@ -41,6 +41,10 @@ func _initialize() -> void:
 	valid = valid and story.choice_history.size() == 1 and story.choice_history[0].result == "hidden_character"
 	valid = valid and "白露" in story.current().text
 	story.reset()
+	valid = valid and story.begin("mode1_won")
+	valid = valid and story.has_choices() and story.current().choices.size() == 2
+	valid = valid and str(story.current().choices[1].get("effect", {}).get("type", "")) == "inherit_endless"
+	story.reset()
 	valid = valid and story.seen.is_empty() and story.history.is_empty() and story.choice_history.is_empty()
-	print("V15 STORY VALIDATION: %d source lines; %s" % [count, "PASS" if valid else "FAIL"])
+	print("V16 STORY VALIDATION: %d source lines; %s" % [count, "PASS" if valid else "FAIL"])
 	quit(0 if valid else 1)

@@ -12,6 +12,7 @@ signal stage_action
 signal skill_action
 signal main_menu_action
 signal formation_action(mode: String)
+signal settings_action
 
 const WHITE = Color("#f3e9df")
 const MUTED = Color("#ae969f")
@@ -72,12 +73,15 @@ var ui_confirm: AudioStreamPlayer
 func _ready() -> void:
 	ui_highlight = AudioStreamPlayer.new()
 	ui_highlight.stream = HT_HIGHLIGHT
+	ui_highlight.bus = "SFX"
 	ui_highlight.volume_db = -15.0
 	ui_confirm = AudioStreamPlayer.new()
 	ui_confirm.stream = HT_CONFIRM
+	ui_confirm.bus = "SFX"
 	ui_confirm.volume_db = -13.0
 	boss_warning = AudioStreamPlayer.new()
 	boss_warning.stream = HT_BOSS_WARNING
+	boss_warning.bus = "SFX"
 	boss_warning.volume_db = -9.0
 	var root := Control.new()
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -216,17 +220,9 @@ func _ready() -> void:
 		hero_details.append(label(hero_btn, Vector2(10, 64), Vector2(250, 18), details, 10, MUTED))
 	label(root, Vector2(900, 656), Vector2(348, 23), "1/2/3 选人 · 右键移动", 13, TEAL)
 	label(root, Vector2(900, 684), Vector2(348, 21), "M5 · F6 对话预览 / F7 特效预览", 12, MUTED)
-	var mute_btn := button(root, Rect2(900, 617, 155, 32), "声音：开", false)
-	mute_btn.pressed.connect(func():
-		muted = not muted
-		mute_btn.text = "声音：关" if muted else "声音：开"
-		mute_action.emit(muted))
-	var reduce_btn := button(root, Rect2(1067, 617, 181, 32), "反馈：标准", false)
-	reduce_btn.pressed.connect(func():
-		reduced = not reduced
-		reduce_btn.text = "反馈：减弱" if reduced else "反馈：标准"
-		reduce_action.emit(reduced))
-	background_buttons = [stage_btn, squad_btn, archive_btn, pause_button, reset_btn, mute_btn, reduce_btn, skill_button]
+	var settings_btn := button(root, Rect2(900, 617, 348, 32), "设置：音量 / 显示   [F10]", false)
+	settings_btn.pressed.connect(func(): settings_action.emit())
+	background_buttons = [stage_btn, squad_btn, archive_btn, pause_button, reset_btn, settings_btn, skill_button]
 	background_buttons.append_array(formation_buttons.values())
 	background_buttons.append_array(hero_buttons)
 	overlay = ColorRect.new()

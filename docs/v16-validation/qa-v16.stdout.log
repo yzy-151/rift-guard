@@ -1,0 +1,21 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 591.86 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 5060 Ti
+
+V16 PASS: roster contains twelve data-driven characters
+V16 PASS: new characters have selectable upgrade cards
+V16 PASS: Helltaker music tracks are packaged
+V16 PASS: main-menu settings button opens the settings screen
+V16 PASS: settings expose master, music and sound-effect volume sliders
+V16 PASS: music slider updates the Music bus
+V16 PASS: closing settings returns to the mode menu
+V16 PASS: campaign starts through real pointer clicks
+V16 PASS: dialogue choices use the Helltaker left response column
+V16 PASS: campaign remains playable after a dialogue choice
+V16 PASS: post-clear inheritance dialogue starts
+V16 PASS: second post-clear reply selects inherited endless mode
+V16 PASS: dialogue branch enters endless gameplay
+V16 PASS: team, levels and combat stats survive the mode transfer
+V16 PASS: Geo skill activates at a distant endless coordinate
+V16 PASS: Geo construct stays at the aimed endless world position
+V16 PASS: early endless tiers suppress ranged enemies until the build develops
+V16 QA COMPLETE: 17 checks, 0 failures

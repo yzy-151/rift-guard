@@ -76,5 +76,41 @@
     "hurt": "res://assets/tiny-dungeon.png",
     "skill": "res://assets/tiny-dungeon.png",
     "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_09": {
+    "portrait": "res://assets/portraits/jessica.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_10": {
+    "portrait": "res://assets/portraits/jessica.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_11": {
+    "portrait": "res://assets/portraits/jessica.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_12": {
+    "portrait": "res://assets/portraits/jessica.png",
+    "idle": "res://assets/tiny-dungeon.png",
+    "move": "res://assets/tiny-dungeon.png",
+    "attack": "res://assets/tiny-dungeon.png",
+    "hurt": "res://assets/tiny-dungeon.png",
+    "skill": "res://assets/tiny-dungeon.png",
+    "down": "res://assets/tiny-dungeon.png"
   }
 }

@@ -62,17 +62,17 @@ func build(owner_hud, game_database, state) -> void:
 		var data: Dictionary = database.characters[id]
 		var col := i % 4
 		var row := i / 4
-		var button: Button = owner_hud.button(frame, Rect2(36 + col * 268, 142 + row * 156, 250, 132), "", true)
+		var button: Button = owner_hud.button(frame, Rect2(36 + col * 268, 130 + row * 118, 250, 106), "", true)
 		owner_hud.bind(button, "squad_character_%d" % (i + 1))
 		button.name = "Squad_" + id
 		button.pressed.connect(toggle.bind(id))
 		buttons[id] = button
-		owner_hud.label(button, Vector2(16, 13), Vector2(218, 30), str(data.name), 20, ELEMENT_COLORS.get(str(data.element), WHITE))
-		var state_label: Label = owner_hud.label(button, Vector2(164, 15), Vector2(70, 24), "", 11, ACCENT)
+		owner_hud.label(button, Vector2(16, 8), Vector2(218, 28), str(data.name), 18, ELEMENT_COLORS.get(str(data.element), WHITE))
+		var state_label: Label = owner_hud.label(button, Vector2(164, 10), Vector2(70, 22), "", 10, ACCENT)
 		state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		state_labels[id] = state_label
-		owner_hud.label(button, Vector2(16, 46), Vector2(218, 22), "%s · %s" % [_element_name(str(data.element)), data.role], 13, WHITE)
-		owner_hud.label(button, Vector2(16, 75), Vector2(218, 42), "ATK %d  ·  射程 %d\n攻速 %.2f/s  ·  阻挡 %d" % [int(data.attack), int(data.attack_range), float(data.attack_rate), int(data.block)], 12, MUTED)
+		owner_hud.label(button, Vector2(16, 38), Vector2(218, 20), "%s · %s" % [_element_name(str(data.element)), data.role], 11, WHITE)
+		owner_hud.label(button, Vector2(16, 64), Vector2(218, 34), "ATK %d  ·  射程 %d\n攻速 %.2f/s  ·  阻挡 %d" % [int(data.attack), int(data.attack_range), float(data.attack_rate), int(data.block)], 10, MUTED)
 	confirm_button = owner_hud.button(frame, Rect2(308, 500, 520, 54), "确认编队并进入下一关   →", true)
 	owner_hud.bind(confirm_button, "squad_confirm")
 	confirm_button.add_theme_font_size_override("font_size", 18)

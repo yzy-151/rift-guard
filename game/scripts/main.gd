@@ -11,6 +11,8 @@ const CompendiumPanel = preload("res://scripts/compendium_panel.gd")
 const SquadPanel = preload("res://scripts/squad_panel.gd")
 const StageSelectPanel = preload("res://scripts/stage_select_panel.gd")
 const ModeSelectPanel = preload("res://scripts/mode_select_panel.gd")
+const AudioDirector = preload("res://scripts/audio_director.gd")
+const SettingsPanel = preload("res://scripts/settings_panel.gd")
 var content = Content.new()
 var story = Story.new(content)
 var saved_story
@@ -26,6 +28,10 @@ var hud
 var selected_id: int = 0
 var muted: bool = false
 var sound: AudioStreamPlayer
+var audio_director
+var settings_panel
+var settings_from_menu := false
+var pending_endless_inheritance: Dictionary = {}
 var sound_timer: float = 0.0
 var test_mode: bool = false
 var compendium = CompendiumState.new()
@@ -39,6 +45,8 @@ var stage_result_recorded := false
 var skill_aiming := false
 
 func _ready() -> void:
+	audio_director = AudioDirector.new()
+	add_child(audio_director)
 	battle = View.new()
 	battle.sim = sim
 	add_child(battle)
@@ -53,13 +61,7 @@ func _ready() -> void:
 	hud.pause_action.connect(toggle_pause)
 	hud.restart_action.connect(restart)
 	hud.select_action.connect(select_hero)
-	hud.mute_action.connect(func(enabled: bool):
-		muted = enabled
-		if muted:
-			sound.stop())
-	hud.reduce_action.connect(func(enabled: bool):
-		battle.reduced_effects = enabled
-		fx.reduced = enabled)
+	hud.settings_action.connect(open_settings)
 	hud.compendium_action.connect(toggle_compendium)
 	hud.squad_action.connect(open_current_squad)
 	hud.stage_action.connect(open_stage_select)
@@ -68,6 +70,7 @@ func _ready() -> void:
 	hud.formation_action.connect(set_formation_command)
 	sound = AudioStreamPlayer.new()
 	sound.stream = preload("res://assets/hit.ogg")
+	sound.bus = "SFX"
 	sound.volume_db = -18
 	sound.max_polyphony = 3
 	add_child(sound)
@@ -93,13 +96,24 @@ func _ready() -> void:
 	add_child(mode_select_panel)
 	mode_select_panel.build(hud)
 	mode_select_panel.chosen.connect(choose_mode)
+	mode_select_panel.settings_requested.connect(open_settings)
+	settings_panel = SettingsPanel.new()
+	add_child(settings_panel)
+	settings_panel.build(hud)
+	settings_panel.setting_changed.connect(apply_setting)
+	settings_panel.closed.connect(settings_closed)
+	apply_setting("reduced_effects", bool(audio_director.values.reduced_effects))
 	dialogue.finished.connect(end_dialogue)
 	dialogue.choice_committed.connect(apply_dialogue_choice)
 	refresh()
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v15-test" in OS.get_cmdline_user_args():
+	if "--v16-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v16_test")
+	elif "--v15-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v15_test")
@@ -200,7 +214,7 @@ func _process(dt: float) -> void:
 			hud.signature = ""
 			refresh()
 	sound_timer = maxf(0.0, sound_timer - dt)
-	if not story.active and not picker.visible and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open() and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
+	if not story.active and not picker.visible and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open() and not settings_panel.is_open() and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
 		battle.advance(dt)
 		fx.advance(dt)
 
@@ -235,6 +249,7 @@ func refresh() -> void:
 	battle.queue_redraw()
 
 func open_mode_menu() -> void:
+	audio_director.set_scene("menu")
 	hud.get_child(0).hide()
 	mode_select_panel.open()
 
@@ -333,6 +348,14 @@ func set_formation_command(mode: String) -> void:
 	refresh()
 
 func _input(event: InputEvent) -> void:
+	if settings_panel != null and settings_panel.is_open():
+		if settings_panel.handle_input(event):
+			get_viewport().set_input_as_handled()
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10:
+		open_settings()
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var handled := false
 		if mode_select_panel != null and mode_select_panel.is_open():
@@ -491,6 +514,7 @@ func begin_dialogue(key: String, resume_action: String = "") -> bool:
 		return false
 	story_resume = resume_action
 	sound.stop()
+	audio_director.set_scene("dialogue")
 	hud.get_child(0).hide()
 	dialogue.display()
 	return true
@@ -503,6 +527,9 @@ func apply_dialogue_choice(choice: Dictionary) -> void:
 	match str(effect.get("type", "")):
 		"luck":
 			sim.run_state.luck = clampf(sim.run_state.luck + float(effect.get("value", 0.0)), 0.0, 0.75)
+		"inherit_endless":
+			pending_endless_inheritance = sim.export_run_snapshot()
+			story_resume = "inherit_endless"
 	hud.signature = ""
 
 func end_dialogue() -> void:
@@ -516,8 +543,11 @@ func end_dialogue() -> void:
 	story_resume = ""
 	if action == "start":
 		sim.start()
+		audio_director.set_scene("endless" if sim.endless_mode else "battle")
 	elif action == "stage_exit":
 		play_stage_exit()
+	elif action == "inherit_endless":
+		start_inherited_endless()
 	refresh()
 
 func check_story() -> void:
@@ -629,6 +659,56 @@ func confirm_next_squad(squad: Array[String]) -> void:
 	pending_stage_number = 0
 	if dialogue_key.is_empty() or not begin_dialogue(dialogue_key, "start"):
 		sim.start()
+		audio_director.set_scene("endless" if sim.endless_mode else "battle")
+
+func open_settings() -> void:
+	if settings_panel == null or settings_panel.is_open() or story.active:
+		return
+	settings_from_menu = mode_select_panel.is_open()
+	if settings_from_menu:
+		mode_select_panel.close()
+	elif sim.state in ["running", "between"]:
+		sim.toggle_pause()
+	settings_panel.open(audio_director.snapshot())
+	refresh()
+
+func apply_setting(key: String, value: Variant) -> void:
+	audio_director.set_setting(key, value)
+	if key == "reduced_effects":
+		battle.reduced_effects = bool(value)
+		fx.reduced = bool(value)
+		hud.reduced = bool(value)
+	elif key == "sfx":
+		muted = float(value) <= 0.001
+
+func settings_closed() -> void:
+	if settings_from_menu:
+		mode_select_panel.open()
+	settings_from_menu = false
+	refresh()
+
+func start_inherited_endless() -> void:
+	if pending_endless_inheritance.is_empty():
+		return
+	var snapshot := pending_endless_inheritance.duplicate(true)
+	pending_endless_inheritance.clear()
+	var squad: Array[String] = []
+	for id: Variant in snapshot.get("squad", ["traveler"]):
+		squad.append(str(id))
+	sim.reset_stage("stage_endless", squad, sim.run_seed + 1)
+	sim.run_state.mode_id = "endless_survival"
+	sim.import_run_snapshot(snapshot)
+	battle.camera_center = sim.heroes[0].pos if not sim.heroes.is_empty() else Sim.ENDLESS_ARENA.get_center()
+	selected_id = 0
+	set_skill_aiming(false)
+	stage_result_recorded = false
+	fx.active.clear()
+	battle.effects.clear()
+	battle.reset_transients()
+	hud.get_child(0).show()
+	sim.start()
+	audio_director.set_scene("endless")
+	refresh()
 
 func run_m4_test() -> void:
 	var suite = preload("res://scripts/qa_m4.gd").new()
@@ -733,6 +813,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v16_test() -> void:
+	var suite = preload("res://scripts/qa_v16.gd").new()
 	await suite.run(self)
 
 func run_v15_test() -> void:

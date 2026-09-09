@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 signal chosen(mode_id: String)
+signal settings_requested
 
 const WHITE := Color("#f3e9df")
 const MUTED := Color("#ad929b")
@@ -9,6 +10,7 @@ const ACCENT := Color("#f07482")
 var root: Control
 var hud
 var buttons: Dictionary = {}
+var settings_button: Button
 
 func build(owner_hud) -> void:
 	hud = owner_hud
@@ -33,7 +35,9 @@ func build(owner_hud) -> void:
 	owner_hud.label(root, Vector2(80, 140), Vector2(920, 24), "不同模式使用独立地图规则，强化均可无限叠加。", 13, MUTED)
 	_build_mode_card(Rect2(80, 205, 535, 390), "rift_watch", "01", "裂隙守望", "多角色路线防守", "三关剧情战役  ·  折线路径  ·  固定Boss\n守卫水晶并在每关重建卡牌构筑", "进入关卡选择")
 	_build_mode_card(Rect2(665, 205, 535, 390), "endless_survival", "∞", "无尽生存", "四屏追击生存", "无固定波次  ·  四边刷怪  ·  无限升级\n操纵旅行者移动，同行者跟随攻击", "立即进入荒原")
-	owner_hud.label(root, Vector2(80, 635), Vector2(1120, 24), "剧情模式的关卡选择可按 F4 再次打开", 11, MUTED)
+	owner_hud.label(root, Vector2(80, 642), Vector2(860, 24), "剧情模式的关卡选择可按 F4 再次打开", 11, MUTED)
+	settings_button = owner_hud.button(root, Rect2(1000, 625, 200, 44), "设置   [F10]", false)
+	settings_button.pressed.connect(func(): settings_requested.emit())
 	root.hide()
 
 func _build_mode_card(rect: Rect2, id: String, number: String, name: String, subtitle: String, description: String, action: String) -> void:
@@ -52,6 +56,9 @@ func _build_mode_card(rect: Rect2, id: String, number: String, name: String, sub
 func activate_at(point: Vector2) -> bool:
 	if not is_open():
 		return false
+	if settings_button != null and settings_button.visible and settings_button.get_global_rect().has_point(point):
+		settings_requested.emit()
+		return true
 	for id: String in buttons:
 		var item: Button = buttons[id]
 		if not item.disabled and item.visible and item.get_global_rect().has_point(point):

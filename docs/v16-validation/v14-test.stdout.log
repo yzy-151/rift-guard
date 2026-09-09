@@ -1,0 +1,30 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 591.86 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 5060 Ti
+
+V14 PASS: embedded Excel data loads without the missing-xlsx warning
+V14 PASS: mode menu opens
+V14 PASS: clicking campaign opens the stage selector
+V14 PASS: first campaign stage is clickable
+V14 PASS: clicking stage one opens squad selection
+V14 PASS: confirming squad enters campaign stage one
+V14 PASS: campaign map loads five tactical terrain features
+V14 PASS: high ground, low ground, blockers, mechanisms and shortcuts are all configured
+V14 PASS: high ground increases both range and attack power
+V14 PASS: low ground applies its displayed movement penalty
+V14 PASS: blocked terrain prevents direct traversal
+V14 PASS: occupied mechanism damages nearby enemies
+V14 PASS: traveler skills can destroy and open the shortcut
+V14 PASS: route warnings include enemy type and count before spawning
+V14 PASS: HUD presents the next three enemy entries as a timeline
+V14 PASS: squad command arms whole-party movement
+V14 PASS: squad move assigns formation destinations
+V14 PASS: follow command activates automatic formation follow
+V14 PASS: hold command freezes current positions
+V14 PASS: critical chance card changes the combat stat
+V14 PASS: depleting an enemy shield emits a dedicated break event
+V14 PASS: late endless leveling uses the reduced experience curve
+V14 PASS: endless starts in follow mode without crystal terrain mechanics
+V14 PASS: stage_01 supports at least five minutes of play
+V14 PASS: stage_02 supports at least five minutes of play
+V14 PASS: stage_03 supports at least five minutes of play
+V14 TESTS: 26 checks; 0 failures

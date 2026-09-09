@@ -32,7 +32,30 @@
     }
   ],
   "mode1_won": [
-    ["saria-soft", "旅行者", "第一道裂隙关闭了。水晶记录下了这次构筑，下一关会有新的同伴回应。"]
+    {
+      "portrait": "saria-soft",
+      "speaker": "旅行者",
+      "text": "裂隙已经关闭。现在可以继续追击，也可以把这支队伍和本关构筑投送到猩红荒原。",
+      "choices": [
+        {
+          "text": "打开下一道门，继续剧情战役。",
+          "result": "continue_campaign",
+          "response_portrait": "jessica",
+          "response_speaker": "通讯员",
+          "response": "门锁已经解除。去迎接新同行者，然后进入下一关。",
+          "response_highlight": "partner"
+        },
+        {
+          "text": "继承角色与全部属性，转入无尽模式。",
+          "result": "inherit_endless",
+          "effect": {"type": "inherit_endless"},
+          "response_portrait": "muelsyse",
+          "response_speaker": "通讯员",
+          "response": "荒原坐标已锁定。本关队伍、元素、卡牌等级与战斗属性全部保留。",
+          "response_highlight": "partner"
+        }
+      ]
+    }
   ],
   "mode1_stage2_opening": [
     ["jessica", "宵宫", "通讯接通。第二道裂隙已经变成赤潮，我从高台提供火力。"],

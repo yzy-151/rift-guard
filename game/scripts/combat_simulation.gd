@@ -534,15 +534,22 @@ func _endless_spawn_tick(dt: float) -> void:
 	endless_spawn_timer -= dt
 	if endless_spawn_timer > 0.0 or enemies.size() >= 180:
 		return
-	var tier := maxi(1, floori(elapsed / 45.0) + 1)
-	var pool := ["grunt", "runner"]
+	var tier := maxi(1, floori(elapsed / 50.0) + 1)
+	var build_levels := 0
+	for level: Variant in run_state.buff_levels.values():
+		build_levels += int(level)
+	var pool := ["grunt", "grunt", "runner", "runner"]
 	if tier >= 2:
-		pool.append_array(["ranged", "flyer"])
+		pool.append("flyer")
 	if tier >= 3:
 		pool.append_array(["armored", "buffer", "charger"])
-	if tier >= 5:
-		pool.append_array(["shielded", "healer", "splitter", "warder"])
-	var batch := mini(7, 1 + floori(tier / 2.0))
+	if tier >= 3 and build_levels >= 5:
+		pool.append("ranged")
+	if tier >= 6 and build_levels >= 14:
+		pool.append_array(["ranged", "ranged", "shielded", "healer", "splitter", "warder"])
+	elif tier >= 5:
+		pool.append_array(["shielded", "healer"])
+	var batch := mini(6, 1 + floori((tier - 1) / 3.0))
 	for i in batch:
 		var side := (kills + next_id + i * 3) % 4
 		var ratio := fposmod(sin(float(next_id + i * 19) * 12.9898) * 43758.5453, 1.0)
@@ -559,7 +566,7 @@ func _endless_spawn_tick(dt: float) -> void:
 		enemy.max_hp = enemy.hp
 		enemy.damage *= 1.0 + elapsed / 360.0
 		events.append({"kind": "route_spawn", "pos": point, "route_id": "edge_%d" % side, "flying": bool(enemy.get("flying", false))})
-	endless_spawn_timer += maxf(0.18, 1.25 - elapsed * 0.0024)
+	endless_spawn_timer += maxf(0.30, 1.55 - elapsed * 0.0018)
 func _spawn_tick(dt: float) -> void:
 	spawn_timer -= dt
 	if spawn_remaining > 0 and spawn_timer <= 0:
@@ -758,8 +765,9 @@ func traveler_skill_radius() -> float:
 func activate_traveler_skill(target: Vector2) -> bool:
 	if not v2_mode or state != "running" or heroes.is_empty() or heroes[0].hp <= 0.0 or traveler_skill_cooldown > 0.0:
 		return false
-	target.x = clampf(target.x, 170.0, 1140.0)
-	target.y = clampf(target.y, 225.0, 515.0)
+	var skill_bounds := ENDLESS_ARENA.grow(-36.0) if endless_mode else Rect2(170.0, 225.0, 970.0, 290.0)
+	target.x = clampf(target.x, skill_bounds.position.x, skill_bounds.end.x)
+	target.y = clampf(target.y, skill_bounds.position.y, skill_bounds.end.y)
 	var element := traveler_skill_element()
 	traveler_skill_cooldown_max = {"none": 9.0, "anemo": 16.0, "electro": 14.0, "pyro": 15.0, "hydro": 18.0, "geo": 13.0, "cryo": 17.0}.get(element, 15.0)
 	traveler_skill_cooldown_max *= maxf(0.35, 1.0 - skill_cooldown_reduction)
@@ -1235,6 +1243,72 @@ func _grant_endless_xp(amount: int) -> int:
 func endless_next_threshold() -> int:
 	var level := maxi(1, run_state.crystal_level)
 	return roundi(55.0 + 38.0 * (level - 1) + 70.0 * sqrt(float(level - 1)))
+
+func export_run_snapshot() -> Dictionary:
+	var hero_snapshots: Array[Dictionary] = []
+	var hero_keys := ["character_id", "hp", "max_hp", "armor", "damage", "rate", "range", "speed", "block", "can_hit_air", "element", "secondary_element", "base_damage", "base_hp", "base_rate", "cleave", "cleave_ratio", "splash", "slow", "projectile_count", "pierce", "chain_count", "blast_radius", "echo_ratio", "crit_chance"]
+	for hero: Dictionary in heroes:
+		var row: Dictionary = {}
+		for key: String in hero_keys:
+			if hero.has(key): row[key] = hero[key]
+		hero_snapshots.append(row)
+	return {
+		"squad": run_state.squad.duplicate(),
+		"traveler_element": run_state.traveler_element,
+		"traveler_secondary_element": run_state.traveler_secondary_element,
+		"buff_levels": run_state.buff_levels.duplicate(true),
+		"crystal_level": run_state.crystal_level,
+		"crystal_xp": run_state.crystal_xp,
+		"luck": run_state.luck,
+		"heroes": hero_snapshots,
+		"supports": supports.duplicate(true),
+		"execute_threshold": execute_threshold,
+		"death_burst_ratio": death_burst_ratio,
+		"elite_damage_bonus": elite_damage_bonus,
+		"kill_frenzy_step": kill_frenzy_step,
+		"reaction_damage_bonus": reaction_damage_bonus,
+		"reaction_radius_bonus": reaction_radius_bonus,
+		"skill_power_bonus": skill_power_bonus,
+		"skill_cooldown_reduction": skill_cooldown_reduction,
+		"skill_area_bonus": skill_area_bonus,
+		"skill_duration_bonus": skill_duration_bonus,
+		"crystal_shield": crystal_shield
+	}
+
+func import_run_snapshot(snapshot: Dictionary) -> bool:
+	if not endless_mode or snapshot.is_empty():
+		return false
+	run_state.traveler_element = str(snapshot.get("traveler_element", "none"))
+	run_state.traveler_secondary_element = str(snapshot.get("traveler_secondary_element", "none"))
+	run_state.buff_levels = snapshot.get("buff_levels", {}).duplicate(true)
+	run_state.crystal_level = maxi(1, int(snapshot.get("crystal_level", 1)))
+	run_state.crystal_xp = maxi(0, int(snapshot.get("crystal_xp", 0)))
+	run_state.pending_level_ups = 0
+	run_state.luck = clampf(float(snapshot.get("luck", 0.0)), 0.0, 0.75)
+	card_pool.levels = run_state.buff_levels
+	var saved_heroes: Array = snapshot.get("heroes", [])
+	for saved: Variant in saved_heroes:
+		if not saved is Dictionary: continue
+		for hero: Dictionary in heroes:
+			if str(hero.get("character_id", "")) != str(saved.get("character_id", "")): continue
+			for key: String in saved:
+				if key != "character_id": hero[key] = saved[key]
+			hero.target = hero.pos
+			hero.moving = false
+			break
+	supports = snapshot.get("supports", {}).duplicate(true)
+	execute_threshold = float(snapshot.get("execute_threshold", 0.0))
+	death_burst_ratio = float(snapshot.get("death_burst_ratio", 0.0))
+	elite_damage_bonus = float(snapshot.get("elite_damage_bonus", 0.0))
+	kill_frenzy_step = float(snapshot.get("kill_frenzy_step", 0.0))
+	reaction_damage_bonus = float(snapshot.get("reaction_damage_bonus", 0.0))
+	reaction_radius_bonus = float(snapshot.get("reaction_radius_bonus", 0.0))
+	skill_power_bonus = float(snapshot.get("skill_power_bonus", 0.0))
+	skill_cooldown_reduction = float(snapshot.get("skill_cooldown_reduction", 0.0))
+	skill_area_bonus = float(snapshot.get("skill_area_bonus", 0.0))
+	skill_duration_bonus = float(snapshot.get("skill_duration_bonus", 0.0))
+	crystal_shield = float(snapshot.get("crystal_shield", 0.0))
+	return true
 
 func element_name(element: String) -> String:
 	return {"none": "无", "anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, element)

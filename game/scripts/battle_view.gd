@@ -476,26 +476,36 @@ func _draw_terrain_features() -> void:
 				caption(center + Vector2(-39, 27), "战技可破坏", Color("#ffc181"), 10)
 
 func _draw_endless_stage() -> void:
-	draw_rect(Rect2(0, 0, 1280, 720), Color("#110c13"))
+	draw_texture_rect(hell_stage_three, Rect2(0, 0, 1280, 720), false, Color(0.28, 0.20, 0.25, 1.0))
+	draw_rect(Rect2(0, 0, 1280, 720), Color(0.035, 0.022, 0.045, 0.74))
 	var top_left := screen_to_world(Vector2.ZERO)
 	var bottom_right := screen_to_world(Vector2(1280, 720))
-	var cell := 96.0
+	var cell := 128.0
 	var first_x := floorf(top_left.x / cell) * cell
 	var first_y := floorf(top_left.y / cell) * cell
 	for x in range(int(first_x), int(bottom_right.x + cell), int(cell)):
 		for y in range(int(first_y), int(bottom_right.y + cell), int(cell)):
-			var world_rect := Rect2(Vector2(x, y), Vector2(cell - 2.0, cell - 2.0))
-			var checker := (floori(x / cell) + floori(y / cell)) % 2
-			draw_rect(Rect2(world_to_screen(world_rect.position), world_rect.size), Color("#29212c") if checker == 0 else Color("#251d28"))
-	var arena_screen := Rect2(world_to_screen(Sim.ENDLESS_ARENA.position), Sim.ENDLESS_ARENA.size)
-	draw_rect(arena_screen, Color("#b05261"), false, 5.0)
+			var world_rect := Rect2(Vector2(x + 0.5, y + 0.5), Vector2(cell - 1.0, cell - 1.0))
+			var checker := (floori(x / cell) + floori(y / cell)) % 3
+			var tile_color: Color = [Color(0.21, 0.17, 0.22, 0.76), Color(0.19, 0.145, 0.20, 0.76), Color(0.225, 0.175, 0.225, 0.76)][checker]
+			draw_rect(Rect2(world_to_screen(world_rect.position), world_rect.size), tile_color)
+			var corner := world_to_screen(world_rect.position + Vector2(16, 18))
+			draw_line(corner, corner + Vector2(20, 6), Color(0.72, 0.40, 0.44, 0.07), 2.0, true)
+			draw_line(corner + Vector2(20, 6), corner + Vector2(29, 22), Color(0.72, 0.40, 0.44, 0.05), 2.0, true)
+	var center := world_to_screen(Sim.ENDLESS_ARENA.get_center())
+	for radius in [245.0, 390.0, 545.0]:
+		draw_arc(center, radius, 0, TAU, 96, Color(0.72, 0.30, 0.38, 0.09), 2.0, true)
 	for i in 18:
 		var angle := float(i) * TAU / 18.0
 		var radius := 230.0 + float((i * 73) % 260)
 		var rune := world_to_screen(Sim.ENDLESS_ARENA.get_center() + Vector2.from_angle(angle) * radius)
-		draw_arc(rune, 12.0 + float(i % 3) * 5.0, angle, angle + PI * 1.35, 16, Color(0.74, 0.27, 0.35, 0.24), 2.0)
-	caption(Vector2(36, 126), "E N D L E S S   F I E L D   /   猩红荒原", Color("#c99593"), 12)
-
+		draw_arc(rune, 12.0 + float(i % 3) * 5.0, angle + clock * 0.05, angle + PI * 1.35 + clock * 0.05, 16, Color(0.88, 0.37, 0.43, 0.23), 2.0)
+		if i % 3 == 0:
+			draw_circle(rune, 3.0, Color(1.0, 0.65, 0.64, 0.20))
+	var arena_screen := Rect2(world_to_screen(Sim.ENDLESS_ARENA.position), Sim.ENDLESS_ARENA.size)
+	draw_rect(arena_screen, Color(0.86, 0.36, 0.43, 0.42), false, 3.0)
+	draw_rect(Rect2(0, 0, 1280, 720), Color(0.02, 0.01, 0.025, 0.18), false, 22.0)
+	caption(Vector2(36, 126), "E N D L E S S   F I E L D   /   猩红荒原", Color("#d6aaa6"), 12)
 func _draw_base_projected() -> void:
 	var point: Vector2 = world_to_screen(Vector2(100, 365))
 	draw_ellipse_shadow(point + Vector2(0, 15), 52, Color(0, 0, 0, 0.48))
@@ -515,30 +525,32 @@ func _draw_route_bed(route: Array) -> void:
 	for i in range(route.size() - 1):
 		var a := world_to_screen(route[i])
 		var b := world_to_screen(route[i + 1])
-		draw_line(a, b, Color(0.08, 0.045, 0.08, 0.82), 30.0, true)
-		draw_line(a, b, Color(0.46, 0.22, 0.27, 0.32), 2.0, true)
-		for fraction in [0.32, 0.68]:
-			var point: Vector2 = a.lerp(b, fraction)
+		# A narrow worn-stone seam hints navigation without drawing a black rail over the map.
+		draw_line(a, b, Color(0.19, 0.13, 0.17, 0.34), 12.0, true)
+		draw_line(a, b, Color(0.64, 0.39, 0.39, 0.14), 7.0, true)
+		var length := a.distance_to(b)
+		var steps := maxi(1, floori(length / 54.0))
+		for step in steps:
+			var t := (float(step) + 0.5) / float(steps)
+			var point := a.lerp(b, t)
 			var direction := (b - a).normalized()
-			var side := direction.rotated(PI * 0.5)
-			draw_polyline(PackedVector2Array([point - direction * 10 + side * 6, point, point - direction * 10 - side * 6]), Color(0.58, 0.33, 0.37, 0.40), 2.0, true)
+			draw_line(point - direction.rotated(PI * 0.5) * 4.0, point + direction.rotated(PI * 0.5) * 4.0, Color(0.83, 0.58, 0.54, 0.10), 1.0, true)
 
 func _draw_route_preview(route: Array, preview: Dictionary) -> void:
-	var color := Color("#f2d26d") if bool(preview.get("flying", false)) else Color("#ff697c")
-	var pulse := 0.58 + sin(clock * 8.0) * 0.18
-	var width := 7.0 if bool(preview.get("boss", false)) else 5.0
+	var color := Color("#f4d878") if bool(preview.get("flying", false)) else Color("#ff8b75")
+	var pulse := 0.68 + sin(clock * 7.0) * 0.16
+	var width := 6.0 if bool(preview.get("boss", false)) else 4.0
 	for i in range(route.size() - 1):
 		var a := world_to_screen(route[i])
 		var b := world_to_screen(route[i + 1])
-		draw_line(a, b, Color(color, 0.08 + pulse * 0.09), width + 13.0, true)
-		draw_line(a, b, Color(color, 0.15 + pulse * 0.10), width + 6.0, true)
-		draw_dashed_line(a, b, Color(color, pulse), width, 11.0, true)
+		draw_line(a, b, Color(color, 0.05 + pulse * 0.07), width + 10.0, true)
+		draw_dashed_line(a, b, Color(color, pulse * 0.84), width, 15.0, true)
 		var direction := (b - a).normalized()
 		var side := direction.rotated(PI * 0.5)
-		for marker in 4:
-			var phase := fposmod(clock * 0.82 + marker / 4.0 + i * 0.13, 1.0)
+		for marker in 3:
+			var phase := fposmod(clock * 0.72 + marker / 3.0 + i * 0.11, 1.0)
 			var point := a.lerp(b, phase)
-			var head := PackedVector2Array([point + direction * 10.0, point - direction * 13.0 + side * 9.0, point - direction * 7.0, point - direction * 13.0 - side * 9.0])
+			var head := PackedVector2Array([point + direction * 9.0, point - direction * 10.0 + side * 7.0, point - direction * 5.0, point - direction * 10.0 - side * 7.0])
 			draw_colored_polygon(head, Color(color, 0.82 + pulse * 0.16))
 			draw_circle(point - direction * 19.0, 3.5 + pulse * 1.5, Color(color, 0.34))
 			draw_line(point - direction * 15.0, point - direction * 32.0, Color(color, 0.24), 3.0, true)

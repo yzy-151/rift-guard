@@ -1,0 +1,16 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 591.86 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 5060 Ti
+
+V15 PASS: mode menu is visible
+V15 PASS: real pointer click opens campaign stage selection
+V15 PASS: stage one is enabled
+V15 PASS: real pointer click opens stage one squad selection
+V15 PASS: real pointer click enters campaign opening dialogue
+V15 PASS: opening dialogue presents two Helltaker-style replies
+V15 PASS: second reply permanently unlocks hidden character Bailu
+V15 PASS: hidden-character reply leads to its own result line
+V15 PASS: campaign starts after branched dialogue
+V15 PASS: branch fixture starts
+V15 PASS: first reply produces the luck result branch
+V15 PASS: real pointer click enters endless gameplay
+V15 QA COMPLETE: 12 checks, 0 failures
