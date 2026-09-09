@@ -70,6 +70,10 @@ func build(owner_hud, game_database, state) -> void:
 func open() -> void:
 	_refresh()
 	root.show()
+	for id: String in buttons:
+		if not buttons[id].disabled:
+			buttons[id].grab_focus()
+			break
 
 func close() -> void:
 	root.hide()

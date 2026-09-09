@@ -51,6 +51,12 @@ func _build_mode_card(rect: Rect2, id: String, number: String, name: String, sub
 
 func open() -> void:
 	root.show()
+	for id: String in buttons:
+		buttons[id].disabled = false
+	buttons["rift_watch"].grab_focus()
+
+func close() -> void:
+	root.hide()
 
 func is_open() -> bool:
 	return root != null and root.visible

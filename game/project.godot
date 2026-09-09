@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V13：全图移动 / 幸运与神话卡 / 双元素旅行者 / 动态路线箭头 / 独立水晶单位"
+config/description="V14：地图战术层 / 波次时间轴 / 敌人轮廓 / 队形指令 / 强化战斗反馈"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

@@ -27,7 +27,7 @@ func tick(dt: float) -> Array[Dictionary]:
 		var wave_at := float(wave.get("at", 0.0))
 		if not telegraph_emitted[i] and elapsed >= maxf(0.0, wave_at - 3.2):
 			telegraph_emitted[i] = true
-			events.append({"kind": "route_warning", "route_id": str(wave.get("route_id", "main")), "flying": str(wave.get("enemy_id", "")) == "flyer", "lead_time": maxf(0.25, wave_at - elapsed)})
+			events.append({"kind": "route_warning", "route_id": str(wave.get("route_id", "main")), "enemy_id": str(wave.get("enemy_id", "grunt")), "count": count, "flying": str(wave.get("enemy_id", "")) == "flyer", "lead_time": maxf(0.25, wave_at - elapsed)})
 		while wave_cursors[i] < count and elapsed >= float(wave.get("at", 0.0)) + wave_cursors[i] * interval:
 			events.append({
 				"kind": "spawn",
@@ -40,7 +40,7 @@ func tick(dt: float) -> Array[Dictionary]:
 	var boss_at := float(definition.get("boss_at_seconds", INF))
 	if not boss_telegraph_emitted and elapsed >= boss_at - 4.5:
 		boss_telegraph_emitted = true
-		events.append({"kind": "route_warning", "route_id": str(definition.get("boss_route_id", "main")), "flying": false, "lead_time": 4.5, "boss": true})
+		events.append({"kind": "route_warning", "route_id": str(definition.get("boss_route_id", "main")), "enemy_id": str(definition.get("boss_id", "boss_01")), "count": 1, "flying": false, "lead_time": 4.5, "boss": true})
 	if not boss_emitted and elapsed >= boss_at:
 		boss_emitted = true
 		events.append({

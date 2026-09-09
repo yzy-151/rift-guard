@@ -40,10 +40,17 @@ func simulate(stage_id: String, squad: Array[String], seed_value: int) -> Dictio
 	if stage_id != "stage_01":
 		sim.reset_stage(stage_id, squad, seed_value)
 	sim.start()
+	for feature: Dictionary in sim.terrain_features:
+		if feature.get("type", "") == "mechanism":
+			sim.heroes[0].pos = feature.area.get_center()
+			sim.heroes[0].target = sim.heroes[0].pos
+		elif feature.get("type", "") == "high_ground" and sim.heroes.size() > 1:
+			sim.heroes[1].pos = feature.area.get_center()
+			sim.heroes[1].target = sim.heroes[1].pos
 	var choices := 0
 	var leak_damage := 0
 	var leak_count := 0
-	for frame in 15000:
+	for frame in 22500:
 		if sim.state == "reward":
 			var best := 0
 			var score := -1
@@ -55,6 +62,15 @@ func simulate(stage_id: String, squad: Array[String], seed_value: int) -> Dictio
 			assert(sim.choose_reward(best))
 			choices += 1
 		elif sim.state == "running":
+			if sim.traveler_skill_cooldown <= 0.0 and not sim.enemies.is_empty():
+				var priority_target: Dictionary = sim.enemies[0]
+				for enemy: Dictionary in sim.enemies:
+					if str(enemy.get("kind", "")).begins_with("boss_") and enemy.hp > 0.0:
+						priority_target = enemy
+						break
+					if enemy.hp > 0.0 and enemy.pos.x < priority_target.pos.x:
+						priority_target = enemy
+				sim.activate_traveler_skill(priority_target.pos)
 			sim.tick(1.0 / 30.0)
 			for event: Dictionary in sim.drain_events():
 				if event.kind == "leak":
@@ -62,5 +78,9 @@ func simulate(stage_id: String, squad: Array[String], seed_value: int) -> Dictio
 					leak_count += 1
 		elif sim.state in ["won", "lost"]:
 			break
-	print("STAGE BALANCE RESULT: stage=%s state=%s base=%d choices=%d kills=%d elapsed=%.2f leaks=%d leak_damage=%d" % [stage_id, sim.state, sim.base_hp, choices, sim.kills, sim.elapsed, leak_count, leak_damage])
+	var living: Array[String] = []
+	for enemy: Dictionary in sim.enemies:
+		if enemy.hp > 0.0:
+			living.append("%s:%d" % [str(enemy.kind), ceili(float(enemy.hp))])
+	print("STAGE BALANCE RESULT: stage=%s state=%s base=%d choices=%d kills=%d elapsed=%.2f leaks=%d leak_damage=%d living=%s" % [stage_id, sim.state, sim.base_hp, choices, sim.kills, sim.elapsed, leak_count, leak_damage, str(living.slice(0, 12))])
 	return {"state": sim.state, "base_hp": sim.base_hp, "choices": choices, "kills": sim.kills}

@@ -65,6 +65,7 @@ func _ready() -> void:
 	hud.stage_action.connect(open_stage_select)
 	hud.skill_action.connect(toggle_skill_aiming)
 	hud.main_menu_action.connect(return_to_main_menu)
+	hud.formation_action.connect(set_formation_command)
 	sound = AudioStreamPlayer.new()
 	sound.stream = preload("res://assets/hit.ogg")
 	sound.volume_db = -18
@@ -97,7 +98,11 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v13-test" in OS.get_cmdline_user_args():
+	if "--v14-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v14_test")
+	elif "--v13-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v13_test")
@@ -201,11 +206,19 @@ func process_events() -> void:
 	for event in batch:
 		if event.kind == "regroup":
 			sound.stop()
+		if event.kind == "route_warning":
+			hud.announce_route_warning(event)
 		if event.kind == "boss_arrival":
 			hud.announce_boss(str(event.value))
 		if event.kind == "boss_phase":
 			hud.announce_boss_phase(str(event.name), int(event.value))
+		if event.kind in ["critical", "shield_break", "terrain_break"] and not muted and not test_mode and sound_timer <= 0.0:
+			sound.volume_db = -9.0
+			sound.pitch_scale = 0.72 if event.kind == "shield_break" else 0.84
+			sound.play()
+			sound_timer = 0.12
 		if event.kind == "hit" and not muted and not test_mode and sound_timer <= 0.0:
+			sound.volume_db = -18.0
 			sound.pitch_scale = 0.94 + float(sim.shots_fired % 3) * 0.06
 			sound.play()
 			sound_timer = 0.065
@@ -221,7 +234,8 @@ func open_mode_menu() -> void:
 	mode_select_panel.open()
 
 func choose_mode(mode_id: String) -> void:
-	hud.get_child(0).show()
+	mode_select_panel.close()
+	hud.get_child(0).hide()
 	if mode_id == "endless_survival":
 		choose_stage("stage_endless")
 	else:
@@ -301,6 +315,18 @@ func select_hero(id: int) -> void:
 	selected_id = id
 	refresh()
 
+func set_formation_command(mode: String) -> void:
+	if story.active or sim.state not in ["running", "between"]:
+		return
+	if mode == "squad":
+		selected_id = -2
+		sim.formation_mode = "squad"
+	else:
+		sim.set_formation_mode(mode)
+		selected_id = 0 if mode == "follow" and not sim.heroes.is_empty() else selected_id
+	process_events()
+	refresh()
+
 func _input(event: InputEvent) -> void:
 	if mode_select_panel != null and mode_select_panel.is_open():
 		return
@@ -361,6 +387,15 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		match event.keycode:
+			KEY_Z:
+				set_formation_command("squad")
+				get_viewport().set_input_as_handled()
+			KEY_X:
+				set_formation_command("follow")
+				get_viewport().set_input_as_handled()
+			KEY_C:
+				set_formation_command("hold")
+				get_viewport().set_input_as_handled()
 			KEY_SPACE, KEY_ESCAPE:
 				toggle_pause()
 				get_viewport().set_input_as_handled()
@@ -415,8 +450,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				if distance < closest:
 					closest = distance
 					selected_id = h.id
-		elif event.button_index == MOUSE_BUTTON_RIGHT and selected_id >= 0:
-			sim.command_move(selected_id, point)
+		elif event.button_index == MOUSE_BUTTON_RIGHT:
+			if selected_id == -2:
+				sim.command_squad(point)
+			else:
+				sim.command_move(selected_id, point)
 		refresh()
 
 func run_smoke_test() -> void:
@@ -527,6 +565,8 @@ func open_stage_select() -> void:
 	sound.stop()
 
 func choose_stage(stage_id: String) -> void:
+	mode_select_panel.close()
+	stage_select_panel.close()
 	var selected_mode := "endless_survival" if stage_id == "stage_endless" else "rift_watch"
 	var ids: Array = sim.database.modes.get(selected_mode, {}).get("stage_ids", [])
 	var index := ids.find(stage_id)
@@ -598,6 +638,10 @@ func run_v12_test() -> void:
 
 func run_v13_test() -> void:
 	var suite = preload("res://scripts/qa_v13.gd").new()
+	await suite.run(self)
+
+func run_v14_test() -> void:
+	var suite = preload("res://scripts/qa_v14.gd").new()
 	await suite.run(self)
 
 func run_m9_test() -> void:

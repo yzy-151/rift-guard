@@ -11,6 +11,7 @@ signal squad_action
 signal stage_action
 signal skill_action
 signal main_menu_action
+signal formation_action(mode: String)
 
 const WHITE = Color("#f3e9df")
 const MUTED = Color("#ae969f")
@@ -57,6 +58,9 @@ var boss_hp_bar: ProgressBar
 var boss_hp_label: Label
 var boss_alert: Label
 var boss_warning: AudioStreamPlayer
+var wave_timeline_panel: Panel
+var wave_timeline_labels: Array[Label] = []
+var formation_buttons: Dictionary = {}
 var pause_details: Panel
 var pause_menu_button: Button
 var pause_buff_labels: Array[Label] = []
@@ -145,6 +149,11 @@ func _ready() -> void:
 	boss_hp_label = label(boss_panel, Vector2(18, 34), Vector2(364, 20), "", 12, WHITE)
 	boss_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	boss_panel.hide()
+	wave_timeline_panel = panel(root, Rect2(475, 106, 400, 92), Color(0.055, 0.035, 0.065, 0.94), Color("#73556f"))
+	label(wave_timeline_panel, Vector2(14, 6), Vector2(370, 18), "敌 情 时 间 轴  /  NEXT WAVES", 10, Color("#d9afc9"))
+	for i in 3:
+		wave_timeline_labels.append(label(wave_timeline_panel, Vector2(14, 27 + i * 19), Vector2(370, 18), "", 10, WHITE))
+	wave_timeline_panel.hide()
 	boss_alert = label(root, Vector2(270, 248), Vector2(740, 96), "", 40, Color("#fff1ed"))
 	boss_alert.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	boss_alert.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -162,6 +171,13 @@ func _ready() -> void:
 	skill_button.add_child(skill_icon_back)
 	skill_icon = icon(skill_button, "res://assets/ui/icons/temporary/nieobie/skill.svg", Rect2(16, 14, 32, 32), WHITE)
 	skill_button.pressed.connect(func(): skill_action.emit())
+	var formation_specs := [["squad", "全队移动  Z"], ["follow", "跟随  X"], ["hold", "坚守  C"]]
+	for i in formation_specs.size():
+		var mode: String = str(formation_specs[i][0])
+		var formation_btn := button(root, Rect2(900 + i * 118, 502, 112, 30), str(formation_specs[i][1]), false)
+		formation_btn.add_theme_font_size_override("font_size", 10)
+		formation_btn.pressed.connect(func(): formation_action.emit(mode))
+		formation_buttons[mode] = formation_btn
 
 	for i in 3:
 		var hero_btn := button(root, Rect2(32 + i * 284, 616, 272, 88), "", true)
@@ -211,6 +227,7 @@ func _ready() -> void:
 		reduce_btn.text = "反馈：减弱" if reduced else "反馈：标准"
 		reduce_action.emit(reduced))
 	background_buttons = [stage_btn, squad_btn, archive_btn, pause_button, reset_btn, mute_btn, reduce_btn, skill_button]
+	background_buttons.append_array(formation_buttons.values())
 	background_buttons.append_array(hero_buttons)
 	overlay = ColorRect.new()
 	overlay.color = Color(0.025, 0.035, 0.05, 0.76)
@@ -355,13 +372,13 @@ func icon(parent: Node, path: String, rect: Rect2, color: Color = Color.WHITE) -
 	return item
 
 func refresh(sim, selected_id: int) -> void:
-	var next_signature: String = str([sim.state, sim.base_hp, sim.base_max_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming])
+	var next_signature: String = str([sim.state, sim.base_hp, sim.base_max_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming, sim.formation_mode])
 	for enemy: Dictionary in sim.enemies:
 		if str(enemy.get("kind", "")).begins_with("boss_"):
 			next_signature += str([ceili(float(enemy.hp)), ceili(float(enemy.get("shield", 0.0)))])
 	if sim.v2_mode:
 		var stage_clock := floori(sim.elapsed) if sim.endless_mode else floori(sim.stage_runtime.remaining_seconds())
-		next_signature += str([sim.run_state.traveler_element, sim.run_state.traveler_secondary_element, sim.run_state.luck, sim.run_state.pending_level_ups, stage_clock])
+		next_signature += str([sim.run_state.traveler_element, sim.run_state.traveler_secondary_element, sim.run_state.luck, sim.run_state.pending_level_ups, stage_clock, sim.upcoming_waves(3)])
 	for hero in sim.heroes:
 		next_signature += str([ceili(hero.hp), hero.moving, hero.blocked])
 	if next_signature == signature:
@@ -392,6 +409,10 @@ func refresh(sim, selected_id: int) -> void:
 	refresh_supports(sim)
 	refresh_buffs(sim)
 	refresh_boss(sim)
+	refresh_wave_timeline(sim)
+	refresh_formations(sim, selected_id)
+	if selected_id == -2:
+		status_label.text = "全队移动 · 右键指定队形中心"
 	if selected_id >= 0 and selected_id < sim.heroes.size():
 		var hero: Dictionary = sim.heroes[selected_id]
 		status_label.text = hero.name + (" · 已倒地，波末恢复" if hero.hp <= 0 else (" · 移动中，暂停攻击" if hero.moving else " · 自动攻击 / 右键走位"))
@@ -412,7 +433,7 @@ func refresh(sim, selected_id: int) -> void:
 		hero_name_labels[i].add_theme_color_override("font_color", hero_color)
 		hero_buttons[i].modulate = Color.WHITE if i == selected_id else Color("#91a0a8")
 		var status: String = "倒地 · 本波无法行动" if hero.hp <= 0 else ("移动中" if hero.moving else ("阻挡 %d/%d" % [hero.blocked, hero.block] if i == 0 else "就绪"))
-		var mechanics := "弹道%d · 穿透%d · 连锁%d" % [int(hero.get("projectile_count", 1)), int(hero.get("pierce", 0)), int(hero.get("chain_count", 0))]
+		var mechanics := "弹道%d · 穿透%d · 暴击%d%%" % [int(hero.get("projectile_count", 1)), int(hero.get("pierce", 0)), roundi(float(hero.get("crit_chance", 0.0)) * 100.0)]
 		hero_details[i].text = "%s元素 · ATK %.0f · %.1f/s · %s" % [sim.element_name(str(hero.get("element", "none"))), hero.damage, hero.rate, mechanics]
 		hero_statuses[i].text = "%d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
 	var was_visible: bool = overlay.visible
@@ -478,9 +499,44 @@ func refresh_boss(sim) -> void:
 	boss_hp_bar.value = hp
 	boss_hp_label.text = "%d / %d%s" % [ceili(hp), ceili(float(active.max_hp)), "   ◇ 护盾 %d" % ceili(shield) if shield > 0.0 else ""]
 
+func refresh_wave_timeline(sim) -> void:
+	var active_boss := boss_panel.visible
+	wave_timeline_panel.visible = sim.v2_mode and not sim.endless_mode and sim.state in ["running", "paused", "between"] and not active_boss
+	if not wave_timeline_panel.visible:
+		return
+	var upcoming: Array[Dictionary] = sim.upcoming_waves(3)
+	var route_names := {"upper": "上路", "main": "中路", "lower": "下路", "air": "空路", "zigzag": "折线", "flank": "侧路"}
+	for i in wave_timeline_labels.size():
+		if i >= upcoming.size():
+			wave_timeline_labels[i].text = "—  暂无后续敌情"
+			wave_timeline_labels[i].add_theme_color_override("font_color", MUTED)
+			continue
+		var item: Dictionary = upcoming[i]
+		var eta := ceili(float(item.get("eta", 0.0)))
+		var prefix := "BOSS" if bool(item.get("boss", false)) else ("%02d:%02d" % [eta / 60, eta % 60])
+		wave_timeline_labels[i].text = "%s   %s   %s ×%d" % [prefix, route_names.get(str(item.get("route_id", "main")), str(item.get("route_id", "main"))), str(item.get("enemy_name", "敌军")), int(item.get("count", 1))]
+		wave_timeline_labels[i].add_theme_color_override("font_color", Color("#ff8398") if bool(item.get("boss", false)) else WHITE)
+
+func refresh_formations(sim, selected_id: int) -> void:
+	for mode: String in formation_buttons:
+		var item: Button = formation_buttons[mode]
+		item.visible = sim.v2_mode and sim.state in ["running", "between", "paused"]
+		item.disabled = sim.state == "paused"
+		var active: bool = (mode == "squad" and selected_id == -2) or (mode != "squad" and sim.formation_mode == mode)
+		item.modulate = Color("#ffd3d7") if active else Color("#a38f98")
+
+func announce_route_warning(event: Dictionary) -> void:
+	if boss_warning != null and not muted:
+		boss_warning.stop()
+		boss_warning.pitch_scale = 0.82 if bool(event.get("boss", false)) else 1.18
+		boss_warning.volume_db = -8.0 if bool(event.get("boss", false)) else -15.0
+		boss_warning.play()
+
 func announce_boss(name: String) -> void:
 	if boss_warning != null and not muted:
 		boss_warning.stop()
+		boss_warning.pitch_scale = 0.82
+		boss_warning.volume_db = -8.0
 		boss_warning.play()
 	boss_alert.text = "W A R N I N G\n%s  降 临" % name
 	boss_alert.position = Vector2(270, 228)
@@ -505,6 +561,7 @@ func announce_boss_phase(name: String, phase: int) -> void:
 	if boss_warning != null and not muted:
 		boss_warning.stop()
 		boss_warning.pitch_scale = 1.08 if phase == 2 else 0.88
+		boss_warning.volume_db = -8.0
 		boss_warning.play()
 	boss_alert.text = "%s\n%s  狂 暴 阶 段" % ["P H A S E   II" if phase == 2 else "F I N A L   P H A S E", name]
 	boss_alert.position = Vector2(270, 228)

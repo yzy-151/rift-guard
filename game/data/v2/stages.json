@@ -9,6 +9,13 @@
     "enemy_damage_multiplier": 0.22,
     "enemy_speed_multiplier": 1.02,
     "enemy_leak_multiplier": 0.18,
+    "terrain": [
+      {"id": "watch_high", "type": "high_ground", "rect": [235, 175, 245, 105], "label": "瞭望高台", "attack_bonus": 0.18},
+      {"id": "watch_low", "type": "low_ground", "rect": [645, 405, 240, 105], "label": "沉降区", "speed_scale": 0.72},
+      {"id": "watch_block", "type": "blocked", "rect": [760, 255, 105, 72], "label": "断墙"},
+      {"id": "watch_device", "type": "mechanism", "rect": [505, 278, 76, 76], "label": "赤月机关", "power": 62, "radius": 185, "interval": 3.6},
+      {"id": "watch_shortcut", "type": "shortcut", "rect": [585, 330, 68, 82], "label": "裂隙封门", "hp": 460}
+    ],
     "starting_squad": [
       "traveler"
     ],
@@ -251,6 +258,13 @@
     "enemy_damage_multiplier": 0.12,
     "enemy_speed_multiplier": 0.96,
     "enemy_leak_multiplier": 0.1,
+    "terrain": [
+      {"id": "tide_high", "type": "high_ground", "rect": [300, 180, 220, 100], "label": "回廊高台", "attack_bonus": 0.18},
+      {"id": "tide_low", "type": "low_ground", "rect": [735, 430, 260, 100], "label": "赤潮洼地", "speed_scale": 0.72},
+      {"id": "tide_block", "type": "blocked", "rect": [825, 260, 125, 78], "label": "崩塌柱阵"},
+      {"id": "tide_device", "type": "mechanism", "rect": [540, 385, 78, 76], "label": "潮汐机关", "power": 78, "radius": 200, "interval": 3.2},
+      {"id": "tide_shortcut", "type": "shortcut", "rect": [655, 305, 72, 90], "label": "血锁闸门", "hp": 620}
+    ],
     "starting_squad": [
       "traveler",
       "hero_02"
@@ -494,10 +508,17 @@
     "boss_at_seconds": 318,
     "boss_id": "boss_02",
     "boss_route_id": "main",
-    "enemy_health_multiplier": 0.44,
+	"enemy_health_multiplier": 0.25,
     "enemy_damage_multiplier": 0.14,
-    "enemy_speed_multiplier": 0.9,
+	"enemy_speed_multiplier": 0.8,
     "enemy_leak_multiplier": 0.08,
+    "terrain": [
+      {"id": "nest_high", "type": "high_ground", "rect": [210, 170, 230, 105], "label": "黑曜祭台", "attack_bonus": 0.18},
+      {"id": "nest_low", "type": "low_ground", "rect": [690, 420, 275, 110], "label": "孵化泥沼", "speed_scale": 0.72},
+      {"id": "nest_block", "type": "blocked", "rect": [790, 245, 135, 82], "label": "母巢骨墙"},
+      {"id": "nest_device", "type": "mechanism", "rect": [470, 300, 82, 82], "label": "黑曜处刑台", "power": 280, "radius": 280, "interval": 1.6},
+      {"id": "nest_shortcut", "type": "shortcut", "rect": [570, 365, 76, 96], "label": "核心外壳", "hp": 840}
+    ],
     "lanes": {
       "upper": 235,
       "main": 355,

@@ -76,6 +76,8 @@ var kill_streak_timer: float = 0.0
 var reward_cooldown: float = 0.0
 var endless_mode: bool = false
 var endless_spawn_timer: float = 0.0
+var terrain_features: Array[Dictionary] = []
+var formation_mode: String = "hold"
 
 func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 	v2_mode = enable_v2
@@ -87,6 +89,8 @@ func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 func reset(seed_value: int = -1) -> void:
 	endless_mode = false
 	endless_spawn_timer = 0.0
+	terrain_features.clear()
+	formation_mode = "hold"
 	run_seed = seed_value if seed_value >= 0 else int(Time.get_ticks_usec() % 2147483647)
 	rewards = Rewards.new(run_seed)
 	team_xp = 0
@@ -161,6 +165,8 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	card_pool.levels = run_state.buff_levels
 	rewards = card_pool
 	stage_runtime = StageRuntime.new(stage_definition)
+	_load_terrain(stage_definition)
+	formation_mode = "follow" if endless_mode else "hold"
 	run_seed = seed_value if seed_value >= 0 else int(Time.get_ticks_usec() % 2147483647)
 	team_xp = 0
 	team_level = 1
@@ -223,7 +229,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 			"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
 			"color": colors[i], "tile": Vector2(i * 16, 112), "visual": "furina" if id == "hero_03" else ""
 		}
-		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.90, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0})
+		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.90, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0})
 		heroes.append(h)
 
 func _add_reinforcement(character_id: String) -> bool:
@@ -244,7 +250,7 @@ func _add_reinforcement(character_id: String) -> bool:
 		"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
 		"color": colors[i], "tile": Vector2(i * 16, 112), "visual": "furina" if character_id == "hero_03" else ""
 	}
-	hero.merge({"id": i, "max_hp": hero.hp, "target": hero.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": hero.damage, "base_hp": hero.hp, "base_rate": hero.rate, "cleave": false, "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0})
+	hero.merge({"id": i, "max_hp": hero.hp, "target": hero.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": hero.damage, "base_hp": hero.hp, "base_rate": hero.rate, "cleave": false, "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0})
 	heroes.append(hero)
 	events.append({"kind": "reinforcement", "pos": hero.pos, "value": character_id})
 	return true
@@ -275,7 +281,9 @@ func begin_wave() -> void:
 func choose_reward(index: int) -> bool:
 	if state != "reward" or index < 0 or index >= rewards.offered.size():
 		return false
-	var picked_name: String = str(rewards.offered[index].get("name", "强化"))
+	var picked: Dictionary = rewards.offered[index]
+	var picked_name: String = str(picked.get("name", "强化"))
+	var picked_rarity: String = str(picked.get("rarity", "common"))
 	if not rewards.take(index, self):
 		return false
 	if v2_mode:
@@ -284,11 +292,11 @@ func choose_reward(index: int) -> bool:
 		team_xp = run_state.crystal_xp
 		reward_cooldown = 14.0
 		state = "running"
-		events.append({"kind": "reward_taken", "pos": heroes[0].pos if not heroes.is_empty() else Vector2(420, 360), "value": picked_name})
+		events.append({"kind": "reward_taken", "pos": heroes[0].pos if not heroes.is_empty() else Vector2(420, 360), "value": picked_name, "rarity": picked_rarity})
 		return true
 	state = "between"
 	wave_timer = 4.0
-	events.append({"kind": "reward_taken", "pos": heroes[0].pos if not heroes.is_empty() else Vector2(420, 360), "value": picked_name})
+	events.append({"kind": "reward_taken", "pos": heroes[0].pos if not heroes.is_empty() else Vector2(420, 360), "value": picked_name, "rarity": picked_rarity})
 	return true
 
 func toggle_pause() -> void:
@@ -305,8 +313,128 @@ func command_move(hero_id: int, point: Vector2) -> void:
 	if hero.hp <= 0:
 		return
 	var area := ENDLESS_ARENA if endless_mode else (STAGE_EXIT_AREA if state == "stage_exit" else MOVE_AREA)
-	hero.target = Vector2(clampf(point.x, area.position.x, area.end.x), clampf(point.y, area.position.y, area.end.y))
+	hero.target = _resolve_walkable_target(Vector2(clampf(point.x, area.position.x, area.end.x), clampf(point.y, area.position.y, area.end.y)))
 	events.append({"kind": "move", "pos": hero.target, "hero_id": hero_id})
+
+func command_squad(point: Vector2) -> void:
+	if state not in ["running", "between"] or heroes.is_empty():
+		return
+	formation_mode = "squad"
+	var offsets := [Vector2(0, 0), Vector2(-72, -58), Vector2(-72, 58)]
+	for i in heroes.size():
+		command_move(i, point + offsets[i])
+	events.append({"kind": "formation", "pos": point, "value": "squad"})
+
+func set_formation_mode(next_mode: String) -> bool:
+	if next_mode not in ["follow", "hold"]:
+		return false
+	formation_mode = next_mode
+	for hero: Dictionary in heroes:
+		hero.target = hero.pos
+		hero.moving = false
+	events.append({"kind": "formation", "pos": heroes[0].pos if not heroes.is_empty() else Vector2.ZERO, "value": next_mode})
+	return true
+
+func _load_terrain(stage_definition: Dictionary) -> void:
+	terrain_features.clear()
+	for value: Variant in stage_definition.get("terrain", []):
+		if not value is Dictionary:
+			continue
+		var feature: Dictionary = value.duplicate(true)
+		var raw_rect: Array = feature.get("rect", [])
+		if raw_rect.size() < 4:
+			continue
+		feature.area = Rect2(float(raw_rect[0]), float(raw_rect[1]), float(raw_rect[2]), float(raw_rect[3]))
+		feature.timer = minf(1.0, float(feature.get("interval", 4.0)))
+		feature.hp = float(feature.get("hp", 0.0))
+		feature.max_hp = float(feature.hp)
+		terrain_features.append(feature)
+
+func terrain_feature_at(point: Vector2, kind: String = "") -> Dictionary:
+	for feature: Dictionary in terrain_features:
+		if not kind.is_empty() and str(feature.get("type", "")) != kind:
+			continue
+		if feature.area.has_point(point):
+			return feature
+	return {}
+
+func terrain_attack_scale(point: Vector2) -> float:
+	var feature := terrain_feature_at(point, "high_ground")
+	return 1.0 + float(feature.get("attack_bonus", 0.18)) if not feature.is_empty() else 1.0
+
+func terrain_movement_scale(point: Vector2) -> float:
+	var feature := terrain_feature_at(point, "low_ground")
+	return float(feature.get("speed_scale", 0.72)) if not feature.is_empty() else 1.0
+
+func _resolve_walkable_target(point: Vector2) -> Vector2:
+	for feature: Dictionary in terrain_features:
+		var blocks := str(feature.get("type", "")) == "blocked" or (str(feature.get("type", "")) == "shortcut" and float(feature.get("hp", 0.0)) > 0.0)
+		if not blocks or not feature.area.has_point(point):
+			continue
+		var area: Rect2 = feature.area
+		var candidates := [Vector2(area.position.x - 8.0, point.y), Vector2(area.end.x + 8.0, point.y), Vector2(point.x, area.position.y - 8.0), Vector2(point.x, area.end.y + 8.0)]
+		candidates.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.distance_squared_to(point) < b.distance_squared_to(point))
+		return candidates[0]
+	return point
+
+func _terrain_blocks(point: Vector2) -> bool:
+	return not _terrain_blocker_at(point).is_empty()
+
+func _terrain_blocker_at(point: Vector2) -> Dictionary:
+	for feature: Dictionary in terrain_features:
+		var blocks := str(feature.get("type", "")) == "blocked" or (str(feature.get("type", "")) == "shortcut" and float(feature.get("hp", 0.0)) > 0.0)
+		if blocks and feature.area.grow(7.0).has_point(point):
+			return feature
+	return {}
+
+func _move_hero_with_terrain(hero: Dictionary, dt: float) -> void:
+	var distance := float(hero.speed) * terrain_movement_scale(hero.pos) * dt
+	var proposed: Vector2 = hero.pos.move_toward(hero.target, distance)
+	var blocker := _terrain_blocker_at(proposed)
+	if blocker.is_empty():
+		hero.pos = proposed
+		return
+	var obstacle: Rect2 = blocker.area.grow(10.0)
+	var detour_y := obstacle.position.y - 6.0 if hero.pos.y <= obstacle.get_center().y else obstacle.end.y + 6.0
+	var tangent := Vector2(hero.pos.x, detour_y)
+	var slide: Vector2 = hero.pos.move_toward(tangent, distance)
+	if not _terrain_blocks(slide):
+		hero.pos = slide
+
+func damage_terrain_shortcuts(center: Vector2, radius: float, damage: float) -> int:
+	var broken := 0
+	for feature: Dictionary in terrain_features:
+		if str(feature.get("type", "")) != "shortcut" or float(feature.get("hp", 0.0)) <= 0.0:
+			continue
+		if feature.area.get_center().distance_to(center) > radius:
+			continue
+		feature.hp = maxf(0.0, float(feature.hp) - damage)
+		events.append({"kind": "terrain_hit", "pos": feature.area.get_center(), "value": ceili(damage)})
+		if feature.hp <= 0.0:
+			broken += 1
+			events.append({"kind": "terrain_break", "pos": feature.area.get_center(), "value": str(feature.get("label", "捷径"))})
+	return broken
+
+func _terrain_tick(dt: float) -> void:
+	if endless_mode:
+		return
+	for feature: Dictionary in terrain_features:
+		if str(feature.get("type", "")) != "mechanism":
+			continue
+		feature.timer = maxf(0.0, float(feature.get("timer", 0.0)) - dt)
+		if feature.timer > 0.0 or enemies.is_empty():
+			continue
+		var active: bool = heroes.any(func(hero: Dictionary) -> bool: return hero.hp > 0.0 and feature.area.grow(95.0).has_point(hero.pos))
+		if not active:
+			continue
+		var hit_count := 0
+		for enemy: Dictionary in enemies.duplicate():
+			if enemy.hp > 0.0 and enemy.pos.distance_to(feature.area.get_center()) <= float(feature.get("radius", 185.0)):
+				apply_hit(enemy, float(feature.get("power", 60.0)), "pyro")
+				hit_count += 1
+		feature.timer = float(feature.get("interval", 3.5))
+		if hit_count > 0:
+			events.append({"kind": "mechanism_pulse", "pos": feature.area.get_center(), "value": hit_count})
 
 func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 	var enemy: Dictionary = Catalog.ENEMIES[kind].duplicate(true)
@@ -322,7 +450,7 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 		shield *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
 	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 28, "charger": 20, "healer": 30, "splitter": 34, "warder": 32, "boss_01": 180, "boss_02": 240}
 	var first_special: float = float(enemy.get("boss_pulse", enemy.get("heal_interval", enemy.get("ward_interval", 0.0))))
-	enemy.merge({"id": next_id, "kind": kind, "pos": point, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10))})
+	enemy.merge({"id": next_id, "kind": kind, "pos": point, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "summons_done": 0, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10))})
 	enemies.append(enemy)
 	return enemy
 
@@ -346,7 +474,7 @@ func tick(dt: float) -> void:
 		return
 	elapsed += dt
 	traveler_skill_cooldown = maxf(0.0, traveler_skill_cooldown - dt)
-	if endless_mode and not heroes.is_empty():
+	if formation_mode == "follow" and not heroes.is_empty():
 		for i in range(1, heroes.size()):
 			var follow_angle := PI + (i - 1) * 1.15
 			heroes[i].target = heroes[0].pos + Vector2.from_angle(follow_angle) * (82.0 + i * 12.0)
@@ -355,7 +483,7 @@ func tick(dt: float) -> void:
 		h.flash = maxf(0.0, h.flash - dt)
 		h.moving = h.hp > 0 and h.pos.distance_to(h.target) > 0.5
 		if h.moving:
-			h.pos = h.pos.move_toward(h.target, h.speed * dt)
+			_move_hero_with_terrain(h, dt)
 		h.attack_timer = maxf(0.0, h.attack_timer - dt)
 		h.heal_timer = maxf(0.0, h.heal_timer - dt)
 	if state == "stage_exit":
@@ -372,6 +500,7 @@ func tick(dt: float) -> void:
 	else:
 		_spawn_tick(dt)
 	_skill_effect_tick(dt)
+	_terrain_tick(dt)
 	_enemy_tick(dt)
 	var traveler_down := endless_mode and (heroes.is_empty() or float(heroes[0].hp) <= 0.0)
 	if base_hp <= 0 or traveler_down:
@@ -495,6 +624,8 @@ func _enemy_tick(dt: float) -> void:
 		if e.aura_timer <= 0:
 			e.aura = ""
 		var speed_scale: float = (0.0 if e.frozen_timer > 0.0 else (0.7 if e.slow_timer > 0 else 1.0)) * (1.35 if e.haste_timer > 0 else 1.0)
+		if not bool(e.get("flying", false)):
+			speed_scale *= terrain_movement_scale(e.pos)
 		if e.get("kind", "") == "charger" and e.pos.x > 650.0 and e.frozen_timer <= 0.0:
 			speed_scale *= float(e.get("charge_multiplier", 2.0))
 		var route: Array = e.get("route_points", [])
@@ -559,11 +690,12 @@ func _enemy_tick(dt: float) -> void:
 			for h: Dictionary in heroes:
 				if h.hp > 0:
 					damage_hero(h.id, e.damage * 0.42)
-			if int(e.get("summon_count", 0)) > 0:
+			if int(e.get("summon_count", 0)) > 0 and int(e.get("summons_done", 0)) < int(e.get("summon_limit", 4)):
 				for summon in int(e.summon_count):
 					var minion := spawn_enemy(e.pos + Vector2(45.0 + summon * 22.0, (summon - 1) * 48.0), "runner")
 					minion.hp *= 0.72
 					minion.max_hp = minion.hp
+				e.summons_done = int(e.get("summons_done", 0)) + 1
 				events.append({"kind": "boss_summon", "pos": e.pos, "value": int(e.summon_count)})
 			e.special_timer = float(e.get("boss_pulse", 7.0))
 			events.append({"kind": "boss_pulse", "pos": e.pos, "value": ceili(e.damage * 0.42)})
@@ -676,7 +808,9 @@ func activate_traveler_skill(target: Vector2) -> bool:
 				if enemy.hp > 0.0 and enemy.pos.distance_to(target) <= 145.0:
 					apply_hit(enemy, 125.0 * power, "")
 					enemy.pos.x += 45.0
+					events.append({"kind": "knockback", "pos": enemy.pos, "value": 45})
 			events.append({"kind": "skill_none", "pos": target, "value": traveler_skill_name()})
+	damage_terrain_shortcuts(target, traveler_skill_radius() * area, 240.0 * power)
 	var secondary := normalize_element(str(heroes[0].get("secondary_element", "")))
 	if not secondary.is_empty():
 		var secondary_radius := traveler_skill_radius() * (1.0 + skill_area_bonus)
@@ -703,6 +837,7 @@ func _skill_effect_tick(dt: float) -> void:
 				if effect.kind == "anemo_tornado" and enemy.pos.distance_to(effect.pos) <= 135.0 * effect_area:
 					enemy.pos.x += 34.0
 					enemy.pos.y = move_toward(float(enemy.pos.y), float(effect.pos.y), 24.0)
+					events.append({"kind": "knockback", "pos": enemy.pos, "value": 34})
 					apply_hit(enemy, 42.0 * effect_power, "anemo")
 				elif effect.kind == "hydro_field" and enemy.pos.distance_to(effect.pos) <= 250.0 * effect_area:
 					apply_hit(enemy, 28.0 * effect_power, "hydro")
@@ -767,12 +902,17 @@ func _hero_tick() -> void:
 		h.shots += 1
 		shots_fired += 1
 		events.append({"kind": "shot", "pos": h.pos, "hero_id": h.id})
-		var damage: float = h.damage
+		var damage: float = h.damage * terrain_attack_scale(h.pos)
+		var critical: bool = randf() < clampf(float(h.get("crit_chance", 0.0)), 0.0, 0.85)
+		if critical:
+			damage *= 2.0
 		var attack_count: int = maxi(1, int(h.get("projectile_count", 1)))
 		available.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.pos.x < b.pos.x)
 		if h.block > 0:
 			for strike in attack_count:
 				var victim: Dictionary = available[strike % available.size()]
+				if critical:
+					events.append({"kind": "critical", "pos": victim.pos, "value": ceili(damage)})
 				apply_hit(victim, damage if strike == 0 else damage * 0.72, h.element)
 				var secondary := normalize_element(str(h.get("secondary_element", "")))
 				if not secondary.is_empty() and victim.hp > 0.0:
@@ -784,13 +924,14 @@ func _hero_tick() -> void:
 		else:
 			for shot_index in attack_count:
 				var shot_target: Dictionary = available[shot_index % available.size()]
-				projectiles.append({"pos": h.pos + Vector2(14, -12 + (shot_index - (attack_count - 1) * 0.5) * 6.0), "target_id": shot_target.id, "damage": damage if shot_index == 0 else damage * 0.78, "element": h.element, "secondary_element": h.get("secondary_element", ""), "source_id": h.id, "splash": h.splash, "slow": h.slow, "pierce": int(h.get("pierce", 0)), "chain_count": int(h.get("chain_count", 0)), "blast_radius": float(h.get("blast_radius", 0.0)), "echo_ratio": float(h.get("echo_ratio", 0.0))})
+				projectiles.append({"pos": h.pos + Vector2(14, -12 + (shot_index - (attack_count - 1) * 0.5) * 6.0), "target_id": shot_target.id, "damage": damage if shot_index == 0 else damage * 0.78, "element": h.element, "secondary_element": h.get("secondary_element", ""), "source_id": h.id, "splash": h.splash, "slow": h.slow, "pierce": int(h.get("pierce", 0)), "chain_count": int(h.get("chain_count", 0)), "blast_radius": float(h.get("blast_radius", 0.0)), "echo_ratio": float(h.get("echo_ratio", 0.0)), "critical": critical})
 		if attack_count > 1:
 			events.append({"kind": "multishot", "pos": h.pos, "value": attack_count})
 
 func attack_range_screen_radii(hero: Dictionary) -> Vector2:
 	var depth: float = StageProjection.depth_scale(hero.pos)
-	var radius_x: float = minf(210.0, 35.0 + float(hero.range) * 0.56 * depth)
+	var terrain_range_scale := 1.22 if not terrain_feature_at(hero.pos, "high_ground").is_empty() else 1.0
+	var radius_x: float = minf(248.0, 35.0 + float(hero.range) * 0.56 * depth * terrain_range_scale)
 	return Vector2(radius_x, radius_x * 0.30)
 
 func is_in_attack_range(hero: Dictionary, point: Vector2) -> bool:
@@ -817,6 +958,8 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 		enemy.shield = float(enemy.shield) - absorbed
 		raw_damage -= absorbed
 		events.append({"kind": "shield_hit", "pos": enemy.pos, "value": ceili(absorbed)})
+		if float(enemy.shield) <= 0.0:
+			events.append({"kind": "shield_break", "pos": enemy.pos, "value": 0})
 		if raw_damage <= 0.0:
 			enemy.flash = 0.08
 			return 0.0
@@ -839,6 +982,7 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 			match reaction:
 				"overloaded":
 					enemy.pos.x += 75.0
+					events.append({"kind": "knockback", "pos": enemy.pos, "value": 75})
 					splash_damage(enemy, raw_damage * 0.65 * (1.0 + reaction_damage_bonus), 92.0 + reaction_radius_bonus)
 				"swirl":
 					_spread_swirl(enemy, aura_element, raw_damage * 0.48 * (1.0 + reaction_damage_bonus), 110.0 + reaction_radius_bonus)
@@ -957,7 +1101,9 @@ func _projectile_tick(dt: float) -> void:
 		if shot.pos.distance_to(impact) <= PROJECTILE_SPEED * dt:
 			if not source_hero.is_empty() and not is_in_attack_range(source_hero, target.pos):
 				continue
-			apply_hit(target, shot.damage, shot.element)
+			var dealt: float = apply_hit(target, shot.damage, shot.element)
+			if bool(shot.get("critical", false)):
+				events.append({"kind": "critical", "pos": target.pos, "value": ceili(dealt)})
 			var secondary := normalize_element(str(shot.get("secondary_element", "")))
 			if not secondary.is_empty() and target.hp > 0.0:
 				apply_hit(target, float(shot.damage) * 0.85, secondary)
@@ -1088,7 +1234,7 @@ func _grant_endless_xp(amount: int) -> int:
 
 func endless_next_threshold() -> int:
 	var level := maxi(1, run_state.crystal_level)
-	return roundi(55.0 * level + 25.0 * pow(float(level), 1.32))
+	return roundi(55.0 + 38.0 * (level - 1) + 70.0 * sqrt(float(level - 1)))
 
 func element_name(element: String) -> String:
 	return {"none": "无", "anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, element)
@@ -1121,6 +1267,29 @@ func stage_routes() -> Dictionary:
 		return result
 	for route_id: String in stage_runtime.definition.get("routes", {}):
 		result[route_id] = stage_route(route_id)
+	return result
+
+func upcoming_waves(limit: int = 3) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	if not v2_mode or endless_mode or stage_runtime == null:
+		return result
+	var waves: Array = stage_runtime.definition.get("waves", [])
+	for i in waves.size():
+		var wave: Dictionary = waves[i]
+		var emitted: int = stage_runtime.wave_cursors[i]
+		var count: int = int(wave.get("count", 0))
+		if emitted >= count:
+			continue
+		var next_at := float(wave.get("at", 0.0)) + emitted * float(wave.get("interval", 1.0))
+		var enemy_id := str(wave.get("enemy_id", "grunt"))
+		result.append({"at": next_at, "eta": maxf(0.0, next_at - stage_runtime.elapsed), "enemy_id": enemy_id, "enemy_name": str(Catalog.ENEMIES.get(enemy_id, {}).get("name", enemy_id)), "route_id": str(wave.get("route_id", "main")), "count": count - emitted, "boss": false})
+	if not stage_runtime.boss_emitted:
+		var boss_id := str(stage_runtime.definition.get("boss_id", "boss_01"))
+		var boss_at := float(stage_runtime.definition.get("boss_at_seconds", INF))
+		result.append({"at": boss_at, "eta": maxf(0.0, boss_at - stage_runtime.elapsed), "enemy_id": boss_id, "enemy_name": str(Catalog.ENEMIES.get(boss_id, {}).get("name", boss_id)), "route_id": str(stage_runtime.definition.get("boss_route_id", "main")), "count": 1, "boss": true})
+	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return float(a.at) < float(b.at))
+	if result.size() > limit:
+		result.resize(limit)
 	return result
 
 func apply_v2_card_effect(card: Dictionary) -> void:
@@ -1175,6 +1344,8 @@ func apply_v2_card_effect(card: Dictionary) -> void:
 			for hero in targets: hero.rate += hero.base_rate * value
 		"range_flat", "squad_range_flat":
 			for hero in targets: hero.range += value
+		"squad_crit_flat":
+			for hero in targets: hero.crit_chance = minf(0.85, float(hero.get("crit_chance", 0.0)) + value)
 		"armor_flat", "squad_armor_flat":
 			for hero in targets: hero.armor += value
 		"move_speed_flat":

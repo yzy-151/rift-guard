@@ -124,7 +124,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 			"route_warning":
 				var route_id := str(event.get("route_id", "main"))
 				var total := maxf(0.8, float(event.get("lead_time", 3.2)))
-				route_previews[route_id] = {"life": total, "total": total, "flying": bool(event.get("flying", false)), "boss": bool(event.get("boss", false))}
+				route_previews[route_id] = {"life": total, "total": total, "flying": bool(event.get("flying", false)), "boss": bool(event.get("boss", false)), "enemy_id": str(event.get("enemy_id", "grunt")), "count": int(event.get("count", 1))}
 				var route: Array = sim.stage_route(route_id)
 				if not route.is_empty():
 					spawn_portals[route_id] = {"pos": route[0], "life": total + 0.9, "total": total + 0.9}
@@ -136,10 +136,10 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				var hero: Dictionary = sim.heroes[event.hero_id]
 				if effects.size() < 260:
 					effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25, -20), "life": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0})
-			"hit", "death", "move", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "crystal_guard", "enemy_heal", "enemy_guard", "split", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break":
+			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break":
 				if effects.size() >= 320 and event.kind in ["hit", "death", "move", "muzzle"]:
 					continue
-				effects.append({"kind": event.kind, "pos": event.pos, "life": 0.6, "value": event.get("value", 0)})
+				effects.append({"kind": event.kind, "pos": event.pos, "life": 0.6, "value": event.get("value", 0), "rarity": event.get("rarity", "")})
 				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "skill_pyro", "skill_electro", "geo_break", "kill_streak"]:
 					shake_trauma = minf(1.0, shake_trauma + 0.42)
 				elif event.kind in ["hit", "slash", "chain"]:
@@ -394,6 +394,7 @@ func _draw_stage() -> void:
 			var rect := Rect2(40 + col * 60, 140 + row * 40, 60, 40)
 			var tile_color := Color("#39313b") if (row + col) % 2 == 0 else Color("#342d37")
 			draw_colored_polygon(Stage.polygon(rect.grow(-1)), tile_color)
+	_draw_terrain_features()
 	draw_colored_polygon(Stage.polygon(Sim.MOVE_AREA), Color(0.67, 0.28, 0.32, 0.10))
 	var border: PackedVector2Array = Stage.polygon(Sim.MOVE_AREA)
 	border.append(border[0])
@@ -418,7 +419,61 @@ func _draw_stage() -> void:
 		draw_circle(screen + Vector2(0, -46), 5, Color("#e8967c"))
 		if not reduced_effects:
 			draw_circle(screen + Vector2(0, -46), 12 + sin(clock * 2) * 1.5, Color(0.9, 0.4, 0.3, 0.1))
-	caption(world_to_screen(Vector2(205, 525)), "自由部署区", Color("#c79398"), 12)
+	caption(world_to_screen(Vector2(205, 525)), "全域机动区", Color("#c79398"), 12)
+
+func _draw_terrain_features() -> void:
+	for feature: Dictionary in sim.terrain_features:
+		var area: Rect2 = feature.get("area", Rect2())
+		if area.size == Vector2.ZERO:
+			continue
+		var kind := str(feature.get("type", ""))
+		var polygon := Stage.polygon(area)
+		var center := world_to_screen(area.get_center())
+		if kind == "high_ground":
+			var lowered := PackedVector2Array()
+			for point in polygon:
+				lowered.append(point + Vector2(0, 10))
+			draw_colored_polygon(lowered, Color("#17131d"))
+			draw_colored_polygon(polygon, Color(0.30, 0.25, 0.34, 0.96))
+			draw_polyline(PackedVector2Array([polygon[0], polygon[1], polygon[2], polygon[3], polygon[0]]), Color("#c2a0ca"), 2.0, true)
+			for i in 3:
+				var mark := center + Vector2(-34 + i * 34, 2)
+				draw_polyline(PackedVector2Array([mark + Vector2(-7, 5), mark + Vector2(0, -3), mark + Vector2(7, 5)]), Color(0.84, 0.70, 0.88, 0.72), 2.0, true)
+			caption(center + Vector2(-34, -18), "高台 · 攻击/射程强化", Color("#e6c9e9"), 10)
+		elif kind == "low_ground":
+			draw_colored_polygon(polygon, Color(0.12, 0.16, 0.22, 0.84))
+			draw_polyline(PackedVector2Array([polygon[0], polygon[1], polygon[2], polygon[3], polygon[0]]), Color("#56829a"), 2.0, true)
+			for i in 4:
+				draw_line(polygon[0].lerp(polygon[3], float(i + 1) / 5.0), polygon[1].lerp(polygon[2], float(i + 1) / 5.0), Color(0.33, 0.57, 0.68, 0.22), 2.0, true)
+			caption(center + Vector2(-28, -8), "洼地 · 减速", Color("#88bfd4"), 10)
+		elif kind == "blocked":
+			draw_colored_polygon(polygon, Color(0.22, 0.07, 0.10, 0.92))
+			draw_polyline(PackedVector2Array([polygon[0], polygon[2], polygon[1], polygon[3], polygon[0]]), Color("#c34d60"), 3.0, true)
+			caption(center + Vector2(-26, -7), "不可通行", Color("#ff8795"), 10)
+		elif kind == "mechanism":
+			var active: bool = sim.heroes.any(func(hero: Dictionary) -> bool: return hero.hp > 0.0 and area.grow(95.0).has_point(hero.pos))
+			var glow := Color("#ffbd62") if active else Color("#9c727a")
+			draw_colored_polygon(polygon, Color(glow, 0.12 if active else 0.07))
+			draw_arc(center, 24.0 + sin(clock * 4.0) * 3.0, clock, clock + PI * 1.65, 6, Color(glow, 0.82), 3.0, true)
+			draw_arc(center, 12.0, -clock * 1.5, TAU - clock * 1.5, 6, Color(glow, 0.90), 2.0, true)
+			if active:
+				draw_arc(center, float(feature.get("radius", 180.0)) * 0.38, 0, TAU, 48, Color(glow, 0.10), 2.0, true)
+			caption(center + Vector2(-28, 37), "火力机关" if active else "靠近启动", glow, 10)
+		elif kind == "shortcut":
+			var broken := bool(feature.get("broken", false))
+			if broken:
+				draw_colored_polygon(polygon, Color(0.25, 0.72, 0.52, 0.08))
+				draw_dashed_line(polygon[0], polygon[1], Color("#66d49d"), 2.0, 7.0, true)
+				caption(center + Vector2(-33, -6), "捷径已开启", Color("#83e1b2"), 10)
+			else:
+				draw_colored_polygon(polygon, Color(0.25, 0.13, 0.10, 0.92))
+				for i in 4:
+					var x := lerpf(polygon[0].x, polygon[1].x, float(i + 1) / 5.0)
+					draw_line(Vector2(x, polygon[0].y), Vector2(x, polygon[3].y), Color("#df8c5d"), 4.0, true)
+				var hp_ratio := clampf(float(feature.get("hp", 0.0)) / maxf(1.0, float(feature.get("max_hp", 1.0))), 0.0, 1.0)
+				draw_rect(Rect2(center + Vector2(-31, -28), Vector2(62, 4)), Color("#291d20"))
+				draw_rect(Rect2(center + Vector2(-31, -28), Vector2(62 * hp_ratio, 4)), Color("#f2aa65"))
+				caption(center + Vector2(-39, 27), "战技可破坏", Color("#ffc181"), 10)
 
 func _draw_endless_stage() -> void:
 	draw_rect(Rect2(0, 0, 1280, 720), Color("#110c13"))
@@ -488,7 +543,9 @@ func _draw_route_preview(route: Array, preview: Dictionary) -> void:
 			draw_circle(point - direction * 19.0, 3.5 + pulse * 1.5, Color(color, 0.34))
 			draw_line(point - direction * 15.0, point - direction * 32.0, Color(color, 0.24), 3.0, true)
 	var first := world_to_screen(route[0])
-	caption(first + Vector2(-72, -58), "BOSS 来袭" if bool(preview.get("boss", false)) else ("空中单位" if bool(preview.get("flying", false)) else "敌袭预告"), color, 13)
+	var enemy_name: String = str({"grunt": "裂隙兽", "runner": "疾行兽", "armored": "重甲兽", "flyer": "空袭兽", "ranged": "射手", "buffer": "增幅者", "shielded": "盾卫", "charger": "冲锋兽", "healer": "愈疗者", "splitter": "分裂体", "warder": "结界师", "boss_01": "裂隙统领", "boss_02": "深渊母巢"}.get(str(preview.get("enemy_id", "grunt")), "敌军"))
+	var warning := "BOSS · %s" % enemy_name if bool(preview.get("boss", false)) else "%s ×%d" % [enemy_name, int(preview.get("count", 1))]
+	caption(first + Vector2(-72, -58), warning, color, 13)
 
 func _draw_spawn_portals() -> void:
 	for route_id: String in spawn_portals:
@@ -595,6 +652,41 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	var bob: float = sin(clock * (8.0 if not flying else 5.0) + enemy.id) * (2.0 if not flying else 7.0) - (22.0 if flying else 0.0)
 	var tint := Color("#fff5e5") if enemy.flash > 0 and not reduced_effects else Color(enemy.color)
 	var side: float = enemy.size
+	var body: Vector2 = enemy.pos + Vector2(0, -18 + bob)
+	# Distinct moving silhouettes remain readable even after replacement art is supplied.
+	match str(enemy.kind):
+		"runner":
+			for trail in 3:
+				draw_line(body + Vector2(12 + trail * 7, -8 + trail * 8), body + Vector2(37 + trail * 8, -8 + trail * 8), Color(0.95, 0.72, 0.34, 0.42 - trail * 0.10), 3.0, true)
+		"flyer":
+			var flap := 8.0 + sin(clock * 10.0 + enemy.id) * 6.0
+			draw_colored_polygon(PackedVector2Array([body + Vector2(-8, -7), body + Vector2(-42, -flap), body + Vector2(-28, 11), body]), Color(0.32, 0.78, 0.82, 0.78))
+			draw_colored_polygon(PackedVector2Array([body + Vector2(8, -7), body + Vector2(42, -flap), body + Vector2(28, 11), body]), Color(0.32, 0.78, 0.82, 0.78))
+		"ranged":
+			draw_arc(body + Vector2(-9, 0), 30.0, -1.15, 1.15, 16, Color("#ffad82"), 4.0, true)
+			draw_line(body + Vector2(-20, -27), body + Vector2(-20, 27), Color("#ffe0b8"), 2.0, true)
+		"buffer":
+			for rune in 3:
+				var angle := clock * 2.2 + rune * TAU / 3.0
+				var rune_pos: Vector2 = body + Vector2.from_angle(angle) * 34.0
+				draw_colored_polygon(PackedVector2Array([rune_pos + Vector2(0, -6), rune_pos + Vector2(5, 3), rune_pos + Vector2(-5, 3)]), Color("#e18df0"))
+		"shielded":
+			var shield := PackedVector2Array([body + Vector2(-38, -28), body + Vector2(-13, -35), body + Vector2(-9, 22), body + Vector2(-28, 36), body + Vector2(-43, 17)])
+			draw_colored_polygon(shield, Color("#385b78"))
+			draw_polyline(PackedVector2Array([shield[0], shield[1], shield[2], shield[3], shield[4], shield[0]]), Color("#91d1ef"), 3.0, true)
+		"charger":
+			for trail in 4:
+				draw_line(body + Vector2(20 + trail * 5, -18 + trail * 11), body + Vector2(64 + trail * 8, -18 + trail * 11), Color(1.0, 0.38, 0.24, 0.46 - trail * 0.08), 4.0, true)
+			draw_colored_polygon(PackedVector2Array([body + Vector2(-14, -24), body + Vector2(-38, -45), body + Vector2(-29, -12)]), Color("#ff895f"))
+		"healer":
+			draw_line(body + Vector2(-29, 0), body + Vector2(29, 0), Color("#8cf0b1"), 7.0, true)
+			draw_line(body + Vector2(0, -29), body + Vector2(0, 29), Color("#8cf0b1"), 7.0, true)
+		"splitter":
+			draw_circle(body + Vector2(-24, 9), 15.0 + sin(clock * 5.0) * 2.0, Color(0.77, 0.30, 0.58, 0.70))
+			draw_circle(body + Vector2(24, -4), 13.0 - sin(clock * 5.0) * 2.0, Color(0.90, 0.45, 0.67, 0.70))
+		"warder":
+			for ring in 2:
+				draw_arc(body, 31.0 + ring * 8.0 + sin(clock * 3.0) * 2.0, clock * (1.0 if ring == 0 else -1.0), TAU + clock * (1.0 if ring == 0 else -1.0), 6, Color(0.55, 0.67, 1.0, 0.52), 2.5, true)
 	draw_texture_rect_region(atlas, Rect2(enemy.pos + Vector2(-side / 2, -side + 12 + bob), Vector2(side, side)), Rect2(0, 144, 16, 16), tint)
 	var ratio: float = clampf(float(enemy.hp) / float(enemy.max_hp), 0, 1)
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44, 4)), Color("#302b32"))
@@ -697,14 +789,25 @@ func _draw_effect(effect: Dictionary) -> void:
 			for ring in 3:
 				draw_arc(effect.pos + Vector2(0, -18), 22.0 + ring * 15.0 + t * 58.0, 0, TAU, 36, Color(streak_color, fade * (0.8 - ring * 0.18)), 4.0 - ring, true)
 	elif effect.kind == "hit":
-		caption(effect.pos + Vector2(-8, -25 - t * 30), str(effect.value), Color(1, 0.84, 0.58, fade), 16)
+		var impact_size := 18 if int(effect.value) >= 200 else 16
+		caption(effect.pos + Vector2(-8, -25 - t * 30), str(effect.value), Color(1, 0.84, 0.58, fade), impact_size)
 		if not reduced_effects:
-			for i in 5:
-				var direction := Vector2.from_angle(i * TAU / 5)
+			for i in 7:
+				var direction := Vector2.from_angle(i * TAU / 7)
 				draw_line(effect.pos + direction * (5 + t * 18), effect.pos + direction * (10 + t * 22), Color(1, 0.75, 0.4, fade), 2)
+	elif effect.kind == "critical":
+		caption(effect.pos + Vector2(-45, -72 - t * 36), "CRITICAL  %d" % int(effect.value), Color(1.0, 0.46, 0.25, fade), 22)
+		for ray in 10:
+			var direction := Vector2.from_angle(ray * TAU / 10.0)
+			draw_line(effect.pos + direction * 8.0, effect.pos + direction * (34.0 + t * 48.0), Color(1.0, 0.73, 0.36, fade), 3.0, true)
 	elif effect.kind == "shield_hit":
 		caption(effect.pos + Vector2(-18, -65 - t * 24), "护盾 -%d" % int(effect.value), Color(0.48, 0.82, 1.0, fade), 14)
 		draw_arc(effect.pos + Vector2(0, -18), 20 + t * 42, -2.7, 0.35, 24, Color(0.48, 0.82, 1.0, fade), 3.0, true)
+	elif effect.kind == "shield_break":
+		caption(effect.pos + Vector2(-38, -78 - t * 28), "BREAK", Color(0.72, 0.94, 1.0, fade), 20)
+		for shard in 9:
+			var direction := Vector2.from_angle(-2.8 + shard * 0.38)
+			draw_line(effect.pos + direction * 19.0, effect.pos + direction * (42.0 + t * 48.0), Color(0.52, 0.84, 1.0, fade), 3.0, true)
 	elif effect.kind in ["crystal_guard", "enemy_guard", "enemy_heal", "split"]:
 		var helpful: bool = effect.kind in ["crystal_guard", "enemy_heal"]
 		var status_color := Color(0.50, 0.95, 0.70, fade) if helpful else Color(0.55, 0.68, 1.0, fade)
@@ -719,7 +822,12 @@ func _draw_effect(effect: Dictionary) -> void:
 		draw_line(effect.pos + Vector2(0, -22), effect.pos + Vector2(-120, -8), Color(1.0, 0.42, 0.30, fade), 3.0, true)
 		draw_circle(effect.pos + Vector2(-120.0 * t, -20.0 + t * 12.0), 4.0, Color(1.0, 0.8, 0.55, fade))
 	elif effect.kind == "reward_taken":
-		caption(effect.pos + Vector2(-70, -92 - t * 28), "强化装载 · " + str(effect.value), Color(1.0, 0.86, 0.54, fade), 18)
+		var mythic := str(effect.get("rarity", "")) == "mythic"
+		var reward_color := Color(1.0, 0.38, 0.68, fade) if mythic else Color(1.0, 0.86, 0.54, fade)
+		caption(effect.pos + Vector2(-100 if mythic else -70, -104 - t * 28), ("神话降临 · " if mythic else "强化装载 · ") + str(effect.value), reward_color, 24 if mythic else 18)
+		if mythic:
+			for ring in 4:
+				draw_arc(effect.pos + Vector2(0, -20), 26.0 + ring * 18.0 + t * 56.0, clock + ring, clock + ring + PI * 1.4, 36, Color(reward_color, fade * (0.9 - ring * 0.16)), 4.0 - ring * 0.5, true)
 	elif effect.kind == "element_attuned":
 		var attuned_color: Color = Color(element_color(str(effect.value)), fade)
 		for ring in 3:
@@ -740,6 +848,12 @@ func _draw_effect(effect: Dictionary) -> void:
 		for shard in 7:
 			var direction := Vector2.from_angle(-2.8 + shard * 0.45)
 			draw_line(effect.pos + direction * 8.0, effect.pos + direction * (22.0 + t * 45.0), geo_color, 3.0, true)
+	elif effect.kind in ["mechanism_pulse", "terrain_hit", "terrain_break", "formation", "knockback"]:
+		var terrain_color := Color(1.0, 0.69, 0.30, fade) if effect.kind != "formation" else Color(0.46, 0.95, 0.77, fade)
+		for ring in 3:
+			draw_arc(effect.pos, 14.0 + ring * 15.0 + t * 52.0, 0, TAU, 36, Color(terrain_color, fade * (0.75 - ring * 0.16)), 3.0, true)
+		if effect.kind == "terrain_break": caption(effect.pos + Vector2(-42, -62), "捷径开启", terrain_color, 17)
+		elif effect.kind == "formation": caption(effect.pos + Vector2(-42, -62), "全队移动", terrain_color, 17)
 	elif effect.kind in ["death", "down"]:
 		if not reduced_effects:
 			draw_arc(effect.pos, 10 + t * 27, 0, TAU, 24, Color(0.8, 0.4, 0.42, fade * 0.6), 1.5)

@@ -18,7 +18,7 @@ const ENEMIES = {
 	"splitter": {"name": "孳生母体", "hp": 240.0, "armor": 26.0, "speed": 32.0, "damage": 20.0, "rate": 0.82, "leak": 22, "color": "#d77aa9", "size": 72.0, "split_count": 2},
 	"warder": {"name": "黑曜司祭", "hp": 205.0, "armor": 32.0, "speed": 30.0, "damage": 15.0, "rate": 0.70, "leak": 19, "color": "#8ba4e8", "size": 62.0, "ward_radius": 205.0, "ward_interval": 6.5},
 	"boss_01": {"name": "裂隙统领", "hp": 3600.0, "armor": 125.0, "speed": 25.0, "damage": 58.0, "rate": 0.8, "leak": 100, "color": "#d05b78", "size": 102.0, "shield": 700.0, "boss_pulse": 7.0},
-	"boss_02": {"name": "黑曜母巢", "hp": 4800.0, "armor": 145.0, "speed": 21.0, "damage": 66.0, "rate": 0.72, "leak": 100, "color": "#9a4f92", "size": 116.0, "shield": 980.0, "boss_pulse": 6.2, "summon_count": 3}
+	"boss_02": {"name": "黑曜母巢", "hp": 4800.0, "armor": 145.0, "speed": 21.0, "damage": 66.0, "rate": 0.72, "leak": 100, "color": "#9a4f92", "size": 116.0, "shield": 980.0, "boss_pulse": 6.2, "summon_count": 3, "summon_limit": 6}
 }
 # Fixed encounters make changes in positioning directly comparable.
 const WAVES = [
