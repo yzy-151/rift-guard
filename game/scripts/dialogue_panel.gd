@@ -1,5 +1,6 @@
 extends CanvasLayer
 signal finished
+signal choice_committed(choice: Dictionary)
 const Backdrop = preload("res://scripts/dialogue_backdrop.gd")
 const PORTRAITS = {
 	"saria": preload("res://assets/portraits/saria.png"),
@@ -22,6 +23,7 @@ var advance_button: Button
 var auto_button: Button
 var history_button: Button
 var controls: Array[Button] = []
+var choice_buttons: Array[Button] = []
 var letters: float = 0.0
 var auto_mode: bool = false
 var auto_timer: float = 0.0
@@ -86,6 +88,13 @@ func build(ui, story) -> void:
 	hud.bind(body, "dialog_body")
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	progress = hud.label(root, Vector2(153, 649), Vector2(245, 25), "", 12, Color("#b9a2a9"))
+	for i in 2:
+		var choice_button := action(Rect2(280, 350 + i * 52, 720, 44), "", choose_option.bind(i))
+		choice_button.add_theme_font_size_override("font_size", 15)
+		choice_button.hide()
+		choice_button.disabled = true
+		choice_button.focus_mode = Control.FOCUS_NONE
+		choice_buttons.append(choice_button)
 	advance_button = action(Rect2(965, 645, 172, 32), "继续  [Enter]", advance)
 	auto_button = action(Rect2(800, 645, 150, 32), "自动：关", func():
 		auto_mode = not auto_mode
@@ -170,6 +179,10 @@ func display() -> void:
 	for item in controls:
 		item.disabled = false
 		item.focus_mode = Control.FOCUS_ALL
+	for item in choice_buttons:
+		item.hide()
+		item.disabled = true
+		item.focus_mode = Control.FOCUS_NONE
 	history_panel.hide()
 	root.modulate = Color(1, 1, 1, 0)
 	root.show()
@@ -217,7 +230,8 @@ func show_line() -> void:
 	letters = 0.0
 	line_ended = false
 	auto_timer = 0.0
-	progress.text = "战场已暂停   ·   %02d / %02d" % [director.index + 1, director.lines.size()]
+	_configure_choices(line)
+	progress.text = ("请选择回应   ·   1 / 2" if director.has_choices() else "战场已暂停   ·   %02d / %02d" % [director.index + 1, director.lines.size()])
 	_animate_line_entrance(str(line.get("highlight", "main")))
 	if cue_sound != null:
 		cue_sound.pitch_scale = 0.98 + float(director.index % 3) * 0.035
@@ -265,10 +279,54 @@ func _process(dt: float) -> void:
 	if not line_ended and body.visible_characters >= body.text.length():
 		line_ended = true
 		end_sound.play()
+		_reveal_choices()
 	if body.visible_characters >= body.text.length() and auto_mode:
 		auto_timer += dt
 		if auto_timer > 2.0:
 			advance()
+
+func _configure_choices(line: Dictionary) -> void:
+	var options: Array = line.get("choices", [])
+	for i in choice_buttons.size():
+		var item: Button = choice_buttons[i]
+		item.hide()
+		item.disabled = true
+		item.focus_mode = Control.FOCUS_NONE
+		if i < options.size():
+			item.text = "%d.  %s" % [i + 1, str(options[i].get("text", ""))]
+	advance_button.disabled = not options.is_empty()
+	auto_button.disabled = not options.is_empty()
+
+func _reveal_choices() -> void:
+	if not director.has_choices() or history_panel.visible:
+		return
+	var options: Array = director.current().get("choices", [])
+	for i in mini(choice_buttons.size(), options.size()):
+		choice_buttons[i].show()
+		choice_buttons[i].disabled = false
+		choice_buttons[i].focus_mode = Control.FOCUS_ALL
+	if not options.is_empty():
+		choice_buttons[0].grab_focus()
+
+func choose_option(choice_index: int) -> void:
+	if not line_ended or history_panel.visible:
+		return
+	var options: Array = director.current().get("choices", [])
+	if choice_index < 0 or choice_index >= options.size():
+		return
+	var chosen: Dictionary = options[choice_index].duplicate(true)
+	if director.choose(choice_index):
+		choice_committed.emit(chosen)
+		show_line()
+
+func activate_choice_at(point: Vector2) -> bool:
+	if not root.visible or history_panel.visible:
+		return false
+	for item in choice_buttons:
+		if item.visible and not item.disabled and item.get_global_rect().has_point(point):
+			choose_option(choice_buttons.find(item))
+			return true
+	return false
 
 func advance() -> void:
 	if not director.active or history_panel.visible:
@@ -279,6 +337,10 @@ func advance() -> void:
 		if not line_ended:
 			line_ended = true
 			end_sound.play()
+		_reveal_choices()
+		return
+	if director.has_choices():
+		_reveal_choices()
 		return
 	if director.advance():
 		body.visible_characters = 0
@@ -315,11 +377,19 @@ func toggle_history() -> void:
 		for item in controls:
 			item.disabled = false
 			item.focus_mode = Control.FOCUS_ALL
-		advance_button.grab_focus()
+		_configure_choices(director.current())
+		if director.has_choices() and line_ended:
+			_reveal_choices()
+		else:
+			advance_button.grab_focus()
 
 func handle_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_H:
+		if event.keycode == KEY_1 and choice_buttons[0].visible:
+			choose_option(0)
+		elif event.keycode == KEY_2 and choice_buttons[1].visible:
+			choose_option(1)
+		elif event.keycode == KEY_H:
 			toggle_history()
 		elif event.keycode == KEY_ESCAPE:
 			if history_panel.visible:

@@ -67,6 +67,16 @@ func build(owner_hud, game_database, state) -> void:
 	owner_hud.label(frame, Vector2(38, 540), Vector2(1040, 22), "F4 打开关卡选择 · ESC 返回战场", 11, MUTED)
 	root.hide()
 
+func activate_at(point: Vector2) -> bool:
+	if not is_open():
+		return false
+	for id: String in buttons:
+		var item: Button = buttons[id]
+		if not item.disabled and item.visible and item.get_global_rect().has_point(point):
+			select(id)
+			return true
+	return false
+
 func open() -> void:
 	_refresh()
 	root.show()

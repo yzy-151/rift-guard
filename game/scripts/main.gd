@@ -94,11 +94,16 @@ func _ready() -> void:
 	mode_select_panel.build(hud)
 	mode_select_panel.chosen.connect(choose_mode)
 	dialogue.finished.connect(end_dialogue)
+	dialogue.choice_committed.connect(apply_dialogue_choice)
 	refresh()
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v14-test" in OS.get_cmdline_user_args():
+	if "--v15-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v15_test")
+	elif "--v14-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v14_test")
@@ -328,6 +333,19 @@ func set_formation_command(mode: String) -> void:
 	refresh()
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var handled := false
+		if mode_select_panel != null and mode_select_panel.is_open():
+			handled = mode_select_panel.activate_at(event.position)
+		elif stage_select_panel != null and stage_select_panel.is_open():
+			handled = stage_select_panel.activate_at(event.position)
+		elif squad_panel != null and squad_panel.is_open():
+			handled = squad_panel.activate_at(event.position)
+		elif story.active:
+			handled = dialogue.activate_choice_at(event.position)
+		if handled:
+			get_viewport().set_input_as_handled()
+			return
 	if mode_select_panel != null and mode_select_panel.is_open():
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F2 and not story.active:
@@ -476,6 +494,16 @@ func begin_dialogue(key: String, resume_action: String = "") -> bool:
 	hud.get_child(0).hide()
 	dialogue.display()
 	return true
+
+func apply_dialogue_choice(choice: Dictionary) -> void:
+	var unlock_id := str(choice.get("unlock_character", ""))
+	if not unlock_id.is_empty() and sim.database.characters.has(unlock_id):
+		compendium.unlock_character(unlock_id)
+	var effect: Dictionary = choice.get("effect", {})
+	match str(effect.get("type", "")):
+		"luck":
+			sim.run_state.luck = clampf(sim.run_state.luck + float(effect.get("value", 0.0)), 0.0, 0.75)
+	hud.signature = ""
 
 func end_dialogue() -> void:
 	if previewing:
@@ -705,4 +733,8 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v15_test() -> void:
+	var suite = preload("res://scripts/qa_v15.gd").new()
 	await suite.run(self)

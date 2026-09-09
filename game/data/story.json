@@ -2,7 +2,34 @@
   "mode1_opening": [
     ["saria", "旅行者", "裂隙已经越过警戒线。元素尚未回应我，但剑还在手里。"],
     ["jessica", "通讯员", "水晶会收集敌人的残响。每次升级都能改写攻击方式，弹道与支援也会随构筑增长。"],
-    ["saria-soft", "旅行者", "那就从这里开始。守住五分半，把右侧涌来的东西全部送回去。"]
+    {
+      "portrait": "saria-soft",
+      "speaker": "旅行者",
+      "text": "那就从这里开始。不过在开战前，我还要决定先回应哪一道信号。",
+      "choices": [
+        {
+          "text": "稳住水晶，先建立可靠的防线。",
+          "result": "lucky_start",
+          "effect": {
+            "type": "luck",
+            "value": 0.08
+          },
+          "response_portrait": "jessica",
+          "response_speaker": "通讯员",
+          "response": "判断稳健。本关幸运值提升，高品质强化会更容易回应。",
+          "response_highlight": "partner"
+        },
+        {
+          "text": "追查裂隙边缘微弱的求救信号。",
+          "result": "hidden_character",
+          "unlock_character": "hero_08",
+          "response_portrait": "muelsyse",
+          "response_speaker": "白露",
+          "response": "总算接通啦！隐藏同行者白露已永久解锁，下一次编队就能带上我。",
+          "response_highlight": "partner"
+        }
+      ]
+    }
   ],
   "mode1_won": [
     ["saria-soft", "旅行者", "第一道裂隙关闭了。水晶记录下了这次构筑，下一关会有新的同伴回应。"]

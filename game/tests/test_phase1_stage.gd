@@ -7,7 +7,7 @@ func _initialize() -> void:
 	sim.start()
 	var choices := 0
 	var element_chosen := false
-	for frame in 12000:
+	for frame in 22500:
 		if sim.state == "reward":
 			var choice := 0
 			if not element_chosen:
@@ -18,7 +18,9 @@ func _initialize() -> void:
 						break
 			assert(sim.choose_reward(choice))
 			choices += 1
-		elif sim.state == "running":
+		elif sim.state in ["running", "between"]:
+			if sim.traveler_skill_cooldown <= 0.0 and not sim.enemies.is_empty():
+				sim.activate_traveler_skill(sim.enemies[0].pos)
 			var traveler: Dictionary = sim.heroes[0]
 			traveler.max_hp = 999999.0
 			traveler.hp = 999999.0

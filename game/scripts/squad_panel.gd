@@ -116,6 +116,19 @@ func confirm() -> void:
 	root.hide()
 	confirmed.emit(selected.duplicate())
 
+func activate_at(point: Vector2) -> bool:
+	if not is_open():
+		return false
+	if not confirm_button.disabled and confirm_button.get_global_rect().has_point(point):
+		confirm()
+		return true
+	for id: String in buttons:
+		var item: Button = buttons[id]
+		if not item.disabled and item.visible and item.get_global_rect().has_point(point):
+			toggle(id)
+			return true
+	return false
+
 func is_open() -> bool:
 	return root != null and root.visible
 

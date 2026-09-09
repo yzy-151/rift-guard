@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V14：地图战术层 / 波次时间轴 / 敌人轮廓 / 队形指令 / 强化战斗反馈"
+config/description="V15：可靠菜单输入 / 双选项分支对话 / 隐藏角色解锁 / 发布前真实点击验收"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

@@ -38,6 +38,12 @@ func record_result(stage_id: String, kills: int, base_hp: int, best_streak: int)
 	}
 	save_progress()
 
+func unlock_character(character_id: String) -> bool:
+	var changed := _mark(unlocked_characters, character_id)
+	if changed:
+		save_progress()
+	return changed
+
 func _mark(collection: Dictionary, id: String) -> bool:
 	if id.is_empty() or collection.has(id):
 		return false

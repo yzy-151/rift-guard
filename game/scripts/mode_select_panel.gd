@@ -49,6 +49,16 @@ func _build_mode_card(rect: Rect2, id: String, number: String, name: String, sub
 	copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	hud.label(button, Vector2(30, 334), Vector2(460, 28), action + "   →", 14, WHITE)
 
+func activate_at(point: Vector2) -> bool:
+	if not is_open():
+		return false
+	for id: String in buttons:
+		var item: Button = buttons[id]
+		if not item.disabled and item.visible and item.get_global_rect().has_point(point):
+			item.pressed.emit()
+			return true
+	return false
+
 func open() -> void:
 	root.show()
 	for id: String in buttons:
