@@ -64,6 +64,7 @@ func _ready() -> void:
 	hud.squad_action.connect(open_current_squad)
 	hud.stage_action.connect(open_stage_select)
 	hud.skill_action.connect(toggle_skill_aiming)
+	hud.main_menu_action.connect(return_to_main_menu)
 	sound = AudioStreamPlayer.new()
 	sound.stream = preload("res://assets/hit.ogg")
 	sound.volume_db = -18
@@ -96,7 +97,11 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v11-test" in OS.get_cmdline_user_args():
+	if "--v13-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v13_test")
+	elif "--v11-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v11_test")
@@ -222,6 +227,17 @@ func choose_mode(mode_id: String) -> void:
 	else:
 		sim.run_state.mode_id = "rift_watch"
 		stage_select_panel.open()
+
+func return_to_main_menu() -> void:
+	story.reset()
+	pending_stage_id = ""
+	pending_stage_number = 0
+	stage_result_recorded = false
+	sim.state = "ready"
+	battle.reset_transients()
+	set_skill_aiming(false)
+	hud.signature = ""
+	open_mode_menu()
 
 func primary() -> void:
 	if story.active:
@@ -578,6 +594,10 @@ func run_v11_test() -> void:
 
 func run_v12_test() -> void:
 	var suite = preload("res://scripts/qa_v12.gd").new()
+	await suite.run(self)
+
+func run_v13_test() -> void:
+	var suite = preload("res://scripts/qa_v13.gd").new()
 	await suite.run(self)
 
 func run_m9_test() -> void:

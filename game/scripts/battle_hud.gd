@@ -10,6 +10,7 @@ signal compendium_action
 signal squad_action
 signal stage_action
 signal skill_action
+signal main_menu_action
 
 const WHITE = Color("#f3e9df")
 const MUTED = Color("#ae969f")
@@ -57,6 +58,7 @@ var boss_hp_label: Label
 var boss_alert: Label
 var boss_warning: AudioStreamPlayer
 var pause_details: Panel
+var pause_menu_button: Button
 var pause_buff_labels: Array[Label] = []
 var pause_hero_labels: Array[Label] = []
 var hero_hp_bars: Array[ProgressBar] = []
@@ -261,6 +263,8 @@ func _ready() -> void:
 	label(pause_details, Vector2(560, 100), Vector2(500, 22), "当 前 角 色 数 值", 13, Color("#ffb0b7"))
 	for i in 3:
 		pause_hero_labels.append(label(pause_details, Vector2(560, 135 + i * 105), Vector2(510, 94), "", 12, WHITE))
+	pause_menu_button = button(pause_details, Rect2(34, 468, 490, 48), "返回主菜单", false)
+	pause_menu_button.pressed.connect(func(): main_menu_action.emit())
 	var pause_continue := button(pause_details, Rect2(560, 468, 510, 48), "继续防守   [空格]", true)
 	pause_continue.pressed.connect(func(): primary_action.emit())
 	pause_details.hide()
@@ -351,13 +355,13 @@ func icon(parent: Node, path: String, rect: Rect2, color: Color = Color.WHITE) -
 	return item
 
 func refresh(sim, selected_id: int) -> void:
-	var next_signature: String = str([sim.state, sim.base_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming])
+	var next_signature: String = str([sim.state, sim.base_hp, sim.base_max_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming])
 	for enemy: Dictionary in sim.enemies:
 		if str(enemy.get("kind", "")).begins_with("boss_"):
 			next_signature += str([ceili(float(enemy.hp)), ceili(float(enemy.get("shield", 0.0)))])
 	if sim.v2_mode:
 		var stage_clock := floori(sim.elapsed) if sim.endless_mode else floori(sim.stage_runtime.remaining_seconds())
-		next_signature += str([sim.run_state.traveler_element, sim.run_state.pending_level_ups, stage_clock])
+		next_signature += str([sim.run_state.traveler_element, sim.run_state.traveler_secondary_element, sim.run_state.luck, sim.run_state.pending_level_ups, stage_clock])
 	for hero in sim.heroes:
 		next_signature += str([ceili(hero.hp), hero.moving, hero.blocked])
 	if next_signature == signature:
@@ -367,17 +371,17 @@ func refresh(sim, selected_id: int) -> void:
 		var traveler: Dictionary = sim.heroes[0] if not sim.heroes.is_empty() else {}
 		base_label.text = "◆ 旅行者 HP %d/%d   ◇ 护盾 %03d" % [ceili(float(traveler.get("hp", 0.0))), ceili(float(traveler.get("max_hp", 0.0))), ceili(sim.crystal_shield)]
 	else:
-		base_label.text = "◆ 基地 %03d/100   ◇ 结晶盾 %03d" % [sim.base_hp, ceili(sim.crystal_shield)] if sim.v2_mode else "◆  基地完整度    %03d / 100" % sim.base_hp
+		base_label.text = "◆ 基地 %03d/%03d   ◇ 结晶盾 %03d" % [sim.base_hp, sim.base_max_hp, ceili(sim.crystal_shield)] if sim.v2_mode else "◆  基地完整度    %03d / %03d" % [sim.base_hp, sim.base_max_hp]
 	if sim.v2_mode:
 		var next_xp: int = sim.endless_next_threshold() if sim.endless_mode else sim.crystal.next_threshold(sim.run_state)
 		var xp_text: String = "MAX" if next_xp < 0 else "%d / %d" % [sim.run_state.crystal_xp, next_xp]
 		var seconds: int = floori(sim.elapsed) if sim.endless_mode else ceili(sim.stage_runtime.remaining_seconds())
 		var queued := "  ·  待选 ×%d" % sim.run_state.pending_level_ups if sim.run_state.pending_level_ups > 0 and sim.state != "reward" else ""
 		if sim.endless_mode:
-			progression_label.text = "旅行者 Lv.%d  ·  EXP %s%s  ·  %s元素  ·  生存 %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.element_name(sim.run_state.traveler_element), seconds / 60, seconds % 60]
+			progression_label.text = "旅行者 Lv.%d  ·  EXP %s%s  ·  %s元素  ·  幸运 %.2f  ·  生存 %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), sim.run_state.luck, seconds / 60, seconds % 60]
 			wave_label.text = "威胁等级   %02d" % maxi(1, floori(sim.elapsed / 45.0) + 1)
 		else:
-			progression_label.text = "水晶 Lv.%d  ·  EXP %s%s  ·  %s元素  ·  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.element_name(sim.run_state.traveler_element), seconds / 60, seconds % 60]
+			progression_label.text = "水晶 Lv.%d  ·  EXP %s%s  ·  %s元素  ·  幸运 %.2f  ·  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), sim.run_state.luck, seconds / 60, seconds % 60]
 			wave_label.text = "波次   %02d / %02d" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size()]
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
@@ -445,10 +449,11 @@ func refresh(sim, selected_id: int) -> void:
 				modal_copy.text = "战场、弹体和攻击冷却已冻结。\n准备好后，继续守住你的防线。"
 				modal_action.text = "继续防守   →   [空格]"
 			"won":
-				var grade := result_grade(sim.base_hp, sim.best_streak)
+				var base_percent := roundi(float(sim.base_hp) / maxf(1.0, float(sim.base_max_hp)) * 100.0)
+				var grade := result_grade(base_percent, sim.best_streak)
 				var unlock_copy := "下一作战区域已解锁。" if sim.v2_mode and sim.current_stage_id != "stage_03" else "本章作战区域已全部完成。"
 				modal_title.text = "防线守住了"
-				modal_copy.text = "评级 %s  ·  击退 %d  ·  基地 %d%%  ·  最高连杀 %d\n元素反应 %d 次  ·  %s\n本关构筑将在进入下一关时重置，可按 F4 选择关卡。" % [grade, sim.kills, sim.base_hp, sim.best_streak, sim.reactions, unlock_copy]
+				modal_copy.text = "评级 %s  ·  击退 %d  ·  基地 %d%%  ·  最高连杀 %d\n元素反应 %d 次  ·  %s\n本关构筑将在进入下一关时重置，可按 F4 选择关卡。" % [grade, sim.kills, base_percent, sim.best_streak, sim.reactions, unlock_copy]
 				modal_action.text = "再守一次   →   [Enter]"
 			"lost":
 				modal_title.text = "核心已经失守"
@@ -570,7 +575,10 @@ func refresh_pause_details(sim) -> void:
 		if i >= sim.heroes.size():
 			continue
 		var hero: Dictionary = sim.heroes[i]
-		pause_hero_labels[i].text = "%d  %s  /  %s\nHP %d/%d    ATK %.0f    ASPD %.2f/s\n射程 %.0f    护甲 %.0f    移速 %.0f    弹道 %d" % [i + 1, hero.name, hero.role, ceili(hero.hp), ceili(hero.max_hp), hero.damage, hero.rate, hero.range, hero.armor, hero.speed, int(hero.get("projectile_count", 1))]
+		var element_text: String = str(sim.element_name(str(hero.get("element", "none"))))
+		if not str(hero.get("secondary_element", "")).is_empty():
+			element_text += " + " + sim.element_name(str(hero.secondary_element))
+		pause_hero_labels[i].text = "%d  %s  /  %s  /  %s\nHP %d/%d    ATK %.0f    ASPD %.2f/s\n射程 %.0f    护甲 %.0f    移速 %.0f    弹道 %d" % [i + 1, hero.name, hero.role, element_text, ceili(hero.hp), ceili(hero.max_hp), hero.damage, hero.rate, hero.range, hero.armor, hero.speed, int(hero.get("projectile_count", 1))]
 
 func refresh_buffs(sim) -> void:
 	buff_panel.visible = sim.v2_mode and not sim.run_state.buff_levels.is_empty() and sim.state in ["running", "between", "paused"]

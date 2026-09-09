@@ -93,8 +93,8 @@ func _initialize() -> void:
 	s.spawn_remaining = 1
 	s.spawn_timer = 999
 	for h in s.heroes: h.attack_timer = 999
-	e = s.spawn_enemy(Vector2(600, 295))
-	var neighbor = s.spawn_enemy(Vector2(615, 295))
+	e = s.spawn_enemy(Vector2(470, 295))
+	var neighbor = s.spawn_enemy(Vector2(485, 295))
 	var distant = s.spawn_enemy(Vector2(800, 295))
 	s.projectiles.append({"pos": e.pos + Vector2(0, -12), "target_id": e.id, "damage": 20.0, "element": "fire", "source_id": 1, "splash": true, "slow": false})
 	s.tick(0.01)
@@ -118,7 +118,7 @@ func _initialize() -> void:
 	s.spawn_remaining = 1
 	s.spawn_timer = 999
 	for h in s.heroes: h.attack_timer = 999
-	e = s.spawn_enemy(Vector2(800, 450), "runner")
+	e = s.spawn_enemy(Vector2(460, 430), "runner")
 	s.projectiles.append({"pos": e.pos + Vector2(0, -12), "target_id": e.id, "damage": 1.0, "element": "water", "source_id": 2, "splash": false, "slow": true})
 	s.tick(0.01)
 	var x: float = e.pos.x

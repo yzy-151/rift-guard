@@ -71,7 +71,7 @@ func _validate() -> void:
 		card_ids[card_id] = true
 		if card.get("target", "global") == "character" and not characters.has(str(card.get("character_id", ""))):
 			errors.append("card target missing: " + card_id)
-		if card.get("rarity", "") not in ["common", "rare", "epic", "legendary"]:
+		if card.get("rarity", "") not in ["common", "rare", "epic", "legendary", "mythic"]:
 			errors.append("invalid rarity: " + card_id)
 	for id: String in stages:
 		var stage: Dictionary = stages[id]

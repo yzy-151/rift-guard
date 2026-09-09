@@ -33,6 +33,7 @@ var atlas: Texture2D = preload("res://assets/tiny-dungeon.png")
 var hell_stage_one: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0002.png")
 var hell_stage_two: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0003.png")
 var hell_stage_three: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0005.png")
+var crystal_texture: Texture2D = preload("res://assets/world/crystal-growth.svg")
 var furina_texture: Texture2D = preload("res://assets/characters/furina/furina-chibi-v1-alpha.png")
 var furina_actor
 var font: SystemFont
@@ -257,22 +258,30 @@ func _advance_stage_exit(dt: float) -> void:
 func _draw_stage_exit() -> void:
 	var door := world_to_screen(STAGE_EXIT_DOOR)
 	var open_ratio := clampf(stage_exit_timer / 0.75, 0.0, 1.0) if stage_exit_phase == "opening" else 1.0
-	draw_rect(Rect2(door + Vector2(-48 * open_ratio, -132), Vector2(96 * open_ratio, 145)), Color(0.94, 0.24, 0.36, 0.18))
-	draw_line(door + Vector2(-49 * open_ratio, 12), door + Vector2(-49 * open_ratio, -132), Color("#ff6477"), 7.0)
-	draw_line(door + Vector2(49 * open_ratio, 12), door + Vector2(49 * open_ratio, -132), Color("#ff6477"), 7.0)
-	draw_line(door + Vector2(-49 * open_ratio, -132), door + Vector2(49 * open_ratio, -132), Color("#ff8d99"), 7.0)
+	var half_width := 34.0 * open_ratio
+	var gate := PackedVector2Array([
+		door + Vector2(-half_width, 10), door + Vector2(-half_width, -74),
+		door + Vector2(-half_width * 0.56, -96), door + Vector2(0, -110),
+		door + Vector2(half_width * 0.56, -96), door + Vector2(half_width, -74),
+		door + Vector2(half_width, 10)
+	])
+	draw_colored_polygon(gate, Color(0.10, 0.025, 0.06, 0.66))
+	draw_polyline(gate, Color("#ff6b7d"), 4.0, true)
+	draw_line(door + Vector2(-half_width - 9, 12), door + Vector2(half_width + 9, 12), Color("#ff9aa6"), 5.0, true)
+	for side in [-1.0, 1.0]:
+		draw_colored_polygon(PackedVector2Array([door + Vector2(side * (half_width + 5), 10), door + Vector2(side * (half_width + 13), 10), door + Vector2(side * (half_width + 11), -66), door + Vector2(side * (half_width + 4), -76)]), Color("#542536"))
 	var actor := world_to_screen(stage_exit_newcomer_pos)
-	draw_ellipse_shadow(actor, 25.0, Color(0, 0, 0, 0.55))
+	draw_ellipse_shadow(actor, 20.0, Color(0, 0, 0, 0.55))
 	var aura_color := element_color(stage_exit_element)
-	draw_circle(actor + Vector2(0, -24), 39.0 + sin(clock * 4.0) * 2.0, Color(aura_color, 0.10))
-	draw_arc(actor + Vector2(0, 5), 31.0, clock, clock + PI * 1.55, 28, Color(aura_color, 0.86), 2.5, true)
+	draw_circle(actor + Vector2(0, -19), 30.0 + sin(clock * 4.0) * 1.5, Color(aura_color, 0.10))
+	draw_arc(actor + Vector2(0, 5), 24.0, clock, clock + PI * 1.55, 28, Color(aura_color, 0.86), 2.2, true)
 	if stage_exit_character_id == "hero_03":
-		draw_texture_rect(furina_texture, Rect2(actor + Vector2(-34, -87), Vector2(68, 91)), false, Color.WHITE)
+		draw_texture_rect(furina_texture, Rect2(actor + Vector2(-27, -69), Vector2(54, 72)), false, Color.WHITE)
 	else:
 		var atlas_index := maxi(0, int(stage_exit_character_id.trim_prefix("hero_")) - 1)
 		var tile := Vector2(atlas_index * 16, 112)
-		draw_texture_rect_region(atlas, Rect2(actor + Vector2(-34, -64), Vector2(68, 68)), Rect2(tile, Vector2(16, 16)), Color.WHITE)
-	caption(actor + Vector2(-34, -91), stage_exit_character_name, aura_color, 15)
+		draw_texture_rect_region(atlas, Rect2(actor + Vector2(-27, -51), Vector2(54, 54)), Rect2(tile, Vector2(16, 16)), Color.WHITE)
+	caption(actor + Vector2(-27, -76), stage_exit_character_name, aura_color, 14)
 	var instruction := "%s已解锁，正在进入下一关" % stage_exit_character_name if stage_exit_phase == "departing" else "右键移动旅行者，前往迎接 %s" % stage_exit_character_name
 	caption(Vector2(410, 132), instruction, Color("#ffe5df"), 18)
 	if stage_exit_phase == "waiting" and not sim.heroes.is_empty():
@@ -338,29 +347,29 @@ func _ground_circle(point: Vector2, radius: float, color: Color) -> void:
 		draw_line(world_to_screen(point + Vector2.from_angle(i * TAU / 40) * radius), world_to_screen(point + Vector2.from_angle((i + 1) * TAU / 40) * radius), color, 1.3, true)
 
 func _draw_range_indicator(hero: Dictionary) -> void:
-	var center: Vector2 = world_to_screen(hero.pos)
+	var center: Vector2 = world_to_screen(hero.pos) + Vector2(0, 8)
 	var color := Color(hero.color)
+	var radii: Vector2 = sim.attack_range_screen_radii(hero)
 	var points := PackedVector2Array()
-	for i in 72:
-		var angle: float = float(i) * TAU / 72.0
-		points.append(world_to_screen(hero.pos + Vector2.from_angle(angle) * float(hero.range)))
+	for i in 64:
+		var angle: float = float(i) * TAU / 64.0
+		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
 	draw_colored_polygon(points, Color(color, 0.055))
 	points.append(points[0])
-	draw_polyline(points, Color(color, 0.78), 2.2, true)
+	draw_polyline(points, Color(color, 0.58), 1.8, true)
 	for segment in 16:
-		var start: float = float(segment) * TAU / 16.0 + clock * 0.05
-		var finish: float = start + TAU / 16.0 * 0.52
+		var start: float = float(segment) * TAU / 16.0 + 0.035
+		var finish: float = start + TAU / 16.0 * 0.46
 		var arc_points := PackedVector2Array()
-		for step in 6:
-			var angle: float = lerpf(start, finish, float(step) / 5.0)
-			arc_points.append(world_to_screen(hero.pos + Vector2.from_angle(angle) * float(hero.range) * 0.94))
-		draw_polyline(arc_points, Color(color, 0.38), 1.4, true)
+		for step in 5:
+			var angle: float = lerpf(start, finish, float(step) / 4.0)
+			arc_points.append(center + Vector2(cos(angle) * radii.x * 0.92, sin(angle) * radii.y * 0.92))
+		draw_polyline(arc_points, Color(color, 0.30), 1.0, true)
 	for angle in [0.0, PI * 0.5, PI, PI * 1.5]:
-		var edge := world_to_screen(hero.pos + Vector2.from_angle(angle) * float(hero.range))
-		var tangent := (edge - center).rotated(PI * 0.5).normalized()
+		var edge := center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		var tangent := Vector2(-sin(angle), cos(angle) * radii.y / radii.x).normalized()
 		draw_line(edge - tangent * 5.0, edge + tangent * 5.0, Color(color, 0.85), 2.0, true)
 	draw_arc(center, 12.0, 0, TAU, 32, Color(color, 0.28), 1.2, true)
-	caption(points[18] + Vector2(8, -4), "射程 %d" % int(hero.range), Color(color, 0.92), 12)
 
 func _draw_stage() -> void:
 	if sim.endless_mode:
@@ -434,15 +443,17 @@ func _draw_endless_stage() -> void:
 
 func _draw_base_projected() -> void:
 	var point: Vector2 = world_to_screen(Vector2(100, 365))
-	draw_ellipse_shadow(point + Vector2(0, 13), 54, Color(0, 0, 0, 0.45))
+	draw_ellipse_shadow(point + Vector2(0, 15), 52, Color(0, 0, 0, 0.48))
 	var tint: Color = RED if base_flash > 0.0 and not reduced_effects else Color("#e3b7ba")
-	draw_colored_polygon(PackedVector2Array([point + Vector2(-36, 20), point + Vector2(-36, -97), point + Vector2(5, -120), point + Vector2(41, -95), point + Vector2(41, 18)]), Color("#59414d"))
-	draw_colored_polygon(PackedVector2Array([point + Vector2(5, -120), point + Vector2(41, -95), point + Vector2(41, 18), point + Vector2(5, 35)]), Color("#31232e"))
-	draw_rect(Rect2(point + Vector2(-25, -76), Vector2(29, 68)), Color("#211823"))
-	draw_colored_polygon(PackedVector2Array([point + Vector2(-11, -67), point + Vector2(1, -40), point + Vector2(-11, -12), point + Vector2(-22, -40)]), tint)
-	draw_line(point + Vector2(-30, -99), point + Vector2(6, -121), Color("#ab7b86"), 2)
+	var glow := 0.75 + sin(clock * 3.4) * 0.18
+	draw_circle(point + Vector2(0, -38), 44.0 + glow * 7.0, Color(tint, 0.055))
+	draw_circle(point + Vector2(0, -38), 30.0 + glow * 5.0, Color(tint, 0.10))
+	draw_arc(point + Vector2(0, -38), 38.0, -clock * 0.7, TAU - clock * 0.7, 40, Color(tint, 0.42), 2.0, true)
+	draw_texture_rect(crystal_texture, Rect2(point + Vector2(-38, -105), Vector2(76, 120)), false, tint)
+	draw_colored_polygon(PackedVector2Array([point + Vector2(-43, 17), point + Vector2(-29, 5), point + Vector2(29, 5), point + Vector2(43, 17), point + Vector2(31, 31), point + Vector2(-31, 31)]), Color("#382934"))
+	draw_polyline(PackedVector2Array([point + Vector2(-43, 17), point + Vector2(-29, 5), point + Vector2(29, 5), point + Vector2(43, 17)]), Color("#a06d7b"), 2.0, true)
 	draw_rect(Rect2(point + Vector2(-40, 46), Vector2(83, 6)), Color("#241d26"))
-	draw_rect(Rect2(point + Vector2(-40, 46), Vector2(83 * sim.base_hp / 100.0, 6)), tint)
+	draw_rect(Rect2(point + Vector2(-40, 46), Vector2(83 * sim.base_hp / maxf(1.0, sim.base_max_hp), 6)), tint)
 	caption(point + Vector2(-35, 72), "基地核心", tint, 13)
 
 func _draw_route_bed(route: Array) -> void:
@@ -460,17 +471,22 @@ func _draw_route_bed(route: Array) -> void:
 func _draw_route_preview(route: Array, preview: Dictionary) -> void:
 	var color := Color("#f2d26d") if bool(preview.get("flying", false)) else Color("#ff697c")
 	var pulse := 0.58 + sin(clock * 8.0) * 0.18
-	var width := 6.0 if bool(preview.get("boss", false)) else 4.0
+	var width := 7.0 if bool(preview.get("boss", false)) else 5.0
 	for i in range(route.size() - 1):
 		var a := world_to_screen(route[i])
 		var b := world_to_screen(route[i + 1])
-		draw_dashed_line(a, b, Color(color, pulse), width, 13.0, true)
+		draw_line(a, b, Color(color, 0.08 + pulse * 0.09), width + 13.0, true)
+		draw_line(a, b, Color(color, 0.15 + pulse * 0.10), width + 6.0, true)
+		draw_dashed_line(a, b, Color(color, pulse), width, 11.0, true)
 		var direction := (b - a).normalized()
 		var side := direction.rotated(PI * 0.5)
-		for marker in 3:
-			var phase := fposmod(clock * 0.72 + marker / 3.0 + i * 0.13, 1.0)
+		for marker in 4:
+			var phase := fposmod(clock * 0.82 + marker / 4.0 + i * 0.13, 1.0)
 			var point := a.lerp(b, phase)
-			draw_polyline(PackedVector2Array([point - direction * 14 + side * 8, point, point - direction * 14 - side * 8]), Color(color, 0.94), 3.0, true)
+			var head := PackedVector2Array([point + direction * 10.0, point - direction * 13.0 + side * 9.0, point - direction * 7.0, point - direction * 13.0 - side * 9.0])
+			draw_colored_polygon(head, Color(color, 0.82 + pulse * 0.16))
+			draw_circle(point - direction * 19.0, 3.5 + pulse * 1.5, Color(color, 0.34))
+			draw_line(point - direction * 15.0, point - direction * 32.0, Color(color, 0.24), 3.0, true)
 	var first := world_to_screen(route[0])
 	caption(first + Vector2(-72, -58), "BOSS 来袭" if bool(preview.get("boss", false)) else ("空中单位" if bool(preview.get("flying", false)) else "敌袭预告"), color, 13)
 
@@ -505,7 +521,7 @@ func _draw_base() -> void:
 	draw_colored_polygon(PackedVector2Array([Vector2(104, 315), Vector2(119, 352), Vector2(104, 389), Vector2(89, 352)]), tint)
 	draw_line(Vector2(104, 326), Vector2(104, 378), Color("#e4f4e7"), 2)
 	draw_rect(Rect2(62, 474, 87, 8), Color("#27343d"))
-	draw_rect(Rect2(62, 474, 87 * sim.base_hp / 100.0, 8), tint)
+	draw_rect(Rect2(62, 474, 87 * sim.base_hp / maxf(1.0, sim.base_max_hp), 8), tint)
 	caption(Vector2(71, 505), "基地核心", Color("#b2c0c8"), 13)
 	draw_rect(Rect2(118, 220, 2, 312), Color(0.65, 0.78, 0.74, 0.14))
 

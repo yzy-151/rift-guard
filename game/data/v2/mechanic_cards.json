@@ -611,5 +611,84 @@
     "value": 18,
     "requires_element": "cryo",
     "mechanic": true
+  },
+  {
+    "id": "luck_spark_common",
+    "name": "幸运火花",
+    "description": "命运开始偏向你：小幅提高稀有、史诗、传奇与神话卡的出现权重。",
+    "rarity": "common",
+    "weight": 50,
+    "target": "global",
+    "effect": "luck_add",
+    "value": 0.18,
+    "mechanic": true
+  },
+  {
+    "id": "luck_shift_rare",
+    "name": "命运偏转",
+    "description": "显著提高高阶卡权重，普通卡权重随幸运降低。",
+    "rarity": "rare",
+    "weight": 24,
+    "target": "global",
+    "effect": "luck_add",
+    "value": 0.35,
+    "mechanic": true
+  },
+  {
+    "id": "luck_blessing_epic",
+    "name": "女神眷顾",
+    "description": "大幅提高传奇与神话卡权重，让后续选择更容易突破上限。",
+    "rarity": "epic",
+    "weight": 9,
+    "target": "global",
+    "effect": "luck_add",
+    "value": 0.65,
+    "mechanic": true
+  },
+  {
+    "id": "mythic_dual_element",
+    "name": "神格·双界共鸣",
+    "description": "旅行者获得一种不同于当前属性的第二元素，普通攻击连续附着两种元素并直接制造反应。",
+    "rarity": "mythic",
+    "weight": 1,
+    "target": "character",
+    "character_id": "traveler",
+    "effect": "dual_element_mythic",
+    "value": 0,
+    "mechanic": true
+  },
+  {
+    "id": "mythic_projectile_storm",
+    "name": "神格·万象弹幕",
+    "description": "全队弹道增加4、攻击速度提高60%、贯穿增加3，瞬间改变战场密度。",
+    "rarity": "mythic",
+    "weight": 1,
+    "target": "global",
+    "effect": "mythic_projectile_storm",
+    "value": 0,
+    "mechanic": true
+  },
+  {
+    "id": "mythic_world_breaker",
+    "name": "神格·碎界",
+    "description": "全队攻击提高150%，攻击获得巨型爆炸并追加6次连锁。",
+    "rarity": "mythic",
+    "weight": 1,
+    "target": "global",
+    "effect": "mythic_world_breaker",
+    "value": 0,
+    "mechanic": true
+  },
+  {
+    "id": "mythic_eternal_support",
+    "name": "神格·永恒终幕",
+    "description": "每1.8秒发动一次高威力全屏终幕齐射，并可继续无限叠加强化。",
+    "rarity": "mythic",
+    "weight": 1,
+    "target": "global",
+    "effect": "mythic_eternal_support",
+    "value": 220,
+    "interval": 1.8,
+    "mechanic": true
   }
 ]

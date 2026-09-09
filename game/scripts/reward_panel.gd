@@ -53,25 +53,34 @@ func display(sim) -> void:
 	show()
 	if offer_key != key:
 		offer_key = key
-		heading.text = ("水晶 Lv.%d     ·     待选择 %d     ·     三项中选择一项     ·     本局种子 %d" % [sim.run_state.crystal_level, sim.run_state.pending_level_ups, sim.run_seed]) if sim.v2_mode else ("节点 %d / 5 已完成     ·     小队 Lv.%d     ·     三项中选择一项     ·     本局种子 %d" % [sim.wave, sim.team_level, sim.run_seed])
+		if sim.v2_mode:
+			var level_owner := "旅行者" if sim.endless_mode else "水晶"
+			heading.text = "%s Lv.%d     ·     幸运 %.2f     ·     待选择 %d     ·     本局种子 %d" % [level_owner, sim.run_state.crystal_level, sim.run_state.luck, sim.run_state.pending_level_ups, sim.run_seed]
+		else:
+			heading.text = "节点 %d / 5 已完成     ·     小队 Lv.%d     ·     三项中选择一项     ·     本局种子 %d" % [sim.wave, sim.team_level, sim.run_seed]
 		for i in 3:
 			var card: Dictionary = sim.rewards.offered[i]
 			if sim.v2_mode:
-				var target := "全队 / 水晶"
+				var target := "全队" if sim.endless_mode else "全队 / 水晶"
 				if card.get("target", "global") == "character":
 					target = str(card.get("character_id", ""))
 					for hero: Dictionary in sim.heroes:
 						if hero.get("character_id", "") == card.get("character_id", ""):
 							target = hero.name
 							break
-				var rarity: String = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}.get(card.get("rarity", "common"), "普通")
-				var rarity_color: Color = {"common": Color("#b8c0cc"), "rare": Color("#69a7e8"), "epic": Color("#b77ae8"), "legendary": Color("#e9b85d")}.get(card.get("rarity", "common"), Color("#b8c0cc"))
+				var rarity: String = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇", "mythic": "神话"}.get(card.get("rarity", "common"), "普通")
+				var rarity_color: Color = {"common": Color("#b8c0cc"), "rare": Color("#69a7e8"), "epic": Color("#b77ae8"), "legendary": Color("#e9b85d"), "mythic": Color("#fff2b2")}.get(card.get("rarity", "common"), Color("#b8c0cc"))
 				var current: int = int(sim.run_state.buff_levels.get(card.id, 0))
 				tags[i].text = "%02d  /  %s · %s%s" % [i + 1, target, rarity, " · 机制" if bool(card.get("mechanic", false)) else ""]
 				tags[i].add_theme_color_override("font_color", rarity_color)
 				titles[i].text = str(card.get("name", card.id))
+				titles[i].add_theme_color_override("font_color", rarity_color if card.get("rarity", "common") == "mythic" else Color("#f3efe3"))
+				buttons[i].self_modulate = Color("#fff1c4") if card.get("rarity", "common") == "mythic" else Color.WHITE
 				previews[i].text = sim.rewards.preview(card, sim)
-				descriptions[i].text = str(card.get("description", "获得强化")) + "\n当前层数 %d / ∞" % current
+				var card_description := str(card.get("description", "获得强化"))
+				if sim.endless_mode:
+					card_description = card_description.replace("并修复水晶", "").replace("水晶", "旅行者")
+				descriptions[i].text = card_description + "\n当前层数 %d / ∞" % current
 			else:
 				var target: String = sim.heroes[card.target].name if card.target >= 0 else "全队 / 基地"
 				var current: int = sim.rewards.levels.get(card.id, 0)

@@ -1,4 +1,10 @@
 {
+  "world.crystal": {
+    "sprite": "res://assets/world/crystal-growth.svg",
+    "source": "https://game-icons.net/1x1/lorc/crystal-growth.html",
+    "license": "CC BY 3.0",
+    "replace_hint": "替换 sprite 指向的透明 PNG/SVG；建议保持约 1:1.55 的宽高比"
+  },
   "character.traveler": {
     "portrait": "res://assets/portraits/jessica.png",
     "idle": "res://assets/tiny-dungeon.png",

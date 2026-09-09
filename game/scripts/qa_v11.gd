@@ -67,6 +67,13 @@ func run(game) -> void:
 					break
 			sim.choose_reward(pick)
 			choices += 1
+		if sim.state == "running" and sim.traveler_skill_cooldown <= 0.0 and sim.run_state.traveler_element != "" and not sim.enemies.is_empty():
+			var skill_target: Dictionary = {}
+			for enemy: Dictionary in sim.enemies:
+				if enemy.hp > 0.0 and (skill_target.is_empty() or enemy.pos.x < skill_target.pos.x):
+					skill_target = enemy
+			if not skill_target.is_empty():
+				sim.activate_traveler_skill(skill_target.pos)
 		if sim.state in ["won", "lost"]:
 			break
 		sim.tick(0.05)

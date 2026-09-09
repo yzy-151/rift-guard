@@ -1,0 +1,7 @@
+Crystal Growth icon by Lorc
+Source: https://game-icons.net/1x1/lorc/crystal-growth.html
+License: Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+License text: https://creativecommons.org/licenses/by/3.0/
+
+Used as a replaceable placeholder crystal unit in Rift Guard.
+Color, scale, glow and pedestal are applied at runtime.
