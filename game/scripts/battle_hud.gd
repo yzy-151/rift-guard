@@ -64,6 +64,11 @@ var wave_timeline_labels: Array[Label] = []
 var formation_buttons: Dictionary = {}
 var pause_details: Panel
 var pause_menu_button: Button
+var pause_status_label: Label
+var pause_settings_button: Button
+var pause_restart_button: Button
+var pause_squad_button: Button
+var pause_stage_button: Button
 var pause_buff_labels: Array[Label] = []
 var pause_hero_labels: Array[Label] = []
 var hero_hp_bars: Array[ProgressBar] = []
@@ -101,20 +106,11 @@ func _ready() -> void:
 	bind(label(root, Vector2(207, 40), Vector2(500, 24), "城门之下 · 守至黎明", 14, MUTED), "game_subtitle")
 	progression_label = label(root, Vector2(620, 47), Vector2(625, 22), "", 12, TEAL)
 	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	var stage_btn := button(root, Rect2(400, 8, 156, 36), "关卡  [F4]", false)
-	bind(stage_btn, "stage_button")
-	stage_btn.pressed.connect(func(): stage_action.emit())
-	var squad_btn := button(root, Rect2(570, 8, 156, 36), "编队  [F3]", false)
-	bind(squad_btn, "squad_button")
-	squad_btn.pressed.connect(func(): squad_action.emit())
-	var archive_btn := button(root, Rect2(740, 8, 156, 36), "图鉴  [F2]", false)
+	var archive_btn := button(root, Rect2(900, 8, 156, 36), "图鉴  [F2]", false)
 	archive_btn.pressed.connect(func(): compendium_action.emit())
-	pause_button = button(root, Rect2(911, 8, 156, 36), "暂停  [空格]", false)
+	pause_button = button(root, Rect2(1080, 8, 168, 36), "暂停  [空格]", false)
 	bind(pause_button, "pause_button")
 	pause_button.pressed.connect(func(): pause_action.emit())
-	var reset_btn := button(root, Rect2(1080, 8, 168, 36), "重新开始  [R]", false)
-	bind(reset_btn, "restart_button")
-	reset_btn.pressed.connect(func(): restart_action.emit())
 	panel(root, Rect2(32, 74, 1216, 25), Color("#261d27"), Color("#543640"))
 	base_label = label(root, Vector2(48, 75), Vector2(240, 27), "", 15, TEAL)
 	wave_label = label(root, Vector2(333, 75), Vector2(180, 27), "", 15, WHITE)
@@ -220,9 +216,7 @@ func _ready() -> void:
 		hero_details.append(label(hero_btn, Vector2(10, 64), Vector2(250, 18), details, 10, MUTED))
 	label(root, Vector2(900, 656), Vector2(348, 23), "1/2/3 选人 · 右键移动", 13, TEAL)
 	label(root, Vector2(900, 684), Vector2(348, 21), "M5 · F6 对话预览 / F7 特效预览", 12, MUTED)
-	var settings_btn := button(root, Rect2(900, 617, 348, 32), "设置：音量 / 显示   [F10]", false)
-	settings_btn.pressed.connect(func(): settings_action.emit())
-	background_buttons = [stage_btn, squad_btn, archive_btn, pause_button, reset_btn, settings_btn, skill_button]
+	background_buttons = [archive_btn, pause_button, skill_button]
 	background_buttons.append_array(formation_buttons.values())
 	background_buttons.append_array(hero_buttons)
 	overlay = ColorRect.new()
@@ -248,37 +242,46 @@ func _ready() -> void:
 	modal_copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	modal_action = button(modal_card, Rect2(42, 281, 536, 47), "", true)
 	modal_action.pressed.connect(func(): primary_action.emit())
-	pause_details = panel(overlay, Rect2(82, 72, 1116, 576), Color("#171119"), Color("#a34c60"))
-	ornament(pause_details, Rect2(-18, -18, 1152, 612))
+	pause_details = panel(overlay, Rect2(55, 28, 1170, 664), Color("#171119"), Color("#a34c60"))
+	ornament(pause_details, Rect2(-18, -18, 1206, 700))
 	var pause_scrim := ColorRect.new()
 	pause_scrim.position = Vector2(18, 12)
-	pause_scrim.size = Vector2(1080, 546)
-	pause_scrim.color = Color(0.035, 0.025, 0.045, 0.94)
+	pause_scrim.size = Vector2(1134, 640)
+	pause_scrim.color = Color(0.035, 0.025, 0.045, 0.96)
 	pause_scrim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pause_details.add_child(pause_scrim)
 	var build_column := ColorRect.new()
-	build_column.position = Vector2(22, 92)
-	build_column.size = Vector2(510, 408)
+	build_column.position = Vector2(22, 112)
+	build_column.size = Vector2(520, 380)
 	build_column.color = Color(0.10, 0.065, 0.11, 0.96)
 	build_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pause_details.add_child(build_column)
 	var stats_column := ColorRect.new()
-	stats_column.position = Vector2(548, 92)
-	stats_column.size = Vector2(526, 408)
+	stats_column.position = Vector2(558, 112)
+	stats_column.size = Vector2(590, 380)
 	stats_column.color = Color(0.12, 0.055, 0.075, 0.96)
 	stats_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pause_details.add_child(stats_column)
-	label(pause_details, Vector2(34, 22), Vector2(600, 20), "T A C T I C A L   R E C O R D   /   战 术 档 案", 11, TEAL)
-	label(pause_details, Vector2(34, 50), Vector2(500, 36), "本关构筑与队伍数值", 25, WHITE)
-	label(pause_details, Vector2(34, 100), Vector2(500, 22), "已 获 得 强 化", 13, Color("#d6b4f0"))
+	label(pause_details, Vector2(34, 20), Vector2(720, 20), "P A U S E   /   战 术 暂 停", 11, TEAL)
+	label(pause_details, Vector2(34, 45), Vector2(500, 34), "作战状态与队伍构筑", 25, WHITE)
+	pause_status_label = label(pause_details, Vector2(34, 80), Vector2(1090, 24), "", 12, Color("#e8b1b4"))
+	label(pause_details, Vector2(34, 120), Vector2(500, 22), "已 获 得 强 化", 13, Color("#d6b4f0"))
 	for i in 12:
-		pause_buff_labels.append(label(pause_details, Vector2(34, 132 + i * 27), Vector2(490, 24), "", 12, WHITE))
-	label(pause_details, Vector2(560, 100), Vector2(500, 22), "当 前 角 色 数 值", 13, Color("#ffb0b7"))
+		pause_buff_labels.append(label(pause_details, Vector2(34, 150 + i * 27), Vector2(496, 24), "", 12, WHITE))
+	label(pause_details, Vector2(570, 120), Vector2(550, 22), "当 前 角 色 数 值", 13, Color("#ffb0b7"))
 	for i in 3:
-		pause_hero_labels.append(label(pause_details, Vector2(560, 135 + i * 105), Vector2(510, 94), "", 12, WHITE))
-	pause_menu_button = button(pause_details, Rect2(34, 468, 490, 48), "返回主菜单", false)
+		pause_hero_labels.append(label(pause_details, Vector2(570, 151 + i * 108), Vector2(550, 98), "", 12, WHITE))
+	pause_settings_button = button(pause_details, Rect2(34, 514, 258, 42), "设置 / 音量   [F10]", false)
+	pause_settings_button.pressed.connect(func(): settings_action.emit())
+	pause_restart_button = button(pause_details, Rect2(306, 514, 258, 42), "重新开始   [R]", false)
+	pause_restart_button.pressed.connect(func(): restart_action.emit())
+	pause_squad_button = button(pause_details, Rect2(578, 514, 258, 42), "调整编队   [F3]", false)
+	pause_squad_button.pressed.connect(func(): squad_action.emit())
+	pause_stage_button = button(pause_details, Rect2(850, 514, 258, 42), "选择关卡   [F4]", false)
+	pause_stage_button.pressed.connect(func(): stage_action.emit())
+	pause_menu_button = button(pause_details, Rect2(34, 574, 530, 46), "返回主菜单", false)
 	pause_menu_button.pressed.connect(func(): main_menu_action.emit())
-	var pause_continue := button(pause_details, Rect2(560, 468, 510, 48), "继续防守   [空格]", true)
+	var pause_continue := button(pause_details, Rect2(590, 574, 518, 46), "继续防守   [空格]", true)
 	pause_continue.pressed.connect(func(): primary_action.emit())
 	pause_details.hide()
 	reward_panel = preload("res://scripts/reward_panel.gd").new()
@@ -610,6 +613,11 @@ func refresh_supports(sim) -> void:
 		row += 1
 
 func refresh_pause_details(sim) -> void:
+	var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {}) if sim.v2_mode else {}
+	var mode_name := "无尽生存" if sim.endless_mode else "裂隙守望"
+	var time_value := floori(sim.elapsed) if sim.endless_mode else ceili(sim.stage_runtime.remaining_seconds())
+	var time_text := "%02d:%02d" % [time_value / 60, time_value % 60]
+	pause_status_label.text = "%s  ·  %s  ·  %s  ·  击退 %d  ·  在场 %d  ·  Lv.%d  ·  幸运 %.2f" % [mode_name, str(stage.get("name", sim.current_stage_id)), time_text, sim.kills, sim.enemies.size(), sim.run_state.crystal_level, sim.run_state.luck]
 	for item in pause_buff_labels:
 		item.text = ""
 	var card_names: Dictionary = {}
@@ -626,6 +634,8 @@ func refresh_pause_details(sim) -> void:
 	for i in pause_hero_labels.size():
 		pause_hero_labels[i].text = ""
 		if i >= sim.heroes.size():
+			pause_hero_labels[i].text = "%d  未部署角色\nHP --/--    ATK --    ASPD --\n射程 --    护甲 --    移速 --    弹道 --" % [i + 1]
+			pause_hero_labels[i].add_theme_color_override("font_color", MUTED)
 			continue
 		var hero: Dictionary = sim.heroes[i]
 		var element_text: String = str(sim.element_name(str(hero.get("element", "none"))))

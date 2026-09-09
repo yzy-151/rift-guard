@@ -25,13 +25,13 @@ const PRIORITY := {
 func _initialize() -> void:
 	var first: Dictionary = simulate("stage_01", ["traveler"], 909)
 	assert(first.state == "won", "fixed strong build must clear stage one")
-	assert(first.base_hp > 0 and first.choices >= 12)
+	assert(first.base_hp > 0 and first.choices >= 8 and first.choices <= 12)
 	var second: Dictionary = simulate("stage_02", ["traveler", "hero_02"], 910)
 	assert(second.state == "won", "fixed strong build must clear stage two")
-	assert(second.base_hp > 0 and second.choices >= 12)
+	assert(second.base_hp > 0 and second.choices >= 8 and second.choices <= 12)
 	var third: Dictionary = simulate("stage_03", ["traveler", "hero_02", "hero_03"], 911)
 	assert(third.state == "won", "fixed strong build must clear stage three")
-	assert(third.base_hp > 0 and third.choices >= 12)
+	assert(third.base_hp > 0 and third.choices >= 8 and third.choices <= 12)
 	print("STAGE BALANCE PASSED: stage1 base=%d kills=%d; stage2 base=%d kills=%d; stage3 base=%d kills=%d" % [first.base_hp, first.kills, second.base_hp, second.kills, third.base_hp, third.kills])
 	quit()
 

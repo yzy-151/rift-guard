@@ -17,8 +17,12 @@ const ENEMIES = {
 	"healer": {"name": "血契医师", "hp": 175.0, "armor": 14.0, "speed": 34.0, "damage": 10.0, "rate": 0.62, "leak": 16, "color": "#75d6a2", "size": 55.0, "heal_radius": 190.0, "heal_interval": 5.5},
 	"splitter": {"name": "孳生母体", "hp": 240.0, "armor": 26.0, "speed": 32.0, "damage": 20.0, "rate": 0.82, "leak": 22, "color": "#d77aa9", "size": 72.0, "split_count": 2},
 	"warder": {"name": "黑曜司祭", "hp": 205.0, "armor": 32.0, "speed": 30.0, "damage": 15.0, "rate": 0.70, "leak": 19, "color": "#8ba4e8", "size": 62.0, "ward_radius": 205.0, "ward_interval": 6.5},
-	"boss_01": {"name": "裂隙统领", "hp": 3600.0, "armor": 125.0, "speed": 25.0, "damage": 58.0, "rate": 0.8, "leak": 100, "color": "#d05b78", "size": 102.0, "shield": 700.0, "boss_pulse": 7.0},
-	"boss_02": {"name": "黑曜母巢", "hp": 4800.0, "armor": 145.0, "speed": 21.0, "damage": 66.0, "rate": 0.72, "leak": 100, "color": "#9a4f92", "size": 116.0, "shield": 980.0, "boss_pulse": 6.2, "summon_count": 3, "summon_limit": 6}
+	"boss_01": {"name": "裂隙统领", "hp": 5200.0, "armor": 130.0, "speed": 27.0, "damage": 66.0, "rate": 0.82, "leak": 100, "color": "#d05b78", "size": 104.0, "shield": 900.0, "boss_pulse": 6.6, "boss_style": "commander", "phase_minion": "charger"},
+	"boss_02": {"name": "黑曜母巢", "hp": 6300.0, "armor": 145.0, "speed": 22.0, "damage": 58.0, "rate": 0.74, "leak": 100, "color": "#9a4f92", "size": 118.0, "shield": 1100.0, "boss_pulse": 6.0, "boss_style": "brood", "summon_count": 4, "summon_limit": 12, "phase_minion": "splitter"},
+	"boss_03": {"name": "苍穹风暴", "hp": 5600.0, "armor": 95.0, "speed": 38.0, "damage": 60.0, "rate": 0.92, "leak": 100, "color": "#66c9d8", "size": 108.0, "shield": 650.0, "boss_pulse": 5.4, "boss_style": "storm", "flying": true, "phase_minion": "flyer"},
+	"boss_04": {"name": "万仞壁垒", "hp": 7600.0, "armor": 210.0, "speed": 18.0, "damage": 78.0, "rate": 0.66, "leak": 100, "color": "#d5ac58", "size": 124.0, "shield": 2200.0, "boss_pulse": 6.8, "boss_style": "bulwark", "phase_shield_restore": 0.72, "phase_minion": "warder"},
+	"boss_05": {"name": "熔核炮台", "hp": 6100.0, "armor": 125.0, "speed": 24.0, "damage": 92.0, "rate": 0.58, "leak": 100, "color": "#ef704f", "size": 114.0, "shield": 800.0, "boss_pulse": 5.0, "boss_style": "artillery", "attack_range": 440.0, "phase_minion": "ranged"},
+	"boss_06": {"name": "噬时魔像", "hp": 6800.0, "armor": 155.0, "speed": 31.0, "damage": 72.0, "rate": 1.02, "leak": 100, "color": "#9878e8", "size": 120.0, "shield": 1050.0, "boss_pulse": 4.8, "boss_style": "chronophage", "life_steal": 0.55, "phase_minion": "healer"}
 }
 # Fixed encounters make changes in positioning directly comparable.
 const WAVES = [

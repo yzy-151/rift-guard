@@ -18,6 +18,7 @@ const AURA_DURATION: float = 3.0
 const REACTION_COOLDOWN: float = 0.5
 const HEAL_RANGE: float = 310.0
 const HEAL_AMOUNT: float = 22.0
+const ENDLESS_BOSS_IDS := ["boss_01", "boss_02", "boss_03", "boss_04", "boss_05", "boss_06"]
 
 var rewards
 var database
@@ -76,6 +77,8 @@ var kill_streak_timer: float = 0.0
 var reward_cooldown: float = 0.0
 var endless_mode: bool = false
 var endless_spawn_timer: float = 0.0
+var endless_next_boss_at: float = 90.0
+var endless_boss_index: int = 0
 var terrain_features: Array[Dictionary] = []
 var formation_mode: String = "hold"
 
@@ -89,6 +92,8 @@ func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 func reset(seed_value: int = -1) -> void:
 	endless_mode = false
 	endless_spawn_timer = 0.0
+	endless_next_boss_at = 90.0
+	endless_boss_index = 0
 	terrain_features.clear()
 	formation_mode = "hold"
 	run_seed = seed_value if seed_value >= 0 else int(Time.get_ticks_usec() % 2147483647)
@@ -148,7 +153,9 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	v2_mode = true
 	current_stage_id = stage_id
 	endless_mode = stage_id == "stage_endless"
-	endless_spawn_timer = 0.25
+	endless_spawn_timer = 0.15
+	endless_next_boss_at = 90.0
+	endless_boss_index = 0
 	database = Database.new()
 	if not database.errors.is_empty() or not database.stages.has(stage_id):
 		push_error("Cannot start configured stage: " + str(database.errors))
@@ -441,6 +448,8 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 	enemy.hp *= 1.0 + maxf(0.0, wave - 1) * 0.10
 	if v2_mode and stage_runtime != null:
 		enemy.hp *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
+		if kind.begins_with("boss_") and not endless_mode:
+			enemy.hp *= float(stage_runtime.definition.get("boss_health_multiplier", 1.0))
 		enemy.damage *= float(stage_runtime.definition.get("enemy_damage_multiplier", 1.0))
 		enemy.speed *= float(stage_runtime.definition.get("enemy_speed_multiplier", 1.0))
 		enemy.leak = maxi(1, roundi(float(enemy.leak) * float(stage_runtime.definition.get("enemy_leak_multiplier", 1.0))))
@@ -448,7 +457,9 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 	var shield: float = float(enemy.get("shield", 0.0))
 	if v2_mode and stage_runtime != null:
 		shield *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
-	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 28, "charger": 20, "healer": 30, "splitter": 34, "warder": 32, "boss_01": 180, "boss_02": 240}
+		if kind.begins_with("boss_") and not endless_mode:
+			shield *= float(stage_runtime.definition.get("boss_health_multiplier", 1.0))
+	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 28, "charger": 20, "healer": 30, "splitter": 34, "warder": 32, "boss_01": 240, "boss_02": 280, "boss_03": 260, "boss_04": 320, "boss_05": 290, "boss_06": 310}
 	var first_special: float = float(enemy.get("boss_pulse", enemy.get("heal_interval", enemy.get("ward_interval", 0.0))))
 	enemy.merge({"id": next_id, "kind": kind, "pos": point, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "summons_done": 0, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10))})
 	enemies.append(enemy)
@@ -531,16 +542,17 @@ func tick(dt: float) -> void:
 			events.append({"kind": "regroup"})
 
 func _endless_spawn_tick(dt: float) -> void:
+	_spawn_endless_boss_if_due()
 	endless_spawn_timer -= dt
-	if endless_spawn_timer > 0.0 or enemies.size() >= 180:
+	if endless_spawn_timer > 0.0 or enemies.size() >= 240:
 		return
-	var tier := maxi(1, floori(elapsed / 50.0) + 1)
+	var tier := maxi(1, floori(elapsed / 45.0) + 1)
 	var build_levels := 0
 	for level: Variant in run_state.buff_levels.values():
 		build_levels += int(level)
-	var pool := ["grunt", "grunt", "runner", "runner"]
+	var pool := ["grunt", "grunt", "runner", "runner", "grunt", "runner"]
 	if tier >= 2:
-		pool.append("flyer")
+		pool.append_array(["flyer", "charger"])
 	if tier >= 3:
 		pool.append_array(["armored", "buffer", "charger"])
 	if tier >= 3 and build_levels >= 5:
@@ -549,24 +561,42 @@ func _endless_spawn_tick(dt: float) -> void:
 		pool.append_array(["ranged", "ranged", "shielded", "healer", "splitter", "warder"])
 	elif tier >= 5:
 		pool.append_array(["shielded", "healer"])
-	var batch := mini(6, 1 + floori((tier - 1) / 3.0))
+	var batch := mini(10, 2 + floori((tier - 1) / 2.0))
 	for i in batch:
 		var side := (kills + next_id + i * 3) % 4
 		var ratio := fposmod(sin(float(next_id + i * 19) * 12.9898) * 43758.5453, 1.0)
-		var point := Vector2.ZERO
-		match side:
-			0: point = Vector2(ENDLESS_ARENA.position.x, lerpf(ENDLESS_ARENA.position.y, ENDLESS_ARENA.end.y, ratio))
-			1: point = Vector2(ENDLESS_ARENA.end.x, lerpf(ENDLESS_ARENA.position.y, ENDLESS_ARENA.end.y, ratio))
-			2: point = Vector2(lerpf(ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x, ratio), ENDLESS_ARENA.position.y)
-			_: point = Vector2(lerpf(ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x, ratio), ENDLESS_ARENA.end.y)
+		var point := _endless_edge_point(side, ratio)
 		var kind: String = pool[(next_id + i * 5 + tier) % pool.size()]
 		var enemy := spawn_enemy(point, kind)
-		var health_scale := 1.0 + elapsed / 210.0 + pow(float(tier), 1.18) * 0.08
+		var health_scale := 1.08 + elapsed / 170.0 + pow(float(tier), 1.20) * 0.10
 		enemy.hp *= health_scale
 		enemy.max_hp = enemy.hp
-		enemy.damage *= 1.0 + elapsed / 360.0
+		enemy.damage *= 1.08 + elapsed / 310.0
 		events.append({"kind": "route_spawn", "pos": point, "route_id": "edge_%d" % side, "flying": bool(enemy.get("flying", false))})
-	endless_spawn_timer += maxf(0.30, 1.55 - elapsed * 0.0018)
+	endless_spawn_timer += maxf(0.22, 1.05 - elapsed * 0.00145)
+
+func _endless_edge_point(side: int, ratio: float) -> Vector2:
+	match posmod(side, 4):
+		0: return Vector2(ENDLESS_ARENA.position.x, lerpf(ENDLESS_ARENA.position.y, ENDLESS_ARENA.end.y, ratio))
+		1: return Vector2(ENDLESS_ARENA.end.x, lerpf(ENDLESS_ARENA.position.y, ENDLESS_ARENA.end.y, ratio))
+		2: return Vector2(lerpf(ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x, ratio), ENDLESS_ARENA.position.y)
+		_: return Vector2(lerpf(ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x, ratio), ENDLESS_ARENA.end.y)
+
+func _spawn_endless_boss_if_due() -> void:
+	while endless_mode and elapsed >= endless_next_boss_at:
+		var boss_id: String = ENDLESS_BOSS_IDS[endless_boss_index % ENDLESS_BOSS_IDS.size()]
+		var cycle := floori(endless_boss_index / float(ENDLESS_BOSS_IDS.size()))
+		var side := endless_boss_index % 4
+		var boss := spawn_enemy(_endless_edge_point(side, 0.22 + fposmod(endless_boss_index * 0.31, 0.56)), boss_id)
+		var boss_scale := 1.0 + elapsed / 360.0 + cycle * 0.55
+		boss.hp *= boss_scale
+		boss.max_hp = boss.hp
+		boss.shield *= 1.0 + elapsed / 520.0 + cycle * 0.35
+		boss.max_shield = boss.shield
+		boss.damage *= 1.0 + elapsed / 520.0 + cycle * 0.22
+		events.append({"kind": "boss_arrival", "pos": boss.pos, "value": str(boss.name), "enemy_id": boss.id})
+		endless_boss_index += 1
+		endless_next_boss_at += 105.0
 func _spawn_tick(dt: float) -> void:
 	spawn_timer -= dt
 	if spawn_remaining > 0 and spawn_timer <= 0:
@@ -693,19 +723,8 @@ func _enemy_tick(dt: float) -> void:
 			if float(e.get("attack_range", 0.0)) > 0.0:
 				events.append({"kind": "enemy_shot", "pos": e.pos, "target": victim.pos, "value": ceili(e.damage)})
 			e.attack_timer = 1.0 / (e.rate * (1.25 if e.haste_timer > 0 else 1.0))
-		if float(e.get("boss_pulse", 0.0)) > 0.0 and e.special_timer <= 0.0:
-			for h: Dictionary in heroes:
-				if h.hp > 0:
-					damage_hero(h.id, e.damage * 0.42)
-			if int(e.get("summon_count", 0)) > 0 and int(e.get("summons_done", 0)) < int(e.get("summon_limit", 4)):
-				for summon in int(e.summon_count):
-					var minion := spawn_enemy(e.pos + Vector2(45.0 + summon * 22.0, (summon - 1) * 48.0), "runner")
-					minion.hp *= 0.72
-					minion.max_hp = minion.hp
-				e.summons_done = int(e.get("summons_done", 0)) + 1
-				events.append({"kind": "boss_summon", "pos": e.pos, "value": int(e.summon_count)})
-			e.special_timer = float(e.get("boss_pulse", 7.0))
-			events.append({"kind": "boss_pulse", "pos": e.pos, "value": ceili(e.damage * 0.42)})
+		if str(e.get("kind", "")).begins_with("boss_") and e.special_timer <= 0.0:
+			_execute_boss_special(e)
 		elif e.get("kind", "") == "healer" and e.special_timer <= 0.0:
 			var healed := 0
 			for ally: Dictionary in enemies:
@@ -730,6 +749,62 @@ func _enemy_tick(dt: float) -> void:
 	enemies = enemies.filter(func(e: Dictionary) -> bool: return e.hp > 0)
 	geo_constructs = geo_constructs.filter(func(item: Dictionary) -> bool: return item.hp > 0.0)
 
+func _execute_boss_special(enemy: Dictionary) -> void:
+	var style := str(enemy.get("boss_style", "commander"))
+	var phase := int(enemy.get("boss_phase", 1))
+	match style:
+		"brood":
+			var summon_count := int(enemy.get("summon_count", 3)) + phase - 1
+			if int(enemy.get("summons_done", 0)) < int(enemy.get("summon_limit", 12)):
+				for summon in summon_count:
+					var kind := "splitter" if phase == 3 and summon == 0 else "runner"
+					var minion := spawn_enemy(enemy.pos + Vector2.from_angle(float(summon) * TAU / summon_count) * 72.0, kind)
+					minion.hp *= 0.74
+					minion.max_hp = minion.hp
+				enemy.summons_done = int(enemy.get("summons_done", 0)) + summon_count
+				events.append({"kind": "boss_summon", "pos": enemy.pos, "value": summon_count})
+		"storm":
+			for hero: Dictionary in heroes:
+				if hero.hp <= 0.0: continue
+				damage_hero(hero.id, enemy.damage * (0.28 + phase * 0.06))
+				var push: Vector2 = (hero.pos - enemy.pos).normalized()
+				hero.pos = Vector2(clampf(hero.pos.x + push.x * (34.0 + phase * 10.0), ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x), clampf(hero.pos.y + push.y * (34.0 + phase * 10.0), ENDLESS_ARENA.position.y, ENDLESS_ARENA.end.y))
+			events.append({"kind": "knockback", "pos": enemy.pos, "value": 34 + phase * 10})
+		"bulwark":
+			var guarded := 0
+			for ally: Dictionary in enemies:
+				if ally.hp <= 0.0 or ally.pos.distance_to(enemy.pos) > 330.0: continue
+				var shield_gain := 70.0 + phase * 45.0
+				ally.shield = float(ally.get("shield", 0.0)) + shield_gain
+				ally.max_shield = maxf(float(ally.get("max_shield", 0.0)), float(ally.shield))
+				guarded += 1
+			events.append({"kind": "enemy_guard", "pos": enemy.pos, "value": guarded})
+		"artillery":
+			if not heroes.is_empty():
+				var victim: Dictionary = heroes[(next_id + phase) % heroes.size()]
+				if victim.hp > 0.0:
+					damage_hero(victim.id, enemy.damage * (0.65 + phase * 0.10))
+					for hero: Dictionary in heroes:
+						if hero.id != victim.id and hero.hp > 0.0 and hero.pos.distance_to(victim.pos) <= 150.0: damage_hero(hero.id, enemy.damage * 0.38)
+					events.append({"kind": "enemy_shot", "pos": enemy.pos, "target": victim.pos, "value": ceili(enemy.damage)})
+		"chronophage":
+			var drained := 0.0
+			for hero: Dictionary in heroes:
+				if hero.hp <= 0.0: continue
+				var amount: float = float(enemy.damage) * (0.30 + phase * 0.07)
+				damage_hero(hero.id, amount)
+				drained += amount
+			enemy.hp = minf(enemy.max_hp, enemy.hp + drained * float(enemy.get("life_steal", 0.5)))
+			events.append({"kind": "enemy_heal", "pos": enemy.pos, "value": ceili(drained * float(enemy.get("life_steal", 0.5)))})
+		_:
+			for hero: Dictionary in heroes:
+				if hero.hp > 0.0: damage_hero(hero.id, enemy.damage * (0.34 + phase * 0.05))
+			if phase >= 2:
+				var minion := spawn_enemy(enemy.pos + Vector2(70, -45 if phase == 2 else 45), "charger")
+				minion.hp *= 0.82
+				minion.max_hp = minion.hp
+			events.append({"kind": "boss_pulse", "pos": enemy.pos, "value": ceili(enemy.damage * 0.42)})
+	enemy.special_timer = maxf(2.6, float(enemy.get("boss_pulse", 6.0)) * (0.90 if phase == 2 else (0.76 if phase == 3 else 1.0)))
 func damage_construct(id: int, damage: float) -> void:
 	for construct: Dictionary in geo_constructs:
 		if construct.id != id or construct.hp <= 0.0:
@@ -1008,7 +1083,7 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 			enemy.aura = incoming_element
 			enemy.aura_timer = aura_duration
 	var damage: float = raw_damage * multiplier * 100.0 / (100.0 + maxf(0, enemy.armor))
-	if enemy.get("kind", "") in ["armored", "boss_01", "boss_02"]:
+	if enemy.get("kind", "") == "armored" or str(enemy.get("kind", "")).begins_with("boss_"):
 		damage *= 1.0 + elite_damage_bonus
 	if execute_threshold > 0.0 and enemy.hp / enemy.max_hp <= minf(0.65, execute_threshold):
 		damage *= 1.6
@@ -1053,21 +1128,24 @@ func _update_boss_phase(enemy: Dictionary) -> void:
 		return
 	var jumps := target_phase - current_phase
 	enemy.boss_phase = target_phase
-	enemy.damage *= pow(1.18, jumps)
-	enemy.speed *= pow(1.12, jumps)
-	enemy.rate *= pow(1.10, jumps)
-	enemy.boss_pulse = maxf(2.8, float(enemy.get("boss_pulse", 7.0)) * pow(0.82, jumps))
-	enemy.special_timer = minf(float(enemy.special_timer), 0.8)
-	var restored: float = float(enemy.get("max_shield", 0.0)) * (0.28 if target_phase == 2 else 0.42)
+	var style := str(enemy.get("boss_style", "commander"))
+	var damage_step := 1.25 if style in ["artillery", "chronophage"] else 1.18
+	var speed_step := 1.22 if style in ["storm", "chronophage"] else 1.11
+	enemy.damage *= pow(damage_step, jumps)
+	enemy.speed *= pow(speed_step, jumps)
+	enemy.rate *= pow(1.13, jumps)
+	enemy.boss_pulse = maxf(2.6, float(enemy.get("boss_pulse", 7.0)) * pow(0.80, jumps))
+	enemy.special_timer = minf(float(enemy.special_timer), 0.65)
+	var restore_ratio := float(enemy.get("phase_shield_restore", 0.42 if target_phase == 3 else 0.30))
+	var restored: float = float(enemy.get("max_shield", 0.0)) * restore_ratio
 	enemy.shield = minf(float(enemy.get("max_shield", 0.0)), float(enemy.get("shield", 0.0)) + restored)
-	var reinforcements := target_phase if enemy.get("kind", "") == "boss_02" else target_phase - 1
-	for i in reinforcements:
-		var kind := "charger" if target_phase == 3 and i == 0 else "runner"
-		var minion := spawn_enemy(enemy.pos + Vector2(55.0 + i * 28.0, (i - 1) * 54.0), kind)
-		minion.hp *= 0.70
+	var minion_count := target_phase if style in ["brood", "commander"] else 1
+	for i in minion_count:
+		var kind := str(enemy.get("phase_minion", "runner"))
+		var minion := spawn_enemy(enemy.pos + Vector2(58.0 + i * 30.0, (i - 1) * 56.0), kind)
+		minion.hp *= 0.74
 		minion.max_hp = minion.hp
-	events.append({"kind": "boss_phase", "pos": enemy.pos, "value": target_phase, "name": str(enemy.name), "shield": ceili(restored)})
-
+	events.append({"kind": "boss_phase", "pos": enemy.pos, "value": target_phase, "name": str(enemy.name), "shield": ceili(restored), "style": style})
 func reaction_for(first: String, second: String) -> String:
 	var pair := [normalize_element(first), normalize_element(second)]
 	pair.sort()
@@ -1242,7 +1320,8 @@ func _grant_endless_xp(amount: int) -> int:
 
 func endless_next_threshold() -> int:
 	var level := maxi(1, run_state.crystal_level)
-	return roundi(55.0 + 38.0 * (level - 1) + 70.0 * sqrt(float(level - 1)))
+	var n := float(level - 1)
+	return roundi(60.0 + 60.0 * n + 24.0 * n * n + 2.5 * n * n * n)
 
 func export_run_snapshot() -> Dictionary:
 	var hero_snapshots: Array[Dictionary] = []

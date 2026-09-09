@@ -5,36 +5,92 @@
     "duration_seconds": 345,
     "boss_at_seconds": 290,
     "boss_id": "boss_01",
-    "enemy_health_multiplier": 0.9,
-    "enemy_damage_multiplier": 0.22,
-    "enemy_speed_multiplier": 1.02,
-    "enemy_leak_multiplier": 0.18,
+    "enemy_health_multiplier": 1.12,
+    "enemy_damage_multiplier": 0.38,
+    "enemy_speed_multiplier": 1.03,
+    "enemy_leak_multiplier": 0.36,
     "terrain": [
-      {"id": "watch_high", "type": "high_ground", "rect": [235, 175, 245, 105], "label": "瞭望高台", "attack_bonus": 0.18},
-      {"id": "watch_low", "type": "low_ground", "rect": [645, 405, 240, 105], "label": "沉降区", "speed_scale": 0.72},
-      {"id": "watch_block", "type": "blocked", "rect": [760, 255, 105, 72], "label": "断墙"},
-      {"id": "watch_device", "type": "mechanism", "rect": [505, 278, 76, 76], "label": "赤月机关", "power": 62, "radius": 185, "interval": 3.6},
-      {"id": "watch_shortcut", "type": "shortcut", "rect": [585, 330, 68, 82], "label": "裂隙封门", "hp": 460}
+      {
+        "id": "watch_high",
+        "type": "high_ground",
+        "rect": [
+          235,
+          175,
+          245,
+          105
+        ],
+        "label": "瞭望高台",
+        "attack_bonus": 0.18
+      },
+      {
+        "id": "watch_low",
+        "type": "low_ground",
+        "rect": [
+          645,
+          405,
+          240,
+          105
+        ],
+        "label": "沉降区",
+        "speed_scale": 0.72
+      },
+      {
+        "id": "watch_block",
+        "type": "blocked",
+        "rect": [
+          760,
+          255,
+          105,
+          72
+        ],
+        "label": "断墙"
+      },
+      {
+        "id": "watch_device",
+        "type": "mechanism",
+        "rect": [
+          505,
+          278,
+          76,
+          76
+        ],
+        "label": "赤月机关",
+        "power": 62,
+        "radius": 185,
+        "interval": 3.6
+      },
+      {
+        "id": "watch_shortcut",
+        "type": "shortcut",
+        "rect": [
+          585,
+          330,
+          68,
+          82
+        ],
+        "label": "裂隙封门",
+        "hp": 460
+      }
     ],
     "starting_squad": [
       "traveler"
     ],
     "xp_thresholds": [
-      80,
-      180,
-      300,
-      440,
-      600,
-      780,
-      980,
-      1200,
-      1440,
-      1700,
-      1980,
-      2280,
-      2600,
-      2940,
-      3300
+      65,
+      140,
+      235,
+      350,
+      500,
+      690,
+      930,
+      1300,
+      1900,
+      2850,
+      4250,
+      6300,
+      9300,
+      13700,
+      20000
     ],
     "unlocks": [
       "hero_02"
@@ -86,7 +142,7 @@
         "at": 175,
         "enemy_id": "buffer",
         "count": 7,
-        "interval": 6.0,
+        "interval": 6,
         "route_id": "main"
       },
       {
@@ -100,14 +156,14 @@
         "at": 190,
         "enemy_id": "healer",
         "count": 5,
-        "interval": 7.0,
+        "interval": 7,
         "route_id": "main"
       },
       {
         "at": 215,
         "enemy_id": "shielded",
         "count": 12,
-        "interval": 3.0,
+        "interval": 3,
         "route_id": "main"
       },
       {
@@ -245,7 +301,8 @@
           360
         ]
       ]
-    }
+    },
+    "boss_health_multiplier": 0.78
   },
   {
     "id": "stage_02",
@@ -254,37 +311,93 @@
     "boss_at_seconds": 305,
     "boss_id": "boss_01",
     "boss_route_id": "upper",
-    "enemy_health_multiplier": 0.55,
-    "enemy_damage_multiplier": 0.12,
-    "enemy_speed_multiplier": 0.96,
-    "enemy_leak_multiplier": 0.1,
+    "enemy_health_multiplier": 0.78,
+    "enemy_damage_multiplier": 0.22,
+    "enemy_speed_multiplier": 0.99,
+    "enemy_leak_multiplier": 0.18,
     "terrain": [
-      {"id": "tide_high", "type": "high_ground", "rect": [300, 180, 220, 100], "label": "回廊高台", "attack_bonus": 0.18},
-      {"id": "tide_low", "type": "low_ground", "rect": [735, 430, 260, 100], "label": "赤潮洼地", "speed_scale": 0.72},
-      {"id": "tide_block", "type": "blocked", "rect": [825, 260, 125, 78], "label": "崩塌柱阵"},
-      {"id": "tide_device", "type": "mechanism", "rect": [540, 385, 78, 76], "label": "潮汐机关", "power": 78, "radius": 200, "interval": 3.2},
-      {"id": "tide_shortcut", "type": "shortcut", "rect": [655, 305, 72, 90], "label": "血锁闸门", "hp": 620}
+      {
+        "id": "tide_high",
+        "type": "high_ground",
+        "rect": [
+          300,
+          180,
+          220,
+          100
+        ],
+        "label": "回廊高台",
+        "attack_bonus": 0.18
+      },
+      {
+        "id": "tide_low",
+        "type": "low_ground",
+        "rect": [
+          735,
+          430,
+          260,
+          100
+        ],
+        "label": "赤潮洼地",
+        "speed_scale": 0.72
+      },
+      {
+        "id": "tide_block",
+        "type": "blocked",
+        "rect": [
+          825,
+          260,
+          125,
+          78
+        ],
+        "label": "崩塌柱阵"
+      },
+      {
+        "id": "tide_device",
+        "type": "mechanism",
+        "rect": [
+          540,
+          385,
+          78,
+          76
+        ],
+        "label": "潮汐机关",
+        "power": 78,
+        "radius": 200,
+        "interval": 3.2
+      },
+      {
+        "id": "tide_shortcut",
+        "type": "shortcut",
+        "rect": [
+          655,
+          305,
+          72,
+          90
+        ],
+        "label": "血锁闸门",
+        "hp": 620
+      }
     ],
     "starting_squad": [
       "traveler",
       "hero_02"
     ],
     "xp_thresholds": [
-      80,
-      180,
-      300,
-      440,
-      600,
-      780,
-      980,
-      1200,
-      1440,
-      1700,
-      1980,
-      2280,
-      2600,
-      2940,
-      3300
+      65,
+      140,
+      235,
+      350,
+      500,
+      690,
+      930,
+      1300,
+      1900,
+      2850,
+      4250,
+      6300,
+      9300,
+      13700,
+      20000
     ],
     "unlocks": [
       "hero_03"
@@ -301,7 +414,7 @@
         "at": 24,
         "enemy_id": "grunt",
         "count": 24,
-        "interval": 2.0,
+        "interval": 2,
         "route_id": "lower"
       },
       {
@@ -364,7 +477,7 @@
         "at": 248,
         "enemy_id": "healer",
         "count": 7,
-        "interval": 5.0,
+        "interval": 5,
         "route_id": "lower"
       },
       {
@@ -499,7 +612,8 @@
           360
         ]
       ]
-    }
+    },
+    "boss_health_multiplier": 0.74
   },
   {
     "id": "stage_03",
@@ -508,16 +622,72 @@
     "boss_at_seconds": 318,
     "boss_id": "boss_02",
     "boss_route_id": "main",
-	"enemy_health_multiplier": 0.25,
-    "enemy_damage_multiplier": 0.14,
-	"enemy_speed_multiplier": 0.8,
-    "enemy_leak_multiplier": 0.08,
+    "enemy_health_multiplier": 0.6,
+    "enemy_damage_multiplier": 0.22,
+    "enemy_speed_multiplier": 0.92,
+    "enemy_leak_multiplier": 0.16,
     "terrain": [
-      {"id": "nest_high", "type": "high_ground", "rect": [210, 170, 230, 105], "label": "黑曜祭台", "attack_bonus": 0.18},
-      {"id": "nest_low", "type": "low_ground", "rect": [690, 420, 275, 110], "label": "孵化泥沼", "speed_scale": 0.72},
-      {"id": "nest_block", "type": "blocked", "rect": [790, 245, 135, 82], "label": "母巢骨墙"},
-      {"id": "nest_device", "type": "mechanism", "rect": [470, 300, 82, 82], "label": "黑曜处刑台", "power": 280, "radius": 280, "interval": 1.6},
-      {"id": "nest_shortcut", "type": "shortcut", "rect": [570, 365, 76, 96], "label": "核心外壳", "hp": 840}
+      {
+        "id": "nest_high",
+        "type": "high_ground",
+        "rect": [
+          210,
+          170,
+          230,
+          105
+        ],
+        "label": "黑曜祭台",
+        "attack_bonus": 0.18
+      },
+      {
+        "id": "nest_low",
+        "type": "low_ground",
+        "rect": [
+          690,
+          420,
+          275,
+          110
+        ],
+        "label": "孵化泥沼",
+        "speed_scale": 0.72
+      },
+      {
+        "id": "nest_block",
+        "type": "blocked",
+        "rect": [
+          790,
+          245,
+          135,
+          82
+        ],
+        "label": "母巢骨墙"
+      },
+      {
+        "id": "nest_device",
+        "type": "mechanism",
+        "rect": [
+          470,
+          300,
+          82,
+          82
+        ],
+        "label": "黑曜处刑台",
+        "power": 280,
+        "radius": 280,
+        "interval": 1.6
+      },
+      {
+        "id": "nest_shortcut",
+        "type": "shortcut",
+        "rect": [
+          570,
+          365,
+          76,
+          96
+        ],
+        "label": "核心外壳",
+        "hp": 840
+      }
     ],
     "lanes": {
       "upper": 235,
@@ -530,21 +700,21 @@
       "hero_03"
     ],
     "xp_thresholds": [
-      80,
-      180,
-      300,
-      440,
-      600,
-      780,
-      980,
-      1200,
-      1440,
-      1700,
-      1980,
-      2280,
-      2600,
-      2940,
-      3300
+      65,
+      140,
+      235,
+      350,
+      500,
+      690,
+      930,
+      1300,
+      1900,
+      2850,
+      4250,
+      6300,
+      9300,
+      13700,
+      20000
     ],
     "unlocks": [
       "hero_04",
@@ -610,7 +780,7 @@
         "at": 154,
         "enemy_id": "ranged",
         "count": 20,
-        "interval": 2.0,
+        "interval": 2,
         "route_id": "main"
       },
       {
@@ -784,7 +954,8 @@
           360
         ]
       ]
-    }
+    },
+    "boss_health_multiplier": 0.39
   },
   {
     "id": "stage_endless",
@@ -792,10 +963,10 @@
     "duration_seconds": 86400,
     "boss_at_seconds": 999999,
     "boss_id": "boss_01",
-    "enemy_health_multiplier": 1.0,
+    "enemy_health_multiplier": 1,
     "enemy_damage_multiplier": 0.34,
-    "enemy_speed_multiplier": 1.0,
-    "enemy_leak_multiplier": 1.0,
+    "enemy_speed_multiplier": 1,
+    "enemy_leak_multiplier": 1,
     "starting_squad": [
       "traveler"
     ],

@@ -37,7 +37,7 @@ func _initialize() -> void:
 	assert(sim.state == "won")
 	assert(sim.stage_runtime.elapsed >= 330.0)
 	assert(sim.stage_runtime.boss_emitted)
-	assert(choices >= 12)
+	assert(choices >= 8 and choices <= 12)
 	assert(element_chosen and sim.run_state.traveler_element != "none")
 	var squad_before: Array[String] = sim.run_state.squad.duplicate()
 	sim.reset_stage("stage_01", squad_before, 707)

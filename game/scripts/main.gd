@@ -109,7 +109,11 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v16-test" in OS.get_cmdline_user_args():
+	if "--v17-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v17_test")
+	elif "--v16-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v16_test")
@@ -352,7 +356,7 @@ func _input(event: InputEvent) -> void:
 		if settings_panel.handle_input(event):
 			get_viewport().set_input_as_handled()
 		return
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10 and (mode_select_panel.is_open() or sim.state == "paused"):
 		open_settings()
 		get_viewport().set_input_as_handled()
 		return
@@ -544,6 +548,8 @@ func end_dialogue() -> void:
 	if action == "start":
 		sim.start()
 		audio_director.set_scene("endless" if sim.endless_mode else "battle")
+		hud.signature = ""
+		refresh()
 	elif action == "stage_exit":
 		play_stage_exit()
 	elif action == "inherit_endless":
@@ -604,7 +610,7 @@ func advance_stage() -> void:
 	sound.stop()
 
 func open_current_squad() -> void:
-	if story.active or compendium_panel.is_open() or squad_panel.is_open() or sim.state not in ["ready", "won"]:
+	if story.active or compendium_panel.is_open() or squad_panel.is_open() or sim.state not in ["ready", "won", "paused"]:
 		return
 	var mode: Dictionary = sim.database.modes.get(sim.run_state.mode_id, {})
 	var ids: Array = mode.get("stage_ids", [])
@@ -617,7 +623,7 @@ func open_current_squad() -> void:
 	sound.stop()
 
 func open_stage_select() -> void:
-	if story.active or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or sim.state not in ["ready", "won"]:
+	if story.active or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or sim.state not in ["ready", "won", "paused"]:
 		return
 	stage_select_panel.open()
 	sound.stop()
@@ -660,6 +666,8 @@ func confirm_next_squad(squad: Array[String]) -> void:
 	if dialogue_key.is_empty() or not begin_dialogue(dialogue_key, "start"):
 		sim.start()
 		audio_director.set_scene("endless" if sim.endless_mode else "battle")
+		hud.signature = ""
+		refresh()
 
 func open_settings() -> void:
 	if settings_panel == null or settings_panel.is_open() or story.active:
@@ -813,6 +821,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v17_test() -> void:
+	var suite = preload("res://scripts/qa_v17.gd").new()
 	await suite.run(self)
 
 func run_v16_test() -> void:

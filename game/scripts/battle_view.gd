@@ -735,9 +735,40 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	elif enemy.kind == "warder":
 		draw_arc(enemy.pos + Vector2(0, -20), 31.0, 0, TAU, 6, Color(0.55, 0.67, 1.0, 0.72), 2.5, true)
 		caption(enemy.pos + Vector2(-7, 27), "护", Color("#8ba4e8"), 12)
-	elif enemy.kind in ["boss_01", "boss_02"]:
-		draw_arc(enemy.pos + Vector2(0, -25), 48.0 + sin(clock * 2.2) * 3.0, 0, TAU, 36, Color("#ff5f82"), 3.0, true)
-		caption(enemy.pos + Vector2(-18, 34), "母巢" if enemy.kind == "boss_02" else "统领", Color("#ff7895"), 14)
+	elif str(enemy.kind).begins_with("boss_"):
+		var style := str(enemy.get("boss_style", "commander"))
+		var phase := int(enemy.get("boss_phase", 1))
+		var pulse := sin(clock * (2.2 + phase * 0.35))
+		var boss_color: Color = {"commander": Color("#ff6686"), "brood": Color("#df61bd"), "storm": Color("#66d9ff"), "bulwark": Color("#e3bd62"), "artillery": Color("#ff8456"), "chronophage": Color("#9b7cff")}.get(style, Color("#ff6686"))
+		draw_arc(body, 48.0 + pulse * 3.0 + phase * 2.0, 0, TAU, 36, Color(boss_color, 0.82), 3.0 + phase * 0.7, true)
+		for phase_mark in phase:
+			var mark_angle := -PI * 0.5 + phase_mark * TAU / maxf(1.0, phase)
+			draw_circle(body + Vector2.from_angle(mark_angle) * 55.0, 4.0, boss_color)
+		match style:
+			"brood":
+				for sac in 3:
+					draw_circle(body + Vector2(-25 + sac * 25, 20 + sin(clock * 3.0 + sac) * 4.0), 13.0, Color(boss_color, 0.58))
+			"storm":
+				for bolt in 3:
+					var x := -34.0 + bolt * 34.0
+					draw_polyline(PackedVector2Array([body + Vector2(x, -43), body + Vector2(x + 10, -24), body + Vector2(x - 2, -8), body + Vector2(x + 14, 12)]), boss_color, 3.0, true)
+			"bulwark":
+				var wall := PackedVector2Array([body + Vector2(-45, -38), body + Vector2(-12, -51), body + Vector2(34, -33), body + Vector2(42, 27), body + Vector2(0, 47), body + Vector2(-43, 25), body + Vector2(-45, -38)])
+				draw_polyline(wall, boss_color, 6.0, true)
+			"artillery":
+				draw_line(body + Vector2(-8, -30), body + Vector2(58, -54), boss_color, 13.0, true)
+				draw_circle(body + Vector2(61, -55), 10.0 + pulse * 2.0, Color("#fff0bd"))
+			"chronophage":
+				for hand in 3:
+					var angle := clock * (1.4 + hand * 0.25) + hand * TAU / 3.0
+					draw_line(body, body + Vector2.from_angle(angle) * (34.0 + hand * 6.0), boss_color, 3.0, true)
+				draw_circle(body, 9.0, Color("#171019"))
+			_:
+				for crown in 3:
+					draw_colored_polygon(PackedVector2Array([body + Vector2(-34 + crown * 34, -38), body + Vector2(-22 + crown * 34, -63), body + Vector2(-10 + crown * 34, -38)]), boss_color)
+		var boss_name: String = {"commander": "统领", "brood": "母巢", "storm": "风暴", "bulwark": "壁垒", "artillery": "炮台", "chronophage": "噬时"}.get(style, "统领")
+		caption(enemy.pos + Vector2(-18, 36), boss_name + " · P%d" % phase, boss_color, 14)
+
 	if enemy.haste_timer > 0:
 		draw_arc(enemy.pos + Vector2(0, -18), side * 0.54, 0, TAU, 28, Color(0.86, 0.45, 0.95, 0.42), 2.0, true)
 	if enemy.blocked_by >= 0:
