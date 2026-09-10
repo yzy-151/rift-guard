@@ -71,6 +71,7 @@ func _ready() -> void:
 	hud.skill_action.connect(toggle_skill_aiming)
 	hud.ultimate_action.connect(activate_selected_ultimate)
 	hud.deploy_drag_action.connect(handle_deploy_drag)
+	hud.recall_action.connect(recall_hero_to_bench)
 	hud.main_menu_action.connect(return_to_main_menu)
 	hud.formation_action.connect(set_formation_command)
 	hud.map_action.connect(open_campaign_map)
@@ -119,7 +120,11 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v20-test" in OS.get_cmdline_user_args():
+	if "--v25-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v25_test")
+	elif "--v20-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v20_test")
@@ -920,6 +925,17 @@ func handle_deploy_drag(hero_id: int, pressed: bool, screen_pos: Vector2) -> voi
 	battle.deploy_preview_active = true
 	_update_deploy_preview(screen_pos)
 
+func recall_hero_to_bench(hero_id: int) -> void:
+	if sim.recall_hero(hero_id):
+		if selected_id == hero_id:
+			selected_id = 0
+			for i in sim.heroes.size():
+				if bool(sim.heroes[i].get("deployed",false)) and sim.heroes[i].hp > 0.0:
+					selected_id = i
+					break
+		process_events()
+		refresh()
+
 func _update_deploy_preview(screen_pos: Vector2) -> void:
 	var local: Vector2 = battle.get_global_transform().affine_inverse() * screen_pos
 	battle.deploy_preview_point = battle.screen_to_world(local)
@@ -963,6 +979,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v25_test() -> void:
+	var suite = preload("res://scripts/qa_v25.gd").new()
 	await suite.run(self)
 
 func run_v20_test() -> void:

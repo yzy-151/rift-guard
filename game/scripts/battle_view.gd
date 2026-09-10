@@ -4,6 +4,7 @@ signal stage_exit_finished
 const Stage = preload("res://scripts/stage_projection.gd")
 const WORLD = Rect2(40, 140, 1200, 440)
 const Sim = preload("res://scripts/combat_simulation.gd")
+const ReusableEffectPool = preload("res://scripts/reusable_effect_pool.gd")
 const INK = Color("#0c1017")
 const TEAL = Color("#8fdbc8")
 const RED = Color("#d66769")
@@ -11,6 +12,7 @@ var sim
 var selected_id: int = 0
 var reduced_effects: bool = false
 var effects: Array[Dictionary] = []
+var effect_pool = ReusableEffectPool.new()
 var clock: float = 0.0
 var shot_flashes: Dictionary = {}
 var hero_attack_visuals: Dictionary = {}
@@ -99,9 +101,14 @@ func advance(dt: float) -> void:
 	base_flash = maxf(0.0, base_flash - dt)
 	shake_trauma = maxf(0.0, shake_trauma - dt * 3.8)
 	position = Vector2(sin(clock * 91.0), cos(clock * 73.0)) * shake_trauma * 5.0
-	for effect in effects:
+	if sim != null and sim.performance_budget != null:
+		reduced_effects = sim.performance_budget.quality_scale < 0.75
+	var live_effects: Array[Dictionary] = []
+	for effect: Dictionary in effects:
 		effect.life -= dt
-	effects = effects.filter(func(e: Dictionary) -> bool: return e.life > 0.0)
+		if effect.life > 0.0: live_effects.append(effect)
+		else: effect_pool.release(effect)
+	effects = live_effects
 	for route_id: String in route_previews.keys():
 		route_previews[route_id].life = float(route_previews[route_id].life) - dt
 		if float(route_previews[route_id].life) <= 0.0:
@@ -164,9 +171,9 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				hero_attack_visuals[event.hero_id] = {"elapsed": 0.0, "duration": attack_duration, "start_frame": 18}
 				if effects.size() < 260:
 					var facing := float(hero.get("facing", 1.0))
-					effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25.0 * facing, -20), "life": 0.16, "total": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0, "element": hero.get("element", "")})
-			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "tag_synergy", "relic_awaken", "revive":
-				if effects.size() >= 320 and event.kind in ["hit", "death", "move", "muzzle"]:
+					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","")},0.16))
+			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "tag_synergy", "relic_awaken", "revive":
+				if effects.size() >= (sim.performance_budget.effect_cap() if sim != null else 320) and event.kind in ["hit", "death", "move", "muzzle"]:
 					continue
 				var visual_event: Dictionary = event.duplicate(true)
 				var effect_duration := 0.6
@@ -174,14 +181,12 @@ func accept_events(batch: Array[Dictionary]) -> void:
 					effect_duration = 1.05
 				elif event.kind == "slash":
 					effect_duration = 0.42
-				visual_event.life = effect_duration
-				visual_event.total = effect_duration
-				effects.append(visual_event)
+				effects.append(effect_pool.acquire(visual_event,effect_duration))
 				if str(event.kind).begins_with("skill_"):
 					for hero: Dictionary in sim.heroes:
 						if hero.get("character_id", "") == "traveler" and hero.hp > 0.0:
 							hero_attack_visuals[hero.id] = {"elapsed": 0.0, "duration": 0.82, "start_frame": 0}
-				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "skill_pyro", "skill_electro", "geo_break", "kill_streak"]:
+				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "boss_phase", "enemy_volatile", "ultimate_impact", "skill_pyro", "skill_electro", "geo_break", "kill_streak"]:
 					shake_trauma = minf(1.0, shake_trauma + 0.42)
 				elif event.kind in ["hit", "slash", "chain"]:
 					shake_trauma = minf(0.42, shake_trauma + 0.045)
@@ -341,10 +346,15 @@ func _draw_enemy_telegraphs() -> void:
 		if bool(enemy.get("special_pending", false)):
 			for warning_point: Variant in enemy.get("special_warning_positions", [enemy.pos]):
 				var center := world_to_screen(warning_point)
-				var radius := 94.0 * world_depth_scale(warning_point)
+				var radius := float(enemy.get("special_warning_radius",150.0))*0.62*world_depth_scale(warning_point)
 				draw_circle(center, radius, Color(0.75,0.05,0.12,0.14))
 				draw_arc(center, radius, clock*2.0, clock*2.0+PI*1.65, 64, Color("#ff334f"), 5.0, true)
-				caption(center+Vector2(-58,-radius-12),"BOSS 危险预警",Color("#fff0ef"),14)
+				var shape := str(enemy.get("special_warning_shape","circle"))
+				if shape in ["line","multi_line","rectangle","cross"]:
+					draw_rect(Rect2(center-Vector2(radius,30),Vector2(radius*2.0,60)),Color(0.92,0.10,0.16,0.13),true)
+				elif shape in ["donut","spiral"]:
+					draw_arc(center,radius*0.55,0,TAU,48,Color("#ff9aa9"),3.0,true)
+				caption(center+Vector2(-74,-radius-12),str(enemy.get("special_move_name","BOSS 危险预警")),Color("#fff0ef"),14)
 
 func _draw_orbitals() -> void:
 	for orbital: Dictionary in sim.orbitals:
@@ -383,16 +393,31 @@ func _draw_skill_preview() -> void:
 	var ability: Dictionary = hero.get("active_skill", {})
 	var radius: float = float(ability.get("radius", 170.0)) * (1.0 + sim.skill_area_bonus)
 	var center := world_to_screen(skill_point)
+	var hero_center := world_to_screen(hero.pos)
 	var radius_x := radius * 0.62 * world_depth_scale(skill_point)
 	var radius_y := radius_x * 0.32
-	var points := PackedVector2Array()
-	for i in 64:
-		var angle := i * TAU / 64.0
-		points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
-	draw_colored_polygon(points, Color(color, 0.12))
-	for segment in 12:
-		var start := segment * TAU / 12.0 + clock * 0.35
-		draw_arc(center, radius_x, start, start + 0.28, 5, Color(color, 0.95), 2.4, true)
+	var targeting := str(ability.get("targeting","point"))
+	if targeting == "line":
+		var direction := (center-hero_center).normalized()
+		var side := direction.orthogonal()*28.0
+		var length := maxf(120.0,radius_x*1.8)
+		var polygon := PackedVector2Array([hero_center+side,hero_center-side,hero_center+direction*length-side,hero_center+direction*length+side])
+		draw_colored_polygon(polygon,Color(color,0.14))
+		draw_polyline(PackedVector2Array([hero_center+side,hero_center+direction*length+side,hero_center+direction*length-side,hero_center-side]),Color(color,0.9),2.5,true)
+	elif targeting == "cone":
+		var direction := (center-hero_center).normalized()
+		var polygon := PackedVector2Array([hero_center,hero_center+direction.rotated(-0.48)*radius_x*1.6,hero_center+direction.rotated(0.48)*radius_x*1.6])
+		draw_colored_polygon(polygon,Color(color,0.14))
+		draw_polyline(PackedVector2Array([polygon[0],polygon[1],polygon[2],polygon[0]]),Color(color,0.9),2.5,true)
+	else:
+		var points := PackedVector2Array()
+		for i in 64:
+			var angle := i * TAU / 64.0
+			points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
+		draw_colored_polygon(points, Color(color, 0.12))
+		for segment in 12:
+			var start := segment * TAU / 12.0 + clock * 0.35
+			draw_arc(center, radius_x, start, start + 0.28, 5, Color(color, 0.95), 2.4, true)
 	draw_circle(center, 6.0 + sin(clock * 6.0) * 1.5, Color(color, 0.9))
 	caption(center + Vector2(-58, -radius_y - 18), sim.hero_skill_name(selected_id), color, 15)
 
@@ -410,11 +435,16 @@ func _draw_skill_zone(zone: Dictionary) -> void:
 		draw_circle(center, 65.0 + pulse, Color(0.25, 0.67, 1.0, 0.08))
 		for ring in 3:
 			draw_arc(center, 42.0 + ring * 22.0 + pulse, 0, TAU, 42, Color(0.35, 0.75, 1.0, 0.42 - ring * 0.08), 2.0, true)
-	elif zone.kind == "cryo_field":
+	elif zone.kind in ["cryo_field","frozen_forest"]:
 		for spoke in 12:
 			var direction := Vector2.from_angle(spoke * TAU / 12.0)
 			draw_line(center + direction * 12.0, center + direction * (78.0 + pulse), Color(0.68, 0.93, 1.0, 0.38), 2.0, true)
 		draw_arc(center, 82.0 + pulse, 0, TAU, 48, Color(0.72, 0.96, 1.0, 0.56), 2.4, true)
+	elif zone.kind in ["anemo_domain","gate_field","storm_field"]:
+		var zone_color := Color("#6ce8c2") if zone.kind != "storm_field" else Color("#65bfff")
+		draw_circle(center,72.0+pulse,Color(zone_color,0.08))
+		for arc_index in 3:
+			draw_arc(center,36.0+arc_index*22.0+pulse,clock*(1.2+arc_index*0.3),clock*(1.2+arc_index*0.3)+PI*1.45,40,Color(zone_color,0.58-arc_index*0.1),2.6,true)
 
 func _draw_geo_construct(construct: Dictionary) -> void:
 	var center := world_to_screen(construct.pos)
@@ -1041,13 +1071,17 @@ func _draw_effect(effect: Dictionary) -> void:
 		for ray in 4:
 			var angle: float = -0.7 + ray * 0.45
 			draw_line(effect.pos + Vector2.from_angle(angle) * 8.0, effect.pos + Vector2.from_angle(angle) * (24.0 + t * 28.0), accent, 2.0, true)
-	elif effect.kind in ["barrage", "crossfire", "finale", "death_burst", "boss_summon"]:
+	elif effect.kind in ["barrage", "crossfire", "finale", "death_burst", "boss_summon", "enemy_volatile", "boss_phase", "ultimate_impact"]:
 		var blast_color := Color(1.0, 0.30, 0.26, fade)
 		for ring in 3:
 			draw_arc(effect.pos, 18.0 + ring * 16.0 + t * 52.0, 0, TAU, 40, Color(blast_color, fade * (0.72 - ring * 0.16)), 4.0 - ring, true)
 		for ray in 12:
 			var direction := Vector2.from_angle(ray * TAU / 12.0)
 			draw_line(effect.pos + direction * (9.0 + t * 25.0), effect.pos + direction * (30.0 + t * 85.0), Color(1.0, 0.76, 0.42, fade), 3.0, true)
+		if effect.kind == "boss_phase":
+			caption(effect.pos + Vector2(-72, -112 - t * 30), "PHASE %d · %s" % [int(effect.value), str(effect.get("name", "BOSS"))], Color(1.0, 0.66, 0.76, fade), 21)
+		elif effect.kind == "enemy_volatile":
+			caption(effect.pos + Vector2(-38, -86 - t * 22), "爆裂", Color(1.0, 0.48, 0.30, fade), 18)
 	elif effect.kind in ["support_heal", "reinforcement", "frenzy"]:
 		var support_color := Color(0.48, 0.95, 0.79, fade)
 		draw_arc(effect.pos, 16 + t * 62, 0, TAU, 40, support_color, 3.0, true)
@@ -1090,10 +1124,10 @@ func _draw_effect(effect: Dictionary) -> void:
 		for shard in 9:
 			var direction := Vector2.from_angle(-2.8 + shard * 0.38)
 			draw_line(effect.pos + direction * 19.0, effect.pos + direction * (42.0 + t * 48.0), Color(0.52, 0.84, 1.0, fade), 3.0, true)
-	elif effect.kind in ["crystal_guard", "enemy_guard", "enemy_heal", "split"]:
+	elif effect.kind in ["crystal_guard", "enemy_guard", "enemy_heal", "split", "enemy_duplicate"]:
 		var helpful: bool = effect.kind in ["crystal_guard", "enemy_heal"]
 		var status_color := Color(0.50, 0.95, 0.70, fade) if helpful else Color(0.55, 0.68, 1.0, fade)
-		var status_name: String = str({"crystal_guard": "结晶护盾", "enemy_guard": "敌方加盾", "enemy_heal": "敌方治疗", "split": "分裂"}.get(effect.kind, effect.kind))
+		var status_name: String = str({"crystal_guard": "结晶护盾", "enemy_guard": "敌方加盾", "enemy_heal": "敌方治疗", "split": "分裂", "enemy_duplicate": "镜像增殖"}.get(effect.kind, effect.kind))
 		draw_arc(effect.pos + Vector2(0, -18), 18 + t * 48, 0, TAU, 24, status_color, 3.0, true)
 		caption(effect.pos + Vector2(-38, -70 - t * 20), status_name, status_color, 15)
 	elif effect.kind == "boss_pulse":
@@ -1125,12 +1159,20 @@ func _draw_effect(effect: Dictionary) -> void:
 		for shard in 7:
 			var direction := Vector2.from_angle(-2.8 + shard * 0.45)
 			draw_line(effect.pos + direction * 8.0, effect.pos + direction * (22.0 + t * 45.0), geo_color, 3.0, true)
-	elif effect.kind in ["mechanism_pulse", "terrain_hit", "terrain_break", "formation", "knockback"]:
+	elif effect.kind in ["mechanism_pulse", "weather_pulse", "trap_pulse", "terrain_hit", "terrain_break", "formation", "knockback"]:
 		var terrain_color := Color(1.0, 0.69, 0.30, fade) if effect.kind != "formation" else Color(0.46, 0.95, 0.77, fade)
 		for ring in 3:
 			draw_arc(effect.pos, 14.0 + ring * 15.0 + t * 52.0, 0, TAU, 36, Color(terrain_color, fade * (0.75 - ring * 0.16)), 3.0, true)
 		if effect.kind == "terrain_break": caption(effect.pos + Vector2(-42, -62), "捷径开启", terrain_color, 17)
 		elif effect.kind == "formation": caption(effect.pos + Vector2(-42, -62), "全队移动", terrain_color, 17)
+		elif effect.kind == "weather_pulse": caption(effect.pos + Vector2(-42, -62), "天气脉冲", terrain_color, 15)
+		elif effect.kind == "trap_pulse": caption(effect.pos + Vector2(-32, -62), "陷阱", terrain_color, 15)
+	elif effect.kind in ["enemy_blink", "skill_suppressed", "vfx_cue"]:
+		var cue_color := Color(0.78, 0.42, 1.0, fade) if effect.kind != "skill_suppressed" else Color(1.0, 0.34, 0.45, fade)
+		for ring in 3:
+			draw_arc(effect.pos, 12.0 + ring * 13.0 + t * 50.0, t * 2.0 + ring, t * 2.0 + ring + PI * 1.45, 30, Color(cue_color, fade * (0.86 - ring * 0.19)), 3.5 - ring * 0.6, true)
+		if effect.kind == "enemy_blink": caption(effect.pos + Vector2(-28, -70 - t * 18), "闪现", cue_color, 15)
+		elif effect.kind == "skill_suppressed": caption(effect.pos + Vector2(-38, -70 - t * 18), "技能封锁", cue_color, 15)
 	elif effect.kind in ["death", "down"]:
 		if not reduced_effects:
 			draw_arc(effect.pos, 10 + t * 27, 0, TAU, 24, Color(0.8, 0.4, 0.42, fade * 0.6), 1.5)

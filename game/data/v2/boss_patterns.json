@@ -1,0 +1,231 @@
+[
+  {
+    "id": "boss_01",
+    "style": "commander",
+    "phases": [
+      {
+        "phase": 1,
+        "name": "号令脉冲",
+        "shape": "circle",
+        "lead": 1.35,
+        "radius": 150,
+        "moves": [
+          "pulse",
+          "summon"
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "交叉军令",
+        "shape": "cross",
+        "lead": 1.15,
+        "radius": 175,
+        "moves": [
+          "crossfire",
+          "charge_summon"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "猩红总攻",
+        "shape": "fan",
+        "lead": 0.95,
+        "radius": 220,
+        "moves": [
+          "fan_burst",
+          "elite_summon"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "boss_02",
+    "style": "brood",
+    "phases": [
+      {
+        "phase": 1,
+        "name": "孵化圈",
+        "shape": "circle",
+        "lead": 1.45,
+        "radius": 135,
+        "moves": [
+          "runner_summon"
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "分裂卵群",
+        "shape": "multi_circle",
+        "lead": 1.2,
+        "radius": 150,
+        "moves": [
+          "splitter_summon",
+          "slow_field"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "母巢坍缩",
+        "shape": "donut",
+        "lead": 1.05,
+        "radius": 230,
+        "moves": [
+          "swarm",
+          "pull"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "boss_03",
+    "style": "storm",
+    "phases": [
+      {
+        "phase": 1,
+        "name": "风眼",
+        "shape": "circle",
+        "lead": 1.25,
+        "radius": 155,
+        "moves": [
+          "knockback"
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "双重龙卷",
+        "shape": "line",
+        "lead": 1.05,
+        "radius": 180,
+        "moves": [
+          "sweep",
+          "flyer_summon"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "天穹裂风",
+        "shape": "spiral",
+        "lead": 0.9,
+        "radius": 240,
+        "moves": [
+          "spiral",
+          "silence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "boss_04",
+    "style": "bulwark",
+    "phases": [
+      {
+        "phase": 1,
+        "name": "壁垒展开",
+        "shape": "rectangle",
+        "lead": 1.55,
+        "radius": 160,
+        "moves": [
+          "guard"
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "地脉震荡",
+        "shape": "line",
+        "lead": 1.25,
+        "radius": 190,
+        "moves": [
+          "shockwave",
+          "warder_summon"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "万仞倾覆",
+        "shape": "multi_line",
+        "lead": 1.05,
+        "radius": 250,
+        "moves": [
+          "terrain_break",
+          "guard"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "boss_05",
+    "style": "artillery",
+    "phases": [
+      {
+        "phase": 1,
+        "name": "定点炮击",
+        "shape": "targeted",
+        "lead": 1.4,
+        "radius": 145,
+        "moves": [
+          "artillery"
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "三联轰炸",
+        "shape": "multi_circle",
+        "lead": 1.15,
+        "radius": 165,
+        "moves": [
+          "triple_artillery",
+          "burning_ground"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "熔核覆盖",
+        "shape": "checker",
+        "lead": 0.95,
+        "radius": 220,
+        "moves": [
+          "carpet_bomb",
+          "ranged_summon"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "boss_06",
+    "style": "chronophage",
+    "phases": [
+      {
+        "phase": 1,
+        "name": "时蚀吸取",
+        "shape": "circle",
+        "lead": 1.3,
+        "radius": 150,
+        "moves": [
+          "drain"
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "迟滞钟摆",
+        "shape": "cone",
+        "lead": 1.1,
+        "radius": 185,
+        "moves": [
+          "slow",
+          "drain"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "时间归零",
+        "shape": "donut",
+        "lead": 0.88,
+        "radius": 245,
+        "moves": [
+          "rewind",
+          "heal_summon"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,734 @@
+[
+  {
+    "id": "traveler",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_02",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_03",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_04",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_05",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_06",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_07",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_08",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_09",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_10",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_11",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  },
+  {
+    "id": "hero_12",
+    "states": {
+      "idle": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "run": {
+        "fps": 24,
+        "loop": true,
+        "frames": 48,
+        "duration": 2.0
+      },
+      "attack": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.48
+      },
+      "skill": {
+        "fps": 24,
+        "loop": false,
+        "frames": 24,
+        "duration": 1.0,
+        "hit_ratio": 0.52
+      },
+      "ultimate": {
+        "fps": 24,
+        "loop": false,
+        "frames": 36,
+        "duration": 1.5,
+        "hit_ratio": 0.58
+      },
+      "hurt": {
+        "fps": 18,
+        "loop": false,
+        "frames": 8,
+        "duration": 0.44
+      },
+      "down": {
+        "fps": 18,
+        "loop": false,
+        "frames": 18,
+        "duration": 1.0
+      },
+      "deploy": {
+        "fps": 24,
+        "loop": false,
+        "frames": 16,
+        "duration": 0.67
+      }
+    },
+    "fallback": {
+      "allow_static": true,
+      "breath_scale": 0.018,
+      "hurt_squash": 0.12
+    }
+  }
+]

@@ -1,5 +1,7 @@
 extends RefCounted
 
+const SaveMigrator = preload("res://scripts/save_migrator.gd")
+
 var save_path: String
 var unlocked_characters: Dictionary = {"traveler": true}
 var discovered_cards: Dictionary = {}
@@ -64,6 +66,7 @@ func save_progress() -> void:
 	if file == null:
 		return
 	file.store_string(JSON.stringify({
+		"save_version": SaveMigrator.CURRENT_VERSION,
 		"unlocked_characters": unlocked_characters.keys(),
 		"discovered_cards": discovered_cards.keys(),
 		"encountered_enemies": encountered_enemies.keys(),
@@ -78,6 +81,7 @@ func load_progress() -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(save_path))
 	if not data is Dictionary:
 		return
+	data = SaveMigrator.migrate(data)
 	_load_set(unlocked_characters, data.get("unlocked_characters", []))
 	_load_set(discovered_cards, data.get("discovered_cards", []))
 	_load_set(encountered_enemies, data.get("encountered_enemies", []))

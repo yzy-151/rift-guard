@@ -8,6 +8,10 @@ var assets: Dictionary = {}
 var relics: Dictionary = {}
 var campaign_map: Dictionary = {}
 var enemy_affixes: Dictionary = {}
+var animation_profiles: Dictionary = {}
+var boss_patterns: Dictionary = {}
+var stage_templates: Dictionary = {}
+var vfx_profiles: Dictionary = {}
 var errors: Array[String] = []
 
 func _init() -> void:
@@ -20,7 +24,16 @@ func _init() -> void:
 	relics = _by_id(_read_array("res://data/v2/relics.json"), "relic")
 	campaign_map = _read_dictionary("res://data/v2/campaign_map.json")
 	enemy_affixes = _by_id(_read_array("res://data/v2/enemy_affixes.json"), "enemy affix")
+	animation_profiles = _by_id(_read_array("res://data/v2/animation_profiles.json"), "animation profile")
+	boss_patterns = _by_id(_read_array("res://data/v2/boss_patterns.json"), "boss pattern")
+	stage_templates = _by_id(_read_array("res://data/v2/stage_templates.json"), "stage template")
+	vfx_profiles = _by_id(_read_array("res://data/v2/vfx_profiles.json"), "VFX profile")
 	_validate()
+	errors.append_array(preload("res://scripts/content_validator.gd").validate(self))
+	if not errors.is_empty():
+		var reporter = preload("res://scripts/error_reporter.gd").new()
+		for message: String in errors: reporter.record("content",message)
+		reporter.flush()
 
 func _read_json(path: String) -> Variant:
 	if not FileAccess.file_exists(path):

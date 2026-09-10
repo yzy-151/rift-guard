@@ -48,23 +48,25 @@ func build(owner_hud, game_database, state) -> void:
 	for i in ids.size():
 		var id: String = str(ids[i])
 		var stage: Dictionary = database.stages[id]
-		var button: Button = owner_hud.button(frame, Rect2(38 + i * 354, 150, 330, 310), "", true)
+		var column := i % 4
+		var row := i / 4
+		var button: Button = owner_hud.button(frame, Rect2(38 + column * 264, 132 + row * 170, 250, 156), "", true)
 		owner_hud.bind(button, "stage_card_%d" % (i + 1))
 		button.pressed.connect(select.bind(id))
 		buttons[id] = button
-		owner_hud.label(button, Vector2(20, 22), Vector2(290, 36), "%02d  %s" % [i + 1, stage.name], 22, WHITE)
+		owner_hud.label(button, Vector2(14, 12), Vector2(222, 28), "%02d  %s" % [i + 1, stage.name], 16, WHITE)
 		var boss: Dictionary = Catalog.ENEMIES.get(str(stage.boss_id), {})
-		owner_hud.label(button, Vector2(20, 70), Vector2(290, 68), "%d分%02d秒\n三路线 · Boss：%s" % [int(stage.duration_seconds) / 60, int(stage.duration_seconds) % 60, boss.get("name", stage.boss_id)], 14, MUTED)
-		var record: Label = owner_hud.label(button, Vector2(20, 164), Vector2(290, 78), "", 14, WHITE)
+		owner_hud.label(button, Vector2(14, 43), Vector2(222, 38), "%d分%02d秒 · %s" % [int(stage.duration_seconds) / 60, int(stage.duration_seconds) % 60, boss.get("name", stage.boss_id)], 11, MUTED)
+		var record: Label = owner_hud.label(button, Vector2(14, 84), Vector2(222, 46), "", 11, WHITE)
 		status_labels[id] = record
-		owner_hud.label(button, Vector2(20, 266), Vector2(290, 24), "点击选择并前往编队  →", 13, ACCENT)
+		owner_hud.label(button, Vector2(14, 132), Vector2(222, 18), "进入编队  →", 10, ACCENT)
 	var endless: Dictionary = database.modes.get("endless_survival", {})
 	var endless_id := str(endless.get("starting_stage_id", "stage_endless"))
-	var endless_button: Button = owner_hud.button(frame, Rect2(38, 475, 1038, 48), "∞  无尽生存 / 猩红荒原    四屏地图 · 四边追击 · 旅行者升级 · 无限构筑     →", true)
+	var endless_button: Button = owner_hud.button(frame, Rect2(38, 482, 1038, 42), "∞  无尽生存 / 猩红荒原    四屏地图 · 四边追击 · 旅行者升级 · 无限构筑     →", true)
 	owner_hud.bind(endless_button, "stage_endless")
 	endless_button.pressed.connect(select.bind(endless_id))
 	buttons[endless_id] = endless_button
-	owner_hud.label(frame, Vector2(38, 540), Vector2(1040, 22), "F4 打开关卡选择 · ESC 返回战场", 11, MUTED)
+	owner_hud.label(frame, Vector2(38, 536), Vector2(1040, 22), "F4 打开关卡选择 · ESC 返回战场", 11, MUTED)
 	root.hide()
 
 func activate_at(point: Vector2) -> bool:

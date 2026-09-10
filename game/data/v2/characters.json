@@ -20,7 +20,17 @@
       "cooldown": 8.0,
       "power": 135,
       "radius": 135,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "cone",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "星落裁决",
@@ -28,8 +38,24 @@
       "energy_cost": 80,
       "power": 330,
       "radius": 330,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "point",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "异界适应",
+      "kind": "adaptive_edge",
+      "description": "切换元素后下一次技能获得额外反应倍率。"
+    },
+    "animation_profile": "traveler"
   },
   {
     "id": "hero_02",
@@ -52,7 +78,17 @@
       "cooldown": 11.0,
       "power": 170,
       "radius": 170,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "ally_area",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "无咏风域",
@@ -60,8 +96,24 @@
       "energy_cost": 90,
       "power": 260,
       "radius": 260,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "point",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "静风守护",
+      "kind": "tailwind_aegis",
+      "description": "治疗同时提供短暂护盾与移动速度。"
+    },
+    "animation_profile": "hero_02"
   },
   {
     "id": "hero_03",
@@ -84,7 +136,17 @@
       "cooldown": 12.0,
       "power": 190,
       "radius": 190,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "self",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "万众狂欢",
@@ -92,8 +154,24 @@
       "energy_cost": 100,
       "power": 290,
       "radius": 290,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "global",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "沙龙礼仪",
+      "kind": "salon_court",
+      "description": "召唤物命中会附着水元素并返还能量。"
+    },
+    "animation_profile": "hero_03"
   },
   {
     "id": "hero_04",
@@ -116,7 +194,17 @@
       "cooldown": 10.0,
       "power": 190,
       "radius": 190,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "line",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "豪雷积层云",
@@ -124,8 +212,24 @@
       "energy_cost": 90,
       "power": 300,
       "radius": 300,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "point",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "魔力潮涌",
+      "kind": "mana_surge",
+      "description": "能量越高，主动技能的伤害与范围越高。"
+    },
+    "animation_profile": "hero_04"
   },
   {
     "id": "hero_05",
@@ -148,7 +252,17 @@
       "cooldown": 9.0,
       "power": 180,
       "radius": 180,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "cone",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "千音迭奏",
@@ -156,8 +270,24 @@
       "energy_cost": 110,
       "power": 340,
       "radius": 340,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "global",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "安可节拍",
+      "kind": "encore_meter",
+      "description": "技能命中会缩短全队主动技能冷却。"
+    },
+    "animation_profile": "hero_05"
   },
   {
     "id": "hero_06",
@@ -180,7 +310,17 @@
       "cooldown": 9.5,
       "power": 160,
       "radius": 160,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "line",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "奇美拉",
@@ -188,8 +328,24 @@
       "energy_cost": 100,
       "power": 300,
       "radius": 300,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "point",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "黑蛇意志",
+      "kind": "resolve",
+      "description": "生命降低时获得攻击力与减伤。"
+    },
+    "animation_profile": "hero_06"
   },
   {
     "id": "hero_07",
@@ -212,7 +368,17 @@
       "cooldown": 10.0,
       "power": 180,
       "radius": 180,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "line",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "命运交响",
@@ -220,8 +386,24 @@
       "energy_cost": 100,
       "power": 330,
       "radius": 330,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "global",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "命运和弦",
+      "kind": "resonance",
+      "description": "暴击积累和声，满层时追加冰元素音浪。"
+    },
+    "animation_profile": "hero_07"
   },
   {
     "id": "hero_08",
@@ -244,7 +426,17 @@
       "cooldown": 11.0,
       "power": 200,
       "radius": 200,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "point",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "冰结之森",
@@ -252,8 +444,24 @@
       "energy_cost": 100,
       "power": 315,
       "radius": 315,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "point",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "精灵加护",
+      "kind": "guardian_spirit",
+      "description": "部署时为全队提供护盾。"
+    },
+    "animation_profile": "hero_08"
   },
   {
     "id": "hero_09",
@@ -276,7 +484,17 @@
       "cooldown": 8.5,
       "power": 170,
       "radius": 170,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "line",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "炫音返场",
@@ -284,8 +502,24 @@
       "energy_cost": 90,
       "power": 320,
       "radius": 320,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "global",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "回声大师",
+      "kind": "echo_mastery",
+      "description": "主动技能会在短暂延迟后重复一次。"
+    },
+    "animation_profile": "hero_09"
   },
   {
     "id": "hero_10",
@@ -308,7 +542,17 @@
       "cooldown": 9.0,
       "power": 185,
       "radius": 185,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "point",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "三相共鸣",
@@ -316,8 +560,24 @@
       "energy_cost": 100,
       "power": 325,
       "radius": 325,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "point",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "三相同调",
+      "kind": "triune",
+      "description": "传送门周期复制友方弹道。"
+    },
+    "animation_profile": "hero_10"
   },
   {
     "id": "hero_11",
@@ -340,7 +600,17 @@
       "cooldown": 12.0,
       "power": 160,
       "radius": 160,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "point",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "指令：熔毁",
@@ -348,8 +618,24 @@
       "energy_cost": 100,
       "power": 280,
       "radius": 280,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "point",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "战术链接",
+      "kind": "tactical_link",
+      "description": "Mon3tr 在场时分担凯尔希受到的伤害。"
+    },
+    "animation_profile": "hero_11"
   },
   {
     "id": "hero_12",
@@ -372,7 +658,17 @@
       "cooldown": 9.0,
       "power": 175,
       "radius": 175,
-      "hit_frame_ratio": 0.46
+      "hit_frame_ratio": 0.46,
+      "targeting": "point",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
     },
     "ultimate": {
       "name": "绳网超频",
@@ -380,7 +676,23 @@
       "energy_cost": 90,
       "power": 310,
       "radius": 310,
-      "hit_frame_ratio": 0.58
-    }
+      "hit_frame_ratio": 0.58,
+      "targeting": "global",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      }
+    },
+    "passive": {
+      "name": "代理网络",
+      "kind": "proxy_network",
+      "description": "成功闪避预警攻击时获得额外能量。"
+    },
+    "animation_profile": "hero_12"
   }
 ]

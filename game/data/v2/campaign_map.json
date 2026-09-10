@@ -67,6 +67,77 @@
           "id": "c1_boss",
           "type": "boss",
           "stage_id": "stage_03",
+          "next": [
+            "c2_combat_4"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter_02",
+      "name": "裂隙远征",
+      "start": "c2_combat_4",
+      "nodes": [
+        {
+          "id": "c2_combat_4",
+          "type": "combat",
+          "stage_id": "stage_04",
+          "next": [
+            "c2_elite_5",
+            "c2_story"
+          ]
+        },
+        {
+          "id": "c2_story",
+          "type": "story",
+          "story": "mode1_opening",
+          "next": [
+            "c2_shop"
+          ]
+        },
+        {
+          "id": "c2_elite_5",
+          "type": "elite",
+          "stage_id": "stage_05",
+          "relic_reward": true,
+          "next": [
+            "c2_rest"
+          ]
+        },
+        {
+          "id": "c2_shop",
+          "type": "shop",
+          "next": [
+            "c2_combat_6"
+          ]
+        },
+        {
+          "id": "c2_rest",
+          "type": "rest",
+          "next": [
+            "c2_combat_6"
+          ]
+        },
+        {
+          "id": "c2_combat_6",
+          "type": "combat",
+          "stage_id": "stage_06",
+          "next": [
+            "c2_combat_7"
+          ]
+        },
+        {
+          "id": "c2_combat_7",
+          "type": "combat",
+          "stage_id": "stage_07",
+          "next": [
+            "c2_boss_8"
+          ]
+        },
+        {
+          "id": "c2_boss_8",
+          "type": "boss",
+          "stage_id": "stage_08",
           "next": []
         }
       ]

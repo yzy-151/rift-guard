@@ -1,0 +1,50 @@
+[
+  {
+    "id": "impact_light",
+    "pool": 96,
+    "blend": "add",
+    "lifetime": 0.34,
+    "shake": 0.16,
+    "flash": 0.05
+  },
+  {
+    "id": "impact_heavy",
+    "pool": 32,
+    "blend": "add",
+    "lifetime": 0.55,
+    "shake": 0.48,
+    "flash": 0.1
+  },
+  {
+    "id": "skill_field",
+    "pool": 24,
+    "blend": "add",
+    "lifetime": 1.1,
+    "shake": 0.24,
+    "flash": 0.04
+  },
+  {
+    "id": "ultimate_burst",
+    "pool": 12,
+    "blend": "add",
+    "lifetime": 1.5,
+    "shake": 0.82,
+    "flash": 0.16
+  },
+  {
+    "id": "enemy_warning",
+    "pool": 48,
+    "blend": "mix",
+    "lifetime": 1.35,
+    "shake": 0.0,
+    "flash": 0.0
+  },
+  {
+    "id": "boss_phase",
+    "pool": 6,
+    "blend": "add",
+    "lifetime": 2.2,
+    "shake": 1.0,
+    "flash": 0.22
+  }
+]

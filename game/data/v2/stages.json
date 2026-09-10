@@ -1183,6 +1183,1954 @@
     "boss_health_multiplier": 0.39
   },
   {
+    "id": "stage_04",
+    "name": "苍穹交叉口",
+    "duration_seconds": 390,
+    "boss_at_seconds": 330,
+    "boss_id": "boss_03",
+    "boss_route_id": "upper",
+    "enemy_health_multiplier": 1.0,
+    "enemy_damage_multiplier": 0.3,
+    "enemy_speed_multiplier": 1.0,
+    "enemy_leak_multiplier": 0.22,
+    "terrain": [
+      {
+        "id": "stage_04_high_ground_0",
+        "type": "high_ground",
+        "rect": [
+          210,
+          170,
+          230,
+          105
+        ],
+        "label": "黑曜祭台",
+        "attack_bonus": 0.18
+      },
+      {
+        "id": "stage_04_low_ground_1",
+        "type": "low_ground",
+        "rect": [
+          690,
+          420,
+          275,
+          110
+        ],
+        "label": "孵化泥沼",
+        "speed_scale": 0.72
+      },
+      {
+        "id": "stage_04_blocked_2",
+        "type": "blocked",
+        "rect": [
+          790,
+          245,
+          135,
+          82
+        ],
+        "label": "母巢骨墙"
+      },
+      {
+        "id": "stage_04_mechanism_3",
+        "type": "mechanism",
+        "rect": [
+          470,
+          300,
+          82,
+          82
+        ],
+        "label": "黑曜处刑台",
+        "power": 280,
+        "radius": 280,
+        "interval": 1.6
+      },
+      {
+        "id": "stage_04_shortcut_4",
+        "type": "shortcut",
+        "rect": [
+          570,
+          365,
+          76,
+          96
+        ],
+        "label": "核心外壳",
+        "hp": 840
+      },
+      {
+        "id": "stage_04_one_way_5",
+        "type": "one_way",
+        "rect": [
+          430,
+          250,
+          78,
+          72
+        ],
+        "label": "单向风门",
+        "direction": [
+          -1,
+          0
+        ]
+      },
+      {
+        "id": "stage_04_moving_platform_6",
+        "type": "moving_platform",
+        "rect": [
+          610,
+          185,
+          150,
+          62
+        ],
+        "label": "浮空平台",
+        "axis": [
+          1,
+          0
+        ],
+        "distance": 120,
+        "period": 4.0
+      },
+      {
+        "id": "stage_04_conveyor_7",
+        "type": "conveyor",
+        "rect": [
+          720,
+          450,
+          210,
+          68
+        ],
+        "label": "裂隙流带",
+        "direction": [
+          -1,
+          0
+        ],
+        "force": 48
+      },
+      {
+        "id": "stage_04_trap_8",
+        "type": "trap",
+        "rect": [
+          850,
+          300,
+          100,
+          82
+        ],
+        "label": "元素陷阱",
+        "element": "electro",
+        "power": 38,
+        "interval": 2.8
+      },
+      {
+        "id": "stage_04_weather_9",
+        "type": "weather",
+        "rect": [
+          180,
+          145,
+          920,
+          390
+        ],
+        "label": "元素乱流",
+        "element": "anemo",
+        "pulse_interval": 8.0
+      }
+    ],
+    "lanes": {
+      "upper": 235,
+      "main": 355,
+      "lower": 485
+    },
+    "starting_squad": [
+      "traveler",
+      "hero_02",
+      "hero_03"
+    ],
+    "xp_thresholds": [
+      65,
+      140,
+      235,
+      350,
+      500,
+      690,
+      930,
+      1300,
+      1900,
+      2850,
+      4250,
+      6300,
+      9300,
+      13700,
+      20000
+    ],
+    "unlocks": [
+      "hero_08"
+    ],
+    "waves": [
+      {
+        "at": 4,
+        "enemy_id": "grunt",
+        "count": 16,
+        "interval": 2.2,
+        "route_id": "upper"
+      },
+      {
+        "at": 24,
+        "enemy_id": "runner",
+        "count": 18,
+        "interval": 2.1300000000000003,
+        "route_id": "main"
+      },
+      {
+        "at": 44,
+        "enemy_id": "flyer",
+        "count": 20,
+        "interval": 2.06,
+        "route_id": "lower"
+      },
+      {
+        "at": 64,
+        "enemy_id": "ranged",
+        "count": 22,
+        "interval": 1.9900000000000002,
+        "route_id": "upper"
+      },
+      {
+        "at": 84,
+        "enemy_id": "armored",
+        "count": 24,
+        "interval": 1.9200000000000002,
+        "route_id": "main"
+      },
+      {
+        "at": 104,
+        "enemy_id": "buffer",
+        "count": 26,
+        "interval": 1.85,
+        "route_id": "lower"
+      },
+      {
+        "at": 124,
+        "enemy_id": "healer",
+        "count": 28,
+        "interval": 1.7800000000000002,
+        "route_id": "upper"
+      },
+      {
+        "at": 144,
+        "enemy_id": "shielded",
+        "count": 30,
+        "interval": 1.7100000000000002,
+        "route_id": "main"
+      },
+      {
+        "at": 164,
+        "enemy_id": "charger",
+        "count": 32,
+        "interval": 1.6400000000000001,
+        "route_id": "lower"
+      },
+      {
+        "at": 184,
+        "enemy_id": "splitter",
+        "count": 34,
+        "interval": 1.57,
+        "route_id": "upper"
+      },
+      {
+        "at": 204,
+        "enemy_id": "warder",
+        "count": 36,
+        "interval": 1.5,
+        "route_id": "main"
+      },
+      {
+        "at": 224,
+        "enemy_id": "grunt",
+        "count": 38,
+        "interval": 1.4300000000000002,
+        "route_id": "lower"
+      },
+      {
+        "at": 244,
+        "enemy_id": "runner",
+        "count": 40,
+        "interval": 1.36,
+        "route_id": "upper"
+      },
+      {
+        "at": 264,
+        "enemy_id": "flyer",
+        "count": 42,
+        "interval": 1.29,
+        "route_id": "main"
+      },
+      {
+        "at": 284,
+        "enemy_id": "ranged",
+        "count": 44,
+        "interval": 1.2200000000000002,
+        "route_id": "lower"
+      },
+      {
+        "at": 304,
+        "enemy_id": "armored",
+        "count": 46,
+        "interval": 1.1500000000000001,
+        "route_id": "upper"
+      }
+    ],
+    "routes": {
+      "upper": [
+        [
+          1195,
+          180
+        ],
+        [
+          980,
+          180
+        ],
+        [
+          830,
+          330
+        ],
+        [
+          660,
+          220
+        ],
+        [
+          500,
+          390
+        ],
+        [
+          300,
+          300
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          360
+        ],
+        [
+          960,
+          360
+        ],
+        [
+          820,
+          210
+        ],
+        [
+          650,
+          410
+        ],
+        [
+          470,
+          270
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "lower": [
+        [
+          1195,
+          540
+        ],
+        [
+          980,
+          540
+        ],
+        [
+          830,
+          390
+        ],
+        [
+          660,
+          500
+        ],
+        [
+          500,
+          330
+        ],
+        [
+          300,
+          440
+        ],
+        [
+          115,
+          360
+        ]
+      ]
+    },
+    "boss_health_multiplier": 0.72,
+    "template_id": "sky_cross"
+  },
+  {
+    "id": "stage_05",
+    "name": "熔炉回旋庭",
+    "duration_seconds": 405,
+    "boss_at_seconds": 345,
+    "boss_id": "boss_05",
+    "boss_route_id": "main",
+    "enemy_health_multiplier": 1.08,
+    "enemy_damage_multiplier": 0.34,
+    "enemy_speed_multiplier": 1.025,
+    "enemy_leak_multiplier": 0.25,
+    "terrain": [
+      {
+        "id": "stage_05_high_ground_0",
+        "type": "high_ground",
+        "rect": [
+          210,
+          170,
+          230,
+          105
+        ],
+        "label": "黑曜祭台",
+        "attack_bonus": 0.18
+      },
+      {
+        "id": "stage_05_low_ground_1",
+        "type": "low_ground",
+        "rect": [
+          690,
+          420,
+          275,
+          110
+        ],
+        "label": "孵化泥沼",
+        "speed_scale": 0.72
+      },
+      {
+        "id": "stage_05_blocked_2",
+        "type": "blocked",
+        "rect": [
+          790,
+          245,
+          135,
+          82
+        ],
+        "label": "母巢骨墙"
+      },
+      {
+        "id": "stage_05_mechanism_3",
+        "type": "mechanism",
+        "rect": [
+          470,
+          300,
+          82,
+          82
+        ],
+        "label": "黑曜处刑台",
+        "power": 280,
+        "radius": 280,
+        "interval": 1.6
+      },
+      {
+        "id": "stage_05_shortcut_4",
+        "type": "shortcut",
+        "rect": [
+          570,
+          365,
+          76,
+          96
+        ],
+        "label": "核心外壳",
+        "hp": 840
+      },
+      {
+        "id": "stage_05_one_way_5",
+        "type": "one_way",
+        "rect": [
+          430,
+          250,
+          78,
+          72
+        ],
+        "label": "单向风门",
+        "direction": [
+          -1,
+          0
+        ]
+      },
+      {
+        "id": "stage_05_moving_platform_6",
+        "type": "moving_platform",
+        "rect": [
+          610,
+          185,
+          150,
+          62
+        ],
+        "label": "浮空平台",
+        "axis": [
+          1,
+          0
+        ],
+        "distance": 120,
+        "period": 4.0
+      },
+      {
+        "id": "stage_05_conveyor_7",
+        "type": "conveyor",
+        "rect": [
+          720,
+          450,
+          210,
+          68
+        ],
+        "label": "裂隙流带",
+        "direction": [
+          -1,
+          0
+        ],
+        "force": 48
+      },
+      {
+        "id": "stage_05_trap_8",
+        "type": "trap",
+        "rect": [
+          850,
+          300,
+          100,
+          82
+        ],
+        "label": "元素陷阱",
+        "element": "electro",
+        "power": 45,
+        "interval": 2.8
+      },
+      {
+        "id": "stage_05_weather_9",
+        "type": "weather",
+        "rect": [
+          180,
+          145,
+          920,
+          390
+        ],
+        "label": "元素乱流",
+        "element": "pyro",
+        "pulse_interval": 8.0
+      }
+    ],
+    "lanes": {
+      "upper": 235,
+      "main": 355,
+      "lower": 485
+    },
+    "starting_squad": [
+      "traveler",
+      "hero_02",
+      "hero_03"
+    ],
+    "xp_thresholds": [
+      65,
+      140,
+      235,
+      350,
+      500,
+      690,
+      930,
+      1300,
+      1900,
+      2850,
+      4250,
+      6300,
+      9300,
+      13700,
+      20000
+    ],
+    "unlocks": [
+      "hero_09"
+    ],
+    "waves": [
+      {
+        "at": 4,
+        "enemy_id": "flyer",
+        "count": 19,
+        "interval": 2.1500000000000004,
+        "route_id": "main"
+      },
+      {
+        "at": 24,
+        "enemy_id": "ranged",
+        "count": 21,
+        "interval": 2.0800000000000005,
+        "route_id": "lower"
+      },
+      {
+        "at": 44,
+        "enemy_id": "armored",
+        "count": 23,
+        "interval": 2.0100000000000002,
+        "route_id": "upper"
+      },
+      {
+        "at": 64,
+        "enemy_id": "buffer",
+        "count": 25,
+        "interval": 1.9400000000000002,
+        "route_id": "main"
+      },
+      {
+        "at": 84,
+        "enemy_id": "healer",
+        "count": 27,
+        "interval": 1.87,
+        "route_id": "lower"
+      },
+      {
+        "at": 104,
+        "enemy_id": "shielded",
+        "count": 29,
+        "interval": 1.8,
+        "route_id": "upper"
+      },
+      {
+        "at": 124,
+        "enemy_id": "charger",
+        "count": 31,
+        "interval": 1.7300000000000002,
+        "route_id": "main"
+      },
+      {
+        "at": 144,
+        "enemy_id": "splitter",
+        "count": 33,
+        "interval": 1.6600000000000001,
+        "route_id": "lower"
+      },
+      {
+        "at": 164,
+        "enemy_id": "warder",
+        "count": 35,
+        "interval": 1.59,
+        "route_id": "upper"
+      },
+      {
+        "at": 184,
+        "enemy_id": "grunt",
+        "count": 37,
+        "interval": 1.52,
+        "route_id": "main"
+      },
+      {
+        "at": 204,
+        "enemy_id": "runner",
+        "count": 39,
+        "interval": 1.45,
+        "route_id": "lower"
+      },
+      {
+        "at": 224,
+        "enemy_id": "flyer",
+        "count": 41,
+        "interval": 1.3800000000000001,
+        "route_id": "upper"
+      },
+      {
+        "at": 244,
+        "enemy_id": "ranged",
+        "count": 43,
+        "interval": 1.31,
+        "route_id": "main"
+      },
+      {
+        "at": 264,
+        "enemy_id": "armored",
+        "count": 45,
+        "interval": 1.24,
+        "route_id": "lower"
+      },
+      {
+        "at": 284,
+        "enemy_id": "buffer",
+        "count": 47,
+        "interval": 1.1700000000000002,
+        "route_id": "upper"
+      },
+      {
+        "at": 304,
+        "enemy_id": "healer",
+        "count": 49,
+        "interval": 1.1,
+        "route_id": "main"
+      }
+    ],
+    "routes": {
+      "upper": [
+        [
+          1120,
+          145
+        ],
+        [
+          1010,
+          260
+        ],
+        [
+          900,
+          180
+        ],
+        [
+          780,
+          360
+        ],
+        [
+          650,
+          260
+        ],
+        [
+          520,
+          440
+        ],
+        [
+          350,
+          300
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          360
+        ],
+        [
+          1050,
+          470
+        ],
+        [
+          900,
+          360
+        ],
+        [
+          760,
+          480
+        ],
+        [
+          610,
+          350
+        ],
+        [
+          430,
+          430
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "lower": [
+        [
+          1120,
+          575
+        ],
+        [
+          1000,
+          470
+        ],
+        [
+          870,
+          550
+        ],
+        [
+          740,
+          390
+        ],
+        [
+          590,
+          500
+        ],
+        [
+          430,
+          360
+        ],
+        [
+          115,
+          360
+        ]
+      ]
+    },
+    "boss_health_multiplier": 0.78,
+    "template_id": "crucible_spiral"
+  },
+  {
+    "id": "stage_06",
+    "name": "噬时钟楼",
+    "duration_seconds": 420,
+    "boss_at_seconds": 360,
+    "boss_id": "boss_06",
+    "boss_route_id": "lower",
+    "enemy_health_multiplier": 1.15,
+    "enemy_damage_multiplier": 0.38,
+    "enemy_speed_multiplier": 1.05,
+    "enemy_leak_multiplier": 0.28,
+    "terrain": [
+      {
+        "id": "stage_06_high_ground_0",
+        "type": "high_ground",
+        "rect": [
+          210,
+          170,
+          230,
+          105
+        ],
+        "label": "黑曜祭台",
+        "attack_bonus": 0.18
+      },
+      {
+        "id": "stage_06_low_ground_1",
+        "type": "low_ground",
+        "rect": [
+          690,
+          420,
+          275,
+          110
+        ],
+        "label": "孵化泥沼",
+        "speed_scale": 0.72
+      },
+      {
+        "id": "stage_06_blocked_2",
+        "type": "blocked",
+        "rect": [
+          790,
+          245,
+          135,
+          82
+        ],
+        "label": "母巢骨墙"
+      },
+      {
+        "id": "stage_06_mechanism_3",
+        "type": "mechanism",
+        "rect": [
+          470,
+          300,
+          82,
+          82
+        ],
+        "label": "黑曜处刑台",
+        "power": 280,
+        "radius": 280,
+        "interval": 1.6
+      },
+      {
+        "id": "stage_06_shortcut_4",
+        "type": "shortcut",
+        "rect": [
+          570,
+          365,
+          76,
+          96
+        ],
+        "label": "核心外壳",
+        "hp": 840
+      },
+      {
+        "id": "stage_06_one_way_5",
+        "type": "one_way",
+        "rect": [
+          430,
+          250,
+          78,
+          72
+        ],
+        "label": "单向风门",
+        "direction": [
+          -1,
+          0
+        ]
+      },
+      {
+        "id": "stage_06_moving_platform_6",
+        "type": "moving_platform",
+        "rect": [
+          610,
+          185,
+          150,
+          62
+        ],
+        "label": "浮空平台",
+        "axis": [
+          1,
+          0
+        ],
+        "distance": 120,
+        "period": 4.0
+      },
+      {
+        "id": "stage_06_conveyor_7",
+        "type": "conveyor",
+        "rect": [
+          720,
+          450,
+          210,
+          68
+        ],
+        "label": "裂隙流带",
+        "direction": [
+          -1,
+          0
+        ],
+        "force": 48
+      },
+      {
+        "id": "stage_06_trap_8",
+        "type": "trap",
+        "rect": [
+          850,
+          300,
+          100,
+          82
+        ],
+        "label": "元素陷阱",
+        "element": "electro",
+        "power": 52,
+        "interval": 2.8
+      },
+      {
+        "id": "stage_06_weather_9",
+        "type": "weather",
+        "rect": [
+          180,
+          145,
+          920,
+          390
+        ],
+        "label": "元素乱流",
+        "element": "electro",
+        "pulse_interval": 8.0
+      }
+    ],
+    "lanes": {
+      "upper": 235,
+      "main": 355,
+      "lower": 485
+    },
+    "starting_squad": [
+      "traveler",
+      "hero_02",
+      "hero_03"
+    ],
+    "xp_thresholds": [
+      65,
+      140,
+      235,
+      350,
+      500,
+      690,
+      930,
+      1300,
+      1900,
+      2850,
+      4250,
+      6300,
+      9300,
+      13700,
+      20000
+    ],
+    "unlocks": [
+      "hero_10"
+    ],
+    "waves": [
+      {
+        "at": 4,
+        "enemy_id": "armored",
+        "count": 22,
+        "interval": 2.1,
+        "route_id": "lower"
+      },
+      {
+        "at": 24,
+        "enemy_id": "buffer",
+        "count": 24,
+        "interval": 2.0300000000000002,
+        "route_id": "upper"
+      },
+      {
+        "at": 44,
+        "enemy_id": "healer",
+        "count": 26,
+        "interval": 1.96,
+        "route_id": "main"
+      },
+      {
+        "at": 64,
+        "enemy_id": "shielded",
+        "count": 28,
+        "interval": 1.8900000000000001,
+        "route_id": "lower"
+      },
+      {
+        "at": 84,
+        "enemy_id": "charger",
+        "count": 30,
+        "interval": 1.82,
+        "route_id": "upper"
+      },
+      {
+        "at": 104,
+        "enemy_id": "splitter",
+        "count": 32,
+        "interval": 1.75,
+        "route_id": "main"
+      },
+      {
+        "at": 124,
+        "enemy_id": "warder",
+        "count": 34,
+        "interval": 1.6800000000000002,
+        "route_id": "lower"
+      },
+      {
+        "at": 144,
+        "enemy_id": "grunt",
+        "count": 36,
+        "interval": 1.61,
+        "route_id": "upper"
+      },
+      {
+        "at": 164,
+        "enemy_id": "runner",
+        "count": 38,
+        "interval": 1.54,
+        "route_id": "main"
+      },
+      {
+        "at": 184,
+        "enemy_id": "flyer",
+        "count": 40,
+        "interval": 1.47,
+        "route_id": "lower"
+      },
+      {
+        "at": 204,
+        "enemy_id": "ranged",
+        "count": 42,
+        "interval": 1.4,
+        "route_id": "upper"
+      },
+      {
+        "at": 224,
+        "enemy_id": "armored",
+        "count": 44,
+        "interval": 1.33,
+        "route_id": "main"
+      },
+      {
+        "at": 244,
+        "enemy_id": "buffer",
+        "count": 46,
+        "interval": 1.26,
+        "route_id": "lower"
+      },
+      {
+        "at": 264,
+        "enemy_id": "healer",
+        "count": 48,
+        "interval": 1.19,
+        "route_id": "upper"
+      },
+      {
+        "at": 284,
+        "enemy_id": "shielded",
+        "count": 50,
+        "interval": 1.12,
+        "route_id": "main"
+      },
+      {
+        "at": 304,
+        "enemy_id": "charger",
+        "count": 52,
+        "interval": 1.05,
+        "route_id": "lower"
+      }
+    ],
+    "routes": {
+      "upper": [
+        [
+          1195,
+          190
+        ],
+        [
+          1040,
+          190
+        ],
+        [
+          880,
+          300
+        ],
+        [
+          720,
+          190
+        ],
+        [
+          560,
+          360
+        ],
+        [
+          360,
+          250
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          360
+        ],
+        [
+          1020,
+          360
+        ],
+        [
+          850,
+          470
+        ],
+        [
+          700,
+          360
+        ],
+        [
+          540,
+          470
+        ],
+        [
+          360,
+          360
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "lower": [
+        [
+          1195,
+          530
+        ],
+        [
+          1040,
+          530
+        ],
+        [
+          880,
+          420
+        ],
+        [
+          720,
+          530
+        ],
+        [
+          560,
+          360
+        ],
+        [
+          360,
+          470
+        ],
+        [
+          115,
+          360
+        ]
+      ]
+    },
+    "boss_health_multiplier": 0.84,
+    "template_id": "clockwork_lanes"
+  },
+  {
+    "id": "stage_07",
+    "name": "永冻岔路",
+    "duration_seconds": 435,
+    "boss_at_seconds": 375,
+    "boss_id": "boss_04",
+    "boss_route_id": "upper",
+    "enemy_health_multiplier": 1.24,
+    "enemy_damage_multiplier": 0.42,
+    "enemy_speed_multiplier": 1.075,
+    "enemy_leak_multiplier": 0.31,
+    "terrain": [
+      {
+        "id": "stage_07_high_ground_0",
+        "type": "high_ground",
+        "rect": [
+          210,
+          170,
+          230,
+          105
+        ],
+        "label": "黑曜祭台",
+        "attack_bonus": 0.18
+      },
+      {
+        "id": "stage_07_low_ground_1",
+        "type": "low_ground",
+        "rect": [
+          690,
+          420,
+          275,
+          110
+        ],
+        "label": "孵化泥沼",
+        "speed_scale": 0.72
+      },
+      {
+        "id": "stage_07_blocked_2",
+        "type": "blocked",
+        "rect": [
+          790,
+          245,
+          135,
+          82
+        ],
+        "label": "母巢骨墙"
+      },
+      {
+        "id": "stage_07_mechanism_3",
+        "type": "mechanism",
+        "rect": [
+          470,
+          300,
+          82,
+          82
+        ],
+        "label": "黑曜处刑台",
+        "power": 280,
+        "radius": 280,
+        "interval": 1.6
+      },
+      {
+        "id": "stage_07_shortcut_4",
+        "type": "shortcut",
+        "rect": [
+          570,
+          365,
+          76,
+          96
+        ],
+        "label": "核心外壳",
+        "hp": 840
+      },
+      {
+        "id": "stage_07_one_way_5",
+        "type": "one_way",
+        "rect": [
+          430,
+          250,
+          78,
+          72
+        ],
+        "label": "单向风门",
+        "direction": [
+          -1,
+          0
+        ]
+      },
+      {
+        "id": "stage_07_moving_platform_6",
+        "type": "moving_platform",
+        "rect": [
+          610,
+          185,
+          150,
+          62
+        ],
+        "label": "浮空平台",
+        "axis": [
+          1,
+          0
+        ],
+        "distance": 120,
+        "period": 4.0
+      },
+      {
+        "id": "stage_07_conveyor_7",
+        "type": "conveyor",
+        "rect": [
+          720,
+          450,
+          210,
+          68
+        ],
+        "label": "裂隙流带",
+        "direction": [
+          -1,
+          0
+        ],
+        "force": 48
+      },
+      {
+        "id": "stage_07_trap_8",
+        "type": "trap",
+        "rect": [
+          850,
+          300,
+          100,
+          82
+        ],
+        "label": "元素陷阱",
+        "element": "electro",
+        "power": 59,
+        "interval": 2.8
+      },
+      {
+        "id": "stage_07_weather_9",
+        "type": "weather",
+        "rect": [
+          180,
+          145,
+          920,
+          390
+        ],
+        "label": "元素乱流",
+        "element": "cryo",
+        "pulse_interval": 8.0
+      }
+    ],
+    "lanes": {
+      "upper": 235,
+      "main": 355,
+      "lower": 485
+    },
+    "starting_squad": [
+      "traveler",
+      "hero_02",
+      "hero_03"
+    ],
+    "xp_thresholds": [
+      65,
+      140,
+      235,
+      350,
+      500,
+      690,
+      930,
+      1300,
+      1900,
+      2850,
+      4250,
+      6300,
+      9300,
+      13700,
+      20000
+    ],
+    "unlocks": [
+      "hero_11"
+    ],
+    "waves": [
+      {
+        "at": 4,
+        "enemy_id": "healer",
+        "count": 25,
+        "interval": 2.0500000000000003,
+        "route_id": "upper"
+      },
+      {
+        "at": 24,
+        "enemy_id": "shielded",
+        "count": 27,
+        "interval": 1.9800000000000004,
+        "route_id": "main"
+      },
+      {
+        "at": 44,
+        "enemy_id": "charger",
+        "count": 29,
+        "interval": 1.9100000000000001,
+        "route_id": "lower"
+      },
+      {
+        "at": 64,
+        "enemy_id": "splitter",
+        "count": 31,
+        "interval": 1.8400000000000003,
+        "route_id": "upper"
+      },
+      {
+        "at": 84,
+        "enemy_id": "warder",
+        "count": 33,
+        "interval": 1.77,
+        "route_id": "main"
+      },
+      {
+        "at": 104,
+        "enemy_id": "grunt",
+        "count": 35,
+        "interval": 1.7000000000000002,
+        "route_id": "lower"
+      },
+      {
+        "at": 124,
+        "enemy_id": "runner",
+        "count": 37,
+        "interval": 1.6300000000000003,
+        "route_id": "upper"
+      },
+      {
+        "at": 144,
+        "enemy_id": "flyer",
+        "count": 39,
+        "interval": 1.56,
+        "route_id": "main"
+      },
+      {
+        "at": 164,
+        "enemy_id": "ranged",
+        "count": 41,
+        "interval": 1.4900000000000002,
+        "route_id": "lower"
+      },
+      {
+        "at": 184,
+        "enemy_id": "armored",
+        "count": 43,
+        "interval": 1.42,
+        "route_id": "upper"
+      },
+      {
+        "at": 204,
+        "enemy_id": "buffer",
+        "count": 45,
+        "interval": 1.35,
+        "route_id": "main"
+      },
+      {
+        "at": 224,
+        "enemy_id": "healer",
+        "count": 47,
+        "interval": 1.2800000000000002,
+        "route_id": "lower"
+      },
+      {
+        "at": 244,
+        "enemy_id": "shielded",
+        "count": 49,
+        "interval": 1.21,
+        "route_id": "upper"
+      },
+      {
+        "at": 264,
+        "enemy_id": "charger",
+        "count": 51,
+        "interval": 1.1400000000000001,
+        "route_id": "main"
+      },
+      {
+        "at": 284,
+        "enemy_id": "splitter",
+        "count": 53,
+        "interval": 1.0700000000000003,
+        "route_id": "lower"
+      },
+      {
+        "at": 304,
+        "enemy_id": "warder",
+        "count": 55,
+        "interval": 1.0,
+        "route_id": "upper"
+      }
+    ],
+    "routes": {
+      "upper": [
+        [
+          1050,
+          145
+        ],
+        [
+          940,
+          240
+        ],
+        [
+          820,
+          175
+        ],
+        [
+          700,
+          300
+        ],
+        [
+          550,
+          230
+        ],
+        [
+          400,
+          360
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          360
+        ],
+        [
+          1010,
+          270
+        ],
+        [
+          840,
+          360
+        ],
+        [
+          680,
+          270
+        ],
+        [
+          510,
+          360
+        ],
+        [
+          330,
+          270
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "lower": [
+        [
+          1050,
+          575
+        ],
+        [
+          940,
+          480
+        ],
+        [
+          820,
+          545
+        ],
+        [
+          700,
+          420
+        ],
+        [
+          550,
+          490
+        ],
+        [
+          400,
+          360
+        ],
+        [
+          115,
+          360
+        ]
+      ]
+    },
+    "boss_health_multiplier": 0.8999999999999999,
+    "template_id": "frozen_fork"
+  },
+  {
+    "id": "stage_08",
+    "name": "蚀日围城",
+    "duration_seconds": 450,
+    "boss_at_seconds": 390,
+    "boss_id": "boss_01",
+    "boss_route_id": "main",
+    "enemy_health_multiplier": 1.36,
+    "enemy_damage_multiplier": 0.48,
+    "enemy_speed_multiplier": 1.1,
+    "enemy_leak_multiplier": 0.33999999999999997,
+    "terrain": [
+      {
+        "id": "stage_08_high_ground_0",
+        "type": "high_ground",
+        "rect": [
+          210,
+          170,
+          230,
+          105
+        ],
+        "label": "黑曜祭台",
+        "attack_bonus": 0.18
+      },
+      {
+        "id": "stage_08_low_ground_1",
+        "type": "low_ground",
+        "rect": [
+          690,
+          420,
+          275,
+          110
+        ],
+        "label": "孵化泥沼",
+        "speed_scale": 0.72
+      },
+      {
+        "id": "stage_08_blocked_2",
+        "type": "blocked",
+        "rect": [
+          790,
+          245,
+          135,
+          82
+        ],
+        "label": "母巢骨墙"
+      },
+      {
+        "id": "stage_08_mechanism_3",
+        "type": "mechanism",
+        "rect": [
+          470,
+          300,
+          82,
+          82
+        ],
+        "label": "黑曜处刑台",
+        "power": 280,
+        "radius": 280,
+        "interval": 1.6
+      },
+      {
+        "id": "stage_08_shortcut_4",
+        "type": "shortcut",
+        "rect": [
+          570,
+          365,
+          76,
+          96
+        ],
+        "label": "核心外壳",
+        "hp": 840
+      },
+      {
+        "id": "stage_08_one_way_5",
+        "type": "one_way",
+        "rect": [
+          430,
+          250,
+          78,
+          72
+        ],
+        "label": "单向风门",
+        "direction": [
+          -1,
+          0
+        ]
+      },
+      {
+        "id": "stage_08_moving_platform_6",
+        "type": "moving_platform",
+        "rect": [
+          610,
+          185,
+          150,
+          62
+        ],
+        "label": "浮空平台",
+        "axis": [
+          1,
+          0
+        ],
+        "distance": 120,
+        "period": 4.0
+      },
+      {
+        "id": "stage_08_conveyor_7",
+        "type": "conveyor",
+        "rect": [
+          720,
+          450,
+          210,
+          68
+        ],
+        "label": "裂隙流带",
+        "direction": [
+          -1,
+          0
+        ],
+        "force": 48
+      },
+      {
+        "id": "stage_08_trap_8",
+        "type": "trap",
+        "rect": [
+          850,
+          300,
+          100,
+          82
+        ],
+        "label": "元素陷阱",
+        "element": "electro",
+        "power": 66,
+        "interval": 2.8
+      },
+      {
+        "id": "stage_08_weather_9",
+        "type": "weather",
+        "rect": [
+          180,
+          145,
+          920,
+          390
+        ],
+        "label": "元素乱流",
+        "element": "geo",
+        "pulse_interval": 8.0
+      }
+    ],
+    "lanes": {
+      "upper": 235,
+      "main": 355,
+      "lower": 485
+    },
+    "starting_squad": [
+      "traveler",
+      "hero_02",
+      "hero_03"
+    ],
+    "xp_thresholds": [
+      65,
+      140,
+      235,
+      350,
+      500,
+      690,
+      930,
+      1300,
+      1900,
+      2850,
+      4250,
+      6300,
+      9300,
+      13700,
+      20000
+    ],
+    "unlocks": [
+      "hero_12"
+    ],
+    "waves": [
+      {
+        "at": 4,
+        "enemy_id": "charger",
+        "count": 28,
+        "interval": 2.0,
+        "route_id": "main"
+      },
+      {
+        "at": 24,
+        "enemy_id": "splitter",
+        "count": 30,
+        "interval": 1.9300000000000004,
+        "route_id": "lower"
+      },
+      {
+        "at": 44,
+        "enemy_id": "warder",
+        "count": 32,
+        "interval": 1.86,
+        "route_id": "upper"
+      },
+      {
+        "at": 64,
+        "enemy_id": "grunt",
+        "count": 34,
+        "interval": 1.7900000000000003,
+        "route_id": "main"
+      },
+      {
+        "at": 84,
+        "enemy_id": "runner",
+        "count": 36,
+        "interval": 1.7200000000000002,
+        "route_id": "lower"
+      },
+      {
+        "at": 104,
+        "enemy_id": "flyer",
+        "count": 38,
+        "interval": 1.6500000000000001,
+        "route_id": "upper"
+      },
+      {
+        "at": 124,
+        "enemy_id": "ranged",
+        "count": 40,
+        "interval": 1.5800000000000003,
+        "route_id": "main"
+      },
+      {
+        "at": 144,
+        "enemy_id": "armored",
+        "count": 42,
+        "interval": 1.5100000000000002,
+        "route_id": "lower"
+      },
+      {
+        "at": 164,
+        "enemy_id": "buffer",
+        "count": 44,
+        "interval": 1.4400000000000002,
+        "route_id": "upper"
+      },
+      {
+        "at": 184,
+        "enemy_id": "healer",
+        "count": 46,
+        "interval": 1.37,
+        "route_id": "main"
+      },
+      {
+        "at": 204,
+        "enemy_id": "shielded",
+        "count": 48,
+        "interval": 1.3,
+        "route_id": "lower"
+      },
+      {
+        "at": 224,
+        "enemy_id": "charger",
+        "count": 50,
+        "interval": 1.2300000000000002,
+        "route_id": "upper"
+      },
+      {
+        "at": 244,
+        "enemy_id": "splitter",
+        "count": 52,
+        "interval": 1.1600000000000001,
+        "route_id": "main"
+      },
+      {
+        "at": 264,
+        "enemy_id": "warder",
+        "count": 54,
+        "interval": 1.09,
+        "route_id": "lower"
+      },
+      {
+        "at": 284,
+        "enemy_id": "grunt",
+        "count": 56,
+        "interval": 1.0200000000000002,
+        "route_id": "upper"
+      },
+      {
+        "at": 304,
+        "enemy_id": "runner",
+        "count": 58,
+        "interval": 0.9500000000000002,
+        "route_id": "main"
+      }
+    ],
+    "routes": {
+      "upper": [
+        [
+          1195,
+          160
+        ],
+        [
+          1000,
+          260
+        ],
+        [
+          880,
+          160
+        ],
+        [
+          760,
+          310
+        ],
+        [
+          610,
+          190
+        ],
+        [
+          460,
+          350
+        ],
+        [
+          280,
+          260
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          360
+        ],
+        [
+          1010,
+          460
+        ],
+        [
+          850,
+          330
+        ],
+        [
+          700,
+          480
+        ],
+        [
+          550,
+          340
+        ],
+        [
+          390,
+          450
+        ],
+        [
+          115,
+          360
+        ]
+      ],
+      "lower": [
+        [
+          1195,
+          560
+        ],
+        [
+          1000,
+          460
+        ],
+        [
+          880,
+          560
+        ],
+        [
+          760,
+          410
+        ],
+        [
+          610,
+          530
+        ],
+        [
+          460,
+          370
+        ],
+        [
+          280,
+          470
+        ],
+        [
+          115,
+          360
+        ]
+      ]
+    },
+    "boss_health_multiplier": 0.96,
+    "template_id": "eclipse_siege"
+  },
+  {
     "id": "stage_endless",
     "name": "猩红荒原",
     "duration_seconds": 86400,

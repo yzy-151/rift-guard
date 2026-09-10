@@ -12,6 +12,7 @@ signal stage_action
 signal skill_action
 signal ultimate_action
 signal deploy_drag_action(hero_id: int, pressed: bool, screen_pos: Vector2)
+signal recall_action(hero_id: int)
 signal main_menu_action
 signal formation_action(mode: String)
 signal settings_action
@@ -729,6 +730,8 @@ E · %d/%d" % [sim.hero_ultimate_name(selected_id), roundi(energy), roundi(maxim
 func _hero_card_input(event: InputEvent, hero_id: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		deploy_drag_action.emit(hero_id, event.pressed, get_viewport().get_mouse_position())
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+		recall_action.emit(hero_id)
 
 func element_color(element: String) -> Color:
 	return {"anemo": Color("#63e6c0"), "electro": Color("#bf83ff"), "pyro": Color("#ff745c"), "hydro": Color("#5ab8ff"), "geo": Color("#e8b94d"), "cryo": Color("#9de7f2")}.get(element, WHITE)

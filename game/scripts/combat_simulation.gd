@@ -7,6 +7,8 @@ const CrystalProgression = preload("res://scripts/rewards/crystal_progression.gd
 const CardPool = preload("res://scripts/rewards/card_pool.gd")
 const StageRuntime = preload("res://scripts/stages/stage_runtime.gd")
 const StageProjection = preload("res://scripts/stage_projection.gd")
+const CombatTimeline = preload("res://scripts/combat_timeline.gd")
+const PerformanceBudget = preload("res://scripts/performance_budget.gd")
 const XP_THRESHOLDS = [80, 190, 330, 500]
 const Catalog = preload("res://scripts/combat_catalog.gd")
 const MOVE_AREA = Rect2(40, 140, 1200, 440)
@@ -89,6 +91,8 @@ var dodges: int = 0
 var damage_source_override: int = -1
 var fireball_level: int = 0
 var meteor_timer: float = 4.0
+var performance_budget = PerformanceBudget.new()
+var culled_spawns: int = 0
 
 func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 	v2_mode = enable_v2
@@ -143,6 +147,8 @@ func reset(seed_value: int = -1) -> void:
 	damage_source_override = -1
 	fireball_level = 0
 	meteor_timer = 4.0
+	performance_budget = PerformanceBudget.new()
+	culled_spawns = 0
 	next_construct_id = 0
 	reaction_damage_bonus = 0.0
 	reaction_radius_bonus = 0.0
@@ -223,6 +229,8 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	damage_source_override = -1
 	fireball_level = 0
 	meteor_timer = 4.0
+	performance_budget = PerformanceBudget.new()
+	culled_spawns = 0
 	next_construct_id = 0
 	reaction_damage_bonus = 0.0
 	reaction_radius_bonus = 0.0
@@ -260,7 +268,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 			"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
 			"color": colors[i], "tile": Vector2(i * 16, 112), "visual": "furina" if id == "hero_03" else ""
 		}
-		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.90, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0, "deployed": false, "energy": 0.0, "max_energy": float(source.get("ultimate", {}).get("energy_cost", 100.0)), "skill_cooldown": 0.0, "active_skill": source.get("active_skill", {}).duplicate(true), "ultimate": source.get("ultimate", {}).duplicate(true), "damage_done": 0.0, "skill_uses": 0, "ultimate_uses": 0, "max_energy_seen": 0.0, "revived": false})
+		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.90, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0, "deployed": false, "energy": 0.0, "max_energy": float(source.get("ultimate", {}).get("energy_cost", 100.0)), "skill_cooldown": 0.0, "active_skill": source.get("active_skill", {}).duplicate(true), "ultimate": source.get("ultimate", {}).duplicate(true), "passive": source.get("passive", {}).duplicate(true), "animation_state":"idle", "status_timer":0.0, "damage_reduction":0.0, "damage_done": 0.0, "skill_uses": 0, "ultimate_uses": 0, "max_energy_seen": 0.0, "revived": false})
 		heroes.append(h)
 
 func _add_reinforcement(character_id: String) -> bool:
@@ -281,7 +289,7 @@ func _add_reinforcement(character_id: String) -> bool:
 		"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
 		"color": colors[i], "tile": Vector2(i * 16, 112), "visual": "furina" if character_id == "hero_03" else ""
 	}
-	hero.merge({"id": i, "max_hp": hero.hp, "target": hero.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": hero.damage, "base_hp": hero.hp, "base_rate": hero.rate, "cleave": false, "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0, "deployed": false, "energy": 0.0, "max_energy": float(source.get("ultimate", {}).get("energy_cost", 100.0)), "skill_cooldown": 0.0, "active_skill": source.get("active_skill", {}).duplicate(true), "ultimate": source.get("ultimate", {}).duplicate(true), "damage_done": 0.0, "skill_uses": 0, "ultimate_uses": 0, "max_energy_seen": 0.0, "revived": false})
+	hero.merge({"id": i, "max_hp": hero.hp, "target": hero.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": hero.damage, "base_hp": hero.hp, "base_rate": hero.rate, "cleave": false, "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0, "deployed": false, "energy": 0.0, "max_energy": float(source.get("ultimate", {}).get("energy_cost", 100.0)), "skill_cooldown": 0.0, "active_skill": source.get("active_skill", {}).duplicate(true), "ultimate": source.get("ultimate", {}).duplicate(true), "passive": source.get("passive", {}).duplicate(true), "animation_state":"idle", "status_timer":0.0, "damage_reduction":0.0, "damage_done": 0.0, "skill_uses": 0, "ultimate_uses": 0, "max_energy_seen": 0.0, "revived": false})
 	heroes.append(hero)
 	events.append({"kind": "reinforcement", "pos": hero.pos, "value": character_id})
 	return true
@@ -533,6 +541,11 @@ func tick(dt: float) -> void:
 		kill_streak_timer = maxf(0.0, kill_streak_timer - dt)
 		if kill_streak_timer <= 0.0:
 			kill_streak = 0
+	performance_budget.sample(dt*1000.0,enemies.size(),projectiles.size())
+	for hero: Dictionary in heroes:
+		if float(hero.get("status_timer",0.0)) > 0.0:
+			hero.status_timer = maxf(0.0,float(hero.status_timer)-dt)
+			if hero.status_timer <= 0.0: hero.animation_state = "run" if bool(hero.get("moving",false)) else "idle"
 	if state not in ["running", "between", "stage_exit"]:
 		return
 	elapsed += dt
@@ -549,6 +562,7 @@ func tick(dt: float) -> void:
 		h.skill_cooldown = maxf(0.0, float(h.get("skill_cooldown", 0.0)) - dt)
 		h.flash = maxf(0.0, h.flash - dt)
 		h.moving = h.hp > 0 and bool(h.get("deployed", true)) and h.pos.distance_to(h.target) > 0.5
+		if float(h.get("status_timer",0.0)) <= 0.0: h.animation_state = "run" if h.moving else "idle"
 		if h.moving:
 			if absf(h.target.x - h.pos.x) > 1.0:
 				h.facing = 1.0 if h.target.x > h.pos.x else -1.0
@@ -687,7 +701,10 @@ func _stage_spawn_tick(dt: float) -> void:
 			events.append(event)
 		elif event.kind == "spawn":
 			wave = maxi(wave, int(event.get("wave", wave)))
-			spawn_on_route(str(event.enemy_id), str(event.route_id))
+			if performance_budget.allow_enemy(enemies.size()):
+				spawn_on_route(str(event.enemy_id), str(event.route_id))
+			else:
+				culled_spawns += 1
 		elif event.kind == "boss_wave":
 			wave += 1
 			var boss_id := str(event.enemy_id)
@@ -728,6 +745,15 @@ func _enemy_tick(dt: float) -> void:
 			e.pos.x -= 120.0
 			e.affix_timer = 5.0
 			events.append({"kind":"enemy_blink","pos":e.pos,"value":120})
+		elif "aegis" in e.get("affixes", []) and e.affix_timer <= 0.0:
+			var guarded := 0
+			for ally: Dictionary in enemies:
+				if ally.hp > 0.0 and ally.pos.distance_to(e.pos) <= 210.0:
+					ally.shield = float(ally.get("shield",0.0))+35.0
+					ally.max_shield = maxf(float(ally.get("max_shield",0.0)),float(ally.shield))
+					guarded += 1
+			e.affix_timer = 5.5
+			events.append({"kind":"enemy_guard","pos":e.pos,"value":guarded})
 		if e.aura_timer <= 0:
 			e.aura = ""
 		var speed_scale: float = (0.0 if e.frozen_timer > 0.0 else (0.7 if e.slow_timer > 0 else 1.0)) * (1.35 if e.haste_timer > 0 else 1.0)
@@ -807,14 +833,22 @@ func _enemy_tick(dt: float) -> void:
 				e.special_pending = false
 				_execute_boss_special(e)
 		elif str(e.get("kind", "")).begins_with("boss_") and e.special_timer <= 0.0:
+			var pattern: Dictionary = database.boss_patterns.get(str(e.kind), {}) if database != null else {}
+			var phase_rows: Array = pattern.get("phases", [])
+			var phase_row: Dictionary = phase_rows[clampi(int(e.get("boss_phase",1))-1,0,phase_rows.size()-1)] if not phase_rows.is_empty() else {}
+			var lead := float(phase_row.get("lead",1.35))
+			var warning_radius := float(phase_row.get("radius",150.0))
 			e.special_pending = true
-			e.special_warning = 1.35
+			e.special_warning = lead
 			e.special_timer = 0.05
+			e.special_warning_radius = warning_radius
+			e.special_warning_shape = str(phase_row.get("shape","circle"))
+			e.special_move_name = str(phase_row.get("name","首领技能"))
 			e.special_warning_positions = []
 			for warned_hero: Dictionary in heroes:
 				if bool(warned_hero.get("deployed", false)) and warned_hero.hp > 0.0:
 					e.special_warning_positions.append(warned_hero.pos)
-					events.append({"kind":"enemy_warning","pos":warned_hero.pos,"source":e.pos,"radius":150.0,"life":1.35,"boss":true})
+					events.append({"kind":"enemy_warning","pos":warned_hero.pos,"source":e.pos,"radius":warning_radius,"life":lead,"boss":true,"shape":e.special_warning_shape,"name":e.special_move_name})
 		elif e.get("kind", "") == "healer" and e.special_timer <= 0.0:
 			var healed := 0
 			for ally: Dictionary in enemies:
@@ -896,7 +930,7 @@ func _execute_boss_special(enemy: Dictionary) -> void:
 	enemy.special_timer = maxf(2.6, float(enemy.get("boss_pulse", 6.0)) * (0.90 if phase == 2 else (0.76 if phase == 3 else 1.0)))
 func _hero_in_boss_warning(hero: Dictionary, enemy: Dictionary) -> bool:
 	for point: Variant in enemy.get("special_warning_positions", []):
-		if hero.pos.distance_to(point) <= 150.0:
+		if hero.pos.distance_to(point) <= float(enemy.get("special_warning_radius",150.0)):
 			return true
 	return false
 
@@ -924,6 +958,9 @@ func deploy_hero(hero_id: int, point: Vector2) -> bool:
 	hero.target = point
 	hero.deployed = true
 	hero.moving = false
+	if str(hero.get("passive",{}).get("kind","")) == "guardian_spirit":
+		crystal_shield = minf(500.0, crystal_shield+90.0)
+		events.append({"kind":"crystal_guard","pos":point,"value":90})
 	events.append({"kind":"deploy","pos":point,"hero_id":hero_id,"value":hero.name})
 	return true
 
@@ -981,10 +1018,12 @@ func activate_hero_ultimate(hero_id: int, target: Vector2) -> bool:
 	return true
 
 func _queue_ability(hero: Dictionary, ability: Dictionary, target: Vector2, ultimate: bool) -> void:
-	var ratio := clampf(float(ability.get("hit_frame_ratio", 0.5)), 0.1, 0.9)
-	var animation_time := 0.92 if ultimate else 0.62
-	pending_impacts.append({"life": animation_time * ratio, "kind": "ability", "hero_id": hero.id, "target_pos": target, "ability": ability.duplicate(true), "ultimate": ultimate})
-	events.append({"kind":"ultimate_cast" if ultimate else "skill_cast","pos":hero.pos,"target":target,"hero_id":hero.id,"value":str(ability.get("name","技能")),"hit_delay":animation_time * ratio})
+	var timeline: Dictionary = CombatTimeline.compile(ability, ultimate)
+	hero.animation_state = "ultimate" if ultimate else "skill"
+	hero.status_timer = float(timeline.duration)
+	pending_impacts.append({"life":float(timeline.hit_frame),"kind":"ability","hero_id":hero.id,"target_pos":target,"ability":ability.duplicate(true),"ultimate":ultimate,"timeline":timeline})
+	events.append({"kind":"ultimate_cast" if ultimate else "skill_cast","pos":hero.pos,"target":target,"hero_id":hero.id,"value":str(ability.get("name","技能")),"hit_delay":float(timeline.hit_frame),"duration":float(timeline.duration),"targeting":str(ability.get("targeting","point"))})
+	events.append({"kind":"vfx_cue","pos":target,"hero_id":hero.id,"profile":"ultimate_burst" if ultimate else "skill_field","delay":float(timeline.vfx_frame),"value":str(ability.get("kind","burst"))})
 
 func _pending_impact_tick(dt: float) -> void:
 	var alive: Array[Dictionary] = []
@@ -1025,28 +1064,119 @@ func _execute_ability_impact(hero: Dictionary, ability: Dictionary, target: Vect
 	var kind := str(ability.get("kind", "burst"))
 	var radius := float(ability.get("radius", 180.0)) * (1.0 + skill_area_bonus) * (1.2 if ultimate and run_state.equipped_relics.has("relic_resonant_core") else 1.0)
 	var power := float(ability.get("power", 160.0)) * (1.0 + skill_power_bonus)
-	if kind in ["heal_gust", "team_concert", "hydro_fanfare", "encore"]:
-		for ally: Dictionary in heroes:
-			if bool(ally.get("deployed", false)) and ally.hp > 0.0:
-				var healing := minf(float(ally.max_hp) - float(ally.hp), power * (0.45 if ultimate else 0.30))
-				ally.hp += healing
-				ally.rate += ally.base_rate * (0.22 if ultimate else 0.08)
-				events.append({"kind":"heal","pos":ally.pos,"value":ceili(healing)})
-	elif kind in ["salon_summon", "mon3tr", "bangboo", "tribbie_gate"]:
-		orbitals.append({"hero_id":hero.id,"count":3 if ultimate else 1,"damage":power * 0.32,"radius":radius * 0.55,"timer":0.1,"interval":0.55,"life":12.0 if ultimate else 7.0,"element":hero.element})
-	elif kind in ["frost_bloom", "frozen_forest", "cryo_chord"]:
-		for enemy: Dictionary in enemies.duplicate():
-			if enemy.hp > 0.0 and enemy.pos.distance_to(target) <= radius:
-				enemy.frozen_timer = maxf(float(enemy.get("frozen_timer", 0.0)), 2.0 if ultimate else 0.8)
-				apply_hit(enemy, power, "cryo", hero.id)
-	else:
-		for enemy: Dictionary in enemies.duplicate():
-			if enemy.hp > 0.0 and enemy.pos.distance_to(target) <= radius:
-				apply_hit(enemy, power, str(hero.element), hero.id)
-				if kind in ["anemo_domain", "sonic_wave"]:
-					enemy.pos += (enemy.pos - target).normalized() * 70.0
+	var passive_kind := str(hero.get("passive", {}).get("kind", ""))
+	if passive_kind == "mana_surge": power *= 1.0 + float(hero.energy) / maxf(1.0, float(hero.max_energy)) * 0.35
+	if passive_kind == "resolve" and float(hero.hp) / maxf(1.0, float(hero.max_hp)) <= 0.5: power *= 1.45
+	match kind:
+		"heal_gust":
+			_heal_heroes(hero.pos, radius, power * 0.42, 34.0)
+			for ally: Dictionary in heroes:
+				if bool(ally.get("deployed", false)): ally.speed *= 1.08
+		"anemo_domain":
+			_damage_area(target, radius, power, "anemo", hero.id, "pull")
+			skill_effects.append({"kind":"anemo_domain","pos":target,"life":7.0,"pulse":0.0,"power":power*0.18,"area":radius/180.0,"hero_id":hero.id})
+		"salon_summon":
+			orbitals.append({"hero_id":hero.id,"count":3,"damage":power*0.32,"radius":radius*0.68,"timer":0.1,"interval":0.52,"life":10.0,"element":"hydro","visual":"salon"})
+		"hydro_fanfare":
+			_heal_heroes(hero.pos, 9999.0, power*0.34, 0.0)
+			for ally: Dictionary in heroes:
+				if bool(ally.get("deployed", false)): ally.rate += ally.base_rate*0.26
+			skill_effects.append({"kind":"hydro_field","pos":hero.pos,"life":10.0,"pulse":0.0,"power":power*0.14,"area":radius/220.0,"hero_id":hero.id})
+		"hydro_burst":
+			_damage_line(hero.pos, target, radius*1.8, 90.0, power, "hydro", hero.id)
+		"storm_field":
+			_damage_area(target, radius, power*0.65, "hydro", hero.id)
+			skill_effects.append({"kind":"storm_field","pos":target,"life":9.0,"pulse":0.0,"power":power*0.22,"area":radius/190.0,"hero_id":hero.id})
+		"sonic_wave":
+			_damage_line(hero.pos, target, radius*1.6, 145.0, power, "anemo", hero.id, true)
+		"team_concert":
+			for ally: Dictionary in heroes:
+				if bool(ally.get("deployed", false)) and ally.hp > 0.0:
+					ally.rate += ally.base_rate*0.32
+					ally.energy = minf(ally.max_energy, ally.energy+24.0)
+					ally.skill_cooldown = maxf(0.0, ally.skill_cooldown-3.0)
+		"arcane_lance":
+			_damage_line(hero.pos, target, radius*2.2, 72.0, power*1.18, "electro", hero.id)
+		"chimera":
+			_damage_area(target, radius, power*1.55, "electro", hero.id)
+			hero.hp = maxf(1.0, hero.hp-hero.max_hp*0.08)
+			hero.damage += hero.base_damage*0.28
+		"cryo_chord":
+			_damage_line(hero.pos, target, radius*1.8, 105.0, power, "cryo", hero.id)
+		"fate_symphony":
+			_damage_area(target, radius, power, "cryo", hero.id, "freeze")
+			for ally: Dictionary in heroes: ally.crit_chance = minf(0.85, ally.crit_chance+0.18)
+		"frost_bloom":
+			_damage_area(target, radius, power, "cryo", hero.id, "freeze")
+		"frozen_forest":
+			_damage_area(target, radius, power*0.75, "cryo", hero.id, "freeze")
+			skill_effects.append({"kind":"frozen_forest","pos":target,"life":12.0,"pulse":0.0,"power":power*0.16,"area":radius/210.0,"hero_id":hero.id})
+		"echo_shot":
+			_damage_line(hero.pos, target, radius*2.0, 82.0, power, "hydro", hero.id)
+			_damage_line(hero.pos, target, radius*2.0, 110.0, power*0.55, "hydro", hero.id)
+		"encore":
+			_heal_heroes(hero.pos, 9999.0, power*0.28, 0.0)
+			for ally: Dictionary in heroes:
+				ally.skill_cooldown = 0.0
+				ally.energy = minf(ally.max_energy, ally.energy+18.0)
+		"tribbie_gate":
+			orbitals.append({"hero_id":hero.id,"count":2,"damage":power*0.30,"radius":radius,"timer":0.1,"interval":0.46,"life":9.0,"element":hero.element,"visual":"gate"})
+			skill_effects.append({"kind":"gate_field","pos":target,"life":8.0,"pulse":0.0,"power":power*0.12,"area":radius/180.0,"hero_id":hero.id})
+		"trinity_field":
+			for offset: Vector2 in [Vector2.ZERO,Vector2(150,-80),Vector2(-150,80)]:
+				skill_effects.append({"kind":"gate_field","pos":target+offset,"life":12.0,"pulse":0.0,"power":power*0.18,"area":radius/230.0,"hero_id":hero.id})
+		"mon3tr":
+			orbitals.append({"hero_id":hero.id,"count":1,"damage":power*0.58,"radius":radius*0.72,"timer":0.1,"interval":0.38,"life":14.0,"element":"","visual":"mon3tr"})
+		"meltdown":
+			_damage_area(target, radius, power*1.35, "", hero.id)
+			orbitals.append({"hero_id":hero.id,"count":1,"damage":power*0.72,"radius":radius*0.75,"timer":0.1,"interval":0.30,"life":16.0,"element":"","visual":"mon3tr"})
+		"bangboo":
+			orbitals.append({"hero_id":hero.id,"count":2,"damage":power*0.36,"radius":radius*0.75,"timer":0.1,"interval":0.5,"life":11.0,"element":"electro","visual":"bangboo"})
+		"network_overdrive":
+			for ally: Dictionary in heroes:
+				if bool(ally.get("deployed", false)):
+					ally.rate += ally.base_rate*0.38
+					ally.speed *= 1.15
+					ally.energy = minf(ally.max_energy, ally.energy+30.0)
+		_:
+			_damage_area(target, radius, power, str(hero.element), hero.id)
+	if passive_kind == "encore_meter":
+		for ally: Dictionary in heroes: ally.skill_cooldown = maxf(0.0, ally.skill_cooldown-1.5)
 	hero.energy = minf(float(hero.max_energy), float(hero.energy) + (8.0 if run_state.equipped_relics.has("relic_resonant_core") else 0.0))
-	events.append({"kind":"ultimate_impact" if ultimate else "skill_impact","pos":target,"hero_id":hero.id,"value":str(ability.get("name","技能")),"element":hero.element,"radius":radius})
+	hero.animation_state = "idle"
+	events.append({"kind":"ultimate_impact" if ultimate else "skill_impact","pos":target,"hero_id":hero.id,"value":str(ability.get("name","技能")),"element":hero.element,"radius":radius,"ability_kind":kind})
+
+func _damage_area(center: Vector2, radius: float, power: float, element: String, hero_id: int, control: String = "") -> int:
+	var hits := 0
+	for enemy: Dictionary in enemies.duplicate():
+		if enemy.hp <= 0.0 or enemy.pos.distance_to(center) > radius: continue
+		apply_hit(enemy, power, element, hero_id)
+		if control == "pull": enemy.pos = enemy.pos.move_toward(center, 72.0)
+		elif control == "freeze": enemy.frozen_timer = maxf(float(enemy.get("frozen_timer",0.0)), 2.8)
+		hits += 1
+	return hits
+
+func _damage_line(origin: Vector2, target: Vector2, length: float, width: float, power: float, element: String, hero_id: int, push: bool = false) -> int:
+	var direction := (target-origin).normalized()
+	if direction.length_squared() < 0.1: direction = Vector2.RIGHT
+	var hits := 0
+	for enemy: Dictionary in enemies.duplicate():
+		var relative: Vector2 = enemy.pos-origin
+		var forward := relative.dot(direction)
+		var lateral := absf(relative.cross(direction))
+		if enemy.hp <= 0.0 or forward < 0.0 or forward > length or lateral > width: continue
+		apply_hit(enemy, power, element, hero_id)
+		if push: enemy.pos += direction*68.0
+		hits += 1
+	return hits
+
+func _heal_heroes(center: Vector2, radius: float, amount: float, shield: float) -> void:
+	for ally: Dictionary in heroes:
+		if not bool(ally.get("deployed", false)) or ally.hp <= 0.0 or ally.pos.distance_to(center) > radius: continue
+		var healed := minf(ally.max_hp-ally.hp, amount)
+		ally.hp += healed
+		if shield > 0.0: crystal_shield = minf(500.0, crystal_shield+shield)
+		events.append({"kind":"heal","pos":ally.pos,"value":ceili(healed)})
 
 func _record_damage(hero_id: int, damage: float) -> void:
 	if hero_id < 0 or hero_id >= heroes.size() or damage <= 0.0:
@@ -1105,6 +1235,9 @@ func _resolve_enemy_warning(enemy: Dictionary) -> void:
 		var victim: Dictionary = heroes[victim_id]
 		if bool(victim.get("deployed", false)) and victim.hp > 0.0 and victim.pos.distance_to(enemy.warning_pos) <= float(enemy.warning_radius):
 			damage_hero(victim_id, enemy.damage)
+			if "suppressor" in enemy.get("affixes",[]):
+				victim.skill_cooldown = float(victim.get("skill_cooldown",0.0))+2.0
+				events.append({"kind":"skill_suppressed","pos":victim.pos,"value":2})
 			hit = true
 			if float(enemy.get("attack_range", 0.0)) > 0.0:
 				events.append({"kind":"enemy_shot","pos":enemy.pos,"target":victim.pos,"value":ceili(enemy.damage)})
@@ -1113,8 +1246,10 @@ func _resolve_enemy_warning(enemy: Dictionary) -> void:
 		events.append({"kind":"enemy_heal","pos":enemy.pos,"value":ceili(enemy.damage * 0.25)})
 	if not hit:
 		dodges += 1
-		if run_state.equipped_relics.has("relic_warning_clock") and victim_id >= 0 and victim_id < heroes.size():
-			heroes[victim_id].energy = minf(float(heroes[victim_id].max_energy), float(heroes[victim_id].energy) + 12.0)
+		if victim_id >= 0 and victim_id < heroes.size():
+			var dodge_energy := 12.0 if run_state.equipped_relics.has("relic_warning_clock") else 0.0
+			if str(heroes[victim_id].get("passive",{}).get("kind","")) == "proxy_network": dodge_energy += 18.0
+			heroes[victim_id].energy = minf(float(heroes[victim_id].max_energy), float(heroes[victim_id].energy) + dodge_energy)
 		events.append({"kind":"dodge","pos":enemy.warning_pos,"value":1})
 	enemy.attack_timer = 1.0 / maxf(0.1, float(enemy.rate) * (1.25 if enemy.haste_timer > 0 else 1.0))
 
@@ -1128,6 +1263,9 @@ func _apply_enemy_affix(enemy: Dictionary) -> void:
 	if threat >= 4: pool.append("vampiric")
 	if threat >= 5: pool.append("blink")
 	if threat >= 6: pool.append("mirror")
+	if threat >= 7: pool.append("aegis")
+	if threat >= 8: pool.append("duplicator")
+	if threat >= 9: pool.append("suppressor")
 	var affix: String = pool[(enemy.id + threat) % pool.size()]
 	enemy.affixes.append(affix)
 	match affix:
@@ -1135,6 +1273,11 @@ func _apply_enemy_affix(enemy: Dictionary) -> void:
 		"mirror":
 			enemy.shield += enemy.max_hp * 0.35
 			enemy.max_shield = enemy.shield
+		"aegis":
+			enemy.shield += enemy.max_hp*0.50
+			enemy.max_shield = enemy.shield
+		"duplicator": enemy.split_count = 2
+		"suppressor": enemy.damage *= 0.90
 
 func _refresh_tag_synergies() -> void:
 	run_state.rebuild_tags(database.cards)
@@ -1271,7 +1414,16 @@ func _skill_effect_tick(dt: float) -> void:
 				elif effect.kind == "cryo_field" and enemy.pos.distance_to(effect.pos) <= 225.0 * effect_area:
 					enemy.slow_timer = maxf(float(enemy.slow_timer), 1.2)
 				elif effect.kind == "burning_ground" and enemy.pos.distance_to(effect.pos) <= 105.0 * effect_area:
-					apply_hit(enemy, 26.0 * effect_power, "pyro")
+					apply_hit(enemy, 26.0 * effect_power, "pyro", int(effect.get("hero_id",-1)))
+				elif effect.kind in ["anemo_domain","gate_field"] and enemy.pos.distance_to(effect.pos) <= 180.0 * effect_area:
+					apply_hit(enemy, effect_power, "anemo", int(effect.get("hero_id",-1)))
+					enemy.pos = enemy.pos.move_toward(effect.pos, 32.0)
+				elif effect.kind == "storm_field" and enemy.pos.distance_to(effect.pos) <= 190.0 * effect_area:
+					apply_hit(enemy, effect_power, "hydro", int(effect.get("hero_id",-1)))
+					chain_damage(enemy, effect_power*0.35, 1)
+				elif effect.kind == "frozen_forest" and enemy.pos.distance_to(effect.pos) <= 210.0 * effect_area:
+					apply_hit(enemy, effect_power, "cryo", int(effect.get("hero_id",-1)))
+					enemy.slow_timer = maxf(float(enemy.slow_timer),1.4)
 		if effect.life > 0.0:
 			surviving.append(effect)
 	skill_effects = surviving
@@ -1287,9 +1439,14 @@ func damage_hero(id: int, raw_damage: float) -> void:
 		events.append({"kind": "crystal_guard", "pos": h.pos, "value": ceili(absorbed)})
 		if raw_damage <= 0.0:
 			return
-	var damage: float = raw_damage * 100.0 / (100.0 + maxf(0, h.armor))
+	var reduction := float(h.get("damage_reduction",0.0))
+	if str(h.get("passive",{}).get("kind","")) == "resolve" and h.hp/h.max_hp <= 0.5: reduction = maxf(reduction,0.22)
+	if str(h.get("passive",{}).get("kind","")) == "tactical_link" and orbitals.any(func(o: Dictionary)->bool: return int(o.get("hero_id",-1)) == id and str(o.get("visual","")) == "mon3tr"): reduction = maxf(reduction,0.25)
+	var damage: float = raw_damage * (1.0-clampf(reduction,0.0,0.75)) * 100.0 / (100.0 + maxf(0, h.armor))
 	h.hp = maxf(0, h.hp - damage)
 	h.flash = 0.12
+	h.animation_state = "hurt"
+	h.status_timer = 0.44
 	events.append({"kind": "hurt", "pos": h.pos, "value": ceili(damage), "hero_id": id})
 	if h.hp <= 0 and run_state.equipped_relics.has("relic_second_heartbeat") and not bool(h.get("revived", false)):
 		h.hp = h.max_hp * 0.35
@@ -1303,6 +1460,8 @@ func damage_hero(id: int, raw_damage: float) -> void:
 		for enemy in enemies:
 			if enemy.blocked_by == id:
 				enemy.blocked_by = -1
+		h.animation_state = "down"
+		h.status_timer = 999999.0
 		events.append({"kind": "down", "pos": h.pos, "hero_id": id})
 
 func _hero_tick() -> void:
@@ -1336,6 +1495,8 @@ func _hero_tick() -> void:
 			h.facing = 1.0 if target.pos.x > h.pos.x else -1.0
 		var interval: float = 1.0 / maxf(0.1, float(h.rate))
 		h.attack_timer = interval
+		h.animation_state = "attack"
+		h.status_timer = minf(0.72,interval)
 		h.shots += 1
 		shots_fired += 1
 		events.append({"kind": "shot", "pos": h.pos, "hero_id": h.id, "duration": interval})
@@ -1354,6 +1515,9 @@ func _hero_tick() -> void:
 				events.append({"kind": "slash", "pos": victim.pos, "source_pos": h.pos, "angle": slash_direction.angle(), "element": normalize_element(str(h.element)), "critical": critical, "hit_delay": interval * hit_ratio})
 		else:
 			for shot_index in attack_count:
+				if not performance_budget.allow_projectile(projectiles.size()):
+					culled_spawns += 1
+					break
 				var shot_target: Dictionary = available[shot_index % available.size()]
 				projectiles.append({"visual_id": next_projectile_id, "pos": h.pos + Vector2(14, -12 + (shot_index - (attack_count - 1) * 0.5) * 6.0), "target_id": shot_target.id, "damage": damage if shot_index == 0 else damage * 0.78, "element": h.element, "secondary_element": h.get("secondary_element", ""), "source_id": h.id, "splash": h.splash, "slow": h.slow, "pierce": int(h.get("pierce", 0)), "chain_count": int(h.get("chain_count", 0)), "blast_radius": float(h.get("blast_radius", 0.0)), "echo_ratio": float(h.get("echo_ratio", 0.0)), "critical": critical})
 				next_projectile_id += 1
@@ -1453,6 +1617,15 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String, source_her
 				child.max_hp = child.hp
 				child.xp = 4
 			events.append({"kind": "split", "pos": enemy.pos, "value": int(enemy.get("split_count", 2))})
+		elif "duplicator" in enemy.get("affixes",[]) and not bool(enemy.get("split_done",false)):
+			enemy.split_done = true
+			for i in 2:
+				var copy_enemy := spawn_enemy(enemy.pos+Vector2(22.0,(i*2-1)*26.0),"runner")
+				copy_enemy.hp = enemy.max_hp*0.22
+				copy_enemy.max_hp = copy_enemy.hp
+				copy_enemy.affixes = []
+				copy_enemy.xp = 3
+			events.append({"kind":"enemy_duplicate","pos":enemy.pos,"value":2})
 		kills += 1
 		kill_streak += 1
 		kill_streak_timer = 2.5

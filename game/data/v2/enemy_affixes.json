@@ -30,5 +30,23 @@
     "name": "镜甲",
     "min_threat": 6,
     "shield_ratio": 0.35
+  },
+  {
+    "id": "aegis",
+    "name": "护阵",
+    "description": "周期为附近敌人补充护盾。",
+    "min_threat": 5
+  },
+  {
+    "id": "duplicator",
+    "name": "增殖",
+    "description": "生命降至一半时产生弱化复制体。",
+    "min_threat": 6
+  },
+  {
+    "id": "suppressor",
+    "name": "抑制",
+    "description": "命中会短暂延长角色技能冷却。",
+    "min_threat": 7
   }
 ]

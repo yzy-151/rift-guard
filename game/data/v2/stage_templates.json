@@ -1,0 +1,83 @@
+[
+  {
+    "id": "citadel_zigzag",
+    "name": "城门折线",
+    "route_style": "zigzag",
+    "mechanics": [
+      "high_ground",
+      "blocked",
+      "mechanism"
+    ]
+  },
+  {
+    "id": "crimson_dual",
+    "name": "赤潮双路",
+    "route_style": "dual_lane",
+    "mechanics": [
+      "low_ground",
+      "shortcut",
+      "conveyor"
+    ]
+  },
+  {
+    "id": "hive_converge",
+    "name": "母巢汇流",
+    "route_style": "converge",
+    "mechanics": [
+      "trap",
+      "blocked",
+      "weather"
+    ]
+  },
+  {
+    "id": "sky_cross",
+    "name": "天穹交叉",
+    "route_style": "cross",
+    "mechanics": [
+      "moving_platform",
+      "one_way",
+      "weather"
+    ]
+  },
+  {
+    "id": "crucible_spiral",
+    "name": "熔炉回旋",
+    "route_style": "spiral",
+    "mechanics": [
+      "trap",
+      "conveyor",
+      "mechanism"
+    ]
+  },
+  {
+    "id": "clockwork_lanes",
+    "name": "钟楼三轨",
+    "route_style": "three_lane",
+    "mechanics": [
+      "one_way",
+      "moving_platform",
+      "shortcut"
+    ]
+  },
+  {
+    "id": "frozen_fork",
+    "name": "冻原岔路",
+    "route_style": "fork",
+    "mechanics": [
+      "low_ground",
+      "weather",
+      "blocked"
+    ]
+  },
+  {
+    "id": "eclipse_siege",
+    "name": "蚀日围城",
+    "route_style": "siege",
+    "mechanics": [
+      "high_ground",
+      "trap",
+      "mechanism",
+      "shortcut"
+    ]
+  }
+]
