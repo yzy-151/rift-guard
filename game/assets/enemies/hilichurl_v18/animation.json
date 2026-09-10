@@ -1,0 +1,20 @@
+{
+  "format": 1,
+  "cell_size": 256,
+  "columns": 6,
+  "rows": 5,
+  "anchor": [
+    128,
+    242
+  ],
+  "clips": {
+    "run": {
+      "atlas": "run.png",
+      "frames": 30,
+      "fps": 20.0,
+      "loop": true,
+      "columns": 6,
+      "rows": 5
+    }
+  }
+}

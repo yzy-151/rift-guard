@@ -13,6 +13,9 @@ var reduced_effects: bool = false
 var effects: Array[Dictionary] = []
 var clock: float = 0.0
 var shot_flashes: Dictionary = {}
+var hero_attack_visuals: Dictionary = {}
+var hero_down_visuals: Dictionary = {}
+var projectile_trails: Dictionary = {}
 var route_previews: Dictionary = {}
 var spawn_portals: Dictionary = {}
 var stage_exit_active := false
@@ -35,6 +38,15 @@ var hell_stage_two: Texture2D = preload("res://assets/helltaker/backgrounds/chap
 var hell_stage_three: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0005.png")
 var crystal_texture: Texture2D = preload("res://assets/world/crystal-growth.svg")
 var furina_texture: Texture2D = preload("res://assets/characters/furina/furina-chibi-v1-alpha.png")
+var traveler_idle_atlas: Texture2D = preload("res://assets/characters/traveler_v18/idle.png")
+var traveler_run_atlas: Texture2D = preload("res://assets/characters/traveler_v18/run.png")
+var traveler_attack_atlas: Texture2D = preload("res://assets/characters/traveler_v18/attack.png")
+var traveler_death_atlas: Texture2D = preload("res://assets/characters/traveler_v18/death.png")
+var hilichurl_run_atlas: Texture2D = preload("res://assets/enemies/hilichurl_v18/run.png")
+const TRAVELER_CELL := 288.0
+const TRAVELER_FRAMES := 48
+const MONSTER_CELL := 256.0
+const MONSTER_FRAMES := 30
 var furina_actor
 var font: SystemFont
 var slash_frames: Array[Texture2D] = [
@@ -57,7 +69,7 @@ var muzzle_ion_frames: Array[Texture2D] = [
 ]
 
 func _ready() -> void:
-	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	font = SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
 	build_furina_actor()
@@ -70,6 +82,17 @@ func advance(dt: float) -> void:
 		_advance_stage_exit(dt)
 	for id in shot_flashes:
 		shot_flashes[id] = maxf(0.0, shot_flashes[id] - dt)
+	for id in hero_attack_visuals.keys():
+		hero_attack_visuals[id].elapsed = float(hero_attack_visuals[id].elapsed) + dt
+		if float(hero_attack_visuals[id].elapsed) >= float(hero_attack_visuals[id].duration):
+			hero_attack_visuals.erase(id)
+	if sim != null:
+		for hero: Dictionary in sim.heroes:
+			if hero.hp <= 0.0:
+				hero_down_visuals[hero.id] = float(hero_down_visuals.get(hero.id, 0.0)) + dt
+			else:
+				hero_down_visuals.erase(hero.id)
+		_update_projectile_trails()
 	base_flash = maxf(0.0, base_flash - dt)
 	shake_trauma = maxf(0.0, shake_trauma - dt * 3.8)
 	position = Vector2(sin(clock * 91.0), cos(clock * 73.0)) * shake_trauma * 5.0
@@ -134,12 +157,21 @@ func accept_events(batch: Array[Dictionary]) -> void:
 			"shot":
 				shot_flashes[event.hero_id] = 0.12
 				var hero: Dictionary = sim.heroes[event.hero_id]
+				var attack_duration := clampf(0.72 / maxf(0.55, float(hero.rate)), 0.22, 0.72)
+				hero_attack_visuals[event.hero_id] = {"elapsed": 0.0, "duration": attack_duration, "start_frame": 18}
 				if effects.size() < 260:
-					effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25, -20), "life": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0})
+					effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25, -20), "life": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0, "element": hero.get("element", "")})
 			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break":
 				if effects.size() >= 320 and event.kind in ["hit", "death", "move", "muzzle"]:
 					continue
-				effects.append({"kind": event.kind, "pos": event.pos, "life": 0.6, "value": event.get("value", 0), "rarity": event.get("rarity", "")})
+				var visual_event: Dictionary = event.duplicate(true)
+				visual_event.life = 0.6
+				visual_event.total = 0.6
+				effects.append(visual_event)
+				if str(event.kind).begins_with("skill_"):
+					for hero: Dictionary in sim.heroes:
+						if hero.get("character_id", "") == "traveler" and hero.hp > 0.0:
+							hero_attack_visuals[hero.id] = {"elapsed": 0.0, "duration": 0.82, "start_frame": 0}
 				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "skill_pyro", "skill_electro", "geo_break", "kill_streak"]:
 					shake_trauma = minf(1.0, shake_trauma + 0.42)
 				elif event.kind in ["hit", "slash", "chain"]:
@@ -194,11 +226,7 @@ func _draw() -> void:
 			_draw_enemy(visual)
 		draw_set_transform(Vector2.ZERO)
 	for projectile in sim.projectiles:
-		var point: Vector2 = world_to_screen(projectile.pos) + Vector2(0, -18)
-		var color: Color = {"hydro": Color("#74c9ff"), "pyro": Color("#ff7d54"), "electro": Color("#c189ff"), "cryo": Color("#b9efff"), "anemo": Color("#82ebc7"), "geo": Color("#f1c45c")}.get(projectile.element, Color("#ffd397"))
-		draw_line(point - Vector2(24, 0), point, Color(color, 0.26), 7.0, true)
-		draw_line(point - Vector2(16, 0), point, color, 2.8, true)
-		draw_circle(point, 4.5, Color.WHITE)
+		_draw_projectile(projectile)
 	for effect in effects:
 		var point: Vector2 = world_to_screen(effect.pos)
 		var scale_factor: float = world_depth_scale(effect.pos)
@@ -476,36 +504,40 @@ func _draw_terrain_features() -> void:
 				caption(center + Vector2(-39, 27), "战技可破坏", Color("#ffc181"), 10)
 
 func _draw_endless_stage() -> void:
-	draw_texture_rect(hell_stage_three, Rect2(0, 0, 1280, 720), false, Color(0.28, 0.20, 0.25, 1.0))
-	draw_rect(Rect2(0, 0, 1280, 720), Color(0.035, 0.022, 0.045, 0.74))
+	draw_texture_rect(hell_stage_three, Rect2(0, 0, 1280, 720), false, Color(0.34, 0.24, 0.30, 1.0))
+	draw_rect(Rect2(0, 0, 1280, 720), Color(0.035, 0.018, 0.045, 0.69))
+	# Broad overlapping slabs remove the old black checkerboard while retaining navigation scale.
 	var top_left := screen_to_world(Vector2.ZERO)
 	var bottom_right := screen_to_world(Vector2(1280, 720))
-	var cell := 128.0
+	var cell := 192.0
 	var first_x := floorf(top_left.x / cell) * cell
 	var first_y := floorf(top_left.y / cell) * cell
 	for x in range(int(first_x), int(bottom_right.x + cell), int(cell)):
 		for y in range(int(first_y), int(bottom_right.y + cell), int(cell)):
-			var world_rect := Rect2(Vector2(x + 0.5, y + 0.5), Vector2(cell - 1.0, cell - 1.0))
-			var checker := (floori(x / cell) + floori(y / cell)) % 3
-			var tile_color: Color = [Color(0.21, 0.17, 0.22, 0.76), Color(0.19, 0.145, 0.20, 0.76), Color(0.225, 0.175, 0.225, 0.76)][checker]
-			draw_rect(Rect2(world_to_screen(world_rect.position), world_rect.size), tile_color)
-			var corner := world_to_screen(world_rect.position + Vector2(16, 18))
-			draw_line(corner, corner + Vector2(20, 6), Color(0.72, 0.40, 0.44, 0.07), 2.0, true)
-			draw_line(corner + Vector2(20, 6), corner + Vector2(29, 22), Color(0.72, 0.40, 0.44, 0.05), 2.0, true)
+			var checker := posmod(floori(x / cell) + floori(y / cell), 4)
+			var tile_color: Color = [Color("#302630"), Color("#352932"), Color("#2f252f"), Color("#392b33")][checker]
+			draw_rect(Rect2(world_to_screen(Vector2(x - 1, y - 1)), Vector2(cell + 2, cell + 2)), tile_color)
+			var seed := absi(x * 13 + y * 7)
+			var crack := world_to_screen(Vector2(x + 28 + seed % 88, y + 34 + seed % 61))
+			draw_polyline(PackedVector2Array([crack, crack + Vector2(17, 5), crack + Vector2(26, 18), crack + Vector2(42, 22)]), Color(0.86, 0.49, 0.50, 0.08), 1.5, true)
 	var center := world_to_screen(Sim.ENDLESS_ARENA.get_center())
-	for radius in [245.0, 390.0, 545.0]:
-		draw_arc(center, radius, 0, TAU, 96, Color(0.72, 0.30, 0.38, 0.09), 2.0, true)
-	for i in 18:
-		var angle := float(i) * TAU / 18.0
-		var radius := 230.0 + float((i * 73) % 260)
+	for radius in [220.0, 360.0, 515.0]:
+		draw_arc(center, radius + sin(clock * 0.8 + radius) * 3.0, 0, TAU, 112, Color(0.88, 0.34, 0.42, 0.075), 3.0, true)
+	for i in 24:
+		var angle := float(i) * TAU / 24.0
+		var radius := 210.0 + float((i * 83) % 330)
 		var rune := world_to_screen(Sim.ENDLESS_ARENA.get_center() + Vector2.from_angle(angle) * radius)
-		draw_arc(rune, 12.0 + float(i % 3) * 5.0, angle + clock * 0.05, angle + PI * 1.35 + clock * 0.05, 16, Color(0.88, 0.37, 0.43, 0.23), 2.0)
-		if i % 3 == 0:
-			draw_circle(rune, 3.0, Color(1.0, 0.65, 0.64, 0.20))
+		var glow := 0.12 + sin(clock * 1.8 + i * 0.7) * 0.045
+		draw_arc(rune, 11.0 + float(i % 4) * 3.0, angle + clock * 0.04, angle + PI * 1.42 + clock * 0.04, 18, Color(0.96, 0.40, 0.46, glow), 2.0, true)
+		if i % 4 == 0:
+			draw_circle(rune, 3.0, Color(1.0, 0.69, 0.62, 0.18))
 	var arena_screen := Rect2(world_to_screen(Sim.ENDLESS_ARENA.position), Sim.ENDLESS_ARENA.size)
-	draw_rect(arena_screen, Color(0.86, 0.36, 0.43, 0.42), false, 3.0)
-	draw_rect(Rect2(0, 0, 1280, 720), Color(0.02, 0.01, 0.025, 0.18), false, 22.0)
-	caption(Vector2(36, 126), "E N D L E S S   F I E L D   /   猩红荒原", Color("#d6aaa6"), 12)
+	draw_rect(arena_screen, Color(0.92, 0.37, 0.43, 0.34), false, 3.0)
+	# Soft frame and ember bands guide focus toward the playable center.
+	for edge in 5:
+		draw_rect(Rect2(edge * 5, edge * 5, 1280 - edge * 10, 720 - edge * 10), Color(0.02, 0.008, 0.02, 0.07), false, 5.0)
+	caption(Vector2(36, 126), "E N D L E S S   F I E L D   /   猩红荒原", Color("#dcb1ad"), 12)
+
 func _draw_base_projected() -> void:
 	var point: Vector2 = world_to_screen(Vector2(100, 365))
 	draw_ellipse_shadow(point + Vector2(0, 15), 52, Color(0, 0, 0, 0.48))
@@ -605,35 +637,39 @@ func _draw_hero(hero: Dictionary) -> void:
 	var down: bool = hero.hp <= 0
 	var color := Color(hero.color)
 	var is_furina: bool = hero.get("visual", "") == "furina"
-	var bob: float = 0.0 if down else sin(clock * (14.0 if hero.moving else 3.0)) * (3.0 if hero.moving else 1.0)
+	var is_traveler: bool = hero.get("character_id", "") == "traveler"
+	var bob: float = 0.0 if down or is_traveler else sin(clock * (14.0 if hero.moving else 3.0)) * (3.0 if hero.moving else 1.0)
 	if selected_id == hero.id:
-		draw_arc(hero.pos + Vector2(0, 8), 29, 0, TAU, 36, color, 2)
+		draw_arc(hero.pos + Vector2(0, 8), 31 if is_traveler else 29, 0, TAU, 36, color, 2)
 	var tint := Color("#67717a") if down else Color.WHITE
-	var traveler_element: String = str(hero.get("element", "")) if hero.get("character_id", "") == "traveler" else ""
+	var traveler_element: String = str(hero.get("element", "")) if is_traveler else ""
 	if traveler_element != "":
 		var aura_color: Color = element_color(traveler_element)
 		draw_circle(hero.pos + Vector2(0, -20), 31.0 + sin(clock * 3.0) * 2.0, Color(aura_color, 0.11))
 		draw_arc(hero.pos + Vector2(0, 7), 31.0, clock * 0.7, clock * 0.7 + PI * 1.45, 30, Color(aura_color, 0.82), 2.2, true)
-		caption(hero.pos + Vector2(-9, -72), element_glyph(traveler_element), aura_color, 16)
+		caption(hero.pos + Vector2(-9, -128 if is_traveler else -72), element_glyph(traveler_element), aura_color, 16)
 	if hero.flash > 0 and not reduced_effects:
-		tint = Color("#f8a6a1")
+		tint = Color("#fff0eb")
 	if is_furina:
 		if shot_flashes.get(hero.id, 0.0) > 0.0 and not reduced_effects:
 			var pulse: float = shot_flashes.get(hero.id, 0.0) / 0.12
 			draw_circle(hero.pos + Vector2(30, -35), 7.0 + pulse * 5.0, Color(0.52, 0.88, 1.0, 0.16))
 			draw_arc(hero.pos + Vector2(30, -35), 9.0 + pulse * 7.0, -1.25, 1.25, 16, Color("#a9ecff"), 2.0, true)
+	elif is_traveler:
+		_draw_traveler(hero, tint, down)
 	else:
 		draw_texture_rect_region(atlas, Rect2(hero.pos + Vector2(-29, -46 + bob), Vector2(58, 58)), Rect2(hero.tile, Vector2(16, 16)), tint)
 	if not down:
-		if hero.block > 0:
+		if hero.block > 0 and not is_traveler:
 			draw_rect(Rect2(hero.pos + Vector2(17, -24), Vector2(16, 25)), Color("#a8a687"))
 			draw_rect(Rect2(hero.pos + Vector2(21, -21), Vector2(8, 18)), Color("#445b5e"))
-		elif not is_furina:
+		elif not is_furina and not is_traveler:
 			draw_circle(hero.pos + Vector2(29, -16 + bob), 5, color)
 			if shot_flashes.get(hero.id, 0.0) > 0 and not reduced_effects:
 				draw_circle(hero.pos + Vector2(37, -16), 8, color)
-	var label_y: float = -108.0 if is_furina else -65.0
-	var health_y: float = -96.0 if is_furina else -53.0
+	var tall_visual := is_furina or is_traveler
+	var label_y: float = -132.0 if is_traveler else (-108.0 if is_furina else -65.0)
+	var health_y: float = -120.0 if is_traveler else (-96.0 if is_furina else -53.0)
 	caption(hero.pos + Vector2(-29, label_y), "%d %s" % [hero.id + 1, hero.name], color, 13)
 	draw_rect(Rect2(hero.pos + Vector2(-25, health_y), Vector2(50, 4)), Color("#303942"))
 	draw_rect(Rect2(hero.pos + Vector2(-25, health_y), Vector2(50 * hero.hp / hero.max_hp, 4)), color)
@@ -643,6 +679,31 @@ func _draw_hero(hero: Dictionary) -> void:
 		caption(hero.pos + Vector2(-24, 30), "移动中", Color("#91a4ad"), 12)
 	elif hero.block > 0:
 		caption(hero.pos + Vector2(-28, 30), "阻挡 %d/%d" % [hero.blocked, hero.block], color, 12)
+
+func _draw_traveler(hero: Dictionary, tint: Color, down: bool) -> void:
+	var texture := traveler_idle_atlas
+	var frame := posmod(floori(clock * 24.0), TRAVELER_FRAMES)
+	if down:
+		texture = traveler_death_atlas
+		frame = mini(TRAVELER_FRAMES - 1, floori(float(hero_down_visuals.get(hero.id, 0.0)) * 30.0))
+	elif hero_attack_visuals.has(hero.id):
+		texture = traveler_attack_atlas
+		var state: Dictionary = hero_attack_visuals[hero.id]
+		var phase := clampf(float(state.elapsed) / maxf(0.01, float(state.duration)), 0.0, 1.0)
+		var start_frame := int(state.get("start_frame", 18))
+		frame = clampi(start_frame + floori(phase * float(TRAVELER_FRAMES - 1 - start_frame)), start_frame, TRAVELER_FRAMES - 1)
+	elif hero.moving:
+		texture = traveler_run_atlas
+		frame = posmod(floori(clock * 24.0), TRAVELER_FRAMES)
+	var hit_strength := clampf(float(hero.flash) / 0.12, 0.0, 1.0) if not reduced_effects else 0.0
+	var width := 132.0 * (1.0 + hit_strength * 0.13)
+	var height := 132.0 * (1.0 - hit_strength * 0.10)
+	var foot: Vector2 = hero.pos + Vector2(0, 8)
+	var destination := Rect2(foot.x - width * 0.5, foot.y - height * 270.0 / TRAVELER_CELL, width, height)
+	var source := Rect2((frame % 8) * TRAVELER_CELL, floori(frame / 8.0) * TRAVELER_CELL, TRAVELER_CELL, TRAVELER_CELL)
+	if not reduced_effects:
+		draw_circle(hero.pos + Vector2(0, -35), 36.0 + sin(clock * 2.2) * 2.0, Color(1.0, 0.76, 0.48, 0.055))
+	draw_texture_rect_region(texture, destination, source, tint)
 
 func _draw_furina(hero: Dictionary, tint: Color, bob: float, down: bool) -> void:
 	if down:
@@ -699,7 +760,11 @@ func _draw_enemy(enemy: Dictionary) -> void:
 		"warder":
 			for ring in 2:
 				draw_arc(body, 31.0 + ring * 8.0 + sin(clock * 3.0) * 2.0, clock * (1.0 if ring == 0 else -1.0), TAU + clock * (1.0 if ring == 0 else -1.0), 6, Color(0.55, 0.67, 1.0, 0.52), 2.5, true)
-	draw_texture_rect_region(atlas, Rect2(enemy.pos + Vector2(-side / 2, -side + 12 + bob), Vector2(side, side)), Rect2(0, 144, 16, 16), tint)
+	var animated_enemy := str(enemy.kind) in ["grunt", "runner", "charger"]
+	if animated_enemy:
+		_draw_animated_enemy(enemy, tint, bob)
+	else:
+		draw_texture_rect_region(atlas, Rect2(enemy.pos + Vector2(-side / 2, -side + 12 + bob), Vector2(side, side)), Rect2(0, 144, 16, 16), tint)
 	var ratio: float = clampf(float(enemy.hp) / float(enemy.max_hp), 0, 1)
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44, 4)), Color("#302b32"))
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44 * ratio, 4)), RED)
@@ -783,6 +848,94 @@ func _draw_enemy(enemy: Dictionary) -> void:
 		draw_circle(enemy.pos + Vector2(30, -side), 11, Color("#10202b"))
 		caption(enemy.pos + Vector2(24, -side + 5), element_glyph(aura_element), color, 12)
 
+func _update_projectile_trails() -> void:
+	if sim == null:
+		projectile_trails.clear()
+		return
+	var active := {}
+	for projectile: Dictionary in sim.projectiles:
+		var key := int(projectile.get("visual_id", projectile.get("source_id", 0) * 100000 + projectile.get("target_id", 0)))
+		active[key] = true
+		var history: Array = projectile_trails.get(key, [])
+		var current := Vector2(projectile.pos)
+		if history.is_empty() or Vector2(history[-1]).distance_to(current) > 1.0:
+			history.append(current)
+		while history.size() > 11:
+			history.pop_front()
+		projectile_trails[key] = history
+	for key in projectile_trails.keys():
+		if not active.has(key):
+			projectile_trails.erase(key)
+
+func _draw_projectile(projectile: Dictionary) -> void:
+	var key := int(projectile.get("visual_id", projectile.get("source_id", 0) * 100000 + projectile.get("target_id", 0)))
+	var history: Array = projectile_trails.get(key, [])
+	var point := world_to_screen(Vector2(projectile.pos)) + Vector2(0, -18)
+	var direction := Vector2.RIGHT
+	if history.size() >= 2:
+		direction = (world_to_screen(Vector2(history[-1])) - world_to_screen(Vector2(history[-2]))).normalized()
+	else:
+		var target: Dictionary = sim.find_enemy(int(projectile.get("target_id", -1)))
+		if not target.is_empty():
+			direction = (world_to_screen(target.pos) - point).normalized()
+	if direction.length_squared() < 0.1:
+		direction = Vector2.RIGHT
+	var element := str(projectile.get("element", ""))
+	var color := element_color(element)
+	for i in range(maxi(0, history.size() - 1)):
+		var a := world_to_screen(Vector2(history[i])) + Vector2(0, -18)
+		var b := world_to_screen(Vector2(history[i + 1])) + Vector2(0, -18)
+		var age := float(i + 1) / maxf(1.0, float(history.size()))
+		draw_line(a, b, Color(color, age * 0.13), 13.0 * age, true)
+		draw_line(a, b, Color(color.lightened(0.32), age * 0.68), 2.2 + age * 2.2, true)
+	draw_set_transform(point, direction.angle(), Vector2.ONE)
+	var critical_scale := 1.35 if bool(projectile.get("critical", false)) else 1.0
+	draw_circle(Vector2.ZERO, 12.0 * critical_scale, Color(color, 0.10))
+	draw_circle(Vector2.ZERO, 6.2 * critical_scale, Color(color, 0.42))
+	match element:
+		"pyro":
+			draw_colored_polygon(PackedVector2Array([Vector2(13, 0), Vector2(-7, -9), Vector2(-2, 0), Vector2(-10, 8)]), Color(color, 0.92))
+			draw_circle(Vector2(4, 0), 3.2, Color("#fff1b8"))
+		"hydro":
+			draw_circle(Vector2.ZERO, 7.2, Color(color, 0.72))
+			draw_arc(Vector2.ZERO, 10.0, -1.8, 1.8, 18, Color("#e7fbff"), 2.0, true)
+			draw_circle(Vector2(2, -3), 2.0, Color.WHITE)
+		"electro":
+			draw_polyline(PackedVector2Array([Vector2(-13, 4), Vector2(-5, -5), Vector2(0, 3), Vector2(7, -7), Vector2(14, 0)]), Color("#f7e8ff"), 3.6, true)
+			draw_polyline(PackedVector2Array([Vector2(-8, 8), Vector2(0, 1), Vector2(5, 8)]), color, 2.4, true)
+		"cryo":
+			var shard := PackedVector2Array([Vector2(14, 0), Vector2(-3, -7), Vector2(-10, 0), Vector2(-3, 7)])
+			draw_colored_polygon(shard, Color(color, 0.82))
+			draw_polyline(PackedVector2Array([shard[0], shard[1], shard[2], shard[3], shard[0]]), Color("#f2ffff"), 1.8, true)
+		"anemo":
+			for ring in 2:
+				draw_arc(Vector2(-2, 0), 7.0 + ring * 4.0, -1.35 + ring, 1.4 + ring, 18, Color(color, 0.92 - ring * 0.28), 2.5, true)
+			draw_line(Vector2(-9, 0), Vector2(14, 0), Color("#e9fff6"), 2.0, true)
+		"geo":
+			var crystal := PackedVector2Array([Vector2(13, 0), Vector2(2, -8), Vector2(-10, -4), Vector2(-8, 6), Vector2(3, 8)])
+			draw_colored_polygon(crystal, Color(color, 0.88))
+			draw_polyline(PackedVector2Array([crystal[0], crystal[1], crystal[2], crystal[3], crystal[4], crystal[0]]), Color("#fff0b0"), 1.8, true)
+		_:
+			var wave := PackedVector2Array()
+			for i in 9:
+				var angle := lerpf(-0.95, 0.95, float(i) / 8.0)
+				wave.append(Vector2(cos(angle) * 13.0, sin(angle) * 10.0))
+			draw_polyline(wave, Color("#fff3c6"), 4.0, true)
+			draw_polyline(wave, Color.WHITE, 1.3, true)
+	draw_set_transform(Vector2.ZERO)
+
+func _draw_animated_enemy(enemy: Dictionary, tint: Color, bob: float) -> void:
+	var speed_scale := 1.28 if str(enemy.kind) in ["runner", "charger"] else 1.0
+	var frame := posmod(floori(clock * 20.0 * speed_scale + enemy.id * 3.0), MONSTER_FRAMES)
+	var visual_size := clampf(float(enemy.size) * 2.14, 86.0, 124.0)
+	if str(enemy.kind) == "runner":
+		visual_size *= 0.92
+	var foot: Vector2 = enemy.pos + Vector2(0, 12 + bob * 0.35)
+	var destination := Rect2(foot.x - visual_size * 0.5, foot.y - visual_size * 242.0 / MONSTER_CELL, visual_size, visual_size)
+	var source := Rect2((frame % 6) * MONSTER_CELL, floori(frame / 6.0) * MONSTER_CELL, MONSTER_CELL, MONSTER_CELL)
+	var art_tint := Color("#fff0e8") if enemy.flash > 0 and not reduced_effects else Color.WHITE
+	draw_texture_rect_region(hilichurl_run_atlas, destination, source, art_tint)
+
 func _draw_effect(effect: Dictionary) -> void:
 	var t: float = 1.0 - effect.life / 0.6
 	var fade: float = minf(1.0, effect.life * 4)
@@ -832,17 +985,29 @@ func _draw_effect(effect: Dictionary) -> void:
 			for ring in 3:
 				draw_arc(effect.pos + Vector2(0, -18), 22.0 + ring * 15.0 + t * 58.0, 0, TAU, 36, Color(streak_color, fade * (0.8 - ring * 0.18)), 4.0 - ring, true)
 	elif effect.kind == "hit":
-		var impact_size := 18 if int(effect.value) >= 200 else 16
-		caption(effect.pos + Vector2(-8, -25 - t * 30), str(effect.value), Color(1, 0.84, 0.58, fade), impact_size)
+		var impact_size := 19 if int(effect.value) >= 200 else 16
+		var impact_color := element_color(str(effect.get("element", "")))
+		caption(effect.pos + Vector2(-8, -31 - t * 34), str(effect.value), Color(impact_color.lightened(0.38), fade), impact_size)
 		if not reduced_effects:
-			for i in 7:
-				var direction := Vector2.from_angle(i * TAU / 7)
-				draw_line(effect.pos + direction * (5 + t * 18), effect.pos + direction * (10 + t * 22), Color(1, 0.75, 0.4, fade), 2)
+			draw_circle(effect.pos, 12.0 * (1.0 - t), Color.WHITE, false, 3.0, true)
+			draw_arc(effect.pos, 10.0 + t * 42.0, -2.65, 0.75, 28, Color(impact_color, fade * 0.82), 4.2 * (1.0 - t) + 1.2, true)
+			for i in 10:
+				var angle := i * TAU / 10.0 + float(effect.pos.x as int % 7) * 0.07
+				var direction := Vector2.from_angle(angle)
+				var start := 5.0 + t * (12.0 + i % 3 * 4.0)
+				var finish := start + 11.0 + (i % 4) * 5.0
+				draw_line(effect.pos + direction * start, effect.pos + direction * finish, Color(impact_color.lightened(0.28), fade * 0.90), 3.2 - (i % 3) * 0.5, true)
 	elif effect.kind == "critical":
-		caption(effect.pos + Vector2(-45, -72 - t * 36), "CRITICAL  %d" % int(effect.value), Color(1.0, 0.46, 0.25, fade), 22)
-		for ray in 10:
-			var direction := Vector2.from_angle(ray * TAU / 10.0)
-			draw_line(effect.pos + direction * 8.0, effect.pos + direction * (34.0 + t * 48.0), Color(1.0, 0.73, 0.36, fade), 3.0, true)
+		var critical_color := Color(1.0, 0.46, 0.22, fade)
+		caption(effect.pos + Vector2(-54, -82 - t * 42), "CRITICAL  %d" % int(effect.value), critical_color, 23)
+		draw_circle(effect.pos, 22.0 * (1.0 - t), Color(1.0, 0.92, 0.66, fade * 0.25))
+		for ring in 2:
+			draw_arc(effect.pos, 18.0 + ring * 13.0 + t * 54.0, ring * 1.4, ring * 1.4 + PI * 1.55, 34, Color(critical_color, fade * (0.90 - ring * 0.25)), 5.0 - ring * 1.5, true)
+		for ray in 14:
+			var direction := Vector2.from_angle(ray * TAU / 14.0 + 0.12)
+			var side := direction.rotated(PI * 0.5)
+			var tip: Vector2 = effect.pos + direction * (42.0 + t * 62.0)
+			draw_colored_polygon(PackedVector2Array([effect.pos + direction * (8.0 + t * 18.0), tip + side * 2.4, tip - side * 2.4]), Color(critical_color, fade * 0.88))
 	elif effect.kind == "shield_hit":
 		caption(effect.pos + Vector2(-18, -65 - t * 24), "护盾 -%d" % int(effect.value), Color(0.48, 0.82, 1.0, fade), 14)
 		draw_arc(effect.pos + Vector2(0, -18), 20 + t * 42, -2.7, 0.35, 24, Color(0.48, 0.82, 1.0, fade), 3.0, true)

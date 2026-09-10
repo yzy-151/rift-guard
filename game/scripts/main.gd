@@ -109,7 +109,11 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v17-test" in OS.get_cmdline_user_args():
+	if "--v18-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v18_test")
+	elif "--v17-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v17_test")
@@ -315,6 +319,9 @@ func restart() -> void:
 	effect_preview = 0
 	battle.effects.clear()
 	battle.shot_flashes.clear()
+	battle.hero_attack_visuals.clear()
+	battle.hero_down_visuals.clear()
+	battle.projectile_trails.clear()
 	battle.base_flash = 0.0
 	sound.stop()
 	set_skill_aiming(false)
@@ -658,6 +665,9 @@ func confirm_next_squad(squad: Array[String]) -> void:
 	fx.active.clear()
 	battle.effects.clear()
 	battle.shot_flashes.clear()
+	battle.hero_attack_visuals.clear()
+	battle.hero_down_visuals.clear()
+	battle.projectile_trails.clear()
 	battle.reset_transients()
 	hud.get_child(0).show()
 	var dialogue_key := "" if sim.endless_mode else ("mode1_opening" if pending_stage_number == 1 else "mode1_stage%d_opening" % pending_stage_number)
@@ -821,6 +831,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v18_test() -> void:
+	var suite = preload("res://scripts/qa_v18.gd").new()
 	await suite.run(self)
 
 func run_v17_test() -> void:

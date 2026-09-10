@@ -53,6 +53,7 @@ var spawn_timer: float = 0.0
 var spawn_remaining: int = 0
 var wave_timer: float = 0.0
 var next_id: int = 0
+var next_projectile_id: int = 0
 var supports: Dictionary = {}
 var execute_threshold: float = 0.0
 var death_burst_ratio: float = 0.0
@@ -143,6 +144,7 @@ func reset(seed_value: int = -1) -> void:
 	heroes.clear()
 	enemies.clear()
 	projectiles.clear()
+	next_projectile_id = 0
 	events.clear()
 	for i in Catalog.HEROES.size():
 		var h: Dictionary = Catalog.HEROES[i].duplicate(true)
@@ -215,6 +217,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	heroes.clear()
 	enemies.clear()
 	projectiles.clear()
+	next_projectile_id = 0
 	events.clear()
 	var starts := [Vector2(505, 360), Vector2(375, 295), Vector2(345, 430)]
 	if endless_mode:
@@ -1007,7 +1010,8 @@ func _hero_tick() -> void:
 		else:
 			for shot_index in attack_count:
 				var shot_target: Dictionary = available[shot_index % available.size()]
-				projectiles.append({"pos": h.pos + Vector2(14, -12 + (shot_index - (attack_count - 1) * 0.5) * 6.0), "target_id": shot_target.id, "damage": damage if shot_index == 0 else damage * 0.78, "element": h.element, "secondary_element": h.get("secondary_element", ""), "source_id": h.id, "splash": h.splash, "slow": h.slow, "pierce": int(h.get("pierce", 0)), "chain_count": int(h.get("chain_count", 0)), "blast_radius": float(h.get("blast_radius", 0.0)), "echo_ratio": float(h.get("echo_ratio", 0.0)), "critical": critical})
+				projectiles.append({"visual_id": next_projectile_id, "pos": h.pos + Vector2(14, -12 + (shot_index - (attack_count - 1) * 0.5) * 6.0), "target_id": shot_target.id, "damage": damage if shot_index == 0 else damage * 0.78, "element": h.element, "secondary_element": h.get("secondary_element", ""), "source_id": h.id, "splash": h.splash, "slow": h.slow, "pierce": int(h.get("pierce", 0)), "chain_count": int(h.get("chain_count", 0)), "blast_radius": float(h.get("blast_radius", 0.0)), "echo_ratio": float(h.get("echo_ratio", 0.0)), "critical": critical})
+				next_projectile_id += 1
 		if attack_count > 1:
 			events.append({"kind": "multishot", "pos": h.pos, "value": attack_count})
 
@@ -1089,7 +1093,7 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String) -> float:
 		damage *= 1.6
 	enemy.hp -= damage
 	enemy.flash = 0.1
-	events.append({"kind": "hit", "pos": enemy.pos + Vector2(0, -12), "value": ceili(damage)})
+	events.append({"kind": "hit", "pos": enemy.pos + Vector2(0, -12), "value": ceili(damage), "element": incoming_element})
 	if enemy.hp > 0.0 and str(enemy.get("kind", "")).begins_with("boss_"):
 		_update_boss_phase(enemy)
 	if enemy.hp <= 0:

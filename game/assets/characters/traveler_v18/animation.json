@@ -1,0 +1,47 @@
+{
+  "format": 1,
+  "cell_size": 288,
+  "columns": 8,
+  "anchor": [
+    144,
+    268
+  ],
+  "clips": {
+    "idle": {
+      "atlas": "idle.png",
+      "frames": 48,
+      "fps": 24.0,
+      "loop": true,
+      "release_frame": -1,
+      "columns": 8,
+      "rows": 6
+    },
+    "run": {
+      "atlas": "run.png",
+      "frames": 48,
+      "fps": 24.0,
+      "loop": true,
+      "release_frame": -1,
+      "columns": 8,
+      "rows": 6
+    },
+    "attack": {
+      "atlas": "attack.png",
+      "frames": 48,
+      "fps": 48.0,
+      "loop": false,
+      "release_frame": 18,
+      "columns": 8,
+      "rows": 6
+    },
+    "death": {
+      "atlas": "death.png",
+      "frames": 48,
+      "fps": 30.0,
+      "loop": false,
+      "release_frame": -1,
+      "columns": 8,
+      "rows": 6
+    }
+  }
+}
