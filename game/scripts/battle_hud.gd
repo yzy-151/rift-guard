@@ -10,9 +10,12 @@ signal compendium_action
 signal squad_action
 signal stage_action
 signal skill_action
+signal ultimate_action
+signal deploy_drag_action(hero_id: int, pressed: bool, screen_pos: Vector2)
 signal main_menu_action
 signal formation_action(mode: String)
 signal settings_action
+signal map_action
 
 const WHITE = Color("#f3e9df")
 const MUTED = Color("#ae969f")
@@ -52,6 +55,9 @@ var buff_labels: Array[Label] = []
 var buff_icons: Array[TextureRect] = []
 var skill_button: Button
 var skill_icon: TextureRect
+var ultimate_button: Button
+var ultimate_icon: TextureRect
+var hero_energy_bars: Array[ProgressBar] = []
 var skill_aiming: bool = false
 var boss_panel: Panel
 var boss_name_label: Label
@@ -69,6 +75,7 @@ var pause_settings_button: Button
 var pause_restart_button: Button
 var pause_squad_button: Button
 var pause_stage_button: Button
+var pause_map_button: Button
 var pause_buff_labels: Array[Label] = []
 var pause_hero_labels: Array[Label] = []
 var hero_hp_bars: Array[ProgressBar] = []
@@ -161,7 +168,7 @@ func _ready() -> void:
 	boss_alert.add_theme_constant_override("shadow_offset_x", 4)
 	boss_alert.add_theme_constant_override("shadow_offset_y", 4)
 	boss_alert.hide()
-	skill_button = button(root, Rect2(900, 540, 348, 62), "旅行者战技  [Q]", true)
+	skill_button = button(root, Rect2(900, 540, 170, 62), "主动技能 [Q]", true)
 	skill_button.add_theme_font_size_override("font_size", 14)
 	var skill_icon_back := ColorRect.new()
 	skill_icon_back.position = Vector2(12, 10)
@@ -171,6 +178,16 @@ func _ready() -> void:
 	skill_button.add_child(skill_icon_back)
 	skill_icon = icon(skill_button, "res://assets/ui/icons/temporary/nieobie/skill.svg", Rect2(16, 14, 32, 32), WHITE)
 	skill_button.pressed.connect(func(): skill_action.emit())
+	ultimate_button = button(root, Rect2(1078, 540, 170, 62), "终结技 [E]", true)
+	ultimate_button.add_theme_font_size_override("font_size", 12)
+	var ultimate_back := ColorRect.new()
+	ultimate_back.position = Vector2(8, 10)
+	ultimate_back.size = Vector2(34, 40)
+	ultimate_back.color = Color("#ead9dc")
+	ultimate_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ultimate_button.add_child(ultimate_back)
+	ultimate_icon = icon(ultimate_button, "res://assets/ui/icons/temporary/nieobie/skill.svg", Rect2(10, 14, 30, 32), WHITE)
+	ultimate_button.pressed.connect(func(): ultimate_action.emit())
 	var formation_specs := [["squad", "全队移动  Z"], ["follow", "跟随  X"], ["hold", "坚守  C"]]
 	for i in formation_specs.size():
 		var mode: String = str(formation_specs[i][0])
@@ -189,6 +206,7 @@ func _ready() -> void:
 		trim.scale = Vector2(0.10, 0.10)
 		hero_btn.add_child(trim)
 		hero_btn.pressed.connect(func(): select_action.emit(i))
+		hero_btn.gui_input.connect(_hero_card_input.bind(i))
 		hero_buttons.append(hero_btn)
 		var portrait := panel(hero_btn, Rect2(10, 9, 48, 48), Color("#33232d"), TEAL)
 		var portrait_back := ColorRect.new()
@@ -211,12 +229,24 @@ func _ready() -> void:
 		hp_bar.add_theme_stylebox_override("fill", hp_fill)
 		hero_btn.add_child(hp_bar)
 		hero_hp_bars.append(hp_bar)
+		var energy_bar := ProgressBar.new()
+		energy_bar.position = Vector2(66, 57)
+		energy_bar.size = Vector2(190, 5)
+		energy_bar.show_percentage = false
+		var energy_bg := StyleBoxFlat.new()
+		energy_bg.bg_color = Color("#251923")
+		var energy_fill := StyleBoxFlat.new()
+		energy_fill.bg_color = Color("#f2bd5d")
+		energy_bar.add_theme_stylebox_override("background", energy_bg)
+		energy_bar.add_theme_stylebox_override("fill", energy_fill)
+		hero_btn.add_child(energy_bar)
+		hero_energy_bars.append(energy_bar)
 		hero_statuses.append(label(hero_btn, Vector2(66, 43), Vector2(192, 18), "", 11, WHITE))
 		var details: String = "阻挡 2 人 · 移动会放行" if i == 0 else ("火系普攻 · 与水触发蒸发" if i == 1 else "水系普攻 · 自动治疗队友")
 		hero_details.append(label(hero_btn, Vector2(10, 64), Vector2(250, 18), details, 10, MUTED))
 	label(root, Vector2(900, 656), Vector2(348, 23), "1/2/3 选人 · 右键移动", 13, TEAL)
 	label(root, Vector2(900, 684), Vector2(348, 21), "M5 · F6 对话预览 / F7 特效预览", 12, MUTED)
-	background_buttons = [archive_btn, pause_button, skill_button]
+	background_buttons = [archive_btn, pause_button, skill_button, ultimate_button]
 	background_buttons.append_array(formation_buttons.values())
 	background_buttons.append_array(hero_buttons)
 	overlay = ColorRect.new()
@@ -279,9 +309,11 @@ func _ready() -> void:
 	pause_squad_button.pressed.connect(func(): squad_action.emit())
 	pause_stage_button = button(pause_details, Rect2(850, 514, 258, 42), "选择关卡   [F4]", false)
 	pause_stage_button.pressed.connect(func(): stage_action.emit())
-	pause_menu_button = button(pause_details, Rect2(34, 574, 530, 46), "返回主菜单", false)
+	pause_menu_button = button(pause_details, Rect2(34, 574, 340, 46), "返回主菜单", false)
 	pause_menu_button.pressed.connect(func(): main_menu_action.emit())
-	var pause_continue := button(pause_details, Rect2(590, 574, 518, 46), "继续防守   [空格]", true)
+	pause_map_button = button(pause_details, Rect2(390, 574, 340, 46), "分支路线图   [F5]", false)
+	pause_map_button.pressed.connect(func(): map_action.emit())
+	var pause_continue := button(pause_details, Rect2(746, 574, 362, 46), "继续防守   [空格]", true)
 	pause_continue.pressed.connect(func(): primary_action.emit())
 	pause_details.hide()
 	reward_panel = preload("res://scripts/reward_panel.gd").new()
@@ -379,7 +411,7 @@ func refresh(sim, selected_id: int) -> void:
 		var stage_clock := floori(sim.elapsed) if sim.endless_mode else floori(sim.stage_runtime.remaining_seconds())
 		next_signature += str([sim.run_state.traveler_element, sim.run_state.traveler_secondary_element, sim.run_state.luck, sim.run_state.pending_level_ups, stage_clock, sim.upcoming_waves(3)])
 	for hero in sim.heroes:
-		next_signature += str([ceili(hero.hp), hero.moving, hero.blocked])
+		next_signature += str([ceili(hero.hp), hero.moving, hero.blocked, hero.get("deployed", true), roundi(float(hero.get("energy", 0.0))), roundi(float(hero.get("skill_cooldown", 0.0)) * 10.0)])
 	if next_signature == signature:
 		return
 	signature = next_signature
@@ -402,9 +434,9 @@ func refresh(sim, selected_id: int) -> void:
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
 		wave_label.text = "节点   %02d / 05" % sim.wave
-	count_label.text = ("击退 %02d  ·  在场 %02d  ·  连杀 %02d" % [sim.kills, sim.enemies.size(), sim.kill_streak]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
+	count_label.text = ("击退 %02d  ·  敌军 %02d  ·  已部署 %d/%d" % [sim.kills, sim.enemies.size(), sim.heroes.filter(func(h: Dictionary)->bool: return bool(h.get("deployed", true))).size(), sim.heroes.size()]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
 	status_label.text = "无尽生存 · 右键移动 · 同行者自动跟随" if sim.endless_mode else "按 1/2/3 或点击角色卡选择"
-	refresh_skill(sim)
+	refresh_skill(sim, selected_id)
 	refresh_supports(sim)
 	refresh_buffs(sim)
 	refresh_boss(sim)
@@ -427,11 +459,13 @@ func refresh(sim, selected_id: int) -> void:
 		var hero: Dictionary = sim.heroes[i]
 		hero_hp_bars[i].max_value = maxf(1.0, float(hero.max_hp))
 		hero_hp_bars[i].value = maxf(0.0, float(hero.hp))
+		hero_energy_bars[i].max_value = maxf(1.0, float(hero.get("max_energy", 100.0)))
+		hero_energy_bars[i].value = maxf(0.0, float(hero.get("energy", 0.0)))
 		hero_name_labels[i].text = "%d  %s / %s" % [i + 1, hero.name, hero.role]
 		var hero_color: Color = element_color(str(hero.get("element", ""))) if hero.get("character_id", "") == "traveler" and hero.get("element", "") != "" else Color(hero.color)
 		hero_name_labels[i].add_theme_color_override("font_color", hero_color)
 		hero_buttons[i].modulate = Color.WHITE if i == selected_id else Color("#91a0a8")
-		var status: String = "倒地 · 本波无法行动" if hero.hp <= 0 else ("移动中" if hero.moving else ("阻挡 %d/%d" % [hero.blocked, hero.block] if i == 0 else "就绪"))
+		var status: String = "倒地" if hero.hp <= 0 else ("待部署 · 拖到战场" if not bool(hero.get("deployed", true)) else ("移动中" if hero.moving else "就绪"))
 		var mechanics := "弹道%d · 穿透%d · 暴击%d%%" % [int(hero.get("projectile_count", 1)), int(hero.get("pierce", 0)), roundi(float(hero.get("crit_chance", 0.0)) * 100.0)]
 		hero_details[i].text = "%s元素 · ATK %.0f · %.1f/s · %s" % [sim.element_name(str(hero.get("element", "none"))), hero.damage, hero.rate, mechanics]
 		hero_statuses[i].text = "%d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
@@ -666,27 +700,35 @@ func set_skill_aiming(enabled: bool) -> void:
 	skill_aiming = enabled
 	signature = ""
 
-func refresh_skill(sim) -> void:
-	skill_button.visible = sim.v2_mode and sim.state in ["running", "between", "paused"]
-	if not skill_button.visible:
+func refresh_skill(sim, selected_id: int) -> void:
+	var visible: bool = sim.v2_mode and sim.state in ["running", "between", "paused"]
+	skill_button.visible = visible
+	ultimate_button.visible = visible
+	if not visible:
 		return
-	var element: String = sim.traveler_skill_element()
-	var glyph: String = str({"none": "剑", "anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, "技"))
+	var hero: Dictionary = sim.heroes[selected_id] if selected_id >= 0 and selected_id < sim.heroes.size() else {}
+	if hero.is_empty():
+		skill_button.disabled = true
+		ultimate_button.disabled = true
+		return
+	var element := str(hero.get("element", "none"))
 	var color := element_color(element)
-	var icon_name: String = {"none": "attack", "anemo": "anemo", "electro": "electro", "pyro": "pyro", "hydro": "hydro", "geo": "geo", "cryo": "cryo"}.get(element, "skill")
-	skill_icon.texture = load("res://assets/ui/icons/temporary/nieobie/%s.svg" % icon_name)
 	skill_icon.modulate = color
-	var growth := ""
-	if sim.skill_power_bonus > 0.0 or sim.skill_area_bonus > 0.0:
-		growth = "  威力+%d%% 范围+%d%%" % [roundi(sim.skill_power_bonus * 100.0), roundi(sim.skill_area_bonus * 100.0)]
-	skill_button.add_theme_color_override("font_color", color)
-	if skill_aiming:
-		skill_button.text = "%s  %s%s  ·  点击战场释放" % [glyph, sim.traveler_skill_name(), growth]
-	elif sim.traveler_skill_cooldown > 0.0:
-		skill_button.text = "%s  %s%s  ·  %.1fs" % [glyph, sim.traveler_skill_name(), growth, sim.traveler_skill_cooldown]
-	else:
-		skill_button.text = "%s  %s%s  ·  [Q]" % [glyph, sim.traveler_skill_name(), growth]
-	skill_button.disabled = sim.state != "running" or sim.traveler_skill_cooldown > 0.0
+	ultimate_icon.modulate = color.lightened(0.18)
+	var cooldown := float(hero.get("skill_cooldown", 0.0))
+	var deployed := bool(hero.get("deployed", false))
+	skill_button.text = "%s
+%s" % [sim.hero_skill_name(selected_id), "选取落点" if skill_aiming else ("冷却 %.1fs" % cooldown if cooldown > 0.0 else "Q · 主动技能")]
+	skill_button.disabled = sim.state != "running" or cooldown > 0.0 or not deployed
+	var energy := float(hero.get("energy", 0.0))
+	var maximum := float(hero.get("max_energy", 100.0))
+	ultimate_button.text = "%s
+E · %d/%d" % [sim.hero_ultimate_name(selected_id), roundi(energy), roundi(maximum)]
+	ultimate_button.disabled = sim.state != "running" or energy < maximum or not deployed
+
+func _hero_card_input(event: InputEvent, hero_id: int) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		deploy_drag_action.emit(hero_id, event.pressed, get_viewport().get_mouse_position())
 
 func element_color(element: String) -> Color:
 	return {"anemo": Color("#63e6c0"), "electro": Color("#bf83ff"), "pyro": Color("#ff745c"), "hydro": Color("#5ab8ff"), "geo": Color("#e8b94d"), "cryo": Color("#9de7f2")}.get(element, WHITE)

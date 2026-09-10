@@ -6,6 +6,7 @@ var discovered_cards: Dictionary = {}
 var encountered_enemies: Dictionary = {}
 var cleared_stages: Dictionary = {}
 var stage_records: Dictionary = {}
+var build_history: Array[Dictionary] = []
 
 func _init(path: String = "user://compendium.json") -> void:
 	save_path = path
@@ -38,6 +39,14 @@ func record_result(stage_id: String, kills: int, base_hp: int, best_streak: int)
 	}
 	save_progress()
 
+func record_build(sim) -> void:
+	var record: Dictionary = sim.export_build_record()
+	record["recorded_at"] = Time.get_datetime_string_from_system()
+	build_history.push_front(record)
+	if build_history.size() > 20:
+		build_history.resize(20)
+	save_progress()
+
 func unlock_character(character_id: String) -> bool:
 	var changed := _mark(unlocked_characters, character_id)
 	if changed:
@@ -60,6 +69,7 @@ func save_progress() -> void:
 		"encountered_enemies": encountered_enemies.keys(),
 		"cleared_stages": cleared_stages.keys(),
 		"stage_records": stage_records,
+		"build_history": build_history,
 	}, "\t"))
 
 func load_progress() -> void:
@@ -74,6 +84,8 @@ func load_progress() -> void:
 	_load_set(cleared_stages, data.get("cleared_stages", []))
 	if data.get("stage_records", {}) is Dictionary:
 		stage_records = data.get("stage_records", {}).duplicate(true)
+	if data.get("build_history", []) is Array:
+		build_history.assign(data.get("build_history", []))
 	unlocked_characters["traveler"] = true
 
 func _load_set(target: Dictionary, values: Array) -> void:

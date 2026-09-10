@@ -70,6 +70,81 @@
         ],
         "label": "裂隙封门",
         "hp": 460
+      },
+      {
+        "id": "one_way_gate",
+        "type": "one_way",
+        "rect": [
+          430,
+          250,
+          78,
+          72
+        ],
+        "label": "单向风门",
+        "direction": [
+          -1,
+          0
+        ]
+      },
+      {
+        "id": "moving_platform",
+        "type": "moving_platform",
+        "rect": [
+          610,
+          185,
+          150,
+          62
+        ],
+        "label": "浮空平台",
+        "axis": [
+          1,
+          0
+        ],
+        "distance": 120,
+        "period": 4.0
+      },
+      {
+        "id": "conveyor",
+        "type": "conveyor",
+        "rect": [
+          720,
+          450,
+          210,
+          68
+        ],
+        "label": "裂隙流带",
+        "direction": [
+          -1,
+          0
+        ],
+        "force": 48
+      },
+      {
+        "id": "element_trap",
+        "type": "trap",
+        "rect": [
+          850,
+          300,
+          100,
+          82
+        ],
+        "label": "元素陷阱",
+        "element": "electro",
+        "power": 32,
+        "interval": 2.8
+      },
+      {
+        "id": "weather",
+        "type": "weather",
+        "rect": [
+          180,
+          145,
+          920,
+          390
+        ],
+        "label": "元素乱流",
+        "element": "anemo",
+        "pulse_interval": 8.0
       }
     ],
     "starting_squad": [
@@ -376,6 +451,81 @@
         ],
         "label": "血锁闸门",
         "hp": 620
+      },
+      {
+        "id": "one_way_gate",
+        "type": "one_way",
+        "rect": [
+          430,
+          250,
+          78,
+          72
+        ],
+        "label": "单向风门",
+        "direction": [
+          -1,
+          0
+        ]
+      },
+      {
+        "id": "moving_platform",
+        "type": "moving_platform",
+        "rect": [
+          610,
+          185,
+          150,
+          62
+        ],
+        "label": "浮空平台",
+        "axis": [
+          1,
+          0
+        ],
+        "distance": 120,
+        "period": 4.0
+      },
+      {
+        "id": "conveyor",
+        "type": "conveyor",
+        "rect": [
+          720,
+          450,
+          210,
+          68
+        ],
+        "label": "裂隙流带",
+        "direction": [
+          -1,
+          0
+        ],
+        "force": 48
+      },
+      {
+        "id": "element_trap",
+        "type": "trap",
+        "rect": [
+          850,
+          300,
+          100,
+          82
+        ],
+        "label": "元素陷阱",
+        "element": "electro",
+        "power": 32,
+        "interval": 2.8
+      },
+      {
+        "id": "weather",
+        "type": "weather",
+        "rect": [
+          180,
+          145,
+          920,
+          390
+        ],
+        "label": "元素乱流",
+        "element": "anemo",
+        "pulse_interval": 8.0
       }
     ],
     "starting_squad": [
@@ -687,6 +837,81 @@
         ],
         "label": "核心外壳",
         "hp": 840
+      },
+      {
+        "id": "one_way_gate",
+        "type": "one_way",
+        "rect": [
+          430,
+          250,
+          78,
+          72
+        ],
+        "label": "单向风门",
+        "direction": [
+          -1,
+          0
+        ]
+      },
+      {
+        "id": "moving_platform",
+        "type": "moving_platform",
+        "rect": [
+          610,
+          185,
+          150,
+          62
+        ],
+        "label": "浮空平台",
+        "axis": [
+          1,
+          0
+        ],
+        "distance": 120,
+        "period": 4.0
+      },
+      {
+        "id": "conveyor",
+        "type": "conveyor",
+        "rect": [
+          720,
+          450,
+          210,
+          68
+        ],
+        "label": "裂隙流带",
+        "direction": [
+          -1,
+          0
+        ],
+        "force": 48
+      },
+      {
+        "id": "element_trap",
+        "type": "trap",
+        "rect": [
+          850,
+          300,
+          100,
+          82
+        ],
+        "label": "元素陷阱",
+        "element": "electro",
+        "power": 32,
+        "interval": 2.8
+      },
+      {
+        "id": "weather",
+        "type": "weather",
+        "rect": [
+          180,
+          145,
+          920,
+          390
+        ],
+        "label": "元素乱流",
+        "element": "anemo",
+        "pulse_interval": 8.0
       }
     ],
     "lanes": {

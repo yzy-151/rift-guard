@@ -1,7 +1,15 @@
 {
   "mode1_opening": [
-    ["saria", "旅行者", "裂隙已经越过警戒线。元素尚未回应我，但剑还在手里。"],
-    ["jessica", "通讯员", "水晶会收集敌人的残响。每次升级都能改写攻击方式，弹道与支援也会随构筑增长。"],
+    [
+      "saria",
+      "旅行者",
+      "裂隙已经越过警戒线。元素尚未回应我，但剑还在手里。"
+    ],
+    [
+      "jessica",
+      "通讯员",
+      "水晶会收集敌人的残响。每次升级都能改写攻击方式，弹道与支援也会随构筑增长。"
+    ],
     {
       "portrait": "saria-soft",
       "speaker": "旅行者",
@@ -17,7 +25,13 @@
           "response_portrait": "jessica",
           "response_speaker": "通讯员",
           "response": "判断稳健。本关幸运值提升，高品质强化会更容易回应。",
-          "response_highlight": "partner"
+          "response_highlight": "partner",
+          "relationship": {
+            "character_id": "traveler",
+            "value": 1
+          },
+          "story_flag": "defense_route",
+          "campaign_node": "c1_elite"
         },
         {
           "text": "追查裂隙边缘微弱的求救信号。",
@@ -26,7 +40,13 @@
           "response_portrait": "muelsyse",
           "response_speaker": "白露",
           "response": "总算接通啦！隐藏同行者白露已永久解锁，下一次编队就能带上我。",
-          "response_highlight": "partner"
+          "response_highlight": "partner",
+          "relationship": {
+            "character_id": "hero_12",
+            "value": 2
+          },
+          "story_flag": "trusted_signal",
+          "campaign_node": "c1_hidden"
         }
       ]
     }
@@ -43,35 +63,72 @@
           "response_portrait": "jessica",
           "response_speaker": "通讯员",
           "response": "门锁已经解除。去迎接新同行者，然后进入下一关。",
-          "response_highlight": "partner"
+          "response_highlight": "partner",
+          "story_flag": "campaign_continued",
+          "campaign_node": "c1_story"
         },
         {
           "text": "继承角色与全部属性，转入无尽模式。",
           "result": "inherit_endless",
-          "effect": {"type": "inherit_endless"},
+          "effect": {
+            "type": "inherit_endless"
+          },
           "response_portrait": "muelsyse",
           "response_speaker": "通讯员",
           "response": "荒原坐标已锁定。本关队伍、元素、卡牌等级与战斗属性全部保留。",
-          "response_highlight": "partner"
+          "response_highlight": "partner",
+          "story_flag": "endless_transfer"
         }
       ]
     }
   ],
   "mode1_stage2_opening": [
-    ["jessica", "宵宫", "通讯接通。第二道裂隙已经变成赤潮，我从高台提供火力。"],
-    ["saria-soft", "旅行者", "上一关的强化已经消散，但元素选择和新的构筑会再次回应。两个人守住三条路线。"]
+    [
+      "jessica",
+      "宵宫",
+      "通讯接通。第二道裂隙已经变成赤潮，我从高台提供火力。"
+    ],
+    [
+      "saria-soft",
+      "旅行者",
+      "上一关的强化已经消散，但元素选择和新的构筑会再次回应。两个人守住三条路线。"
+    ]
   ],
   "mode1_stage3_opening": [
-    ["muelsyse", "芙宁娜", "第三道裂隙已经结晶化，路线正在上下错位。水域会替大家维持生命。"],
-    ["jessica", "宵宫", "黑曜母巢会周期召来疾行兽，我负责清掉它的护卫。"],
-    ["saria-soft", "旅行者", "三人到齐。重新选择元素与构筑，把母巢留在这里。"]
+    [
+      "muelsyse",
+      "芙宁娜",
+      "第三道裂隙已经结晶化，路线正在上下错位。水域会替大家维持生命。"
+    ],
+    [
+      "jessica",
+      "宵宫",
+      "黑曜母巢会周期召来疾行兽，我负责清掉它的护卫。"
+    ],
+    [
+      "saria-soft",
+      "旅行者",
+      "三人到齐。重新选择元素与构筑，把母巢留在这里。"
+    ]
   ],
   "mode1_final_won": [
-    ["muelsyse", "芙宁娜", "黑曜母巢停止活动，三道裂隙都已经安静下来。"],
-    ["saria-soft", "旅行者", "模式一的防线全部守住，水晶已经记录新的角色与卡牌。"]
+    [
+      "muelsyse",
+      "芙宁娜",
+      "黑曜母巢停止活动，三道裂隙都已经安静下来。"
+    ],
+    [
+      "saria-soft",
+      "旅行者",
+      "模式一的防线全部守住，水晶已经记录新的角色与卡牌。"
+    ]
   ],
   "mode1_lost": [
-    ["saria", "旅行者", "水晶破碎前保住了核心记录。重来一次，这次把弹道铺满整条路线。"]
+    [
+      "saria",
+      "旅行者",
+      "水晶破碎前保住了核心记录。重来一次，这次把弹道铺满整条路线。"
+    ]
   ],
   "opening": [
     [
@@ -171,5 +228,41 @@
       "缪尔赛斯",
       "我来掩护。下一次，我们换一种布阵。"
     ]
+  ],
+  "branch_sylphiette": [
+    {
+      "portrait": "jessica",
+      "speaker": "希露菲",
+      "text": "风正在把两条路分开。你希望我守住队伍，还是追踪隐藏信号？",
+      "choices": [
+        {
+          "text": "留下来保护所有人。",
+          "result": "bond_guard",
+          "relationship": {
+            "character_id": "hero_02",
+            "value": 2
+          },
+          "story_flag": "sylphiette_guard",
+          "campaign_node": "c1_rest",
+          "response_portrait": "jessica",
+          "response_speaker": "希露菲",
+          "response": "我会让风停在大家身边。休整路线已经开启。"
+        },
+        {
+          "text": "相信你的判断，追踪信号。",
+          "result": "bond_hidden",
+          "relationship": {
+            "character_id": "hero_02",
+            "value": 3
+          },
+          "story_flag": "trusted_signal",
+          "campaign_node": "c1_hidden",
+          "unlock_character": "hero_12",
+          "response_portrait": "jessica",
+          "response_speaker": "希露菲",
+          "response": "找到了。铃的绳网信号已经接入，隐藏招募路线开启。"
+        }
+      ]
+    }
   ]
 }

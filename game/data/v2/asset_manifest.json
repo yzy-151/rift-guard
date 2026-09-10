@@ -63,7 +63,7 @@
     "down": "res://assets/tiny-dungeon.png"
   },
   "character.hero_06": {
-    "portrait": "res://assets/portraits/jessica.png",
+    "portrait": "res://assets/portraits/amiya.png",
     "idle": "res://assets/tiny-dungeon.png",
     "move": "res://assets/tiny-dungeon.png",
     "attack": "res://assets/tiny-dungeon.png",
@@ -117,7 +117,7 @@
     "down": "res://assets/tiny-dungeon.png"
   },
   "character.hero_12": {
-    "portrait": "res://assets/portraits/amiya.png",
+    "portrait": "res://assets/portraits/jessica.png",
     "idle": "res://assets/tiny-dungeon.png",
     "move": "res://assets/tiny-dungeon.png",
     "attack": "res://assets/tiny-dungeon.png",

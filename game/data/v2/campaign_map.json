@@ -1,0 +1,85 @@
+{
+  "chapters": [
+    {
+      "id": "chapter_01",
+      "name": "裂隙序章",
+      "start": "c1_combat_1",
+      "nodes": [
+        {
+          "id": "c1_combat_1",
+          "type": "combat",
+          "stage_id": "stage_01",
+          "next": [
+            "c1_story",
+            "c1_elite"
+          ]
+        },
+        {
+          "id": "c1_story",
+          "type": "story",
+          "story": "branch_sylphiette",
+          "next": [
+            "c1_shop",
+            "c1_hidden"
+          ]
+        },
+        {
+          "id": "c1_elite",
+          "type": "elite",
+          "stage_id": "stage_02",
+          "relic_reward": true,
+          "next": [
+            "c1_rest"
+          ]
+        },
+        {
+          "id": "c1_shop",
+          "type": "shop",
+          "next": [
+            "c1_recruit"
+          ]
+        },
+        {
+          "id": "c1_hidden",
+          "type": "hidden",
+          "requires_flag": "trusted_signal",
+          "unlock": "hero_12",
+          "next": [
+            "c1_recruit"
+          ]
+        },
+        {
+          "id": "c1_rest",
+          "type": "rest",
+          "next": [
+            "c1_recruit"
+          ]
+        },
+        {
+          "id": "c1_recruit",
+          "type": "recruit",
+          "unlock": "hero_02",
+          "next": [
+            "c1_boss"
+          ]
+        },
+        {
+          "id": "c1_boss",
+          "type": "boss",
+          "stage_id": "stage_03",
+          "next": []
+        }
+      ]
+    }
+  ],
+  "node_types": [
+    "combat",
+    "story",
+    "elite",
+    "shop",
+    "rest",
+    "recruit",
+    "hidden",
+    "boss"
+  ]
+}
