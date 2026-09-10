@@ -1,0 +1,101 @@
+[
+  {
+    "id": "stage_01",
+    "name": "先锋清剿",
+    "metric": "kills",
+    "target": 16,
+    "reward": {
+      "kind": "luck",
+      "value": 0.04,
+      "text": "幸运 +4%"
+    }
+  },
+  {
+    "id": "stage_02",
+    "name": "元素演练",
+    "metric": "reactions",
+    "target": 10,
+    "reward": {
+      "kind": "shield",
+      "value": 120,
+      "text": "结晶盾 +120"
+    }
+  },
+  {
+    "id": "stage_03",
+    "name": "破阵试炼",
+    "metric": "kills",
+    "target": 34,
+    "reward": {
+      "kind": "energy",
+      "value": 35,
+      "text": "全队能量 +35"
+    }
+  },
+  {
+    "id": "stage_04",
+    "name": "共鸣追猎",
+    "metric": "reactions",
+    "target": 18,
+    "reward": {
+      "kind": "luck",
+      "value": 0.05,
+      "text": "幸运 +5%"
+    }
+  },
+  {
+    "id": "stage_05",
+    "name": "精英围猎",
+    "metric": "kills",
+    "target": 46,
+    "reward": {
+      "kind": "shield",
+      "value": 180,
+      "text": "结晶盾 +180"
+    }
+  },
+  {
+    "id": "stage_06",
+    "name": "持久防线",
+    "metric": "survival_time",
+    "target": 180,
+    "reward": {
+      "kind": "energy",
+      "value": 60,
+      "text": "全队能量 +60"
+    }
+  },
+  {
+    "id": "stage_07",
+    "name": "反应大师",
+    "metric": "reactions",
+    "target": 28,
+    "reward": {
+      "kind": "heal",
+      "value": 0.35,
+      "text": "全队恢复 35%"
+    }
+  },
+  {
+    "id": "stage_08",
+    "name": "终局歼灭",
+    "metric": "kills",
+    "target": 66,
+    "reward": {
+      "kind": "luck",
+      "value": 0.08,
+      "text": "幸运 +8%"
+    }
+  },
+  {
+    "id": "stage_endless",
+    "name": "荒原生还",
+    "metric": "survival_time",
+    "target": 120,
+    "reward": {
+      "kind": "luck",
+      "value": 0.06,
+      "text": "幸运 +6%"
+    }
+  }
+]

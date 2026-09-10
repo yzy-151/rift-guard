@@ -93,6 +93,9 @@ var fireball_level: int = 0
 var meteor_timer: float = 4.0
 var performance_budget = PerformanceBudget.new()
 var culled_spawns: int = 0
+var combat_contract: Dictionary = {}
+var contract_completed: bool = false
+var contract_reward_text: String = ""
 
 func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 	v2_mode = enable_v2
@@ -149,6 +152,9 @@ func reset(seed_value: int = -1) -> void:
 	meteor_timer = 4.0
 	performance_budget = PerformanceBudget.new()
 	culled_spawns = 0
+	combat_contract = {}
+	contract_completed = false
+	contract_reward_text = ""
 	next_construct_id = 0
 	reaction_damage_bonus = 0.0
 	reaction_radius_bonus = 0.0
@@ -231,6 +237,10 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	meteor_timer = 4.0
 	performance_budget = PerformanceBudget.new()
 	culled_spawns = 0
+	combat_contract = {}
+	contract_completed = false
+	contract_reward_text = ""
+	combat_contract = database.combat_contracts.get(stage_id, {}).duplicate(true)
 	next_construct_id = 0
 	reaction_damage_bonus = 0.0
 	reaction_radius_bonus = 0.0
@@ -520,7 +530,7 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 			shield *= float(stage_runtime.definition.get("boss_health_multiplier", 1.0))
 	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 28, "charger": 20, "healer": 30, "splitter": 34, "warder": 32, "boss_01": 240, "boss_02": 280, "boss_03": 260, "boss_04": 320, "boss_05": 290, "boss_06": 310}
 	var first_special: float = float(enemy.get("boss_pulse", enemy.get("heal_interval", enemy.get("ward_interval", 0.0))))
-	enemy.merge({"id": next_id, "kind": kind, "pos": point, "facing": -1.0, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "summons_done": 0, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10)), "attack_pending": false, "warning_timer": 0.0, "warning_pos": point, "warning_radius": 58.0, "special_pending": false, "special_warning": 0.0, "affixes": [], "affix_timer": 3.5})
+	enemy.merge({"id": next_id, "kind": kind, "pos": point, "facing": -1.0, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "boss_cast_index": 0, "special_move": "pulse", "summons_done": 0, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10)), "attack_pending": false, "warning_timer": 0.0, "warning_pos": point, "warning_radius": 58.0, "special_pending": false, "special_warning": 0.0, "affixes": [], "affix_timer": 3.5})
 	_apply_enemy_affix(enemy)
 	enemies.append(enemy)
 	return enemy
@@ -594,6 +604,7 @@ func tick(dt: float) -> void:
 	_hero_tick()
 	_projectile_tick(dt)
 	_support_tick(dt)
+	_contract_tick()
 	enemies = enemies.filter(func(e: Dictionary) -> bool: return e.hp > 0)
 	if v2_mode and not endless_mode:
 		if stage_runtime.time_complete and stage_runtime.all_spawns_emitted and enemies.is_empty() and projectiles.is_empty():
@@ -612,6 +623,41 @@ func tick(dt: float) -> void:
 				h.blocked = 0
 			rewards.draw(self)
 			events.append({"kind": "regroup"})
+
+
+func contract_progress() -> int:
+	if combat_contract.is_empty():
+		return 0
+	match str(combat_contract.get("metric", "kills")):
+		"reactions": return reactions
+		"survival_time": return floori(elapsed)
+		_: return kills
+
+func contract_status() -> String:
+	if combat_contract.is_empty():
+		return "无战术契约"
+	var suffix := "完成" if contract_completed else "%d/%d" % [mini(contract_progress(), int(combat_contract.target)), int(combat_contract.target)]
+	return "%s %s" % [str(combat_contract.get("name", "战术契约")), suffix]
+
+func _contract_tick() -> void:
+	if contract_completed or combat_contract.is_empty() or contract_progress() < int(combat_contract.get("target", 1)):
+		return
+	contract_completed = true
+	var reward: Dictionary = combat_contract.get("reward", {})
+	contract_reward_text = str(reward.get("text", "奖励已获得"))
+	match str(reward.get("kind", "")):
+		"luck":
+			run_state.luck = clampf(run_state.luck + float(reward.get("value", 0.0)), 0.0, 0.75)
+		"shield":
+			crystal_shield = minf(999.0, crystal_shield + float(reward.get("value", 0.0)))
+		"energy":
+			for hero: Dictionary in heroes:
+				hero.energy = minf(float(hero.get("max_energy", 100.0)), float(hero.get("energy", 0.0)) + float(reward.get("value", 0.0)))
+		"heal":
+			for hero: Dictionary in heroes:
+				hero.hp = minf(float(hero.max_hp), float(hero.hp) + float(hero.max_hp) * float(reward.get("value", 0.0)))
+	events.append({"kind":"contract_complete","pos":heroes[0].pos if not heroes.is_empty() else Vector2(640,360),"value":str(combat_contract.get("name","战术契约")),"reward":contract_reward_text})
+
 
 func _endless_spawn_tick(dt: float) -> void:
 	_spawn_endless_boss_if_due()
@@ -836,6 +882,11 @@ func _enemy_tick(dt: float) -> void:
 			var pattern: Dictionary = database.boss_patterns.get(str(e.kind), {}) if database != null else {}
 			var phase_rows: Array = pattern.get("phases", [])
 			var phase_row: Dictionary = phase_rows[clampi(int(e.get("boss_phase",1))-1,0,phase_rows.size()-1)] if not phase_rows.is_empty() else {}
+			var moves: Array = phase_row.get("moves", ["pulse"])
+			var cast_index := int(e.get("boss_cast_index", 0))
+			var selected_move := str(moves[cast_index % moves.size()]) if not moves.is_empty() else "pulse"
+			e.boss_cast_index = cast_index + 1
+			e.special_move = selected_move
 			var lead := float(phase_row.get("lead",1.35))
 			var warning_radius := float(phase_row.get("radius",150.0))
 			e.special_pending = true
@@ -874,65 +925,138 @@ func _enemy_tick(dt: float) -> void:
 	geo_constructs = geo_constructs.filter(func(item: Dictionary) -> bool: return item.hp > 0.0)
 
 func _execute_boss_special(enemy: Dictionary) -> void:
-	var style := str(enemy.get("boss_style", "commander"))
 	var phase := int(enemy.get("boss_phase", 1))
-	match style:
-		"brood":
-			var summon_count := int(enemy.get("summon_count", 3)) + phase - 1
-			if int(enemy.get("summons_done", 0)) < int(enemy.get("summon_limit", 12)):
-				for summon in summon_count:
-					var kind := "splitter" if phase == 3 and summon == 0 else "runner"
-					var minion := spawn_enemy(enemy.pos + Vector2.from_angle(float(summon) * TAU / summon_count) * 72.0, kind)
-					minion.hp *= 0.74
-					minion.max_hp = minion.hp
-				enemy.summons_done = int(enemy.get("summons_done", 0)) + summon_count
-				events.append({"kind": "boss_summon", "pos": enemy.pos, "value": summon_count})
-		"storm":
-			for hero: Dictionary in heroes:
-				if hero.hp <= 0.0 or not bool(hero.get("deployed", false)) or not _hero_in_boss_warning(hero, enemy): continue
-				damage_hero(hero.id, enemy.damage * (0.28 + phase * 0.06))
-				var push: Vector2 = (hero.pos - enemy.pos).normalized()
-				hero.pos = Vector2(clampf(hero.pos.x + push.x * (34.0 + phase * 10.0), ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x), clampf(hero.pos.y + push.y * (34.0 + phase * 10.0), ENDLESS_ARENA.position.y, ENDLESS_ARENA.end.y))
-			events.append({"kind": "knockback", "pos": enemy.pos, "value": 34 + phase * 10})
-		"bulwark":
-			var guarded := 0
+	var move := str(enemy.get("special_move", "pulse"))
+	var hit_count := 0
+	var summon_count := 0
+	match move:
+		"summon":
+			summon_count = _boss_summon(enemy, "grunt", 2 + phase)
+		"charge_summon":
+			summon_count = _boss_summon(enemy, "charger", 2 + phase)
+		"elite_summon":
+			summon_count = _boss_summon(enemy, "armored", 2)
+			summon_count += _boss_summon(enemy, "warder", 1)
+		"runner_summon":
+			summon_count = _boss_summon(enemy, "runner", 3 + phase)
+		"splitter_summon":
+			summon_count = _boss_summon(enemy, "splitter", 2 + phase)
+		"swarm":
+			summon_count = _boss_summon(enemy, "runner", 5 + phase)
+		"flyer_summon":
+			summon_count = _boss_summon(enemy, "flyer", 2 + phase)
+		"warder_summon":
+			summon_count = _boss_summon(enemy, "warder", 1 + phase)
+		"ranged_summon":
+			summon_count = _boss_summon(enemy, "ranged", 2 + phase)
+		"heal_summon":
+			summon_count = _boss_summon(enemy, "healer", 1 + phase)
+		"guard":
 			for ally: Dictionary in enemies:
-				if ally.hp <= 0.0 or ally.pos.distance_to(enemy.pos) > 330.0: continue
-				var shield_gain := 70.0 + phase * 45.0
-				ally.shield = float(ally.get("shield", 0.0)) + shield_gain
-				ally.max_shield = maxf(float(ally.get("max_shield", 0.0)), float(ally.shield))
-				guarded += 1
-			events.append({"kind": "enemy_guard", "pos": enemy.pos, "value": guarded})
-		"artillery":
-			for hero: Dictionary in heroes:
-				if hero.hp <= 0.0 or not bool(hero.get("deployed", false)) or not _hero_in_boss_warning(hero, enemy):
-					continue
-				damage_hero(hero.id, enemy.damage * (0.65 + phase * 0.10))
-				events.append({"kind": "enemy_shot", "pos": enemy.pos, "target": hero.pos, "value": ceili(enemy.damage)})
-		"chronophage":
-			var drained := 0.0
-			for hero: Dictionary in heroes:
-				if hero.hp <= 0.0 or not bool(hero.get("deployed", false)) or not _hero_in_boss_warning(hero, enemy):
-					continue
-				var amount: float = float(enemy.damage) * (0.30 + phase * 0.07)
-				damage_hero(hero.id, amount)
-				drained += amount
-			enemy.hp = minf(enemy.max_hp, enemy.hp + drained * float(enemy.get("life_steal", 0.5)))
-			events.append({"kind": "enemy_heal", "pos": enemy.pos, "value": ceili(drained * float(enemy.get("life_steal", 0.5)))})
+				if ally.hp > 0.0 and ally.pos.distance_to(enemy.pos) <= 360.0:
+					var shield_gain := 95.0 + phase * 55.0
+					ally.shield = float(ally.get("shield", 0.0)) + shield_gain
+					ally.max_shield = maxf(float(ally.get("max_shield", 0.0)), float(ally.shield))
+				hit_count += 1
+		"terrain_break":
+			for construct: Dictionary in geo_constructs.duplicate():
+				if construct.hp > 0.0:
+					damage_construct(int(construct.id), float(construct.max_hp) * 1.25)
+					hit_count += 1
+		"pull":
+			hit_count = _boss_damage_warned(enemy, 0.34 + phase * 0.06, "pull")
+		"knockback", "shockwave":
+			hit_count = _boss_damage_warned(enemy, 0.42 + phase * 0.08, "knockback")
+		"slow", "slow_field":
+			hit_count = _boss_damage_warned(enemy, 0.28 + phase * 0.05, "slow")
+		"silence":
+			hit_count = _boss_damage_warned(enemy, 0.32 + phase * 0.05, "silence")
+		"drain":
+			hit_count = _boss_damage_warned(enemy, 0.38 + phase * 0.06, "drain")
+		"rewind":
+			enemy.hp = minf(float(enemy.max_hp), float(enemy.hp) + float(enemy.max_hp) * 0.15)
+			hit_count = _boss_damage_warned(enemy, 0.36 + phase * 0.06, "silence")
+		"burning_ground":
+			hit_count = _boss_damage_warned(enemy, 0.48 + phase * 0.07, "burn")
+		"artillery", "triple_artillery", "carpet_bomb":
+			var multiplier := 0.70 if move == "artillery" else (0.82 if move == "triple_artillery" else 0.96)
+			hit_count = _boss_damage_warned(enemy, multiplier + phase * 0.06)
+		"crossfire", "fan_burst", "sweep", "spiral":
+			hit_count = _boss_damage_warned(enemy, 0.52 + phase * 0.08, "knockback" if move in ["fan_burst", "spiral"] else "")
 		_:
-			for hero: Dictionary in heroes:
-				if hero.hp > 0.0 and bool(hero.get("deployed", false)) and _hero_in_boss_warning(hero, enemy): damage_hero(hero.id, enemy.damage * (0.34 + phase * 0.05))
-			if phase >= 2:
-				var minion := spawn_enemy(enemy.pos + Vector2(70, -45 if phase == 2 else 45), "charger")
-				minion.hp *= 0.82
-				minion.max_hp = minion.hp
-			events.append({"kind": "boss_pulse", "pos": enemy.pos, "value": ceili(enemy.damage * 0.42)})
+			hit_count = _boss_damage_warned(enemy, 0.38 + phase * 0.06)
+	if summon_count > 0:
+		enemy.summons_done = int(enemy.get("summons_done", 0)) + summon_count
+		events.append({"kind":"boss_summon","pos":enemy.pos,"value":summon_count})
+	events.append({"kind":"boss_move","pos":enemy.pos,"value":move,"name":str(enemy.get("special_move_name","首领技能")),"phase":phase,"shape":str(enemy.get("special_warning_shape","circle")),"hits":hit_count})
 	enemy.special_timer = maxf(2.6, float(enemy.get("boss_pulse", 6.0)) * (0.90 if phase == 2 else (0.76 if phase == 3 else 1.0)))
+
+func _boss_summon(enemy: Dictionary, kind: String, count: int) -> int:
+	var spawned := 0
+	for index in count:
+		if not performance_budget.allow_enemy(enemies.size()):
+			break
+		var direction := Vector2.from_angle(float(index) * TAU / maxf(1.0, float(count)))
+		var minion := spawn_enemy(enemy.pos + direction * (64.0 + (index % 2) * 28.0), kind)
+		minion.hp *= 0.72 + int(enemy.get("boss_phase", 1)) * 0.08
+		minion.max_hp = minion.hp
+		spawned += 1
+	return spawned
+
+func _boss_damage_warned(enemy: Dictionary, multiplier: float, control: String = "") -> int:
+	var hits := 0
+	var drained := 0.0
+	var bounds := ENDLESS_ARENA.grow(-28.0) if endless_mode else MOVE_AREA
+	for hero: Dictionary in heroes:
+		if hero.hp <= 0.0 or not bool(hero.get("deployed", false)) or not _hero_in_boss_warning(hero, enemy):
+			continue
+		var amount := float(enemy.damage) * multiplier
+		damage_hero(int(hero.id), amount)
+		hits += 1
+		if control == "knockback":
+			var away: Vector2 = (hero.pos - enemy.pos).normalized()
+			hero.pos = Vector2(clampf(hero.pos.x + away.x * 78.0, bounds.position.x, bounds.end.x), clampf(hero.pos.y + away.y * 78.0, bounds.position.y, bounds.end.y))
+		elif control == "pull":
+			hero.pos = hero.pos.move_toward(enemy.pos, 92.0)
+		elif control in ["slow", "silence"]:
+			hero.skill_cooldown = float(hero.get("skill_cooldown", 0.0)) + (2.0 if control == "slow" else 4.0)
+		if control == "drain":
+			drained += amount
+	if drained > 0.0:
+		enemy.hp = minf(float(enemy.max_hp), float(enemy.hp) + drained * float(enemy.get("life_steal", 0.55)))
+		events.append({"kind":"enemy_heal","pos":enemy.pos,"value":ceili(drained * float(enemy.get("life_steal", 0.55)))})
+	return hits
+
 func _hero_in_boss_warning(hero: Dictionary, enemy: Dictionary) -> bool:
-	for point: Variant in enemy.get("special_warning_positions", []):
-		if hero.pos.distance_to(point) <= float(enemy.get("special_warning_radius",150.0)):
-			return true
+	var shape := str(enemy.get("special_warning_shape", "circle"))
+	var radius := float(enemy.get("special_warning_radius", 150.0))
+	var source: Vector2 = enemy.pos
+	for point_value: Variant in enemy.get("special_warning_positions", []):
+		var point: Vector2 = point_value
+		var delta: Vector2 = hero.pos - point
+		match shape:
+			"donut":
+				if delta.length() >= radius * 0.38 and delta.length() <= radius: return true
+			"line", "multi_line", "rectangle":
+				if _distance_to_segment(hero.pos, source, point) <= (34.0 if shape == "line" else 52.0): return true
+			"cross":
+				if maxf(absf(delta.x), absf(delta.y)) <= radius and (absf(delta.x) <= 34.0 or absf(delta.y) <= 34.0): return true
+			"fan", "cone":
+				var aim := (point - source).normalized()
+				var offset: Vector2 = hero.pos - source
+				if offset.length() <= radius * 1.45 and offset.length() > 0.0 and aim.dot(offset.normalized()) >= 0.62: return true
+			"checker":
+				if absf(delta.x) <= radius and absf(delta.y) <= radius and (floori(absf(delta.x) / 48.0) + floori(absf(delta.y) / 36.0)) % 2 == 0: return true
+			_:
+				if delta.length() <= radius: return true
 	return false
+
+func _distance_to_segment(point: Vector2, start: Vector2, finish: Vector2) -> float:
+	var segment := finish - start
+	if segment.length_squared() <= 0.001:
+		return point.distance_to(start)
+	var ratio := clampf((point - start).dot(segment) / segment.length_squared(), 0.0, 1.0)
+	return point.distance_to(start + segment * ratio)
 
 func damage_construct(id: int, damage: float) -> void:
 	for construct: Dictionary in geo_constructs:

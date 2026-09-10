@@ -435,7 +435,7 @@ func refresh(sim, selected_id: int) -> void:
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
 		wave_label.text = "节点   %02d / 05" % sim.wave
-	count_label.text = ("击退 %02d  ·  敌军 %02d  ·  已部署 %d/%d" % [sim.kills, sim.enemies.size(), sim.heroes.filter(func(h: Dictionary)->bool: return bool(h.get("deployed", true))).size(), sim.heroes.size()]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
+	count_label.text = ("击退 %02d  ·  敌军 %02d  ·  已部署 %d/%d  ·  契约 %s" % [sim.kills, sim.enemies.size(), sim.heroes.filter(func(h: Dictionary)->bool: return bool(h.get("deployed", true))).size(), sim.heroes.size(), sim.contract_status()]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
 	status_label.text = "无尽生存 · 右键移动 · 同行者自动跟随" if sim.endless_mode else "按 1/2/3 或点击角色卡选择"
 	refresh_skill(sim, selected_id)
 	refresh_supports(sim)
@@ -566,6 +566,32 @@ func announce_route_warning(event: Dictionary) -> void:
 		boss_warning.volume_db = -8.0 if bool(event.get("boss", false)) else -15.0
 		boss_warning.play()
 
+
+func announce_contract(name: String, reward: String) -> void:
+	if boss_warning != null and not muted:
+		boss_warning.stop()
+		boss_warning.pitch_scale = 1.22
+		boss_warning.volume_db = -11.0
+		boss_warning.play()
+	boss_alert.text = "C O N T R A C T   C L E A R
+%s  ·  %s" % [name, reward]
+	boss_alert.position = Vector2(270, 228)
+	boss_alert.modulate = Color(1,1,1,0)
+	boss_alert.scale = Vector2(1.12,1.12)
+	boss_alert.pivot_offset = boss_alert.size*0.5
+	boss_alert.show()
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(boss_alert,"modulate:a",1.0,0.14)
+	tween.tween_property(boss_alert,"scale",Vector2.ONE,0.20).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await tween.finished
+	await get_tree().create_timer(0.82).timeout
+	var out := create_tween()
+	out.tween_property(boss_alert,"modulate:a",0.0,0.24)
+	await out.finished
+	boss_alert.hide()
+
+
 func announce_boss(name: String) -> void:
 	if boss_warning != null and not muted:
 		boss_warning.stop()
@@ -652,7 +678,7 @@ func refresh_pause_details(sim) -> void:
 	var mode_name := "无尽生存" if sim.endless_mode else "裂隙守望"
 	var time_value := floori(sim.elapsed) if sim.endless_mode else ceili(sim.stage_runtime.remaining_seconds())
 	var time_text := "%02d:%02d" % [time_value / 60, time_value % 60]
-	pause_status_label.text = "%s  ·  %s  ·  %s  ·  击退 %d  ·  在场 %d  ·  Lv.%d  ·  幸运 %.2f" % [mode_name, str(stage.get("name", sim.current_stage_id)), time_text, sim.kills, sim.enemies.size(), sim.run_state.crystal_level, sim.run_state.luck]
+	pause_status_label.text = "%s · %s · %s · 击退%d · 敌%d · Lv.%d · 幸运%.2f · 契约 %s · PERF %d%% / 丢弃%d" % [mode_name, str(stage.get("name", sim.current_stage_id)), time_text, sim.kills, sim.enemies.size(), sim.run_state.crystal_level, sim.run_state.luck, sim.contract_status(), roundi(sim.performance_budget.quality_scale*100.0), sim.culled_spawns]
 	for item in pause_buff_labels:
 		item.text = ""
 	var card_names: Dictionary = {}
@@ -719,7 +745,7 @@ func refresh_skill(sim, selected_id: int) -> void:
 	var cooldown := float(hero.get("skill_cooldown", 0.0))
 	var deployed := bool(hero.get("deployed", false))
 	skill_button.text = "%s
-%s" % [sim.hero_skill_name(selected_id), "选取落点" if skill_aiming else ("冷却 %.1fs" % cooldown if cooldown > 0.0 else "Q · 主动技能")]
+%s" % [sim.hero_skill_name(selected_id), "选取落点 · 右键取消" if skill_aiming else ("冷却 %.1fs" % cooldown if cooldown > 0.0 else "Q · 主动技能")]
 	skill_button.disabled = sim.state != "running" or cooldown > 0.0 or not deployed
 	var energy := float(hero.get("energy", 0.0))
 	var maximum := float(hero.get("max_energy", 100.0))

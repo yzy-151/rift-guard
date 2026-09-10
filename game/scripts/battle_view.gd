@@ -172,7 +172,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				if effects.size() < 260:
 					var facing := float(hero.get("facing", 1.0))
 					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","")},0.16))
-			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "tag_synergy", "relic_awaken", "revive":
+			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "tag_synergy", "relic_awaken", "revive":
 				if effects.size() >= (sim.performance_budget.effect_cap() if sim != null else 320) and event.kind in ["hit", "death", "move", "muzzle"]:
 					continue
 				var visual_event: Dictionary = event.duplicate(true)
@@ -186,7 +186,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 					for hero: Dictionary in sim.heroes:
 						if hero.get("character_id", "") == "traveler" and hero.hp > 0.0:
 							hero_attack_visuals[hero.id] = {"elapsed": 0.0, "duration": 0.82, "start_frame": 0}
-				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "boss_phase", "enemy_volatile", "ultimate_impact", "skill_pyro", "skill_electro", "geo_break", "kill_streak"]:
+				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "boss_move", "boss_phase", "enemy_volatile", "ultimate_impact", "skill_pyro", "skill_electro", "geo_break", "kill_streak"]:
 					shake_trauma = minf(1.0, shake_trauma + 0.42)
 				elif event.kind in ["hit", "slash", "chain"]:
 					shake_trauma = minf(0.42, shake_trauma + 0.045)
@@ -346,14 +346,45 @@ func _draw_enemy_telegraphs() -> void:
 		if bool(enemy.get("special_pending", false)):
 			for warning_point: Variant in enemy.get("special_warning_positions", [enemy.pos]):
 				var center := world_to_screen(warning_point)
+				var source := world_to_screen(enemy.pos)
 				var radius := float(enemy.get("special_warning_radius",150.0))*0.62*world_depth_scale(warning_point)
-				draw_circle(center, radius, Color(0.75,0.05,0.12,0.14))
-				draw_arc(center, radius, clock*2.0, clock*2.0+PI*1.65, 64, Color("#ff334f"), 5.0, true)
 				var shape := str(enemy.get("special_warning_shape","circle"))
-				if shape in ["line","multi_line","rectangle","cross"]:
-					draw_rect(Rect2(center-Vector2(radius,30),Vector2(radius*2.0,60)),Color(0.92,0.10,0.16,0.13),true)
-				elif shape in ["donut","spiral"]:
-					draw_arc(center,radius*0.55,0,TAU,48,Color("#ff9aa9"),3.0,true)
+				var danger := Color(0.88,0.06,0.14,0.16)
+				if shape in ["line","rectangle","multi_line"]:
+					var direction: Vector2 = (center-source).normalized()
+					var side := direction.orthogonal()*(20.0 if shape=="line" else 32.0)
+					var lane := PackedVector2Array([source+side,source-side,center-side,center+side])
+					draw_colored_polygon(lane,danger)
+					draw_polyline(PackedVector2Array([source+side,center+side,center-side,source-side]),Color("#ff4158"),4.0,true)
+					if shape=="multi_line":
+						for offset in [-58.0,58.0]:
+							draw_line(source+side.normalized()*offset,center+side.normalized()*offset,Color(1.0,0.25,0.34,0.56),18.0,true)
+				elif shape=="cross":
+					draw_rect(Rect2(center-Vector2(radius,24),Vector2(radius*2.0,48)),danger,true)
+					draw_rect(Rect2(center-Vector2(24,radius),Vector2(48,radius*2.0)),danger,true)
+					draw_line(center-Vector2(radius,0),center+Vector2(radius,0),Color("#ff4158"),4.0,true)
+					draw_line(center-Vector2(0,radius),center+Vector2(0,radius),Color("#ff4158"),4.0,true)
+				elif shape in ["fan","cone"]:
+					var direction: Vector2 = (center-source).normalized()
+					var length := radius*1.45
+					var fan := PackedVector2Array([source,source+direction.rotated(-0.90)*length,source+direction.rotated(0.90)*length])
+					draw_colored_polygon(fan,danger)
+					draw_polyline(PackedVector2Array([fan[0],fan[1],fan[2],fan[0]]),Color("#ff4158"),4.0,true)
+				elif shape=="checker":
+					for gx in range(-2,3):
+						for gy in range(-2,3):
+							if (gx+gy)%2==0:
+								draw_rect(Rect2(center+Vector2(gx*42.0,gy*31.0)-Vector2(20,14),Vector2(40,28)),danger,true)
+				elif shape=="donut":
+					draw_circle(center,radius,danger)
+					draw_circle(center,radius*0.38,Color(0.04,0.03,0.06,0.78))
+					draw_arc(center,radius*0.38,0,TAU,48,Color("#ff9aa9"),3.0,true)
+				elif shape=="spiral":
+					for arc_index in 4:
+						draw_arc(center,radius*(0.28+arc_index*0.19),clock*2.0+arc_index*0.9,clock*2.0+arc_index*0.9+PI*1.55,44,Color(1.0,0.18,0.30,0.74),5.0-arc_index*0.6,true)
+				else:
+					draw_circle(center, radius, danger)
+					draw_arc(center, radius, clock*2.0, clock*2.0+PI*1.65, 64, Color("#ff334f"), 5.0, true)
 				caption(center+Vector2(-74,-radius-12),str(enemy.get("special_move_name","BOSS 危险预警")),Color("#fff0ef"),14)
 
 func _draw_orbitals() -> void:
@@ -1071,7 +1102,7 @@ func _draw_effect(effect: Dictionary) -> void:
 		for ray in 4:
 			var angle: float = -0.7 + ray * 0.45
 			draw_line(effect.pos + Vector2.from_angle(angle) * 8.0, effect.pos + Vector2.from_angle(angle) * (24.0 + t * 28.0), accent, 2.0, true)
-	elif effect.kind in ["barrage", "crossfire", "finale", "death_burst", "boss_summon", "enemy_volatile", "boss_phase", "ultimate_impact"]:
+	elif effect.kind in ["barrage", "crossfire", "finale", "death_burst", "boss_summon", "enemy_volatile", "boss_move", "boss_phase", "ultimate_impact"]:
 		var blast_color := Color(1.0, 0.30, 0.26, fade)
 		for ring in 3:
 			draw_arc(effect.pos, 18.0 + ring * 16.0 + t * 52.0, 0, TAU, 40, Color(blast_color, fade * (0.72 - ring * 0.16)), 4.0 - ring, true)
@@ -1080,12 +1111,15 @@ func _draw_effect(effect: Dictionary) -> void:
 			draw_line(effect.pos + direction * (9.0 + t * 25.0), effect.pos + direction * (30.0 + t * 85.0), Color(1.0, 0.76, 0.42, fade), 3.0, true)
 		if effect.kind == "boss_phase":
 			caption(effect.pos + Vector2(-72, -112 - t * 30), "PHASE %d · %s" % [int(effect.value), str(effect.get("name", "BOSS"))], Color(1.0, 0.66, 0.76, fade), 21)
+		elif effect.kind == "boss_move":
+			caption(effect.pos + Vector2(-80, -108 - t * 26), str(effect.get("name", effect.value)), Color(1.0, 0.62, 0.68, fade), 19)
 		elif effect.kind == "enemy_volatile":
 			caption(effect.pos + Vector2(-38, -86 - t * 22), "爆裂", Color(1.0, 0.48, 0.30, fade), 18)
-	elif effect.kind in ["support_heal", "reinforcement", "frenzy"]:
+	elif effect.kind in ["support_heal", "reinforcement", "frenzy", "contract_complete"]:
 		var support_color := Color(0.48, 0.95, 0.79, fade)
 		draw_arc(effect.pos, 16 + t * 62, 0, TAU, 40, support_color, 3.0, true)
-		caption(effect.pos + Vector2(-42, -58 - t * 20), "支援接入" if effect.kind != "frenzy" else "战意升级", support_color, 18)
+		var support_text := "战术契约完成 · %s" % str(effect.get("reward", "")) if effect.kind == "contract_complete" else ("支援接入" if effect.kind != "frenzy" else "战意升级")
+		caption(effect.pos + Vector2(-88, -58 - t * 20), support_text, support_color, 18)
 	elif effect.kind == "kill_streak":
 		var streak_color := Color(1.0, 0.35, 0.30, fade)
 		caption(effect.pos + Vector2(-72, -105 - t * 38), "%d 连杀" % int(effect.value), streak_color, 28)

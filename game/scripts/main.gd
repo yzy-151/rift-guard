@@ -120,7 +120,11 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v25-test" in OS.get_cmdline_user_args():
+	if "--v26-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v26_test")
+	elif "--v25-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v25_test")
@@ -264,6 +268,8 @@ func process_events() -> void:
 			hud.announce_boss(str(event.value))
 		if event.kind == "boss_phase":
 			hud.announce_boss_phase(str(event.name), int(event.value))
+		if event.kind == "contract_complete":
+			hud.announce_contract(str(event.value), str(event.get("reward", "")))
 		if event.kind in ["critical", "shield_break", "terrain_break"] and not muted and not test_mode and sound_timer <= 0.0:
 			sound.volume_db = -9.0
 			sound.pitch_scale = 0.72 if event.kind == "shield_break" else 0.84
@@ -521,6 +527,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		battle.queue_redraw()
 		return
 	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_RIGHT and skill_aiming:
+			set_skill_aiming(false)
+			get_viewport().set_input_as_handled()
+			return
 		var screen_point: Vector2 = battle.get_global_transform().affine_inverse() * event.position
 		var point: Vector2 = battle.screen_to_world(screen_point)
 		var playable_area: Rect2 = Sim.ENDLESS_ARENA if sim.endless_mode else View.WORLD
@@ -979,6 +989,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v26_test() -> void:
+	var suite = preload("res://scripts/qa_v26.gd").new()
 	await suite.run(self)
 
 func run_v25_test() -> void:

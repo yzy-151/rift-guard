@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V25：12角色独立能力 / 8关地图模板 / 六种三阶段Boss / 动画与特效技术基础"
+config/description="V26：战术契约 / 31个Boss阶段招式槽位（29个独立动作） / 九类几何预警 / 素材就绪度扫描"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

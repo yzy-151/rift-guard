@@ -21,4 +21,11 @@ static func validate(database) -> Array[String]:
 	for id: String in database.boss_patterns:
 		if database.boss_patterns[id].get("phases", []).size() != 3:
 			errors.append("boss requires three phases: " + id)
+	for stage_id: String in database.stages:
+		if not database.combat_contracts.has(stage_id):
+			errors.append("stage missing combat contract: " + stage_id)
+	for contract_id: String in database.combat_contracts:
+		var contract: Dictionary = database.combat_contracts[contract_id]
+		if str(contract.get("metric", "")) not in ["kills", "reactions", "survival_time"] or int(contract.get("target", 0)) <= 0:
+			errors.append("invalid combat contract: " + contract_id)
 	return errors
