@@ -148,7 +148,7 @@ func reset(seed_value: int = -1) -> void:
 	events.clear()
 	for i in Catalog.HEROES.size():
 		var h: Dictionary = Catalog.HEROES[i].duplicate(true)
-		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": false, "splash": false, "slow": false})
+		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": false, "splash": false, "slow": false})
 		heroes.append(h)
 
 func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: int = -1) -> void:
@@ -239,7 +239,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 			"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
 			"color": colors[i], "tile": Vector2(i * 16, 112), "visual": "furina" if id == "hero_03" else ""
 		}
-		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.90, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0})
+		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.90, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0})
 		heroes.append(h)
 
 func _add_reinforcement(character_id: String) -> bool:
@@ -260,7 +260,7 @@ func _add_reinforcement(character_id: String) -> bool:
 		"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
 		"color": colors[i], "tile": Vector2(i * 16, 112), "visual": "furina" if character_id == "hero_03" else ""
 	}
-	hero.merge({"id": i, "max_hp": hero.hp, "target": hero.pos, "moving": false, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": hero.damage, "base_hp": hero.hp, "base_rate": hero.rate, "cleave": false, "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0})
+	hero.merge({"id": i, "max_hp": hero.hp, "target": hero.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": hero.damage, "base_hp": hero.hp, "base_rate": hero.rate, "cleave": false, "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0})
 	heroes.append(hero)
 	events.append({"kind": "reinforcement", "pos": hero.pos, "value": character_id})
 	return true
@@ -324,6 +324,8 @@ func command_move(hero_id: int, point: Vector2) -> void:
 		return
 	var area := ENDLESS_ARENA if endless_mode else (STAGE_EXIT_AREA if state == "stage_exit" else MOVE_AREA)
 	hero.target = _resolve_walkable_target(Vector2(clampf(point.x, area.position.x, area.end.x), clampf(point.y, area.position.y, area.end.y)))
+	if absf(hero.target.x - hero.pos.x) > 1.0:
+		hero.facing = 1.0 if hero.target.x > hero.pos.x else -1.0
 	events.append({"kind": "move", "pos": hero.target, "hero_id": hero_id})
 
 func command_squad(point: Vector2) -> void:
@@ -464,7 +466,7 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 			shield *= float(stage_runtime.definition.get("boss_health_multiplier", 1.0))
 	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 28, "charger": 20, "healer": 30, "splitter": 34, "warder": 32, "boss_01": 240, "boss_02": 280, "boss_03": 260, "boss_04": 320, "boss_05": 290, "boss_06": 310}
 	var first_special: float = float(enemy.get("boss_pulse", enemy.get("heal_interval", enemy.get("ward_interval", 0.0))))
-	enemy.merge({"id": next_id, "kind": kind, "pos": point, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "summons_done": 0, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10))})
+	enemy.merge({"id": next_id, "kind": kind, "pos": point, "facing": -1.0, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "summons_done": 0, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10))})
 	enemies.append(enemy)
 	return enemy
 
@@ -497,6 +499,8 @@ func tick(dt: float) -> void:
 		h.flash = maxf(0.0, h.flash - dt)
 		h.moving = h.hp > 0 and h.pos.distance_to(h.target) > 0.5
 		if h.moving:
+			if absf(h.target.x - h.pos.x) > 1.0:
+				h.facing = 1.0 if h.target.x > h.pos.x else -1.0
 			_move_hero_with_terrain(h, dt)
 		h.attack_timer = maxf(0.0, h.attack_timer - dt)
 		h.heal_timer = maxf(0.0, h.heal_timer - dt)
@@ -673,6 +677,8 @@ func _enemy_tick(dt: float) -> void:
 		var destination: Vector2 = heroes[0].pos if endless_mode and not heroes.is_empty() else Vector2(100, e.pos.y)
 		if not endless_mode and not route.is_empty() and route_index < route.size():
 			destination = route[route_index]
+		if absf(destination.x - e.pos.x) > 1.0:
+			e.facing = 1.0 if destination.x > e.pos.x else -1.0
 		var next_pos: Vector2 = e.pos.move_toward(destination, e.speed * speed_scale * dt)
 		if not endless_mode and e.pos.distance_to(destination) <= maxf(4.0, e.speed * speed_scale * dt + 1.0):
 			e.pos = destination
@@ -984,6 +990,8 @@ func _hero_tick() -> void:
 					target = e
 		if target.is_empty():
 			continue
+		if absf(target.pos.x - h.pos.x) > 1.0:
+			h.facing = 1.0 if target.pos.x > h.pos.x else -1.0
 		h.attack_timer = 1.0 / h.rate
 		h.shots += 1
 		shots_fired += 1
@@ -1005,7 +1013,8 @@ func _hero_tick() -> void:
 					apply_hit(victim, (damage if strike == 0 else damage * 0.72) * 0.85, secondary)
 				if h.cleave:
 					splash_damage(victim, damage * float(h.get("cleave_ratio", 0.5)), 145.0 + float(h.get("pierce", 0)) * 18.0, h)
-				events.append({"kind": "slash", "pos": victim.pos})
+				var slash_direction: Vector2 = (victim.pos - h.pos).normalized()
+				events.append({"kind": "slash", "pos": victim.pos, "source_pos": h.pos, "angle": slash_direction.angle(), "element": normalize_element(str(h.element)), "critical": critical})
 				_apply_attack_extras(victim, h, damage)
 		else:
 			for shot_index in attack_count:

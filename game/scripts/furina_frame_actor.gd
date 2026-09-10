@@ -49,7 +49,8 @@ func build_frames() -> SpriteFrames:
 
 func sync(hero: Dictionary, screen_position: Vector2, depth: float, shot_life: float, reduced: bool, dt: float = 0.0) -> void:
 	position = screen_position + Vector2(0, 8)
-	scale = Vector2.ONE * DISPLAY_SCALE * depth
+	var facing := float(hero.get("facing", 1.0))
+	scale = Vector2(DISPLAY_SCALE * depth * facing, DISPLAY_SCALE * depth)
 	attack_hold = maxf(0.0, attack_hold - dt)
 	hurt_hold = maxf(0.0, hurt_hold - dt)
 	if shot_life > 0.0:

@@ -7,12 +7,18 @@
   },
   "character.traveler": {
     "portrait": "res://assets/portraits/jessica.png",
-    "idle": "res://assets/tiny-dungeon.png",
-    "move": "res://assets/tiny-dungeon.png",
-    "attack": "res://assets/tiny-dungeon.png",
+    "idle": "res://assets/characters/traveler_v18/idle.png",
+    "move": "res://assets/characters/traveler_v18/run.png",
+    "attack": "res://assets/characters/traveler_v18/attack.png",
     "hurt": "res://assets/tiny-dungeon.png",
     "skill": "res://assets/tiny-dungeon.png",
-    "down": "res://assets/tiny-dungeon.png"
+    "down": "res://assets/characters/traveler_v18/death.png",
+    "idle_frames": 48,
+    "idle_columns": 8,
+    "idle_cell": [
+      288,
+      288
+    ]
   },
   "character.hero_02": {
     "portrait": "res://assets/portraits/jessica.png",
@@ -25,12 +31,18 @@
   },
   "character.hero_03": {
     "portrait": "res://assets/portraits/muelsyse.png",
-    "idle": "res://assets/tiny-dungeon.png",
+    "idle": "res://assets/characters/furina_frames/furina-motion-sheet.png",
     "move": "res://assets/tiny-dungeon.png",
     "attack": "res://assets/tiny-dungeon.png",
     "hurt": "res://assets/tiny-dungeon.png",
     "skill": "res://assets/tiny-dungeon.png",
-    "down": "res://assets/tiny-dungeon.png"
+    "down": "res://assets/tiny-dungeon.png",
+    "idle_frames": 8,
+    "idle_columns": 8,
+    "idle_cell": [
+      256,
+      256
+    ]
   },
   "character.hero_04": {
     "portrait": "res://assets/portraits/jessica.png",
@@ -105,7 +117,7 @@
     "down": "res://assets/tiny-dungeon.png"
   },
   "character.hero_12": {
-    "portrait": "res://assets/portraits/jessica.png",
+    "portrait": "res://assets/portraits/amiya.png",
     "idle": "res://assets/tiny-dungeon.png",
     "move": "res://assets/tiny-dungeon.png",
     "attack": "res://assets/tiny-dungeon.png",

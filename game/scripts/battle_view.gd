@@ -160,13 +160,19 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				var attack_duration := clampf(0.72 / maxf(0.55, float(hero.rate)), 0.22, 0.72)
 				hero_attack_visuals[event.hero_id] = {"elapsed": 0.0, "duration": attack_duration, "start_frame": 18}
 				if effects.size() < 260:
-					effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25, -20), "life": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0, "element": hero.get("element", "")})
+					var facing := float(hero.get("facing", 1.0))
+					effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25.0 * facing, -20), "life": 0.16, "total": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0, "element": hero.get("element", "")})
 			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break":
 				if effects.size() >= 320 and event.kind in ["hit", "death", "move", "muzzle"]:
 					continue
 				var visual_event: Dictionary = event.duplicate(true)
-				visual_event.life = 0.6
-				visual_event.total = 0.6
+				var effect_duration := 0.6
+				if str(event.kind).begins_with("skill_"):
+					effect_duration = 1.05
+				elif event.kind == "slash":
+					effect_duration = 0.42
+				visual_event.life = effect_duration
+				visual_event.total = effect_duration
 				effects.append(visual_event)
 				if str(event.kind).begins_with("skill_"):
 					for hero: Dictionary in sim.heroes:
@@ -658,7 +664,9 @@ func _draw_hero(hero: Dictionary) -> void:
 	elif is_traveler:
 		_draw_traveler(hero, tint, down)
 	else:
-		draw_texture_rect_region(atlas, Rect2(hero.pos + Vector2(-29, -46 + bob), Vector2(58, 58)), Rect2(hero.tile, Vector2(16, 16)), tint)
+		var facing := float(hero.get("facing", 1.0))
+		var hero_rect := Rect2(hero.pos + Vector2(-29 if facing >= 0.0 else 29, -46 + bob), Vector2(58 if facing >= 0.0 else -58, 58))
+		draw_texture_rect_region(atlas, hero_rect, Rect2(hero.tile, Vector2(16, 16)), tint)
 	if not down:
 		if hero.block > 0 and not is_traveler:
 			draw_rect(Rect2(hero.pos + Vector2(17, -24), Vector2(16, 25)), Color("#a8a687"))
@@ -699,7 +707,9 @@ func _draw_traveler(hero: Dictionary, tint: Color, down: bool) -> void:
 	var width := 132.0 * (1.0 + hit_strength * 0.13)
 	var height := 132.0 * (1.0 - hit_strength * 0.10)
 	var foot: Vector2 = hero.pos + Vector2(0, 8)
-	var destination := Rect2(foot.x - width * 0.5, foot.y - height * 270.0 / TRAVELER_CELL, width, height)
+	var facing := float(hero.get("facing", 1.0))
+	var destination_x := foot.x - width * 0.5 if facing >= 0.0 else foot.x + width * 0.5
+	var destination := Rect2(destination_x, foot.y - height * 270.0 / TRAVELER_CELL, width if facing >= 0.0 else -width, height)
 	var source := Rect2((frame % 8) * TRAVELER_CELL, floori(frame / 8.0) * TRAVELER_CELL, TRAVELER_CELL, TRAVELER_CELL)
 	if not reduced_effects:
 		draw_circle(hero.pos + Vector2(0, -35), 36.0 + sin(clock * 2.2) * 2.0, Color(1.0, 0.76, 0.48, 0.055))
@@ -764,7 +774,9 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	if animated_enemy:
 		_draw_animated_enemy(enemy, tint, bob)
 	else:
-		draw_texture_rect_region(atlas, Rect2(enemy.pos + Vector2(-side / 2, -side + 12 + bob), Vector2(side, side)), Rect2(0, 144, 16, 16), tint)
+		var facing := float(enemy.get("facing", -1.0))
+		var enemy_rect := Rect2(enemy.pos + Vector2(-side / 2 if facing <= 0.0 else side / 2, -side + 12 + bob), Vector2(side if facing <= 0.0 else -side, side))
+		draw_texture_rect_region(atlas, enemy_rect, Rect2(0, 144, 16, 16), tint)
 	var ratio: float = clampf(float(enemy.hp) / float(enemy.max_hp), 0, 1)
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44, 4)), Color("#302b32"))
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44 * ratio, 4)), RED)
@@ -932,21 +944,28 @@ func _draw_animated_enemy(enemy: Dictionary, tint: Color, bob: float) -> void:
 		visual_size *= 0.92
 	var foot: Vector2 = enemy.pos + Vector2(0, 12 + bob * 0.35)
 	var destination := Rect2(foot.x - visual_size * 0.5, foot.y - visual_size * 242.0 / MONSTER_CELL, visual_size, visual_size)
+	var facing := float(enemy.get("facing", -1.0))
+	if facing > 0.0:
+		destination = Rect2(foot.x + visual_size * 0.5, destination.position.y, -visual_size, visual_size)
 	var source := Rect2((frame % 6) * MONSTER_CELL, floori(frame / 6.0) * MONSTER_CELL, MONSTER_CELL, MONSTER_CELL)
 	var art_tint := Color("#fff0e8") if enemy.flash > 0 and not reduced_effects else Color.WHITE
 	draw_texture_rect_region(hilichurl_run_atlas, destination, source, art_tint)
 
 func _draw_effect(effect: Dictionary) -> void:
-	var t: float = 1.0 - effect.life / 0.6
-	var fade: float = minf(1.0, effect.life * 4)
+	var total := maxf(0.01, float(effect.get("total", 0.6)))
+	var t: float = clampf(1.0 - float(effect.life) / total, 0.0, 1.0)
+	var fade: float = clampf(float(effect.life) / minf(0.18, total), 0.0, 1.0)
 	if effect.kind == "muzzle" and not reduced_effects:
 		var frames: Array[Texture2D] = muzzle_ion_frames if int(effect.value) == 1 else muzzle_fire_frames
 		var muzzle_t: float = 1.0 - effect.life / 0.16
 		var muzzle_index: int = clampi(floori(muzzle_t * frames.size()), 0, frames.size() - 1)
 		draw_texture_rect(frames[muzzle_index], Rect2(effect.pos + Vector2(-32, -32), Vector2(64, 64)), false, Color.WHITE)
-	elif effect.kind == "slash" and not reduced_effects:
-		var frame_index: int = clampi(floori(t * slash_frames.size()), 0, slash_frames.size() - 1)
-		draw_texture_rect(slash_frames[frame_index], Rect2(effect.pos + Vector2(-62, -82), Vector2(124, 124)), false, Color(1, 0.88, 0.78, fade))
+	elif effect.kind == "slash":
+		if reduced_effects:
+			var slash_color := element_color(str(effect.get("element", "")))
+			draw_polyline(_arc_polyline(effect.pos, 62.0, -1.05, 1.05, 0.70, float(effect.get("angle", 0.0))), Color(slash_color, fade), 5.0, true)
+		else:
+			_draw_melee_slash(effect, t, fade)
 	elif effect.kind in ["vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread"]:
 		var reaction_names := {"vaporize": "蒸发", "melt": "融化", "overloaded": "超载", "superconduct": "超导", "electro_charged": "感电", "frozen": "冻结", "swirl": "扩散", "swirl_spread": "扩散传播", "crystallize": "结晶", "shatter": "碎冰", "element_burst": "元素爆发"}
 		var reaction_colors := {"vaporize": Color("#ffd082"), "melt": Color("#ffb28e"), "overloaded": Color("#ff7188"), "superconduct": Color("#b9a2ff"), "electro_charged": Color("#82bcff"), "frozen": Color("#b9f2ff"), "swirl": Color("#7ef0c5"), "swirl_spread": Color("#7ef0c5"), "crystallize": Color("#f3ca62"), "shatter": Color("#e8fbff"), "element_burst": Color("#ffffff")}
@@ -1043,14 +1062,9 @@ func _draw_effect(effect: Dictionary) -> void:
 		caption(effect.pos + Vector2(-28, -105 - t * 20), element_glyph(str(effect.value)) + "元素共鸣", attuned_color, 19)
 	elif effect.kind.begins_with("skill_"):
 		var element: String = str(effect.kind).trim_prefix("skill_")
-		var skill_color := Color(element_color(element), fade)
-		if element == "none": skill_color = Color(1.0, 0.86, 0.58, fade)
-		for ring in 4:
-			draw_arc(effect.pos, 18.0 + ring * 18.0 + t * 78.0, 0, TAU, 42, Color(skill_color, fade * (0.82 - ring * 0.14)), 4.0 - ring * 0.5, true)
-		for ray in 10:
-			var direction := Vector2.from_angle(ray * TAU / 10.0 + t)
-			draw_line(effect.pos + direction * 12.0, effect.pos + direction * (42.0 + t * 78.0), skill_color, 2.5, true)
-		caption(effect.pos + Vector2(-48, -92 - t * 28), sim.traveler_skill_name(), skill_color, 18)
+		_draw_element_skill(effect.pos, element, t, fade)
+		var label_color := element_color(element) if element != "none" else Color("#ffe4a3")
+		caption(effect.pos + Vector2(-58, -122 - t * 30), _skill_display_name(element), Color(label_color, fade), 20)
 	elif effect.kind in ["geo_hit", "geo_break"]:
 		var geo_color := Color(1.0, 0.76, 0.31, fade)
 		for shard in 7:
@@ -1067,6 +1081,102 @@ func _draw_effect(effect: Dictionary) -> void:
 			draw_arc(effect.pos, 10 + t * 27, 0, TAU, 24, Color(0.8, 0.4, 0.42, fade * 0.6), 1.5)
 	elif effect.kind == "move":
 		draw_arc(effect.pos, 7 + t * 19, 0, TAU, 24, Color(0.55, 0.86, 0.78, fade), 1.5)
+
+
+func _arc_polyline(center: Vector2, radius: float, start_angle: float, end_angle: float, squash: float = 0.72, rotation: float = 0.0) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	for index in 25:
+		var angle := lerpf(start_angle, end_angle, float(index) / 24.0)
+		points.append(center + Vector2(cos(angle) * radius, sin(angle) * radius * squash).rotated(rotation))
+	return points
+
+func _draw_melee_slash(effect: Dictionary, t: float, fade: float) -> void:
+	var element := str(effect.get("element", ""))
+	var color := element_color(element)
+	var angle := float(effect.get("angle", 0.0))
+	var scale_phase := 0.72 + sin(t * PI) * 0.42
+	var arc := _arc_polyline(effect.pos, 76.0 * scale_phase, -1.18, 1.18, 0.72, angle)
+	var inner := _arc_polyline(effect.pos, 61.0 * scale_phase, -1.05, 1.05, 0.72, angle)
+	draw_polyline(arc, Color(color, fade * 0.20), 24.0 * (1.0 - t * 0.35), true)
+	draw_polyline(arc, Color(color.lightened(0.24), fade * 0.92), 9.0 * (1.0 - t * 0.25), true)
+	draw_polyline(inner, Color(Color.WHITE, fade * 0.96), 2.5, true)
+	var frame_index: int = clampi(floori(t * slash_frames.size()), 0, slash_frames.size() - 1)
+	var texture_size := 176.0 * scale_phase
+	draw_texture_rect(slash_frames[frame_index], Rect2(effect.pos + Vector2(-texture_size * 0.5, -texture_size * 0.62), Vector2(texture_size, texture_size)), false, Color(color.lightened(0.34), fade * 0.48))
+	for shard in 9:
+		var shard_angle := angle - 1.0 + shard * 0.25
+		var direction := Vector2.from_angle(shard_angle)
+		var side := direction.rotated(PI * 0.5)
+		var start: Vector2 = effect.pos + direction * (24.0 + t * 35.0)
+		var tip: Vector2 = effect.pos + direction * (52.0 + t * 78.0)
+		draw_colored_polygon(PackedVector2Array([start - side * 2.5, tip, start + side * 2.5]), Color(color.lightened(0.35), fade * 0.86))
+	if bool(effect.get("critical", false)):
+		draw_circle(effect.pos, 32.0 * (1.0 - t), Color(1.0, 0.88, 0.54, fade * 0.26))
+		draw_arc(effect.pos, 36.0 + t * 62.0, 0.0, TAU, 36, Color(1.0, 0.72, 0.36, fade), 5.0, true)
+
+func _draw_element_skill(center: Vector2, element: String, t: float, fade: float) -> void:
+	var color := element_color(element) if element != "none" else Color("#ffe4a3")
+	draw_circle(center, 48.0 + sin(t * PI) * 26.0, Color(color, fade * 0.12))
+	match element:
+		"pyro":
+			for flame in 10:
+				var angle := flame * TAU / 10.0 + t * 0.65
+				var direction := Vector2.from_angle(angle)
+				var side := direction.rotated(PI * 0.5)
+				var root := center + direction * (18.0 + t * 30.0)
+				var tip := center + direction * (72.0 + t * 96.0)
+				draw_colored_polygon(PackedVector2Array([root - side * 13.0, tip, root + side * 13.0]), Color(color, fade * 0.70))
+			draw_circle(center, 28.0 * (1.0 - t * 0.5), Color("#fff0b8"), false, 7.0, true)
+		"hydro":
+			for wave in 4:
+				var radius := 30.0 + wave * 22.0 + t * 62.0
+				draw_polyline(_arc_polyline(center + Vector2(0, wave * 4.0), radius, -2.82, -0.16, 0.42, wave * 0.26), Color(color.lightened(0.18 * wave), fade * (0.92 - wave * 0.15)), 7.0 - wave, true)
+			for bubble in 9:
+				var bubble_pos := center + Vector2.from_angle(bubble * 2.4 + t) * (28.0 + bubble * 8.0 + t * 42.0)
+				draw_circle(bubble_pos, 4.0 + bubble % 3 * 2.0, Color(color, fade * 0.75), false, 2.0, true)
+		"electro":
+			for bolt in 10:
+				var direction := Vector2.from_angle(bolt * TAU / 10.0 + t * 0.32)
+				var side := direction.rotated(PI * 0.5)
+				var start := center + direction * 12.0
+				var mid_a := center + direction * (42.0 + t * 35.0) + side * (10.0 if bolt % 2 == 0 else -10.0)
+				var mid_b := center + direction * (72.0 + t * 55.0) - side * 8.0
+				var tip := center + direction * (112.0 + t * 70.0)
+				draw_polyline(PackedVector2Array([start, mid_a, mid_b, tip]), Color(color, fade * 0.40), 9.0, true)
+				draw_polyline(PackedVector2Array([start, mid_a, mid_b, tip]), Color("#fff4ff", fade), 2.7, true)
+		"cryo":
+			for shard in 12:
+				var angle := shard * TAU / 12.0
+				var direction := Vector2.from_angle(angle)
+				var side := direction.rotated(PI * 0.5)
+				var base := center + direction * (24.0 + t * 28.0)
+				var tip := center + direction * (82.0 + t * 82.0)
+				draw_colored_polygon(PackedVector2Array([base - side * 8.0, tip, base + side * 8.0]), Color(color, fade * 0.74))
+				draw_line(base, tip, Color("#f4ffff", fade), 2.2, true)
+		"anemo":
+			for spiral in 5:
+				var radius := 34.0 + spiral * 18.0 + t * 66.0
+				var rotation := t * 2.1 + spiral * 1.18
+				draw_polyline(_arc_polyline(center, radius, -1.35, 1.55, 0.66, rotation), Color(color.lightened(spiral * 0.06), fade * (0.94 - spiral * 0.13)), 8.0 - spiral, true)
+		"geo":
+			for shard in 8:
+				var angle := shard * TAU / 8.0 + 0.39
+				var direction := Vector2.from_angle(angle)
+				var side := direction.rotated(PI * 0.5)
+				var root := center + direction * (26.0 + t * 30.0)
+				var tip := center + direction * (80.0 + t * 62.0)
+				draw_colored_polygon(PackedVector2Array([root - side * 12.0, tip, root + side * 12.0, center + direction * 10.0]), Color(color, fade * 0.68))
+				draw_polyline(PackedVector2Array([root - side * 12.0, tip, root + side * 12.0]), Color("#fff0ad", fade), 2.4, true)
+		_:
+			for slash in 4:
+				var rotation := slash * PI * 0.5 + t * 0.5
+				draw_polyline(_arc_polyline(center, 54.0 + slash * 12.0 + t * 58.0, -1.05, 1.05, 0.66, rotation), Color(color, fade * (0.95 - slash * 0.16)), 8.0 - slash, true)
+	for ring in 3:
+		draw_arc(center, 22.0 + ring * 28.0 + t * 92.0, t * (1.0 + ring), t * (1.0 + ring) + PI * 1.58, 42, Color(color, fade * (0.78 - ring * 0.18)), 4.0 - ring * 0.7, true)
+
+
+func _skill_display_name(element: String) -> String:
+	return {"none": "断空剑阵", "anemo": "苍风龙卷", "electro": "雷霆链狱", "pyro": "烈焰星坠", "hydro": "潮汐回响", "geo": "岩脊构筑", "cryo": "霜华禁锢"}.get(element, "元素爆发")
 
 func element_color(element: String) -> Color:
 	return {"anemo": Color("#63e6c0"), "electro": Color("#bf83ff"), "pyro": Color("#ff745c"), "hydro": Color("#5ab8ff"), "geo": Color("#e8b94d"), "cryo": Color("#9de7f2")}.get(element, Color("#f0dfb8"))

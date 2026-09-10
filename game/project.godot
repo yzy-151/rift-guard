@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V18：旅行者与怪物序列帧 / 七系动态弹道 / 强化打击特效 / 无尽地图美化"
+config/description="V19：七元素近战与技能特效 / 全单位动态朝向 / 12 角色动态编队卡 / 美术工作流"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

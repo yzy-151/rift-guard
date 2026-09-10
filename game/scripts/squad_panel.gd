@@ -2,6 +2,7 @@ extends CanvasLayer
 
 signal confirmed(squad: Array[String])
 
+const Preview = preload("res://scripts/character_breath_preview.gd")
 const WHITE := Color("#f3e9df")
 const MUTED := Color("#9a858e")
 const ACCENT := Color("#e7a0a4")
@@ -17,6 +18,7 @@ var count_label: Label
 var confirm_button: Button
 var buttons: Dictionary = {}
 var state_labels: Dictionary = {}
+var previews: Dictionary = {}
 var database
 var progress
 var hud
@@ -41,44 +43,82 @@ func build(owner_hud, game_database, state) -> void:
 	root.add_child(background)
 	owner_hud.bind(background, "squad_background")
 	var veil := ColorRect.new()
-	veil.color = Color(0.025, 0.012, 0.02, 0.88)
+	veil.color = Color(0.025, 0.012, 0.02, 0.90)
 	veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(veil)
-	var frame: Panel = owner_hud.panel(root, Rect2(72, 42, 1136, 636), Color("#171119"), Color("#9f4f60"))
+	var frame: Panel = owner_hud.panel(root, Rect2(48, 24, 1184, 672), Color("#171119"), Color("#9f4f60"))
 	owner_hud.bind(frame, "squad_frame")
-	owner_hud.ornament(frame, Rect2(-18, -18, 1172, 672))
-	owner_hud.label(frame, Vector2(36, 22), Vector2(600, 20), "P A R T Y   /   裂 隙 编 队", 12, ACCENT)
-	title = owner_hud.label(frame, Vector2(36, 50), Vector2(700, 42), "选择下一关出战角色", 30, WHITE)
+	owner_hud.ornament(frame, Rect2(-16, -16, 1216, 704))
+	owner_hud.label(frame, Vector2(30, 18), Vector2(650, 18), "P A R T Y   /   裂 隙 编 队", 11, ACCENT)
+	title = owner_hud.label(frame, Vector2(30, 40), Vector2(720, 36), "选择下一关出战角色", 27, WHITE)
 	owner_hud.bind(title, "squad_title")
-	subtitle = owner_hud.label(frame, Vector2(36, 94), Vector2(900, 24), "旅行者必须出战 · 点击已解锁角色加入或移出队伍", 14, MUTED)
+	subtitle = owner_hud.label(frame, Vector2(30, 78), Vector2(900, 22), "旅行者固定出战 · 最多选择三名角色", 13, MUTED)
 	owner_hud.bind(subtitle, "squad_subtitle")
-	count_label = owner_hud.label(frame, Vector2(820, 62), Vector2(270, 28), "", 16, ACCENT)
+	count_label = owner_hud.label(frame, Vector2(910, 50), Vector2(236, 28), "", 16, ACCENT)
 	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	var order: Array[String] = []
 	for id: String in database.characters:
 		order.append(id)
 	for i in order.size():
-		var id := order[i]
-		var data: Dictionary = database.characters[id]
-		var col := i % 4
-		var row := i / 4
-		var button: Button = owner_hud.button(frame, Rect2(36 + col * 268, 130 + row * 118, 250, 106), "", true)
-		owner_hud.bind(button, "squad_character_%d" % (i + 1))
-		button.name = "Squad_" + id
-		button.pressed.connect(toggle.bind(id))
-		buttons[id] = button
-		owner_hud.label(button, Vector2(16, 8), Vector2(218, 28), str(data.name), 18, ELEMENT_COLORS.get(str(data.element), WHITE))
-		var state_label: Label = owner_hud.label(button, Vector2(164, 10), Vector2(70, 22), "", 10, ACCENT)
-		state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		state_labels[id] = state_label
-		owner_hud.label(button, Vector2(16, 38), Vector2(218, 20), "%s · %s" % [_element_name(str(data.element)), data.role], 11, WHITE)
-		owner_hud.label(button, Vector2(16, 64), Vector2(218, 34), "ATK %d  ·  射程 %d\n攻速 %.2f/s  ·  阻挡 %d" % [int(data.attack), int(data.attack_range), float(data.attack_rate), int(data.block)], 10, MUTED)
-	confirm_button = owner_hud.button(frame, Rect2(308, 500, 520, 54), "确认编队并进入下一关   →", true)
+		_build_character_card(frame, order[i], i)
+	confirm_button = owner_hud.button(frame, Rect2(324, 548, 536, 52), "确认编队并进入下一关   →", true)
 	owner_hud.bind(confirm_button, "squad_confirm")
-	confirm_button.add_theme_font_size_override("font_size", 18)
+	confirm_button.add_theme_font_size_override("font_size", 17)
 	confirm_button.pressed.connect(confirm)
-	owner_hud.label(frame, Vector2(36, 580), Vector2(1064, 22), "已解锁角色永久保留 · 本关卡牌与元素将在下一关重置", 12, MUTED)
+	owner_hud.label(frame, Vector2(30, 622), Vector2(1124, 20), "◆ 点击角色卡加入或移出编队    ◆ 悬停可查看完整战斗数值    ◆ 解锁状态永久保留", 11, MUTED)
 	root.hide()
+
+func _build_character_card(frame: Control, id: String, index: int) -> void:
+	var data: Dictionary = database.characters[id]
+	var col := index % 4
+	var row := index / 4
+	var card_rect := Rect2(30 + col * 285, 112 + row * 140, 270, 126)
+	var button: Button = hud.button(frame, card_rect, "", true)
+	hud.bind(button, "squad_character_%d" % (index + 1))
+	button.name = "Squad_" + id
+	button.clip_contents = true
+	button.pressed.connect(toggle.bind(id))
+	buttons[id] = button
+	var element := str(data.element)
+	var color: Color = ELEMENT_COLORS.get(element, WHITE)
+	var preview = Preview.new()
+	preview.position = Vector2(10, 15)
+	preview.size = Vector2(88, 98)
+	button.add_child(preview)
+	var asset: Dictionary = database.assets.get(str(data.asset_key), {})
+	preview.configure(id, asset, color, not progress.unlocked_characters.has(id))
+	previews[id] = preview
+	var badge := Panel.new()
+	badge.position = Vector2(108, 14)
+	badge.size = Vector2(35, 24)
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var badge_style := StyleBoxFlat.new()
+	badge_style.bg_color = Color(color, 0.17)
+	badge_style.border_color = Color(color, 0.72)
+	badge_style.set_border_width_all(1)
+	badge_style.corner_radius_top_left = 4
+	badge_style.corner_radius_top_right = 4
+	badge_style.corner_radius_bottom_left = 4
+	badge_style.corner_radius_bottom_right = 4
+	badge.add_theme_stylebox_override("panel", badge_style)
+	button.add_child(badge)
+	var glyph: Label = hud.label(badge, Vector2.ZERO, badge.size, _element_glyph(element), 13, color)
+	glyph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	glyph.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	hud.label(button, Vector2(151, 13), Vector2(108, 26), str(data.name), 18, color)
+	var divider := ColorRect.new()
+	divider.position = Vector2(108, 45)
+	divider.size = Vector2(148, 1)
+	divider.color = Color(color, 0.30)
+	divider.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(divider)
+	hud.label(button, Vector2(108, 53), Vector2(150, 20), str(data.role), 11, WHITE)
+	hud.label(button, Vector2(108, 75), Vector2(150, 17), _element_name(element), 10, MUTED)
+	var state_label: Label = hud.label(button, Vector2(108, 98), Vector2(148, 17), "", 10, ACCENT)
+	state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	state_labels[id] = state_label
+	button.tooltip_text = "%s / %s\n生命 %d  攻击 %d  护甲 %d\n射程 %d  攻速 %.2f/s  移速 %d  阻挡 %d" % [data.name, data.role, int(data.max_hp), int(data.attack), int(data.armor), int(data.attack_range), float(data.attack_rate), int(data.move_speed), int(data.block)]
 
 func open(stage_id: String, current_squad: Array[String], newly_unlocked: Array = []) -> void:
 	next_stage_id = stage_id
@@ -96,7 +136,7 @@ func open(stage_id: String, current_squad: Array[String], newly_unlocked: Array 
 			selected.append(id)
 	var stage: Dictionary = database.stages.get(stage_id, {})
 	title.text = "下一关：%s" % stage.get("name", stage_id)
-	subtitle.text = "新角色已解锁：%s" % _names(newly_unlocked) if not newly_unlocked.is_empty() else "旅行者必须出战 · 点击已解锁角色加入或移出队伍"
+	subtitle.text = "新角色已解锁：%s" % _names(newly_unlocked) if not newly_unlocked.is_empty() else "旅行者固定出战 · 最多选择三名角色"
 	_refresh()
 	root.show()
 	confirm_button.grab_focus()
@@ -133,17 +173,18 @@ func is_open() -> bool:
 	return root != null and root.visible
 
 func _refresh() -> void:
-	count_label.text = "出战 %d / 3" % selected.size()
+	count_label.text = "出战  %d / 3" % selected.size()
 	confirm_button.disabled = selected.is_empty() or selected.size() > 3
 	for id: String in buttons:
 		var button: Button = buttons[id]
 		var known: bool = progress.unlocked_characters.has(id)
 		button.disabled = not known
-		button.modulate = Color.WHITE if id in selected else (Color("#c7afb7") if known else Color("#352c31"))
-		button.tooltip_text = "已选择" if id in selected else ("点击加入编队" if known else "随剧情通关后解锁")
+		button.modulate = Color.WHITE if id in selected else (Color("#c7afb7") if known else Color("#4b3c43"))
 		var state_label: Label = state_labels[id]
-		state_label.text = "◆ 出战" if id in selected else ("可选择" if known else "未解锁")
+		state_label.text = "◆ 出战中" if id in selected else ("＋ 加入队伍" if known else "LOCKED / 未解锁")
 		state_label.add_theme_color_override("font_color", ACCENT if id in selected else (WHITE if known else MUTED))
+		var preview = previews[id]
+		preview.set_locked(not known)
 
 func _names(ids: Array) -> String:
 	var result: Array[String] = []
@@ -155,3 +196,6 @@ func _names(ids: Array) -> String:
 
 func _element_name(element: String) -> String:
 	return {"none": "无元素", "anemo": "风元素", "electro": "雷元素", "pyro": "火元素", "hydro": "水元素", "geo": "岩元素", "cryo": "冰元素"}.get(element, element)
+
+func _element_glyph(element: String) -> String:
+	return {"none": "无", "anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, "?")
