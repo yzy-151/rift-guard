@@ -8,7 +8,10 @@
     "target": "global",
     "effect": "projectile_count_add",
     "value": 1,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "mechanic_prism_fan",
@@ -19,7 +22,10 @@
     "target": "global",
     "effect": "projectile_count_add",
     "value": 2,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "mechanic_piercing_edge",
@@ -30,7 +36,10 @@
     "target": "global",
     "effect": "pierce_add",
     "value": 1,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "mechanic_chain_arc",
@@ -41,7 +50,10 @@
     "target": "global",
     "effect": "chain_add",
     "value": 1,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "mechanic_blast_core",
@@ -52,7 +64,10 @@
     "target": "global",
     "effect": "blast_add",
     "value": 18,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "mechanic_rapid_echo",
@@ -63,7 +78,10 @@
     "target": "global",
     "effect": "echo_add",
     "value": 0.35,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "support_red_moon",
@@ -76,7 +94,10 @@
     "value": 70,
     "interval": 8,
     "radius": 105,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "support_crossfire",
@@ -88,7 +109,10 @@
     "effect": "support_crossfire",
     "value": 42,
     "interval": 6,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "support_tidal_aid",
@@ -100,7 +124,11 @@
     "effect": "support_heal",
     "value": 24,
     "interval": 10,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援",
+      "护盾"
+    ]
   },
   {
     "id": "support_finale",
@@ -112,7 +140,10 @@
     "effect": "support_finale",
     "value": 55,
     "interval": 14,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "reinforcement_pyro",
@@ -123,7 +154,10 @@
     "target": "global",
     "effect": "deploy_reinforcement",
     "value": "hero_02",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "召唤"
+    ]
   },
   {
     "id": "reinforcement_hydro",
@@ -134,7 +168,10 @@
     "target": "global",
     "effect": "deploy_reinforcement",
     "value": "hero_03",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "召唤"
+    ]
   },
   {
     "id": "mechanic_execution",
@@ -145,7 +182,10 @@
     "target": "global",
     "effect": "execute_threshold_add",
     "value": 0.03,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "暴击"
+    ]
   },
   {
     "id": "mechanic_overflow",
@@ -156,7 +196,10 @@
     "target": "global",
     "effect": "death_burst_add",
     "value": 0.08,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "mechanic_giant_slayer",
@@ -167,7 +210,10 @@
     "target": "global",
     "effect": "elite_damage_add",
     "value": 0.2,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "mechanic_battle_fever",
@@ -178,7 +224,10 @@
     "target": "global",
     "effect": "kill_frenzy_add",
     "value": 0.02,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "anemo_skill_power_add",
@@ -190,7 +239,10 @@
     "effect": "skill_power_add",
     "value": 0.18,
     "requires_element": "anemo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "anemo_skill_cooldown_add",
@@ -202,7 +254,10 @@
     "effect": "skill_cooldown_add",
     "value": 0.06,
     "requires_element": "anemo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "anemo_skill_area_add",
@@ -214,7 +269,10 @@
     "effect": "skill_area_add",
     "value": 0.12,
     "requires_element": "anemo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "anemo_skill_duration_add",
@@ -226,7 +284,10 @@
     "effect": "skill_duration_add",
     "value": 0.15,
     "requires_element": "anemo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "anemo_reaction_damage_add",
@@ -238,7 +299,10 @@
     "effect": "reaction_damage_add",
     "value": 0.14,
     "requires_element": "anemo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "anemo_reaction_radius_add",
@@ -250,7 +314,10 @@
     "effect": "reaction_radius_add",
     "value": 18,
     "requires_element": "anemo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "electro_skill_power_add",
@@ -262,7 +329,10 @@
     "effect": "skill_power_add",
     "value": 0.18,
     "requires_element": "electro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "electro_skill_cooldown_add",
@@ -274,7 +344,10 @@
     "effect": "skill_cooldown_add",
     "value": 0.06,
     "requires_element": "electro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "electro_skill_area_add",
@@ -286,7 +359,10 @@
     "effect": "skill_area_add",
     "value": 0.12,
     "requires_element": "electro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "electro_skill_duration_add",
@@ -298,7 +374,10 @@
     "effect": "skill_duration_add",
     "value": 0.15,
     "requires_element": "electro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "electro_reaction_damage_add",
@@ -310,7 +389,10 @@
     "effect": "reaction_damage_add",
     "value": 0.14,
     "requires_element": "electro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "electro_reaction_radius_add",
@@ -322,7 +404,10 @@
     "effect": "reaction_radius_add",
     "value": 18,
     "requires_element": "electro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "pyro_skill_power_add",
@@ -334,7 +419,10 @@
     "effect": "skill_power_add",
     "value": 0.18,
     "requires_element": "pyro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "pyro_skill_cooldown_add",
@@ -346,7 +434,10 @@
     "effect": "skill_cooldown_add",
     "value": 0.06,
     "requires_element": "pyro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "pyro_skill_area_add",
@@ -358,7 +449,10 @@
     "effect": "skill_area_add",
     "value": 0.12,
     "requires_element": "pyro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "pyro_skill_duration_add",
@@ -370,7 +464,10 @@
     "effect": "skill_duration_add",
     "value": 0.15,
     "requires_element": "pyro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "pyro_reaction_damage_add",
@@ -382,7 +479,10 @@
     "effect": "reaction_damage_add",
     "value": 0.14,
     "requires_element": "pyro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "pyro_reaction_radius_add",
@@ -394,7 +494,10 @@
     "effect": "reaction_radius_add",
     "value": 18,
     "requires_element": "pyro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hydro_skill_power_add",
@@ -406,7 +509,10 @@
     "effect": "skill_power_add",
     "value": 0.18,
     "requires_element": "hydro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "hydro_skill_cooldown_add",
@@ -418,7 +524,10 @@
     "effect": "skill_cooldown_add",
     "value": 0.06,
     "requires_element": "hydro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "hydro_skill_area_add",
@@ -430,7 +539,10 @@
     "effect": "skill_area_add",
     "value": 0.12,
     "requires_element": "hydro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "hydro_skill_duration_add",
@@ -442,7 +554,10 @@
     "effect": "skill_duration_add",
     "value": 0.15,
     "requires_element": "hydro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "hydro_reaction_damage_add",
@@ -454,7 +569,10 @@
     "effect": "reaction_damage_add",
     "value": 0.14,
     "requires_element": "hydro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hydro_reaction_radius_add",
@@ -466,7 +584,10 @@
     "effect": "reaction_radius_add",
     "value": 18,
     "requires_element": "hydro",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "geo_skill_power_add",
@@ -478,7 +599,10 @@
     "effect": "skill_power_add",
     "value": 0.18,
     "requires_element": "geo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "geo_skill_cooldown_add",
@@ -490,7 +614,10 @@
     "effect": "skill_cooldown_add",
     "value": 0.06,
     "requires_element": "geo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "geo_skill_area_add",
@@ -502,7 +629,10 @@
     "effect": "skill_area_add",
     "value": 0.12,
     "requires_element": "geo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "geo_skill_duration_add",
@@ -514,7 +644,10 @@
     "effect": "skill_duration_add",
     "value": 0.15,
     "requires_element": "geo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "geo_reaction_damage_add",
@@ -526,7 +659,10 @@
     "effect": "reaction_damage_add",
     "value": 0.14,
     "requires_element": "geo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "geo_reaction_radius_add",
@@ -538,7 +674,10 @@
     "effect": "reaction_radius_add",
     "value": 18,
     "requires_element": "geo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "cryo_skill_power_add",
@@ -550,7 +689,10 @@
     "effect": "skill_power_add",
     "value": 0.18,
     "requires_element": "cryo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "cryo_skill_cooldown_add",
@@ -562,7 +704,10 @@
     "effect": "skill_cooldown_add",
     "value": 0.06,
     "requires_element": "cryo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "cryo_skill_area_add",
@@ -574,7 +719,10 @@
     "effect": "skill_area_add",
     "value": 0.12,
     "requires_element": "cryo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "cryo_skill_duration_add",
@@ -586,7 +734,10 @@
     "effect": "skill_duration_add",
     "value": 0.15,
     "requires_element": "cryo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "cryo_reaction_damage_add",
@@ -598,7 +749,10 @@
     "effect": "reaction_damage_add",
     "value": 0.14,
     "requires_element": "cryo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "cryo_reaction_radius_add",
@@ -610,7 +764,10 @@
     "effect": "reaction_radius_add",
     "value": 18,
     "requires_element": "cryo",
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "luck_spark_common",
@@ -621,7 +778,10 @@
     "target": "global",
     "effect": "luck_add",
     "value": 0.18,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "luck_shift_rare",
@@ -632,7 +792,10 @@
     "target": "global",
     "effect": "luck_add",
     "value": 0.35,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "luck_blessing_epic",
@@ -643,7 +806,10 @@
     "target": "global",
     "effect": "luck_add",
     "value": 0.65,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "mythic_dual_element",
@@ -655,7 +821,10 @@
     "character_id": "traveler",
     "effect": "dual_element_mythic",
     "value": 0,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "mythic_projectile_storm",
@@ -666,7 +835,10 @@
     "target": "global",
     "effect": "mythic_projectile_storm",
     "value": 0,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "mythic_world_breaker",
@@ -677,7 +849,10 @@
     "target": "global",
     "effect": "mythic_world_breaker",
     "value": 0,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "mythic_eternal_support",
@@ -689,6 +864,218 @@
     "effect": "mythic_eternal_support",
     "value": 220,
     "interval": 1.8,
-    "mechanic": true
+    "mechanic": true,
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "orbit_arcane_blades",
+    "name": "星轨剑阵",
+    "description": "3柄飞剑环绕指定角色并自动切割近敌；3级扩大范围，6级追加剑数，9级触发剑雨。",
+    "rarity": "rare",
+    "weight": 24,
+    "target": "global",
+    "effect": "orbit_add",
+    "value": 3,
+    "mechanic": true,
+    "tags": [
+      "召唤",
+      "弹道"
+    ],
+    "evolutions": [
+      {
+        "level": 3,
+        "name": "扩展剑环",
+        "branch": "range"
+      },
+      {
+        "level": 6,
+        "name": "六芒剑轮",
+        "branch": "count"
+      },
+      {
+        "level": 9,
+        "name": "星轨剑雨",
+        "branch": "storm"
+      }
+    ]
+  },
+  {
+    "id": "orbit_spell_rings",
+    "name": "术式环流",
+    "description": "生成持续脉冲的法术环；等级提高伤害、半径与脉冲次数。",
+    "rarity": "epic",
+    "weight": 13,
+    "target": "global",
+    "effect": "orbit_spell_add",
+    "value": 2,
+    "mechanic": true,
+    "tags": [
+      "召唤",
+      "反应"
+    ],
+    "evolutions": [
+      {
+        "level": 3,
+        "name": "双重环流"
+      },
+      {
+        "level": 6,
+        "name": "元素共振"
+      },
+      {
+        "level": 9,
+        "name": "无尽回廊"
+      }
+    ]
+  },
+  {
+    "id": "evolve_fireball",
+    "name": "炽热火球",
+    "description": "获得火球弹道；3级分裂、6级留下燃烧地面、9级周期召唤陨石。",
+    "rarity": "common",
+    "weight": 48,
+    "target": "global",
+    "effect": "evolving_fireball",
+    "value": 0.16,
+    "mechanic": true,
+    "tags": [
+      "弹道",
+      "反应"
+    ],
+    "evolutions": [
+      {
+        "level": 3,
+        "name": "分裂火球",
+        "branch": "split"
+      },
+      {
+        "level": 6,
+        "name": "灼热余烬",
+        "branch": "burning_ground"
+      },
+      {
+        "level": 9,
+        "name": "天火陨星",
+        "branch": "meteor"
+      }
+    ]
+  },
+  {
+    "id": "relic_drop_resonant",
+    "name": "遗物·共鸣核心",
+    "description": "本局规则改变：技能返还能量并扩大终结技。",
+    "rarity": "legendary",
+    "weight": 5,
+    "target": "global",
+    "effect": "grant_relic",
+    "value": "relic_resonant_core",
+    "mechanic": true,
+    "tags": [
+      "反应",
+      "支援"
+    ]
+  },
+  {
+    "id": "relic_drop_orbit",
+    "name": "遗物·环轨锻炉",
+    "description": "本局规则改变：环绕物复制并扩大轨道。",
+    "rarity": "legendary",
+    "weight": 5,
+    "target": "global",
+    "effect": "grant_relic",
+    "value": "relic_orbit_foundry",
+    "mechanic": true,
+    "tags": [
+      "召唤"
+    ]
+  },
+  {
+    "id": "relic_drop_clock",
+    "name": "遗物·预知时钟",
+    "description": "本局规则改变：敌方预警延长，成功闪避恢复能量。",
+    "rarity": "epic",
+    "weight": 9,
+    "target": "global",
+    "effect": "grant_relic",
+    "value": "relic_warning_clock",
+    "mechanic": true,
+    "tags": [
+      "护盾",
+      "支援"
+    ]
+  },
+  {
+    "id": "relic_drop_glass",
+    "name": "遗物·绯红透镜",
+    "description": "伤害提高35%，承伤提高20%，形成高风险构筑。",
+    "rarity": "legendary",
+    "weight": 4,
+    "target": "global",
+    "effect": "grant_relic",
+    "value": "relic_glass_cannon",
+    "mechanic": true,
+    "tags": [
+      "暴击"
+    ]
+  },
+  {
+    "id": "relic_drop_heartbeat",
+    "name": "遗物·第二心跳",
+    "description": "每名角色本局首次阵亡时以35%生命复苏。",
+    "rarity": "mythic",
+    "weight": 1,
+    "target": "global",
+    "effect": "grant_relic",
+    "value": "relic_second_heartbeat",
+    "mechanic": true,
+    "tags": [
+      "支援",
+      "护盾"
+    ]
+  },
+  {
+    "id": "relic_drop_overclock",
+    "name": "遗物·失控节拍器",
+    "description": "攻击速度提高25%，命中能量获取提高50%。",
+    "rarity": "epic",
+    "weight": 8,
+    "target": "global",
+    "effect": "grant_relic",
+    "value": "relic_overclock",
+    "mechanic": true,
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "relic_drop_prism",
+    "name": "遗物·元素棱镜",
+    "description": "反应伤害提高30%，强化反应构筑。",
+    "rarity": "legendary",
+    "weight": 4,
+    "target": "global",
+    "effect": "grant_relic",
+    "value": "relic_elemental_prism",
+    "mechanic": true,
+    "tags": [
+      "反应"
+    ]
+  },
+  {
+    "id": "relic_drop_geo",
+    "name": "遗物·岩契残页",
+    "description": "岩造物生命翻倍并成为可靠掩体。",
+    "rarity": "epic",
+    "weight": 8,
+    "target": "global",
+    "effect": "grant_relic",
+    "value": "relic_geo_contract",
+    "mechanic": true,
+    "tags": [
+      "召唤",
+      "护盾"
+    ]
   }
 ]

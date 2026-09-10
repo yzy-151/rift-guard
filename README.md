@@ -1,59 +1,62 @@
 # Rift Guard / 裂隙守望
 
-《裂隙守望》是一款 2.5D 多角色塔防 + Roguelike 构筑 + 分支剧情游戏。玩家操纵旅行者与最多两名同伴在战场上自由移动，守住基地、处理空中与地面敌人，并在升级时从三张强化卡中选择一张，逐步构筑高弹道、高攻速、多元素反应的队伍。
+《裂隙守望》是一款 2.5D 多角色塔防 + Roguelike 构筑 + 分支剧情游戏。玩家从角色卡把最多三名角色拖入战场，在指定路线、动态入口和地形机制中守住基地；每名角色拥有自动攻击、主动技能、终结技和独立能量条。
 
-![V19 火元素近战与主动技能](docs/v19-validation/01-pyro-melee-skill-vfx.png)
+![V20 战斗、技能与预警](docs/v20-validation/01-deployment-skills-telegraph.png)
 
-## 核心玩法
+## V20 核心玩法
 
-- **裂隙守望模式**：怪物沿关卡指定路线推进，通关后进入剧情，通过回应影响奖励、隐藏角色与无尽继承，再在地图右侧迎接新角色并进入下一关。
-- **无尽生存模式**：地图扩大到约四个屏幕，敌人从四周边缘追击旅行者；没有基地水晶相关卡牌，队友自动跟随，卡牌可以无限叠加。
-- **三人战场与十二人角色库**：旅行者固定出战，当前版本有 12 名角色，编队上限为 3 人。
-- **七种元素状态**：无、风、雷、火、水、岩、冰拥有不同弹道、近战斩击和主动技能；旅行者在单关内锁定元素，神话卡可以解锁双元素。
-- **元素反应**：蒸发、融化、超载、超导、感电、冻结、扩散、结晶、碎冰与元素爆发会改变伤害、范围、控制或护盾。
-- **204 张强化卡**：普通、稀有、史诗、传奇、神话五档卡牌包含数值成长、额外弹道、攻击方式、角色召唤、场外支援、幸运和双元素等构筑方向。
-- **敌人与 Boss**：近战、疾跑、重甲、飞行、远程、增益、护盾、冲锋、治疗、分裂、结界等敌人逐步加入；无尽模式有 6 个三阶段 Boss。
+- **两种模式**：裂隙守望按关卡推进剧情、解锁角色与路线；无尽生存在大地图边缘持续刷怪，并周期出现六种三阶段 Boss。
+- **十二名角色**：旅行者、希露菲、芙宁娜、洛琪希、知更鸟、阿米娅、丰川祥子、艾米莉亚、萨勒芬妮、风堇、凯尔希、铃。
+- **拖放部署**：编队角色先进入待部署区，拖到合法战场位置后参战；角色可全地图移动、切换和规避敌方预警。
+- **主动战斗**：`Q` 释放当前角色主动技能，`E` 在独立能量充满后释放终结技。动画命中帧同时触发伤害、特效、音效和震屏。
+- **元素系统**：风、雷、火、水、岩、冰遵循反应组合；旅行者关内锁定已选元素，神话构筑可同时持有两种元素。
+- **274 张强化卡**：五档稀有度，支持无限叠加、弹道/召唤/反应/暴击/护盾/支援标签联动，以及火球分裂、燃烧地面、陨石等等级进化。
+- **规则遗物**：八件遗物会改变预警时间、复活、攻速与能量、反应倍率、岩造物生命等局内规则。
+- **敌方机制**：飞行、远程、治疗、护盾、分裂、冲锋和增益单位会获得狂暴、爆裂、吸血、闪现、镜像等词缀。
+- **地图机制**：路线分岔、单向通行、移动平台、传送带、陷阱和天气均由数据配置驱动。
+- **构筑战报**：图鉴保存最近 20 局的强化等级、伤害贡献、技能与终结技次数、最高能量、闪避和最高叠层。
 
-![V19 七元素技能视觉语言](docs/v19-validation/02-seven-element-vfx-language.png)
+![V20 分支关卡地图](docs/v20-validation/02-branching-campaign-map.png)
 
 ## 操作
 
 - `WASD` 或方向键：移动当前角色。
 - 鼠标左键：选择角色、移动、选卡和确认剧情回应。
-- `1 / 2 / 3`：切换场上角色。
-- `Space`：释放旅行者当前元素主动技能；岩元素进入岩造物放置状态。
-- `Esc`：打开暂停战术中心，可查看强化等级、角色数值、编队、关卡、设置、重开或返回主菜单。
+- 拖动底部角色卡：把待部署角色放入战场。
+- `1 / 2 / 3`：切换当前角色。
+- `Q`：释放当前角色主动技能；岩元素旅行者进入岩造物放置状态。
+- `E`：释放当前角色终结技。
+- `Space` 或 `Esc`：打开暂停战术中心。
+- `F2`：打开图鉴；`F5`：打开分支路线图。
 
-## 编队与角色预览
+![V20 最终构筑战报](docs/v20-validation/03-final-build-report.png)
 
-编队界面使用 4×3 的独立角色卡，每张卡只显示动态呼吸预览、元素、姓名、定位和选择状态，完整数值放在悬停提示中。旅行者使用 48 帧呼吸图集，芙宁娜使用现有 8 帧图集，其他角色在正式序列帧到位前使用立绘呼吸占位。
+## 可替换内容
 
-![V19 十二角色编队卡](docs/v19-validation/03-character-selection-cards.png)
+角色、地图、技能和 UI 都通过数据或 manifest 引用，替换素材时无需重写战斗逻辑。
 
-## 素材与替换
-
-所有可替换素材入口集中在 [`game/data/v2/asset_manifest.json`](game/data/v2/asset_manifest.json)。角色卡会自动读取 `portrait` 或带有 `idle_frames`、`idle_columns`、`idle_cell` 元数据的呼吸图集；后续替换同一角色素材时无需修改 UI 代码。
-
+- 角色能力：`game/data/v2/characters.json`
+- 强化卡：`game/data/v2/cards.json`、`game/data/v2/mechanic_cards.json`
+- 遗物：`game/data/v2/relics.json`
+- 分支地图：`game/data/v2/campaign_map.json`
+- 关卡与地形：`game/data/v2/stages.json`
+- 敌人词缀：`game/data/v2/enemy_affixes.json`
+- 剧情与选择：`game/data/story.json`
+- 素材映射：`game/data/v2/asset_manifest.json`
 - 角色动画：`game/assets/characters/`
 - 角色头像与立绘：`game/assets/portraits/`
 - 战斗特效：`game/assets/vfx/`
 - 地图与水晶：`game/assets/world/`
-- Helltaker 风格界面与音频：`game/assets/helltaker/`
-- 数据表：`game/data/v2/`
+- 界面与音频：`game/assets/helltaker/`
 - 外置 Excel 配置：`content/game_config.xlsx`
-- 完整交付要求：[`docs/art-asset-request-v19.md`](docs/art-asset-request-v19.md)
-- 后续美术路线：[`docs/art-roadmap-v19.md`](docs/art-roadmap-v19.md)
 
-第三方素材的来源与许可证记录在各素材目录的 LICENSE 文件和 manifest 中。发布前可按相同入口替换成最终授权素材。
+## 运行与验收
 
-## 运行与开发
-
-Windows 可直接运行 `builds/rift-guard-v19/RiftGuard-V19.exe`。Godot 4.4 工程入口是 [`game/project.godot`](game/project.godot)，进入工程后运行主场景即可。
-
-V19 自动验收命令：
+Windows 构建位于 `builds/rift-guard-v20/RiftGuard-V20.exe`。Godot 4.4 工程入口为 `game/project.godot`。
 
 ```powershell
-Godot_v4.4.1-stable_win64_console.exe --path game -- --v19-test
+Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v20-test
 ```
 
-验收报告与截图位于 [`docs/v19-validation`](docs/v19-validation)。
+V20 自动验收包含 46 项检查，验证十二人数据、拖放部署、技能能量、命中帧同步、预警闪避、卡牌进化、遗物、地图机制、敌人词缀和构筑战报。验收截图位于 `docs/v20-validation/`。

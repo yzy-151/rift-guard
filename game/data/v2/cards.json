@@ -11,7 +11,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "traveler_health_common",
@@ -25,7 +28,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "traveler_speed_common",
@@ -39,7 +45,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "traveler_range_rare",
@@ -53,7 +62,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "traveler_armor_rare",
@@ -67,7 +79,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "traveler_move_rare",
@@ -81,7 +96,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "traveler_special_epic",
@@ -95,7 +113,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "traveler_signature_legendary",
@@ -109,7 +130,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_02_attack_common",
@@ -123,7 +147,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_02_health_common",
@@ -137,7 +164,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_02_speed_common",
@@ -151,7 +181,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_02_range_rare",
@@ -165,7 +198,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_02_armor_rare",
@@ -179,7 +215,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_02_move_rare",
@@ -193,7 +232,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_02_special_epic",
@@ -207,7 +249,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_02_signature_legendary",
@@ -221,7 +266,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_03_attack_common",
@@ -235,7 +283,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_03_health_common",
@@ -249,7 +300,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_03_speed_common",
@@ -263,7 +317,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_03_range_rare",
@@ -277,7 +334,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_03_armor_rare",
@@ -291,7 +351,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_03_move_rare",
@@ -305,7 +368,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_03_special_epic",
@@ -319,7 +385,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_03_signature_legendary",
@@ -333,7 +402,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_04_attack_common",
@@ -347,7 +419,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_04_health_common",
@@ -361,7 +436,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_04_speed_common",
@@ -375,7 +453,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_04_range_rare",
@@ -389,7 +470,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_04_armor_rare",
@@ -403,7 +487,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_04_move_rare",
@@ -417,7 +504,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_04_special_epic",
@@ -431,7 +521,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_04_signature_legendary",
@@ -445,7 +538,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_05_attack_common",
@@ -459,7 +555,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_05_health_common",
@@ -473,7 +572,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_05_speed_common",
@@ -487,7 +589,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_05_range_rare",
@@ -501,7 +606,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_05_armor_rare",
@@ -515,7 +623,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_05_move_rare",
@@ -529,7 +640,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_05_special_epic",
@@ -543,7 +657,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_05_signature_legendary",
@@ -557,7 +674,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_06_attack_common",
@@ -571,7 +691,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_06_health_common",
@@ -585,7 +708,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_06_speed_common",
@@ -599,7 +725,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_06_range_rare",
@@ -613,7 +742,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_06_armor_rare",
@@ -627,7 +759,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_06_move_rare",
@@ -641,7 +776,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_06_special_epic",
@@ -655,7 +793,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_06_signature_legendary",
@@ -669,7 +810,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_07_attack_common",
@@ -683,7 +827,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_07_health_common",
@@ -697,7 +844,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_07_speed_common",
@@ -711,7 +861,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_07_range_rare",
@@ -725,7 +878,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_07_armor_rare",
@@ -739,7 +895,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_07_move_rare",
@@ -753,7 +912,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_07_special_epic",
@@ -767,7 +929,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_07_signature_legendary",
@@ -781,7 +946,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_08_attack_common",
@@ -795,7 +963,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_08_health_common",
@@ -809,7 +980,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_08_speed_common",
@@ -823,7 +997,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_08_range_rare",
@@ -837,7 +1014,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_08_armor_rare",
@@ -851,7 +1031,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_08_move_rare",
@@ -865,7 +1048,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_08_special_epic",
@@ -879,7 +1065,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_08_signature_legendary",
@@ -893,7 +1082,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "traveler_attune_anemo",
@@ -907,7 +1099,10 @@
     "value": "anemo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_anemo_mastery",
@@ -922,7 +1117,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_anemo_technique",
@@ -937,7 +1135,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_attune_electro",
@@ -951,7 +1152,10 @@
     "value": "electro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_electro_mastery",
@@ -966,7 +1170,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_electro_technique",
@@ -981,7 +1188,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_attune_pyro",
@@ -995,7 +1205,10 @@
     "value": "pyro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_pyro_mastery",
@@ -1010,7 +1223,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_pyro_technique",
@@ -1025,7 +1241,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_attune_hydro",
@@ -1039,7 +1258,10 @@
     "value": "hydro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_hydro_mastery",
@@ -1054,7 +1276,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_hydro_technique",
@@ -1069,7 +1294,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_attune_geo",
@@ -1083,7 +1311,10 @@
     "value": "geo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_geo_mastery",
@@ -1098,7 +1329,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_geo_technique",
@@ -1113,7 +1347,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_attune_cryo",
@@ -1127,7 +1364,10 @@
     "value": "cryo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_cryo_mastery",
@@ -1142,7 +1382,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "traveler_cryo_technique",
@@ -1157,7 +1400,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "global_attack_1",
@@ -1170,7 +1416,10 @@
     "value": 0.08,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "global_health_1",
@@ -1183,7 +1432,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "global_speed_1",
@@ -1196,7 +1448,10 @@
     "value": 0.07,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "crystal_guard_1",
@@ -1209,7 +1464,10 @@
     "value": 15,
     "max_stacks": 4,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "global_armor_1",
@@ -1222,7 +1480,10 @@
     "value": 12,
     "max_stacks": 4,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "global_range_1",
@@ -1235,7 +1496,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "crystal_repair_1",
@@ -1248,7 +1512,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "global_mastery_1",
@@ -1261,7 +1528,10 @@
     "value": 30,
     "max_stacks": 4,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "global_critical_1",
@@ -1274,7 +1544,10 @@
     "value": 0.1,
     "max_stacks": 2,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "暴击"
+    ]
   },
   {
     "id": "global_chain_1",
@@ -1287,7 +1560,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "global_laststand_1",
@@ -1300,7 +1576,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
   },
   {
     "id": "global_overdrive_1",
@@ -1313,7 +1592,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "reaction_prep_anemo",
@@ -1327,7 +1609,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "reaction_prep_electro",
@@ -1341,7 +1626,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "reaction_prep_pyro",
@@ -1355,7 +1643,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "reaction_prep_hydro",
@@ -1369,7 +1660,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "reaction_prep_geo",
@@ -1383,7 +1677,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "reaction_prep_cryo",
@@ -1397,7 +1694,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_attack_common",
@@ -1411,7 +1711,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_09_health_common",
@@ -1425,7 +1728,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_09_speed_common",
@@ -1439,7 +1745,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_09_range_rare",
@@ -1453,7 +1762,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_09_armor_rare",
@@ -1467,7 +1779,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_09_move_rare",
@@ -1481,7 +1796,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_09_special_epic",
@@ -1495,7 +1813,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_09_signature_legendary",
@@ -1509,7 +1830,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_09_attune_anemo",
@@ -1523,7 +1847,10 @@
     "value": "anemo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_anemo_mastery",
@@ -1538,7 +1865,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_anemo_technique",
@@ -1553,7 +1883,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_attune_electro",
@@ -1567,7 +1900,10 @@
     "value": "electro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_electro_mastery",
@@ -1582,7 +1918,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_electro_technique",
@@ -1597,7 +1936,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_attune_pyro",
@@ -1611,7 +1953,10 @@
     "value": "pyro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_pyro_mastery",
@@ -1626,7 +1971,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_pyro_technique",
@@ -1641,7 +1989,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_attune_hydro",
@@ -1655,7 +2006,10 @@
     "value": "hydro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_hydro_mastery",
@@ -1670,7 +2024,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_hydro_technique",
@@ -1685,7 +2042,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_attune_geo",
@@ -1699,7 +2059,10 @@
     "value": "geo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_geo_mastery",
@@ -1714,7 +2077,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_geo_technique",
@@ -1729,7 +2095,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_attune_cryo",
@@ -1743,7 +2112,10 @@
     "value": "cryo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_cryo_mastery",
@@ -1758,7 +2130,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_09_cryo_technique",
@@ -1773,7 +2148,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_attack_common",
@@ -1787,7 +2165,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_10_health_common",
@@ -1801,7 +2182,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_10_speed_common",
@@ -1815,7 +2199,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_10_range_rare",
@@ -1829,7 +2216,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_10_armor_rare",
@@ -1843,7 +2233,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_10_move_rare",
@@ -1857,7 +2250,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_10_special_epic",
@@ -1871,7 +2267,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_10_signature_legendary",
@@ -1885,7 +2284,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_10_attune_anemo",
@@ -1899,7 +2301,10 @@
     "value": "anemo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_anemo_mastery",
@@ -1914,7 +2319,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_anemo_technique",
@@ -1929,7 +2337,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_attune_electro",
@@ -1943,7 +2354,10 @@
     "value": "electro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_electro_mastery",
@@ -1958,7 +2372,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_electro_technique",
@@ -1973,7 +2390,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_attune_pyro",
@@ -1987,7 +2407,10 @@
     "value": "pyro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_pyro_mastery",
@@ -2002,7 +2425,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_pyro_technique",
@@ -2017,7 +2443,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_attune_hydro",
@@ -2031,7 +2460,10 @@
     "value": "hydro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_hydro_mastery",
@@ -2046,7 +2478,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_hydro_technique",
@@ -2061,7 +2496,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_attune_geo",
@@ -2075,7 +2513,10 @@
     "value": "geo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_geo_mastery",
@@ -2090,7 +2531,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_geo_technique",
@@ -2105,7 +2549,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_attune_cryo",
@@ -2119,7 +2566,10 @@
     "value": "cryo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_cryo_mastery",
@@ -2134,7 +2584,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_10_cryo_technique",
@@ -2149,7 +2602,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_attack_common",
@@ -2163,7 +2619,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_11_health_common",
@@ -2177,7 +2636,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_11_speed_common",
@@ -2191,7 +2653,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_11_range_rare",
@@ -2205,7 +2670,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_11_armor_rare",
@@ -2219,7 +2687,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_11_move_rare",
@@ -2233,7 +2704,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_11_special_epic",
@@ -2247,7 +2721,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_11_signature_legendary",
@@ -2261,7 +2738,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_11_attune_anemo",
@@ -2275,7 +2755,10 @@
     "value": "anemo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_anemo_mastery",
@@ -2290,7 +2773,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_anemo_technique",
@@ -2305,7 +2791,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_attune_electro",
@@ -2319,7 +2808,10 @@
     "value": "electro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_electro_mastery",
@@ -2334,7 +2826,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_electro_technique",
@@ -2349,7 +2844,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_attune_pyro",
@@ -2363,7 +2861,10 @@
     "value": "pyro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_pyro_mastery",
@@ -2378,7 +2879,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_pyro_technique",
@@ -2393,7 +2897,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_attune_hydro",
@@ -2407,7 +2914,10 @@
     "value": "hydro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_hydro_mastery",
@@ -2422,7 +2932,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_hydro_technique",
@@ -2437,7 +2950,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_attune_geo",
@@ -2451,7 +2967,10 @@
     "value": "geo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_geo_mastery",
@@ -2466,7 +2985,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_geo_technique",
@@ -2481,7 +3003,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_attune_cryo",
@@ -2495,7 +3020,10 @@
     "value": "cryo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_cryo_mastery",
@@ -2510,7 +3038,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_11_cryo_technique",
@@ -2525,7 +3056,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_attack_common",
@@ -2539,7 +3073,10 @@
     "value": 0.12,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_12_health_common",
@@ -2553,7 +3090,10 @@
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_12_speed_common",
@@ -2567,7 +3107,10 @@
     "value": 0.1,
     "max_stacks": 5,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_12_range_rare",
@@ -2581,7 +3124,10 @@
     "value": 40,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_12_armor_rare",
@@ -2595,7 +3141,10 @@
     "value": 20,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
   },
   {
     "id": "hero_12_move_rare",
@@ -2609,7 +3158,10 @@
     "value": 25,
     "max_stacks": 3,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_12_special_epic",
@@ -2623,7 +3175,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_12_signature_legendary",
@@ -2637,7 +3192,10 @@
     "value": true,
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
   },
   {
     "id": "hero_12_attune_anemo",
@@ -2651,7 +3209,10 @@
     "value": "anemo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_anemo_mastery",
@@ -2666,7 +3227,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_anemo_technique",
@@ -2681,7 +3245,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "anemo"
+    "requires_element": "anemo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_attune_electro",
@@ -2695,7 +3262,10 @@
     "value": "electro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_electro_mastery",
@@ -2710,7 +3280,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_electro_technique",
@@ -2725,7 +3298,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "electro"
+    "requires_element": "electro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_attune_pyro",
@@ -2739,7 +3315,10 @@
     "value": "pyro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_pyro_mastery",
@@ -2754,7 +3333,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_pyro_technique",
@@ -2769,7 +3351,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "pyro"
+    "requires_element": "pyro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_attune_hydro",
@@ -2783,7 +3368,10 @@
     "value": "hydro",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_hydro_mastery",
@@ -2798,7 +3386,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_hydro_technique",
@@ -2813,7 +3404,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "hydro"
+    "requires_element": "hydro",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_attune_geo",
@@ -2827,7 +3421,10 @@
     "value": "geo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_geo_mastery",
@@ -2842,7 +3439,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_geo_technique",
@@ -2857,7 +3457,10 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "geo"
+    "requires_element": "geo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_attune_cryo",
@@ -2871,7 +3474,10 @@
     "value": "cryo",
     "max_stacks": 1,
     "requires": [],
-    "excludes": []
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_cryo_mastery",
@@ -2886,7 +3492,10 @@
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   },
   {
     "id": "hero_12_cryo_technique",
@@ -2901,6 +3510,9 @@
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "requires_element": "cryo"
+    "requires_element": "cryo",
+    "tags": [
+      "反应"
+    ]
   }
 ]

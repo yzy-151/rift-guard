@@ -5,6 +5,9 @@ var cards: Array[Dictionary] = []
 var stages: Dictionary = {}
 var modes: Dictionary = {}
 var assets: Dictionary = {}
+var relics: Dictionary = {}
+var campaign_map: Dictionary = {}
+var enemy_affixes: Dictionary = {}
 var errors: Array[String] = []
 
 func _init() -> void:
@@ -14,6 +17,9 @@ func _init() -> void:
 	stages = _by_id(_read_array("res://data/v2/stages.json"), "stage")
 	modes = _by_id(_read_array("res://data/v2/modes.json"), "mode")
 	assets = _read_dictionary("res://data/v2/asset_manifest.json")
+	relics = _by_id(_read_array("res://data/v2/relics.json"), "relic")
+	campaign_map = _read_dictionary("res://data/v2/campaign_map.json")
+	enemy_affixes = _by_id(_read_array("res://data/v2/enemy_affixes.json"), "enemy affix")
 	_validate()
 
 func _read_json(path: String) -> Variant:
@@ -64,6 +70,10 @@ func _validate() -> void:
 			errors.append("invalid character element: " + id)
 		if not assets.has(str(character.get("asset_key", ""))):
 			errors.append("missing character asset key: " + id)
+		for ability_key: String in ["active_skill", "ultimate"]:
+			var ability: Dictionary = character.get(ability_key, {})
+			if str(ability.get("name", "")).is_empty() or str(ability.get("kind", "")).is_empty():
+				errors.append("missing %s definition: %s" % [ability_key, id])
 	for card: Dictionary in cards:
 		var card_id: String = str(card.get("id", ""))
 		if card_id.is_empty() or card_ids.has(card_id):
@@ -73,6 +83,10 @@ func _validate() -> void:
 			errors.append("card target missing: " + card_id)
 		if card.get("rarity", "") not in ["common", "rare", "epic", "legendary", "mythic"]:
 			errors.append("invalid rarity: " + card_id)
+		if card.get("tags", []).is_empty():
+			errors.append("card has no gameplay tags: " + card_id)
+	if campaign_map.get("chapters", []).is_empty():
+		errors.append("campaign map has no chapters")
 	for id: String in stages:
 		var stage: Dictionary = stages[id]
 		if float(stage.get("duration_seconds", 0.0)) < 300.0:

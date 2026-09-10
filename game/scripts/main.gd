@@ -13,6 +13,7 @@ const StageSelectPanel = preload("res://scripts/stage_select_panel.gd")
 const ModeSelectPanel = preload("res://scripts/mode_select_panel.gd")
 const AudioDirector = preload("res://scripts/audio_director.gd")
 const SettingsPanel = preload("res://scripts/settings_panel.gd")
+const CampaignMapPanel = preload("res://scripts/campaign_map_panel.gd")
 var content = Content.new()
 var story = Story.new(content)
 var saved_story
@@ -30,6 +31,7 @@ var muted: bool = false
 var sound: AudioStreamPlayer
 var audio_director
 var settings_panel
+var campaign_map_panel
 var settings_from_menu := false
 var pending_endless_inheritance: Dictionary = {}
 var sound_timer: float = 0.0
@@ -43,6 +45,7 @@ var pending_stage_id := ""
 var pending_stage_number := 0
 var stage_result_recorded := false
 var skill_aiming := false
+var dragging_hero_id: int = -1
 
 func _ready() -> void:
 	audio_director = AudioDirector.new()
@@ -66,8 +69,11 @@ func _ready() -> void:
 	hud.squad_action.connect(open_current_squad)
 	hud.stage_action.connect(open_stage_select)
 	hud.skill_action.connect(toggle_skill_aiming)
+	hud.ultimate_action.connect(activate_selected_ultimate)
+	hud.deploy_drag_action.connect(handle_deploy_drag)
 	hud.main_menu_action.connect(return_to_main_menu)
 	hud.formation_action.connect(set_formation_command)
+	hud.map_action.connect(open_campaign_map)
 	sound = AudioStreamPlayer.new()
 	sound.stream = preload("res://assets/hit.ogg")
 	sound.bus = "SFX"
@@ -97,6 +103,10 @@ func _ready() -> void:
 	mode_select_panel.build(hud)
 	mode_select_panel.chosen.connect(choose_mode)
 	mode_select_panel.settings_requested.connect(open_settings)
+	campaign_map_panel = CampaignMapPanel.new()
+	add_child(campaign_map_panel)
+	campaign_map_panel.build(hud, sim.database, sim.run_state)
+	campaign_map_panel.node_chosen.connect(choose_campaign_node)
 	settings_panel = SettingsPanel.new()
 	add_child(settings_panel)
 	settings_panel.build(hud)
@@ -109,7 +119,11 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v19-test" in OS.get_cmdline_user_args():
+	if "--v20-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v20_test")
+	elif "--v19-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v19_test")
@@ -204,16 +218,18 @@ func _ready() -> void:
 		call_deferred("open_mode_menu")
 
 func _physics_process(dt: float) -> void:
-	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open():
+	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()):
 		return
 	sim.tick(dt)
 	check_story()
 	process_events()
 	compendium.observe(sim)
-	if sim.state == "won" and not stage_result_recorded:
-		var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {})
-		compendium.clear_stage(sim.current_stage_id, stage.get("unlocks", []))
+	if sim.state in ["won", "lost"] and not stage_result_recorded:
+		if sim.state == "won":
+			var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {})
+			compendium.clear_stage(sim.current_stage_id, stage.get("unlocks", []))
 		compendium.record_result(sim.current_stage_id, sim.kills, sim.base_hp, sim.best_streak)
+		compendium.record_build(sim)
 		stage_result_recorded = true
 	if not story.active:
 		hud.refresh(sim, selected_id)
@@ -267,6 +283,7 @@ func open_mode_menu() -> void:
 
 func choose_mode(mode_id: String) -> void:
 	mode_select_panel.close()
+	sim.run_state.reset_run_meta()
 	hud.get_child(0).hide()
 	if mode_id == "endless_survival":
 		choose_stage("stage_endless")
@@ -363,6 +380,12 @@ func set_formation_command(mode: String) -> void:
 	refresh()
 
 func _input(event: InputEvent) -> void:
+	if dragging_hero_id >= 0 and event is InputEventMouseMotion:
+		_update_deploy_preview(event.position)
+	if dragging_hero_id >= 0 and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		_finish_deploy_drag(event.position)
+		get_viewport().set_input_as_handled()
+		return
 	if settings_panel != null and settings_panel.is_open():
 		if settings_panel.handle_input(event):
 			get_viewport().set_input_as_handled()
@@ -385,6 +408,11 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 	if mode_select_panel != null and mode_select_panel.is_open():
+		return
+	if campaign_map_panel != null and campaign_map_panel.is_open():
+		if event is InputEventKey and event.pressed and event.keycode in [KEY_ESCAPE, KEY_F5]:
+			campaign_map_panel.close()
+			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F2 and not story.active:
 		toggle_compendium()
@@ -424,6 +452,10 @@ func _input(event: InputEvent) -> void:
 			picker.open()
 			get_viewport().set_input_as_handled()
 			return
+		if event.keycode == KEY_F5 and sim.state in ["ready", "paused", "won"]:
+			open_campaign_map()
+			get_viewport().set_input_as_handled()
+			return
 		if event.keycode == KEY_F7 and sim.state in ["ready", "paused"]:
 			preview_effects()
 			get_viewport().set_input_as_handled()
@@ -436,6 +468,10 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_Q:
 			toggle_skill_aiming()
+			get_viewport().set_input_as_handled()
+			return
+		if event.keycode == KEY_E:
+			activate_selected_ultimate()
 			get_viewport().set_input_as_handled()
 			return
 		if event.keycode == KEY_ESCAPE and skill_aiming:
@@ -470,7 +506,7 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if story.active or picker.visible or effect_preview > 0 or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open():
+	if story.active or picker.visible or effect_preview > 0 or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()):
 		return
 	if sim.state not in ["running", "between", "stage_exit"]:
 		return
@@ -493,7 +529,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if sim.state == "stage_exit":
 			return
 		if event.button_index == MOUSE_BUTTON_LEFT and skill_aiming:
-			if sim.activate_traveler_skill(point):
+			if sim.activate_hero_skill(selected_id, point):
 				set_skill_aiming(false)
 				process_events()
 				refresh()
@@ -502,6 +538,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			selected_id = -1
 			var closest: float = 48.0
 			for h in sim.heroes:
+				if not bool(h.get("deployed", true)):
+					continue
 				var distance: float = screen_point.distance_to(battle.world_to_screen(h.pos) + Vector2(0, -18))
 				if distance < closest:
 					closest = distance
@@ -538,6 +576,15 @@ func apply_dialogue_choice(choice: Dictionary) -> void:
 	var unlock_id := str(choice.get("unlock_character", ""))
 	if not unlock_id.is_empty() and sim.database.characters.has(unlock_id):
 		compendium.unlock_character(unlock_id)
+	var relationship: Dictionary = choice.get("relationship", {})
+	if not relationship.is_empty():
+		sim.run_state.add_relationship(str(relationship.get("character_id", "traveler")), int(relationship.get("value", 0)))
+	var flag := str(choice.get("story_flag", ""))
+	if not flag.is_empty():
+		sim.run_state.set_story_flag(flag)
+	var next_node := str(choice.get("campaign_node", ""))
+	if not next_node.is_empty():
+		sim.run_state.select_campaign_node(next_node)
 	var effect: Dictionary = choice.get("effect", {})
 	match str(effect.get("type", "")):
 		"luck":
@@ -619,6 +666,40 @@ func advance_stage() -> void:
 	pending_stage_number = index + 2
 	squad_panel.open(pending_stage_id, sim.run_state.squad, unlocks)
 	sound.stop()
+
+func open_campaign_map() -> void:
+	if story.active or campaign_map_panel.is_open() or sim.state not in ["ready", "paused", "won"]:
+		return
+	campaign_map_panel.open()
+	sound.stop()
+
+func choose_campaign_node(node_id: String) -> void:
+	var node: Dictionary = campaign_map_panel.node_rows.get(node_id, {})
+	if node.is_empty():
+		return
+	sim.run_state.select_campaign_node(node_id)
+	campaign_map_panel.close()
+	var unlock_id := str(node.get("unlock", ""))
+	if not unlock_id.is_empty():
+		compendium.unlock_character(unlock_id)
+	match str(node.get("type", "")):
+		"combat", "elite", "boss":
+			var stage_id := str(node.get("stage_id", ""))
+			if not stage_id.is_empty():
+				pending_stage_id = stage_id
+				squad_panel.open(stage_id, sim.run_state.squad, [unlock_id] if not unlock_id.is_empty() else [])
+		"story":
+			if not begin_dialogue(str(node.get("story", "mode1_opening"))):
+				begin_dialogue("mode1_opening")
+		"rest":
+			for hero: Dictionary in sim.heroes:
+				hero.hp = hero.max_hp
+		"shop":
+			sim.run_state.luck += 0.12
+		"recruit", "hidden":
+			pass
+	hud.signature = ""
+	refresh()
 
 func open_current_squad() -> void:
 	if story.active or compendium_panel.is_open() or squad_panel.is_open() or sim.state not in ["ready", "won", "paused"]:
@@ -797,16 +878,63 @@ func toggle_compendium() -> void:
 		sound.stop()
 
 func toggle_skill_aiming() -> void:
-	if story.active or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or sim.state != "running" or sim.traveler_skill_cooldown > 0.0:
+	if story.active or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or sim.state != "running":
+		return
+	if selected_id < 0 or selected_id >= sim.heroes.size():
+		return
+	var hero: Dictionary = sim.heroes[selected_id]
+	if not bool(hero.get("deployed", false)) or float(hero.get("skill_cooldown", 0.0)) > 0.0:
 		return
 	set_skill_aiming(not skill_aiming)
 
 func set_skill_aiming(enabled: bool) -> void:
 	skill_aiming = enabled
 	battle.skill_targeting = enabled
-	if enabled and not sim.heroes.is_empty():
-		battle.skill_point = sim.heroes[0].pos + Vector2(260, 0)
+	if enabled and selected_id >= 0 and selected_id < sim.heroes.size():
+		battle.skill_point = sim.heroes[selected_id].pos + Vector2(220, 0)
 	hud.set_skill_aiming(enabled)
+	refresh()
+
+func activate_selected_ultimate() -> void:
+	if selected_id < 0 or selected_id >= sim.heroes.size():
+		return
+	var target: Vector2 = battle.skill_point
+	var closest: Dictionary = {}
+	for enemy: Dictionary in sim.enemies:
+		if enemy.hp > 0.0 and (closest.is_empty() or enemy.pos.distance_to(sim.heroes[selected_id].pos) < closest.pos.distance_to(sim.heroes[selected_id].pos)):
+			closest = enemy
+	if not closest.is_empty():
+		target = closest.pos
+	if sim.activate_hero_ultimate(selected_id, target):
+		process_events()
+		refresh()
+
+func handle_deploy_drag(hero_id: int, pressed: bool, screen_pos: Vector2) -> void:
+	if not pressed or sim.state not in ["running", "between"] or hero_id < 0 or hero_id >= sim.heroes.size():
+		return
+	if bool(sim.heroes[hero_id].get("deployed", false)):
+		select_hero(hero_id)
+		return
+	dragging_hero_id = hero_id
+	battle.deploy_preview_id = hero_id
+	battle.deploy_preview_active = true
+	_update_deploy_preview(screen_pos)
+
+func _update_deploy_preview(screen_pos: Vector2) -> void:
+	var local: Vector2 = battle.get_global_transform().affine_inverse() * screen_pos
+	battle.deploy_preview_point = battle.screen_to_world(local)
+	battle.queue_redraw()
+
+func _finish_deploy_drag(screen_pos: Vector2) -> void:
+	var hero_id := dragging_hero_id
+	dragging_hero_id = -1
+	battle.deploy_preview_active = false
+	var local: Vector2 = battle.get_global_transform().affine_inverse() * screen_pos
+	var point: Vector2 = battle.screen_to_world(local)
+	var playable: Rect2 = Sim.ENDLESS_ARENA if sim.endless_mode else Sim.MOVE_AREA
+	if playable.has_point(point) and sim.deploy_hero(hero_id, point):
+		selected_id = hero_id
+		process_events()
 	refresh()
 
 func run_v4_test() -> void:
@@ -835,6 +963,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v20_test() -> void:
+	var suite = preload("res://scripts/qa_v20.gd").new()
 	await suite.run(self)
 
 func run_v19_test() -> void:

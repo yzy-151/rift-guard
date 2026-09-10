@@ -26,6 +26,8 @@ func eligible(card: Dictionary, run) -> bool:
 		return run.traveler_element != "none" and run.traveler_secondary_element == "none"
 	if card.get("effect", "") == "deploy_reinforcement":
 		return run.squad.size() + _reinforcement_count(run) < run.MAX_SQUAD_SIZE and int(run.buff_levels.get(card.id, 0)) == 0
+	if card.get("effect", "") == "grant_relic":
+		return not run.equipped_relics.has(str(card.get("value", "")))
 	var required_element: String = str(card.get("requires_element", ""))
 	if not required_element.is_empty() and required_element != run.traveler_element:
 		return false
@@ -135,7 +137,10 @@ func apply_card(card: Dictionary, run) -> bool:
 	if card.get("effect", "") == "dual_element_mythic":
 		var choices: Array = ELEMENTS.filter(func(element: String) -> bool: return element != run.traveler_element)
 		run.traveler_secondary_element = choices[rng.randi_range(0, choices.size() - 1)]
+	if card.get("effect", "") == "grant_relic":
+		run.grant_relic(str(card.get("value", "")))
 	run.buff_levels[card.id] = int(run.buff_levels.get(card.id, 0)) + 1
+	run.rebuild_tags(cards)
 	if card.get("rarity", "common") == "legendary":
 		run.legendary_count += 1
 	if card.get("rarity", "common") == "mythic":
@@ -168,6 +173,10 @@ func preview(card: Dictionary, sim) -> String:
 		"squad_health_multiplier": return "全队最大生命 +%d%%" % roundi(float(value) * 100.0)
 		"squad_rate_multiplier": return "全队攻击速度 +%d%%" % roundi(float(value) * 100.0)
 		"projectile_count_add": return "每次攻击弹道 +%d" % int(value)
+		"orbit_add": return "环绕飞剑 +%d，并按等级进化" % int(value)
+		"orbit_spell_add": return "法术环 +%d，并按等级进化" % int(value)
+		"evolving_fireball": return "火球伤害成长，3/6/9级进化"
+		"grant_relic": return "获得永久局内规则：%s" % str(card.get("name", "遗物"))
 		"pierce_add": return "贯穿次数 +%d" % int(value)
 		"chain_add": return "连锁目标 +%d" % int(value)
 		"blast_add": return "爆炸半径 +%d" % int(value)

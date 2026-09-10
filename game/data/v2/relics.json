@@ -1,0 +1,84 @@
+[
+  {
+    "id": "relic_resonant_core",
+    "name": "共鸣核心",
+    "description": "主动技能命中时返还8点能量，终结技范围提高20%。",
+    "rule": "skill_energy_refund",
+    "value": 8.0,
+    "tags": [
+      "反应",
+      "支援"
+    ]
+  },
+  {
+    "id": "relic_glass_cannon",
+    "name": "绯红透镜",
+    "description": "伤害提高35%，角色受到的伤害提高20%。",
+    "rule": "glass_cannon",
+    "value": 0.35,
+    "tags": [
+      "暴击"
+    ]
+  },
+  {
+    "id": "relic_second_heartbeat",
+    "name": "第二心跳",
+    "description": "每名角色首次阵亡时以35%生命复苏。",
+    "rule": "revive_once",
+    "value": 0.35,
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "relic_overclock",
+    "name": "失控节拍器",
+    "description": "攻击速度提高25%，命中获得的能量提高50%。",
+    "rule": "overclock",
+    "value": 0.25,
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "relic_elemental_prism",
+    "name": "元素棱镜",
+    "description": "反应伤害提高30%，反应会向附近目标扩散一次。",
+    "rule": "reaction_prism",
+    "value": 0.3,
+    "tags": [
+      "反应"
+    ]
+  },
+  {
+    "id": "relic_orbit_foundry",
+    "name": "环轨锻炉",
+    "description": "每个环绕物额外复制一枚，环绕半径提高25%。",
+    "rule": "orbit_foundry",
+    "value": 1.0,
+    "tags": [
+      "召唤"
+    ]
+  },
+  {
+    "id": "relic_warning_clock",
+    "name": "预知时钟",
+    "description": "敌方攻击预警延长35%，成功闪避后获得12点能量。",
+    "rule": "warning_clock",
+    "value": 0.35,
+    "tags": [
+      "护盾"
+    ]
+  },
+  {
+    "id": "relic_geo_contract",
+    "name": "岩契残页",
+    "description": "岩造物生命翻倍并嘲讽附近敌人。",
+    "rule": "geo_contract",
+    "value": 1.0,
+    "tags": [
+      "召唤",
+      "护盾"
+    ]
+  }
+]

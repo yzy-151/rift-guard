@@ -30,6 +30,9 @@ const STAGE_EXIT_MEET := Vector2(930, 360)
 var base_flash: float = 0.0
 var shake_trauma: float = 0.0
 var skill_targeting: bool = false
+var deploy_preview_active: bool = false
+var deploy_preview_id: int = -1
+var deploy_preview_point: Vector2 = Vector2.ZERO
 var skill_point: Vector2 = Vector2(760, 360)
 var camera_center: Vector2 = Vector2(640, 360)
 var atlas: Texture2D = preload("res://assets/tiny-dungeon.png")
@@ -134,7 +137,7 @@ func sync_furina_actor(dt: float = 0.0) -> void:
 	if furina_actor == null or sim == null:
 		return
 	for hero: Dictionary in sim.heroes:
-		if hero.get("character_id", "") == "hero_03":
+		if hero.get("character_id", "") == "hero_03" and bool(hero.get("deployed", true)):
 			furina_actor.visible = true
 			var shot_life: float = shot_flashes.get(hero.id, 0.0)
 			furina_actor.sync(hero, world_to_screen(hero.pos), world_depth_scale(hero.pos), shot_life, reduced_effects, dt)
@@ -162,7 +165,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				if effects.size() < 260:
 					var facing := float(hero.get("facing", 1.0))
 					effects.append({"kind": "muzzle", "pos": event.pos + Vector2(25.0 * facing, -20), "life": 0.16, "total": 0.16, "value": 1 if hero.get("element", "") == "electro" else 0, "element": hero.get("element", "")})
-			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break":
+			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "tag_synergy", "relic_awaken", "revive":
 				if effects.size() >= 320 and event.kind in ["hit", "death", "move", "muzzle"]:
 					continue
 				var visual_event: Dictionary = event.duplicate(true)
@@ -192,11 +195,15 @@ func _draw() -> void:
 	if sim == null or font == null:
 		return
 	_draw_stage()
+	_draw_enemy_telegraphs()
 	if not sim.endless_mode:
 		_draw_base_projected()
 		_draw_spawn_portals()
 		if stage_exit_active:
 			_draw_stage_exit()
+	_draw_orbitals()
+	if deploy_preview_active:
+		_draw_deploy_preview()
 	for zone: Dictionary in sim.skill_effects:
 		_draw_skill_zone(zone)
 	for construct: Dictionary in sim.geo_constructs:
@@ -205,7 +212,7 @@ func _draw() -> void:
 		_draw_skill_preview()
 	if selected_id >= 0:
 		var hero: Dictionary = sim.heroes[selected_id]
-		if hero.hp > 0:
+		if hero.hp > 0 and bool(hero.get("deployed", true)):
 			_draw_range_indicator(hero)
 	for hero in sim.heroes:
 		if hero.hp > 0 and hero.pos.distance_to(hero.target) > 3.0:
@@ -215,7 +222,8 @@ func _draw() -> void:
 	for enemy in sim.enemies:
 		actors.append({"unit": enemy, "hero": false})
 	for hero in sim.heroes:
-		actors.append({"unit": hero, "hero": true})
+		if bool(hero.get("deployed", true)):
+			actors.append({"unit": hero, "hero": true})
 	actors.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.unit.pos.y < b.unit.pos.y)
 	for actor in actors:
 		var unit: Dictionary = actor.unit
@@ -321,10 +329,59 @@ func _draw_stage_exit() -> void:
 	if stage_exit_phase == "waiting" and not sim.heroes.is_empty():
 		draw_dashed_line(world_to_screen(sim.heroes[0].pos), actor, Color(1.0, 0.62, 0.67, 0.62), 2.0, 10.0, true)
 
+func _draw_enemy_telegraphs() -> void:
+	for enemy: Dictionary in sim.enemies:
+		if bool(enemy.get("attack_pending", false)):
+			var center := world_to_screen(enemy.get("warning_pos", enemy.pos))
+			var radius := float(enemy.get("warning_radius", 60.0)) * 0.62 * world_depth_scale(enemy.pos)
+			var ratio := clampf(float(enemy.get("warning_timer", 0.0)) / 1.05, 0.0, 1.0)
+			draw_circle(center, radius, Color(0.95, 0.12, 0.18, 0.10 + (1.0-ratio)*0.16))
+			draw_arc(center, radius, -PI*0.5, -PI*0.5 + TAU*(1.0-ratio), 48, Color("#ff5267"), 4.0, true)
+			draw_line(world_to_screen(enemy.pos), center, Color(1.0,0.25,0.32,0.52), 2.0, true)
+		if bool(enemy.get("special_pending", false)):
+			for warning_point: Variant in enemy.get("special_warning_positions", [enemy.pos]):
+				var center := world_to_screen(warning_point)
+				var radius := 94.0 * world_depth_scale(warning_point)
+				draw_circle(center, radius, Color(0.75,0.05,0.12,0.14))
+				draw_arc(center, radius, clock*2.0, clock*2.0+PI*1.65, 64, Color("#ff334f"), 5.0, true)
+				caption(center+Vector2(-58,-radius-12),"BOSS 危险预警",Color("#fff0ef"),14)
+
+func _draw_orbitals() -> void:
+	for orbital: Dictionary in sim.orbitals:
+		var hero_id := int(orbital.get("hero_id",-1))
+		if hero_id < 0 or hero_id >= sim.heroes.size():
+			continue
+		var hero: Dictionary = sim.heroes[hero_id]
+		if not bool(hero.get("deployed",false)):
+			continue
+		var center := world_to_screen(hero.pos)+Vector2(0,-22)
+		var radius := float(orbital.get("radius",150.0))*0.38
+		var count := maxi(1,int(orbital.get("count",1)))
+		for i in count:
+			var angle := clock*2.8+i*TAU/count
+			var point := center+Vector2(cos(angle)*radius,sin(angle)*radius*0.36)
+			var direction := Vector2.from_angle(angle+PI*0.5)
+			draw_line(point-direction*12.0,point+direction*12.0,element_color(str(orbital.get("element",""))),4.0,true)
+			draw_circle(point,3.0,Color.WHITE)
+
+func _draw_deploy_preview() -> void:
+	var point := world_to_screen(deploy_preview_point)
+	var allowed: bool = (sim.ENDLESS_ARENA if sim.endless_mode else sim.MOVE_AREA).has_point(deploy_preview_point)
+	var color := Color("#69f0c2") if allowed else Color("#ff5267")
+	draw_circle(point,34.0,Color(color,0.16))
+	draw_arc(point,34.0,0,TAU,48,color,3.0,true)
+	draw_line(point-Vector2(18,0),point+Vector2(18,0),color,2.0,true)
+	draw_line(point-Vector2(0,18),point+Vector2(0,18),color,2.0,true)
+	caption(point+Vector2(-50,-54),"松开放置角色" if allowed else "不可部署",color,13)
+
 func _draw_skill_preview() -> void:
-	var element: String = sim.traveler_skill_element()
+	if selected_id < 0 or selected_id >= sim.heroes.size():
+		return
+	var hero: Dictionary = sim.heroes[selected_id]
+	var element: String = str(hero.get("element", "none"))
 	var color: Color = element_color(element)
-	var radius: float = sim.traveler_skill_radius()
+	var ability: Dictionary = hero.get("active_skill", {})
+	var radius: float = float(ability.get("radius", 170.0)) * (1.0 + sim.skill_area_bonus)
 	var center := world_to_screen(skill_point)
 	var radius_x := radius * 0.62 * world_depth_scale(skill_point)
 	var radius_y := radius_x * 0.32
@@ -332,14 +389,12 @@ func _draw_skill_preview() -> void:
 	for i in 64:
 		var angle := i * TAU / 64.0
 		points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
-	draw_colored_polygon(points, Color(color, 0.10))
+	draw_colored_polygon(points, Color(color, 0.12))
 	for segment in 12:
 		var start := segment * TAU / 12.0 + clock * 0.35
-		draw_arc(center, radius_x, start, start + 0.28, 5, Color(color, 0.92), 2.4, true)
+		draw_arc(center, radius_x, start, start + 0.28, 5, Color(color, 0.95), 2.4, true)
 	draw_circle(center, 6.0 + sin(clock * 6.0) * 1.5, Color(color, 0.9))
-	draw_line(center - Vector2(13, 0), center + Vector2(13, 0), Color.WHITE, 1.2, true)
-	draw_line(center - Vector2(0, 13), center + Vector2(0, 13), Color.WHITE, 1.2, true)
-	caption(center + Vector2(-58, -radius_y - 18), sim.traveler_skill_name(), color, 15)
+	caption(center + Vector2(-58, -radius_y - 18), sim.hero_skill_name(selected_id), color, 15)
 
 func _draw_skill_zone(zone: Dictionary) -> void:
 	var center := world_to_screen(zone.pos)

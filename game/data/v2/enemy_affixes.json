@@ -1,0 +1,34 @@
+[
+  {
+    "id": "frenzied",
+    "name": "狂热",
+    "min_threat": 2,
+    "attack_rate": 0.3
+  },
+  {
+    "id": "volatile",
+    "name": "爆裂",
+    "min_threat": 3,
+    "death_radius": 95,
+    "death_damage": 36
+  },
+  {
+    "id": "vampiric",
+    "name": "汲取",
+    "min_threat": 4,
+    "lifesteal": 0.25
+  },
+  {
+    "id": "blink",
+    "name": "闪袭",
+    "min_threat": 5,
+    "blink_interval": 5.0,
+    "blink_distance": 120
+  },
+  {
+    "id": "mirror",
+    "name": "镜甲",
+    "min_threat": 6,
+    "shield_ratio": 0.35
+  }
+]
