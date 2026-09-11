@@ -53,7 +53,8 @@ func build_frames() -> SpriteFrames:
 func sync(hero: Dictionary, screen_position: Vector2, depth: float, shot_life: float, reduced: bool, dt: float = 0.0) -> void:
 	position = screen_position + Vector2(0, 8)
 	var facing := float(hero.get("facing", 1.0))
-	scale = Vector2(DISPLAY_SCALE * depth * facing, DISPLAY_SCALE * depth)
+	scale = Vector2.ONE * DISPLAY_SCALE * depth
+	sprite.flip_h = facing < 0.0
 	attack_hold = maxf(0.0, attack_hold - dt)
 	hurt_hold = maxf(0.0, hurt_hold - dt)
 	if shot_life > 0.0:
@@ -93,4 +94,6 @@ func _apply_frame_pivot() -> void:
 	var frame_size := ATTACK_FRAME_SIZE if current_state == "attack" else FRAME_SIZE
 	var fallback := Vector2(frame_size.x * 0.5, frame_size.y - 28.0)
 	var pivot := SpriteAnchor.pivot(sprite_pivots, profile_id, sprite.frame, fallback)
+	if sprite.flip_h:
+		pivot.x = frame_size.x - pivot.x
 	sprite.position = (frame_size * 0.5 - pivot) * sprite.scale

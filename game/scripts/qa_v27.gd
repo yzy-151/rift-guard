@@ -56,13 +56,12 @@ func run(game) -> void:
 	expect(catalog.size() == 10, "ten atlas animation profiles own generated frame pivots")
 	expect(catalog.traveler_run.pivots.size() == 48 and catalog.hilichurl_run.pivots.size() == 30, "traveler and hilichurl pivots cover every run frame")
 	expect(catalog.furina_attack.pivots.size() == 16 and catalog.furina_idle.pivots.size() == 8, "Furina pivots cover attack and idle frames")
-	var anchor := Vector2(420,360)
 	var asymmetric_pivot := Vector2(132,270)
-	var forward := SpriteAnchor.destination(anchor,Vector2(132,132),Vector2(288,288),asymmetric_pivot,1.0)
-	var backward := SpriteAnchor.destination(anchor,Vector2(132,132),Vector2(288,288),asymmetric_pivot,-1.0)
-	expect(forward.size.x > 0.0 and backward.size.x < 0.0, "movement direction produces the correct horizontal flip")
-	expect(SpriteAnchor.mapped_pivot(forward,Vector2(288,288),asymmetric_pivot).is_equal_approx(anchor), "forward animation keeps its foot pivot fixed")
-	expect(SpriteAnchor.mapped_pivot(backward,Vector2(288,288),asymmetric_pivot).is_equal_approx(anchor), "reversed animation keeps its foot pivot fixed")
+	var forward := SpriteAnchor.placement(Vector2(132,132),Vector2(288,288),asymmetric_pivot,1.0)
+	var backward := SpriteAnchor.placement(Vector2(132,132),Vector2(288,288),asymmetric_pivot,-1.0)
+	expect(forward.rect.size.x > 0.0 and backward.rect.size.x > 0.0 and forward.flip_x == 1.0 and backward.flip_x == -1.0, "movement direction uses a positive rect and pivot-centered transform flip")
+	expect(SpriteAnchor.mapped_pivot(forward,Vector2(288,288),asymmetric_pivot).is_equal_approx(Vector2.ZERO), "forward animation keeps its foot pivot fixed")
+	expect(SpriteAnchor.mapped_pivot(backward,Vector2(288,288),asymmetric_pivot).is_equal_approx(Vector2.ZERO), "reversed animation keeps its foot pivot fixed")
 	expect(game.battle.enemy_visual_textures.size() == 9, "battle view preloads every configured slime role")
 
 	var blade_card: Dictionary = {}

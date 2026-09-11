@@ -23,6 +23,7 @@ var sprite_pivots: Dictionary = {}
 var enemy_visual_textures: Dictionary = {}
 var route_previews: Dictionary = {}
 var spawn_portals: Dictionary = {}
+var current_actor_transform := Transform2D.IDENTITY
 var stage_exit_active := false
 var stage_exit_phase := ""
 var stage_exit_timer := 0.0
@@ -55,6 +56,8 @@ const TRAVELER_CELL := 288.0
 const TRAVELER_FRAMES := 48
 const MONSTER_CELL := 256.0
 const MONSTER_FRAMES := 30
+const HERO_FOOT_OFFSET := 8.0
+const ENEMY_FOOT_OFFSET := 12.0
 var furina_actor
 var font: SystemFont
 var slash_frames: Array[Texture2D] = [
@@ -249,9 +252,11 @@ func _draw() -> void:
 		var unit: Dictionary = actor.unit
 		var point: Vector2 = world_to_screen(unit.pos)
 		var scale_factor: float = world_depth_scale(unit.pos)
-		draw_set_transform(point, 0, Vector2(scale_factor, scale_factor))
-		draw_ellipse_shadow(Vector2.ZERO, 28.0 if actor.hero else unit.size * 0.48, Color(0, 0, 0, 0.5))
-		draw_set_transform(point, 0, Vector2(scale_factor, scale_factor))
+		current_actor_transform = Transform2D(Vector2(scale_factor, 0.0), Vector2(0.0, scale_factor), point)
+		draw_set_transform_matrix(current_actor_transform)
+		var shadow_foot := Vector2(0.0, HERO_FOOT_OFFSET if actor.hero else ENEMY_FOOT_OFFSET)
+		draw_ellipse_shadow(shadow_foot - Vector2(0.0, 9.0), 28.0 if actor.hero else unit.size * 0.48, Color(0, 0, 0, 0.5))
+		draw_set_transform_matrix(current_actor_transform)
 		var visual: Dictionary = unit.duplicate()
 		visual.pos = Vector2.ZERO
 		if actor.hero:
@@ -813,8 +818,7 @@ func _draw_hero(hero: Dictionary) -> void:
 		_draw_traveler(hero, tint, down)
 	else:
 		var facing := float(hero.get("facing", 1.0))
-		var hero_rect := Rect2(hero.pos + Vector2(-29 if facing >= 0.0 else 29, -46 + bob), Vector2(58 if facing >= 0.0 else -58, 58))
-		draw_texture_rect_region(atlas, hero_rect, Rect2(hero.tile, Vector2(16, 16)), tint)
+		_draw_anchored_texture_region(atlas, hero.pos + Vector2(0, HERO_FOOT_OFFSET + bob), Vector2(58, 58), Vector2(16, 16), Vector2(8, 16), facing, 1.0, Rect2(hero.tile, Vector2(16, 16)), tint)
 	if not down:
 		if hero.block > 0 and not is_traveler:
 			draw_rect(Rect2(hero.pos + Vector2(17, -24), Vector2(16, 25)), Color("#a8a687"))
@@ -858,14 +862,13 @@ func _draw_traveler(hero: Dictionary, tint: Color, down: bool) -> void:
 	var hit_strength := clampf(float(hero.flash) / 0.12, 0.0, 1.0) if not reduced_effects else 0.0
 	var width := 132.0 * (1.0 + hit_strength * 0.13)
 	var height := 132.0 * (1.0 - hit_strength * 0.10)
-	var foot: Vector2 = hero.pos + Vector2(0, 8)
+	var foot: Vector2 = hero.pos + Vector2(0, HERO_FOOT_OFFSET)
 	var facing := float(hero.get("facing", 1.0))
 	var pivot := SpriteAnchor.pivot(sprite_pivots, pivot_profile, frame, Vector2(TRAVELER_CELL * 0.5, 270.0))
-	var destination := SpriteAnchor.destination(foot, Vector2(width, height), Vector2(TRAVELER_CELL, TRAVELER_CELL), pivot, facing)
 	var source := Rect2((frame % 8) * TRAVELER_CELL, floori(frame / 8.0) * TRAVELER_CELL, TRAVELER_CELL, TRAVELER_CELL)
 	if not reduced_effects:
 		draw_circle(hero.pos + Vector2(0, -35), 36.0 + sin(clock * 2.2) * 2.0, Color(1.0, 0.76, 0.48, 0.055))
-	draw_texture_rect_region(texture, destination, source, tint)
+	_draw_anchored_texture_region(texture, foot, Vector2(width, height), Vector2(TRAVELER_CELL, TRAVELER_CELL), pivot, facing, 1.0, source, tint)
 
 func _draw_furina(hero: Dictionary, tint: Color, bob: float, down: bool) -> void:
 	if down:
@@ -929,8 +932,7 @@ func _draw_enemy(enemy: Dictionary) -> void:
 		_draw_animated_enemy(enemy, tint, bob)
 	else:
 		var facing := float(enemy.get("facing", -1.0))
-		var enemy_rect := Rect2(enemy.pos + Vector2(-side / 2 if facing <= 0.0 else side / 2, -side + 12 + bob), Vector2(side if facing <= 0.0 else -side, side))
-		draw_texture_rect_region(atlas, enemy_rect, Rect2(0, 144, 16, 16), tint)
+		_draw_anchored_texture_region(atlas, enemy.pos + Vector2(0, ENEMY_FOOT_OFFSET + bob), Vector2(side, side), Vector2(16, 16), Vector2(8, 16), facing, -1.0, Rect2(0, 144, 16, 16), tint)
 	var ratio: float = clampf(float(enemy.hp) / float(enemy.max_hp), 0, 1)
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44, 4)), Color("#302b32"))
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44 * ratio, 4)), RED)
@@ -1096,13 +1098,12 @@ func _draw_animated_enemy(enemy: Dictionary, tint: Color, bob: float) -> void:
 	var visual_size := clampf(float(enemy.size) * 2.14, 86.0, 124.0)
 	if str(enemy.kind) == "runner":
 		visual_size *= 0.92
-	var foot: Vector2 = enemy.pos + Vector2(0, 12 + bob * 0.35)
+	var foot: Vector2 = enemy.pos + Vector2(0, ENEMY_FOOT_OFFSET + bob * 0.35)
 	var facing := float(enemy.get("facing", -1.0))
 	var pivot := SpriteAnchor.pivot(sprite_pivots, "hilichurl_run", frame, Vector2(MONSTER_CELL * 0.5, 242.0))
-	var destination := SpriteAnchor.destination(foot, Vector2.ONE * visual_size, Vector2.ONE * MONSTER_CELL, pivot, facing)
 	var source := Rect2((frame % 6) * MONSTER_CELL, floori(frame / 6.0) * MONSTER_CELL, MONSTER_CELL, MONSTER_CELL)
 	var art_tint := Color("#fff0e8") if enemy.flash > 0 and not reduced_effects else Color.WHITE
-	draw_texture_rect_region(hilichurl_run_atlas, destination, source, art_tint)
+	_draw_anchored_texture_region(hilichurl_run_atlas, foot, Vector2.ONE * visual_size, Vector2.ONE * MONSTER_CELL, pivot, facing, 1.0, source, art_tint)
 
 func _draw_slime_enemy(enemy: Dictionary, definition: Dictionary, texture: Texture2D, bob: float) -> void:
 	var phase := clock * (7.8 if str(enemy.kind) == "charger" else 5.6) + float(enemy.id) * 0.73
@@ -1119,12 +1120,18 @@ func _draw_slime_enemy(enemy: Dictionary, definition: Dictionary, texture: Textu
 		height_scale -= 0.14
 	var base_size := float(definition.get("display_size", enemy.size * 2.0))
 	var display_size := Vector2(base_size * width_scale, base_size * height_scale)
-	var foot: Vector2 = Vector2(enemy.pos) + Vector2(0.0, 12.0 + bob * 0.25 - lift * 9.0)
+	var foot: Vector2 = Vector2(enemy.pos) + Vector2(0.0, ENEMY_FOOT_OFFSET + bob * 0.25 - lift * 9.0)
 	var pivot_value: Array = definition.get("pivot", [256.0, 480.0])
 	var pivot := Vector2(float(pivot_value[0]), float(pivot_value[1]))
-	var destination := SpriteAnchor.destination(foot, display_size, texture.get_size(), pivot, float(enemy.get("facing", -1.0)), float(definition.get("native_facing", 1.0)))
 	var art_tint := Color("#fff0e8") if float(enemy.get("flash",0.0)) > 0.0 and not reduced_effects else Color.WHITE
-	draw_texture_rect_region(texture, destination, Rect2(Vector2.ZERO, texture.get_size()), art_tint)
+	_draw_anchored_texture_region(texture, foot, display_size, texture.get_size(), pivot, float(enemy.get("facing", -1.0)), float(definition.get("native_facing", 1.0)), Rect2(Vector2.ZERO, texture.get_size()), art_tint)
+
+func _draw_anchored_texture_region(texture: Texture2D, anchor: Vector2, display_size: Vector2, source_size: Vector2, source_pivot: Vector2, facing: float, native_facing: float, source: Rect2, tint: Color) -> void:
+	var placement_data := SpriteAnchor.placement(display_size, source_size, source_pivot, facing, native_facing)
+	var local_transform := Transform2D(Vector2(float(placement_data.flip_x), 0.0), Vector2(0.0, 1.0), anchor)
+	draw_set_transform_matrix(current_actor_transform * local_transform)
+	draw_texture_rect_region(texture, placement_data.rect, source, tint)
+	draw_set_transform_matrix(current_actor_transform)
 
 func _draw_effect(effect: Dictionary) -> void:
 	var total := maxf(0.01, float(effect.get("total", 0.6)))
