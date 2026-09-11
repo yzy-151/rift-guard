@@ -5,6 +5,7 @@ const Stage = preload("res://scripts/stage_projection.gd")
 const WORLD = Rect2(40, 140, 1200, 440)
 const Sim = preload("res://scripts/combat_simulation.gd")
 const ReusableEffectPool = preload("res://scripts/reusable_effect_pool.gd")
+const SpriteAnchor = preload("res://scripts/sprite_anchor.gd")
 const INK = Color("#0c1017")
 const TEAL = Color("#8fdbc8")
 const RED = Color("#d66769")
@@ -18,6 +19,8 @@ var shot_flashes: Dictionary = {}
 var hero_attack_visuals: Dictionary = {}
 var hero_down_visuals: Dictionary = {}
 var projectile_trails: Dictionary = {}
+var sprite_pivots: Dictionary = {}
+var enemy_visual_textures: Dictionary = {}
 var route_previews: Dictionary = {}
 var spawn_portals: Dictionary = {}
 var stage_exit_active := false
@@ -75,9 +78,21 @@ var muzzle_ion_frames: Array[Texture2D] = [
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	sprite_pivots = SpriteAnchor.load_catalog()
+	_load_enemy_visuals()
 	font = SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
 	build_furina_actor()
+
+func _load_enemy_visuals() -> void:
+	enemy_visual_textures.clear()
+	if sim == null or sim.database == null:
+		return
+	for enemy_id: String in sim.database.enemy_visuals:
+		var definition: Dictionary = sim.database.enemy_visuals[enemy_id]
+		var texture: Resource = ResourceLoader.load(str(definition.get("sprite", "")))
+		if texture is Texture2D:
+			enemy_visual_textures[enemy_id] = texture
 
 func advance(dt: float) -> void:
 	clock += dt
@@ -172,7 +187,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				if effects.size() < 260:
 					var facing := float(hero.get("facing", 1.0))
 					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","")},0.16))
-			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "tag_synergy", "relic_awaken", "revive":
+			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
 				if effects.size() >= (sim.performance_budget.effect_cap() if sim != null else 320) and event.kind in ["hit", "death", "move", "muzzle"]:
 					continue
 				var visual_event: Dictionary = event.duplicate(true)
@@ -186,7 +201,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 					for hero: Dictionary in sim.heroes:
 						if hero.get("character_id", "") == "traveler" and hero.hp > 0.0:
 							hero_attack_visuals[hero.id] = {"elapsed": 0.0, "duration": 0.82, "start_frame": 0}
-				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "boss_move", "boss_phase", "enemy_volatile", "ultimate_impact", "skill_pyro", "skill_electro", "geo_break", "kill_streak"]:
+				if event.kind in ["death_burst", "crossfire", "finale", "barrage", "boss_pulse", "boss_move", "boss_phase", "enemy_volatile", "orbit_storm", "ultimate_impact", "skill_pyro", "skill_electro", "geo_break", "kill_streak"]:
 					shake_trauma = minf(1.0, shake_trauma + 0.42)
 				elif event.kind in ["hit", "slash", "chain"]:
 					shake_trauma = minf(0.42, shake_trauma + 0.045)
@@ -398,12 +413,29 @@ func _draw_orbitals() -> void:
 		var center := world_to_screen(hero.pos)+Vector2(0,-22)
 		var radius := float(orbital.get("radius",150.0))*0.38
 		var count := maxi(1,int(orbital.get("count",1)))
+		var visual := str(orbital.get("visual","spell"))
 		for i in count:
 			var angle := clock*2.8+i*TAU/count
 			var point := center+Vector2(cos(angle)*radius,sin(angle)*radius*0.36)
-			var direction := Vector2.from_angle(angle+PI*0.5)
-			draw_line(point-direction*12.0,point+direction*12.0,element_color(str(orbital.get("element",""))),4.0,true)
-			draw_circle(point,3.0,Color.WHITE)
+			var color := element_color(str(orbital.get("element","")))
+			if visual == "blade":
+				_draw_vertical_orbit_blade(point, color, angle)
+			else:
+				var direction := Vector2.from_angle(angle+PI*0.5)
+				draw_line(point-direction*12.0,point+direction*12.0,color,4.0,true)
+				draw_circle(point,3.0,Color.WHITE)
+
+func _draw_vertical_orbit_blade(point: Vector2, color: Color, orbit_angle: float) -> void:
+	var pulse := 1.0 + sin(clock*5.0+orbit_angle)*0.06
+	var tip := point+Vector2(0,-18.0*pulse)
+	var shoulder_left := point+Vector2(-5.0,-7.0)
+	var shoulder_right := point+Vector2(5.0,-7.0)
+	var base := point+Vector2(0,9.0)
+	draw_colored_polygon(PackedVector2Array([tip,shoulder_right,base,shoulder_left]),Color(color,0.92))
+	draw_polyline(PackedVector2Array([tip,shoulder_right,base,shoulder_left,tip]),Color.WHITE,1.4,true)
+	draw_line(point+Vector2(-7,9),point+Vector2(7,9),Color("#ffe9bd"),3.0,true)
+	draw_line(point+Vector2(0,9),point+Vector2(0,16),Color("#7d593e"),3.2,true)
+	draw_circle(point,22.0,Color(color,0.055))
 
 func _draw_deploy_preview() -> void:
 	var point := world_to_screen(deploy_preview_point)
@@ -806,26 +838,30 @@ func _draw_hero(hero: Dictionary) -> void:
 
 func _draw_traveler(hero: Dictionary, tint: Color, down: bool) -> void:
 	var texture := traveler_idle_atlas
+	var pivot_profile := "traveler_idle"
 	var frame := posmod(floori(clock * 24.0), TRAVELER_FRAMES)
 	if down:
 		texture = traveler_death_atlas
+		pivot_profile = "traveler_down"
 		frame = mini(TRAVELER_FRAMES - 1, floori(float(hero_down_visuals.get(hero.id, 0.0)) * 30.0))
 	elif hero_attack_visuals.has(hero.id):
 		texture = traveler_attack_atlas
+		pivot_profile = "traveler_attack"
 		var state: Dictionary = hero_attack_visuals[hero.id]
 		var phase := clampf(float(state.elapsed) / maxf(0.01, float(state.duration)), 0.0, 1.0)
 		var start_frame := int(state.get("start_frame", 18))
 		frame = clampi(start_frame + floori(phase * float(TRAVELER_FRAMES - 1 - start_frame)), start_frame, TRAVELER_FRAMES - 1)
 	elif hero.moving:
 		texture = traveler_run_atlas
+		pivot_profile = "traveler_run"
 		frame = posmod(floori(clock * 24.0), TRAVELER_FRAMES)
 	var hit_strength := clampf(float(hero.flash) / 0.12, 0.0, 1.0) if not reduced_effects else 0.0
 	var width := 132.0 * (1.0 + hit_strength * 0.13)
 	var height := 132.0 * (1.0 - hit_strength * 0.10)
 	var foot: Vector2 = hero.pos + Vector2(0, 8)
 	var facing := float(hero.get("facing", 1.0))
-	var destination_x := foot.x - width * 0.5 if facing >= 0.0 else foot.x + width * 0.5
-	var destination := Rect2(destination_x, foot.y - height * 270.0 / TRAVELER_CELL, width if facing >= 0.0 else -width, height)
+	var pivot := SpriteAnchor.pivot(sprite_pivots, pivot_profile, frame, Vector2(TRAVELER_CELL * 0.5, 270.0))
+	var destination := SpriteAnchor.destination(foot, Vector2(width, height), Vector2(TRAVELER_CELL, TRAVELER_CELL), pivot, facing)
 	var source := Rect2((frame % 8) * TRAVELER_CELL, floori(frame / 8.0) * TRAVELER_CELL, TRAVELER_CELL, TRAVELER_CELL)
 	if not reduced_effects:
 		draw_circle(hero.pos + Vector2(0, -35), 36.0 + sin(clock * 2.2) * 2.0, Color(1.0, 0.76, 0.48, 0.055))
@@ -886,8 +922,10 @@ func _draw_enemy(enemy: Dictionary) -> void:
 		"warder":
 			for ring in 2:
 				draw_arc(body, 31.0 + ring * 8.0 + sin(clock * 3.0) * 2.0, clock * (1.0 if ring == 0 else -1.0), TAU + clock * (1.0 if ring == 0 else -1.0), 6, Color(0.55, 0.67, 1.0, 0.52), 2.5, true)
-	var animated_enemy := str(enemy.kind) in ["grunt", "runner", "charger"]
-	if animated_enemy:
+	var visual_id := str(enemy.kind)
+	if enemy_visual_textures.has(visual_id):
+		_draw_slime_enemy(enemy, sim.database.enemy_visuals[visual_id], enemy_visual_textures[visual_id], bob)
+	elif visual_id in ["grunt", "runner", "charger"]:
 		_draw_animated_enemy(enemy, tint, bob)
 	else:
 		var facing := float(enemy.get("facing", -1.0))
@@ -1059,13 +1097,34 @@ func _draw_animated_enemy(enemy: Dictionary, tint: Color, bob: float) -> void:
 	if str(enemy.kind) == "runner":
 		visual_size *= 0.92
 	var foot: Vector2 = enemy.pos + Vector2(0, 12 + bob * 0.35)
-	var destination := Rect2(foot.x - visual_size * 0.5, foot.y - visual_size * 242.0 / MONSTER_CELL, visual_size, visual_size)
 	var facing := float(enemy.get("facing", -1.0))
-	if facing > 0.0:
-		destination = Rect2(foot.x + visual_size * 0.5, destination.position.y, -visual_size, visual_size)
+	var pivot := SpriteAnchor.pivot(sprite_pivots, "hilichurl_run", frame, Vector2(MONSTER_CELL * 0.5, 242.0))
+	var destination := SpriteAnchor.destination(foot, Vector2.ONE * visual_size, Vector2.ONE * MONSTER_CELL, pivot, facing)
 	var source := Rect2((frame % 6) * MONSTER_CELL, floori(frame / 6.0) * MONSTER_CELL, MONSTER_CELL, MONSTER_CELL)
 	var art_tint := Color("#fff0e8") if enemy.flash > 0 and not reduced_effects else Color.WHITE
 	draw_texture_rect_region(hilichurl_run_atlas, destination, source, art_tint)
+
+func _draw_slime_enemy(enemy: Dictionary, definition: Dictionary, texture: Texture2D, bob: float) -> void:
+	var phase := clock * (7.8 if str(enemy.kind) == "charger" else 5.6) + float(enemy.id) * 0.73
+	var lift := maxf(0.0, sin(phase))
+	var landing := pow(1.0 - lift, 5.0)
+	var width_scale := 1.0 + landing * 0.10
+	var height_scale := 1.0 - landing * 0.12 + lift * 0.05
+	if bool(enemy.get("attack_pending", false)) or bool(enemy.get("special_pending", false)):
+		var windup := 0.5 + sin(clock * 18.0 + float(enemy.id)) * 0.5
+		width_scale += 0.08 * windup
+		height_scale -= 0.10 * windup
+	if float(enemy.get("flash", 0.0)) > 0.0:
+		width_scale += 0.16
+		height_scale -= 0.14
+	var base_size := float(definition.get("display_size", enemy.size * 2.0))
+	var display_size := Vector2(base_size * width_scale, base_size * height_scale)
+	var foot: Vector2 = Vector2(enemy.pos) + Vector2(0.0, 12.0 + bob * 0.25 - lift * 9.0)
+	var pivot_value: Array = definition.get("pivot", [256.0, 480.0])
+	var pivot := Vector2(float(pivot_value[0]), float(pivot_value[1]))
+	var destination := SpriteAnchor.destination(foot, display_size, texture.get_size(), pivot, float(enemy.get("facing", -1.0)), float(definition.get("native_facing", 1.0)))
+	var art_tint := Color("#fff0e8") if float(enemy.get("flash",0.0)) > 0.0 and not reduced_effects else Color.WHITE
+	draw_texture_rect_region(texture, destination, Rect2(Vector2.ZERO, texture.get_size()), art_tint)
 
 func _draw_effect(effect: Dictionary) -> void:
 	var total := maxf(0.01, float(effect.get("total", 0.6)))

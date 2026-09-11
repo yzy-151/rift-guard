@@ -872,12 +872,12 @@
   {
     "id": "orbit_arcane_blades",
     "name": "星轨剑阵",
-    "description": "3柄飞剑环绕指定角色并自动切割近敌；3级扩大范围，6级追加剑数，9级触发剑雨。",
+    "description": "2柄竖向飞剑以180度间隔环绕；3级变为3柄/120度，6级变为6柄/60度，9级触发剑雨。",
     "rarity": "rare",
     "weight": 24,
     "target": "global",
     "effect": "orbit_add",
-    "value": 3,
+    "value": 2,
     "mechanic": true,
     "tags": [
       "召唤",

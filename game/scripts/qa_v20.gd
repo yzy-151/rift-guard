@@ -101,7 +101,8 @@ func run(game) -> void:
 	for i in 3:
 		sim.run_state.buff_levels[blades.id] = i + 1
 		sim.apply_v2_card_effect(blades)
-	expect(not sim.orbitals.is_empty() and int(sim.orbitals[-1].count) >= 4, "orbiting sword card grows count and radius with levels")
+	var blade_orbits: Array = sim.orbitals.filter(func(orbital: Dictionary)->bool: return str(orbital.get("source_card","")) == str(blades.id))
+	expect(blade_orbits.size() == 1 and int(blade_orbits[0].count) == 3, "orbiting sword card upgrades one persistent orbit to the configured level-three count")
 	var orbit_target: Dictionary = sim.spawn_enemy(sim.heroes[0].pos + Vector2(60, 0), "grunt")
 	orbit_target.hp *= 10.0
 	orbit_target.max_hp = orbit_target.hp

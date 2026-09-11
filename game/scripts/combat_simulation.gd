@@ -1316,14 +1316,19 @@ func _orbital_tick(dt: float) -> void:
 	for orbital: Dictionary in orbitals:
 		orbital.life = float(orbital.life) - dt
 		orbital.timer = float(orbital.timer) - dt
+		orbital.storm_timer = float(orbital.get("storm_timer", 3.2)) - dt
 		if orbital.life <= 0.0:
 			continue
 		var hero_id := int(orbital.get("hero_id", -1))
 		if hero_id < 0 or hero_id >= heroes.size() or not bool(heroes[hero_id].get("deployed", false)):
 			continue
+		var hero: Dictionary = heroes[hero_id]
+		if str(orbital.get("source_card", "")) == "orbit_arcane_blades" and int(orbital.get("level", 1)) >= 9 and orbital.storm_timer <= 0.0:
+			orbital.storm_timer += 3.2
+			_damage_area(hero.pos, float(orbital.radius) * 1.35, float(orbital.damage) * 1.8, str(orbital.element), hero_id, "barrage")
+			events.append({"kind":"orbit_storm","pos":hero.pos,"hero_id":hero_id,"value":int(orbital.count)})
 		if orbital.timer <= 0.0:
 			orbital.timer += float(orbital.interval)
-			var hero: Dictionary = heroes[hero_id]
 			var targets: Array[Dictionary] = enemies.filter(func(e: Dictionary) -> bool: return e.hp > 0.0 and e.pos.distance_to(hero.pos) <= float(orbital.radius))
 			targets.sort_custom(func(a: Dictionary,b: Dictionary)->bool: return a.pos.distance_to(hero.pos) < b.pos.distance_to(hero.pos))
 			for i in mini(int(orbital.count), targets.size()):
@@ -1417,7 +1422,12 @@ func _refresh_tag_synergies() -> void:
 			"弹道":
 				for hero: Dictionary in heroes: hero.projectile_count += delta
 			"召唤":
-				for orbital: Dictionary in orbitals: orbital.count += delta
+				for orbital: Dictionary in orbitals:
+					if str(orbital.get("source_card","")) == "orbit_arcane_blades":
+						orbital.damage = float(orbital.damage) * (1.0 + 0.12 * delta)
+						orbital.radius = float(orbital.radius) + 18.0 * delta
+					else:
+						orbital.count += delta
 			"反应": reaction_damage_bonus += 0.15 * delta
 			"暴击":
 				for hero: Dictionary in heroes: hero.crit_chance = minf(0.85, float(hero.crit_chance) + 0.10 * delta)
@@ -2130,9 +2140,23 @@ func apply_v2_card_effect(card: Dictionary) -> void:
 		"orbit_add", "orbit_spell_add":
 			var owner := targets[0] if not targets.is_empty() else (heroes[0] if not heroes.is_empty() else {})
 			if not owner.is_empty():
-				var level := int(run_state.buff_levels.get(str(card.id), 1))
-				var count := int(value) + level / 3 + (1 if run_state.equipped_relics.has("relic_orbit_foundry") else 0)
-				orbitals.append({"hero_id":owner.id,"count":count,"damage":28.0 + level * 9.0,"radius":(155.0 + level * 12.0) * (1.25 if run_state.equipped_relics.has("relic_orbit_foundry") else 1.0),"timer":0.1,"interval":maxf(0.24,0.70-level*0.035),"life":99999.0,"element":owner.element})
+				var card_id := str(card.id)
+				var level := int(run_state.buff_levels.get(card_id, 1))
+				var blade_mode := str(card.get("effect", "")) == "orbit_add"
+				var count := (6 if level >= 6 else (3 if level >= 3 else 2)) if blade_mode else int(value) + level / 3 + (1 if run_state.equipped_relics.has("relic_orbit_foundry") else 0)
+				var radius_bonus := 1.25 if run_state.equipped_relics.has("relic_orbit_foundry") else 1.0
+				var state := {"hero_id":owner.id,"source_card":card_id,"level":level,"count":count,"damage":28.0+level*9.0,"radius":(155.0+level*12.0)*radius_bonus,"timer":0.1,"interval":maxf(0.24,0.70-level*0.035),"life":99999.0,"element":owner.element,"visual":"blade" if blade_mode else "spell","storm_timer":3.2}
+				var existing_index := -1
+				for index in orbitals.size():
+					if int(orbitals[index].get("hero_id",-1)) == int(owner.id) and str(orbitals[index].get("source_card","")) == card_id:
+						existing_index = index
+						break
+				if existing_index >= 0:
+					state.timer = float(orbitals[existing_index].get("timer",0.1))
+					state.storm_timer = float(orbitals[existing_index].get("storm_timer",3.2))
+					orbitals[existing_index] = state
+				else:
+					orbitals.append(state)
 		"evolving_fireball":
 			var level := int(run_state.buff_levels.get(str(card.id), 1))
 			fireball_level = maxi(fireball_level, level)

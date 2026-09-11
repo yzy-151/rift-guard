@@ -13,6 +13,7 @@ var boss_patterns: Dictionary = {}
 var stage_templates: Dictionary = {}
 var vfx_profiles: Dictionary = {}
 var combat_contracts: Dictionary = {}
+var enemy_visuals: Dictionary = {}
 var asset_readiness: Dictionary = {}
 var errors: Array[String] = []
 
@@ -31,6 +32,7 @@ func _init() -> void:
 	stage_templates = _by_id(_read_array("res://data/v2/stage_templates.json"), "stage template")
 	vfx_profiles = _by_id(_read_array("res://data/v2/vfx_profiles.json"), "VFX profile")
 	combat_contracts = _by_id(_read_array("res://data/v2/combat_contracts.json"), "combat contract")
+	enemy_visuals = _by_id(_read_array("res://data/v2/enemy_visuals.json"), "enemy visual")
 	_validate()
 	errors.append_array(preload("res://scripts/content_validator.gd").validate(self))
 	asset_readiness = preload("res://scripts/asset_readiness.gd").scan(self)

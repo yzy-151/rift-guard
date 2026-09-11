@@ -1,0 +1,74 @@
+[
+  {
+    "id": "flyer",
+    "sprite": "res://assets/enemies/slimes/anemo_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [256, 480],
+    "display_size": 92
+  },
+  {
+    "id": "ranged",
+    "sprite": "res://assets/enemies/slimes/electro_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [256, 480],
+    "display_size": 92
+  },
+  {
+    "id": "buffer",
+    "sprite": "res://assets/enemies/slimes/anemo_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [256, 480],
+    "display_size": 96
+  },
+  {
+    "id": "shielded",
+    "sprite": "res://assets/enemies/slimes/hydro_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [256, 480],
+    "display_size": 104
+  },
+  {
+    "id": "charger",
+    "sprite": "res://assets/enemies/slimes/pyro_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [256, 480],
+    "display_size": 102
+  },
+  {
+    "id": "healer",
+    "sprite": "res://assets/enemies/slimes/hydro_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [256, 480],
+    "display_size": 94
+  },
+  {
+    "id": "splitter",
+    "sprite": "res://assets/enemies/slimes/electro_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [256, 480],
+    "display_size": 98
+  },
+  {
+    "id": "warder",
+    "sprite": "res://assets/enemies/slimes/hydro_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [256, 480],
+    "display_size": 100
+  },
+  {
+    "id": "boss_02",
+    "sprite": "res://assets/enemies/slimes/slime_king.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [256, 480],
+    "display_size": 168
+  }
+]

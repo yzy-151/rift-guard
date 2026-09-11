@@ -4,6 +4,7 @@ extends Node2D
 const FRAME_SIZE := Vector2(256, 256)
 const ATTACK_FRAME_SIZE := Vector2(512, 512)
 const DISPLAY_SCALE := 0.52
+const SpriteAnchor = preload("res://scripts/sprite_anchor.gd")
 const DEFINITIONS := {
 	"idle": {"row": 0, "frames": 8, "fps": 6.0, "loop": true},
 	"move": {"row": 1, "frames": 8, "fps": 12.0, "loop": true},
@@ -16,9 +17,11 @@ var sprite: AnimatedSprite2D
 var current_state := ""
 var attack_hold := 0.0
 var hurt_hold := 0.0
+var sprite_pivots: Dictionary = {}
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	sprite_pivots = SpriteAnchor.load_catalog()
 	sprite = AnimatedSprite2D.new()
 	sprite.name = "AnimatedSprite2D"
 	sprite.position = Vector2(0, -100)
@@ -67,6 +70,7 @@ func sync(hero: Dictionary, screen_position: Vector2, depth: float, shot_life: f
 	elif hero.moving:
 		next_state = "move"
 	set_state(next_state)
+	_apply_frame_pivot()
 	modulate = Color("#ffb5b2") if next_state == "hurt" and not reduced else Color.WHITE
 	if reduced and next_state not in ["attack", "hurt", "down"]:
 		sprite.pause()
@@ -80,3 +84,13 @@ func set_state(next_state: String) -> void:
 	current_state = next_state
 	sprite.scale = Vector2.ONE * (0.5 if next_state == "attack" else 1.0)
 	sprite.play(next_state)
+	_apply_frame_pivot()
+
+func _apply_frame_pivot() -> void:
+	if sprite == null or current_state.is_empty():
+		return
+	var profile_id := "furina_" + current_state
+	var frame_size := ATTACK_FRAME_SIZE if current_state == "attack" else FRAME_SIZE
+	var fallback := Vector2(frame_size.x * 0.5, frame_size.y - 28.0)
+	var pivot := SpriteAnchor.pivot(sprite_pivots, profile_id, sprite.frame, fallback)
+	sprite.position = (frame_size * 0.5 - pivot) * sprite.scale

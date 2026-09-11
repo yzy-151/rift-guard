@@ -28,4 +28,12 @@ static func validate(database) -> Array[String]:
 		var contract: Dictionary = database.combat_contracts[contract_id]
 		if str(contract.get("metric", "")) not in ["kills", "reactions", "survival_time"] or int(contract.get("target", 0)) <= 0:
 			errors.append("invalid combat contract: " + contract_id)
+	for visual_id: String in database.enemy_visuals:
+		var visual: Dictionary = database.enemy_visuals[visual_id]
+		var sprite_path := str(visual.get("sprite", ""))
+		if sprite_path.is_empty() or not ResourceLoader.exists(sprite_path):
+			errors.append("missing enemy visual sprite: " + visual_id)
+		var pivot: Array = visual.get("pivot", [])
+		if pivot.size() != 2 or float(visual.get("display_size", 0.0)) <= 0.0:
+			errors.append("invalid enemy visual geometry: " + visual_id)
 	return errors
