@@ -14,6 +14,7 @@ var stage_templates: Dictionary = {}
 var vfx_profiles: Dictionary = {}
 var combat_contracts: Dictionary = {}
 var enemy_visuals: Dictionary = {}
+var vfx_themes: Dictionary = {}
 var asset_readiness: Dictionary = {}
 var errors: Array[String] = []
 
@@ -33,6 +34,7 @@ func _init() -> void:
 	vfx_profiles = _by_id(_read_array("res://data/v2/vfx_profiles.json"), "VFX profile")
 	combat_contracts = _by_id(_read_array("res://data/v2/combat_contracts.json"), "combat contract")
 	enemy_visuals = _by_id(_read_array("res://data/v2/enemy_visuals.json"), "enemy visual")
+	vfx_themes = _by_id(_read_array("res://data/v2/vfx_themes.json"), "VFX theme")
 	_validate()
 	errors.append_array(preload("res://scripts/content_validator.gd").validate(self))
 	asset_readiness = preload("res://scripts/asset_readiness.gd").scan(self)
@@ -83,6 +85,9 @@ func _by_id(rows: Array, label: String) -> Dictionary:
 func _validate() -> void:
 	var elements := ["none", "anemo", "electro", "pyro", "hydro", "geo", "cryo"]
 	var card_ids: Dictionary = {}
+	for required_theme: String in ["neutral","anemo","electro","pyro","hydro","geo","cryo","vaporize","melt","overload","electro_charged","freeze","swirl","crystallize","superconduct"]:
+		if not vfx_themes.has(required_theme):
+			errors.append("missing VFX theme: " + required_theme)
 	for id: String in characters:
 		var character: Dictionary = characters[id]
 		if str(character.get("element", "")) not in elements:

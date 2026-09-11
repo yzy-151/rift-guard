@@ -120,7 +120,11 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v28-test" in OS.get_cmdline_user_args():
+	if "--v29-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v29_test")
+	elif "--v28-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v28_test")
@@ -957,6 +961,8 @@ func recall_hero_to_bench(hero_id: int) -> void:
 func _update_deploy_preview(screen_pos: Vector2) -> void:
 	var local: Vector2 = battle.get_global_transform().affine_inverse() * screen_pos
 	battle.deploy_preview_point = battle.screen_to_world(local)
+	var playable: Rect2 = Sim.ENDLESS_ARENA if sim.endless_mode else Sim.MOVE_AREA
+	battle.deploy_preview_valid = playable.has_point(battle.deploy_preview_point)
 	battle.queue_redraw()
 
 func _finish_deploy_drag(screen_pos: Vector2) -> void:
@@ -997,6 +1003,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v29_test() -> void:
+	var suite = preload("res://scripts/qa_v29.gd").new()
 	await suite.run(self)
 
 func run_v28_test() -> void:

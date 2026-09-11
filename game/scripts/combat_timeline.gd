@@ -7,9 +7,9 @@ static func compile(ability: Dictionary, ultimate: bool = false) -> Dictionary:
 	return {
 		"duration": duration,
 		"anticipation": clampf(float(source.get("anticipation", hit * 0.65)), 0.0, hit),
-		"vfx_frame": clampf(float(source.get("vfx_frame", hit)), 0.0, duration),
+		"vfx_frame": hit,
 		"hit_frame": hit,
-		"sfx_frame": clampf(float(source.get("sfx_frame", hit)), 0.0, duration),
+		"sfx_frame": hit,
 		"recovery": maxf(0.0, float(source.get("recovery", duration - hit))),
 		"shake": clampf(float(source.get("shake", 0.72 if ultimate else 0.32)), 0.0, 1.0),
 	}
@@ -18,6 +18,6 @@ static func validate(ability: Dictionary) -> String:
 	var timeline := compile(ability, false)
 	if float(timeline.hit_frame) > float(timeline.duration):
 		return "hit frame exceeds duration"
-	if absf(float(timeline.sfx_frame) - float(timeline.hit_frame)) > 0.04:
-		return "impact SFX must stay within 40ms of damage"
+	if not is_equal_approx(float(timeline.sfx_frame), float(timeline.hit_frame)) or not is_equal_approx(float(timeline.vfx_frame), float(timeline.hit_frame)):
+		return "impact cues must share the damage frame"
 	return ""

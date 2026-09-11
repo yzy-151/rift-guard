@@ -24,6 +24,8 @@ var progress
 var hud
 var selected: Array[String] = []
 var next_stage_id := ""
+var preview_has_anchor := true
+var preview_has_validity := true
 
 func build(owner_hud, game_database, state) -> void:
 	hud = owner_hud

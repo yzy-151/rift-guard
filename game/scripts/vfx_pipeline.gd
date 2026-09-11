@@ -13,3 +13,9 @@ static func import_spec() -> Dictionary:
 
 static func validate_profile(profile: Dictionary) -> bool:
 	return int(profile.get("pool", 0)) > 0 and float(profile.get("lifetime", 0.0)) > 0.0 and str(profile.get("blend", "")) in ["add", "mix"]
+
+static func validate_theme(theme: Dictionary) -> bool:
+	return not str(theme.get("color", "")).is_empty() and not str(theme.get("impact", "")).is_empty()
+
+static func color_for(theme: Dictionary, accent: bool = false) -> Color:
+	return Color(str(theme.get("accent" if accent else "color", "#ffffff")))

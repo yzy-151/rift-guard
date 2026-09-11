@@ -6,6 +6,9 @@ const WORLD = Rect2(40, 140, 1200, 440)
 const Sim = preload("res://scripts/combat_simulation.gd")
 const ReusableEffectPool = preload("res://scripts/reusable_effect_pool.gd")
 const SpriteAnchor = preload("res://scripts/sprite_anchor.gd")
+const UnitVisualActor = preload("res://scripts/unit_visual_actor.gd")
+const CombatFeedbackDirector = preload("res://scripts/combat_feedback_director.gd")
+const VfxPipeline = preload("res://scripts/vfx_pipeline.gd")
 const INK = Color("#0c1017")
 const TEAL = Color("#8fdbc8")
 const RED = Color("#d66769")
@@ -21,6 +24,11 @@ var hero_down_visuals: Dictionary = {}
 var projectile_trails: Dictionary = {}
 var sprite_pivots: Dictionary = {}
 var enemy_visual_textures: Dictionary = {}
+var unit_visual_actors: Dictionary = {}
+var feedback_director = CombatFeedbackDirector.new()
+var debug_visual_matrix: Array[Dictionary] = []
+var debug_anchor_error_max := 0.0
+var debug_damage_shape_error_max := 0.0
 var route_previews: Dictionary = {}
 var spawn_portals: Dictionary = {}
 var current_actor_transform := Transform2D.IDENTITY
@@ -39,6 +47,7 @@ var skill_targeting: bool = false
 var deploy_preview_active: bool = false
 var deploy_preview_id: int = -1
 var deploy_preview_point: Vector2 = Vector2.ZERO
+var deploy_preview_valid := false
 var skill_point: Vector2 = Vector2(760, 360)
 var camera_center: Vector2 = Vector2(640, 360)
 var atlas: Texture2D = preload("res://assets/tiny-dungeon.png")
@@ -83,6 +92,8 @@ func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	sprite_pivots = SpriteAnchor.load_catalog()
 	_load_enemy_visuals()
+	feedback_director.setup(sim.database if sim != null else null)
+	_build_visual_matrix()
 	font = SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
 	build_furina_actor()
@@ -99,6 +110,7 @@ func _load_enemy_visuals() -> void:
 
 func advance(dt: float) -> void:
 	clock += dt
+	_sync_unit_visuals(dt)
 	if sim != null and sim.endless_mode and not sim.heroes.is_empty():
 		camera_center = camera_center.lerp(sim.heroes[0].pos, 1.0 - exp(-dt * 7.0))
 	if stage_exit_active:
@@ -169,8 +181,32 @@ func sync_furina_actor(dt: float = 0.0) -> void:
 			return
 	furina_actor.visible = false
 
+func _build_visual_matrix() -> void:
+	debug_visual_matrix.clear()
+	if sim == null or sim.database == null:
+		return
+	for character_id: String in sim.database.characters:
+		debug_visual_matrix.append({"character_id":character_id,"facing":-1.0})
+		debug_visual_matrix.append({"character_id":character_id,"facing":1.0})
+
+func _sync_unit_visuals(dt: float) -> void:
+	if sim == null:
+		return
+	for hero: Dictionary in sim.heroes:
+		var id := str(hero.get("character_id", ""))
+		if not unit_visual_actors.has(id):
+			var actor = UnitVisualActor.new()
+			actor.setup(id, sim.database.animation_profiles.get(id, {}))
+			unit_visual_actors[id] = actor
+		unit_visual_actors[id].sync(hero, dt)
+
+func visual_sample(hero: Dictionary) -> Dictionary:
+	var id := str(hero.get("character_id", ""))
+	return unit_visual_actors[id].sample() if unit_visual_actors.has(id) else {"scale":Vector2.ONE,"offset":Vector2.ZERO}
+
 func accept_events(batch: Array[Dictionary]) -> void:
 	for event in batch:
+		var feedback: Dictionary = feedback_director.observe(event)
 		match event.kind:
 			"route_warning":
 				var route_id := str(event.get("route_id", "main"))
@@ -194,6 +230,8 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				if effects.size() >= (sim.performance_budget.effect_cap() if sim != null else 320) and event.kind in ["hit", "death", "move", "muzzle"]:
 					continue
 				var visual_event: Dictionary = event.duplicate(true)
+				visual_event.feedback_theme = feedback.theme
+				visual_event.feedback_theme_id = feedback.theme_id
 				var effect_duration := 0.6
 				if str(event.kind).begins_with("skill_"):
 					effect_duration = 1.05
@@ -444,7 +482,7 @@ func _draw_vertical_orbit_blade(point: Vector2, color: Color, orbit_angle: float
 
 func _draw_deploy_preview() -> void:
 	var point := world_to_screen(deploy_preview_point)
-	var allowed: bool = (sim.ENDLESS_ARENA if sim.endless_mode else sim.MOVE_AREA).has_point(deploy_preview_point)
+	var allowed: bool = deploy_preview_valid
 	var color := Color("#69f0c2") if allowed else Color("#ff5267")
 	draw_circle(point,34.0,Color(color,0.16))
 	draw_arc(point,34.0,0,TAU,48,color,3.0,true)
@@ -818,7 +856,10 @@ func _draw_hero(hero: Dictionary) -> void:
 		_draw_traveler(hero, tint, down)
 	else:
 		var facing := float(hero.get("facing", 1.0))
-		_draw_anchored_texture_region(atlas, hero.pos + Vector2(0, HERO_FOOT_OFFSET + bob), Vector2(58, 58), Vector2(16, 16), Vector2(8, 16), facing, 1.0, Rect2(hero.tile, Vector2(16, 16)), tint)
+		var sample := visual_sample(hero)
+		var motion_scale: Vector2 = sample.get("scale", Vector2.ONE)
+		var motion_offset: Vector2 = sample.get("offset", Vector2.ZERO)
+		_draw_anchored_texture_region(atlas, hero.pos + Vector2(0, HERO_FOOT_OFFSET + bob) + motion_offset, Vector2(58, 58) * motion_scale, Vector2(16, 16), Vector2(8, 16), facing, 1.0, Rect2(hero.tile, Vector2(16, 16)), tint)
 	if not down:
 		if hero.block > 0 and not is_traveler:
 			draw_rect(Rect2(hero.pos + Vector2(17, -24), Vector2(16, 25)), Color("#a8a687"))
@@ -1137,6 +1178,12 @@ func _draw_effect(effect: Dictionary) -> void:
 	var total := maxf(0.01, float(effect.get("total", 0.6)))
 	var t: float = clampf(1.0 - float(effect.life) / total, 0.0, 1.0)
 	var fade: float = clampf(float(effect.life) / minf(0.18, total), 0.0, 1.0)
+	if effect.has("feedback_theme") and not reduced_effects:
+		var theme: Dictionary = effect.feedback_theme
+		var theme_color := VfxPipeline.color_for(theme)
+		var accent_color := VfxPipeline.color_for(theme, true)
+		draw_arc(effect.pos, 8.0 + t * 34.0, 0.0, TAU, 24, Color(theme_color, fade * (1.0 - t) * 0.72), 3.0, true)
+		draw_circle(effect.pos, maxf(1.0, 7.0 * (1.0 - t)), Color(accent_color, fade * 0.82))
 	if effect.kind == "muzzle" and not reduced_effects:
 		var frames: Array[Texture2D] = muzzle_ion_frames if int(effect.value) == 1 else muzzle_fire_frames
 		var muzzle_t: float = 1.0 - effect.life / 0.16

@@ -1,0 +1,136 @@
+[
+  {
+    "id": "neutral",
+    "color": "#fff0d2",
+    "accent": "#ffffff",
+    "projectile": "kinetic_lance",
+    "impact": "star_burst",
+    "trail": "speed_ribbon",
+    "shake": 0.14,
+    "hit_stop_ms": 22
+  },
+  {
+    "id": "anemo",
+    "color": "#63e6c0",
+    "accent": "#d8fff4",
+    "projectile": "wind_crescent",
+    "impact": "vortex_bloom",
+    "trail": "spiral_ribbon",
+    "shake": 0.18,
+    "hit_stop_ms": 24
+  },
+  {
+    "id": "electro",
+    "color": "#bf83ff",
+    "accent": "#f0d7ff",
+    "projectile": "arc_bolt",
+    "impact": "thunder_cross",
+    "trail": "ion_chain",
+    "shake": 0.24,
+    "hit_stop_ms": 28
+  },
+  {
+    "id": "pyro",
+    "color": "#ff745c",
+    "accent": "#ffe0a8",
+    "projectile": "ember_comet",
+    "impact": "fire_bloom",
+    "trail": "heat_ribbon",
+    "shake": 0.28,
+    "hit_stop_ms": 30
+  },
+  {
+    "id": "hydro",
+    "color": "#5ab8ff",
+    "accent": "#d8f6ff",
+    "projectile": "water_lance",
+    "impact": "splash_ring",
+    "trail": "bubble_stream",
+    "shake": 0.18,
+    "hit_stop_ms": 24
+  },
+  {
+    "id": "geo",
+    "color": "#e8b94d",
+    "accent": "#fff0a8",
+    "projectile": "crystal_shard",
+    "impact": "stone_crown",
+    "trail": "gold_dust",
+    "shake": 0.34,
+    "hit_stop_ms": 36
+  },
+  {
+    "id": "cryo",
+    "color": "#9de7f2",
+    "accent": "#f2ffff",
+    "projectile": "frost_needle",
+    "impact": "ice_flower",
+    "trail": "snow_ribbon",
+    "shake": 0.22,
+    "hit_stop_ms": 28
+  },
+  {
+    "id": "vaporize",
+    "color": "#8fdcff",
+    "accent": "#fff4dc",
+    "impact": "steam_crown",
+    "shake": 0.34,
+    "hit_stop_ms": 38
+  },
+  {
+    "id": "melt",
+    "color": "#ff9b72",
+    "accent": "#ffffff",
+    "impact": "thermal_break",
+    "shake": 0.38,
+    "hit_stop_ms": 42
+  },
+  {
+    "id": "overload",
+    "color": "#ff626f",
+    "accent": "#e6b4ff",
+    "impact": "shock_burst",
+    "shake": 0.55,
+    "hit_stop_ms": 55
+  },
+  {
+    "id": "electro_charged",
+    "color": "#8bb8ff",
+    "accent": "#e8c8ff",
+    "impact": "charged_tide",
+    "shake": 0.32,
+    "hit_stop_ms": 34
+  },
+  {
+    "id": "freeze",
+    "color": "#bff7ff",
+    "accent": "#ffffff",
+    "impact": "frozen_star",
+    "shake": 0.3,
+    "hit_stop_ms": 46
+  },
+  {
+    "id": "swirl",
+    "color": "#6ff0ca",
+    "accent": "#ffffff",
+    "impact": "swirl_ring",
+    "shake": 0.26,
+    "hit_stop_ms": 30
+  },
+  {
+    "id": "crystallize",
+    "color": "#f3c758",
+    "accent": "#fff7bf",
+    "impact": "crystal_guard",
+    "shake": 0.28,
+    "hit_stop_ms": 36
+  },
+  {
+    "id": "superconduct",
+    "color": "#b69cff",
+    "accent": "#d8fbff",
+    "impact": "cold_thunder",
+    "shake": 0.36,
+    "hit_stop_ms": 40
+  }
+]

@@ -4,7 +4,7 @@
 
 ![战斗、技能与预警](docs/v20-validation/01-deployment-skills-telegraph.png)
 
-## V28 核心玩法
+## V29 核心玩法
 
 - **两种模式**：裂隙守望按八个关卡推进剧情、解锁角色与路线；无尽生存在大地图边缘持续刷怪并周期出现 Boss。
 - **十二名角色**：旅行者、希露菲、芙宁娜、洛琪希、知更鸟、阿米娅、丰川祥子、艾米莉亚、萨勒芬妮、风堇、凯尔希、铃。每人拥有唯一被动、主动技能、终结技、目标选择方式与战斗时间轴。
@@ -62,20 +62,21 @@
 - 动画与透明特效交付规范：`docs/v25-asset-pipeline.md`
 - 角色素材就绪度：`docs/asset-readiness-v26.md`
 - V27 怪物与锚点素材流：`docs/v27-asset-pipeline.md`
+- V29 战斗视觉与命中反馈：`docs/v29-release-notes.md`
 - V28 朝向锚点修复：`docs/v28-release-notes.md`
 - V27 发布说明：`docs/v27-release-notes.md`
 - V26 发布说明：`docs/v26-release-notes.md`
 
 ## 技术基础
 
-V28 修正左向角色与怪物的巨大偏移：所有战场贴图改用正尺寸矩形，并围绕逐帧脚底锚点施加局部镜像；角色与怪物阴影中心也统一到各自脚底坐标。V27 的透明史莱姆素材流、方向感知、竖向剑阵，以及 V26 的动画状态机、战斗时间轴、特效池和性能预算继续保留。九张地图、十二名角色、六个三阶段 Boss 及其战术契约均由 JSON 配置驱动。
+V29 增加十二角色统一动画状态、按攻速缩放的动作时钟、单次命中标记、严格同步的伤害/特效/音效时间轴，以及十五套元素与反应特效主题。V28 的双向脚底锚点与阴影对齐继续保留，九张地图、十二名角色、六个三阶段 Boss 及其战术契约均由 JSON 配置驱动。
 
 ## 运行与验收
 
-Windows 构建位于 `builds/rift-guard-v28/RiftGuard-V28.exe`。Godot 4.4 工程入口为 `game/project.godot`。
+Windows 构建位于 `builds/rift-guard-v29/RiftGuard-V29.exe`。Godot 4.4 工程入口为 `game/project.godot`。
 
 ```powershell
-Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v28-test
+Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v29-test
 ```
 
-V28 自动验收包含 13 项专项检查，并继续执行 V27 的 21 项、V26 的 51 项、V25 的 93 项、V20 的 46 项和 V17 的 15 项回归检查。V28 专项覆盖正尺寸贴图矩形、局部镜像、全部逐帧锚点、角色与怪物双向脚底/阴影对齐，以及芙宁娜独立动画节点。当前 README 图片展示 V20 的基础界面，图形截图需要在有桌面图形上下文的会话中重新生成。
+V29 自动验收包含 22 项专项检查，并继续执行 V28、V27、V26、V25、V20 和 V17 回归。V29 专项覆盖十二角色动画契约、攻速驱动、命中标记、帧级同步、十五套特效主题、表现事件与部署落点反馈。当前 README 图片展示基础界面，图形截图需要在有桌面图形上下文的会话中重新生成。
