@@ -73,10 +73,11 @@ func refresh()->void:
 	if current not in run_state.completed_nodes: allowed.append(current)
 	for id:String in buttons:
 		var completed: bool = id in run_state.completed_nodes; var available: bool = id in allowed; buttons[id].set_meta("route_available",available); buttons[id].modulate=Color("#c5b8bd") if not available else (Color("#8ee8c4") if completed else Color.WHITE)
-	detail.text="当前位置：%s · 当前章节 %s · 可前往节点会高亮。"%[_node_label(node_rows.get(current,{})),active_chapter_id]
+	detail.text="当前位置：%s · 当前章节 %s · 裂隙币 ◇%d · 可前往节点会高亮。"%[_node_label(node_rows.get(current,{})),active_chapter_id,int(run_state.rift_shards)]
 
 func _show_detail(id:String)->void:
 	var node:Dictionary=node_rows.get(id,{}); detail.text="%s / %s · %s"%[TYPE_NAMES.get(str(node.get("type","")),"节点"),_node_label(node),"已完成" if id in run_state.completed_nodes else ("可进入" if bool(buttons[id].get_meta("route_available",false)) else "路线尚未解锁")]
 
 func _choose(id:String)->void:
 	if buttons.has(id) and bool(buttons[id].get_meta("route_available",false)): node_chosen.emit(id)
+

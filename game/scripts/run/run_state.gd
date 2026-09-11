@@ -20,6 +20,11 @@ var relationships: Dictionary = {}
 var story_flags: Dictionary = {}
 var current_node := "c1_combat_1"
 var completed_nodes: Array[String] = []
+var rift_shards := 0
+var campaign_perks: Dictionary = {}
+var resolved_nodes: Dictionary = {}
+var rewarded_stages: Dictionary = {}
+var active_resonances: Array[String] = []
 
 func set_squad(ids: Array[String]) -> bool:
 	if ids.is_empty() or ids.size() > MAX_SQUAD_SIZE:
@@ -38,6 +43,11 @@ func reset_run_meta() -> void:
 	story_flags.clear()
 	current_node = "c1_combat_1"
 	completed_nodes.clear()
+	rift_shards = 0
+	campaign_perks.clear()
+	resolved_nodes.clear()
+	rewarded_stages.clear()
+	active_resonances.clear()
 
 func reset_for_stage(next_stage_id: String) -> void:
 	stage_id = next_stage_id
@@ -51,6 +61,24 @@ func reset_for_stage(next_stage_id: String) -> void:
 	legendary_count = 0
 	mythic_count = 0
 	luck = 0.0
+
+func grant_stage_reward(completed_stage_id: String, kills: int, remaining_base_hp: int, boss: bool = false) -> int:
+	if rewarded_stages.has(completed_stage_id):
+		return 0
+	var amount := 24 + mini(45, maxi(0, kills) / 3) + maxi(0, remaining_base_hp) / 5 + (30 if boss else 0)
+	rewarded_stages[completed_stage_id] = amount
+	rift_shards += amount
+	return amount
+
+func spend_shards(amount: int) -> bool:
+	if amount < 0 or rift_shards < amount:
+		return false
+	rift_shards -= amount
+	return true
+
+func add_campaign_perk(perk_id: String, amount: int = 1) -> int:
+	campaign_perks[perk_id] = int(campaign_perks.get(perk_id, 0)) + amount
+	return int(campaign_perks[perk_id])
 
 func grant_relic(relic_id: String) -> bool:
 	if relic_id.is_empty() or equipped_relics.has(relic_id):
@@ -86,5 +114,7 @@ func export_build() -> Dictionary:
 		"stage_id": stage_id, "mode_id": mode_id, "squad": squad.duplicate(),
 		"buff_levels": buff_levels.duplicate(true), "relics": equipped_relics.keys(),
 		"tag_counts": tag_counts.duplicate(true), "relationships": relationships.duplicate(true),
-		"story_flags": story_flags.duplicate(true), "node": current_node
+		"story_flags": story_flags.duplicate(true), "node": current_node,
+		"rift_shards": rift_shards, "campaign_perks": campaign_perks.duplicate(true),
+		"resolved_nodes": resolved_nodes.duplicate(true), "active_resonances": active_resonances.duplicate()
 	}

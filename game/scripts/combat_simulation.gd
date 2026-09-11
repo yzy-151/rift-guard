@@ -280,6 +280,28 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 		}
 		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.90, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0, "deployed": false, "energy": 0.0, "max_energy": float(source.get("ultimate", {}).get("energy_cost", 100.0)), "skill_cooldown": 0.0, "active_skill": source.get("active_skill", {}).duplicate(true), "ultimate": source.get("ultimate", {}).duplicate(true), "passive": source.get("passive", {}).duplicate(true), "animation_state":"idle", "status_timer":0.0, "damage_reduction":0.0, "damage_done": 0.0, "skill_uses": 0, "ultimate_uses": 0, "max_energy_seen": 0.0, "revived": false})
 		heroes.append(h)
+	_apply_campaign_progression()
+
+func _apply_campaign_progression() -> void:
+	var fortify: int = int(run_state.campaign_perks.get("fortify", 0))
+	if fortify > 0:
+		base_max_hp += 25 * fortify
+		base_hp += 25 * fortify
+		for hero: Dictionary in heroes:
+			var hp_bonus: float = float(hero.base_hp) * 0.08 * fortify
+			hero.max_hp += hp_bonus
+			hero.hp += hp_bonus
+	var charged_start: int = int(run_state.campaign_perks.get("charged_start", 0))
+	if charged_start > 0:
+		for hero: Dictionary in heroes:
+			hero.energy = minf(float(hero.max_energy), 18.0 * charged_start)
+	var elemental_focus: int = int(run_state.campaign_perks.get("elemental_focus", 0))
+	if elemental_focus > 0:
+		reaction_damage_bonus += 0.12 * elemental_focus
+	for relic_id: String in run_state.equipped_relics:
+		_apply_relic(relic_id)
+	if fortify > 0 or charged_start > 0 or elemental_focus > 0:
+		events.append({"kind":"campaign_perk","pos":heroes[0].pos if not heroes.is_empty() else Vector2.ZERO,"value":run_state.campaign_perks.duplicate(true)})
 
 func _add_reinforcement(character_id: String) -> bool:
 	if heroes.size() >= RunState.MAX_SQUAD_SIZE or not database.characters.has(character_id):

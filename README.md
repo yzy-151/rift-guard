@@ -4,8 +4,9 @@
 
 ![战斗、技能与预警](docs/v20-validation/01-deployment-skills-telegraph.png)
 
-## V30 核心玩法
+## V31 核心玩法
 
+- **战役事件闭环**：通关获得裂隙币；商店、休整、招募与隐藏节点均提供三选一，遗物、幸运、编队与远征增益可跨关卡生效。
 - **两种模式**：裂隙守望按八个关卡推进剧情、解锁角色与路线；无尽生存在大地图边缘持续刷怪并周期出现 Boss。
 - **十二名角色**：旅行者、希露菲、芙宁娜、洛琪希、知更鸟、阿米娅、丰川祥子、艾米莉亚、萨勒芬妮、风堇、凯尔希、铃。每人拥有唯一被动、主动技能、终结技、目标选择方式与战斗时间轴。
 - **部署与调度**：角色从待部署区拖入战场，可全地图移动；右键角色卡撤回，之后可重新部署。
@@ -66,6 +67,7 @@
 - 动画与透明特效交付规范：`docs/v25-asset-pipeline.md`
 - 角色素材就绪度：`docs/asset-readiness-v26.md`
 - V27 怪物与锚点素材流：`docs/v27-asset-pipeline.md`
+- V31 战役事件与跨关卡进度：`docs/v31-release-notes.md`
 - V30 地图、怪物与遭遇：`docs/v30-release-notes.md`
 - V29 战斗视觉与命中反馈：`docs/v29-release-notes.md`
 - V28 朝向锚点修复：`docs/v28-release-notes.md`
@@ -78,10 +80,10 @@ V30 增加统一地图表现节点、多出生点传送门、敌人族群数据�
 
 ## 运行与验收
 
-Windows 构建位于 `builds/rift-guard-v30/RiftGuard-V30.exe`。Godot 4.4 工程入口为 `game/project.godot`。
+Windows 构建位于 `builds/rift-guard-v31/RiftGuard-V31.exe`。Godot 4.4 工程入口为 `game/project.godot`。
 
 ```powershell
-Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v30-test
+Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v31-test
 ```
 
-V30 自动验收包含 25 项专项检查，并继续执行 V29、V28、V26、V25、V20 和 V17 回归。V30 专项覆盖九张地图、动态路线、多点传送门、二十二个敌人族群定义、十八个 Boss 场地事件及 300 敌人压力样本。当前 README 图片展示基础界面，图形截图需要在有桌面图形上下文的会话中重新生成。
+V31 自动验收包含 16 项专项检查，并继续执行 V29、V28、V26、V25、V20 和 V17 回归。V30 专项覆盖九张地图、动态路线、多点传送门、二十二个敌人族群定义、十八个 Boss 场地事件及 300 敌人压力样本。当前 README 图片展示基础界面，图形截图需要在有桌面图形上下文的会话中重新生成。

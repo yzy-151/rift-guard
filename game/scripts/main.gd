@@ -14,6 +14,8 @@ const ModeSelectPanel = preload("res://scripts/mode_select_panel.gd")
 const AudioDirector = preload("res://scripts/audio_director.gd")
 const SettingsPanel = preload("res://scripts/settings_panel.gd")
 const CampaignMapPanel = preload("res://scripts/campaign_map_panel.gd")
+const CampaignEventPanel = preload("res://scripts/campaign_event_panel.gd")
+const CampaignNodeResolver = preload("res://scripts/campaign_node_resolver.gd")
 var content = Content.new()
 var story = Story.new(content)
 var saved_story
@@ -32,6 +34,8 @@ var sound: AudioStreamPlayer
 var audio_director
 var settings_panel
 var campaign_map_panel
+var campaign_event_panel
+var campaign_node_resolver = CampaignNodeResolver.new()
 var settings_from_menu := false
 var pending_endless_inheritance: Dictionary = {}
 var sound_timer: float = 0.0
@@ -108,6 +112,11 @@ func _ready() -> void:
 	add_child(campaign_map_panel)
 	campaign_map_panel.build(hud, sim.database, sim.run_state)
 	campaign_map_panel.node_chosen.connect(choose_campaign_node)
+	campaign_event_panel = CampaignEventPanel.new()
+	add_child(campaign_event_panel)
+	campaign_event_panel.build(hud)
+	campaign_event_panel.option_chosen.connect(resolve_campaign_option)
+	campaign_event_panel.closed.connect(_campaign_event_closed)
 	settings_panel = SettingsPanel.new()
 	add_child(settings_panel)
 	settings_panel.build(hud)
@@ -120,7 +129,11 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v30-test" in OS.get_cmdline_user_args():
+	if "--v31-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v31_test")
+	elif "--v30-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v30_test")
@@ -243,7 +256,7 @@ func _ready() -> void:
 		call_deferred("open_mode_menu")
 
 func _physics_process(dt: float) -> void:
-	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()):
+	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()):
 		return
 	sim.tick(dt)
 	check_story()
@@ -255,6 +268,10 @@ func _physics_process(dt: float) -> void:
 			compendium.clear_stage(sim.current_stage_id, stage.get("unlocks", []))
 		compendium.record_result(sim.current_stage_id, sim.kills, sim.base_hp, sim.best_streak)
 		compendium.record_build(sim)
+		var current_node: Dictionary = campaign_map_panel.node_rows.get(sim.run_state.current_node,{}) if campaign_map_panel != null else {}
+		var boss_reward := str(current_node.get("type","")) == "boss" or str(sim.current_stage_id) in ["stage_03","stage_08"]
+		var shard_reward: int = sim.run_state.grant_stage_reward(sim.current_stage_id,sim.kills,sim.base_hp,boss_reward)
+		if shard_reward > 0: hud.signature = "关卡结算 · 获得 ◇ %d 裂隙币" % shard_reward
 		stage_result_recorded = true
 	if not story.active:
 		hud.refresh(sim, selected_id)
@@ -409,6 +426,14 @@ func set_formation_command(mode: String) -> void:
 	refresh()
 
 func _input(event: InputEvent) -> void:
+	if campaign_event_panel != null and campaign_event_panel.is_open():
+		if campaign_event_panel.handle_input(event):
+			get_viewport().set_input_as_handled()
+			return
+		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			if campaign_event_panel.activate_at(event.position):
+				get_viewport().set_input_as_handled()
+		return
 	if dragging_hero_id >= 0 and event is InputEventMouseMotion:
 		_update_deploy_preview(event.position)
 	if dragging_hero_id >= 0 and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
@@ -431,6 +456,8 @@ func _input(event: InputEvent) -> void:
 			handled = stage_select_panel.activate_at(event.position)
 		elif squad_panel != null and squad_panel.is_open():
 			handled = squad_panel.activate_at(event.position)
+		elif campaign_event_panel != null and campaign_event_panel.is_open():
+			handled = campaign_event_panel.activate_at(event.position)
 		elif story.active:
 			handled = dialogue.activate_choice_at(event.position)
 		if handled:
@@ -535,7 +562,7 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if story.active or picker.visible or effect_preview > 0 or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()):
+	if story.active or picker.visible or effect_preview > 0 or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()):
 		return
 	if sim.state not in ["running", "between", "stage_exit"]:
 		return
@@ -713,10 +740,9 @@ func choose_campaign_node(node_id: String) -> void:
 	sim.run_state.select_campaign_node(node_id)
 	campaign_map_panel.close()
 	var unlock_id := str(node.get("unlock", ""))
-	if not unlock_id.is_empty():
-		compendium.unlock_character(unlock_id)
 	match str(node.get("type", "")):
 		"combat", "elite", "boss":
+			if not unlock_id.is_empty(): compendium.unlock_character(unlock_id)
 			var stage_id := str(node.get("stage_id", ""))
 			if not stage_id.is_empty():
 				pending_stage_id = stage_id
@@ -724,15 +750,27 @@ func choose_campaign_node(node_id: String) -> void:
 		"story":
 			if not begin_dialogue(str(node.get("story", "mode1_opening"))):
 				begin_dialogue("mode1_opening")
-		"rest":
-			for hero: Dictionary in sim.heroes:
-				hero.hp = hero.max_hp
-		"shop":
-			sim.run_state.luck += 0.12
-		"recruit", "hidden":
-			pass
+		"shop", "rest", "recruit", "hidden":
+			open_campaign_event(node)
 	hud.signature = ""
 	refresh()
+
+func open_campaign_event(node: Dictionary) -> void:
+	var rows: Array[Dictionary] = campaign_node_resolver.build_options(node,sim.run_state,sim.database)
+	campaign_event_panel.open(node,rows,sim.run_state.rift_shards)
+
+func resolve_campaign_option(option: Dictionary) -> void:
+	var result: Dictionary = campaign_node_resolver.apply_option(option,sim.run_state)
+	if bool(result.get("ok",false)):
+		var unlock_id := str(result.get("unlock_character",""))
+		if not unlock_id.is_empty(): compendium.unlock_character(unlock_id)
+		compendium.save_progress()
+	campaign_event_panel.show_result(result,sim.run_state.rift_shards)
+	refresh()
+
+func _campaign_event_closed() -> void:
+	if campaign_map_panel != null:
+		campaign_map_panel.open()
 
 func open_current_squad() -> void:
 	if story.active or compendium_panel.is_open() or squad_panel.is_open() or sim.state not in ["ready", "won", "paused"]:
@@ -1011,6 +1049,10 @@ func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
 	await suite.run(self)
 
+func run_v31_test() -> void:
+	var suite = preload("res://scripts/qa_v31.gd").new()
+	await suite.run(self)
+
 func run_v30_test() -> void:
 	var suite = preload("res://scripts/qa_v30.gd").new()
 	await suite.run(self)
@@ -1058,3 +1100,4 @@ func run_v16_test() -> void:
 func run_v15_test() -> void:
 	var suite = preload("res://scripts/qa_v15.gd").new()
 	await suite.run(self)
+
