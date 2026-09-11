@@ -1,0 +1,16 @@
+[
+  {"id":"anemo_chorus","name":"风之合奏","description":"两名风元素角色形成高速气流。","priority":110,"exclusive_group":"element_core","conditions":[{"type":"element_count","element":"anemo","count":2}],"effects":{"rate_mult":0.16,"move_mult":0.12}},
+  {"id":"hydro_tide","name":"潮汐同调","description":"两名水元素角色共享潮汐生命。","priority":110,"exclusive_group":"element_core","conditions":[{"type":"element_count","element":"hydro","count":2}],"effects":{"health_mult":0.16,"energy_start":10}},
+  {"id":"cryo_oath","name":"霜誓阵线","description":"两名冰元素角色提高暴击与护盾。","priority":110,"exclusive_group":"element_core","conditions":[{"type":"element_count","element":"cryo","count":2}],"effects":{"crit_add":0.14,"base_shield":45}},
+  {"id":"electro_circuit","name":"超频回路","description":"两名雷元素角色加速攻击与充能。","priority":110,"exclusive_group":"element_core","conditions":[{"type":"element_count","element":"electro","count":2}],"effects":{"rate_mult":0.12,"energy_start":18}},
+  {"id":"geo_bastion","name":"岩脊堡垒","description":"岩元素角色带队时强化全队生存。","priority":70,"conditions":[{"type":"element_count","element":"geo","count":1},{"type":"squad_size","count":3}],"effects":{"health_mult":0.10,"base_shield":70}},
+  {"id":"prismatic_triad","name":"三色棱镜","description":"三种元素构成反应棱镜。","priority":90,"exclusive_group":"element_core","conditions":[{"type":"distinct_elements","count":3}],"effects":{"reaction_bonus":0.28,"attack_mult":0.08}},
+  {"id":"star_and_tide","name":"星海巡礼","description":"旅行者与芙宁娜并肩作战。","priority":80,"conditions":[{"type":"characters","ids":["traveler","hero_03"]}],"effects":{"attack_mult":0.12,"energy_start":12}},
+  {"id":"greyrat_academy","name":"魔法学院","description":"希露菲与洛琪希互补施法。","priority":80,"conditions":[{"type":"characters","ids":["hero_02","hero_04"]}],"effects":{"reaction_bonus":0.18,"rate_mult":0.10}},
+  {"id":"duet_stage","name":"双星舞台","description":"知更鸟与萨勒芬妮共享舞台节拍。","priority":80,"conditions":[{"type":"characters","ids":["hero_05","hero_09"]}],"effects":{"rate_mult":0.18,"energy_start":15}},
+  {"id":"rhodes_command","name":"罗德岛指挥链","description":"阿米娅与凯尔希建立战术指挥。","priority":80,"conditions":[{"type":"characters","ids":["hero_06","hero_11"]}],"effects":{"attack_mult":0.10,"health_mult":0.12}},
+  {"id":"winter_concert","name":"冬夜协奏","description":"丰川祥子与艾米莉亚展开冰晶乐章。","priority":80,"conditions":[{"type":"characters","ids":["hero_07","hero_08"]}],"effects":{"crit_add":0.12,"reaction_bonus":0.14}},
+  {"id":"new_eridu_link","name":"新艾利都连线","description":"旅行者与铃共享实时战场情报。","priority":80,"conditions":[{"type":"characters","ids":["traveler","hero_12"]}],"effects":{"move_mult":0.14,"crit_add":0.10}},
+  {"id":"hidden_signal_bond","name":"隐藏信号共振","description":"铃的羁绊达到二级后解锁额外增幅。","priority":130,"conditions":[{"type":"characters","ids":["traveler","hero_12"]},{"type":"relationship","character_id":"hero_12","min":2}],"effects":{"attack_mult":0.18,"reaction_bonus":0.22,"energy_start":20}},
+  {"id":"support_network","name":"支援网络","description":"两名支援型角色建立持续协作。","priority":60,"conditions":[{"type":"role_contains","value":"支援","count":2}],"effects":{"rate_mult":0.08,"health_mult":0.08}}
+]

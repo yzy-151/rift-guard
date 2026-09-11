@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V31：裂隙币 / 战役事件 / 跨关卡远征增益"
+config/description="V32：战役事件 / 队伍共鸣 / 羁绊构筑"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

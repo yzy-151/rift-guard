@@ -16,6 +16,7 @@ var combat_contracts: Dictionary = {}
 var enemy_visuals: Dictionary = {}
 var vfx_themes: Dictionary = {}
 var enemy_families: Dictionary = {}
+var team_resonances: Dictionary = {}
 var asset_readiness: Dictionary = {}
 var errors: Array[String] = []
 
@@ -37,6 +38,7 @@ func _init() -> void:
 	enemy_visuals = _by_id(_read_array("res://data/v2/enemy_visuals.json"), "enemy visual")
 	vfx_themes = _by_id(_read_array("res://data/v2/vfx_themes.json"), "VFX theme")
 	enemy_families = _by_id(_read_array("res://data/v2/enemy_families.json"), "enemy family")
+	team_resonances = _by_id(_read_array("res://data/v2/team_resonances.json"), "team resonance")
 	_validate()
 	errors.append_array(preload("res://scripts/content_validator.gd").validate(self))
 	asset_readiness = preload("res://scripts/asset_readiness.gd").scan(self)
@@ -90,6 +92,8 @@ func _validate() -> void:
 	for required_theme: String in ["neutral","anemo","electro","pyro","hydro","geo","cryo","vaporize","melt","overload","electro_charged","freeze","swirl","crystallize","superconduct"]:
 		if not vfx_themes.has(required_theme):
 			errors.append("missing VFX theme: " + required_theme)
+	if team_resonances.size() < 12:
+		errors.append("at least twelve team resonances are required")
 	if enemy_families.size() < 12:
 		errors.append("at least twelve enemy families are required")
 	for id: String in characters:

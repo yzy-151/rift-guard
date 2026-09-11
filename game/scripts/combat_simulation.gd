@@ -9,6 +9,7 @@ const StageRuntime = preload("res://scripts/stages/stage_runtime.gd")
 const StageProjection = preload("res://scripts/stage_projection.gd")
 const CombatTimeline = preload("res://scripts/combat_timeline.gd")
 const PerformanceBudget = preload("res://scripts/performance_budget.gd")
+const TeamResonance = preload("res://scripts/team_resonance.gd")
 const XP_THRESHOLDS = [80, 190, 330, 500]
 const Catalog = preload("res://scripts/combat_catalog.gd")
 const MOVE_AREA = Rect2(40, 140, 1200, 440)
@@ -281,6 +282,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.90, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0, "deployed": false, "energy": 0.0, "max_energy": float(source.get("ultimate", {}).get("energy_cost", 100.0)), "skill_cooldown": 0.0, "active_skill": source.get("active_skill", {}).duplicate(true), "ultimate": source.get("ultimate", {}).duplicate(true), "passive": source.get("passive", {}).duplicate(true), "animation_state":"idle", "status_timer":0.0, "damage_reduction":0.0, "damage_done": 0.0, "skill_uses": 0, "ultimate_uses": 0, "max_energy_seen": 0.0, "revived": false})
 		heroes.append(h)
 	_apply_campaign_progression()
+	_apply_team_resonances()
 
 func _apply_campaign_progression() -> void:
 	var fortify: int = int(run_state.campaign_perks.get("fortify", 0))
@@ -303,6 +305,27 @@ func _apply_campaign_progression() -> void:
 	if fortify > 0 or charged_start > 0 or elemental_focus > 0:
 		events.append({"kind":"campaign_perk","pos":heroes[0].pos if not heroes.is_empty() else Vector2.ZERO,"value":run_state.campaign_perks.duplicate(true)})
 
+func _apply_team_resonances() -> void:
+	var resolved: Array[Dictionary] = TeamResonance.resolve(database.team_resonances, run_state, heroes)
+	var active_ids: Array[String] = []
+	for resonance: Dictionary in resolved:
+		active_ids.append(str(resonance.id))
+		var effects: Dictionary = resonance.get("effects", {})
+		for hero: Dictionary in heroes:
+			var health_bonus: float = float(hero.max_hp) * float(effects.get("health_mult", 0.0))
+			hero.max_hp += health_bonus
+			hero.hp += health_bonus
+			hero.damage *= 1.0 + float(effects.get("attack_mult", 0.0))
+			hero.rate *= 1.0 + float(effects.get("rate_mult", 0.0))
+			hero.speed *= 1.0 + float(effects.get("move_mult", 0.0))
+			hero.crit_chance = clampf(float(hero.get("crit_chance", 0.0)) + float(effects.get("crit_add", 0.0)), 0.0, 0.85)
+			hero.energy = minf(float(hero.max_energy), float(hero.energy) + float(effects.get("energy_start", 0.0)))
+		reaction_damage_bonus += float(effects.get("reaction_bonus", 0.0))
+		crystal_shield += float(effects.get("base_shield", 0.0))
+		run_state.luck += float(effects.get("luck_add", 0.0))
+	run_state.active_resonances = active_ids
+	if not resolved.is_empty():
+		events.append({"kind":"team_resonance","pos":heroes[0].pos if not heroes.is_empty() else Vector2.ZERO,"value":active_ids.duplicate()})
 func _add_reinforcement(character_id: String) -> bool:
 	if heroes.size() >= RunState.MAX_SQUAD_SIZE or not database.characters.has(character_id):
 		return false

@@ -412,7 +412,7 @@ func refresh(sim, selected_id: int) -> void:
 			next_signature += str([ceili(float(enemy.hp)), ceili(float(enemy.get("shield", 0.0)))])
 	if sim.v2_mode:
 		var stage_clock := floori(sim.elapsed) if sim.endless_mode else floori(sim.stage_runtime.remaining_seconds())
-		next_signature += str([sim.run_state.traveler_element, sim.run_state.traveler_secondary_element, sim.run_state.luck, sim.run_state.pending_level_ups, stage_clock, sim.upcoming_waves(3)])
+		next_signature += str([sim.run_state.traveler_element, sim.run_state.traveler_secondary_element, sim.run_state.luck, sim.run_state.pending_level_ups, sim.run_state.active_resonances, stage_clock, sim.upcoming_waves(3)])
 	for hero in sim.heroes:
 		next_signature += str([ceili(hero.hp), hero.moving, hero.blocked, hero.get("deployed", true), roundi(float(hero.get("energy", 0.0))), roundi(float(hero.get("skill_cooldown", 0.0)) * 10.0)])
 	if next_signature == signature:
@@ -456,6 +456,9 @@ func refresh(sim, selected_id: int) -> void:
 		status_label.text = "通关区域 · 右键移动旅行者前往迎接新角色"
 	if sim.state == "between":
 		status_label.text = "队伍休整 · %d 秒后继续" % ceili(sim.wave_timer)
+	var resonance_text: String = resonance_summary(sim)
+	if not resonance_text.is_empty():
+		status_label.text += " · 共鸣 " + resonance_text
 	pause_button.disabled = sim.state in ["ready", "won", "lost", "reward", "stage_exit"]
 	pause_button.text = "继续  [空格]" if sim.state == "paused" else "暂停  [空格]"
 	for i in hero_buttons.size():
@@ -681,12 +684,22 @@ func refresh_supports(sim) -> void:
 		support_labels[row].add_theme_color_override("font_color", info[1])
 		row += 1
 
+func resonance_summary(sim) -> String:
+	var names: Array[String] = []
+	for id: String in sim.run_state.active_resonances:
+		var resonance: Dictionary = sim.database.team_resonances.get(id, {})
+		if not resonance.is_empty():
+			names.append(str(resonance.get("name", id)))
+	return " / ".join(names)
 func refresh_pause_details(sim) -> void:
 	var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {}) if sim.v2_mode else {}
 	var mode_name := "无尽生存" if sim.endless_mode else "裂隙守望"
 	var time_value := floori(sim.elapsed) if sim.endless_mode else ceili(sim.stage_runtime.remaining_seconds())
 	var time_text := "%02d:%02d" % [time_value / 60, time_value % 60]
 	pause_status_label.text = "%s · %s · %s · 击退%d · 敌%d · Lv.%d · 幸运%.2f · 契约 %s · PERF %d%% / 丢弃%d" % [mode_name, str(stage.get("name", sim.current_stage_id)), time_text, sim.kills, sim.enemies.size(), sim.run_state.crystal_level, sim.run_state.luck, sim.contract_status(), roundi(sim.performance_budget.quality_scale*100.0), sim.culled_spawns]
+	var active_resonance_text: String = resonance_summary(sim)
+	if not active_resonance_text.is_empty():
+		pause_status_label.text += " · 共鸣 " + active_resonance_text
 	for item in pause_buff_labels:
 		item.text = ""
 	var card_names: Dictionary = {}
@@ -695,10 +708,16 @@ func refresh_pause_details(sim) -> void:
 			card_names[str(card.id)] = str(card.name)
 	var ids: Array = sim.run_state.buff_levels.keys()
 	ids.sort()
-	for i in mini(ids.size(), pause_buff_labels.size()):
+	var buff_start: int = 0
+	if not active_resonance_text.is_empty():
+		pause_buff_labels[0].text = "◇  队伍共鸣     " + active_resonance_text
+		pause_buff_labels[0].add_theme_color_override("font_color", Color("#f4c873"))
+		buff_start = 1
+	for i in mini(ids.size(), pause_buff_labels.size() - buff_start):
 		var id := str(ids[i])
-		pause_buff_labels[i].text = "◆  %s     Lv.%d" % [card_names.get(id, id), int(sim.run_state.buff_levels[id])]
-	if ids.is_empty():
+		pause_buff_labels[i + buff_start].text = "◆  %s     Lv.%d" % [card_names.get(id, id), int(sim.run_state.buff_levels[id])]
+		pause_buff_labels[i + buff_start].add_theme_color_override("font_color", WHITE)
+	if ids.is_empty() and buff_start == 0:
 		pause_buff_labels[0].text = "尚未获得强化卡牌"
 	for i in pause_hero_labels.size():
 		pause_hero_labels[i].text = ""
