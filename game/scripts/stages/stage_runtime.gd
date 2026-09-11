@@ -8,6 +8,7 @@ var all_spawns_emitted := false
 var wave_cursors: Array[int] = []
 var telegraph_emitted: Array[bool] = []
 var boss_telegraph_emitted := false
+var arena_events: Array[Dictionary] = []
 
 func _init(stage_definition: Dictionary) -> void:
 	definition = stage_definition.duplicate(true)
@@ -19,6 +20,9 @@ func _init(stage_definition: Dictionary) -> void:
 func tick(dt: float) -> Array[Dictionary]:
 	var events: Array[Dictionary] = []
 	elapsed += maxf(dt, 0.0)
+	for event: Dictionary in arena_events:
+		event.life = maxf(0.0, float(event.get("life", 0.0)) - maxf(dt, 0.0))
+	arena_events = arena_events.filter(func(event: Dictionary) -> bool: return float(event.get("life", 0.0)) > 0.0)
 	var waves: Array = definition.get("waves", [])
 	for i in waves.size():
 		var wave: Dictionary = waves[i]
@@ -53,6 +57,15 @@ func tick(dt: float) -> Array[Dictionary]:
 		all_spawns_emitted = all_spawns_emitted and wave_cursors[i] >= int(waves[i].get("count", 0))
 	time_complete = elapsed + 0.0001 >= float(definition.get("duration_seconds", 300.0))
 	return events
+
+func apply_arena_event(event_definition: Dictionary, source: Vector2 = Vector2(640, 360)) -> Dictionary:
+	var event := event_definition.duplicate(true)
+	var duration := maxf(0.5, float(event.get("duration", 6.0)))
+	event["life"] = duration
+	event["total"] = duration
+	event["source"] = source
+	arena_events.append(event)
+	return event
 
 func remaining_seconds() -> float:
 	return maxf(0.0, float(definition.get("duration_seconds", 300.0)) - elapsed)

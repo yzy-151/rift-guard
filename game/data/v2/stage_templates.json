@@ -79,5 +79,35 @@
       "mechanism",
       "shortcut"
     ]
+  },
+  {
+    "id": "fork",
+    "name": "裂隙分岔",
+    "route_style": "fork",
+    "mechanics": [
+      "one_way",
+      "high_ground",
+      "weather"
+    ]
+  },
+  {
+    "id": "loop",
+    "name": "回环祭坛",
+    "route_style": "loop",
+    "mechanics": [
+      "moving_platform",
+      "trap",
+      "conveyor"
+    ]
+  },
+  {
+    "id": "breakable_shortcut",
+    "name": "破壁捷径",
+    "route_style": "breakable_shortcut",
+    "mechanics": [
+      "shortcut",
+      "blocked",
+      "mechanism"
+    ]
   }
 ]

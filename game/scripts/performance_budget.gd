@@ -24,5 +24,15 @@ func allow_projectile(current: int) -> bool:
 func allow_enemy(current: int, boss: bool = false) -> bool:
 	return boss or current < MAX_ENEMIES
 
+func quality_for_load(enemy_count: int, projectile_count: int, effect_count: int = 0) -> float:
+	var pressure := maxf(float(enemy_count) / MAX_ENEMIES, float(projectile_count) / MAX_PROJECTILES)
+	pressure = maxf(pressure, float(effect_count) / MAX_EFFECTS)
+	return 0.58 if pressure >= 0.92 else (0.78 if pressure >= 0.72 else 1.0)
+
+func can_spawn_cosmetic(kind: String, current: int) -> bool:
+	if kind in ["boss_phase", "boss_move", "enemy_warning", "ultimate_impact", "skill_impact", "synced_impact", "shield_break", "terrain_break"]:
+		return true
+	return current < effect_cap()
+
 func snapshot() -> Dictionary:
-	return {"frame_ms":last_frame_ms,"quality":quality_scale,"overload_frames":overload_frames}
+	return {"frame_ms":last_frame_ms,"quality":quality_scale,"overload_frames":overload_frames,"limits":{"enemies":MAX_ENEMIES,"projectiles":MAX_PROJECTILES,"effects":MAX_EFFECTS}}

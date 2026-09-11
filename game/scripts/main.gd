@@ -120,7 +120,11 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v29-test" in OS.get_cmdline_user_args():
+	if "--v30-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		set_physics_process(false)
+		call_deferred("run_v30_test")
+	elif "--v29-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v29_test")
@@ -280,6 +284,8 @@ func process_events() -> void:
 			hud.announce_boss(str(event.value))
 		if event.kind == "boss_phase":
 			hud.announce_boss_phase(str(event.name), int(event.value))
+		if event.kind == "arena_event":
+			hud.announce_arena_event(str(event.get("arena_type", "hazard")), float(event.get("duration", 6.0)))
 		if event.kind == "contract_complete":
 			hud.announce_contract(str(event.value), str(event.get("reward", "")))
 		if event.kind in ["critical", "shield_break", "terrain_break"] and not muted and not test_mode and sound_timer <= 0.0:
@@ -1003,6 +1009,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v30_test() -> void:
+	var suite = preload("res://scripts/qa_v30.gd").new()
 	await suite.run(self)
 
 func run_v29_test() -> void:

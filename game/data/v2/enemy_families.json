@@ -1,0 +1,186 @@
+[
+  {
+    "id": "grunt",
+    "family": "slime",
+    "variant": "crimson",
+    "behavior": "pressure_advance",
+    "motion": "elastic_hop",
+    "visual": "slime_red"
+  },
+  {
+    "id": "runner",
+    "family": "slime",
+    "variant": "amber",
+    "behavior": "zigzag_dash",
+    "motion": "quick_squash",
+    "visual": "slime_orange"
+  },
+  {
+    "id": "armored",
+    "family": "slime",
+    "variant": "stone",
+    "behavior": "armor_lock",
+    "motion": "heavy_bounce",
+    "visual": "slime_gray"
+  },
+  {
+    "id": "flyer",
+    "family": "riftwing",
+    "variant": "azure",
+    "behavior": "air_route",
+    "motion": "hover_swoop",
+    "visual": "flyer"
+  },
+  {
+    "id": "ranged",
+    "family": "slime",
+    "variant": "violet",
+    "behavior": "ranged_volley",
+    "motion": "recoil_hop",
+    "visual": "slime_purple"
+  },
+  {
+    "id": "buffer",
+    "family": "slime",
+    "variant": "gold",
+    "behavior": "haste_aura",
+    "motion": "pulse_bounce",
+    "visual": "buffer"
+  },
+  {
+    "id": "shielded",
+    "family": "slime",
+    "variant": "crystal",
+    "behavior": "shield_regen",
+    "motion": "guard_squash",
+    "visual": "shielded"
+  },
+  {
+    "id": "charger",
+    "family": "slime",
+    "variant": "scarlet",
+    "behavior": "charge_burst",
+    "motion": "lean_dash",
+    "visual": "charger"
+  },
+  {
+    "id": "healer",
+    "family": "slime",
+    "variant": "mint",
+    "behavior": "healing_pulse",
+    "motion": "gentle_bob",
+    "visual": "healer"
+  },
+  {
+    "id": "splitter",
+    "family": "slime",
+    "variant": "rose",
+    "behavior": "split_on_death",
+    "motion": "double_bounce",
+    "visual": "splitter"
+  },
+  {
+    "id": "warder",
+    "family": "slime",
+    "variant": "indigo",
+    "behavior": "ward_pulse",
+    "motion": "orbit_bob",
+    "visual": "warder"
+  },
+  {
+    "id": "boss_01",
+    "family": "rift_lord",
+    "variant": "commander",
+    "behavior": "command_summons",
+    "motion": "boss_stride",
+    "visual": "boss_01"
+  },
+  {
+    "id": "boss_02",
+    "family": "rift_lord",
+    "variant": "brood",
+    "behavior": "brood_phase",
+    "motion": "brood_heave",
+    "visual": "boss_02"
+  },
+  {
+    "id": "boss_03",
+    "family": "rift_lord",
+    "variant": "storm",
+    "behavior": "storm_sweep",
+    "motion": "storm_hover",
+    "visual": "boss_03"
+  },
+  {
+    "id": "boss_04",
+    "family": "rift_lord",
+    "variant": "bulwark",
+    "behavior": "terrain_crush",
+    "motion": "fortress_step",
+    "visual": "boss_04"
+  },
+  {
+    "id": "boss_05",
+    "family": "rift_lord",
+    "variant": "artillery",
+    "behavior": "artillery_grid",
+    "motion": "recoil_stride",
+    "visual": "boss_05"
+  },
+  {
+    "id": "boss_06",
+    "family": "rift_lord",
+    "variant": "chronophage",
+    "behavior": "time_distortion",
+    "motion": "time_skip",
+    "visual": "boss_06"
+  },
+  {
+    "id": "slime_split",
+    "base_kind": "splitter",
+    "family": "slime",
+    "variant": "electro",
+    "behavior": "split_on_death",
+    "motion": "double_bounce",
+    "visual": "splitter",
+    "children": 2
+  },
+  {
+    "id": "slime_heal",
+    "base_kind": "healer",
+    "family": "slime",
+    "variant": "hydro",
+    "behavior": "healing_pulse",
+    "motion": "gentle_bob",
+    "visual": "healer",
+    "interval": 6.0
+  },
+  {
+    "id": "slime_shield",
+    "base_kind": "shielded",
+    "family": "slime",
+    "variant": "geo",
+    "behavior": "shield_regen",
+    "motion": "guard_squash",
+    "visual": "shielded"
+  },
+  {
+    "id": "slime_bomb",
+    "base_kind": "grunt",
+    "family": "slime",
+    "variant": "pyro",
+    "behavior": "death_burst",
+    "motion": "charged_hop",
+    "visual": "slime_red",
+    "radius": 110
+  },
+  {
+    "id": "slime_elemental",
+    "base_kind": "buffer",
+    "family": "slime",
+    "variant": "adaptive",
+    "behavior": "element_aura",
+    "motion": "element_pulse",
+    "visual": "buffer"
+  }
+]

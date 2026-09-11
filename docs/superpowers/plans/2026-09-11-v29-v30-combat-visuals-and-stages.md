@@ -1,6 +1,6 @@
 # V29–V30 战斗视觉与关卡扩充 Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** 连续完成 V29 战斗视觉成品化与 V30 地图、怪物、关卡扩充，并交付可运行的 Windows 构建和独立 GitHub 分支。
 
@@ -58,7 +58,7 @@ git switch -c v29
 - Modify: `game/scripts/main.gd`
 - Modify: `game/scripts/battle_view.gd`
 
-- [ ] **Step 1: 写入失败测试**
+- [x] **Step 1: 写入失败测试**
 
 ```gdscript
 expect(game.battle.debug_visual_matrix.size() == 24, "twelve heroes expose both facings")
@@ -66,7 +66,7 @@ expect(game.battle.debug_anchor_error_max <= 0.5, "feet and shadows stay aligned
 expect(game.battle.debug_damage_shape_error_max <= 2.0, "telegraph matches damage shape")
 ```
 
-- [ ] **Step 2: 运行测试并确认失败**
+- [x] **Step 2: 运行测试并确认失败**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v29-test
@@ -74,7 +74,7 @@ Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v29-test
 
 Expected: FAIL，缺少视觉矩阵与误差统计。
 
-- [ ] **Step 3: 实现审查模式**
+- [x] **Step 3: 实现审查模式**
 
 ```gdscript
 func build_visual_matrix() -> Array[Dictionary]:
@@ -85,7 +85,7 @@ func build_visual_matrix() -> Array[Dictionary]:
     return rows
 ```
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v29-test
@@ -103,7 +103,7 @@ Expected: 双向矩阵、锚点与预警几何检查通过。
 - Modify: `game/data/v2/animation_profiles.json`
 - Test: `game/scripts/qa_v29.gd`
 
-- [ ] **Step 1: 写入失败测试**
+- [x] **Step 1: 写入失败测试**
 
 ```gdscript
 for character in game.sim.database.characters:
@@ -112,7 +112,7 @@ for character in game.sim.database.characters:
         expect(profile.has(state), "%s owns %s animation" % [character.id, state])
 ```
 
-- [ ] **Step 2: 实现统一状态接口**
+- [x] **Step 2: 实现统一状态接口**
 
 ```gdscript
 func play_state(next_state: String, attack_speed: float = 1.0) -> void:
@@ -121,7 +121,7 @@ func play_state(next_state: String, attack_speed: float = 1.0) -> void:
     sprite.play(next_state)
 ```
 
-- [ ] **Step 3: 保留占位素材降级规则**
+- [x] **Step 3: 保留占位素材降级规则**
 
 ```gdscript
 func resolved_animation(requested: String) -> String:
@@ -130,7 +130,7 @@ func resolved_animation(requested: String) -> String:
     return "attack" if requested in ["skill", "ultimate"] else "idle"
 ```
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v29-test
@@ -147,7 +147,7 @@ git commit -m "feat: unify twelve character animation states"
 - Modify: `game/scripts/battle_view.gd`
 - Test: `game/scripts/qa_v29.gd`
 
-- [ ] **Step 1: 写入失败测试**
+- [x] **Step 1: 写入失败测试**
 
 ```gdscript
 expect(event.damage_frame == event.vfx_frame, "damage and VFX share one frame")
@@ -155,7 +155,7 @@ expect(event.damage_frame == event.sfx_frame, "damage and SFX share one frame")
 expect(event.damage_frame == event.hit_stop_frame, "damage and hit stop share one frame")
 ```
 
-- [ ] **Step 2: 统一命中载荷**
+- [x] **Step 2: 统一命中载荷**
 
 ```gdscript
 var payload := {
@@ -169,7 +169,7 @@ var payload := {
 }
 ```
 
-- [ ] **Step 3: 集中消费表现事件**
+- [x] **Step 3: 集中消费表现事件**
 
 ```gdscript
 func present_impact(event: Dictionary) -> void:
@@ -179,7 +179,7 @@ func present_impact(event: Dictionary) -> void:
     battle_view.apply_shake(event)
 ```
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v29-test
@@ -196,7 +196,7 @@ git commit -m "feat: synchronize combat impact feedback"
 - Modify: `game/scripts/content/game_database.gd`
 - Test: `game/scripts/qa_v29.gd`
 
-- [ ] **Step 1: 写入失败测试**
+- [x] **Step 1: 写入失败测试**
 
 ```gdscript
 for element in ["anemo", "electro", "pyro", "hydro", "geo", "cryo"]:
@@ -205,7 +205,7 @@ for reaction in ["vaporize", "melt", "overload", "electro_charged", "freeze", "s
     expect(db.vfx_themes.has(reaction), "%s owns reaction feedback" % reaction)
 ```
 
-- [ ] **Step 2: 写入主题数据**
+- [x] **Step 2: 写入主题数据**
 
 ```json
 {
@@ -215,7 +215,7 @@ for reaction in ["vaporize", "melt", "overload", "electro_charged", "freeze", "s
 }
 ```
 
-- [ ] **Step 3: 按主题生成表现**
+- [x] **Step 3: 按主题生成表现**
 
 ```gdscript
 func spawn_theme(theme_id: String, event: Dictionary) -> void:
@@ -223,7 +223,7 @@ func spawn_theme(theme_id: String, event: Dictionary) -> void:
     pool.acquire({"kind": theme.impact, "pos": event.pos, "element": theme_id})
 ```
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v29-test
@@ -239,7 +239,7 @@ git commit -m "feat: add elemental and reaction VFX themes"
 - Modify: `game/scripts/main.gd`
 - Test: `game/scripts/qa_v29.gd`
 
-- [ ] **Step 1: 写入失败测试**
+- [x] **Step 1: 写入失败测试**
 
 ```gdscript
 expect(game.hud.hero_cards.size() == 3, "deployed squad owns three readable cards")
@@ -247,7 +247,7 @@ expect(game.hud.hero_cards.all(func(card): return card.has_energy and card.has_s
 expect(game.squad_panel.preview_has_anchor and game.squad_panel.preview_has_validity, "drag preview shows anchor and legal placement")
 ```
 
-- [ ] **Step 2: 实现角色卡布局**
+- [x] **Step 2: 实现角色卡布局**
 
 ```gdscript
 func refresh_character_card(card: Control, hero: Dictionary) -> void:
@@ -256,7 +256,7 @@ func refresh_character_card(card: Control, hero: Dictionary) -> void:
     card.get_node("Energy").value = hero.energy / hero.max_energy * 100.0
 ```
 
-- [ ] **Step 3: 实现部署反馈**
+- [x] **Step 3: 实现部署反馈**
 
 ```gdscript
 func update_deploy_preview(point: Vector2) -> void:
@@ -265,7 +265,7 @@ func update_deploy_preview(point: Vector2) -> void:
     queue_redraw()
 ```
 
-- [ ] **Step 4: 完成 V29 验收和发布**
+- [x] **Step 4: 完成 V29 验收和发布**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v29-test
@@ -296,7 +296,7 @@ git switch -c v30
 - Modify: `game/scripts/battle_view.gd`
 - Modify: `game/scripts/main.gd`
 
-- [ ] **Step 1: 写入失败测试**
+- [x] **Step 1: 写入失败测试**
 
 ```gdscript
 expect(renderer.route_beds.size() >= 3, "stage exposes at least three readable routes")
@@ -304,7 +304,7 @@ expect(renderer.route_arrows_only_when_warned, "arrows appear only before spawni
 expect(renderer.route_overlap_alpha <= 0.35, "overlapping routes remain visually quiet")
 ```
 
-- [ ] **Step 2: 拆分地图表现职责**
+- [x] **Step 2: 拆分地图表现职责**
 
 ```gdscript
 func sync_stage(stage: Dictionary, warnings: Dictionary, portals: Dictionary) -> void:
@@ -314,7 +314,7 @@ func sync_stage(stage: Dictionary, warnings: Dictionary, portals: Dictionary) ->
     queue_redraw()
 ```
 
-- [ ] **Step 3: 实现动态箭头**
+- [x] **Step 3: 实现动态箭头**
 
 ```gdscript
 var progress := fposmod(clock * speed + arrow_index * spacing, route_length)
@@ -323,7 +323,7 @@ var direction := sample_route_tangent(route, progress)
 draw_arrow(point, direction, Color(accent, alpha))
 ```
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v30-test
@@ -339,7 +339,7 @@ git commit -m "feat: add data-driven stage surface renderer"
 - Modify: `game/data/v2/stages.json`
 - Test: `game/scripts/qa_v30.gd`
 
-- [ ] **Step 1: 写入失败测试**
+- [x] **Step 1: 写入失败测试**
 
 ```gdscript
 expect(portal.phases == ["forming", "opening", "active", "closing"], "portal owns four animation phases")
@@ -347,7 +347,7 @@ expect(stage.spawn_points.size() >= 5, "stage owns multiple legal spawn points")
 expect(spawned_routes.size() >= 3, "encounter rotates through route starts")
 ```
 
-- [ ] **Step 2: 实现传送门状态**
+- [x] **Step 2: 实现传送门状态**
 
 ```gdscript
 func portal_phase(life: float, total: float) -> String:
@@ -358,7 +358,7 @@ func portal_phase(life: float, total: float) -> String:
     return "closing"
 ```
 
-- [ ] **Step 3: 根据路线选择出生点**
+- [x] **Step 3: 根据路线选择出生点**
 
 ```gdscript
 func select_spawn(route_id: String, encounter_index: int) -> Vector2:
@@ -366,7 +366,7 @@ func select_spawn(route_id: String, encounter_index: int) -> Vector2:
     return points[encounter_index % points.size()]
 ```
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v30-test
@@ -383,7 +383,7 @@ git commit -m "feat: animate portals across multiple spawn points"
 - Modify: `game/scripts/battle_view.gd`
 - Test: `game/scripts/qa_v30.gd`
 
-- [ ] **Step 1: 写入失败测试**
+- [x] **Step 1: 写入失败测试**
 
 ```gdscript
 for kind in ["slime_split", "slime_heal", "slime_shield", "slime_bomb", "slime_elemental"]:
@@ -391,7 +391,7 @@ for kind in ["slime_split", "slime_heal", "slime_shield", "slime_bomb", "slime_e
 expect(sim.debug_enemy_behaviors_unique >= 12, "enemy roster owns twelve distinct behaviors")
 ```
 
-- [ ] **Step 2: 定义族群数据**
+- [x] **Step 2: 定义族群数据**
 
 ```json
 {
@@ -401,7 +401,7 @@ expect(sim.debug_enemy_behaviors_unique >= 12, "enemy roster owns twelve distinc
 }
 ```
 
-- [ ] **Step 3: 分发行为**
+- [x] **Step 3: 分发行为**
 
 ```gdscript
 func tick_enemy_behavior(enemy: Dictionary, dt: float) -> void:
@@ -411,7 +411,7 @@ func tick_enemy_behavior(enemy: Dictionary, dt: float) -> void:
         "death_burst": tick_volatile_warning(enemy, dt)
 ```
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v30-test
@@ -428,7 +428,7 @@ git commit -m "feat: expand slime and enemy behavior families"
 - Modify: `game/scripts/stage_surface_renderer.gd`
 - Test: `game/scripts/qa_v30.gd`
 
-- [ ] **Step 1: 写入失败测试**
+- [x] **Step 1: 写入失败测试**
 
 ```gdscript
 for stage in db.stages:
@@ -437,7 +437,7 @@ for stage in db.stages:
 expect(db.stage_templates.has("fork") and db.stage_templates.has("loop") and db.stage_templates.has("breakable_shortcut"), "advanced route templates exist")
 ```
 
-- [ ] **Step 2: 增加路线模板**
+- [x] **Step 2: 增加路线模板**
 
 ```json
 {
@@ -447,14 +447,14 @@ expect(db.stage_templates.has("fork") and db.stage_templates.has("loop") and db.
 }
 ```
 
-- [ ] **Step 3: 让地形暗示路线**
+- [x] **Step 3: 让地形暗示路线**
 
 ```gdscript
 func route_material(route_kind: String) -> Dictionary:
     return {"ground":"#4b3034", "edge":"#a65b57", "glow":0.18} if route_kind == "main" else {"ground":"#332b38", "edge":"#725565", "glow":0.10}
 ```
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v30-test
@@ -471,7 +471,7 @@ git commit -m "feat: expand nine tactical map layouts"
 - Modify: `game/scripts/battle_hud.gd`
 - Test: `game/scripts/qa_v30.gd`
 
-- [ ] **Step 1: 写入失败测试**
+- [x] **Step 1: 写入失败测试**
 
 ```gdscript
 expect(db.boss_patterns.size() == 6, "six bosses remain available")
@@ -480,7 +480,7 @@ for boss in db.boss_patterns.values():
     expect(boss.phases.all(func(phase): return phase.has("arena_event")), "%s changes the arena every phase" % boss.id)
 ```
 
-- [ ] **Step 2: 定义阶段场地事件**
+- [x] **Step 2: 定义阶段场地事件**
 
 ```json
 {
@@ -490,7 +490,7 @@ for boss in db.boss_patterns.values():
 }
 ```
 
-- [ ] **Step 3: 同步转阶段演出**
+- [x] **Step 3: 同步转阶段演出**
 
 ```gdscript
 func enter_boss_phase(enemy: Dictionary, phase: Dictionary) -> void:
@@ -498,7 +498,7 @@ func enter_boss_phase(enemy: Dictionary, phase: Dictionary) -> void:
     stage_runtime.apply_arena_event(phase.arena_event)
 ```
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v30-test
@@ -515,7 +515,7 @@ git commit -m "feat: add staged boss arena events"
 - Modify: `game/scripts/combat_simulation.gd`
 - Test: `game/scripts/qa_v30.gd`
 
-- [ ] **Step 1: 写入压力测试**
+- [x] **Step 1: 写入压力测试**
 
 ```gdscript
 sim.debug_spawn_load(300, 180, 120)
@@ -524,7 +524,7 @@ expect(game.battle.effect_pool.live_count <= game.battle.effect_pool.capacity, "
 expect(game.battle.debug_telegraphs_visible, "performance degradation preserves warnings")
 ```
 
-- [ ] **Step 2: 分级表现预算**
+- [x] **Step 2: 分级表现预算**
 
 ```gdscript
 func quality_for_load(enemy_count: int, projectile_count: int) -> float:
@@ -532,7 +532,7 @@ func quality_for_load(enemy_count: int, projectile_count: int) -> float:
     return clampf(1.0 - maxf(0.0, pressure - 1.0) * 0.35, 0.45, 1.0)
 ```
 
-- [ ] **Step 3: 保留战斗信息优先级**
+- [x] **Step 3: 保留战斗信息优先级**
 
 ```gdscript
 func can_spawn_cosmetic(kind: String) -> bool:
@@ -541,7 +541,7 @@ func can_spawn_cosmetic(kind: String) -> bool:
     return performance_budget.quality_scale >= 0.70
 ```
 
-- [ ] **Step 4: 验证并提交**
+- [x] **Step 4: 验证并提交**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v30-test
@@ -557,7 +557,7 @@ git commit -m "perf: protect large-scale battle readability"
 - Modify: `game/project.godot`
 - Modify: `game/export_presets.cfg`
 
-- [ ] **Step 1: 执行专项与回归**
+- [x] **Step 1: 执行专项与回归**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v30-test
@@ -571,7 +571,7 @@ Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v17-test
 
 Expected: 所有专项和回归为 0 failures。
 
-- [ ] **Step 2: 导出并直接启动发布包**
+- [x] **Step 2: 导出并直接启动发布包**
 
 ```powershell
 Godot_v4.4.1-stable_win64_console.exe --headless --path game --export-release "Windows Desktop"
@@ -581,7 +581,7 @@ Godot_v4.4.1-stable_win64_console.exe --headless --path game --export-release "W
 
 Expected: 两次启动退出码均为 0。
 
-- [ ] **Step 3: 清理旧构建并记录哈希**
+- [x] **Step 3: 清理旧构建并记录哈希**
 
 ```powershell
 Get-FileHash .\builds\rift-guard-v30\RiftGuard-V30.exe -Algorithm SHA256
@@ -589,7 +589,7 @@ Get-FileHash .\builds\rift-guard-v30\RiftGuard-V30.exe -Algorithm SHA256
 
 Expected: `builds` 只保留 `rift-guard-v30`，发布说明记录文件大小与 SHA256。
 
-- [ ] **Step 4: 提交并推送 V30**
+- [x] **Step 4: 提交并推送 V30**
 
 ```powershell
 git add README.md docs/v30-release-notes.md game/project.godot game/export_presets.cfg game/scripts/stage_surface_renderer.gd game/scripts/stage_surface_renderer.gd.uid game/scripts/qa_v30.gd game/scripts/qa_v30.gd.uid game/scripts/main.gd game/scripts/battle_view.gd game/scripts/combat_simulation.gd game/scripts/content/game_database.gd game/scripts/stages/stage_runtime.gd game/scripts/battle_hud.gd game/scripts/performance_budget.gd game/scripts/reusable_effect_pool.gd game/data/v2/enemy_families.json game/data/v2/stages.json game/data/v2/stage_templates.json game/data/v2/boss_patterns.json

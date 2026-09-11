@@ -377,7 +377,57 @@
         ]
       ]
     },
-    "boss_health_multiplier": 0.78
+    "boss_health_multiplier": 0.78,
+    "template_id": "citadel_zigzag",
+    "spawn_points": {
+      "upper": [
+        [
+          980,
+          145
+        ],
+        [
+          962,
+          111
+        ],
+        [
+          998,
+          179
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          355
+        ],
+        [
+          1177,
+          321
+        ],
+        [
+          1213,
+          389
+        ]
+      ],
+      "lower": [
+        [
+          1040,
+          555
+        ],
+        [
+          1022,
+          521
+        ],
+        [
+          1058,
+          589
+        ]
+      ]
+    },
+    "route_material": {
+      "upper": "copper",
+      "main": "crimson",
+      "lower": "violet"
+    }
   },
   {
     "id": "stage_02",
@@ -763,7 +813,57 @@
         ]
       ]
     },
-    "boss_health_multiplier": 0.74
+    "boss_health_multiplier": 0.74,
+    "template_id": "crimson_dual",
+    "spawn_points": {
+      "upper": [
+        [
+          1195,
+          220
+        ],
+        [
+          1177,
+          186
+        ],
+        [
+          1213,
+          254
+        ]
+      ],
+      "main": [
+        [
+          930,
+          145
+        ],
+        [
+          912,
+          111
+        ],
+        [
+          948,
+          179
+        ]
+      ],
+      "lower": [
+        [
+          1195,
+          505
+        ],
+        [
+          1177,
+          471
+        ],
+        [
+          1213,
+          539
+        ]
+      ]
+    },
+    "route_material": {
+      "upper": "copper",
+      "main": "crimson",
+      "lower": "violet"
+    }
   },
   {
     "id": "stage_03",
@@ -1180,7 +1280,57 @@
         ]
       ]
     },
-    "boss_health_multiplier": 0.39
+    "boss_health_multiplier": 0.39,
+    "template_id": "hive_converge",
+    "spawn_points": {
+      "upper": [
+        [
+          1040,
+          145
+        ],
+        [
+          1022,
+          111
+        ],
+        [
+          1058,
+          179
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          350
+        ],
+        [
+          1177,
+          316
+        ],
+        [
+          1213,
+          384
+        ]
+      ],
+      "lower": [
+        [
+          1010,
+          555
+        ],
+        [
+          992,
+          521
+        ],
+        [
+          1028,
+          589
+        ]
+      ]
+    },
+    "route_material": {
+      "upper": "copper",
+      "main": "crimson",
+      "lower": "violet"
+    }
   },
   {
     "id": "stage_04",
@@ -1564,7 +1714,56 @@
       ]
     },
     "boss_health_multiplier": 0.72,
-    "template_id": "sky_cross"
+    "template_id": "sky_cross",
+    "spawn_points": {
+      "upper": [
+        [
+          1195,
+          180
+        ],
+        [
+          1177,
+          146
+        ],
+        [
+          1213,
+          214
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          360
+        ],
+        [
+          1177,
+          326
+        ],
+        [
+          1213,
+          394
+        ]
+      ],
+      "lower": [
+        [
+          1195,
+          540
+        ],
+        [
+          1177,
+          506
+        ],
+        [
+          1213,
+          574
+        ]
+      ]
+    },
+    "route_material": {
+      "upper": "copper",
+      "main": "crimson",
+      "lower": "violet"
+    }
   },
   {
     "id": "stage_05",
@@ -1956,7 +2155,56 @@
       ]
     },
     "boss_health_multiplier": 0.78,
-    "template_id": "crucible_spiral"
+    "template_id": "crucible_spiral",
+    "spawn_points": {
+      "upper": [
+        [
+          1120,
+          145
+        ],
+        [
+          1102,
+          111
+        ],
+        [
+          1138,
+          179
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          360
+        ],
+        [
+          1177,
+          326
+        ],
+        [
+          1213,
+          394
+        ]
+      ],
+      "lower": [
+        [
+          1120,
+          575
+        ],
+        [
+          1102,
+          541
+        ],
+        [
+          1138,
+          609
+        ]
+      ]
+    },
+    "route_material": {
+      "upper": "copper",
+      "main": "crimson",
+      "lower": "violet"
+    }
   },
   {
     "id": "stage_06",
@@ -2344,7 +2592,56 @@
       ]
     },
     "boss_health_multiplier": 0.84,
-    "template_id": "clockwork_lanes"
+    "template_id": "clockwork_lanes",
+    "spawn_points": {
+      "upper": [
+        [
+          1195,
+          190
+        ],
+        [
+          1177,
+          156
+        ],
+        [
+          1213,
+          224
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          360
+        ],
+        [
+          1177,
+          326
+        ],
+        [
+          1213,
+          394
+        ]
+      ],
+      "lower": [
+        [
+          1195,
+          530
+        ],
+        [
+          1177,
+          496
+        ],
+        [
+          1213,
+          564
+        ]
+      ]
+    },
+    "route_material": {
+      "upper": "copper",
+      "main": "crimson",
+      "lower": "violet"
+    }
   },
   {
     "id": "stage_07",
@@ -2732,7 +3029,56 @@
       ]
     },
     "boss_health_multiplier": 0.8999999999999999,
-    "template_id": "frozen_fork"
+    "template_id": "frozen_fork",
+    "spawn_points": {
+      "upper": [
+        [
+          1050,
+          145
+        ],
+        [
+          1032,
+          111
+        ],
+        [
+          1068,
+          179
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          360
+        ],
+        [
+          1177,
+          326
+        ],
+        [
+          1213,
+          394
+        ]
+      ],
+      "lower": [
+        [
+          1050,
+          575
+        ],
+        [
+          1032,
+          541
+        ],
+        [
+          1068,
+          609
+        ]
+      ]
+    },
+    "route_material": {
+      "upper": "copper",
+      "main": "crimson",
+      "lower": "violet"
+    }
   },
   {
     "id": "stage_08",
@@ -3128,7 +3474,56 @@
       ]
     },
     "boss_health_multiplier": 0.96,
-    "template_id": "eclipse_siege"
+    "template_id": "eclipse_siege",
+    "spawn_points": {
+      "upper": [
+        [
+          1195,
+          160
+        ],
+        [
+          1177,
+          126
+        ],
+        [
+          1213,
+          194
+        ]
+      ],
+      "main": [
+        [
+          1195,
+          360
+        ],
+        [
+          1177,
+          326
+        ],
+        [
+          1213,
+          394
+        ]
+      ],
+      "lower": [
+        [
+          1195,
+          560
+        ],
+        [
+          1177,
+          526
+        ],
+        [
+          1213,
+          594
+        ]
+      ]
+    },
+    "route_material": {
+      "upper": "copper",
+      "main": "crimson",
+      "lower": "violet"
+    }
   },
   {
     "id": "stage_endless",
@@ -3148,6 +3543,179 @@
     ],
     "unlocks": [],
     "waves": [],
-    "routes": {}
+    "routes": {
+      "north": [
+        [
+          660,
+          70
+        ],
+        [
+          760,
+          280
+        ],
+        [
+          1240,
+          720
+        ]
+      ],
+      "east": [
+        [
+          2440,
+          410
+        ],
+        [
+          2010,
+          520
+        ],
+        [
+          1240,
+          720
+        ]
+      ],
+      "south": [
+        [
+          1750,
+          1335
+        ],
+        [
+          1590,
+          1040
+        ],
+        [
+          1240,
+          720
+        ]
+      ],
+      "west": [
+        [
+          45,
+          750
+        ],
+        [
+          470,
+          820
+        ],
+        [
+          1240,
+          720
+        ]
+      ]
+    },
+    "spawn_points": {
+      "north": [
+        [
+          660,
+          70
+        ],
+        [
+          960,
+          85
+        ],
+        [
+          1320,
+          80
+        ]
+      ],
+      "east": [
+        [
+          2440,
+          410
+        ],
+        [
+          2430,
+          700
+        ],
+        [
+          2445,
+          1040
+        ]
+      ],
+      "south": [
+        [
+          660,
+          1340
+        ],
+        [
+          1120,
+          1350
+        ],
+        [
+          1750,
+          1335
+        ]
+      ],
+      "west": [
+        [
+          45,
+          410
+        ],
+        [
+          55,
+          750
+        ],
+        [
+          40,
+          1110
+        ]
+      ]
+    },
+    "template_id": "loop",
+    "terrain": [
+      {
+        "id": "endless_north_ruin",
+        "type": "blocked",
+        "rect": [
+          820,
+          220,
+          160,
+          90
+        ],
+        "label": "北侧断墙"
+      },
+      {
+        "id": "endless_east_device",
+        "type": "mechanism",
+        "rect": [
+          1760,
+          610,
+          90,
+          90
+        ],
+        "label": "荒原机关",
+        "power": 55,
+        "radius": 210,
+        "interval": 4.2
+      },
+      {
+        "id": "endless_south_low",
+        "type": "low_ground",
+        "rect": [
+          1160,
+          990,
+          280,
+          120
+        ],
+        "label": "猩红洼地",
+        "speed_scale": 0.75
+      },
+      {
+        "id": "endless_west_high",
+        "type": "high_ground",
+        "rect": [
+          500,
+          520,
+          260,
+          110
+        ],
+        "label": "西部高台",
+        "attack_bonus": 0.16
+      }
+    ],
+    "route_material": {
+      "north": "copper",
+      "east": "crimson",
+      "south": "violet",
+      "west": "ash"
+    }
   }
 ]

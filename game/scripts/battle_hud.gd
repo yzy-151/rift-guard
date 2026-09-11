@@ -36,6 +36,8 @@ var base_label: Label
 var wave_label: Label
 var count_label: Label
 var status_label: Label
+var arena_event_name := ""
+var arena_event_until_ms := 0
 var pause_button: Button
 var hero_buttons: Array[Button] = []
 var hero_name_labels: Array[Label] = []
@@ -437,6 +439,8 @@ func refresh(sim, selected_id: int) -> void:
 		wave_label.text = "节点   %02d / 05" % sim.wave
 	count_label.text = ("击退 %02d  ·  敌军 %02d  ·  已部署 %d/%d  ·  契约 %s" % [sim.kills, sim.enemies.size(), sim.heroes.filter(func(h: Dictionary)->bool: return bool(h.get("deployed", true))).size(), sim.heroes.size(), sim.contract_status()]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
 	status_label.text = "无尽生存 · 右键移动 · 同行者自动跟随" if sim.endless_mode else "按 1/2/3 或点击角色卡选择"
+	if Time.get_ticks_msec() < arena_event_until_ms:
+		status_label.text = "场地变化 · " + arena_event_name
 	refresh_skill(sim, selected_id)
 	refresh_supports(sim)
 	refresh_buffs(sim)
@@ -616,6 +620,10 @@ func announce_boss(name: String) -> void:
 	out.tween_property(boss_alert, "position:y", 210.0, 0.28)
 	await out.finished
 	boss_alert.hide()
+
+func announce_arena_event(kind: String, duration: float) -> void:
+	arena_event_name = kind.replace("_", " ").to_upper()
+	arena_event_until_ms = Time.get_ticks_msec() + roundi(minf(duration, 6.0) * 1000.0)
 
 func announce_boss_phase(name: String, phase: int) -> void:
 	if boss_warning != null and not muted:

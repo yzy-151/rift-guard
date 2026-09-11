@@ -15,6 +15,7 @@ var vfx_profiles: Dictionary = {}
 var combat_contracts: Dictionary = {}
 var enemy_visuals: Dictionary = {}
 var vfx_themes: Dictionary = {}
+var enemy_families: Dictionary = {}
 var asset_readiness: Dictionary = {}
 var errors: Array[String] = []
 
@@ -35,6 +36,7 @@ func _init() -> void:
 	combat_contracts = _by_id(_read_array("res://data/v2/combat_contracts.json"), "combat contract")
 	enemy_visuals = _by_id(_read_array("res://data/v2/enemy_visuals.json"), "enemy visual")
 	vfx_themes = _by_id(_read_array("res://data/v2/vfx_themes.json"), "VFX theme")
+	enemy_families = _by_id(_read_array("res://data/v2/enemy_families.json"), "enemy family")
 	_validate()
 	errors.append_array(preload("res://scripts/content_validator.gd").validate(self))
 	asset_readiness = preload("res://scripts/asset_readiness.gd").scan(self)
@@ -88,6 +90,8 @@ func _validate() -> void:
 	for required_theme: String in ["neutral","anemo","electro","pyro","hydro","geo","cryo","vaporize","melt","overload","electro_charged","freeze","swirl","crystallize","superconduct"]:
 		if not vfx_themes.has(required_theme):
 			errors.append("missing VFX theme: " + required_theme)
+	if enemy_families.size() < 12:
+		errors.append("at least twelve enemy families are required")
 	for id: String in characters:
 		var character: Dictionary = characters[id]
 		if str(character.get("element", "")) not in elements:

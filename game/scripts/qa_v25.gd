@@ -46,7 +46,7 @@ func run(game) -> void:
 	for id:String in db.animation_profiles:
 		var states:Dictionary=db.animation_profiles[id].get("states",{})
 		expect(["idle","run","attack","skill","ultimate","hurt","down","deploy"].all(func(key:String)->bool:return states.has(key)),"%s animation state set is complete"%id)
-	expect(db.stage_templates.size()==8,"eight route and terrain templates are data driven")
+	expect(db.stage_templates.size()>=8,"at least eight route and terrain templates are data driven")
 	expect(db.stages.size()==9 and db.modes.rift_watch.stage_ids.size()==8,"eight campaign stages plus endless are selectable")
 	for stage_id:Variant in db.modes.rift_watch.stage_ids:
 		var stage:Dictionary=db.stages[str(stage_id)]

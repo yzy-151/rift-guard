@@ -8,6 +8,7 @@ const ReusableEffectPool = preload("res://scripts/reusable_effect_pool.gd")
 const SpriteAnchor = preload("res://scripts/sprite_anchor.gd")
 const UnitVisualActor = preload("res://scripts/unit_visual_actor.gd")
 const CombatFeedbackDirector = preload("res://scripts/combat_feedback_director.gd")
+const StageSurfaceRenderer = preload("res://scripts/stage_surface_renderer.gd")
 const VfxPipeline = preload("res://scripts/vfx_pipeline.gd")
 const INK = Color("#0c1017")
 const TEAL = Color("#8fdbc8")
@@ -26,9 +27,13 @@ var sprite_pivots: Dictionary = {}
 var enemy_visual_textures: Dictionary = {}
 var unit_visual_actors: Dictionary = {}
 var feedback_director = CombatFeedbackDirector.new()
+var surface_renderer = StageSurfaceRenderer.new()
 var debug_visual_matrix: Array[Dictionary] = []
 var debug_anchor_error_max := 0.0
 var debug_damage_shape_error_max := 0.0
+var debug_route_overlap_alpha := 0.30
+var debug_telegraphs_visible := true
+var debug_portal_phases: Array[String] = []
 var route_previews: Dictionary = {}
 var spawn_portals: Dictionary = {}
 var current_actor_transform := Transform2D.IDENTITY
@@ -226,8 +231,8 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				if effects.size() < 260:
 					var facing := float(hero.get("facing", 1.0))
 					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","")},0.16))
-			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
-				if effects.size() >= (sim.performance_budget.effect_cap() if sim != null else 320) and event.kind in ["hit", "death", "move", "muzzle"]:
+			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "arena_event", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
+				if sim != null and not sim.performance_budget.can_spawn_cosmetic(str(event.kind), effects.size()):
 					continue
 				var visual_event: Dictionary = event.duplicate(true)
 				visual_event.feedback_theme = feedback.theme
@@ -256,6 +261,7 @@ func _draw() -> void:
 	if sim == null or font == null:
 		return
 	_draw_stage()
+	_draw_arena_events()
 	_draw_enemy_telegraphs()
 	if not sim.endless_mode:
 		_draw_base_projected()
@@ -629,9 +635,9 @@ func _draw_stage() -> void:
 		var route: Array = routes[route_id]
 		if route.size() < 2:
 			continue
-		_draw_route_bed(route)
+		_draw_route_bed(route, route_id)
 		if route_previews.has(route_id):
-			_draw_route_preview(route, route_previews[route_id])
+			_draw_route_preview(route, route_previews[route_id], route_id)
 	# Rear wall has height independent of the floor projection.
 	for i in 12:
 		var ground: Vector2 = world_to_screen(Vector2(45 + i * 105, 140))
@@ -750,58 +756,82 @@ func _draw_base_projected() -> void:
 	draw_rect(Rect2(point + Vector2(-40, 46), Vector2(83 * sim.base_hp / maxf(1.0, sim.base_max_hp), 6)), tint)
 	caption(point + Vector2(-35, 72), "基地核心", tint, 13)
 
-func _draw_route_bed(route: Array) -> void:
+func _draw_route_bed(route: Array, route_id: String = "main") -> void:
+	var material: Dictionary = surface_renderer.route_material(route_id)
+	var color: Color = material.color
 	for i in range(route.size() - 1):
 		var a := world_to_screen(route[i])
 		var b := world_to_screen(route[i + 1])
-		# A narrow worn-stone seam hints navigation without drawing a black rail over the map.
-		draw_line(a, b, Color(0.19, 0.13, 0.17, 0.34), 12.0, true)
-		draw_line(a, b, Color(0.64, 0.39, 0.39, 0.14), 7.0, true)
+		draw_line(a, b, Color(0.17, 0.11, 0.16, 0.24), 12.0, true)
+		draw_line(a, b, Color(color, float(material.bed_alpha)), 6.0, true)
 		var length := a.distance_to(b)
-		var steps := maxi(1, floori(length / 54.0))
+		var steps := maxi(1, floori(length / 68.0))
 		for step in steps:
-			var t := (float(step) + 0.5) / float(steps)
-			var point := a.lerp(b, t)
+			var point := a.lerp(b, (float(step) + 0.5) / float(steps))
 			var direction := (b - a).normalized()
-			draw_line(point - direction.rotated(PI * 0.5) * 4.0, point + direction.rotated(PI * 0.5) * 4.0, Color(0.83, 0.58, 0.54, 0.10), 1.0, true)
+			draw_line(point - direction.rotated(PI * 0.5) * 3.0, point + direction.rotated(PI * 0.5) * 3.0, Color(color, 0.10), 1.0, true)
 
-func _draw_route_preview(route: Array, preview: Dictionary) -> void:
-	var color := Color("#f4d878") if bool(preview.get("flying", false)) else Color("#ff8b75")
+func _draw_route_preview(route: Array, preview: Dictionary, route_id: String = "main") -> void:
+	var material: Dictionary = surface_renderer.route_material(route_id, bool(preview.get("flying", false)), bool(preview.get("boss", false)))
+	var color: Color = material.color
 	var pulse := 0.68 + sin(clock * 7.0) * 0.16
-	var width := 6.0 if bool(preview.get("boss", false)) else 4.0
+	var width := float(material.width)
 	for i in range(route.size() - 1):
 		var a := world_to_screen(route[i])
 		var b := world_to_screen(route[i + 1])
-		draw_line(a, b, Color(color, 0.05 + pulse * 0.07), width + 10.0, true)
-		draw_dashed_line(a, b, Color(color, pulse * 0.84), width, 15.0, true)
-		var direction := (b - a).normalized()
+		draw_line(a, b, Color(color, 0.05 + pulse * 0.06), width + 10.0, true)
+		draw_dashed_line(a, b, Color(color, pulse * 0.70), width, 18.0, true)
+	for sample: Dictionary in surface_renderer.route_samples(route, clock, 8 if bool(preview.get("boss", false)) else 6, 0.18):
+		var point := world_to_screen(sample.point)
+		var ahead := world_to_screen(sample.point + sample.tangent * 12.0)
+		var direction := (ahead - point).normalized()
 		var side := direction.rotated(PI * 0.5)
-		for marker in 3:
-			var phase := fposmod(clock * 0.72 + marker / 3.0 + i * 0.11, 1.0)
-			var point := a.lerp(b, phase)
-			var head := PackedVector2Array([point + direction * 9.0, point - direction * 10.0 + side * 7.0, point - direction * 5.0, point - direction * 10.0 - side * 7.0])
-			draw_colored_polygon(head, Color(color, 0.82 + pulse * 0.16))
-			draw_circle(point - direction * 19.0, 3.5 + pulse * 1.5, Color(color, 0.34))
-			draw_line(point - direction * 15.0, point - direction * 32.0, Color(color, 0.24), 3.0, true)
+		var head := PackedVector2Array([point + direction * 11.0, point - direction * 8.0 + side * 6.0, point - direction * 3.0, point - direction * 8.0 - side * 6.0])
+		draw_colored_polygon(head, Color(color, 0.86 + pulse * 0.12))
+		draw_circle(point - direction * 16.0, 3.0 + pulse, Color(color, 0.28))
 	var first := world_to_screen(route[0])
 	var enemy_name: String = str({"grunt": "裂隙兽", "runner": "疾行兽", "armored": "重甲兽", "flyer": "空袭兽", "ranged": "射手", "buffer": "增幅者", "shielded": "盾卫", "charger": "冲锋兽", "healer": "愈疗者", "splitter": "分裂体", "warder": "结界师", "boss_01": "裂隙统领", "boss_02": "深渊母巢"}.get(str(preview.get("enemy_id", "grunt")), "敌军"))
 	var warning := "BOSS · %s" % enemy_name if bool(preview.get("boss", false)) else "%s ×%d" % [enemy_name, int(preview.get("count", 1))]
 	caption(first + Vector2(-72, -58), warning, color, 13)
 
 func _draw_spawn_portals() -> void:
+	debug_portal_phases.clear()
 	for route_id: String in spawn_portals:
 		var portal: Dictionary = spawn_portals[route_id]
 		var point := world_to_screen(portal.pos) + Vector2(0, -23)
-		var ratio := clampf(float(portal.life) / maxf(0.01, float(portal.total)), 0.0, 1.0)
-		var pulse := 1.0 + sin(clock * 10.0 + route_id.hash() % 7) * 0.10
-		draw_set_transform(point, clock * 0.18, Vector2(0.62, 1.0) * pulse)
-		draw_circle(Vector2.ZERO, 31.0, Color(0.28, 0.015, 0.06, 0.42 * ratio))
-		draw_arc(Vector2.ZERO, 36.0, 0, TAU, 48, Color(0.94, 0.23, 0.38, 0.95 * ratio), 5.0, true)
-		draw_arc(Vector2.ZERO, 25.0, -clock * 2.0, TAU - clock * 2.0, 32, Color(1.0, 0.68, 0.72, 0.86 * ratio), 2.0, true)
-		for spark in 6:
-			var angle := clock * 2.4 + spark * TAU / 6.0
-			draw_circle(Vector2.from_angle(angle) * (31.0 + spark % 2 * 8.0), 2.5, Color(1.0, 0.55, 0.63, ratio))
+		var visual: Dictionary = surface_renderer.portal_visual(float(portal.life), float(portal.total), clock, route_id.hash() % 17)
+		debug_portal_phases.append(str(visual.phase))
+		var alpha := float(visual.alpha)
+		var color := Color("#ffd36e") if route_id == "stage_exit" else Color("#f24b6a")
+		draw_set_transform(point, clock * (0.24 if visual.phase == "active" else 0.12), visual.scale)
+		draw_circle(Vector2.ZERO, float(visual.ring), Color(0.22, 0.008, 0.055, 0.52 * alpha))
+		draw_arc(Vector2.ZERO, float(visual.ring) + 5.0, float(visual.gap), TAU - float(visual.gap), 48, Color(color, 0.96 * alpha), 5.0, true)
+		draw_arc(Vector2.ZERO, float(visual.ring) - 7.0, -clock * 1.8, TAU - clock * 1.8, 32, Color(1.0, 0.72, 0.77, 0.76 * alpha), 2.0, true)
+		for spark in 8:
+			var angle := clock * 2.4 + spark * TAU / 8.0
+			draw_circle(Vector2.from_angle(angle) * (float(visual.ring) + spark % 2 * 8.0), 2.2, Color(color, alpha))
 		draw_set_transform(Vector2.ZERO)
+
+func _draw_arena_events() -> void:
+	if sim == null or sim.stage_runtime == null:
+		return
+	for event: Dictionary in sim.stage_runtime.arena_events:
+		var center := world_to_screen(Vector2(event.get("source", Vector2(640,360))))
+		var ratio := clampf(float(event.get("life",0.0)) / maxf(0.01,float(event.get("total",1.0))),0.0,1.0)
+		var radius := float(event.get("radius",160.0)) * (0.82 + sin(clock*3.0)*0.03)
+		var color := Color(str(event.get("color","#ff776e")))
+		var kind := str(event.get("type","hazard"))
+		draw_circle(center,radius,Color(color,0.035+0.035*ratio))
+		draw_arc(center,radius,clock*0.25,TAU+clock*0.25,64,Color(color,0.58*ratio),3.0,true)
+		if kind in ["artillery_grid","carpet_grid","shield_wall","break_terrain"]:
+			for offset in [-0.66,-0.22,0.22,0.66]:
+				draw_line(center+Vector2(offset*radius,-radius*0.72),center+Vector2(offset*radius,radius*0.72),Color(color,0.18*ratio),2.0,true)
+				draw_line(center+Vector2(-radius*0.72,offset*radius),center+Vector2(radius*0.72,offset*radius),Color(color,0.18*ratio),2.0,true)
+		else:
+			for ray in 8:
+				var angle := clock*0.35+ray*TAU/8.0
+				draw_line(center+Vector2.from_angle(angle)*radius*0.38,center+Vector2.from_angle(angle)*radius,Color(color,0.18*ratio),2.0,true)
+		caption(center+Vector2(-72,-radius-12),kind.replace("_"," ").to_upper(),Color(color,0.82*ratio),11)
 
 func draw_ellipse_shadow(pos: Vector2, radius: float, color: Color) -> void:
 	var points := PackedVector2Array()

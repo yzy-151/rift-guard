@@ -12,7 +12,14 @@
         "moves": [
           "pulse",
           "summon"
-        ]
+        ],
+        "arena_event": {
+          "type": "seal_route",
+          "duration": 7.0,
+          "radius": 150,
+          "intensity": 1,
+          "color": "#e96c78"
+        }
       },
       {
         "phase": 2,
@@ -23,7 +30,14 @@
         "moves": [
           "crossfire",
           "charge_summon"
-        ]
+        ],
+        "arena_event": {
+          "type": "safe_zone_shift",
+          "duration": 8.5,
+          "radius": 175,
+          "intensity": 2,
+          "color": "#f0a86e"
+        }
       },
       {
         "phase": 3,
@@ -34,7 +48,14 @@
         "moves": [
           "fan_burst",
           "elite_summon"
-        ]
+        ],
+        "arena_event": {
+          "type": "reinforcement_gate",
+          "duration": 10.0,
+          "radius": 220,
+          "intensity": 3,
+          "color": "#ffd36e"
+        }
       }
     ]
   },
@@ -50,7 +71,14 @@
         "radius": 135,
         "moves": [
           "runner_summon"
-        ]
+        ],
+        "arena_event": {
+          "type": "spawn_rifts",
+          "duration": 7.0,
+          "radius": 135,
+          "intensity": 1,
+          "color": "#e96c78"
+        }
       },
       {
         "phase": 2,
@@ -61,7 +89,14 @@
         "moves": [
           "splitter_summon",
           "slow_field"
-        ]
+        ],
+        "arena_event": {
+          "type": "moving_hazard",
+          "duration": 8.5,
+          "radius": 150,
+          "intensity": 2,
+          "color": "#f0a86e"
+        }
       },
       {
         "phase": 3,
@@ -72,7 +107,14 @@
         "moves": [
           "swarm",
           "pull"
-        ]
+        ],
+        "arena_event": {
+          "type": "brood_nest",
+          "duration": 10.0,
+          "radius": 230,
+          "intensity": 3,
+          "color": "#ffd36e"
+        }
       }
     ]
   },
@@ -88,7 +130,14 @@
         "radius": 155,
         "moves": [
           "knockback"
-        ]
+        ],
+        "arena_event": {
+          "type": "wind_lane",
+          "duration": 7.0,
+          "radius": 155,
+          "intensity": 1,
+          "color": "#e96c78"
+        }
       },
       {
         "phase": 2,
@@ -99,7 +148,14 @@
         "moves": [
           "sweep",
           "flyer_summon"
-        ]
+        ],
+        "arena_event": {
+          "type": "cyclone_ring",
+          "duration": 8.5,
+          "radius": 180,
+          "intensity": 2,
+          "color": "#f0a86e"
+        }
       },
       {
         "phase": 3,
@@ -110,7 +166,14 @@
         "moves": [
           "spiral",
           "silence"
-        ]
+        ],
+        "arena_event": {
+          "type": "storm_cross",
+          "duration": 10.0,
+          "radius": 240,
+          "intensity": 3,
+          "color": "#ffd36e"
+        }
       }
     ]
   },
@@ -126,7 +189,14 @@
         "radius": 160,
         "moves": [
           "guard"
-        ]
+        ],
+        "arena_event": {
+          "type": "shield_wall",
+          "duration": 7.0,
+          "radius": 160,
+          "intensity": 1,
+          "color": "#e96c78"
+        }
       },
       {
         "phase": 2,
@@ -137,7 +207,14 @@
         "moves": [
           "shockwave",
           "warder_summon"
-        ]
+        ],
+        "arena_event": {
+          "type": "break_terrain",
+          "duration": 8.5,
+          "radius": 190,
+          "intensity": 2,
+          "color": "#f0a86e"
+        }
       },
       {
         "phase": 3,
@@ -148,7 +225,14 @@
         "moves": [
           "terrain_break",
           "guard"
-        ]
+        ],
+        "arena_event": {
+          "type": "stone_prison",
+          "duration": 10.0,
+          "radius": 250,
+          "intensity": 3,
+          "color": "#ffd36e"
+        }
       }
     ]
   },
@@ -164,7 +248,14 @@
         "radius": 145,
         "moves": [
           "artillery"
-        ]
+        ],
+        "arena_event": {
+          "type": "artillery_grid",
+          "duration": 7.0,
+          "radius": 145,
+          "intensity": 1,
+          "color": "#e96c78"
+        }
       },
       {
         "phase": 2,
@@ -175,7 +266,14 @@
         "moves": [
           "triple_artillery",
           "burning_ground"
-        ]
+        ],
+        "arena_event": {
+          "type": "burning_ring",
+          "duration": 8.5,
+          "radius": 165,
+          "intensity": 2,
+          "color": "#f0a86e"
+        }
       },
       {
         "phase": 3,
@@ -186,7 +284,14 @@
         "moves": [
           "carpet_bomb",
           "ranged_summon"
-        ]
+        ],
+        "arena_event": {
+          "type": "carpet_grid",
+          "duration": 10.0,
+          "radius": 220,
+          "intensity": 3,
+          "color": "#ffd36e"
+        }
       }
     ]
   },
@@ -202,7 +307,14 @@
         "radius": 150,
         "moves": [
           "drain"
-        ]
+        ],
+        "arena_event": {
+          "type": "time_slow",
+          "duration": 7.0,
+          "radius": 150,
+          "intensity": 1,
+          "color": "#e96c78"
+        }
       },
       {
         "phase": 2,
@@ -213,7 +325,14 @@
         "moves": [
           "slow",
           "drain"
-        ]
+        ],
+        "arena_event": {
+          "type": "rewind_zone",
+          "duration": 8.5,
+          "radius": 185,
+          "intensity": 2,
+          "color": "#f0a86e"
+        }
       },
       {
         "phase": 3,
@@ -224,7 +343,14 @@
         "moves": [
           "rewind",
           "heal_summon"
-        ]
+        ],
+        "arena_event": {
+          "type": "clock_collapse",
+          "duration": 10.0,
+          "radius": 245,
+          "intensity": 3,
+          "color": "#ffd36e"
+        }
       }
     ]
   }

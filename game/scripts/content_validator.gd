@@ -16,11 +16,17 @@ static func validate(database) -> Array[String]:
 			if not message.is_empty(): errors.append("%s %s: %s" % [id, key, message])
 	if database.stage_templates.size() < 8:
 		errors.append("at least eight stage templates are required")
+	for template_id: String in ["fork","loop","breakable_shortcut"]:
+		if not database.stage_templates.has(template_id):
+			errors.append("missing V30 stage template: " + template_id)
 	if database.boss_patterns.size() < 6:
 		errors.append("six boss patterns are required")
 	for id: String in database.boss_patterns:
 		if database.boss_patterns[id].get("phases", []).size() != 3:
 			errors.append("boss requires three phases: " + id)
+		for phase: Dictionary in database.boss_patterns[id].get("phases", []):
+			if phase.get("arena_event", {}).is_empty():
+				errors.append("boss phase missing arena event: %s/%s" % [id, phase.get("phase", 0)])
 	for stage_id: String in database.stages:
 		if not database.combat_contracts.has(stage_id):
 			errors.append("stage missing combat contract: " + stage_id)

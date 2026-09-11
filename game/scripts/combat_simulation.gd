@@ -514,6 +514,9 @@ func _terrain_tick(dt: float) -> void:
 
 func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 	var enemy: Dictionary = Catalog.ENEMIES[kind].duplicate(true)
+	if v2_mode and database != null and database.enemy_families.has(kind):
+		var family_definition: Dictionary = database.enemy_families[kind]
+		enemy.merge({"family":family_definition.get("family", "rift"), "variant":family_definition.get("variant", kind), "behavior":family_definition.get("behavior", "pressure_advance"), "motion":family_definition.get("motion", "elastic_hop"), "visual_family":family_definition.get("visual", kind)}, true)
 	enemy.hp *= 1.0 + maxf(0.0, wave - 1) * 0.10
 	if v2_mode and stage_runtime != null:
 		enemy.hp *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
@@ -748,7 +751,7 @@ func _stage_spawn_tick(dt: float) -> void:
 		elif event.kind == "spawn":
 			wave = maxi(wave, int(event.get("wave", wave)))
 			if performance_budget.allow_enemy(enemies.size()):
-				spawn_on_route(str(event.enemy_id), str(event.route_id))
+				spawn_on_route(str(event.enemy_id), str(event.route_id), int(event.get("sequence", 0)))
 			else:
 				culled_spawns += 1
 		elif event.kind == "boss_wave":
@@ -758,9 +761,14 @@ func _stage_spawn_tick(dt: float) -> void:
 			events.append({"kind": "wave", "value": wave})
 			events.append({"kind": "boss_arrival", "pos": boss.pos, "value": str(boss.get("name", boss_id)), "enemy_id": boss.id})
 
-func spawn_on_route(kind: String, route_id: String) -> Dictionary:
+func spawn_on_route(kind: String, route_id: String, sequence: int = 0) -> Dictionary:
 	var points := stage_route(route_id)
-	var start := points[0] if not points.is_empty() else Vector2(1160, stage_lane_map().get(route_id, LANES[1]))
+	var starts := stage_spawn_points(route_id)
+	var start: Vector2 = starts[posmod(sequence, starts.size())] if not starts.is_empty() else (points[0] if not points.is_empty() else Vector2(1160, stage_lane_map().get(route_id, LANES[1])))
+	if not points.is_empty() and not start.is_equal_approx(points[0]):
+		var adjusted: Array[Vector2] = [start]
+		adjusted.append_array(points.slice(1))
+		points = adjusted
 	var enemy := spawn_enemy(start, kind)
 	enemy.route_points = points
 	enemy.route_index = 1 if points.size() > 1 else 0
@@ -1809,6 +1817,15 @@ func _update_boss_phase(enemy: Dictionary) -> void:
 		var minion := spawn_enemy(enemy.pos + Vector2(58.0 + i * 30.0, (i - 1) * 56.0), kind)
 		minion.hp *= 0.74
 		minion.max_hp = minion.hp
+	var phase_definition: Dictionary = {}
+	if database != null:
+		var pattern: Dictionary = database.boss_patterns.get(str(enemy.get("kind", "")), {})
+		var phase_rows: Array = pattern.get("phases", [])
+		if target_phase - 1 < phase_rows.size():
+			phase_definition = phase_rows[target_phase - 1]
+	if stage_runtime != null and not phase_definition.get("arena_event", {}).is_empty():
+		var arena_event: Dictionary = stage_runtime.apply_arena_event(phase_definition.arena_event, enemy.pos)
+		events.append({"kind":"arena_event","pos":enemy.pos,"arena_type":arena_event.get("type", "hazard"),"duration":arena_event.get("duration", 6.0),"radius":arena_event.get("radius", 160.0),"intensity":arena_event.get("intensity", target_phase)})
 	events.append({"kind": "boss_phase", "pos": enemy.pos, "value": target_phase, "name": str(enemy.name), "shield": ceili(restored), "style": style})
 func reaction_for(first: String, second: String) -> String:
 	var pair := [normalize_element(first), normalize_element(second)]
@@ -2076,6 +2093,16 @@ func stage_route(route_id: String) -> Array[Vector2]:
 	if not v2_mode or stage_runtime == null:
 		return result
 	var configured: Dictionary = stage_runtime.definition.get("routes", {})
+	for value in configured.get(route_id, []):
+		if value is Array and value.size() >= 2:
+			result.append(Vector2(float(value[0]), float(value[1])))
+	return result
+
+func stage_spawn_points(route_id: String) -> Array[Vector2]:
+	var result: Array[Vector2] = []
+	if not v2_mode or stage_runtime == null:
+		return result
+	var configured: Dictionary = stage_runtime.definition.get("spawn_points", {})
 	for value in configured.get(route_id, []):
 		if value is Array and value.size() >= 2:
 			result.append(Vector2(float(value[0]), float(value[1])))
