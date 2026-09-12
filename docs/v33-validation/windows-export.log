@@ -8,6 +8,14 @@ first_scan_filesystem: begin: 项目初始化 steps: 5
 	first_scan_filesystem: step 4: 正在初始化插件……
 	first_scan_filesystem: step 5: 正在启动文件扫描……
 first_scan_filesystem: end
+update_scripts_classes: begin: 正在注册全局类…… steps: 2
+	update_scripts_classes: step 0:
+	update_scripts_classes: step 1:
+update_scripts_classes: end
+update_script_paths_documentation: begin: 正在更新脚本文档 steps: 2
+	update_script_paths_documentation: step 0: campaign_checkpoint.gd
+	update_script_paths_documentation: step 1: qa_v33.gd
+update_script_paths_documentation: end
 savepack: begin: 打包中 steps: 102
 	savepack: step 2: 保存文件：res://.godot/imported/furina-chibi-v1-alpha.png-4b4b84e1418faa4d39f9f75359b6cb7a.ctex
 	savepack: step 2: 保存文件：res://assets/characters/furina/furina-chibi-v1-alpha.png.import
@@ -1471,13 +1479,14 @@ savepack: begin: 打包中 steps: 102
 	savepack: step 98: 保存文件：res://scripts/qa_v32.gdc
 	savepack: step 98: 保存文件：res://scripts/qa_v33.gdc
 	savepack: step 99: 保存文件：res://scripts/qa_v33_restart.gdc
+	savepack: step 99: 保存文件：res://scripts/qa_v33_ui.gdc
 	savepack: step 99: 保存文件：res://scripts/reusable_effect_pool.gdc
 	savepack: step 99: 保存文件：res://scripts/reward_book.gdc
 	savepack: step 99: 保存文件：res://scripts/reward_panel.gdc
 	savepack: step 99: 保存文件：res://scripts/save_migrator.gdc
 	savepack: step 99: 保存文件：res://scripts/settings_panel.gdc
 	savepack: step 99: 保存文件：res://scripts/sheet_effects.gdc
-	savepack: step 99: 保存文件：res://scripts/sprite_anchor.gdc
+	savepack: step 100: 保存文件：res://scripts/sprite_anchor.gdc
 	savepack: step 100: 保存文件：res://scripts/squad_panel.gdc
 	savepack: step 100: 保存文件：res://scripts/stage_clear_sequence.gdc
 	savepack: step 100: 保存文件：res://scripts/stage_projection.gdc
@@ -1485,7 +1494,7 @@ savepack: begin: 打包中 steps: 102
 	savepack: step 100: 保存文件：res://scripts/stage_surface_renderer.gdc
 	savepack: step 100: 保存文件：res://scripts/team_resonance.gdc
 	savepack: step 100: 保存文件：res://scripts/unit_visual_actor.gdc
-	savepack: step 100: 保存文件：res://scripts/vfx_pipeline.gdc
+	savepack: step 101: 保存文件：res://scripts/vfx_pipeline.gdc
 	savepack: step 101: 保存文件：res://scripts/xlsx_reader.gdc
 	savepack: step 101: 保存文件：res://data/game_config.xlsx
 	savepack: step 101: 保存文件：res://assets/world/GAME-ICONS-CRYSTAL-LICENSE.txt
@@ -1560,6 +1569,7 @@ savepack: begin: 打包中 steps: 102
 	savepack: step 101: 保存文件：res://scripts/qa_v32.gd.remap
 	savepack: step 101: 保存文件：res://scripts/qa_v33.gd.remap
 	savepack: step 101: 保存文件：res://scripts/qa_v33_restart.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v33_ui.gd.remap
 	savepack: step 101: 保存文件：res://scripts/reusable_effect_pool.gd.remap
 	savepack: step 101: 保存文件：res://scripts/reward_book.gd.remap
 	savepack: step 101: 保存文件：res://scripts/reward_panel.gd.remap

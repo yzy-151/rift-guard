@@ -1,24 +1,24 @@
 [
   {
     "role": "write",
-    "pid": 38732,
-    "session": "run_567582c6f22e4942ad578343423a2b3c",
+    "pid": 41600,
+    "session": "run_94a308fc624f431090570682f030590f",
     "exit_code": 0,
     "ok": true,
     "checks": 4
   },
   {
     "role": "resume",
-    "pid": 43760,
-    "session": "run_567582c6f22e4942ad578343423a2b3c",
+    "pid": 40148,
+    "session": "run_94a308fc624f431090570682f030590f",
     "exit_code": 0,
     "ok": true,
     "checks": 9
   },
   {
     "role": "settled",
-    "pid": 44828,
-    "session": "run_567582c6f22e4942ad578343423a2b3c",
+    "pid": 32220,
+    "session": "run_94a308fc624f431090570682f030590f",
     "exit_code": 0,
     "ok": true,
     "checks": 10

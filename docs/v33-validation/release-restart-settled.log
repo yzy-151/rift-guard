@@ -11,5 +11,5 @@ V33 RESTART PASS: old stage cannot award currency in a new process
 V33 RESTART PASS: third process resumes the route after the settled event
 V33 RESTART PASS: purchased relic, remaining currency and one-shot ledger survive restart
 V33 RESTART PASS: new process rejects a second event reward
-V33 RESTART PROCESS: 44828 settled
+V33 RESTART PROCESS: 32220 settled
 V33 RESTART QA COMPLETE: 10 checks, 0 failures

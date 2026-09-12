@@ -14,5 +14,13 @@
     "summary": [
       "V33 QA COMPLETE: 89 checks, 0 failures"
     ]
+  },
+  {
+    "resolution": "1920x1080",
+    "ok": true,
+    "exit_code": 0,
+    "summary": [
+      "V33 QA COMPLETE: 89 checks, 0 failures"
+    ]
   }
 ]

@@ -7,8 +7,8 @@ out=root/'docs/v33-validation'
 results=[]
 for name,args in [
     ('release-headless-v33',['--headless','--','--v33-test']),
-    ('release-visual-v33',['--resolution','1600x900','--','--v33-test',f'--qa-output={(out/"release").as_posix()}']),
-    ('release-visual-v33-ui',['--resolution','1600x900','--','--v33-ui-test',f'--qa-output={(out/"release-ui").as_posix()}']),
+    ('release-visual-v33',['--resolution','1920x1080','--','--v33-test',f'--qa-output={(out/"release").as_posix()}']),
+    ('release-visual-v33-ui',['--resolution','1920x1080','--','--v33-ui-test',f'--qa-output={(out/"release-ui").as_posix()}']),
     ('release-visual-v17',['--resolution','1280x720','--','--v17-test']),
 ]:
     logfile=out/f'{name}.log'

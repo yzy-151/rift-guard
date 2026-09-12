@@ -10,5 +10,5 @@ V33 RESTART PASS: relationships and story flags survive a process restart
 V33 RESTART PASS: old stage cannot award currency in a new process
 V33 RESTART PASS: pending event and currency resume together
 V33 RESTART PASS: real event click pays once and persists its result
-V33 RESTART PROCESS: 43760 resume
+V33 RESTART PROCESS: 40148 resume
 V33 RESTART QA COMPLETE: 9 checks, 0 failures

@@ -16,7 +16,7 @@ V33 增加远征检查点，让退出游戏后的编队、资源和路线能够�
 实验与验收计划：`docs/superpowers/plans/2026-09-12-v33-release-experiments.md`。
 
 源码与回归：`python tools/validate_v33.py`。
-视觉验收：`python tools/validate_v33_visual.py`，覆盖 1280×720 / 1600×900。
+视觉验收：`python tools/validate_v33_visual.py`，覆盖 1280×720 / 1600×900 / 1920×1080。
 完整 UI 验收：`python tools/validate_v33_ui.py`，在两种分辨率下以真实鼠标输入走通主菜单到战斗交互。
 Windows 导出后验收：`python tools/validate_v33_release.py`。
 三进程独立验收：`python tools/validate_v33_restart.py`，发布包增加 `--release`。
@@ -25,4 +25,4 @@ Windows 导出后验收：`python tools/validate_v33_release.py`。
 
 Windows 发布包：`builds/rift-guard-v33/RiftGuard-V33.exe`；文件大小、SHA256 和每项验收结果由 `docs/v33-validation/release-results.json` 记录。
 
-发布包 SHA256：4A37F910763C0E3C93D5F7B247542FD7B9CE6770AEBC2560908569B2897752FE。
+发布包 SHA256：4C8880037BB8E8BC7455AB77EF3E48CE13FB62E1809E2EDF78A3BDA7CAB9E3C3。

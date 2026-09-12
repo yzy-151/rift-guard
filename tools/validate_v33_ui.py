@@ -8,7 +8,7 @@ engine = root.parent / ".tools/godot/Godot_v4.4.1-stable_win64_console.exe"
 out = root / "docs/v33-validation"
 results = []
 
-for resolution in ("1280x720", "1600x900"):
+for resolution in ("1280x720", "1600x900", "1920x1080"):
     destination = out / "ui" / resolution
     result = subprocess.run(
         [

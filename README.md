@@ -87,7 +87,7 @@ V30 增加统一地图表现节点、多出生点传送门、敌人族群数据�
 
 ## 运行与验收
 
-Windows 构建位于 `builds/rift-guard-v33/RiftGuard-V33.exe`。Godot 4.4 工程入口为 `game/project.godot`。
+Windows 构建位于 `builds/rift-guard-v33/RiftGuard-V33.exe`。Godot 4.4 工程入口为 `game/project.godot`。 默认输出分辨率为 1920×1080，逻辑画布为 1280×720。
 
 ```powershell
 python tools/validate_v33.py
