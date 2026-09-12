@@ -1,0 +1,26 @@
+[
+  {
+    "role": "write",
+    "pid": 32384,
+    "session": "run_47e3a818a5704544b7fe1302713df1a0",
+    "exit_code": 0,
+    "ok": true,
+    "checks": 4
+  },
+  {
+    "role": "resume",
+    "pid": 41008,
+    "session": "run_47e3a818a5704544b7fe1302713df1a0",
+    "exit_code": 0,
+    "ok": true,
+    "checks": 9
+  },
+  {
+    "role": "settled",
+    "pid": 35516,
+    "session": "run_47e3a818a5704544b7fe1302713df1a0",
+    "exit_code": 0,
+    "ok": true,
+    "checks": 10
+  }
+]

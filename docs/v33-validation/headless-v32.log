@@ -1,0 +1,16 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V32 PASS: database loads at least twelve team resonances
+V32 PASS: resonance content passes database validation
+V32 PASS: same-element and prismatic compositions obey exclusive priority
+V32 PASS: role composition can activate independently
+V32 PASS: basic character bond activates before relationship threshold
+V32 PASS: relationship threshold unlocks hidden resonance
+V32 PASS: stage reset recomputes current squad resonances
+V32 PASS: resonance changes real combat attack value
+V32 PASS: resonance applies starting energy to every hero
+V32 PASS: cryo composition grants its combat shield
+V32 PASS: resonance critical chance reaches hero stats
+V32 PASS: combat HUD and pause center expose active resonance
+V32 PASS: final build report records active resonances
+V32 QA COMPLETE: 13 checks, 0 failures

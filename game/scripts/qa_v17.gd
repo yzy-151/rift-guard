@@ -105,4 +105,8 @@ func run(game) -> void:
 	expect(int(thresholds[-1]) > int(thresholds[5]) * 10, "late campaign upgrades slow down sharply")
 
 	print("V17 QA COMPLETE: %d checks, %d failures" % [checks, failures])
+	for player: Node in game.find_children("*", "AudioStreamPlayer", true, false):
+		player.stop()
+		player.stream = null
+	await game.get_tree().create_timer(0.08).timeout
 	game.get_tree().quit(failures)

@@ -1,0 +1,16 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V28 PASS: both facings keep positive destination dimensions
+V28 PASS: left-facing art flips through a local transform
+V28 PASS: right-facing asymmetric frame maps its foot to local origin
+V28 PASS: left-facing asymmetric frame maps its foot to local origin
+V28 PASS: right-facing character foot stays centered on its shadow
+V28 PASS: left-facing character foot stays centered on its shadow
+V28 PASS: right-facing monster foot stays centered on its shadow
+V28 PASS: left-facing monster foot stays centered on its shadow
+V28 PASS: every configured character and monster animation frame preserves its pivot in both directions
+V28 PASS: Furina uses Sprite2D flip without a negative parent scale
+V28 PASS: left-facing Furina frame keeps its generated foot pivot at the node origin
+V28 PASS: right-facing Furina frame keeps the same foot anchor
+V28 PASS: battle rendering no longer uses negative-width destination rectangles
+V28 QA COMPLETE: 13 checks, 0 failures

@@ -1,0 +1,96 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V25 PASS: all V25 data and cross references validate
+V25 PASS: twelve-character roster remains stable
+V25 PASS: 旅行者 owns a unique passive
+V25 PASS: 旅行者 damage and SFX share its hit frame
+V25 PASS: 希露菲 owns a unique passive
+V25 PASS: 希露菲 damage and SFX share its hit frame
+V25 PASS: 芙宁娜 owns a unique passive
+V25 PASS: 芙宁娜 damage and SFX share its hit frame
+V25 PASS: 洛琪希 owns a unique passive
+V25 PASS: 洛琪希 damage and SFX share its hit frame
+V25 PASS: 知更鸟 owns a unique passive
+V25 PASS: 知更鸟 damage and SFX share its hit frame
+V25 PASS: 阿米娅 owns a unique passive
+V25 PASS: 阿米娅 damage and SFX share its hit frame
+V25 PASS: 丰川祥子 owns a unique passive
+V25 PASS: 丰川祥子 damage and SFX share its hit frame
+V25 PASS: 艾米莉亚 owns a unique passive
+V25 PASS: 艾米莉亚 damage and SFX share its hit frame
+V25 PASS: 萨勒芬妮 owns a unique passive
+V25 PASS: 萨勒芬妮 damage and SFX share its hit frame
+V25 PASS: 风堇 owns a unique passive
+V25 PASS: 风堇 damage and SFX share its hit frame
+V25 PASS: 凯尔希 owns a unique passive
+V25 PASS: 凯尔希 damage and SFX share its hit frame
+V25 PASS: 铃 owns a unique passive
+V25 PASS: 铃 damage and SFX share its hit frame
+V25 PASS: all active skills and ultimates use distinct gameplay kinds
+V25 PASS: all characters have replaceable animation profiles
+V25 PASS: traveler animation state set is complete
+V25 PASS: hero_02 animation state set is complete
+V25 PASS: hero_03 animation state set is complete
+V25 PASS: hero_04 animation state set is complete
+V25 PASS: hero_05 animation state set is complete
+V25 PASS: hero_06 animation state set is complete
+V25 PASS: hero_07 animation state set is complete
+V25 PASS: hero_08 animation state set is complete
+V25 PASS: hero_09 animation state set is complete
+V25 PASS: hero_10 animation state set is complete
+V25 PASS: hero_11 animation state set is complete
+V25 PASS: hero_12 animation state set is complete
+V25 PASS: at least eight route and terrain templates are data driven
+V25 PASS: eight campaign stages plus endless are selectable
+V25 PASS: stage_01 has three routes, terrain mechanics and a full wave plan
+V25 PASS: stage_02 has three routes, terrain mechanics and a full wave plan
+V25 PASS: stage_03 has three routes, terrain mechanics and a full wave plan
+V25 PASS: stage_04 has three routes, terrain mechanics and a full wave plan
+V25 PASS: stage_05 has three routes, terrain mechanics and a full wave plan
+V25 PASS: stage_06 has three routes, terrain mechanics and a full wave plan
+V25 PASS: stage_07 has three routes, terrain mechanics and a full wave plan
+V25 PASS: stage_08 has three routes, terrain mechanics and a full wave plan
+V25 PASS: six boss pattern libraries are loaded
+V25 PASS: boss_01 owns three telegraphed phases
+V25 PASS: boss_02 owns three telegraphed phases
+V25 PASS: boss_03 owns three telegraphed phases
+V25 PASS: boss_04 owns three telegraphed phases
+V25 PASS: boss_05 owns three telegraphed phases
+V25 PASS: boss_06 owns three telegraphed phases
+V25 PASS: late-game enemy affix pool includes eight behaviors
+V25 PASS: VFX profiles define valid pools and blend modes
+V25 PASS: legacy saves migrate to V25 without losing history
+V25 PASS: performance budget degrades cosmetic load under pressure
+V25 PASS: animation state machine advances frames and preserves facing
+V25 PASS: one-shot animation returns to idle
+V25 PASS: transparent VFX import contract is executable
+V25 PASS: reusable effect pool recycles visual dictionaries
+V25 PASS: structured error reporter retains diagnostic context
+V25 PASS: enemy and projectile hard caps protect endless-mode stability
+V25 PASS: 旅行者 active skill resolves through the synchronized timeline
+V25 PASS: 旅行者 ultimate resolves independently
+V25 PASS: 希露菲 active skill resolves through the synchronized timeline
+V25 PASS: 希露菲 ultimate resolves independently
+V25 PASS: 芙宁娜 active skill resolves through the synchronized timeline
+V25 PASS: 芙宁娜 ultimate resolves independently
+V25 PASS: 洛琪希 active skill resolves through the synchronized timeline
+V25 PASS: 洛琪希 ultimate resolves independently
+V25 PASS: 知更鸟 active skill resolves through the synchronized timeline
+V25 PASS: 知更鸟 ultimate resolves independently
+V25 PASS: 阿米娅 active skill resolves through the synchronized timeline
+V25 PASS: 阿米娅 ultimate resolves independently
+V25 PASS: 丰川祥子 active skill resolves through the synchronized timeline
+V25 PASS: 丰川祥子 ultimate resolves independently
+V25 PASS: 艾米莉亚 active skill resolves through the synchronized timeline
+V25 PASS: 艾米莉亚 ultimate resolves independently
+V25 PASS: 萨勒芬妮 active skill resolves through the synchronized timeline
+V25 PASS: 萨勒芬妮 ultimate resolves independently
+V25 PASS: 风堇 active skill resolves through the synchronized timeline
+V25 PASS: 风堇 ultimate resolves independently
+V25 PASS: 凯尔希 active skill resolves through the synchronized timeline
+V25 PASS: 凯尔希 ultimate resolves independently
+V25 PASS: 铃 active skill resolves through the synchronized timeline
+V25 PASS: 铃 ultimate resolves independently
+V25 PASS: right-click recall path supports redeploy and deploy passive
+V25 PASS: boss attack uses phase-specific telegraph data
+V25 QA COMPLETE: 93 checks, 0 failures

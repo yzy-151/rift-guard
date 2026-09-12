@@ -1,0 +1,54 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V26 PASS: V26 content validates
+V26 PASS: every map owns one replaceable combat contract
+V26 PASS: all twelve characters have a complete playable asset fallback
+V26 PASS: asset readiness report distinguishes placeholders from final art
+V26 PASS: contracts cover kill, reaction and survival play styles
+V26 PASS: kill contract grants its configured luck reward
+V26 PASS: contract completion emits a presentation event exactly once
+V26 PASS: reaction contract grants shield reward
+V26 PASS: energy contract charges independent ultimate meter
+V26 PASS: healing contract restores surviving heroes
+V26 PASS: endless survival contract completes without a crystal objective
+V26 PASS: boss_01 executes phase move pulse
+V26 PASS: boss_01 executes phase move summon
+V26 PASS: boss_01 executes phase move crossfire
+V26 PASS: boss_01 executes phase move charge_summon
+V26 PASS: boss_01 executes phase move fan_burst
+V26 PASS: boss_01 executes phase move elite_summon
+V26 PASS: boss_02 executes phase move runner_summon
+V26 PASS: boss_02 executes phase move splitter_summon
+V26 PASS: boss_02 executes phase move slow_field
+V26 PASS: boss_02 executes phase move swarm
+V26 PASS: boss_02 executes phase move pull
+V26 PASS: boss_03 executes phase move knockback
+V26 PASS: boss_03 executes phase move sweep
+V26 PASS: boss_03 executes phase move flyer_summon
+V26 PASS: boss_03 executes phase move spiral
+V26 PASS: boss_03 executes phase move silence
+V26 PASS: boss_04 executes phase move guard
+V26 PASS: boss_04 executes phase move shockwave
+V26 PASS: boss_04 executes phase move warder_summon
+V26 PASS: boss_04 executes phase move terrain_break
+V26 PASS: boss_04 executes phase move guard
+V26 PASS: boss_05 executes phase move artillery
+V26 PASS: boss_05 executes phase move triple_artillery
+V26 PASS: boss_05 executes phase move burning_ground
+V26 PASS: boss_05 executes phase move carpet_bomb
+V26 PASS: boss_05 executes phase move ranged_summon
+V26 PASS: boss_06 executes phase move drain
+V26 PASS: boss_06 executes phase move slow
+V26 PASS: boss_06 executes phase move drain
+V26 PASS: boss_06 executes phase move rewind
+V26 PASS: boss_06 executes phase move heal_summon
+V26 PASS: six bosses expose eighteen phases and a broad move library
+V26 PASS: line telegraph collision follows the drawn lane
+V26 PASS: leaving a line telegraph avoids damage
+V26 PASS: donut telegraph has a safe inner ring
+V26 PASS: donut telegraph damages its visible outer ring
+V26 PASS: cross telegraph uses orthogonal damage lanes
+V26 PASS: right click cancels skill targeting without moving the hero
+V26 PASS: pause center exposes performance budget and contract progress
+V26 PASS: active skill HUD remains available after V26 interaction changes
+V26 QA COMPLETE: 51 checks, 0 failures

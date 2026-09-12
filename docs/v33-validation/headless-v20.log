@@ -1,0 +1,49 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V20 PASS: V20 data validates
+V20 PASS: roster contains twelve unique characters
+V20 PASS: 旅行者 has active skill and ultimate
+V20 PASS: 希露菲 has active skill and ultimate
+V20 PASS: 芙宁娜 has active skill and ultimate
+V20 PASS: 洛琪希 has active skill and ultimate
+V20 PASS: 知更鸟 has active skill and ultimate
+V20 PASS: 阿米娅 has active skill and ultimate
+V20 PASS: 丰川祥子 has active skill and ultimate
+V20 PASS: 艾米莉亚 has active skill and ultimate
+V20 PASS: 萨勒芬妮 has active skill and ultimate
+V20 PASS: 风堇 has active skill and ultimate
+V20 PASS: 凯尔希 has active skill and ultimate
+V20 PASS: 铃 has active skill and ultimate
+V20 PASS: roster order and names match V20 plan
+V20 PASS: rule-changing relic library loaded
+V20 PASS: enemy affix library loaded
+V20 PASS: branching campaign includes combat, story, elite, shop, rest, recruit, hidden and boss nodes
+V20 PASS: squad starts on deployment bench
+V20 PASS: all three characters can be dragged onto battlefield
+V20 PASS: deployment writes exact legal battlefield position
+V20 PASS: melee damage waits for animation hit frame
+V20 PASS: damage is still absent before the configured hit frame
+V20 PASS: damage, impact event, SFX trigger and shake cue share the hit frame
+V20 PASS: each character owns an independent energy bar
+V20 PASS: non-Traveler active skill enters synchronized impact queue
+V20 PASS: active skill resolves with dedicated impact event
+V20 PASS: selected character can cast ultimate at full energy
+V20 PASS: ultimate consumes only its owner's energy
+V20 PASS: ultimate damage and audiovisual cue resolve on configured hit frame
+V20 PASS: enemy attack first creates a clear warning without dealing damage
+V20 PASS: moving out of warning region avoids the attack
+V20 PASS: fireball evolves into split, burning ground and meteor milestones
+V20 PASS: cards expose projectile, summon, reaction, crit, shield and support tags
+V20 PASS: orbiting sword card upgrades one persistent orbit to the configured level-three count
+V20 PASS: orbiting weapons acquire and damage nearby enemies
+V20 PASS: tag levels are accumulated for build synergies
+V20 PASS: warning-clock relic permanently changes telegraph timing
+V20 PASS: dialogue choices persist relationship, unlock flag and branch route
+V20 PASS: advanced map mechanics are instantiated from replaceable stage data
+V20 PASS: moving platform updates its gameplay collision area
+V20 PASS: late threats receive gameplay affixes
+V20 PASS: final build exports card levels, damage contribution, triggers, highest energy and dodges
+V20 PASS: compendium stores the final build record
+V20 PASS: HUD exposes three energy bars and a selected-character ultimate button
+V20 PASS: battle view renders telegraph zones and orbiting weapons
+V20 QA COMPLETE: 46 checks, 0 failures

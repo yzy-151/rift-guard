@@ -1,0 +1,164 @@
+[
+  {
+    "suite": "V33",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "V33 QA COMPLETE: 85 checks, 0 failures"
+    ],
+    "seconds": 2.73
+  },
+  {
+    "suite": "V32",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "V32 QA COMPLETE: 13 checks, 0 failures"
+    ],
+    "seconds": 1.89
+  },
+  {
+    "suite": "V31",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "V31 QA COMPLETE: 16 checks, 0 failures"
+    ],
+    "seconds": 1.89
+  },
+  {
+    "suite": "V30",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "V30 QA COMPLETE: 25 checks, 0 failures"
+    ],
+    "seconds": 1.89
+  },
+  {
+    "suite": "V29",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "V29 QA COMPLETE: 22 checks, 0 failures"
+    ],
+    "seconds": 1.89
+  },
+  {
+    "suite": "V28",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "V28 QA COMPLETE: 13 checks, 0 failures"
+    ],
+    "seconds": 1.9
+  },
+  {
+    "suite": "V26",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "V26 QA COMPLETE: 51 checks, 0 failures"
+    ],
+    "seconds": 1.89
+  },
+  {
+    "suite": "V25",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "V25 QA COMPLETE: 93 checks, 0 failures"
+    ],
+    "seconds": 1.99
+  },
+  {
+    "suite": "V20",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "V20 QA COMPLETE: 46 checks, 0 failures"
+    ],
+    "seconds": 1.89
+  },
+  {
+    "suite": "V17",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "V17 QA COMPLETE: 15 checks, 0 failures"
+    ],
+    "seconds": 2.26
+  },
+  {
+    "suite": "test_run_state",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "RUN STATE PASSED"
+    ],
+    "seconds": 0.22
+  },
+  {
+    "suite": "test_core_loop_v2",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "CORE LOOP V2 PASSED"
+    ],
+    "seconds": 0.5
+  },
+  {
+    "suite": "test_game_database",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "GAME DATABASE PASSED"
+    ],
+    "seconds": 0.32
+  },
+  {
+    "suite": "test_stage_runtime",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "STAGE RUNTIME PASSED"
+    ],
+    "seconds": 0.31
+  },
+  {
+    "suite": "test_card_pool_v2",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "CARD POOL V2 PASSED"
+    ],
+    "seconds": 0.87
+  },
+  {
+    "suite": "test_mechanic_cards",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "MECHANIC CARDS PASSED"
+    ],
+    "seconds": 0.4
+  },
+  {
+    "suite": "test_crystal_progression",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "CRYSTAL PROGRESSION PASSED"
+    ],
+    "seconds": 0.22
+  },
+  {
+    "suite": "test_story",
+    "exit_code": 0,
+    "ok": true,
+    "summary": [
+      "STORY VALIDATION: 30 source lines; PASS"
+    ],
+    "seconds": 0.22
+  }
+]

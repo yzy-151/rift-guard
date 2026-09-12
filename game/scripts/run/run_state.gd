@@ -22,6 +22,7 @@ var current_node := "c1_combat_1"
 var completed_nodes: Array[String] = []
 var rift_shards := 0
 var campaign_perks: Dictionary = {}
+var campaign_luck: float = 0.0
 var resolved_nodes: Dictionary = {}
 var rewarded_stages: Dictionary = {}
 var active_resonances: Array[String] = []
@@ -45,6 +46,7 @@ func reset_run_meta() -> void:
 	completed_nodes.clear()
 	rift_shards = 0
 	campaign_perks.clear()
+	campaign_luck = 0.0
 	resolved_nodes.clear()
 	rewarded_stages.clear()
 	active_resonances.clear()
@@ -60,7 +62,7 @@ func reset_for_stage(next_stage_id: String) -> void:
 	pending_level_ups = 0
 	legendary_count = 0
 	mythic_count = 0
-	luck = 0.0
+	luck = campaign_luck
 
 func grant_stage_reward(completed_stage_id: String, kills: int, remaining_base_hp: int, boss: bool = false) -> int:
 	if rewarded_stages.has(completed_stage_id):
@@ -116,5 +118,6 @@ func export_build() -> Dictionary:
 		"tag_counts": tag_counts.duplicate(true), "relationships": relationships.duplicate(true),
 		"story_flags": story_flags.duplicate(true), "node": current_node,
 		"rift_shards": rift_shards, "campaign_perks": campaign_perks.duplicate(true),
-		"resolved_nodes": resolved_nodes.duplicate(true), "active_resonances": active_resonances.duplicate()
+		"resolved_nodes": resolved_nodes.duplicate(true), "active_resonances": active_resonances.duplicate(),
+		"campaign_luck": campaign_luck
 	}

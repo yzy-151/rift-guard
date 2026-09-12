@@ -1,0 +1,14 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V33 RESTART PASS: shared session stays inside isolated QA storage
+V33 RESTART PASS: new process discovers the saved continue entry
+V33 RESTART PASS: new process continues the saved squad through the menu
+V33 RESTART PASS: stage and route survive a process restart
+V33 RESTART PASS: persistent luck and fortification reach the restored simulation
+V33 RESTART PASS: relationships and story flags survive a process restart
+V33 RESTART PASS: old stage cannot award currency in a new process
+V33 RESTART PASS: third process resumes the route after the settled event
+V33 RESTART PASS: purchased relic, remaining currency and one-shot ledger survive restart
+V33 RESTART PASS: new process rejects a second event reward
+V33 RESTART PROCESS: 35516 settled
+V33 RESTART QA COMPLETE: 10 checks, 0 failures

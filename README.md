@@ -4,7 +4,10 @@
 
 ![战斗、技能与预警](docs/v20-validation/01-deployment-skills-telegraph.png)
 
-## V32 核心玩法
+## V33 核心玩法
+
+- **远征检查点**：主菜单可继续上次远征，保留编队、路线、裂隙币、遗物、远征幸运、增益与剧情关系；战斗从本关起点重开，待选事件原位恢复，已结算奖励不会重复领取。
+- **恢复与保存提示**：检查点交替写入两份记录，最新记录损坏时回退到上一份有效记录；保存失败会在当前界面显示提示。新远征在确认编队后更新检查点，无尽模式保留远征记录。
 
 - **队伍共鸣**：十四套元素、角色羁绊和职业组合会直接改变攻击、生命、攻速、移速、反应、能量、护盾与幸运；三色与同元素核心互斥。
 - **战役事件闭环**：通关获得裂隙币；商店、休整、招募与隐藏节点均提供三选一，遗物、幸运、编队与远征增益可跨关卡生效。
@@ -69,6 +72,7 @@
 - 动画与透明特效交付规范：`docs/v25-asset-pipeline.md`
 - 角色素材就绪度：`docs/asset-readiness-v26.md`
 - V27 怪物与锚点素材流：`docs/v27-asset-pipeline.md`
+- V33 远征检查点与续玩：`docs/v33-release-notes.md`
 - V32 队伍共鸣与羁绊构筑：`docs/v32-release-notes.md`
 - V31 战役事件与跨关卡进度：`docs/v31-release-notes.md`
 - V30 地图、怪物与遭遇：`docs/v30-release-notes.md`
@@ -83,10 +87,13 @@ V30 增加统一地图表现节点、多出生点传送门、敌人族群数据�
 
 ## 运行与验收
 
-Windows 构建位于 `builds/rift-guard-v32/RiftGuard-V32.exe`。Godot 4.4 工程入口为 `game/project.godot`。
+Windows 构建位于 `builds/rift-guard-v33/RiftGuard-V33.exe`。Godot 4.4 工程入口为 `game/project.godot`。
 
 ```powershell
-Godot_v4.4.1-stable_win64_console.exe --headless --path game -- --v32-test
+python tools/validate_v33.py
+python tools/validate_v33_visual.py
+python tools/validate_v33_ui.py
+python tools/validate_v33_release.py
 ```
 
-V32 自动验收包含 13 项专项检查，并继续执行 V31、V30、V29、V28、V26、V25、V20 和 V17 回归，全部为 0 failures。发布包专项与模式点击验收退出码均为 0。
+V33 验收覆盖检查点往返、损坏恢复、失败重开、奖励去重、路线门槛、保存错误提示和跨进程续玩；同时执行 V32、V31、V30、V29、V28、V26、V25、V20、V17 与八组底层回归，结果记录在 `docs/v33-validation/`。独立 UI 验收在两种分辨率下用真实鼠标走通菜单、设置、模式、关卡、编队、对话、部署、技能、终结技、卡牌与暂停入口。

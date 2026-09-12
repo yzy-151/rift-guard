@@ -84,6 +84,7 @@ func show_result(result: Dictionary, shards: int) -> void:
 		for i in option_buttons.size():
 			var button: Button = option_buttons[i]
 			button.disabled = true
+			button.add_theme_color_override("font_disabled_color", WHITE if i == selected_index else MUTED)
 			button.modulate = Color.WHITE if i == selected_index else Color(0.76,0.70,0.73,0.86)
 		close_button.text = "继续前进   →"
 	else:

@@ -1,0 +1,18 @@
+[
+  {
+    "resolution": "1280x720",
+    "ok": true,
+    "exit_code": 0,
+    "summary": [
+      "V33 UI QA COMPLETE: 32 checks, 0 failures"
+    ]
+  },
+  {
+    "resolution": "1600x900",
+    "ok": true,
+    "exit_code": 0,
+    "summary": [
+      "V33 UI QA COMPLETE: 32 checks, 0 failures"
+    ]
+  }
+]

@@ -1,0 +1,94 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V33 PASS: QA progress, settings and checkpoints are isolated from player saves
+V33 PASS: fresh install disables continue without a checkpoint
+V33 PASS: missing checkpoint leaves menu open
+V33 PASS: formation checkpoint retains unfinished opening dialogue
+V33 PASS: continuing a briefing reopens unfinished dialogue
+V33 PASS: completed opening commits a battle checkpoint
+V33 PASS: formation confirmation writes a real stage-entry checkpoint
+V33 PASS: direct stage selection aligns its campaign node
+V33 PASS: all campaign fields form a valid event checkpoint
+V33 PASS: checkpoint saves after previous stage-entry record
+V33 PASS: a fresh reader restores latest on-disk checkpoint
+V33 PASS: route completion and pending choice round-trip
+V33 PASS: stage seed round-trips
+V33 PASS: checkpoint applies to a fresh simulation
+V33 PASS: squad and stage restore together
+V33 PASS: relationship thresholds and story flags survive restore
+V33 PASS: restored expedition perks reach combat stats
+V33 PASS: relic and resonance effects recompute from restored composition
+V33 PASS: checkpoint restarts stage without stale enemies or local cards
+V33 PASS: reward ledger prevents claiming cleared stage again after restore
+V33 PASS: malformed field rejected: squad
+V33 PASS: malformed field rejected: completed_nodes
+V33 PASS: malformed field rejected: relics
+V33 PASS: malformed field rejected: campaign_perks
+V33 PASS: malformed field rejected: relationships
+V33 PASS: malformed field rejected: story_flags
+V33 PASS: malformed field rejected: resolved_nodes
+V33 PASS: malformed field rejected: rewarded_stages
+V33 PASS: unknown schema rejects before touching live state
+V33 PASS: unknown character rejected
+V33 PASS: duplicate party members rejected
+V33 PASS: endless cannot enter campaign checkpoint
+V33 PASS: negative currency rejected
+V33 PASS: fractional currency rejected
+V33 PASS: unknown expedition perk rejected
+V33 PASS: event checkpoint cannot point to a combat node
+V33 PASS: unwritable destination reports a save error
+V33 PASS: failed save elsewhere preserves valid campaign checkpoint
+V33 PASS: first recovery slot written
+V33 PASS: second recovery slot written
+V33 PASS: truncated latest slot recovers previous complete record
+V33 PASS: bad checksum and truncated backup fail without applying data
+V33 PASS: new checkpoint can recover an unusable pair
+V33 PASS: menu shows latest currency and enabled continue
+V33 PASS: menu exposes saved squad
+V33 PASS: real continue click restores pending event directly
+V33 PASS: resumed event pointer choice spends currency once
+V33 PASS: resolved event immediately persists its one-shot ledger
+V33 PASS: resolved event resumes on route instead of offering reward again
+V33 PASS: event cannot be purchased twice after reloading
+V33 PASS: restored route remains accessible through the public map action
+V33 PASS: restored route can still enter its next pending event
+V33 PASS: successful event reports checkpoint write failure separately
+ERROR: V33 FAIL: save failure remains visible above full-screen event, map and dialogue panels
+   at: push_error (core/variant/variant_utility.cpp:1098)
+V33 PASS: save failure notification does not intercept pointer input
+ERROR: V33 FAIL: save failure remains visible when dialogue hides the HUD
+   at: push_error (core/variant/variant_utility.cpp:1098)
+ERROR: V33 FAIL: failed event save still advances live route phase
+   at: push_error (core/variant/variant_utility.cpp:1098)
+V33 PASS: successful retry clears the visible save failure
+V33 PASS: shop luck offer applies
+V33 PASS: shop luck survives stage reset
+V33 PASS: persistent luck reapplies without accumulating every reset
+V33 PASS: defeat opens its actual dialogue
+V33 PASS: finishing defeat dialogue never replaces battle checkpoint with route
+V33 PASS: continuing after defeat replays the stage instead of bypassing it
+ERROR: V33 FAIL: paused battle after defeat cannot open a route that skips the stage
+   at: push_error (core/variant/variant_utility.cpp:1098)
+ERROR: V33 FAIL: direct route selection cannot bypass an unfinished restored battle
+   at: push_error (core/variant/variant_utility.cpp:1098)
+V33 PASS: defeat grants no campaign currency or reward ledger entry
+V33 PASS: victory grants campaign currency
+V33 PASS: result callback cannot grant rewards twice
+V33 PASS: build history records currency after settlement
+V33 PASS: cleared checkpoint resumes post-victory with settlement already recorded
+V33 PASS: next-stage formation retains checkpoint squad even with a fresh progress file
+V33 PASS: cleared checkpoint exposes next-stage formation without requiring stage hotkeys
+V33 PASS: restored victory displays its actual settled combat statistics
+ERROR: V33 FAIL: restarting a cleared stage resets route access even when checkpoint writing fails
+   at: push_error (core/variant/variant_utility.cpp:1098)
+V33 PASS: chapter-one boss checkpoint continues directly into chapter-two formation
+V33 PASS: battle checkpoint resumes at stage start and runs
+V33 PASS: completed opening restores relationship without replaying its choice
+V33 PASS: opening luck is retained when restarting from saved battle entry
+ERROR: V33 FAIL: opening choice moving the route node cannot unlock route travel during battle
+   at: push_error (core/variant/variant_utility.cpp:1098)
+ERROR: V33 FAIL: direct event selection is blocked after an opening changes the route node
+   at: push_error (core/variant/variant_utility.cpp:1098)
+V33 PASS: endless result never grants campaign currency
+V33 PASS: playing endless preserves the campaign checkpoint
+V33 QA COMPLETE: 83 checks, 8 failures

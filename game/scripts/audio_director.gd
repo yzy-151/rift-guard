@@ -15,6 +15,7 @@ var values := {
 	"fullscreen": false,
 	"reduced_effects": false
 }
+var save_path := SAVE_PATH
 var music_player: AudioStreamPlayer
 var current_scene := ""
 
@@ -72,9 +73,9 @@ func _set_bus_level(bus_name: String, amount: float) -> void:
 	AudioServer.set_bus_volume_db(index, linear_to_db(maxf(0.001, amount)))
 
 func _load_settings() -> void:
-	if not FileAccess.file_exists(SAVE_PATH):
+	if not FileAccess.file_exists(save_path):
 		return
-	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
+	var file := FileAccess.open(save_path, FileAccess.READ)
 	if file == null:
 		return
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
@@ -85,6 +86,6 @@ func _load_settings() -> void:
 			values[key] = parsed[key]
 
 func _save_settings() -> void:
-	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	var file := FileAccess.open(save_path, FileAccess.WRITE)
 	if file != null:
 		file.store_string(JSON.stringify(values, "  "))

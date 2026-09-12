@@ -16,6 +16,7 @@ const SettingsPanel = preload("res://scripts/settings_panel.gd")
 const CampaignMapPanel = preload("res://scripts/campaign_map_panel.gd")
 const CampaignEventPanel = preload("res://scripts/campaign_event_panel.gd")
 const CampaignNodeResolver = preload("res://scripts/campaign_node_resolver.gd")
+const CampaignCheckpoint = preload("res://scripts/campaign_checkpoint.gd")
 var content = Content.new()
 var story = Story.new(content)
 var saved_story
@@ -36,6 +37,14 @@ var settings_panel
 var campaign_map_panel
 var campaign_event_panel
 var campaign_node_resolver = CampaignNodeResolver.new()
+var checkpoint_store = CampaignCheckpoint.new()
+var checkpoint_phase := "battle"
+var checkpoint_active := false
+var checkpoint_testing := false
+var checkpoint_error := ""
+var checkpoint_warning: Label
+var checkpoint_overlay: CanvasLayer
+var qa_storage_path := ""
 var settings_from_menu := false
 var pending_endless_inheritance: Dictionary = {}
 var sound_timer: float = 0.0
@@ -52,7 +61,22 @@ var skill_aiming := false
 var dragging_hero_id: int = -1
 
 func _ready() -> void:
+	# Every QA process writes progress into its own directory, never the player's save.
+	if Array(OS.get_cmdline_user_args()).any(func(arg: String) -> bool: return arg.ends_with("-test") or arg.begins_with("--qa")):
+		var qa_path := "user://qa-%d-%d" % [OS.get_process_id(), int(Time.get_unix_time_from_system() * 1000000)]
+		if "--v33-restart-test" in OS.get_cmdline_user_args():
+			for arg: String in OS.get_cmdline_user_args():
+				if arg.begins_with("--qa-session="):
+					var session := arg.trim_prefix("--qa-session=")
+					if session.is_valid_identifier() and session.length() <= 64:
+						qa_path = "user://qa-v33-restart-" + session
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(qa_path))
+		qa_storage_path = qa_path
+		compendium = CompendiumState.new(qa_path.path_join("compendium.json"))
+		checkpoint_store = CampaignCheckpoint.new(qa_path.path_join("campaign-checkpoint"))
 	audio_director = AudioDirector.new()
+	if not qa_storage_path.is_empty():
+		audio_director.save_path = qa_storage_path.path_join("settings.json")
 	add_child(audio_director)
 	battle = View.new()
 	battle.sim = sim
@@ -79,6 +103,16 @@ func _ready() -> void:
 	hud.main_menu_action.connect(return_to_main_menu)
 	hud.formation_action.connect(set_formation_command)
 	hud.map_action.connect(open_campaign_map)
+	checkpoint_overlay = CanvasLayer.new()
+	checkpoint_overlay.layer = 100
+	add_child(checkpoint_overlay)
+	var checkpoint_frame: Panel = hud.panel(checkpoint_overlay, Rect2(40, 12, 1200, 46), Color("#32151f"), Color("#ff8797"))
+	checkpoint_frame.theme = hud.get_child(0).theme
+	checkpoint_warning = hud.label(checkpoint_frame, Vector2(16, 4), Vector2(1168, 38), "", 15, Color("#ffb1bc"))
+	checkpoint_warning.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	checkpoint_warning.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	checkpoint_warning.hide()
+	checkpoint_overlay.hide()
 	sound = AudioStreamPlayer.new()
 	sound.stream = preload("res://assets/hit.ogg")
 	sound.bus = "SFX"
@@ -108,6 +142,7 @@ func _ready() -> void:
 	mode_select_panel.build(hud)
 	mode_select_panel.chosen.connect(choose_mode)
 	mode_select_panel.settings_requested.connect(open_settings)
+	mode_select_panel.continue_requested.connect(resume_campaign)
 	campaign_map_panel = CampaignMapPanel.new()
 	add_child(campaign_map_panel)
 	campaign_map_panel.build(hud, sim.database, sim.run_state)
@@ -129,7 +164,22 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v32-test" in OS.get_cmdline_user_args():
+	if "--v33-restart-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v33_restart_test")
+	elif "--v33-ui-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v33_ui_test")
+	elif "--v33-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v33_test")
+	elif "--v32-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		set_physics_process(false)
 		call_deferred("run_v32_test")
@@ -266,19 +316,24 @@ func _physics_process(dt: float) -> void:
 	check_story()
 	process_events()
 	compendium.observe(sim)
-	if sim.state in ["won", "lost"] and not stage_result_recorded:
-		if sim.state == "won":
-			var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {})
-			compendium.clear_stage(sim.current_stage_id, stage.get("unlocks", []))
-		compendium.record_result(sim.current_stage_id, sim.kills, sim.base_hp, sim.best_streak)
-		compendium.record_build(sim)
-		var current_node: Dictionary = campaign_map_panel.node_rows.get(sim.run_state.current_node,{}) if campaign_map_panel != null else {}
-		var boss_reward := str(current_node.get("type","")) == "boss" or str(sim.current_stage_id) in ["stage_03","stage_08"]
-		var shard_reward: int = sim.run_state.grant_stage_reward(sim.current_stage_id,sim.kills,sim.base_hp,boss_reward)
-		if shard_reward > 0: hud.signature = "关卡结算 · 获得 ◇ %d 裂隙币" % shard_reward
-		stage_result_recorded = true
+	record_stage_result()
 	if not story.active:
 		hud.refresh(sim, selected_id)
+
+func record_stage_result() -> void:
+	if sim.state not in ["won", "lost"] or stage_result_recorded:
+		return
+	if sim.state == "won":
+		var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {})
+		compendium.clear_stage(sim.current_stage_id, stage.get("unlocks", []))
+		if not sim.endless_mode:
+			var node: Dictionary = CampaignCheckpoint.nodes(sim.database).get(sim.run_state.current_node, {})
+			var boss: bool = str(node.get("type", "")) == "boss" or sim.current_stage_id in ["stage_03", "stage_08"]
+			sim.run_state.grant_stage_reward(sim.current_stage_id, sim.kills, sim.base_hp, boss)
+			save_campaign_checkpoint("cleared")
+	compendium.record_result(sim.current_stage_id, sim.kills, sim.base_hp, sim.best_streak)
+	compendium.record_build(sim)
+	stage_result_recorded = true
 
 func _process(dt: float) -> void:
 	if effect_preview > 0:
@@ -329,11 +384,16 @@ func refresh() -> void:
 func open_mode_menu() -> void:
 	audio_director.set_scene("menu")
 	hud.get_child(0).hide()
+	var checkpoint: Dictionary = checkpoint_store.load_checkpoint(sim.database)
+	if not checkpoint_error.is_empty():
+		checkpoint["message"] = checkpoint_error
+	mode_select_panel.update_checkpoint(checkpoint, sim.database)
 	mode_select_panel.open()
 
 func choose_mode(mode_id: String) -> void:
 	mode_select_panel.close()
 	sim.run_state.reset_run_meta()
+	checkpoint_active = false
 	hud.get_child(0).hide()
 	if mode_id == "endless_survival":
 		choose_stage("stage_endless")
@@ -343,6 +403,11 @@ func choose_mode(mode_id: String) -> void:
 
 func return_to_main_menu() -> void:
 	story.reset()
+	dialogue.root.hide()
+	campaign_event_panel.root.hide()
+	campaign_map_panel.root.hide()
+	squad_panel.root.hide()
+	stage_select_panel.close()
 	pending_stage_id = ""
 	pending_stage_number = 0
 	stage_result_recorded = false
@@ -351,6 +416,79 @@ func return_to_main_menu() -> void:
 	set_skill_aiming(false)
 	hud.signature = ""
 	open_mode_menu()
+
+func save_campaign_checkpoint(phase: String) -> bool:
+	if not checkpoint_active or sim.endless_mode:
+		return false
+	# Live progression must remain correct even when the disk write fails.
+	checkpoint_phase = phase
+	if test_mode and not checkpoint_testing:
+		return false
+	var snapshot: Dictionary = CampaignCheckpoint.snapshot(sim, phase)
+	if not checkpoint_store.save_checkpoint(snapshot, sim.database):
+		checkpoint_error = checkpoint_store.last_message
+		checkpoint_warning.text = checkpoint_error
+		checkpoint_warning.show()
+		checkpoint_overlay.show()
+		mode_select_panel.update_checkpoint({"ok": false, "message": checkpoint_error}, sim.database)
+		return false
+	checkpoint_error = ""
+	checkpoint_warning.hide()
+	checkpoint_overlay.hide()
+	return true
+
+func resume_campaign() -> bool:
+	var loaded: Dictionary = checkpoint_store.load_checkpoint(sim.database)
+	if not bool(loaded.ok):
+		mode_select_panel.update_checkpoint(loaded, sim.database)
+		return false
+	var snapshot: Dictionary = loaded.snapshot
+	if not CampaignCheckpoint.restore(snapshot, sim):
+		return false
+	for id: String in snapshot.run.squad:
+		compendium.unlock_character(id)
+	story.reset()
+	story_resume = ""
+	dialogue.root.hide()
+	mode_select_panel.close()
+	stage_select_panel.close()
+	squad_panel.root.hide()
+	campaign_event_panel.root.hide()
+	campaign_map_panel.root.hide()
+	pending_stage_id = ""
+	pending_stage_number = 0
+	checkpoint_active = true
+	checkpoint_phase = str(snapshot.phase)
+	stage_result_recorded = checkpoint_phase == "cleared"
+	selected_id = 0
+	fx.active.clear()
+	battle.reset_transients()
+	set_skill_aiming(false)
+	hud.get_child(0).show()
+	if checkpoint_phase == "briefing":
+		var ids: Array = sim.database.modes.get("rift_watch", {}).get("stage_ids", [])
+		var number := ids.find(sim.current_stage_id) + 1
+		var opening_key := "mode1_opening" if number == 1 else "mode1_stage%d_opening" % number
+		if not begin_dialogue(opening_key, "start"):
+			sim.start()
+			save_campaign_checkpoint("battle")
+	elif checkpoint_phase == "battle":
+		sim.start()
+		audio_director.set_scene("battle")
+	else:
+		sim.state = "won" if checkpoint_phase == "cleared" else "paused"
+		story.seen["mode1_won"] = true
+		story.seen["mode1_final_won"] = true
+		if checkpoint_phase == "cleared" and has_next_stage():
+			advance_stage()
+		else:
+			campaign_map_panel.open()
+		if checkpoint_phase == "event":
+			var node: Dictionary = CampaignCheckpoint.nodes(sim.database).get(sim.run_state.current_node, {})
+			campaign_map_panel.close()
+			open_campaign_event(node)
+	refresh()
+	return true
 
 func primary() -> void:
 	if story.active:
@@ -385,6 +523,10 @@ func restart() -> void:
 		dialogue.auto_mode = false
 		dialogue.auto_button.text = "自动：关"
 	sim.restart_current_stage()
+	if checkpoint_active and not sim.endless_mode:
+		checkpoint_phase = "briefing"
+	campaign_map_panel.root.hide()
+	campaign_event_panel.root.hide()
 	selected_id = 0
 	fx.active.clear()
 	effect_preview = 0
@@ -669,13 +811,17 @@ func end_dialogue() -> void:
 	story_resume = ""
 	if action == "start":
 		sim.start()
+		save_campaign_checkpoint("battle")
 		audio_director.set_scene("endless" if sim.endless_mode else "battle")
 		hud.signature = ""
 		refresh()
 	elif action == "stage_exit":
+		save_campaign_checkpoint("cleared")
 		play_stage_exit()
 	elif action == "inherit_endless":
 		start_inherited_endless()
+	elif action == "campaign_route":
+		save_campaign_checkpoint("route")
 	refresh()
 
 func check_story() -> void:
@@ -731,13 +877,20 @@ func advance_stage() -> void:
 	squad_panel.open(pending_stage_id, sim.run_state.squad, unlocks)
 	sound.stop()
 
+func can_travel_campaign_route() -> bool:
+	if sim.endless_mode or sim.state not in ["ready", "paused", "won"]:
+		return false
+	return sim.state == "won" or checkpoint_phase in ["route", "event", "cleared"]
+
 func open_campaign_map() -> void:
-	if story.active or campaign_map_panel.is_open() or sim.state not in ["ready", "paused", "won"]:
+	if story.active or campaign_map_panel.is_open() or not can_travel_campaign_route():
 		return
 	campaign_map_panel.open()
 	sound.stop()
 
 func choose_campaign_node(node_id: String) -> void:
+	if story.active or not can_travel_campaign_route():
+		return
 	var node: Dictionary = campaign_map_panel.node_rows.get(node_id, {})
 	if node.is_empty():
 		return
@@ -752,9 +905,10 @@ func choose_campaign_node(node_id: String) -> void:
 				pending_stage_id = stage_id
 				squad_panel.open(stage_id, sim.run_state.squad, [unlock_id] if not unlock_id.is_empty() else [])
 		"story":
-			if not begin_dialogue(str(node.get("story", "mode1_opening"))):
-				begin_dialogue("mode1_opening")
+			if not begin_dialogue(str(node.get("story", "mode1_opening")), "campaign_route"):
+				begin_dialogue("mode1_opening", "campaign_route")
 		"shop", "rest", "recruit", "hidden":
+			save_campaign_checkpoint("event")
 			open_campaign_event(node)
 	hud.signature = ""
 	refresh()
@@ -769,6 +923,7 @@ func resolve_campaign_option(option: Dictionary) -> void:
 		var unlock_id := str(result.get("unlock_character",""))
 		if not unlock_id.is_empty(): compendium.unlock_character(unlock_id)
 		compendium.save_progress()
+		save_campaign_checkpoint("route")
 	campaign_event_panel.show_result(result,sim.run_state.rift_shards)
 	refresh()
 
@@ -817,6 +972,16 @@ func confirm_next_squad(squad: Array[String]) -> void:
 		return
 	story.reset()
 	sim.reset_stage(pending_stage_id, squad, sim.run_seed + 1)
+	if not sim.endless_mode:
+		var campaign_nodes := CampaignCheckpoint.nodes(sim.database)
+		var current: Dictionary = campaign_nodes.get(sim.run_state.current_node, {})
+		if str(current.get("stage_id", "")) != pending_stage_id:
+			for node: Dictionary in campaign_nodes.values():
+				if str(node.get("stage_id", "")) == pending_stage_id:
+					sim.run_state.current_node = str(node.id)
+					break
+		checkpoint_active = true
+		save_campaign_checkpoint("briefing")
 	if sim.endless_mode and not sim.heroes.is_empty():
 		battle.camera_center = sim.heroes[0].pos
 	selected_id = 0
@@ -835,6 +1000,7 @@ func confirm_next_squad(squad: Array[String]) -> void:
 	pending_stage_number = 0
 	if dialogue_key.is_empty() or not begin_dialogue(dialogue_key, "start"):
 		sim.start()
+		save_campaign_checkpoint("battle")
 		audio_director.set_scene("endless" if sim.endless_mode else "battle")
 		hud.signature = ""
 		refresh()
@@ -1051,6 +1217,18 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v33_restart_test() -> void:
+	var suite = preload("res://scripts/qa_v33_restart.gd").new()
+	await suite.run(self)
+
+func run_v33_ui_test() -> void:
+	var suite = preload("res://scripts/qa_v33_ui.gd").new()
+	await suite.run(self)
+
+func run_v33_test() -> void:
+	var suite = preload("res://scripts/qa_v33.gd").new()
 	await suite.run(self)
 
 func run_v32_test() -> void:

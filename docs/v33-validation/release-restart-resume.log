@@ -1,0 +1,14 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 591.86 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 5060 Ti
+
+V33 RESTART PASS: shared session stays inside isolated QA storage
+V33 RESTART PASS: new process discovers the saved continue entry
+V33 RESTART PASS: new process continues the saved squad through the menu
+V33 RESTART PASS: stage and route survive a process restart
+V33 RESTART PASS: persistent luck and fortification reach the restored simulation
+V33 RESTART PASS: relationships and story flags survive a process restart
+V33 RESTART PASS: old stage cannot award currency in a new process
+V33 RESTART PASS: pending event and currency resume together
+V33 RESTART PASS: real event click pays once and persists its result
+V33 RESTART PROCESS: 43760 resume
+V33 RESTART QA COMPLETE: 9 checks, 0 failures

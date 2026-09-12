@@ -1,0 +1,28 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V30 PASS: V30 content and cross references validate
+V30 PASS: campaign and endless expose nine maps
+V30 PASS: all nine maps own readable routes terrain and multiple spawn groups
+V30 PASS: advanced route templates cover fork loop and breakable shortcut
+V30 PASS: spawn portal owns forming opening active and closing phases
+V30 PASS: route arrows move continuously across turns
+V30 PASS: overlapping route beds remain visually quiet
+V30 PASS: slime_split is configured
+V30 PASS: slime_heal is configured
+V30 PASS: slime_shield is configured
+V30 PASS: slime_bomb is configured
+V30 PASS: slime_elemental is configured
+V30 PASS: enemy roster exposes at least twelve distinct behaviors
+V30 PASS: encounters rotate across legal route spawn points
+V30 PASS: spawned enemies inherit family behavior data
+V30 PASS: warnings alone reveal animated route and portal previews
+V30 PASS: performance degradation always preserves combat warnings
+V30 PASS: six three-phase bosses own eighteen distinct arena events
+V30 PASS: stage runtime activates boss arena changes
+V30 PASS: arena changes expire without stale collision state
+V30 PASS: boss health transition activates its configured arena event
+V30 PASS: 300 enemies 180 projectiles and 120 effects remain inside staged budget
+V30 PASS: load shedding preserves critical combat information
+V30 PASS: stress fixture retains 300 enemies and 180 projectiles
+V30 PASS: bounded effect pool reuses cosmetic payloads
+V30 QA COMPLETE: 25 checks, 0 failures

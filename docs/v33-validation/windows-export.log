@@ -1,0 +1,1586 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+first_scan_filesystem: begin: 项目初始化 steps: 5
+	first_scan_filesystem: step 0: 正在扫描文件结构……
+	first_scan_filesystem: step 1: 正在加载全局类名……
+	first_scan_filesystem: step 2: 正在校验 GDExtension……
+	first_scan_filesystem: step 3: 正在创建自动加载脚本……
+	first_scan_filesystem: step 4: 正在初始化插件……
+	first_scan_filesystem: step 5: 正在启动文件扫描……
+first_scan_filesystem: end
+savepack: begin: 打包中 steps: 102
+	savepack: step 2: 保存文件：res://.godot/imported/furina-chibi-v1-alpha.png-4b4b84e1418faa4d39f9f75359b6cb7a.ctex
+	savepack: step 2: 保存文件：res://assets/characters/furina/furina-chibi-v1-alpha.png.import
+	savepack: step 2: 保存文件：res://.godot/imported/furina-chibi-v1.png-a3a2bedf393d0a651ce3ef186edb96cc.ctex
+	savepack: step 2: 保存文件：res://assets/characters/furina/furina-chibi-v1.png.import
+	savepack: step 2: 保存文件：res://.godot/imported/furina-parts-board-alpha.png-782dc18b575e6833747429f708568795.ctex
+	savepack: step 2: 保存文件：res://assets/characters/furina/furina-parts-board-alpha.png.import
+	savepack: step 2: 保存文件：res://.godot/imported/furina-parts-contact-sheet.jpg-c0f3c19f5ea1e757eda780e859f6465e.ctex
+	savepack: step 2: 保存文件：res://assets/characters/furina/furina-parts-contact-sheet.jpg.import
+	savepack: step 2: 保存文件：res://.godot/imported/part-00.png-79b643f20ef79038a4ae00a8e9d5469a.ctex
+	savepack: step 2: 保存文件：res://assets/characters/furina/part-00.png.import
+	savepack: step 2: 保存文件：res://.godot/imported/part-01.png-458ca55a231159b19ecdd719d4a435f4.ctex
+	savepack: step 2: 保存文件：res://assets/characters/furina/part-01.png.import
+	savepack: step 2: 保存文件：res://.godot/imported/part-02.png-563e95ef44e3809a855587a3d02e4a20.ctex
+	savepack: step 2: 保存文件：res://assets/characters/furina/part-02.png.import
+	savepack: step 2: 保存文件：res://.godot/imported/part-03.png-3dd5307f8269a7d964dafcb8280ca554.ctex
+	savepack: step 2: 保存文件：res://assets/characters/furina/part-03.png.import
+	savepack: step 3: 保存文件：res://.godot/imported/part-04.png-40cacb2d601b378a192046b8080ac031.ctex
+	savepack: step 3: 保存文件：res://assets/characters/furina/part-04.png.import
+	savepack: step 3: 保存文件：res://.godot/imported/part-05.png-8f0017ffb6a82b23b5328f7aa3936a21.ctex
+	savepack: step 3: 保存文件：res://assets/characters/furina/part-05.png.import
+	savepack: step 3: 保存文件：res://.godot/imported/part-06.png-5543c8fe1f30522f283ae4545853c589.ctex
+	savepack: step 3: 保存文件：res://assets/characters/furina/part-06.png.import
+	savepack: step 3: 保存文件：res://.godot/imported/part-07.png-bb5184c1da4f7d9e679975d0812e56e1.ctex
+	savepack: step 3: 保存文件：res://assets/characters/furina/part-07.png.import
+	savepack: step 3: 保存文件：res://.godot/imported/part-08.png-6ecd6d3fad9239ef2af0af0b17240908.ctex
+	savepack: step 3: 保存文件：res://assets/characters/furina/part-08.png.import
+	savepack: step 3: 保存文件：res://.godot/imported/part-09.png-b4d2a2874e61d4c536f16032d3ba4894.ctex
+	savepack: step 3: 保存文件：res://assets/characters/furina/part-09.png.import
+	savepack: step 3: 保存文件：res://.godot/imported/part-10.png-49069e85366725f110e0505c150fba11.ctex
+	savepack: step 3: 保存文件：res://assets/characters/furina/part-10.png.import
+	savepack: step 3: 保存文件：res://.godot/imported/part-11.png-22ecfb41c10e0d26ecb0a987da23f4cf.ctex
+	savepack: step 3: 保存文件：res://assets/characters/furina/part-11.png.import
+	savepack: step 4: 保存文件：res://.godot/imported/part-12.png-66f063f2a68bd988da07b81541484ee8.ctex
+	savepack: step 4: 保存文件：res://assets/characters/furina/part-12.png.import
+	savepack: step 4: 保存文件：res://.godot/imported/part-13.png-0e175fa67ea02ad36c0d7a2988204934.ctex
+	savepack: step 4: 保存文件：res://assets/characters/furina/part-13.png.import
+	savepack: step 4: 保存文件：res://.godot/imported/part-14.png-fed1064bbc0ff042dbce0a23e00f7f58.ctex
+	savepack: step 4: 保存文件：res://assets/characters/furina/part-14.png.import
+	savepack: step 4: 保存文件：res://.godot/imported/part-15.png-a8d92be955fed1f4a5aa402e75b22c69.ctex
+	savepack: step 4: 保存文件：res://assets/characters/furina/part-15.png.import
+	savepack: step 4: 保存文件：res://.godot/imported/part-16.png-fa6f45d406bec912c37a167a27095711.ctex
+	savepack: step 4: 保存文件：res://assets/characters/furina/part-16.png.import
+	savepack: step 4: 保存文件：res://.godot/imported/part-17.png-21af2a12e800c043044421d9285381cd.ctex
+	savepack: step 4: 保存文件：res://assets/characters/furina/part-17.png.import
+	savepack: step 4: 保存文件：res://.godot/imported/part-18.png-7e0db5ccd71d3cee47891221e62d722b.ctex
+	savepack: step 4: 保存文件：res://assets/characters/furina/part-18.png.import
+	savepack: step 4: 保存文件：res://.godot/imported/part-19.png-ce00ce350fd49ab50c6a88d620f02bfe.ctex
+	savepack: step 4: 保存文件：res://assets/characters/furina/part-19.png.import
+	savepack: step 5: 保存文件：res://.godot/imported/part-20.png-9d1fdc3a09a83d9304593a71ab325f8c.ctex
+	savepack: step 5: 保存文件：res://assets/characters/furina/part-20.png.import
+	savepack: step 5: 保存文件：res://.godot/imported/part-21.png-d09fcf66e1f4f5247faf7503b7393f87.ctex
+	savepack: step 5: 保存文件：res://assets/characters/furina/part-21.png.import
+	savepack: step 5: 保存文件：res://.godot/imported/part-22.png-51271f77f41316a9d906a3a69c2c785b.ctex
+	savepack: step 5: 保存文件：res://assets/characters/furina/part-22.png.import
+	savepack: step 5: 保存文件：res://.godot/imported/part-23.png-71920ee746531171dec0494fe01c170e.ctex
+	savepack: step 5: 保存文件：res://assets/characters/furina/part-23.png.import
+	savepack: step 5: 保存文件：res://.godot/imported/part-24.png-1fae7836713f85e7538ee52634e4c6f2.ctex
+	savepack: step 5: 保存文件：res://assets/characters/furina/part-24.png.import
+	savepack: step 5: 保存文件：res://.godot/imported/part-25.png-4d608d82302e3615635ad674e23bc3db.ctex
+	savepack: step 5: 保存文件：res://assets/characters/furina/part-25.png.import
+	savepack: step 5: 保存文件：res://.godot/imported/part-26.png-7b67165a6c149763a311b232004fe9ec.ctex
+	savepack: step 5: 保存文件：res://assets/characters/furina/part-26.png.import
+	savepack: step 5: 保存文件：res://.godot/imported/part-27.png-6b0c915b305497cc352d426b2471c865.ctex
+	savepack: step 5: 保存文件：res://assets/characters/furina/part-27.png.import
+	savepack: step 6: 保存文件：res://.godot/imported/part-28.png-6784f558d5bd1e1de4c5bfc8e7bfe428.ctex
+	savepack: step 6: 保存文件：res://assets/characters/furina/part-28.png.import
+	savepack: step 6: 保存文件：res://.godot/imported/part-29.png-e234423093670d08f42779b54693c811.ctex
+	savepack: step 6: 保存文件：res://assets/characters/furina/part-29.png.import
+	savepack: step 6: 保存文件：res://assets/characters/furina/parts.json
+	savepack: step 6: 保存文件：res://.godot/imported/attack-00.png-6d726c7594dad6b88b0c265a7ad668bc.ctex
+	savepack: step 6: 保存文件：res://assets/characters/furina_ai_frames/attack_8/attack-00.png.import
+	savepack: step 6: 保存文件：res://.godot/imported/attack-01.png-f03a9b9c680198b703dec62ff3cd358d.ctex
+	savepack: step 6: 保存文件：res://assets/characters/furina_ai_frames/attack_8/attack-01.png.import
+	savepack: step 6: 保存文件：res://.godot/imported/attack-02.png-784aa01a5bcf3e15089ac8750cd47ea0.ctex
+	savepack: step 6: 保存文件：res://assets/characters/furina_ai_frames/attack_8/attack-02.png.import
+	savepack: step 6: 保存文件：res://.godot/imported/attack-03.png-35987d5d18350ab7fab3eec8b40cadba.ctex
+	savepack: step 6: 保存文件：res://assets/characters/furina_ai_frames/attack_8/attack-03.png.import
+	savepack: step 6: 保存文件：res://.godot/imported/attack-04.png-c7f82eb884a44384b21167dad4c03891.ctex
+	savepack: step 6: 保存文件：res://assets/characters/furina_ai_frames/attack_8/attack-04.png.import
+	savepack: step 7: 保存文件：res://.godot/imported/attack-05.png-a4138024301a85fb2c6dc293003ea0f4.ctex
+	savepack: step 7: 保存文件：res://assets/characters/furina_ai_frames/attack_8/attack-05.png.import
+	savepack: step 7: 保存文件：res://.godot/imported/attack-06.png-ca07bb2de5b0a9f5043e1b6ff708b004.ctex
+	savepack: step 7: 保存文件：res://assets/characters/furina_ai_frames/attack_8/attack-06.png.import
+	savepack: step 7: 保存文件：res://.godot/imported/attack-07.png-b07f0ec4de75c7e85c77e42d7e800e9f.ctex
+	savepack: step 7: 保存文件：res://assets/characters/furina_ai_frames/attack_8/attack-07.png.import
+	savepack: step 7: 保存文件：res://.godot/imported/furina-attack-8-atlas.png-4f996e83641f6e764bf896645cfa39dd.ctex
+	savepack: step 7: 保存文件：res://assets/characters/furina_ai_frames/attack_8/furina-attack-8-atlas.png.import
+	savepack: step 7: 保存文件：res://.godot/imported/attack-00.png-3535c2d76bc2235c47803e69fe1e4ac4.ctex
+	savepack: step 7: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-00.png.import
+	savepack: step 7: 保存文件：res://.godot/imported/attack-01.png-578796b1e3a14712f13d372f0d2dc993.ctex
+	savepack: step 7: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-01.png.import
+	savepack: step 7: 保存文件：res://.godot/imported/attack-02.png-d1c3fd6974b77e913043153147f4fab9.ctex
+	savepack: step 7: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-02.png.import
+	savepack: step 7: 保存文件：res://.godot/imported/attack-03.png-8f9cdc6bfb2026c585a2959bc631dca7.ctex
+	savepack: step 7: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-03.png.import
+	savepack: step 8: 保存文件：res://.godot/imported/attack-04.png-04409bccd092e0975bc7c7d7d752eb5b.ctex
+	savepack: step 8: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-04.png.import
+	savepack: step 8: 保存文件：res://.godot/imported/attack-05.png-9239fdc52801031f412c67d64452dd9d.ctex
+	savepack: step 8: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-05.png.import
+	savepack: step 8: 保存文件：res://.godot/imported/attack-06.png-3a6ff8f69488577e3524afa1be3ad183.ctex
+	savepack: step 8: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-06.png.import
+	savepack: step 8: 保存文件：res://.godot/imported/attack-07.png-790a46c616077bc0d93638722ee98328.ctex
+	savepack: step 8: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-07.png.import
+	savepack: step 8: 保存文件：res://.godot/imported/attack-08.png-b6791f3751bd33f467b3d2c6a535b884.ctex
+	savepack: step 8: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-08.png.import
+	savepack: step 8: 保存文件：res://.godot/imported/attack-09.png-6f152b9f3c8e031735962a3f1d58e14d.ctex
+	savepack: step 8: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-09.png.import
+	savepack: step 8: 保存文件：res://.godot/imported/attack-10.png-458e8928aa62f02bef60ce3059193ae3.ctex
+	savepack: step 8: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-10.png.import
+	savepack: step 8: 保存文件：res://.godot/imported/attack-11.png-f506ae7de8ee95e9df8de71be7a037bd.ctex
+	savepack: step 8: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-11.png.import
+	savepack: step 9: 保存文件：res://.godot/imported/attack-12.png-c94b4be552295957affc74c7e914d64b.ctex
+	savepack: step 9: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-12.png.import
+	savepack: step 9: 保存文件：res://.godot/imported/attack-13.png-88274bfa503bb13cb11825022f819595.ctex
+	savepack: step 9: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-13.png.import
+	savepack: step 9: 保存文件：res://.godot/imported/attack-14.png-0f3795ba682c86a964f991e3a64b2f2a.ctex
+	savepack: step 9: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-14.png.import
+	savepack: step 9: 保存文件：res://.godot/imported/attack-15.png-12b74e6f4aa361d8cbf65b65c8768edd.ctex
+	savepack: step 9: 保存文件：res://assets/characters/furina_ai_frames/attack_16/attack-15.png.import
+	savepack: step 9: 保存文件：res://.godot/imported/furina-attack-16-atlas.png-61a8333ea2bc8a74567f695c6253350f.ctex
+	savepack: step 9: 保存文件：res://assets/characters/furina_ai_frames/attack_16/furina-attack-16-atlas.png.import
+	savepack: step 9: 保存文件：res://.godot/imported/furina-attack-16-contact-sheet.jpg-19c12a11ab8351fee908eec9496f1ec4.ctex
+	savepack: step 9: 保存文件：res://assets/characters/furina_ai_frames/attack_16/furina-attack-16-contact-sheet.jpg.import
+	savepack: step 9: 保存文件：res://.godot/imported/furina-attack-16-green-source.png-108431ab22c84131403765a81ca20e8e.ctex
+	savepack: step 9: 保存文件：res://assets/characters/furina_ai_frames/attack_16/furina-attack-16-green-source.png.import
+	savepack: step 9: 保存文件：res://.godot/imported/attack-00.png-c3e34bd4682203708e740e8a8c4fcb9d.ctex
+	savepack: step 9: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-00.png.import
+	savepack: step 10: 保存文件：res://.godot/imported/attack-01.png-4f7dbc2ac966a52cd4c5ad4c7714c3b2.ctex
+	savepack: step 10: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-01.png.import
+	savepack: step 10: 保存文件：res://.godot/imported/attack-02.png-e6255684e7ff2b1f7a81589af95899b9.ctex
+	savepack: step 10: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-02.png.import
+	savepack: step 10: 保存文件：res://.godot/imported/attack-03.png-48b0c27f59494b127a5614f00dd15697.ctex
+	savepack: step 10: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-03.png.import
+	savepack: step 10: 保存文件：res://.godot/imported/attack-04.png-b9b8aceeb2d9ee5cd79d8089bc496343.ctex
+	savepack: step 10: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-04.png.import
+	savepack: step 10: 保存文件：res://.godot/imported/attack-05.png-cfaaa5e348817adaccbee3fbbea16bc3.ctex
+	savepack: step 10: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-05.png.import
+	savepack: step 10: 保存文件：res://.godot/imported/attack-06.png-00dfa1bf90b7257c84820771080cf80a.ctex
+	savepack: step 10: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-06.png.import
+	savepack: step 10: 保存文件：res://.godot/imported/attack-07.png-844b4b06d832ce96d0b1322f93d506a2.ctex
+	savepack: step 10: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-07.png.import
+	savepack: step 10: 保存文件：res://.godot/imported/attack-08.png-44f2235a1b6bbbc259b74e5a41206a37.ctex
+	savepack: step 10: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-08.png.import
+	savepack: step 11: 保存文件：res://.godot/imported/attack-09.png-ab68f0d9c176c2b66ad32479cde07fb1.ctex
+	savepack: step 11: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-09.png.import
+	savepack: step 11: 保存文件：res://.godot/imported/attack-10.png-31d5243f6e11134709f588edeea5ef8b.ctex
+	savepack: step 11: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-10.png.import
+	savepack: step 11: 保存文件：res://.godot/imported/attack-11.png-5b7e82c9fbd4a4113cc3c984fbde1f6e.ctex
+	savepack: step 11: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-11.png.import
+	savepack: step 11: 保存文件：res://.godot/imported/attack-12.png-6db138ac29b611f1edf2b8f6b4c6c54c.ctex
+	savepack: step 11: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-12.png.import
+	savepack: step 11: 保存文件：res://.godot/imported/attack-13.png-e5b07d5767846ea214d127f0e416e7b6.ctex
+	savepack: step 11: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-13.png.import
+	savepack: step 11: 保存文件：res://.godot/imported/attack-14.png-f55fee7b4b3dbf5ae1b765c10b6bea33.ctex
+	savepack: step 11: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-14.png.import
+	savepack: step 11: 保存文件：res://.godot/imported/attack-15.png-41ebf4420045fbbe604fe107986abe59.ctex
+	savepack: step 11: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-15.png.import
+	savepack: step 11: 保存文件：res://.godot/imported/attack-16.png-51555af2a912ee218b3c0509485e604b.ctex
+	savepack: step 11: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-16.png.import
+	savepack: step 12: 保存文件：res://.godot/imported/attack-17.png-807defc3a19823b4db81bb322fb7992e.ctex
+	savepack: step 12: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-17.png.import
+	savepack: step 12: 保存文件：res://.godot/imported/attack-18.png-f53d0e32e94fd2e048ca18b46f6bfd97.ctex
+	savepack: step 12: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-18.png.import
+	savepack: step 12: 保存文件：res://.godot/imported/attack-19.png-7572fb83f4e3890357cdf15e8618accc.ctex
+	savepack: step 12: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-19.png.import
+	savepack: step 12: 保存文件：res://.godot/imported/attack-20.png-2864e5d5a6f14fa47778be3d2eeac31e.ctex
+	savepack: step 12: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-20.png.import
+	savepack: step 12: 保存文件：res://.godot/imported/attack-21.png-2d150281ad9f8ae21bdc36a0171b5a0d.ctex
+	savepack: step 12: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-21.png.import
+	savepack: step 12: 保存文件：res://.godot/imported/attack-22.png-390c2c7c864e12e1f5b08cce0bfe77bc.ctex
+	savepack: step 12: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-22.png.import
+	savepack: step 12: 保存文件：res://.godot/imported/attack-23.png-f97d99a5218fbeb98f3edb6859da6bfd.ctex
+	savepack: step 12: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-23.png.import
+	savepack: step 12: 保存文件：res://.godot/imported/attack-24.png-dff962715ec4233a0f441f16f51d7aee.ctex
+	savepack: step 12: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-24.png.import
+	savepack: step 13: 保存文件：res://.godot/imported/attack-25.png-81ac688b58fc5275881c88403d59ffe8.ctex
+	savepack: step 13: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-25.png.import
+	savepack: step 13: 保存文件：res://.godot/imported/attack-26.png-09aa04542396f55ee8cd06008b161e17.ctex
+	savepack: step 13: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-26.png.import
+	savepack: step 13: 保存文件：res://.godot/imported/attack-27.png-d56ade6b46fbb7f811d2c2cf95b116cd.ctex
+	savepack: step 13: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-27.png.import
+	savepack: step 13: 保存文件：res://.godot/imported/attack-28.png-889e424aacebab4a63a8b1d3f1c88a61.ctex
+	savepack: step 13: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-28.png.import
+	savepack: step 13: 保存文件：res://.godot/imported/attack-29.png-0ee18b8d031a3b459901f4a8103ed66e.ctex
+	savepack: step 13: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-29.png.import
+	savepack: step 13: 保存文件：res://.godot/imported/attack-30.png-bce027da46968eb6d96a8431ac236cc0.ctex
+	savepack: step 13: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-30.png.import
+	savepack: step 13: 保存文件：res://.godot/imported/attack-31.png-11970492130d1d296122785d96edcd7f.ctex
+	savepack: step 13: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-31.png.import
+	savepack: step 13: 保存文件：res://.godot/imported/attack-32.png-b867f2061bd5850482dba68a6f2c69a0.ctex
+	savepack: step 13: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-32.png.import
+	savepack: step 14: 保存文件：res://.godot/imported/attack-33.png-50d80139ceb5402ae8d6f91e44b44fb8.ctex
+	savepack: step 14: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-33.png.import
+	savepack: step 14: 保存文件：res://.godot/imported/attack-34.png-05b4c9909a30f33e3d9dafd6ee7d0ee5.ctex
+	savepack: step 14: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-34.png.import
+	savepack: step 14: 保存文件：res://.godot/imported/attack-35.png-d38158870d3919fe84e6966007e1bce5.ctex
+	savepack: step 14: 保存文件：res://assets/characters/furina_ai_frames/attack_36/attack-35.png.import
+	savepack: step 14: 保存文件：res://.godot/imported/furina-attack-36-atlas.png-235f7e8d717d95d25c5f2f20a594d516.ctex
+	savepack: step 14: 保存文件：res://assets/characters/furina_ai_frames/attack_36/furina-attack-36-atlas.png.import
+	savepack: step 14: 保存文件：res://.godot/imported/furina-attack-36-contact-sheet.jpg-4a32e501d2a08d093c51ac8d1735caf8.ctex
+	savepack: step 14: 保存文件：res://assets/characters/furina_ai_frames/attack_36/furina-attack-36-contact-sheet.jpg.import
+	savepack: step 14: 保存文件：res://.godot/imported/attack-00.png-3f5bd1f2a97e51cdbc4ffc504483cc65.ctex
+	savepack: step 14: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-00.png.import
+	savepack: step 14: 保存文件：res://.godot/imported/attack-01.png-8da3ab3be4e517ef05205b995a127514.ctex
+	savepack: step 14: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-01.png.import
+	savepack: step 14: 保存文件：res://.godot/imported/attack-02.png-5b8551e1fa13f223b780876f8b67e143.ctex
+	savepack: step 14: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-02.png.import
+	savepack: step 15: 保存文件：res://.godot/imported/attack-03.png-1a648e99f0bd7fc1b710505c32de2b10.ctex
+	savepack: step 15: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-03.png.import
+	savepack: step 15: 保存文件：res://.godot/imported/attack-04.png-5e9333ec2aea601a98d283a05558fbb8.ctex
+	savepack: step 15: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-04.png.import
+	savepack: step 15: 保存文件：res://.godot/imported/attack-05.png-13904fc14d7cafe9a600bf9c998004a1.ctex
+	savepack: step 15: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-05.png.import
+	savepack: step 15: 保存文件：res://.godot/imported/attack-06.png-f6693fcc4b20e27480678f6ebf4da6ef.ctex
+	savepack: step 15: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-06.png.import
+	savepack: step 15: 保存文件：res://.godot/imported/attack-07.png-600b8326ce40d7a811d32cf2855d37ba.ctex
+	savepack: step 15: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-07.png.import
+	savepack: step 15: 保存文件：res://.godot/imported/attack-08.png-6ae1a169ce4bd26d63d9aa6b5b3a7b45.ctex
+	savepack: step 15: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-08.png.import
+	savepack: step 15: 保存文件：res://.godot/imported/attack-09.png-a8a8fd488db68066703082674ebd44b3.ctex
+	savepack: step 15: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-09.png.import
+	savepack: step 15: 保存文件：res://.godot/imported/attack-10.png-982c8575ae64c81a4e007bbeb2469850.ctex
+	savepack: step 15: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-10.png.import
+	savepack: step 16: 保存文件：res://.godot/imported/attack-11.png-0370f9a50b225ad372279b7fe6c5449f.ctex
+	savepack: step 16: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-11.png.import
+	savepack: step 16: 保存文件：res://.godot/imported/attack-12.png-1b30cccc503b31d9153167000f20c62b.ctex
+	savepack: step 16: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-12.png.import
+	savepack: step 16: 保存文件：res://.godot/imported/attack-13.png-e0fb631a44defc23621f33e6d973f3d5.ctex
+	savepack: step 16: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-13.png.import
+	savepack: step 16: 保存文件：res://.godot/imported/attack-14.png-4268f2e9101ea479c2cc08f981bb9781.ctex
+	savepack: step 16: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-14.png.import
+	savepack: step 16: 保存文件：res://.godot/imported/attack-15.png-fa8c2ab07ba4c42fe1abea0381e9ae1a.ctex
+	savepack: step 16: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-15.png.import
+	savepack: step 16: 保存文件：res://.godot/imported/attack-16.png-47797a668cabc4a0ef02c5293cacf935.ctex
+	savepack: step 16: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-16.png.import
+	savepack: step 16: 保存文件：res://.godot/imported/attack-17.png-3260c224709dabd9176daa0245a88614.ctex
+	savepack: step 16: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-17.png.import
+	savepack: step 16: 保存文件：res://.godot/imported/attack-18.png-d315ec49fc233766a5dcae31d6e0e77b.ctex
+	savepack: step 16: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-18.png.import
+	savepack: step 17: 保存文件：res://.godot/imported/attack-19.png-bf57b78e1747fe9ae939b0c72d1cd0c9.ctex
+	savepack: step 17: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-19.png.import
+	savepack: step 17: 保存文件：res://.godot/imported/attack-20.png-9c21f9ce25ba260635c458279af0c016.ctex
+	savepack: step 17: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-20.png.import
+	savepack: step 17: 保存文件：res://.godot/imported/attack-21.png-f415387d384fee24107128e9a2e0609d.ctex
+	savepack: step 17: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-21.png.import
+	savepack: step 17: 保存文件：res://.godot/imported/attack-22.png-ce56c863be5dfc030a744272a015d256.ctex
+	savepack: step 17: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-22.png.import
+	savepack: step 17: 保存文件：res://.godot/imported/attack-23.png-7633e2aa062d840f5096618adcc3221d.ctex
+	savepack: step 17: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-23.png.import
+	savepack: step 17: 保存文件：res://.godot/imported/attack-24.png-c87993b26dd7dadf63706de9b11f988c.ctex
+	savepack: step 17: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-24.png.import
+	savepack: step 17: 保存文件：res://.godot/imported/attack-25.png-55b393a713edc3cf4c0b8152687bd878.ctex
+	savepack: step 17: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-25.png.import
+	savepack: step 17: 保存文件：res://.godot/imported/attack-26.png-13a25273347c8d4c4a24efa707f86da4.ctex
+	savepack: step 17: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-26.png.import
+	savepack: step 18: 保存文件：res://.godot/imported/attack-27.png-3f6c8a635fbc261e87fee3f99bc4d789.ctex
+	savepack: step 18: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-27.png.import
+	savepack: step 18: 保存文件：res://.godot/imported/attack-28.png-5e6c7772a534617a7bae983d890912f7.ctex
+	savepack: step 18: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-28.png.import
+	savepack: step 18: 保存文件：res://.godot/imported/attack-29.png-031054a3cbf557fd472ebf4d5a314946.ctex
+	savepack: step 18: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-29.png.import
+	savepack: step 18: 保存文件：res://.godot/imported/attack-30.png-749144a9addae15e548ed3edad3ae5f5.ctex
+	savepack: step 18: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-30.png.import
+	savepack: step 18: 保存文件：res://.godot/imported/attack-31.png-132c66e11efc61acf8a15a3f85246a8b.ctex
+	savepack: step 18: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-31.png.import
+	savepack: step 18: 保存文件：res://.godot/imported/attack-32.png-fdec7038fc221c2660c933c93ecd4cd9.ctex
+	savepack: step 18: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-32.png.import
+	savepack: step 18: 保存文件：res://.godot/imported/attack-33.png-e056e15486d619673c30b28e24d7aa80.ctex
+	savepack: step 18: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-33.png.import
+	savepack: step 18: 保存文件：res://.godot/imported/attack-34.png-48fed15a2313801fc9103276a5161b77.ctex
+	savepack: step 18: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-34.png.import
+	savepack: step 19: 保存文件：res://.godot/imported/attack-35.png-abc982ed414b1e1a0221e9dec2e0aac7.ctex
+	savepack: step 19: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/attack-35.png.import
+	savepack: step 19: 保存文件：res://.godot/imported/furina-attack-30-source.png-78b859393a2ee9af311dc83b2d1b1d82.ctex
+	savepack: step 19: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/furina-attack-30-source.png.import
+	savepack: step 19: 保存文件：res://.godot/imported/furina-attack-36-atlas.png-58136542e4a595c0b2e5dcbead35503a.ctex
+	savepack: step 19: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/furina-attack-36-atlas.png.import
+	savepack: step 19: 保存文件：res://.godot/imported/furina-attack-36-contact-sheet-768.jpg-72c97f5f29eef60169cee551a984ebc9.ctex
+	savepack: step 19: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/furina-attack-36-contact-sheet-768.jpg.import
+	savepack: step 19: 保存文件：res://.godot/imported/furina-attack-36-contact-sheet.jpg-d0b4f1d8c93f1432856ac709085855ca.ctex
+	savepack: step 19: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/furina-attack-36-contact-sheet.jpg.import
+	savepack: step 19: 保存文件：res://.godot/imported/furina-recovery-6-source.png-e706dc28e86f2bfb4aefb1812bb0a67a.ctex
+	savepack: step 19: 保存文件：res://assets/characters/furina_ai_frames/attack_36_direct/furina-recovery-6-source.png.import
+	savepack: step 19: 保存文件：res://.godot/imported/furina-attack-8-green-source.png-50eef2cc5027d3c85377e816d8a28074.ctex
+	savepack: step 19: 保存文件：res://assets/characters/furina_ai_frames/furina-attack-8-green-source.png.import
+	savepack: step 19: 保存文件：res://.godot/imported/furina-attack-grid-v2-source.png-4986a9ebb5b517c60b314b411248a2ee.ctex
+	savepack: step 19: 保存文件：res://assets/characters/furina_ai_frames/furina-attack-grid-v2-source.png.import
+	savepack: step 20: 保存文件：res://.godot/imported/furina-attack-keyframes-v1.png-693c2a4ae36729f3c2b143f4281ae67d.ctex
+	savepack: step 20: 保存文件：res://assets/characters/furina_ai_frames/furina-attack-keyframes-v1.png.import
+	savepack: step 20: 保存文件：res://assets/characters/furina_frames/frames.json
+	savepack: step 20: 保存文件：res://.godot/imported/furina-motion-preview.jpg-fae25c885caf235df4d03a393c9dd95d.ctex
+	savepack: step 20: 保存文件：res://assets/characters/furina_frames/furina-motion-preview.jpg.import
+	savepack: step 20: 保存文件：res://.godot/imported/furina-motion-sheet.png-99799fee4bc8e9033cb2f686b372b507.ctex
+	savepack: step 20: 保存文件：res://assets/characters/furina_frames/furina-motion-sheet.png.import
+	savepack: step 20: 保存文件：res://.godot/imported/furina-q-board-alpha.png-2266d268daaad21ed62bfc7f29a7104f.ctex
+	savepack: step 20: 保存文件：res://assets/characters/furina_q_rig/furina-q-board-alpha.png.import
+	savepack: step 20: 保存文件：res://.godot/imported/furina-q-parts-contact-sheet.jpg-26f1fe9d1aa02e55eecf95cefe9df259.ctex
+	savepack: step 20: 保存文件：res://assets/characters/furina_q_rig/furina-q-parts-contact-sheet.jpg.import
+	savepack: step 20: 保存文件：res://assets/characters/furina_q_rig/parts.json
+	savepack: step 20: 保存文件：res://.godot/imported/q-part-00.png-fcbd6a48e05e735bb87b3ea1b40571d6.ctex
+	savepack: step 20: 保存文件：res://assets/characters/furina_q_rig/q-part-00.png.import
+	savepack: step 21: 保存文件：res://.godot/imported/q-part-01.png-379bce1308c74e18d74e812fe6046a5f.ctex
+	savepack: step 21: 保存文件：res://assets/characters/furina_q_rig/q-part-01.png.import
+	savepack: step 21: 保存文件：res://.godot/imported/q-part-02.png-268e00f203e351bb5851966ee8999f8e.ctex
+	savepack: step 21: 保存文件：res://assets/characters/furina_q_rig/q-part-02.png.import
+	savepack: step 21: 保存文件：res://.godot/imported/q-part-03.png-113f03c23212dc77681b2e397256b498.ctex
+	savepack: step 21: 保存文件：res://assets/characters/furina_q_rig/q-part-03.png.import
+	savepack: step 21: 保存文件：res://.godot/imported/q-part-04.png-4d5aa82d12b26a48bdf23ab1f7e3f5cc.ctex
+	savepack: step 21: 保存文件：res://assets/characters/furina_q_rig/q-part-04.png.import
+	savepack: step 21: 保存文件：res://.godot/imported/q-part-05.png-a7ee328bc016bbd1a303a418f33b9d22.ctex
+	savepack: step 21: 保存文件：res://assets/characters/furina_q_rig/q-part-05.png.import
+	savepack: step 21: 保存文件：res://.godot/imported/q-part-06.png-f536c7c95bec4588f0c9b31baab5638f.ctex
+	savepack: step 21: 保存文件：res://assets/characters/furina_q_rig/q-part-06.png.import
+	savepack: step 21: 保存文件：res://.godot/imported/q-part-07.png-c5043cd71f16c061caf55511bb7e61fd.ctex
+	savepack: step 21: 保存文件：res://assets/characters/furina_q_rig/q-part-07.png.import
+	savepack: step 21: 保存文件：res://.godot/imported/q-part-08.png-433c9cd0d1b3548b12973d85065ded58.ctex
+	savepack: step 21: 保存文件：res://assets/characters/furina_q_rig/q-part-08.png.import
+	savepack: step 22: 保存文件：res://.godot/imported/q-part-09.png-a04e2dee79e85aad92e4c64e2a30a888.ctex
+	savepack: step 22: 保存文件：res://assets/characters/furina_q_rig/q-part-09.png.import
+	savepack: step 22: 保存文件：res://.godot/imported/q-part-10.png-aba20e95fd1739ae32a09b20c4d22201.ctex
+	savepack: step 22: 保存文件：res://assets/characters/furina_q_rig/q-part-10.png.import
+	savepack: step 22: 保存文件：res://.godot/imported/q-part-11.png-f9d78d1576eed6b1f7f069fd23c02821.ctex
+	savepack: step 22: 保存文件：res://assets/characters/furina_q_rig/q-part-11.png.import
+	savepack: step 22: 保存文件：res://.godot/imported/q-part-12.png-bd9d9802f2de815a727bd4f4f44213b8.ctex
+	savepack: step 22: 保存文件：res://assets/characters/furina_q_rig/q-part-12.png.import
+	savepack: step 22: 保存文件：res://.godot/imported/q-part-13.png-99ee50920795d7eff1fc6414a8d8e682.ctex
+	savepack: step 22: 保存文件：res://assets/characters/furina_q_rig/q-part-13.png.import
+	savepack: step 22: 保存文件：res://.godot/imported/q-part-14.png-287f1f0bea47a87494f260bf080fcbe5.ctex
+	savepack: step 22: 保存文件：res://assets/characters/furina_q_rig/q-part-14.png.import
+	savepack: step 22: 保存文件：res://.godot/imported/q-part-15.png-bcfb08681c48d5665f04dfb9ca5711a4.ctex
+	savepack: step 22: 保存文件：res://assets/characters/furina_q_rig/q-part-15.png.import
+	savepack: step 22: 保存文件：res://.godot/imported/q-part-16.png-a1cbde5d454819fe26576a7d760f64a3.ctex
+	savepack: step 22: 保存文件：res://assets/characters/furina_q_rig/q-part-16.png.import
+	savepack: step 23: 保存文件：res://.godot/imported/q-part-17.png-44f77067a90d526b701b20991a989eaa.ctex
+	savepack: step 23: 保存文件：res://assets/characters/furina_q_rig/q-part-17.png.import
+	savepack: step 23: 保存文件：res://.godot/imported/q-part-18.png-5b3079598080d178773ae5807b949acd.ctex
+	savepack: step 23: 保存文件：res://assets/characters/furina_q_rig/q-part-18.png.import
+	savepack: step 23: 保存文件：res://.godot/imported/q-part-19.png-6af154f71d63048c6d2eade169c2758d.ctex
+	savepack: step 23: 保存文件：res://assets/characters/furina_q_rig/q-part-19.png.import
+	savepack: step 23: 保存文件：res://.godot/imported/q-part-20.png-db7954297e463f0948d2317f47855655.ctex
+	savepack: step 23: 保存文件：res://assets/characters/furina_q_rig/q-part-20.png.import
+	savepack: step 23: 保存文件：res://.godot/imported/q-part-21.png-f32c303c39932b3999aadb161cd9773d.ctex
+	savepack: step 23: 保存文件：res://assets/characters/furina_q_rig/q-part-21.png.import
+	savepack: step 23: 保存文件：res://assets/characters/traveler_v18/animation.json
+	savepack: step 23: 保存文件：res://.godot/imported/attack.png-f82b9019ba407f278db47cd33396215e.ctex
+	savepack: step 23: 保存文件：res://assets/characters/traveler_v18/attack.png.import
+	savepack: step 23: 保存文件：res://.godot/imported/death.png-1ac83d955875db29de9fb7a2e1d4abe1.ctex
+	savepack: step 23: 保存文件：res://assets/characters/traveler_v18/death.png.import
+	savepack: step 24: 保存文件：res://.godot/imported/idle.png-2a87c4c48693c759809a6814dfdb485b.ctex
+	savepack: step 24: 保存文件：res://assets/characters/traveler_v18/idle.png.import
+	savepack: step 24: 保存文件：res://.godot/imported/run.png-097dc979614ac00619a2ac1c6a0e7cca.ctex
+	savepack: step 24: 保存文件：res://assets/characters/traveler_v18/run.png.import
+	savepack: step 24: 保存文件：res://.godot/imported/arcane-sheet.png-9a11234afbd36d313c47a95af78e7126.ctex
+	savepack: step 24: 保存文件：res://assets/effects/arcane-sheet.png.import
+	savepack: step 24: 保存文件：res://.godot/imported/heal-sheet.png-3706a9ddfdf126604252c8f67dccd25e.ctex
+	savepack: step 24: 保存文件：res://assets/effects/heal-sheet.png.import
+	savepack: step 24: 保存文件：res://assets/enemies/hilichurl_v18/animation.json
+	savepack: step 24: 保存文件：res://.godot/imported/run.png-56b07cae103f9b670c283a9f0a0fe110.ctex
+	savepack: step 24: 保存文件：res://assets/enemies/hilichurl_v18/run.png.import
+	savepack: step 24: 保存文件：res://.godot/imported/anemo_slime.png-a5a5a63f45a33b702d839acd1d50d3ce.ctex
+	savepack: step 24: 保存文件：res://assets/enemies/slimes/anemo_slime.png.import
+	savepack: step 24: 保存文件：res://.godot/imported/electro_slime.png-e075ac10fbd85ab5cd273611b5f1f674.ctex
+	savepack: step 24: 保存文件：res://assets/enemies/slimes/electro_slime.png.import
+	savepack: step 25: 保存文件：res://.godot/imported/hydro_slime.png-cdabc72b3aa2b12c146aa78c459ef8f3.ctex
+	savepack: step 25: 保存文件：res://assets/enemies/slimes/hydro_slime.png.import
+	savepack: step 25: 保存文件：res://.godot/imported/pyro_slime.png-81ce1c378f34da0b2abb8134c9ffa4b5.ctex
+	savepack: step 25: 保存文件：res://assets/enemies/slimes/pyro_slime.png.import
+	savepack: step 25: 保存文件：res://.godot/imported/slime_king.png-fd6cb3f80108ee723b7daaec3e84e934.ctex
+	savepack: step 25: 保存文件：res://assets/enemies/slimes/slime_king.png.import
+	savepack: step 25: 保存文件：res://.godot/imported/TiejiliSC-Regular.ttf-b656050bfe61c245ff4c4c26a7189f53.fontdata
+	savepack: step 25: 保存文件：res://assets/fonts/TiejiliSC-Regular.ttf.import
+	savepack: step 25: 保存文件：res://.godot/imported/bar_round.png-dbab649b6f1bfc0d92048f828ed3e4ef.ctex
+	savepack: step 25: 保存文件：res://assets/gothic/bar_round.png.import
+	savepack: step 25: 保存文件：res://.godot/imported/panel_main_horned.png-626f725dee3a09bb702c15a5c6c9cb32.ctex
+	savepack: step 25: 保存文件：res://assets/gothic/panel_main_horned.png.import
+	savepack: step 25: 保存文件：res://.godot/imported/tab_trident.png-812fdd8ae38802560f680d0c04be1be8.ctex
+	savepack: step 25: 保存文件：res://assets/gothic/tab_trident.png.import
+	savepack: step 25: 保存文件：res://.godot/imported/button_chapter_confirm_01.wav-35483b1918bc6adb3cadb28d1b573a51.sample
+	savepack: step 25: 保存文件：res://assets/helltaker/audio/button_chapter_confirm_01.wav.import
+	savepack: step 26: 保存文件：res://.godot/imported/button_chapter_highlight_01.wav-a64549c9b4e5ffd040d8fae8a12ac430.sample
+	savepack: step 26: 保存文件：res://assets/helltaker/audio/button_chapter_highlight_01.wav.import
+	savepack: step 26: 保存文件：res://.godot/imported/button_dialogue_confirm_01.wav-47c781fa0fccc417866e0be4f85f45d0.sample
+	savepack: step 26: 保存文件：res://assets/helltaker/audio/button_dialogue_confirm_01.wav.import
+	savepack: step 26: 保存文件：res://.godot/imported/button_dialogue_highlight_01.wav-520559344f6b527f6b5d6b79ff4d7f1f.sample
+	savepack: step 26: 保存文件：res://assets/helltaker/audio/button_dialogue_highlight_01.wav.import
+	savepack: step 26: 保存文件：res://.godot/imported/button_menu_confirm_01.wav-a78b5212da98865c93ecb9b448c0fde5.sample
+	savepack: step 26: 保存文件：res://assets/helltaker/audio/button_menu_confirm_01.wav.import
+	savepack: step 26: 保存文件：res://.godot/imported/button_menu_highlight_01.wav-26b4973c7a69034638ad119b9e403a4b.sample
+	savepack: step 26: 保存文件：res://assets/helltaker/audio/button_menu_highlight_01.wav.import
+	savepack: step 26: 保存文件：res://.godot/imported/dialogue_start_01.wav-561ee8e38dfb115720e1cdcedf5388fd.sample
+	savepack: step 26: 保存文件：res://assets/helltaker/audio/dialogue_start_01.wav.import
+	savepack: step 26: 保存文件：res://.godot/imported/dialogue_start_epilogue_01.wav-ff65dea68f43b3abc0cdc1cc0de4896b.sample
+	savepack: step 26: 保存文件：res://assets/helltaker/audio/dialogue_start_epilogue_01.wav.import
+	savepack: step 26: 保存文件：res://.godot/imported/dialogue_success_01.wav-e72707d6363d3e1049bcd7109fd9ccce.sample
+	savepack: step 26: 保存文件：res://assets/helltaker/audio/dialogue_success_01.wav.import
+	savepack: step 27: 保存文件：res://.godot/imported/dialogue_text_end_01.wav-fcea3cfea6f613295a27f90a359aed4c.sample
+	savepack: step 27: 保存文件：res://assets/helltaker/audio/dialogue_text_end_01.wav.import
+	savepack: step 27: 保存文件：res://.godot/imported/Epitomize.ogg-09f16ce2034e285be2780ae820dd6e4f.oggvorbisstr
+	savepack: step 27: 保存文件：res://assets/helltaker/audio/Epitomize.ogg.import
+	savepack: step 27: 保存文件：res://.godot/imported/lucifer_intro_dialogue_start_v2.wav-9f308c78ce6f65d45e49679400f46b84.sample
+	savepack: step 27: 保存文件：res://assets/helltaker/audio/lucifer_intro_dialogue_start_v2.wav.import
+	savepack: step 27: 保存文件：res://.godot/imported/Titanium.ogg-cfe94e2986ebb56560781039ba0054da.oggvorbisstr
+	savepack: step 27: 保存文件：res://assets/helltaker/audio/Titanium.ogg.import
+	savepack: step 27: 保存文件：res://.godot/imported/Vitality.ogg-e8fe70e527986f8d94e2b22b54507d21.oggvorbisstr
+	savepack: step 27: 保存文件：res://assets/helltaker/audio/Vitality.ogg.import
+	savepack: step 27: 保存文件：res://.godot/imported/chapterBG0001.png-1d1cbf2f40714cdfc6a92f861243be73.ctex
+	savepack: step 27: 保存文件：res://assets/helltaker/backgrounds/chapterBG0001.png.import
+	savepack: step 27: 保存文件：res://.godot/imported/chapterBG0002.png-f6c5c5dc91241349570f6260d85c2612.ctex
+	savepack: step 27: 保存文件：res://assets/helltaker/backgrounds/chapterBG0002.png.import
+	savepack: step 27: 保存文件：res://.godot/imported/chapterBG0003.png-fe4f0a6839d88466b55747810db2c148.ctex
+	savepack: step 27: 保存文件：res://assets/helltaker/backgrounds/chapterBG0003.png.import
+	savepack: step 28: 保存文件：res://.godot/imported/chapterBG0004.png-74ac8db792beaa2c450afee2f36db724.ctex
+	savepack: step 28: 保存文件：res://assets/helltaker/backgrounds/chapterBG0004.png.import
+	savepack: step 28: 保存文件：res://.godot/imported/chapterBG0005.png-6d6d4344133b51cc1ade58609b846742.ctex
+	savepack: step 28: 保存文件：res://assets/helltaker/backgrounds/chapterBG0005.png.import
+	savepack: step 28: 保存文件：res://.godot/imported/chapterBG0006.png-41c29876d963e7139bb71b51c2fbbd62.ctex
+	savepack: step 28: 保存文件：res://assets/helltaker/backgrounds/chapterBG0006.png.import
+	savepack: step 28: 保存文件：res://.godot/imported/chapterBG0007.png-2bd1398cc89ace0c6de62a15ffab48f4.ctex
+	savepack: step 28: 保存文件：res://assets/helltaker/backgrounds/chapterBG0007.png.import
+	savepack: step 28: 保存文件：res://.godot/imported/chapterBG0008.png-fa74099a1edc12ee19acee8f4ba3a154.ctex
+	savepack: step 28: 保存文件：res://assets/helltaker/backgrounds/chapterBG0008.png.import
+	savepack: step 28: 保存文件：res://.godot/imported/dialBG_darkHell.png-19d54a3f21538058c4e4870491122602.ctex
+	savepack: step 28: 保存文件：res://assets/helltaker/backgrounds/dialBG_darkHell.png.import
+	savepack: step 28: 保存文件：res://.godot/imported/dialBG_litHell.png-2bc6ced3a985b4291fc0df2b7695c96d.ctex
+	savepack: step 28: 保存文件：res://assets/helltaker/backgrounds/dialBG_litHell.png.import
+	savepack: step 28: 保存文件：res://.godot/imported/dialogueBG_hell.png-6cb3a672067347afa5416b3873054821.ctex
+	savepack: step 28: 保存文件：res://assets/helltaker/backgrounds/dialogueBG_hell.png.import
+	savepack: step 29: 保存文件：res://.godot/imported/Amiri-Regular.ttf-b774a30eed81c67d75c8d7db9dace8a9.fontdata
+	savepack: step 29: 保存文件：res://assets/helltaker/fonts/Amiri-Regular.ttf.import
+	savepack: step 29: 保存文件：res://.godot/imported/CrimsonPro-Medium.ttf-c58f41c3ba5f328334f8b94eaa478c23.fontdata
+	savepack: step 29: 保存文件：res://assets/helltaker/fonts/CrimsonPro-Medium.ttf.import
+	savepack: step 29: 保存文件：res://.godot/imported/transition0002.png-b0bf76aa2b0239289bd0d62973f870d2.ctex
+	savepack: step 29: 保存文件：res://assets/helltaker/transitions/transition0002.png.import
+	savepack: step 29: 保存文件：res://.godot/imported/transition0003.png-9affed81f271e000f0df4c1998622391.ctex
+	savepack: step 29: 保存文件：res://assets/helltaker/transitions/transition0003.png.import
+	savepack: step 29: 保存文件：res://.godot/imported/transition0004.png-e29b5bc44b4cb4a79970ba9421974b6b.ctex
+	savepack: step 29: 保存文件：res://assets/helltaker/transitions/transition0004.png.import
+	savepack: step 29: 保存文件：res://.godot/imported/transition0005.png-ca290c19f2db6137a0187b31cff216a6.ctex
+	savepack: step 29: 保存文件：res://assets/helltaker/transitions/transition0005.png.import
+	savepack: step 29: 保存文件：res://.godot/imported/transition0006.png-fbf150902ef2c8d01d65773c29b81f44.ctex
+	savepack: step 29: 保存文件：res://assets/helltaker/transitions/transition0006.png.import
+	savepack: step 29: 保存文件：res://.godot/imported/transition0007.png-59b5b3da3483957fe921f1540dab7ed3.ctex
+	savepack: step 29: 保存文件：res://assets/helltaker/transitions/transition0007.png.import
+	savepack: step 30: 保存文件：res://.godot/imported/transition0008.png-65f43292880695537d5f367a625d7658.ctex
+	savepack: step 30: 保存文件：res://assets/helltaker/transitions/transition0008.png.import
+	savepack: step 30: 保存文件：res://.godot/imported/transition0009.png-59e623165ef68ee445a46ee0707a3408.ctex
+	savepack: step 30: 保存文件：res://assets/helltaker/transitions/transition0009.png.import
+	savepack: step 30: 保存文件：res://.godot/imported/transition0010.png-2ec4688cca53c873b9245c988911af17.ctex
+	savepack: step 30: 保存文件：res://assets/helltaker/transitions/transition0010.png.import
+	savepack: step 30: 保存文件：res://.godot/imported/transition0011.png-d8eafb633570d5007b300fc511a9eea6.ctex
+	savepack: step 30: 保存文件：res://assets/helltaker/transitions/transition0011.png.import
+	savepack: step 30: 保存文件：res://.godot/imported/transition0012.png-0f9ee0c66fab78c1a41278636b49d7ea.ctex
+	savepack: step 30: 保存文件：res://assets/helltaker/transitions/transition0012.png.import
+	savepack: step 30: 保存文件：res://.godot/imported/transition0013.png-bab2f4f2fb9a93cfd29245e5fe9efbdc.ctex
+	savepack: step 30: 保存文件：res://assets/helltaker/transitions/transition0013.png.import
+	savepack: step 30: 保存文件：res://.godot/imported/transition0014.png-f9e9709cbd258a03bd06add19be95acd.ctex
+	savepack: step 30: 保存文件：res://assets/helltaker/transitions/transition0014.png.import
+	savepack: step 30: 保存文件：res://.godot/imported/transition0015.png-78dc116487a63c25984ef0828a54fd4e.ctex
+	savepack: step 30: 保存文件：res://assets/helltaker/transitions/transition0015.png.import
+	savepack: step 31: 保存文件：res://.godot/imported/transition0016.png-4b1ecbda6ce7b28288987d2b6abf07fe.ctex
+	savepack: step 31: 保存文件：res://assets/helltaker/transitions/transition0016.png.import
+	savepack: step 31: 保存文件：res://.godot/imported/transition0017.png-74fdf3374aa3cecf1d587d53c0935140.ctex
+	savepack: step 31: 保存文件：res://assets/helltaker/transitions/transition0017.png.import
+	savepack: step 31: 保存文件：res://.godot/imported/transition0018.png-fe1d2a4a0848611d17ace655e0b9cf33.ctex
+	savepack: step 31: 保存文件：res://assets/helltaker/transitions/transition0018.png.import
+	savepack: step 31: 保存文件：res://.godot/imported/transition0019.png-c6f996a6af9c5d055b88b3d6444d40f5.ctex
+	savepack: step 31: 保存文件：res://assets/helltaker/transitions/transition0019.png.import
+	savepack: step 31: 保存文件：res://.godot/imported/transition0020.png-1a50c71861cd7b1a329d0071dbef92bc.ctex
+	savepack: step 31: 保存文件：res://assets/helltaker/transitions/transition0020.png.import
+	savepack: step 31: 保存文件：res://.godot/imported/transition0021.png-67c0ecbe1569d134c499b26d63cc5331.ctex
+	savepack: step 31: 保存文件：res://assets/helltaker/transitions/transition0021.png.import
+	savepack: step 31: 保存文件：res://.godot/imported/transition0022.png-fe17d64f3caad69bc51d700fbf9ec9c3.ctex
+	savepack: step 31: 保存文件：res://assets/helltaker/transitions/transition0022.png.import
+	savepack: step 31: 保存文件：res://.godot/imported/transition0023.png-ea547ab58c2cbbe9a358d546702aa08f.ctex
+	savepack: step 31: 保存文件：res://assets/helltaker/transitions/transition0023.png.import
+	savepack: step 32: 保存文件：res://.godot/imported/transition0024.png-df1af12955500d405831c278117bd57b.ctex
+	savepack: step 32: 保存文件：res://assets/helltaker/transitions/transition0024.png.import
+	savepack: step 32: 保存文件：res://.godot/imported/transition0025.png-28daa081ab73d3a9198a3ccab1107efb.ctex
+	savepack: step 32: 保存文件：res://assets/helltaker/transitions/transition0025.png.import
+	savepack: step 32: 保存文件：res://.godot/imported/transition0026.png-db505dc23c43f6e0db0d726f99588406.ctex
+	savepack: step 32: 保存文件：res://assets/helltaker/transitions/transition0026.png.import
+	savepack: step 32: 保存文件：res://.godot/imported/transition0027.png-66ddc50aa3f37c579828d663a16f3f60.ctex
+	savepack: step 32: 保存文件：res://assets/helltaker/transitions/transition0027.png.import
+	savepack: step 32: 保存文件：res://.godot/imported/transition0028.png-e803b4a67a67c5798ba97c348769bbfd.ctex
+	savepack: step 32: 保存文件：res://assets/helltaker/transitions/transition0028.png.import
+	savepack: step 32: 保存文件：res://.godot/imported/transition0029.png-7871e2c9ec98b0f190d1afd36247c601.ctex
+	savepack: step 32: 保存文件：res://assets/helltaker/transitions/transition0029.png.import
+	savepack: step 32: 保存文件：res://.godot/imported/transition0030.png-2dbf27f99e2a1ac04e853a9a243b3e69.ctex
+	savepack: step 32: 保存文件：res://assets/helltaker/transitions/transition0030.png.import
+	savepack: step 32: 保存文件：res://.godot/imported/transitionHM0002.png-1f2f2d0f45770763932deee40104ab36.ctex
+	savepack: step 32: 保存文件：res://assets/helltaker/transitions/transitionHM0002.png.import
+	savepack: step 33: 保存文件：res://.godot/imported/transitionHM0003.png-aeb47c6983084be20a13f8dbc36b89fb.ctex
+	savepack: step 33: 保存文件：res://assets/helltaker/transitions/transitionHM0003.png.import
+	savepack: step 33: 保存文件：res://.godot/imported/transitionHM0004.png-0f1865d9e79711214de59f27b11e0db8.ctex
+	savepack: step 33: 保存文件：res://assets/helltaker/transitions/transitionHM0004.png.import
+	savepack: step 33: 保存文件：res://.godot/imported/transitionHM0005.png-8c2cc941fd60fa6c388e9c6d50574436.ctex
+	savepack: step 33: 保存文件：res://assets/helltaker/transitions/transitionHM0005.png.import
+	savepack: step 33: 保存文件：res://.godot/imported/transitionHM0006.png-9fe99ab3081aa925a792d416c68e98a7.ctex
+	savepack: step 33: 保存文件：res://assets/helltaker/transitions/transitionHM0006.png.import
+	savepack: step 33: 保存文件：res://.godot/imported/transitionHM0007.png-5c9a24c8463f2b55723df1a25c9bce02.ctex
+	savepack: step 33: 保存文件：res://assets/helltaker/transitions/transitionHM0007.png.import
+	savepack: step 33: 保存文件：res://.godot/imported/transitionHM0008.png-329cbdb3fdd5eb4b5bc2deb422fd9614.ctex
+	savepack: step 33: 保存文件：res://assets/helltaker/transitions/transitionHM0008.png.import
+	savepack: step 33: 保存文件：res://.godot/imported/transitionHM0009.png-8e8d1b79eec97c677242767cdf68c1ed.ctex
+	savepack: step 33: 保存文件：res://assets/helltaker/transitions/transitionHM0009.png.import
+	savepack: step 33: 保存文件：res://.godot/imported/transitionHM0010.png-13becbf51c48c69748baf0ac86c22f0d.ctex
+	savepack: step 33: 保存文件：res://assets/helltaker/transitions/transitionHM0010.png.import
+	savepack: step 34: 保存文件：res://.godot/imported/transitionHM0011.png-efd55c9642d5e9e878396b7d06813571.ctex
+	savepack: step 34: 保存文件：res://assets/helltaker/transitions/transitionHM0011.png.import
+	savepack: step 34: 保存文件：res://.godot/imported/transitionHM0012.png-568837561572a2062076455d4e5f7fd4.ctex
+	savepack: step 34: 保存文件：res://assets/helltaker/transitions/transitionHM0012.png.import
+	savepack: step 34: 保存文件：res://.godot/imported/transitionHM0013.png-17fc7315012a720ad0c7d3c8a419a76e.ctex
+	savepack: step 34: 保存文件：res://assets/helltaker/transitions/transitionHM0013.png.import
+	savepack: step 34: 保存文件：res://.godot/imported/transitionHM0014.png-e2e4d556ec457054bfc69932a16faa51.ctex
+	savepack: step 34: 保存文件：res://assets/helltaker/transitions/transitionHM0014.png.import
+	savepack: step 34: 保存文件：res://.godot/imported/transitionHM0015.png-e132e44df23dd4fe33a9381be839cda2.ctex
+	savepack: step 34: 保存文件：res://assets/helltaker/transitions/transitionHM0015.png.import
+	savepack: step 34: 保存文件：res://.godot/imported/transitionHM0016.png-278dcd7d1d9510aa116b111641277583.ctex
+	savepack: step 34: 保存文件：res://assets/helltaker/transitions/transitionHM0016.png.import
+	savepack: step 34: 保存文件：res://.godot/imported/transitionHM0022.png-5795bd6f91fc620c5c80e3e3c357e5fc.ctex
+	savepack: step 34: 保存文件：res://assets/helltaker/transitions/transitionHM0022.png.import
+	savepack: step 34: 保存文件：res://.godot/imported/transitionHM0023.png-176acee33c78441bc5c46d016d1b4845.ctex
+	savepack: step 34: 保存文件：res://assets/helltaker/transitions/transitionHM0023.png.import
+	savepack: step 35: 保存文件：res://.godot/imported/transitionHM0024.png-7ad5484dac12953d4b3c953a46629a55.ctex
+	savepack: step 35: 保存文件：res://assets/helltaker/transitions/transitionHM0024.png.import
+	savepack: step 35: 保存文件：res://.godot/imported/transitionHM0025.png-fd95fed3565047ccd2173adf1596ba9a.ctex
+	savepack: step 35: 保存文件：res://assets/helltaker/transitions/transitionHM0025.png.import
+	savepack: step 35: 保存文件：res://.godot/imported/transitionHM0026.png-7caf55fdf60d1daa02077e8e766a0f54.ctex
+	savepack: step 35: 保存文件：res://assets/helltaker/transitions/transitionHM0026.png.import
+	savepack: step 35: 保存文件：res://.godot/imported/transitionHM0027.png-af2c3e41227c64c3c48f4933ed408f70.ctex
+	savepack: step 35: 保存文件：res://assets/helltaker/transitions/transitionHM0027.png.import
+	savepack: step 35: 保存文件：res://.godot/imported/transitionHM0028.png-d81cb11fd513edf3bbd2eb2548407ff2.ctex
+	savepack: step 35: 保存文件：res://assets/helltaker/transitions/transitionHM0028.png.import
+	savepack: step 35: 保存文件：res://.godot/imported/transitionHM0029.png-8a7c73b3985ab787877fc5d30a724dea.ctex
+	savepack: step 35: 保存文件：res://assets/helltaker/transitions/transitionHM0029.png.import
+	savepack: step 35: 保存文件：res://.godot/imported/transitionHM0030.png-00f2962617accc58f97a09592ec98bff.ctex
+	savepack: step 35: 保存文件：res://assets/helltaker/transitions/transitionHM0030.png.import
+	savepack: step 35: 保存文件：res://.godot/imported/button0003.png-d7bba87792839c5e2cb433a5a2dcfe1f.ctex
+	savepack: step 35: 保存文件：res://assets/helltaker/ui/button0003.png.import
+	savepack: step 36: 保存文件：res://.godot/imported/button0004.png-50e0bafa0fa028b6447318c8f85798f6.ctex
+	savepack: step 36: 保存文件：res://assets/helltaker/ui/button0004.png.import
+	savepack: step 36: 保存文件：res://.godot/imported/button active.png-21f54bf7acbc5c84d8dcad4afccf8056.ctex
+	savepack: step 36: 保存文件：res://assets/helltaker/ui/button active.png.import
+	savepack: step 36: 保存文件：res://.godot/imported/button hover.png-1b39b5461102f474ab9e30905b633391.ctex
+	savepack: step 36: 保存文件：res://assets/helltaker/ui/button hover.png.import
+	savepack: step 36: 保存文件：res://.godot/imported/button on hover.png-d7a286ad85ea427a640d7c3920e5be9e.ctex
+	savepack: step 36: 保存文件：res://assets/helltaker/ui/button on hover.png.import
+	savepack: step 36: 保存文件：res://.godot/imported/button on.png-ed3fbb574bd24a2a6ebf91272fc7243a.ctex
+	savepack: step 36: 保存文件：res://assets/helltaker/ui/button on.png.import
+	savepack: step 36: 保存文件：res://.godot/imported/button.png-3a0592103220a27b5cdd276d4b5ae22a.ctex
+	savepack: step 36: 保存文件：res://assets/helltaker/ui/button.png.import
+	savepack: step 36: 保存文件：res://.godot/imported/button_small.png-0657dc9d6b87b56bc1131ed2965037cf.ctex
+	savepack: step 36: 保存文件：res://assets/helltaker/ui/button_small.png.import
+	savepack: step 36: 保存文件：res://.godot/imported/UISprite.png-b9a8aa70ed097c4b52f8cda0dc31b0d6.ctex
+	savepack: step 36: 保存文件：res://assets/helltaker/ui/UISprite.png.import
+	savepack: step 37: 保存文件：res://.godot/imported/W_chapterSelect.png-dcb8c85b5550a33770fd668058252046.ctex
+	savepack: step 37: 保存文件：res://assets/helltaker/ui/W_chapterSelect.png.import
+	savepack: step 37: 保存文件：res://.godot/imported/W_selection.png-19bebcfd9eb6538af93b41d5e58c5b17.ctex
+	savepack: step 37: 保存文件：res://assets/helltaker/ui/W_selection.png.import
+	savepack: step 37: 保存文件：res://.godot/imported/amiya.png-ca521238c5de5e24d6abd66793ab97a4.ctex
+	savepack: step 37: 保存文件：res://assets/portraits/amiya.png.import
+	savepack: step 37: 保存文件：res://.godot/imported/jessica.png-34a7d0e5774604debbeff9f2ce094723.ctex
+	savepack: step 37: 保存文件：res://assets/portraits/jessica.png.import
+	savepack: step 37: 保存文件：res://.godot/imported/muelsyse.png-f83771f5f9ab95140052a2c95077dea2.ctex
+	savepack: step 37: 保存文件：res://assets/portraits/muelsyse.png.import
+	savepack: step 37: 保存文件：res://.godot/imported/saria-soft.png-acdc0596e6d61c9b9140beb71db80d3e.ctex
+	savepack: step 37: 保存文件：res://assets/portraits/saria-soft.png.import
+	savepack: step 37: 保存文件：res://.godot/imported/saria.png-4f084eab97d9a13669ac87a8947fe0e8.ctex
+	savepack: step 37: 保存文件：res://assets/portraits/saria.png.import
+	savepack: step 37: 保存文件：res://.godot/imported/anemo.svg-76fa9f288701dde117e4df4788b647bb.ctex
+	savepack: step 37: 保存文件：res://assets/ui/icons/temporary/nieobie/anemo.svg.import
+	savepack: step 38: 保存文件：res://.godot/imported/archive.svg-dc14a3025b9d3f0dce7810098b63d17d.ctex
+	savepack: step 38: 保存文件：res://assets/ui/icons/temporary/nieobie/archive.svg.import
+	savepack: step 38: 保存文件：res://.godot/imported/armor.svg-1ae6f64bc8f679765375f6d76b90d448.ctex
+	savepack: step 38: 保存文件：res://assets/ui/icons/temporary/nieobie/armor.svg.import
+	savepack: step 38: 保存文件：res://.godot/imported/attack.svg-a45b2b50afc62efd6b14d671fbffcd35.ctex
+	savepack: step 38: 保存文件：res://assets/ui/icons/temporary/nieobie/attack.svg.import
+	savepack: step 38: 保存文件：res://.godot/imported/boss.svg-b55cb06af2795afff5319359cef53883.ctex
+	savepack: step 38: 保存文件：res://assets/ui/icons/temporary/nieobie/boss.svg.import
+	savepack: step 38: 保存文件：res://.godot/imported/card.svg-d06d4ac5b36401113f44cbb0ec7091fd.ctex
+	savepack: step 38: 保存文件：res://assets/ui/icons/temporary/nieobie/card.svg.import
+	savepack: step 38: 保存文件：res://.godot/imported/character.svg-49edb233c617c61a0b614f10f748ae6f.ctex
+	savepack: step 38: 保存文件：res://assets/ui/icons/temporary/nieobie/character.svg.import
+	savepack: step 38: 保存文件：res://.godot/imported/cryo.svg-1a9c50ab6fcc8c726dd6b378b1486b84.ctex
+	savepack: step 38: 保存文件：res://assets/ui/icons/temporary/nieobie/cryo.svg.import
+	savepack: step 38: 保存文件：res://.godot/imported/door.svg-af36914d97308f7943e9d9b83e492105.ctex
+	savepack: step 38: 保存文件：res://assets/ui/icons/temporary/nieobie/door.svg.import
+	savepack: step 39: 保存文件：res://.godot/imported/electro.svg-b0f9f6818e49eb589f0ce9988902576e.ctex
+	savepack: step 39: 保存文件：res://assets/ui/icons/temporary/nieobie/electro.svg.import
+	savepack: step 39: 保存文件：res://.godot/imported/experience.svg-b8f1abb2c24f951aa936cb0f0190c429.ctex
+	savepack: step 39: 保存文件：res://assets/ui/icons/temporary/nieobie/experience.svg.import
+	savepack: step 39: 保存文件：res://.godot/imported/geo.svg-71c42d96c3f450bdbdcc183a57805018.ctex
+	savepack: step 39: 保存文件：res://assets/ui/icons/temporary/nieobie/geo.svg.import
+	savepack: step 39: 保存文件：res://.godot/imported/health.svg-e6173ebda2075c5555743bf992f5554b.ctex
+	savepack: step 39: 保存文件：res://assets/ui/icons/temporary/nieobie/health.svg.import
+	savepack: step 39: 保存文件：res://.godot/imported/hydro.svg-c207328b86084d12fa4ff6098a4b1666.ctex
+	savepack: step 39: 保存文件：res://assets/ui/icons/temporary/nieobie/hydro.svg.import
+	savepack: step 39: 保存文件：res://.godot/imported/level.svg-b20b76aed0f05d5da0ce1564bac525a8.ctex
+	savepack: step 39: 保存文件：res://assets/ui/icons/temporary/nieobie/level.svg.import
+	savepack: step 39: 保存文件：res://.godot/imported/map.svg-4ccfffc6ae97c4e2161af0feec0df844.ctex
+	savepack: step 39: 保存文件：res://assets/ui/icons/temporary/nieobie/map.svg.import
+	savepack: step 39: 保存文件：res://.godot/imported/pause.svg-71a945b150e89bf9f0fa2789e9fe5a58.ctex
+	savepack: step 39: 保存文件：res://assets/ui/icons/temporary/nieobie/pause.svg.import
+	savepack: step 40: 保存文件：res://.godot/imported/pyro.svg-a644a7b48c6f002228dfa75a6d6c98d5.ctex
+	savepack: step 40: 保存文件：res://assets/ui/icons/temporary/nieobie/pyro.svg.import
+	savepack: step 40: 保存文件：res://.godot/imported/skill.svg-774846fa0e62e1cab2cfe8b530f60739.ctex
+	savepack: step 40: 保存文件：res://assets/ui/icons/temporary/nieobie/skill.svg.import
+	savepack: step 40: 保存文件：res://.godot/imported/skull.svg-0f1f062016a55f8e310082de84aad24c.ctex
+	savepack: step 40: 保存文件：res://assets/ui/icons/temporary/nieobie/skull.svg.import
+	savepack: step 40: 保存文件：res://.godot/imported/squad.svg-953d701d54405d2d151b88e9df2cd597.ctex
+	savepack: step 40: 保存文件：res://assets/ui/icons/temporary/nieobie/squad.svg.import
+	savepack: step 40: 保存文件：res://.godot/imported/Alternative_1_01.png-26517cc1315ed17e7d20d346233afc1d.ctex
+	savepack: step 40: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_01.png.import
+	savepack: step 40: 保存文件：res://.godot/imported/Alternative_1_02.png-0fdd2c2d6d9961d8eba466e707bf2a1a.ctex
+	savepack: step 40: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_02.png.import
+	savepack: step 40: 保存文件：res://.godot/imported/Alternative_1_03.png-249ee47f082cb60b50d303417295581a.ctex
+	savepack: step 40: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_03.png.import
+	savepack: step 40: 保存文件：res://.godot/imported/Alternative_1_04.png-c4a8e4ad51cac214f037dbbc531950ae.ctex
+	savepack: step 40: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_04.png.import
+	savepack: step 41: 保存文件：res://.godot/imported/Alternative_1_05.png-30d455b315114aa764bfad9ae62bac59.ctex
+	savepack: step 41: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_05.png.import
+	savepack: step 41: 保存文件：res://.godot/imported/Alternative_1_06.png-4c56e6707644edca0c008081741953ed.ctex
+	savepack: step 41: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_06.png.import
+	savepack: step 41: 保存文件：res://.godot/imported/Alternative_1_07.png-da1943f69ee0d6b79bed1dee0d4c1582.ctex
+	savepack: step 41: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/2/Alternative_1_07.png.import
+	savepack: step 41: 保存文件：res://.godot/imported/Alternative_1_08.png-eceaaa23a89383dbb2693ee29d778a26.ctex
+	savepack: step 41: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/2/Alternative_1_08.png.import
+	savepack: step 41: 保存文件：res://.godot/imported/Alternative_1_09.png-5c4650d48a703a26acbe4285fe0ecc95.ctex
+	savepack: step 41: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/2/Alternative_1_09.png.import
+	savepack: step 41: 保存文件：res://.godot/imported/Alternative_1_10.png-d74860659123064d7d2d81b7b14f0504.ctex
+	savepack: step 41: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/2/Alternative_1_10.png.import
+	savepack: step 41: 保存文件：res://.godot/imported/Alternative_1_11.png-6d66ff3dc9eeeaeceb63603f3348b790.ctex
+	savepack: step 41: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/2/Alternative_1_11.png.import
+	savepack: step 41: 保存文件：res://.godot/imported/Alternative_1_12.png-a77f65ee005929ed866bfa71a5b3cb7a.ctex
+	savepack: step 41: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/2/Alternative_1_12.png.import
+	savepack: step 42: 保存文件：res://.godot/imported/Alternative_1_13.png-111ab7d444be9f330c012cad4e433abf.ctex
+	savepack: step 42: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/3/Alternative_1_13.png.import
+	savepack: step 42: 保存文件：res://.godot/imported/Alternative_1_14.png-210529d7e30a469d536628ea09354ed6.ctex
+	savepack: step 42: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/3/Alternative_1_14.png.import
+	savepack: step 42: 保存文件：res://.godot/imported/Alternative_1_15.png-7c5a4f74409b1d790d1443028ea2b319.ctex
+	savepack: step 42: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/3/Alternative_1_15.png.import
+	savepack: step 42: 保存文件：res://.godot/imported/Alternative_1_16.png-f721b73ca66a50ae77a1d915bc30d481.ctex
+	savepack: step 42: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/3/Alternative_1_16.png.import
+	savepack: step 42: 保存文件：res://.godot/imported/Alternative_1_17.png-8ec1fb972fac8dce505f70e2c173b2ba.ctex
+	savepack: step 42: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/3/Alternative_1_17.png.import
+	savepack: step 42: 保存文件：res://.godot/imported/Alternative_1_18.png-7b5615faa3b5b6ed9ec623dc3fa06e1f.ctex
+	savepack: step 42: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/3/Alternative_1_18.png.import
+	savepack: step 42: 保存文件：res://.godot/imported/Alternative_1_19.png-e21c7b21c535dcf01437ea43f6fe70d4.ctex
+	savepack: step 42: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/4/Alternative_1_19.png.import
+	savepack: step 42: 保存文件：res://.godot/imported/Alternative_1_20.png-e010a8050ca263b375fd813fe5610afe.ctex
+	savepack: step 42: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/4/Alternative_1_20.png.import
+	savepack: step 43: 保存文件：res://.godot/imported/Alternative_1_21.png-cbb75122a589c73b36e2e7817b53fa48.ctex
+	savepack: step 43: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/4/Alternative_1_21.png.import
+	savepack: step 43: 保存文件：res://.godot/imported/Alternative_1_22.png-b5926db3f6269d61f2ad138f40c6106c.ctex
+	savepack: step 43: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/4/Alternative_1_22.png.import
+	savepack: step 43: 保存文件：res://.godot/imported/Alternative_1_23.png-8e58fa9c819a86170f99a7062d439284.ctex
+	savepack: step 43: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/4/Alternative_1_23.png.import
+	savepack: step 43: 保存文件：res://.godot/imported/Alternative_1_24.png-108d3818308449432e14a37a6a763dae.ctex
+	savepack: step 43: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/4/Alternative_1_24.png.import
+	savepack: step 43: 保存文件：res://.godot/imported/Alternative_1_25.png-1a259f8671f5395a88ba07bfe03f7c16.ctex
+	savepack: step 43: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/5/Alternative_1_25.png.import
+	savepack: step 43: 保存文件：res://.godot/imported/Alternative_1_26.png-63553c35e6fac387037071fd2431e098.ctex
+	savepack: step 43: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/5/Alternative_1_26.png.import
+	savepack: step 43: 保存文件：res://.godot/imported/Alternative_1_27.png-a1216096b60781e4a8476abac6aa8f0a.ctex
+	savepack: step 43: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/5/Alternative_1_27.png.import
+	savepack: step 43: 保存文件：res://.godot/imported/Alternative_1_28.png-98d6f9b32693a5e8538006fcb91a33b4.ctex
+	savepack: step 43: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/5/Alternative_1_28.png.import
+	savepack: step 44: 保存文件：res://.godot/imported/Alternative_1_29.png-d47b4f571c992df33a551b0b3ab52e51.ctex
+	savepack: step 44: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/5/Alternative_1_29.png.import
+	savepack: step 44: 保存文件：res://.godot/imported/Alternative_1_30.png-21ba246ca25f195d0bfd10bab060ac99.ctex
+	savepack: step 44: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/5/Alternative_1_30.png.import
+	savepack: step 44: 保存文件：res://.godot/imported/Preview_Alternative_1.png-cdb8329c931e6ab7024d0c334c8059e3.ctex
+	savepack: step 44: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/Preview_Alternative_1.png.import
+	savepack: step 44: 保存文件：res://.godot/imported/Alternative_2_01.png-fbaa70bebe315659bc0154403bb7295d.ctex
+	savepack: step 44: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/1/Alternative_2_01.png.import
+	savepack: step 44: 保存文件：res://.godot/imported/Alternative_2_02.png-bc276357cd9961389136f02ed9810313.ctex
+	savepack: step 44: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/1/Alternative_2_02.png.import
+	savepack: step 44: 保存文件：res://.godot/imported/Alternative_2_03.png-ede04d819b784aa4c8d409b09d9ca243.ctex
+	savepack: step 44: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/1/Alternative_2_03.png.import
+	savepack: step 44: 保存文件：res://.godot/imported/Alternative_2_04.png-1b5e658ae30e060af3101d21494dbd66.ctex
+	savepack: step 44: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/1/Alternative_2_04.png.import
+	savepack: step 44: 保存文件：res://.godot/imported/Alternative_2_05.png-5fde854378b3c0ffe914d3f410b4a52e.ctex
+	savepack: step 44: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/1/Alternative_2_05.png.import
+	savepack: step 45: 保存文件：res://.godot/imported/Alternative_2_06.png-32838808180bc0b3c9825ceb5936ac74.ctex
+	savepack: step 45: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/1/Alternative_2_06.png.import
+	savepack: step 45: 保存文件：res://.godot/imported/Alternative_2_07.png-813c2ec0f868a0db54b90758ab3c032d.ctex
+	savepack: step 45: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/2/Alternative_2_07.png.import
+	savepack: step 45: 保存文件：res://.godot/imported/Alternative_2_08.png-4be94dbce9d07c01b170e15185002e3c.ctex
+	savepack: step 45: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/2/Alternative_2_08.png.import
+	savepack: step 45: 保存文件：res://.godot/imported/Alternative_2_09.png-4db75de71212d1a728c5210b76212289.ctex
+	savepack: step 45: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/2/Alternative_2_09.png.import
+	savepack: step 45: 保存文件：res://.godot/imported/Alternative_2_10.png-37912b6dcf600e0c949067d4c4989d1f.ctex
+	savepack: step 45: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/2/Alternative_2_10.png.import
+	savepack: step 45: 保存文件：res://.godot/imported/Alternative_2_11.png-74b177be3fb6c6099b3413aea4baa52d.ctex
+	savepack: step 45: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/2/Alternative_2_11.png.import
+	savepack: step 45: 保存文件：res://.godot/imported/Alternative_2_12.png-ecd844856d0bd14863f3b6bab3a170e1.ctex
+	savepack: step 45: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/2/Alternative_2_12.png.import
+	savepack: step 45: 保存文件：res://.godot/imported/Alternative_2_13.png-88f5f1e9c2bc9d1527850b8bb48368e0.ctex
+	savepack: step 45: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/3/Alternative_2_13.png.import
+	savepack: step 46: 保存文件：res://.godot/imported/Alternative_2_14.png-014c4365ec56faf8c19916da0f070953.ctex
+	savepack: step 46: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/3/Alternative_2_14.png.import
+	savepack: step 46: 保存文件：res://.godot/imported/Alternative_2_15.png-64b80a480de06a2fd412edd401e1cb24.ctex
+	savepack: step 46: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/3/Alternative_2_15.png.import
+	savepack: step 46: 保存文件：res://.godot/imported/Alternative_2_16.png-d80be46d29dea5ad71dfe68112e1912d.ctex
+	savepack: step 46: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/3/Alternative_2_16.png.import
+	savepack: step 46: 保存文件：res://.godot/imported/Alternative_2_17.png-7e055e783633b3b64a0480e6f00b0844.ctex
+	savepack: step 46: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/3/Alternative_2_17.png.import
+	savepack: step 46: 保存文件：res://.godot/imported/Alternative_2_18.png-ee560b655e5f55816989472a103cad71.ctex
+	savepack: step 46: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/3/Alternative_2_18.png.import
+	savepack: step 46: 保存文件：res://.godot/imported/Alternative_2_19.png-992576cf556964bb48991b3d58b7b7be.ctex
+	savepack: step 46: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/4/Alternative_2_19.png.import
+	savepack: step 46: 保存文件：res://.godot/imported/Alternative_2_20.png-7d5f3617b96949eaf8897ef981d0a6d7.ctex
+	savepack: step 46: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/4/Alternative_2_20.png.import
+	savepack: step 46: 保存文件：res://.godot/imported/Alternative_2_21.png-86c3fe28efaf704acf84806f8f211155.ctex
+	savepack: step 46: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/4/Alternative_2_21.png.import
+	savepack: step 47: 保存文件：res://.godot/imported/Alternative_2_22.png-8f37c11f6fb24a216f5b662cf223e342.ctex
+	savepack: step 47: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/4/Alternative_2_22.png.import
+	savepack: step 47: 保存文件：res://.godot/imported/Alternative_2_23.png-ad525246cd60c4799b44c6fcf5a8636c.ctex
+	savepack: step 47: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/4/Alternative_2_23.png.import
+	savepack: step 47: 保存文件：res://.godot/imported/Alternative_2_24.png-2560fdca938503afdb416dc24abaec0a.ctex
+	savepack: step 47: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/4/Alternative_2_24.png.import
+	savepack: step 47: 保存文件：res://.godot/imported/Alternative_2_25.png-e56dff53857566b0f37b52f09d4a4c4c.ctex
+	savepack: step 47: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/5/Alternative_2_25.png.import
+	savepack: step 47: 保存文件：res://.godot/imported/Alternative_2_26.png-70bed00f2a17b34b248d3fcdb291b098.ctex
+	savepack: step 47: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/5/Alternative_2_26.png.import
+	savepack: step 47: 保存文件：res://.godot/imported/Alternative_2_27.png-93d7e987fc2c64081c163e3e542eeca9.ctex
+	savepack: step 47: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/5/Alternative_2_27.png.import
+	savepack: step 47: 保存文件：res://.godot/imported/Alternative_2_28.png-961c436caf2b164328ed35bafb37a9a9.ctex
+	savepack: step 47: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/5/Alternative_2_28.png.import
+	savepack: step 47: 保存文件：res://.godot/imported/Alternative_2_29.png-c19d4b9920b7bc9e42a08399c13d58f9.ctex
+	savepack: step 47: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/5/Alternative_2_29.png.import
+	savepack: step 48: 保存文件：res://.godot/imported/Alternative_2_30.png-36e0f8e0bd5b786c04bbb759a58326c2.ctex
+	savepack: step 48: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/5/Alternative_2_30.png.import
+	savepack: step 48: 保存文件：res://.godot/imported/Preview_Alternative_2.png-665c33b2290078f9efbf52c8056b51ac.ctex
+	savepack: step 48: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 2/Preview_Alternative_2.png.import
+	savepack: step 48: 保存文件：res://.godot/imported/Alternative_3_01.png-b7d15dc49219587d73770ca2adae8caa.ctex
+	savepack: step 48: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/1/Alternative_3_01.png.import
+	savepack: step 48: 保存文件：res://.godot/imported/Alternative_3_02.png-8978edaa73647a3e858d4c6cfd6ad215.ctex
+	savepack: step 48: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/1/Alternative_3_02.png.import
+	savepack: step 48: 保存文件：res://.godot/imported/Alternative_3_03.png-5ab7be96d27e4754b37315112b1b98ff.ctex
+	savepack: step 48: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/1/Alternative_3_03.png.import
+	savepack: step 48: 保存文件：res://.godot/imported/Alternative_3_04.png-dfb9d714e6d97421a9587002ff5ee03b.ctex
+	savepack: step 48: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/1/Alternative_3_04.png.import
+	savepack: step 48: 保存文件：res://.godot/imported/Alternative_3_05.png-52dfaff390c7ba7c3bc088cffa21d3ce.ctex
+	savepack: step 48: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/1/Alternative_3_05.png.import
+	savepack: step 48: 保存文件：res://.godot/imported/Alternative_3_06.png-c88ca3a55acb6653931f7ee3042a3987.ctex
+	savepack: step 48: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/1/Alternative_3_06.png.import
+	savepack: step 49: 保存文件：res://.godot/imported/Alternative_3_07.png-58ad3c7a42172a35ada1bf5d91e3525c.ctex
+	savepack: step 49: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/2/Alternative_3_07.png.import
+	savepack: step 49: 保存文件：res://.godot/imported/Alternative_3_08.png-d976425769be4d187b938dd36537f844.ctex
+	savepack: step 49: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/2/Alternative_3_08.png.import
+	savepack: step 49: 保存文件：res://.godot/imported/Alternative_3_09.png-dc80dfb636c441aeefaed3d52bfe528f.ctex
+	savepack: step 49: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/2/Alternative_3_09.png.import
+	savepack: step 49: 保存文件：res://.godot/imported/Alternative_3_10.png-41bda37a1dbad992fa836a630313c8c0.ctex
+	savepack: step 49: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/2/Alternative_3_10.png.import
+	savepack: step 49: 保存文件：res://.godot/imported/Alternative_3_11.png-fed18de4f9c7aa78b3a78b28c3edc6de.ctex
+	savepack: step 49: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/2/Alternative_3_11.png.import
+	savepack: step 49: 保存文件：res://.godot/imported/Alternative_3_12.png-c9a0674d45b13b90815709020dd29b12.ctex
+	savepack: step 49: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/2/Alternative_3_12.png.import
+	savepack: step 49: 保存文件：res://.godot/imported/Alternative_3_13.png-451f64f08d22807115d29eb7cda6023b.ctex
+	savepack: step 49: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/3/Alternative_3_13.png.import
+	savepack: step 49: 保存文件：res://.godot/imported/Alternative_3_14.png-d7e29cc813b7847c69624f2e5fab9156.ctex
+	savepack: step 49: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/3/Alternative_3_14.png.import
+	savepack: step 50: 保存文件：res://.godot/imported/Alternative_3_15.png-90702e9a8920fb1cdd31b826ab544416.ctex
+	savepack: step 50: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/3/Alternative_3_15.png.import
+	savepack: step 50: 保存文件：res://.godot/imported/Alternative_3_16.png-baad2506517b68ccfb18f364e0d9e4a3.ctex
+	savepack: step 50: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/3/Alternative_3_16.png.import
+	savepack: step 50: 保存文件：res://.godot/imported/Alternative_3_17.png-d6ad98e09a3915b57036eeb007b6f420.ctex
+	savepack: step 50: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/3/Alternative_3_17.png.import
+	savepack: step 50: 保存文件：res://.godot/imported/Alternative_3_18.png-30d81bbe58e617ec1edb81f233a896e9.ctex
+	savepack: step 50: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/3/Alternative_3_18.png.import
+	savepack: step 50: 保存文件：res://.godot/imported/Alternative_3_19.png-53b2a09cae5b39e45f2fb3cb4a16691f.ctex
+	savepack: step 50: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/4/Alternative_3_19.png.import
+	savepack: step 50: 保存文件：res://.godot/imported/Alternative_3_20.png-fd47bbf2082c15c3906d280924ad5110.ctex
+	savepack: step 50: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/4/Alternative_3_20.png.import
+	savepack: step 50: 保存文件：res://.godot/imported/Alternative_3_21.png-42dc22a487bef70841479cc283c18c24.ctex
+	savepack: step 50: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/4/Alternative_3_21.png.import
+	savepack: step 50: 保存文件：res://.godot/imported/Alternative_3_22.png-2e477de4710c9903d9af6ac7f4841ad4.ctex
+	savepack: step 50: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/4/Alternative_3_22.png.import
+	savepack: step 51: 保存文件：res://.godot/imported/Alternative_3_23.png-1707a05258f7e53736be46c0274ca1c2.ctex
+	savepack: step 51: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/4/Alternative_3_23.png.import
+	savepack: step 51: 保存文件：res://.godot/imported/Alternative_3_24.png-fc69098d5ec79e28824ebb7967eb0466.ctex
+	savepack: step 51: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/4/Alternative_3_24.png.import
+	savepack: step 51: 保存文件：res://.godot/imported/Alternative_3_25.png-b75f77a887c04f3a7d4b6c448fe0cd95.ctex
+	savepack: step 51: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/5/Alternative_3_25.png.import
+	savepack: step 51: 保存文件：res://.godot/imported/Alternative_3_26.png-b37653837affed20a7e9eaeae5ea4b47.ctex
+	savepack: step 51: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/5/Alternative_3_26.png.import
+	savepack: step 51: 保存文件：res://.godot/imported/Alternative_3_27.png-66e62c78664d595d12f1c4807c8259f8.ctex
+	savepack: step 51: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/5/Alternative_3_27.png.import
+	savepack: step 51: 保存文件：res://.godot/imported/Alternative_3_28.png-7e250e69512eee6458c5ec588cdd4c4c.ctex
+	savepack: step 51: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/5/Alternative_3_28.png.import
+	savepack: step 51: 保存文件：res://.godot/imported/Alternative_3_29.png-1e939fe879fd9c2d2d7b8360f5e54bcb.ctex
+	savepack: step 51: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/5/Alternative_3_29.png.import
+	savepack: step 51: 保存文件：res://.godot/imported/Alternative_3_30.png-d4b42712e0c8146ad6710d134804e770.ctex
+	savepack: step 51: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/5/Alternative_3_30.png.import
+	savepack: step 52: 保存文件：res://.godot/imported/Preview_Alternative_3.png-3390f92fe95709f491c886df16e434a7.ctex
+	savepack: step 52: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 3/Preview_Alternative_3.png.import
+	savepack: step 52: 保存文件：res://.godot/imported/Classic_01.png-145748cb256366e8a29a885e0094a6e5.ctex
+	savepack: step 52: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/1/Classic_01.png.import
+	savepack: step 52: 保存文件：res://.godot/imported/Classic_02.png-cbfb5ca2b9c1a6f49ceb1b9ea6f42ec3.ctex
+	savepack: step 52: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/1/Classic_02.png.import
+	savepack: step 52: 保存文件：res://.godot/imported/Classic_03.png-33beb49b43553157a0d693f00943e65c.ctex
+	savepack: step 52: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/1/Classic_03.png.import
+	savepack: step 52: 保存文件：res://.godot/imported/Classic_04.png-89452ee12d20e0ce0b5679b676be9bde.ctex
+	savepack: step 52: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/1/Classic_04.png.import
+	savepack: step 52: 保存文件：res://.godot/imported/Classic_05.png-7c34aa93b2564c94d04582d4aaf94500.ctex
+	savepack: step 52: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/1/Classic_05.png.import
+	savepack: step 52: 保存文件：res://.godot/imported/Classic_06.png-2d4c55336c46279091231d2a3dfa828a.ctex
+	savepack: step 52: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/1/Classic_06.png.import
+	savepack: step 52: 保存文件：res://.godot/imported/Classic_07.png-643964a5691be20f9cede82b2cc1731a.ctex
+	savepack: step 52: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/2/Classic_07.png.import
+	savepack: step 53: 保存文件：res://.godot/imported/Classic_08.png-48fccf4dab5dd7dc948b2e5ae8f5cc34.ctex
+	savepack: step 53: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/2/Classic_08.png.import
+	savepack: step 53: 保存文件：res://.godot/imported/Classic_09.png-32b95dc76825c8080152d64c4c0902d7.ctex
+	savepack: step 53: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/2/Classic_09.png.import
+	savepack: step 53: 保存文件：res://.godot/imported/Classic_10.png-f1901fa6de42869a10e39a132548ed0e.ctex
+	savepack: step 53: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/2/Classic_10.png.import
+	savepack: step 53: 保存文件：res://.godot/imported/Classic_11.png-bd37b8c252e5e2e5105f3139200e3475.ctex
+	savepack: step 53: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/2/Classic_11.png.import
+	savepack: step 53: 保存文件：res://.godot/imported/Classic_12.png-2b3ed9f8e27a4a87ab6967df82f70606.ctex
+	savepack: step 53: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/2/Classic_12.png.import
+	savepack: step 53: 保存文件：res://.godot/imported/Classic_13.png-8bf2b1c7f34a0a5d8a1b31d544ca016d.ctex
+	savepack: step 53: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/3/Classic_13.png.import
+	savepack: step 53: 保存文件：res://.godot/imported/Classic_14.png-014692962cc925c470af55b874eab4d7.ctex
+	savepack: step 53: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/3/Classic_14.png.import
+	savepack: step 53: 保存文件：res://.godot/imported/Classic_15.png-116b7370f3be2cbbf96c78bb754ce881.ctex
+	savepack: step 53: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/3/Classic_15.png.import
+	savepack: step 54: 保存文件：res://.godot/imported/Classic_16.png-7ef0a857d5f8f5871fd79b08436c31e6.ctex
+	savepack: step 54: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/3/Classic_16.png.import
+	savepack: step 54: 保存文件：res://.godot/imported/Classic_17.png-29fc969f57d5d92586b72897dc326972.ctex
+	savepack: step 54: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/3/Classic_17.png.import
+	savepack: step 54: 保存文件：res://.godot/imported/Classic_18.png-19be1621d103f855a9c6eac884c7a4f6.ctex
+	savepack: step 54: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/3/Classic_18.png.import
+	savepack: step 54: 保存文件：res://.godot/imported/Classic_19.png-d0b302b3b3c45b0f1a62e24a09a0c029.ctex
+	savepack: step 54: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/4/Classic_19.png.import
+	savepack: step 54: 保存文件：res://.godot/imported/Classic_20.png-2d20795196348bd9288a4bf60384c3ed.ctex
+	savepack: step 54: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/4/Classic_20.png.import
+	savepack: step 54: 保存文件：res://.godot/imported/Classic_21.png-f47f1728499e9f25f4a1a96af66b9387.ctex
+	savepack: step 54: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/4/Classic_21.png.import
+	savepack: step 54: 保存文件：res://.godot/imported/Classic_22.png-637f8cba2a2c5d1ad55d9e90748a3d3b.ctex
+	savepack: step 54: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/4/Classic_22.png.import
+	savepack: step 54: 保存文件：res://.godot/imported/Classic_23.png-5cf38fef1ca5d73c2e5ea58fcaa75126.ctex
+	savepack: step 54: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/4/Classic_23.png.import
+	savepack: step 55: 保存文件：res://.godot/imported/Classic_24.png-71ae45f9fbe60fcccfc734326177d767.ctex
+	savepack: step 55: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/4/Classic_24.png.import
+	savepack: step 55: 保存文件：res://.godot/imported/Classic_25.png-64ce521c0f04a435d938e1f4ceeb1d31.ctex
+	savepack: step 55: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/5/Classic_25.png.import
+	savepack: step 55: 保存文件：res://.godot/imported/Classic_26.png-9695386bc8ad6a2e6690d8d464a0d7f6.ctex
+	savepack: step 55: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/5/Classic_26.png.import
+	savepack: step 55: 保存文件：res://.godot/imported/Classic_27.png-b3225b10bf2e1b7f90b1bd26f82a1c82.ctex
+	savepack: step 55: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/5/Classic_27.png.import
+	savepack: step 55: 保存文件：res://.godot/imported/Classic_28.png-ae46a9ec722058653d06dd8c13a3c5e8.ctex
+	savepack: step 55: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/5/Classic_28.png.import
+	savepack: step 55: 保存文件：res://.godot/imported/Classic_29.png-5a0f80bf4c4e3a72798dd0e7a90c8479.ctex
+	savepack: step 55: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/5/Classic_29.png.import
+	savepack: step 55: 保存文件：res://.godot/imported/Classic_30.png-942884b4b0b09b9110e1d82986855541.ctex
+	savepack: step 55: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/5/Classic_30.png.import
+	savepack: step 55: 保存文件：res://.godot/imported/Preview.png-15f36de76d6fa70b480bb94f88d51d49.ctex
+	savepack: step 55: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Classic/Preview.png.import
+	savepack: step 56: 保存文件：res://.godot/imported/Big_Preview.png-6473ac3420c86d9a0cac2df90b4aa6a5.ctex
+	savepack: step 56: 保存文件：res://assets/vfx/third_party/cethiel_weapon_slash/files/Big_Preview.png.import
+	savepack: step 56: 保存文件：res://.godot/imported/0 Fire.png-5e5d5a7a0c6a8c259a69f28b45eeb0e3.ctex
+	savepack: step 56: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/0 Fire.png.import
+	savepack: step 56: 保存文件：res://.godot/imported/1 Fire.png-bdf8f466251ba99c9174827744caa390.ctex
+	savepack: step 56: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/1 Fire.png.import
+	savepack: step 56: 保存文件：res://.godot/imported/2 Fire.png-8d505e9453921689bc1394ec2cb5b737.ctex
+	savepack: step 56: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/2 Fire.png.import
+	savepack: step 56: 保存文件：res://.godot/imported/3 Fire.png-e4b69fd58c01346977f328b21f05f5f7.ctex
+	savepack: step 56: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/3 Fire.png.import
+	savepack: step 56: 保存文件：res://.godot/imported/4 Fire.png-29b765e84192ad63f2f7e0ee68d1409b.ctex
+	savepack: step 56: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/4 Fire.png.import
+	savepack: step 56: 保存文件：res://.godot/imported/5 Fire.png-73ca3c3e5e540e96715167f645e1cfbc.ctex
+	savepack: step 56: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/5 Fire.png.import
+	savepack: step 56: 保存文件：res://.godot/imported/6 Fire.png-0ffad41596db6ecbef4e6e624780cbd2.ctex
+	savepack: step 56: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/6 Fire.png.import
+	savepack: step 57: 保存文件：res://.godot/imported/7 Fire.png-e198ef14e67546957818594bdbcfa0eb.ctex
+	savepack: step 57: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/7 Fire.png.import
+	savepack: step 57: 保存文件：res://.godot/imported/8 Fire.png-8be1e61960149a041ee3645bc2565e72.ctex
+	savepack: step 57: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/8 Fire.png.import
+	savepack: step 57: 保存文件：res://.godot/imported/9 Fire.png-8064f6b4cc2fa2bb15bed72ea7d18dcd.ctex
+	savepack: step 57: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/9 Fire.png.import
+	savepack: step 57: 保存文件：res://.godot/imported/10 Fire.png-52fce7c024e66b450ae9626209d7c434.ctex
+	savepack: step 57: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/10 Fire.png.import
+	savepack: step 57: 保存文件：res://.godot/imported/11 Fire.png-a9c8d19033d94992397678d6a7037e4f.ctex
+	savepack: step 57: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/11 Fire.png.import
+	savepack: step 57: 保存文件：res://.godot/imported/12 Fire.png-439e6d769a9e879b7468f1d05c70101f.ctex
+	savepack: step 57: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/12 Fire.png.import
+	savepack: step 57: 保存文件：res://.godot/imported/13 Fire.png-ffa21450a19375b5ca796fa804da6fc9.ctex
+	savepack: step 57: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/13 Fire.png.import
+	savepack: step 57: 保存文件：res://.godot/imported/14 Fire.png-5ffa5eb2c8fdadbcc2fb851f3e00b0db.ctex
+	savepack: step 57: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/14 Fire.png.import
+	savepack: step 58: 保存文件：res://.godot/imported/15 Fire.png-d3dabae0e6312ba672193681191fa6f5.ctex
+	savepack: step 58: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/15 Fire.png.import
+	savepack: step 58: 保存文件：res://.godot/imported/16 Fire.png-a53da73662d5e3a65733525a4936630d.ctex
+	savepack: step 58: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/16 Fire.png.import
+	savepack: step 58: 保存文件：res://.godot/imported/17 Fire.png-b313d7cbd0119cc68fae49f3865144ad.ctex
+	savepack: step 58: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/17 Fire.png.import
+	savepack: step 58: 保存文件：res://.godot/imported/18 Fire.png-8fa66492acda30091bc61d21b0d6b75b.ctex
+	savepack: step 58: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/18 Fire.png.import
+	savepack: step 58: 保存文件：res://.godot/imported/19 Fire.png-bd33e84fdbcefdcd61ef53d1df65e306.ctex
+	savepack: step 58: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/19 Fire.png.import
+	savepack: step 58: 保存文件：res://.godot/imported/20 Fire.png-2e45c530b94ee1cb23446622ce784c1e.ctex
+	savepack: step 58: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/20 Fire.png.import
+	savepack: step 58: 保存文件：res://.godot/imported/21 Fire.png-23a90698860bac747aa45e8caa2c52ac.ctex
+	savepack: step 58: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/21 Fire.png.import
+	savepack: step 58: 保存文件：res://.godot/imported/22 Fire.png-7a928b7e99f4f81e8a9f67a4bfc0b578.ctex
+	savepack: step 58: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/22 Fire.png.import
+	savepack: step 59: 保存文件：res://.godot/imported/23 Fire.png-42a8432fd6c1e127d5d2e9c9cf8a1957.ctex
+	savepack: step 59: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/23 Fire.png.import
+	savepack: step 59: 保存文件：res://.godot/imported/24 Fire.png-95aa06978c5e25dc7e61a3cb2948453d.ctex
+	savepack: step 59: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/24 Fire.png.import
+	savepack: step 59: 保存文件：res://.godot/imported/25 Fire.png-e235eb83f2b983a4b8ef348895c9be1f.ctex
+	savepack: step 59: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/25 Fire.png.import
+	savepack: step 59: 保存文件：res://.godot/imported/26 Fire.png-ddde697d3412e30d0be56261b0bd3896.ctex
+	savepack: step 59: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/26 Fire.png.import
+	savepack: step 59: 保存文件：res://.godot/imported/27 Fire.png-1bced9f4e5d4a399c2a8c84cc46a321d.ctex
+	savepack: step 59: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/27 Fire.png.import
+	savepack: step 59: 保存文件：res://.godot/imported/28 Fire.png-3ea6a8f938ccf54a739a59f000a59ca5.ctex
+	savepack: step 59: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/28 Fire.png.import
+	savepack: step 59: 保存文件：res://.godot/imported/29 Fire.png-5896ca7882288c8859326989abaab827.ctex
+	savepack: step 59: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/29 Fire.png.import
+	savepack: step 59: 保存文件：res://.godot/imported/30 Fire.png-1480ac10abe96973665a551f79930567.ctex
+	savepack: step 59: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/30 Fire.png.import
+	savepack: step 60: 保存文件：res://.godot/imported/31 Fire.png-cee7444a8d84565616774730bb95b240.ctex
+	savepack: step 60: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/31 Fire.png.import
+	savepack: step 60: 保存文件：res://.godot/imported/32 Fire.png-1f882c50d2e9ba03a4b2b6bb94034c59.ctex
+	savepack: step 60: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/32 Fire.png.import
+	savepack: step 60: 保存文件：res://.godot/imported/33 Fire.png-ce746ea08dbb29248b104b862d8ba5e7.ctex
+	savepack: step 60: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/33 Fire.png.import
+	savepack: step 60: 保存文件：res://.godot/imported/34 Fire.png-3762e345851f011cb0e845c2905cb0b7.ctex
+	savepack: step 60: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/34 Fire.png.import
+	savepack: step 60: 保存文件：res://.godot/imported/35 Fire.png-5b5a26b1da8103d216c1c675bf0c77ef.ctex
+	savepack: step 60: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/35 Fire.png.import
+	savepack: step 60: 保存文件：res://.godot/imported/36 Fire.png-7452703668d5674fb30499231b643691.ctex
+	savepack: step 60: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/36 Fire.png.import
+	savepack: step 60: 保存文件：res://.godot/imported/37 Fire.png-f8726d4b9cf633c3eaf1843d9f93b5d3.ctex
+	savepack: step 60: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/37 Fire.png.import
+	savepack: step 60: 保存文件：res://.godot/imported/38 Fire.png-0c05d231a0294fbdc6098c76e2bb7830.ctex
+	savepack: step 60: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/38 Fire.png.import
+	savepack: step 61: 保存文件：res://.godot/imported/39 Fire.png-72d1c5f94977bf976bc53526a4907d2c.ctex
+	savepack: step 61: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/39 Fire.png.import
+	savepack: step 61: 保存文件：res://.godot/imported/40 Fire.png-b2a296e338c62f5d708437aa78f01826.ctex
+	savepack: step 61: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/40 Fire.png.import
+	savepack: step 61: 保存文件：res://.godot/imported/41 Fire.png-a194b66de99acefb27b0a20678bbea21.ctex
+	savepack: step 61: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/41 Fire.png.import
+	savepack: step 61: 保存文件：res://.godot/imported/42 Fire.png-c86aaf0d59c4e06e8f644f4c705c5b51.ctex
+	savepack: step 61: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/42 Fire.png.import
+	savepack: step 61: 保存文件：res://.godot/imported/43 Fire.png-a653359a33b7ed8af441159b6966561d.ctex
+	savepack: step 61: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/43 Fire.png.import
+	savepack: step 61: 保存文件：res://.godot/imported/44 Fire.png-be17969c0be0cfded71bc1ed7530ec77.ctex
+	savepack: step 61: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/44 Fire.png.import
+	savepack: step 61: 保存文件：res://.godot/imported/45 Fire.png-9a98f2762b7168f384b867cfd5cfb7bf.ctex
+	savepack: step 61: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/45 Fire.png.import
+	savepack: step 61: 保存文件：res://.godot/imported/46 Fire.png-74f639424ff1aa9e2adc4cc28baa20c5.ctex
+	savepack: step 61: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/46 Fire.png.import
+	savepack: step 62: 保存文件：res://.godot/imported/47 Fire.png-22e291981fb610da439aaf75443d9c28.ctex
+	savepack: step 62: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/47 Fire.png.import
+	savepack: step 62: 保存文件：res://.godot/imported/48 Fire.png-e90243138c36a293bb0fb86615b01dcc.ctex
+	savepack: step 62: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/48 Fire.png.import
+	savepack: step 62: 保存文件：res://.godot/imported/49 Fire.png-27e6fcd15a6553e66da80c795f565df2.ctex
+	savepack: step 62: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/49 Fire.png.import
+	savepack: step 62: 保存文件：res://.godot/imported/50 Fire.png-e4d272cdd800c9b683af599c1a90f9e5.ctex
+	savepack: step 62: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/50 Fire.png.import
+	savepack: step 62: 保存文件：res://.godot/imported/51 Fire.png-2a30bf29d21f8d41d5857963b96ed59d.ctex
+	savepack: step 62: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/51 Fire.png.import
+	savepack: step 62: 保存文件：res://.godot/imported/52 Fire.png-446cddc501d1c1a01c6e86585937eb43.ctex
+	savepack: step 62: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/52 Fire.png.import
+	savepack: step 62: 保存文件：res://.godot/imported/53 Fire.png-fb64ce2a0a4e8b5996bee825ddf2ea7e.ctex
+	savepack: step 62: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Fire/53 Fire.png.import
+	savepack: step 62: 保存文件：res://.godot/imported/0 Ion.png-4c28d1b5966f1eb04039a5ae6185c166.ctex
+	savepack: step 62: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/0 Ion.png.import
+	savepack: step 63: 保存文件：res://.godot/imported/1 Ion.png-9b96a531104fcc829e232199126047ca.ctex
+	savepack: step 63: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/1 Ion.png.import
+	savepack: step 63: 保存文件：res://.godot/imported/2 Ion.png-d7c3694145aca1fcfcea0eabf4de907e.ctex
+	savepack: step 63: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/2 Ion.png.import
+	savepack: step 63: 保存文件：res://.godot/imported/3 Ion.png-b8770b146514f7b738b4ca3f6ec781ed.ctex
+	savepack: step 63: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/3 Ion.png.import
+	savepack: step 63: 保存文件：res://.godot/imported/4 Ion.png-f6447c072f58538c14c44c00efdc2b53.ctex
+	savepack: step 63: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/4 Ion.png.import
+	savepack: step 63: 保存文件：res://.godot/imported/5 Ion.png-daeebafcd837fe5dbe1303135a431454.ctex
+	savepack: step 63: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/5 Ion.png.import
+	savepack: step 63: 保存文件：res://.godot/imported/6 Ion.png-bb5b673bad78d00e6cc596ee9a8bce3d.ctex
+	savepack: step 63: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/6 Ion.png.import
+	savepack: step 63: 保存文件：res://.godot/imported/7 Ion.png-465e94e0ddfd819016eb076c8692a7f7.ctex
+	savepack: step 63: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/7 Ion.png.import
+	savepack: step 63: 保存文件：res://.godot/imported/8 Ion.png-3c923e31f79f12cd6c3c817f63968893.ctex
+	savepack: step 63: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/8 Ion.png.import
+	savepack: step 64: 保存文件：res://.godot/imported/9 Ion.png-143fdcf45a74c9d7676addcd2430e56a.ctex
+	savepack: step 64: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/9 Ion.png.import
+	savepack: step 64: 保存文件：res://.godot/imported/10 Ion.png-9c2c65f79471db4e603a202f62d7c2f0.ctex
+	savepack: step 64: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/10 Ion.png.import
+	savepack: step 64: 保存文件：res://.godot/imported/11 Ion.png-ef10cfe369471ea4dcaaa8f94f8c35d8.ctex
+	savepack: step 64: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/11 Ion.png.import
+	savepack: step 64: 保存文件：res://.godot/imported/12 Ion.png-667b299f66327384d4b5560db50f60a9.ctex
+	savepack: step 64: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/12 Ion.png.import
+	savepack: step 64: 保存文件：res://.godot/imported/13 Ion.png-54f0f757edc6ccea8b225aa3deb2a5ce.ctex
+	savepack: step 64: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/13 Ion.png.import
+	savepack: step 64: 保存文件：res://.godot/imported/14 Ion.png-b22348a25706384e37b0ccf34f6f0838.ctex
+	savepack: step 64: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/14 Ion.png.import
+	savepack: step 64: 保存文件：res://.godot/imported/15 Ion.png-b73d0203770a8118b243bac685a34c08.ctex
+	savepack: step 64: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/15 Ion.png.import
+	savepack: step 64: 保存文件：res://.godot/imported/16 Ion.png-217489b092d57ef6826c39a3a26e4433.ctex
+	savepack: step 64: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/16 Ion.png.import
+	savepack: step 65: 保存文件：res://.godot/imported/17 Ion.png-3c88b90163dda20beca65adbd143f8a4.ctex
+	savepack: step 65: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/17 Ion.png.import
+	savepack: step 65: 保存文件：res://.godot/imported/18 Ion.png-f01a1d3725a2f7facad5c888f9dec334.ctex
+	savepack: step 65: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/18 Ion.png.import
+	savepack: step 65: 保存文件：res://.godot/imported/19 Ion.png-5ba6332c688f463891f4c3c9f2c1d198.ctex
+	savepack: step 65: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/19 Ion.png.import
+	savepack: step 65: 保存文件：res://.godot/imported/20 Ion.png-b2460dcfac0e3ee4063b88aac600ac7e.ctex
+	savepack: step 65: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/20 Ion.png.import
+	savepack: step 65: 保存文件：res://.godot/imported/21 Ion.png-05774e36e2e433d0c73aca45d922c619.ctex
+	savepack: step 65: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/21 Ion.png.import
+	savepack: step 65: 保存文件：res://.godot/imported/22 Ion.png-c54dde372c2cefba60dc186eb70ad034.ctex
+	savepack: step 65: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/22 Ion.png.import
+	savepack: step 65: 保存文件：res://.godot/imported/23 Ion.png-8018ef4caf836db58311b129ffd0499b.ctex
+	savepack: step 65: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/23 Ion.png.import
+	savepack: step 65: 保存文件：res://.godot/imported/24 Ion.png-4028534889bc557a0b7dcff9bd0a77b9.ctex
+	savepack: step 65: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/24 Ion.png.import
+	savepack: step 66: 保存文件：res://.godot/imported/25 Ion.png-7329659e179929cf6cdcbae362c3c89c.ctex
+	savepack: step 66: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/25 Ion.png.import
+	savepack: step 66: 保存文件：res://.godot/imported/26 Ion.png-8444d2d5f202f060915c34c738f6a8ca.ctex
+	savepack: step 66: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/26 Ion.png.import
+	savepack: step 66: 保存文件：res://.godot/imported/27 Ion.png-a63944ac8bb8f74d86e212492ca15744.ctex
+	savepack: step 66: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/27 Ion.png.import
+	savepack: step 66: 保存文件：res://.godot/imported/28 Ion.png-95c1433281b2f936f383024710f3d258.ctex
+	savepack: step 66: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/28 Ion.png.import
+	savepack: step 66: 保存文件：res://.godot/imported/29 Ion.png-4e1825c81ca71a204b909901c245002e.ctex
+	savepack: step 66: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/29 Ion.png.import
+	savepack: step 66: 保存文件：res://.godot/imported/30 Ion.png-df2dc13694d589109604e6c2fb6618af.ctex
+	savepack: step 66: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/30 Ion.png.import
+	savepack: step 66: 保存文件：res://.godot/imported/31 Ion.png-58d32dd5c84c2ac659ba8f9088cfcb98.ctex
+	savepack: step 66: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/31 Ion.png.import
+	savepack: step 66: 保存文件：res://.godot/imported/32 Ion.png-a84c271274749b6ee662d0034af07849.ctex
+	savepack: step 66: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/32 Ion.png.import
+	savepack: step 67: 保存文件：res://.godot/imported/33 Ion.png-8cefe880ed6d2cf2bf5831afbdd04952.ctex
+	savepack: step 67: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/33 Ion.png.import
+	savepack: step 67: 保存文件：res://.godot/imported/34 Ion.png-78a5bf09ac95e6a63e3bb1b41894c195.ctex
+	savepack: step 67: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/34 Ion.png.import
+	savepack: step 67: 保存文件：res://.godot/imported/35 Ion.png-5cb8d0b6c33f13536afd88a06ebc2301.ctex
+	savepack: step 67: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/35 Ion.png.import
+	savepack: step 67: 保存文件：res://.godot/imported/36 Ion.png-d08244677429395e70b4204c8b0304d5.ctex
+	savepack: step 67: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/36 Ion.png.import
+	savepack: step 67: 保存文件：res://.godot/imported/37 Ion.png-d93754bcfcaa19fdf27fe51da5b6f470.ctex
+	savepack: step 67: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/37 Ion.png.import
+	savepack: step 67: 保存文件：res://.godot/imported/38 Ion.png-533a8b8006d99737c9da10eb6eb2cb10.ctex
+	savepack: step 67: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/38 Ion.png.import
+	savepack: step 67: 保存文件：res://.godot/imported/39 Ion.png-beab4cc4ac3f9e062a5dbc60051c77e4.ctex
+	savepack: step 67: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/39 Ion.png.import
+	savepack: step 67: 保存文件：res://.godot/imported/40 Ion.png-0e3f00533dde064917ee9306b1cc7a82.ctex
+	savepack: step 67: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/40 Ion.png.import
+	savepack: step 68: 保存文件：res://.godot/imported/41 Ion.png-659e9a151edc04dbdfe6d3a8954c6d03.ctex
+	savepack: step 68: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/41 Ion.png.import
+	savepack: step 68: 保存文件：res://.godot/imported/42 Ion.png-d65088694728005d9c7de6d7e5d7369b.ctex
+	savepack: step 68: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/42 Ion.png.import
+	savepack: step 68: 保存文件：res://.godot/imported/43 Ion.png-818e03a3c660479d9eb262687f5f8383.ctex
+	savepack: step 68: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/43 Ion.png.import
+	savepack: step 68: 保存文件：res://.godot/imported/44 Ion.png-c3291ac76a04cd16fc0655fa8bd91afe.ctex
+	savepack: step 68: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/44 Ion.png.import
+	savepack: step 68: 保存文件：res://.godot/imported/45 Ion.png-974bd933d9321b0280bf511d3b0a3147.ctex
+	savepack: step 68: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/45 Ion.png.import
+	savepack: step 68: 保存文件：res://.godot/imported/46 Ion.png-b579887acb4e827c8a690c6ebc23670c.ctex
+	savepack: step 68: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/46 Ion.png.import
+	savepack: step 68: 保存文件：res://.godot/imported/47 Ion.png-1da92818e222492e6d2f393a3c0d92dd.ctex
+	savepack: step 68: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/47 Ion.png.import
+	savepack: step 68: 保存文件：res://.godot/imported/48 Ion.png-88904fd397d734fae1604e3bde04068f.ctex
+	savepack: step 68: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/48 Ion.png.import
+	savepack: step 69: 保存文件：res://.godot/imported/49 Ion.png-040b842901dbb604bde33433bf0478a9.ctex
+	savepack: step 69: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/49 Ion.png.import
+	savepack: step 69: 保存文件：res://.godot/imported/50 Ion.png-5f8a367d0ba6682a89dfbebab912bf5a.ctex
+	savepack: step 69: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/50 Ion.png.import
+	savepack: step 69: 保存文件：res://.godot/imported/51 Ion.png-de2b0c7c8fe22f06c1343e7546292779.ctex
+	savepack: step 69: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/51 Ion.png.import
+	savepack: step 69: 保存文件：res://.godot/imported/52 Ion.png-c8b5841c7c12b74d1f79a5b435b139b3.ctex
+	savepack: step 69: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/52 Ion.png.import
+	savepack: step 69: 保存文件：res://.godot/imported/53 Ion.png-e935693dd1328623066b960d18f71891.ctex
+	savepack: step 69: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Ion/53 Ion.png.import
+	savepack: step 69: 保存文件：res://.godot/imported/BladeGreen_01.png-075daf955fa8fdef475ca52811dcc3c3.ctex
+	savepack: step 69: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_01.png.import
+	savepack: step 69: 保存文件：res://.godot/imported/BladeGreen_02.png-53674913d4d148756612c943f48672bc.ctex
+	savepack: step 69: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_02.png.import
+	savepack: step 69: 保存文件：res://.godot/imported/BladeGreen_03.png-92413bfd252e510d66895da0db698b8d.ctex
+	savepack: step 69: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_03.png.import
+	savepack: step 70: 保存文件：res://.godot/imported/BladeGreen_04.png-7eae835a96127e3f297ba8015439512f.ctex
+	savepack: step 70: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_04.png.import
+	savepack: step 70: 保存文件：res://.godot/imported/BladeGreen_05.png-254817af7a0465cc806833678d41fc74.ctex
+	savepack: step 70: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_05.png.import
+	savepack: step 70: 保存文件：res://.godot/imported/BladeGreen_06.png-c6b9a29467f7851fa9c2a3c46c7544fe.ctex
+	savepack: step 70: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_06.png.import
+	savepack: step 70: 保存文件：res://.godot/imported/BladeGreen_07.png-ee43c82d7a4eb6be6d6a530a2b42ac5b.ctex
+	savepack: step 70: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_07.png.import
+	savepack: step 70: 保存文件：res://.godot/imported/BladeGreen_08.png-c0bd037cbae546bdaf4cc5181cbd822b.ctex
+	savepack: step 70: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_08.png.import
+	savepack: step 70: 保存文件：res://.godot/imported/BladeGreen_09.png-089fb146463095072407ef1d23ea8828.ctex
+	savepack: step 70: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_09.png.import
+	savepack: step 70: 保存文件：res://.godot/imported/BladeGreen_10.png-bcf4e68778b8c1461f482505a9dde75d.ctex
+	savepack: step 70: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_10.png.import
+	savepack: step 70: 保存文件：res://.godot/imported/BladeGreen_11.png-5c07764dbd672aefa20c3c4199f670dd.ctex
+	savepack: step 70: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_11.png.import
+	savepack: step 71: 保存文件：res://.godot/imported/BladeGreen_12.png-82f695be66fa4dae2443054fcfd3ec30.ctex
+	savepack: step 71: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_12.png.import
+	savepack: step 71: 保存文件：res://.godot/imported/BladeGreen_13.png-a0775b0724bf2566e4a2f15041394ddd.ctex
+	savepack: step 71: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_13.png.import
+	savepack: step 71: 保存文件：res://.godot/imported/BladeGreen_14.png-71d0d03a667bd1b7a72ebb6aa1a7e736.ctex
+	savepack: step 71: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_14.png.import
+	savepack: step 71: 保存文件：res://.godot/imported/BladeGreen_15.png-ee90993911988fd57af85a7e53df5a4f.ctex
+	savepack: step 71: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_15.png.import
+	savepack: step 71: 保存文件：res://.godot/imported/BladeGreen_16.png-6b5e95cf51c1c27e991e882bddc96a6e.ctex
+	savepack: step 71: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_16.png.import
+	savepack: step 71: 保存文件：res://.godot/imported/BladeGreen_17.png-24597dde7e7ade4b2473bb96e1eaf611.ctex
+	savepack: step 71: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_17.png.import
+	savepack: step 71: 保存文件：res://.godot/imported/BladeGreen_18.png-08f0cd725527e2adf0e43a18bf6dd988.ctex
+	savepack: step 71: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_18.png.import
+	savepack: step 71: 保存文件：res://.godot/imported/BladeGreen_19.png-be0467eb9cd9f4658b54da018e3b2f6c.ctex
+	savepack: step 71: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_19.png.import
+	savepack: step 72: 保存文件：res://.godot/imported/BladeGreen_20.png-9b13045092c8a51ee56e1eee6699e579.ctex
+	savepack: step 72: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_20.png.import
+	savepack: step 72: 保存文件：res://.godot/imported/BladeGreen_21.png-6687debda8ef7bee8b045b5dae3b99db.ctex
+	savepack: step 72: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_21.png.import
+	savepack: step 72: 保存文件：res://.godot/imported/BladeGreen_22.png-510a9a705aac34e9f9ddc0973268b4c3.ctex
+	savepack: step 72: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_22.png.import
+	savepack: step 72: 保存文件：res://.godot/imported/BladeGreen_23.png-dbf52fd60cae6ac6945a0406d7085378.ctex
+	savepack: step 72: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_23.png.import
+	savepack: step 72: 保存文件：res://.godot/imported/BladeGreen_24.png-4f352c863a3e9ed357c06e3b333f9406.ctex
+	savepack: step 72: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_24.png.import
+	savepack: step 72: 保存文件：res://.godot/imported/BladeGreen_25.png-8273502f420572ca634850e1f00da70f.ctex
+	savepack: step 72: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_25.png.import
+	savepack: step 72: 保存文件：res://.godot/imported/BladeGreen_26.png-425fad562d138f994043528b37d6a52e.ctex
+	savepack: step 72: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_26.png.import
+	savepack: step 72: 保存文件：res://.godot/imported/BladeGreen_27.png-c3ad62cc980190d6f9674fe4af3ec5f2.ctex
+	savepack: step 72: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_27.png.import
+	savepack: step 73: 保存文件：res://.godot/imported/BladeGreen_28.png-61c733a3565336def63ac27039d385d0.ctex
+	savepack: step 73: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_28.png.import
+	savepack: step 73: 保存文件：res://.godot/imported/BladeGreen_29.png-0abc09826774431e0f42a36e1d0301bc.ctex
+	savepack: step 73: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_29.png.import
+	savepack: step 73: 保存文件：res://.godot/imported/BladeGreen_30.png-2d042075fc4e14abb5282cef22021020.ctex
+	savepack: step 73: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_30.png.import
+	savepack: step 73: 保存文件：res://.godot/imported/BladeGreen_31.png-c2dea86d7551d82aefce99af7b8f5f55.ctex
+	savepack: step 73: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_31.png.import
+	savepack: step 73: 保存文件：res://.godot/imported/BladeGreen_32.png-db908eb44334147097d50e3f09b8a95e.ctex
+	savepack: step 73: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_32.png.import
+	savepack: step 73: 保存文件：res://.godot/imported/BladeGreen_33.png-46116fbb53d17d08149fe2634f1be8d0.ctex
+	savepack: step 73: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_33.png.import
+	savepack: step 73: 保存文件：res://.godot/imported/BladeGreen_34.png-1a008e9f877d41a30362e26100ac106b.ctex
+	savepack: step 73: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_34.png.import
+	savepack: step 73: 保存文件：res://.godot/imported/BladeGreen_35.png-f5a3f590bf27803089b9183bbfc8c84d.ctex
+	savepack: step 73: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_35.png.import
+	savepack: step 74: 保存文件：res://.godot/imported/BladeGreen_36.png-b110ee282744bdc3639b0a266220e534.ctex
+	savepack: step 74: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_36.png.import
+	savepack: step 74: 保存文件：res://.godot/imported/BladeGreen_37.png-ca98c338d6eedb1b731a65bbb0d6189e.ctex
+	savepack: step 74: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_37.png.import
+	savepack: step 74: 保存文件：res://.godot/imported/BladeGreen_38.png-a9f3b0cd2c7357161c10dc1fad507629.ctex
+	savepack: step 74: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_38.png.import
+	savepack: step 74: 保存文件：res://.godot/imported/BladeGreen_39.png-47fde30b62afae1f7b7955f40fdfc993.ctex
+	savepack: step 74: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_39.png.import
+	savepack: step 74: 保存文件：res://.godot/imported/BladeGreen_40.png-3f5f40fd10aaea8946a87c76e1a13dc6.ctex
+	savepack: step 74: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_40.png.import
+	savepack: step 74: 保存文件：res://.godot/imported/BladeGreen_41.png-503ff195509b47348ca539d38ea6dd5d.ctex
+	savepack: step 74: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_41.png.import
+	savepack: step 74: 保存文件：res://.godot/imported/BladeGreen_42.png-e0648da66814a12420484b439ebca2ab.ctex
+	savepack: step 74: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_42.png.import
+	savepack: step 74: 保存文件：res://.godot/imported/BladeGreen_43.png-62830930e8db13239cb913d363904796.ctex
+	savepack: step 74: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_43.png.import
+	savepack: step 75: 保存文件：res://.godot/imported/BladeGreen_44.png-0e6e9fe4fd3f3de18cd5b0ff2e35e68e.ctex
+	savepack: step 75: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_44.png.import
+	savepack: step 75: 保存文件：res://.godot/imported/BladeGreen_45.png-d3889ffb6e4445fb8d54406f257271fb.ctex
+	savepack: step 75: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_45.png.import
+	savepack: step 75: 保存文件：res://.godot/imported/BladeGreen_46.png-4a3f17f26174d51e6be3a290ee209551.ctex
+	savepack: step 75: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_46.png.import
+	savepack: step 75: 保存文件：res://.godot/imported/BladeGreen_47.png-490e3a7d8686f668c5f3849db7504473.ctex
+	savepack: step 75: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_47.png.import
+	savepack: step 75: 保存文件：res://.godot/imported/BladeGreen_48.png-e15d3a7b0a0dfbd9d74e5cac1814e356.ctex
+	savepack: step 75: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Green/BladeGreen_48.png.import
+	savepack: step 75: 保存文件：res://.godot/imported/BladeRed_01.png-2d7b5d2f824bd321bfb7e0bc4bcc5628.ctex
+	savepack: step 75: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_01.png.import
+	savepack: step 75: 保存文件：res://.godot/imported/BladeRed_02.png-a89c481d25a420f2b01df0dfefd90fcd.ctex
+	savepack: step 75: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_02.png.import
+	savepack: step 75: 保存文件：res://.godot/imported/BladeRed_03.png-73e9df9a6d0272cbf31c4cd757f0276f.ctex
+	savepack: step 75: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_03.png.import
+	savepack: step 76: 保存文件：res://.godot/imported/BladeRed_04.png-6b67e57161a3f11a17e4ca81750bed03.ctex
+	savepack: step 76: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_04.png.import
+	savepack: step 76: 保存文件：res://.godot/imported/BladeRed_05.png-5307de802f2111f863576b4ce39c4908.ctex
+	savepack: step 76: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_05.png.import
+	savepack: step 76: 保存文件：res://.godot/imported/BladeRed_06.png-f5be0b792d7ac2104cae723ac082b27f.ctex
+	savepack: step 76: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_06.png.import
+	savepack: step 76: 保存文件：res://.godot/imported/BladeRed_07.png-50b0211bc6034a92bc744baf40fc48f3.ctex
+	savepack: step 76: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_07.png.import
+	savepack: step 76: 保存文件：res://.godot/imported/BladeRed_08.png-91dd7b503c5066af92d9df439225dc5d.ctex
+	savepack: step 76: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_08.png.import
+	savepack: step 76: 保存文件：res://.godot/imported/BladeRed_09.png-2e23ff86f519101162ac607e636d3fd3.ctex
+	savepack: step 76: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_09.png.import
+	savepack: step 76: 保存文件：res://.godot/imported/BladeRed_10.png-17787ae0b5514012f0399c7033900b7e.ctex
+	savepack: step 76: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_10.png.import
+	savepack: step 76: 保存文件：res://.godot/imported/BladeRed_11.png-7967925f232b6e95450be3b26334b49e.ctex
+	savepack: step 76: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_11.png.import
+	savepack: step 77: 保存文件：res://.godot/imported/BladeRed_12.png-2e5de35fc2a49658fe8a1d2db95cd5f9.ctex
+	savepack: step 77: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_12.png.import
+	savepack: step 77: 保存文件：res://.godot/imported/BladeRed_13.png-11b6a6170d9471fed039836a2c32b870.ctex
+	savepack: step 77: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_13.png.import
+	savepack: step 77: 保存文件：res://.godot/imported/BladeRed_14.png-4d596ac97dbe77c3711af9a183490042.ctex
+	savepack: step 77: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_14.png.import
+	savepack: step 77: 保存文件：res://.godot/imported/BladeRed_15.png-016dade9ce9f4160d09578a1381f1dd8.ctex
+	savepack: step 77: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_15.png.import
+	savepack: step 77: 保存文件：res://.godot/imported/BladeRed_16.png-0a88ca7400f555ee63b93478eb3d95ae.ctex
+	savepack: step 77: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_16.png.import
+	savepack: step 77: 保存文件：res://.godot/imported/BladeRed_17.png-3f267609fbeee000bad05f7e1811bd21.ctex
+	savepack: step 77: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_17.png.import
+	savepack: step 77: 保存文件：res://.godot/imported/BladeRed_18.png-310bd185d930c749e9fa488cd6024b0c.ctex
+	savepack: step 77: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_18.png.import
+	savepack: step 77: 保存文件：res://.godot/imported/BladeRed_19.png-f12fd7f5f0f89287c8dbb5c3cb2cc0ae.ctex
+	savepack: step 77: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_19.png.import
+	savepack: step 78: 保存文件：res://.godot/imported/BladeRed_20.png-60e9f3b50c90b4e2e6abda42a2d7f20f.ctex
+	savepack: step 78: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_20.png.import
+	savepack: step 78: 保存文件：res://.godot/imported/BladeRed_21.png-8b8d895b908ebe0d5fb340c7314450c7.ctex
+	savepack: step 78: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_21.png.import
+	savepack: step 78: 保存文件：res://.godot/imported/BladeRed_22.png-7460c9c003bd15d37f5a13c0aae2f1ef.ctex
+	savepack: step 78: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_22.png.import
+	savepack: step 78: 保存文件：res://.godot/imported/BladeRed_23.png-b36715fdad78b654bf177f8b10a43ee3.ctex
+	savepack: step 78: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_23.png.import
+	savepack: step 78: 保存文件：res://.godot/imported/BladeRed_24.png-1b1b535f29b97278bff6b5a1a52b14f8.ctex
+	savepack: step 78: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_24.png.import
+	savepack: step 78: 保存文件：res://.godot/imported/BladeRed_25.png-085d21aeea4fc513d4fda7725d1b715a.ctex
+	savepack: step 78: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_25.png.import
+	savepack: step 78: 保存文件：res://.godot/imported/BladeRed_26.png-58ac601ec9e742a50a2fdb62cfa39b7a.ctex
+	savepack: step 78: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_26.png.import
+	savepack: step 78: 保存文件：res://.godot/imported/BladeRed_27.png-b7e110ab34568bf677c19d2a2e1ec990.ctex
+	savepack: step 78: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_27.png.import
+	savepack: step 79: 保存文件：res://.godot/imported/BladeRed_28.png-6f0890a43aaa7a5108fe18e25718b398.ctex
+	savepack: step 79: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_28.png.import
+	savepack: step 79: 保存文件：res://.godot/imported/BladeRed_29.png-cd0def3e407f4362ba9142804eb5619d.ctex
+	savepack: step 79: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_29.png.import
+	savepack: step 79: 保存文件：res://.godot/imported/BladeRed_30.png-342d7d44f810cfd7fcc7936e6588764a.ctex
+	savepack: step 79: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_30.png.import
+	savepack: step 79: 保存文件：res://.godot/imported/BladeRed_31.png-5b54bc9d650b94b8af6b693d4e195662.ctex
+	savepack: step 79: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_31.png.import
+	savepack: step 79: 保存文件：res://.godot/imported/BladeRed_32.png-c5e9c260ad492b4a54b6c59feea11fd4.ctex
+	savepack: step 79: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_32.png.import
+	savepack: step 79: 保存文件：res://.godot/imported/BladeRed_33.png-fd9eaddfd9eaa9bb8f2a6e73eb8fa9bd.ctex
+	savepack: step 79: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_33.png.import
+	savepack: step 79: 保存文件：res://.godot/imported/BladeRed_34.png-3942d2b015a82b4cf4ecd6046156b698.ctex
+	savepack: step 79: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_34.png.import
+	savepack: step 79: 保存文件：res://.godot/imported/BladeRed_35.png-e0a461443e8dd86a01af829ebf07e35a.ctex
+	savepack: step 79: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_35.png.import
+	savepack: step 80: 保存文件：res://.godot/imported/BladeRed_36.png-b5e031af86b12650c1bdd6074b392c47.ctex
+	savepack: step 80: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_36.png.import
+	savepack: step 80: 保存文件：res://.godot/imported/BladeRed_37.png-44b12a770f320ab585c157929ddddff1.ctex
+	savepack: step 80: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_37.png.import
+	savepack: step 80: 保存文件：res://.godot/imported/BladeRed_38.png-c6a67af0bb91bf52eedef5e9fb7e5d07.ctex
+	savepack: step 80: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_38.png.import
+	savepack: step 80: 保存文件：res://.godot/imported/BladeRed_39.png-e9434da8f7301cbd33839c31d6d2f0c0.ctex
+	savepack: step 80: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_39.png.import
+	savepack: step 80: 保存文件：res://.godot/imported/BladeRed_40.png-39e5513c389ce5a964206bde34ab62f2.ctex
+	savepack: step 80: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_40.png.import
+	savepack: step 80: 保存文件：res://.godot/imported/BladeRed_41.png-e6d94598ba8a3ef31429ee5d9529b914.ctex
+	savepack: step 80: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_41.png.import
+	savepack: step 80: 保存文件：res://.godot/imported/BladeRed_42.png-af49b9aa0aa02f9c0b658916921f36b8.ctex
+	savepack: step 80: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_42.png.import
+	savepack: step 80: 保存文件：res://.godot/imported/BladeRed_43.png-02c4448ac6012b6fba7567adaedc8bc8.ctex
+	savepack: step 80: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_43.png.import
+	savepack: step 81: 保存文件：res://.godot/imported/BladeRed_44.png-19f648d027e46673fe20405d5fb404ba.ctex
+	savepack: step 81: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_44.png.import
+	savepack: step 81: 保存文件：res://.godot/imported/BladeRed_45.png-96a4a87fa6031284649dbf03c8643842.ctex
+	savepack: step 81: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_45.png.import
+	savepack: step 81: 保存文件：res://.godot/imported/BladeRed_46.png-9fa0e0731527bd4f0975c2fb8a830036.ctex
+	savepack: step 81: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_46.png.import
+	savepack: step 81: 保存文件：res://.godot/imported/BladeRed_47.png-110cab119e4b1ea6b15a02e2ee268d76.ctex
+	savepack: step 81: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_47.png.import
+	savepack: step 81: 保存文件：res://.godot/imported/BladeRed_48.png-42f74b7cf11e155917ac9e1a1a63eb66.ctex
+	savepack: step 81: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blade Red/BladeRed_48.png.import
+	savepack: step 81: 保存文件：res://.godot/imported/Muzzle Big Fire_1.png-136b0d34f66dbbe06a41cd1fa564ba2a.ctex
+	savepack: step 81: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Big Fire/Muzzle Big Fire_1.png.import
+	savepack: step 81: 保存文件：res://.godot/imported/Muzzle Big Fire_2.png-bf765b54570ad1eedcff03857dcb2171.ctex
+	savepack: step 81: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Big Fire/Muzzle Big Fire_2.png.import
+	savepack: step 81: 保存文件：res://.godot/imported/Muzzle Big Fire_3.png-68ebf1df8ac478fd1489350df20e4a55.ctex
+	savepack: step 81: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Big Fire/Muzzle Big Fire_3.png.import
+	savepack: step 82: 保存文件：res://.godot/imported/Muzzle Big Ion_1.png-8442f7161fa8abeadc5ec8de6b1b4d7c.ctex
+	savepack: step 82: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Big Ion/Muzzle Big Ion_1.png.import
+	savepack: step 82: 保存文件：res://.godot/imported/Muzzle Big Ion_2.png-ebffe19cbc69e59787b735bd3d3595a9.ctex
+	savepack: step 82: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Big Ion/Muzzle Big Ion_2.png.import
+	savepack: step 82: 保存文件：res://.godot/imported/Muzzle Big Ion_3.png-240e7ff466a53b3b4e4405a0fe0d4a88.ctex
+	savepack: step 82: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Big Ion/Muzzle Big Ion_3.png.import
+	savepack: step 82: 保存文件：res://.godot/imported/Muzzle Giga Fire_1.png-4b6dae8ea3641fdfea472eebf3c431f6.ctex
+	savepack: step 82: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Giga Fire/Muzzle Giga Fire_1.png.import
+	savepack: step 82: 保存文件：res://.godot/imported/Muzzle Giga Fire_2.png-1107fc5952a8d4ec9d9b35df9c77004e.ctex
+	savepack: step 82: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Giga Fire/Muzzle Giga Fire_2.png.import
+	savepack: step 82: 保存文件：res://.godot/imported/Muzzle Giga Ion_1.png-a3e2f56a7a1bad1c137a16dfe8a41bdc.ctex
+	savepack: step 82: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Giga Ion/Muzzle Giga Ion_1.png.import
+	savepack: step 82: 保存文件：res://.godot/imported/Muzzle Giga Ion_2.png-96d2f0e66add06865de13a45afcf6a89.ctex
+	savepack: step 82: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Giga Ion/Muzzle Giga Ion_2.png.import
+	savepack: step 82: 保存文件：res://.godot/imported/Muzzle Large Fire_1.png-2ecb2eee87b3285f49b64d4912572e57.ctex
+	savepack: step 82: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Fire/Muzzle Large Fire_1.png.import
+	savepack: step 83: 保存文件：res://.godot/imported/Muzzle Large Fire_2.png-3242f8d6c1722b942ea11e7c4b38b835.ctex
+	savepack: step 83: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Fire/Muzzle Large Fire_2.png.import
+	savepack: step 83: 保存文件：res://.godot/imported/Muzzle Large Fire_3.png-aea1c4984924d6763ac9e3832e58d779.ctex
+	savepack: step 83: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Fire/Muzzle Large Fire_3.png.import
+	savepack: step 83: 保存文件：res://.godot/imported/Muzzle Large Ion_1.png-40e4865898c06dbf75ab96968f6cac9f.ctex
+	savepack: step 83: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Ion/Muzzle Large Ion_1.png.import
+	savepack: step 83: 保存文件：res://.godot/imported/Muzzle Large Ion_2.png-6667adcd52e93d090005395f8eb617a0.ctex
+	savepack: step 83: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Ion/Muzzle Large Ion_2.png.import
+	savepack: step 83: 保存文件：res://.godot/imported/Muzzle Large Ion_3.png-a85ff6ca010486e7ea12fa38b757fc3f.ctex
+	savepack: step 83: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Ion/Muzzle Large Ion_3.png.import
+	savepack: step 83: 保存文件：res://.godot/imported/Muzzle Mega Fire_1.png-187eec4fcd7b39b8b1192dd23ed14d0e.ctex
+	savepack: step 83: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Mega Fire/Muzzle Mega Fire_1.png.import
+	savepack: step 83: 保存文件：res://.godot/imported/Muzzle Mega Fire_2.png-46f5e5e4f1527db3baef313514df0cdb.ctex
+	savepack: step 83: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Mega Fire/Muzzle Mega Fire_2.png.import
+	savepack: step 83: 保存文件：res://.godot/imported/Muzzle Mega Fire_3.png-7bfac15edac8510068b155286f71c9f7.ctex
+	savepack: step 83: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Mega Fire/Muzzle Mega Fire_3.png.import
+	savepack: step 84: 保存文件：res://.godot/imported/Muzzle Mega Ion_1.png-159a4b5346d05eb459cdfacdf69b0063.ctex
+	savepack: step 84: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Mega Ion/Muzzle Mega Ion_1.png.import
+	savepack: step 84: 保存文件：res://.godot/imported/Muzzle Mega Ion_2.png-6a4ffb7d28aff04af355aa38104e5000.ctex
+	savepack: step 84: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Mega Ion/Muzzle Mega Ion_2.png.import
+	savepack: step 84: 保存文件：res://.godot/imported/Muzzle Mega Ion_3.png-64ae23efb288f71bfe4eb5b5abacf042.ctex
+	savepack: step 84: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Mega Ion/Muzzle Mega Ion_3.png.import
+	savepack: step 84: 保存文件：res://.godot/imported/Muzzle Torch Fire_1.png-9e11c8ef14c5c9fad95cf1d441552ea7.ctex
+	savepack: step 84: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Torch Fire/Muzzle Torch Fire_1.png.import
+	savepack: step 84: 保存文件：res://.godot/imported/Muzzle Torch Fire_2.png-c7b7e5490c0663181fad08cbcf3baeeb.ctex
+	savepack: step 84: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Torch Fire/Muzzle Torch Fire_2.png.import
+	savepack: step 84: 保存文件：res://.godot/imported/Muzzle Torch Fire_3.png-b19658a2120bb4ac5f3e03967e9a7a54.ctex
+	savepack: step 84: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Torch Fire/Muzzle Torch Fire_3.png.import
+	savepack: step 84: 保存文件：res://.godot/imported/Muzzle Torch Ion_1.png-2f96240e8a0e09f259467825dab96bc7.ctex
+	savepack: step 84: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Torch Ion/Muzzle Torch Ion_1.png.import
+	savepack: step 84: 保存文件：res://.godot/imported/Muzzle Torch Ion_2.png-cf0f63ed1652c20038ced1fb978dd25d.ctex
+	savepack: step 84: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Torch Ion/Muzzle Torch Ion_2.png.import
+	savepack: step 85: 保存文件：res://.godot/imported/Muzzle Torch Ion_3.png-70ea803ecb9e8523545ca63ad7896813.ctex
+	savepack: step 85: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Torch Ion/Muzzle Torch Ion_3.png.import
+	savepack: step 85: 保存文件：res://.godot/imported/!Muzzles Fire REFERENCE.png-d5e2a6f7a24dbb25b4b1cee703e48ad0.ctex
+	savepack: step 85: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Muzzles Fire REFERENCE.png.import
+	savepack: step 85: 保存文件：res://.godot/imported/!Muzzles Fire SHEET.png-0000f3dc6ad9e4305437d3df3e16440f.ctex
+	savepack: step 85: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Muzzles Fire SHEET.png.import
+	savepack: step 85: 保存文件：res://.godot/imported/!Muzzles Ion REFERENCE.png-692d005f31ee10446ffb7deeff166d7c.ctex
+	savepack: step 85: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Muzzles Ion REFERENCE.png.import
+	savepack: step 85: 保存文件：res://.godot/imported/!Muzzles Ion SHEET.png-76b37dbbb21f05f8318c20ee7a1b94bf.ctex
+	savepack: step 85: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/!Muzzles Ion SHEET.png.import
+	savepack: step 85: 保存文件：res://.godot/imported/Blades ALL long SHEET.png-4129503b32f160b3532a3a8594f39f9b.ctex
+	savepack: step 85: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blades ALL long SHEET.png.import
+	savepack: step 85: 保存文件：res://.godot/imported/Blades ALL REFERENCE Long.png-b6578af03bed57ffed92920ecaaa7c31.ctex
+	savepack: step 85: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blades ALL REFERENCE Long.png.import
+	savepack: step 85: 保存文件：res://.godot/imported/Blades ALL REFERENCE Square.png-4b253c9efb453fa616b9c10f0b305b15.ctex
+	savepack: step 85: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Blades ALL REFERENCE Square.png.import
+	savepack: step 86: 保存文件：res://.godot/imported/BladesGreen REFERENCE.png-7e2bebcd0ff94ee450fe62233f46d19c.ctex
+	savepack: step 86: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/BladesGreen REFERENCE.png.import
+	savepack: step 86: 保存文件：res://.godot/imported/BladesGreen SHEET.png-eec7075c0f924c757037fd662f14f3b8.ctex
+	savepack: step 86: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/BladesGreen SHEET.png.import
+	savepack: step 86: 保存文件：res://.godot/imported/BladesRed REFERENCE.png-15688813a2525673e117033ff72e4823.ctex
+	savepack: step 86: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/BladesRed REFERENCE.png.import
+	savepack: step 86: 保存文件：res://.godot/imported/BladesRed SHEET.png-0a021de4d409eb9f60bdf45b20f23c10.ctex
+	savepack: step 86: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/BladesRed SHEET.png.import
+	savepack: step 86: 保存文件：res://.godot/imported/Muzzle Big Fire.png-ced512d5549d05359535d24089635ae2.ctex
+	savepack: step 86: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Big Fire.png.import
+	savepack: step 86: 保存文件：res://.godot/imported/Muzzle Big Ion.png-539f2eef3f0ab322e3b07997b2e1db5b.ctex
+	savepack: step 86: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Big Ion.png.import
+	savepack: step 86: 保存文件：res://.godot/imported/Muzzle Giga Fire.png-2600d4fcf4dadc999751d7776a10d151.ctex
+	savepack: step 86: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Giga Fire.png.import
+	savepack: step 86: 保存文件：res://.godot/imported/Muzzle Giga Ion.png-9a4f392d2dc22cff828bedb14a34bfef.ctex
+	savepack: step 86: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Giga Ion.png.import
+	savepack: step 87: 保存文件：res://.godot/imported/Muzzle Large Fire.png-68c049f7760f921b909b80141854f574.ctex
+	savepack: step 87: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Fire.png.import
+	savepack: step 87: 保存文件：res://.godot/imported/Muzzle Large Ion.png-53afa3bfcf5f30608958aed449ae5803.ctex
+	savepack: step 87: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Ion.png.import
+	savepack: step 87: 保存文件：res://.godot/imported/Muzzle Mega Fire.png-b6612854151d42e68147e6ea2cf8b84f.ctex
+	savepack: step 87: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Mega Fire.png.import
+	savepack: step 87: 保存文件：res://.godot/imported/Muzzle Mega Ion.png-7d27d21fc72b404cb1a5ebbf669babaa.ctex
+	savepack: step 87: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Mega Ion.png.import
+	savepack: step 87: 保存文件：res://.godot/imported/Muzzle Torch Fire.png-c022ab8e7fd9dc3cc658d0e8e36d2447.ctex
+	savepack: step 87: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Torch Fire.png.import
+	savepack: step 87: 保存文件：res://.godot/imported/Muzzle Torch Ion.png-f498b9235d595b4e29d7851a63aacc53.ctex
+	savepack: step 87: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Torch Ion.png.import
+	savepack: step 87: 保存文件：res://.godot/imported/MuzzlesMK2_collage all clean.png-56cc1afabbaced58f550f44b48196cac.ctex
+	savepack: step 87: 保存文件：res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/MuzzlesMK2_collage all clean.png.import
+	savepack: step 87: 保存文件：res://.godot/imported/crystal-growth.svg-a6220ad34625ab3bfd56d4343061d038.ctex
+	savepack: step 87: 保存文件：res://assets/world/crystal-growth.svg.import
+	savepack: step 88: 保存文件：res://.godot/imported/hit.ogg-7fb8d68134e855b60b320ce6c56659fc.oggvorbisstr
+	savepack: step 88: 保存文件：res://assets/hit.ogg.import
+	savepack: step 88: 保存文件：res://.godot/imported/tiny-dungeon.png-5f2b32d87236d18c93721e16eb69ddb4.ctex
+	savepack: step 88: 保存文件：res://assets/tiny-dungeon.png.import
+	savepack: step 88: 保存文件：res://data/v2/animation_profiles.json
+	savepack: step 88: 保存文件：res://data/v2/asset_manifest.json
+	savepack: step 88: 保存文件：res://data/v2/boss_patterns.json
+	savepack: step 88: 保存文件：res://data/v2/campaign_map.json
+	savepack: step 88: 保存文件：res://data/v2/cards.json
+	savepack: step 88: 保存文件：res://data/v2/characters.json
+	savepack: step 89: 保存文件：res://data/v2/combat_contracts.json
+	savepack: step 89: 保存文件：res://data/v2/enemy_affixes.json
+	savepack: step 89: 保存文件：res://data/v2/enemy_families.json
+	savepack: step 89: 保存文件：res://data/v2/enemy_visuals.json
+	savepack: step 89: 保存文件：res://data/v2/mechanic_cards.json
+	savepack: step 89: 保存文件：res://data/v2/modes.json
+	savepack: step 89: 保存文件：res://data/v2/relics.json
+	savepack: step 89: 保存文件：res://data/v2/sprite_pivots.json
+	savepack: step 90: 保存文件：res://data/v2/stages.json
+	savepack: step 90: 保存文件：res://data/v2/stage_templates.json
+	savepack: step 90: 保存文件：res://data/v2/team_resonances.json
+	savepack: step 90: 保存文件：res://data/v2/vfx_profiles.json
+	savepack: step 90: 保存文件：res://data/v2/vfx_themes.json
+	savepack: step 90: 保存文件：res://data/story.json
+	savepack: step 90: 保存文件：res://scripts/content/game_database.gdc
+	savepack: step 90: 保存文件：res://scripts/rewards/card_pool.gdc
+	savepack: step 91: 保存文件：res://scripts/rewards/crystal_progression.gdc
+	savepack: step 91: 保存文件：res://scripts/run/run_state.gdc
+	savepack: step 91: 保存文件：res://scripts/stages/stage_runtime.gdc
+	savepack: step 91: 保存文件：res://scripts/animation_state_machine.gdc
+	savepack: step 91: 保存文件：res://scripts/asset_readiness.gdc
+	savepack: step 91: 保存文件：res://scripts/audio_director.gdc
+	savepack: step 91: 保存文件：res://scripts/battle_hud.gdc
+	savepack: step 91: 保存文件：res://scripts/battle_view.gdc
+	savepack: step 92: 保存文件：res://scripts/campaign_checkpoint.gdc
+	savepack: step 92: 保存文件：res://scripts/campaign_event_panel.gdc
+	savepack: step 92: 保存文件：res://scripts/campaign_map_panel.gdc
+	savepack: step 92: 保存文件：res://scripts/campaign_node_resolver.gdc
+	savepack: step 92: 保存文件：res://scripts/character_breath_preview.gdc
+	savepack: step 92: 保存文件：res://scripts/combat_catalog.gdc
+	savepack: step 92: 保存文件：res://scripts/combat_feedback_director.gdc
+	savepack: step 92: 保存文件：res://scripts/combat_simulation.gdc
+	savepack: step 93: 保存文件：res://scripts/combat_timeline.gdc
+	savepack: step 93: 保存文件：res://scripts/compendium_panel.gdc
+	savepack: step 93: 保存文件：res://scripts/compendium_state.gdc
+	savepack: step 93: 保存文件：res://scripts/content_config.gdc
+	savepack: step 93: 保存文件：res://scripts/content_preview.gdc
+	savepack: step 93: 保存文件：res://scripts/content_validator.gdc
+	savepack: step 93: 保存文件：res://scripts/dialogue_backdrop.gdc
+	savepack: step 93: 保存文件：res://scripts/dialogue_director.gdc
+	savepack: step 94: 保存文件：res://scripts/dialogue_panel.gdc
+	savepack: step 94: 保存文件：res://scripts/error_reporter.gdc
+	savepack: step 94: 保存文件：res://scripts/furina_frame_actor.gdc
+	savepack: step 94: 保存文件：res://scripts/furina_rig.gdc
+	savepack: step 94: 保存文件：res://scripts/main.gdc
+	savepack: step 94: 保存文件：res://scripts/mode_select_panel.gdc
+	savepack: step 94: 保存文件：res://scripts/performance_budget.gdc
+	savepack: step 94: 保存文件：res://scripts/qa_config_window.gdc
+	savepack: step 95: 保存文件：res://scripts/qa_m4.gdc
+	savepack: step 95: 保存文件：res://scripts/qa_m5.gdc
+	savepack: step 95: 保存文件：res://scripts/qa_m8.gdc
+	savepack: step 95: 保存文件：res://scripts/qa_m9.gdc
+	savepack: step 95: 保存文件：res://scripts/qa_phase1.gdc
+	savepack: step 95: 保存文件：res://scripts/qa_suite.gdc
+	savepack: step 95: 保存文件：res://scripts/qa_v4.gdc
+	savepack: step 95: 保存文件：res://scripts/qa_v5.gdc
+	savepack: step 96: 保存文件：res://scripts/qa_v6.gdc
+	savepack: step 96: 保存文件：res://scripts/qa_v7.gdc
+	savepack: step 96: 保存文件：res://scripts/qa_v8.gdc
+	savepack: step 96: 保存文件：res://scripts/qa_v9.gdc
+	savepack: step 96: 保存文件：res://scripts/qa_v10.gdc
+	savepack: step 96: 保存文件：res://scripts/qa_v11.gdc
+	savepack: step 96: 保存文件：res://scripts/qa_v12.gdc
+	savepack: step 96: 保存文件：res://scripts/qa_v13.gdc
+	savepack: step 97: 保存文件：res://scripts/qa_v14.gdc
+	savepack: step 97: 保存文件：res://scripts/qa_v15.gdc
+	savepack: step 97: 保存文件：res://scripts/qa_v16.gdc
+	savepack: step 97: 保存文件：res://scripts/qa_v17.gdc
+	savepack: step 97: 保存文件：res://scripts/qa_v18.gdc
+	savepack: step 97: 保存文件：res://scripts/qa_v19.gdc
+	savepack: step 97: 保存文件：res://scripts/qa_v20.gdc
+	savepack: step 97: 保存文件：res://scripts/qa_v25.gdc
+	savepack: step 98: 保存文件：res://scripts/qa_v26.gdc
+	savepack: step 98: 保存文件：res://scripts/qa_v27.gdc
+	savepack: step 98: 保存文件：res://scripts/qa_v28.gdc
+	savepack: step 98: 保存文件：res://scripts/qa_v29.gdc
+	savepack: step 98: 保存文件：res://scripts/qa_v30.gdc
+	savepack: step 98: 保存文件：res://scripts/qa_v31.gdc
+	savepack: step 98: 保存文件：res://scripts/qa_v32.gdc
+	savepack: step 98: 保存文件：res://scripts/qa_v33.gdc
+	savepack: step 99: 保存文件：res://scripts/qa_v33_restart.gdc
+	savepack: step 99: 保存文件：res://scripts/reusable_effect_pool.gdc
+	savepack: step 99: 保存文件：res://scripts/reward_book.gdc
+	savepack: step 99: 保存文件：res://scripts/reward_panel.gdc
+	savepack: step 99: 保存文件：res://scripts/save_migrator.gdc
+	savepack: step 99: 保存文件：res://scripts/settings_panel.gdc
+	savepack: step 99: 保存文件：res://scripts/sheet_effects.gdc
+	savepack: step 99: 保存文件：res://scripts/sprite_anchor.gdc
+	savepack: step 100: 保存文件：res://scripts/squad_panel.gdc
+	savepack: step 100: 保存文件：res://scripts/stage_clear_sequence.gdc
+	savepack: step 100: 保存文件：res://scripts/stage_projection.gdc
+	savepack: step 100: 保存文件：res://scripts/stage_select_panel.gdc
+	savepack: step 100: 保存文件：res://scripts/stage_surface_renderer.gdc
+	savepack: step 100: 保存文件：res://scripts/team_resonance.gdc
+	savepack: step 100: 保存文件：res://scripts/unit_visual_actor.gdc
+	savepack: step 100: 保存文件：res://scripts/vfx_pipeline.gdc
+	savepack: step 101: 保存文件：res://scripts/xlsx_reader.gdc
+	savepack: step 101: 保存文件：res://data/game_config.xlsx
+	savepack: step 101: 保存文件：res://assets/world/GAME-ICONS-CRYSTAL-LICENSE.txt
+	savepack: step 101: 保存文件：res://assets/fonts/TIEJILI-LICENSE.txt
+	savepack: step 101: 保存文件：res://assets/KENNEY-TINY-DUNGEON-LICENSE.txt
+	savepack: step 101: 保存文件：res://assets/KENNEY-IMPACT-SOUNDS-LICENSE.txt
+	savepack: step 101: 保存文件：res://.godot/exported/133200997/export-3070c538c03ee49b7677ff960a3f5195-main.scn
+	savepack: step 101: 保存文件：res://scripts/content/game_database.gd.remap
+	savepack: step 101: 保存文件：res://scripts/rewards/card_pool.gd.remap
+	savepack: step 101: 保存文件：res://scripts/rewards/crystal_progression.gd.remap
+	savepack: step 101: 保存文件：res://scripts/run/run_state.gd.remap
+	savepack: step 101: 保存文件：res://scripts/stages/stage_runtime.gd.remap
+	savepack: step 101: 保存文件：res://scripts/animation_state_machine.gd.remap
+	savepack: step 101: 保存文件：res://scripts/asset_readiness.gd.remap
+	savepack: step 101: 保存文件：res://scripts/audio_director.gd.remap
+	savepack: step 101: 保存文件：res://scripts/battle_hud.gd.remap
+	savepack: step 101: 保存文件：res://scripts/battle_view.gd.remap
+	savepack: step 101: 保存文件：res://scripts/campaign_checkpoint.gd.remap
+	savepack: step 101: 保存文件：res://scripts/campaign_event_panel.gd.remap
+	savepack: step 101: 保存文件：res://scripts/campaign_map_panel.gd.remap
+	savepack: step 101: 保存文件：res://scripts/campaign_node_resolver.gd.remap
+	savepack: step 101: 保存文件：res://scripts/character_breath_preview.gd.remap
+	savepack: step 101: 保存文件：res://scripts/combat_catalog.gd.remap
+	savepack: step 101: 保存文件：res://scripts/combat_feedback_director.gd.remap
+	savepack: step 101: 保存文件：res://scripts/combat_simulation.gd.remap
+	savepack: step 101: 保存文件：res://scripts/combat_timeline.gd.remap
+	savepack: step 101: 保存文件：res://scripts/compendium_panel.gd.remap
+	savepack: step 101: 保存文件：res://scripts/compendium_state.gd.remap
+	savepack: step 101: 保存文件：res://scripts/content_config.gd.remap
+	savepack: step 101: 保存文件：res://scripts/content_preview.gd.remap
+	savepack: step 101: 保存文件：res://scripts/content_validator.gd.remap
+	savepack: step 101: 保存文件：res://scripts/dialogue_backdrop.gd.remap
+	savepack: step 101: 保存文件：res://scripts/dialogue_director.gd.remap
+	savepack: step 101: 保存文件：res://scripts/dialogue_panel.gd.remap
+	savepack: step 101: 保存文件：res://scripts/error_reporter.gd.remap
+	savepack: step 101: 保存文件：res://scripts/furina_frame_actor.gd.remap
+	savepack: step 101: 保存文件：res://scripts/furina_rig.gd.remap
+	savepack: step 101: 保存文件：res://scripts/main.gd.remap
+	savepack: step 101: 保存文件：res://scripts/mode_select_panel.gd.remap
+	savepack: step 101: 保存文件：res://scripts/performance_budget.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_config_window.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_m4.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_m5.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_m8.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_m9.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_phase1.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_suite.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v4.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v5.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v6.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v7.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v8.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v9.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v10.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v11.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v12.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v13.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v14.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v15.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v16.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v17.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v18.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v19.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v20.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v25.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v26.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v27.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v28.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v29.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v30.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v31.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v32.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v33.gd.remap
+	savepack: step 101: 保存文件：res://scripts/qa_v33_restart.gd.remap
+	savepack: step 101: 保存文件：res://scripts/reusable_effect_pool.gd.remap
+	savepack: step 101: 保存文件：res://scripts/reward_book.gd.remap
+	savepack: step 101: 保存文件：res://scripts/reward_panel.gd.remap
+	savepack: step 101: 保存文件：res://scripts/save_migrator.gd.remap
+	savepack: step 101: 保存文件：res://scripts/settings_panel.gd.remap
+	savepack: step 101: 保存文件：res://scripts/sheet_effects.gd.remap
+	savepack: step 101: 保存文件：res://scripts/sprite_anchor.gd.remap
+	savepack: step 101: 保存文件：res://scripts/squad_panel.gd.remap
+	savepack: step 101: 保存文件：res://scripts/stage_clear_sequence.gd.remap
+	savepack: step 101: 保存文件：res://scripts/stage_projection.gd.remap
+	savepack: step 101: 保存文件：res://scripts/stage_select_panel.gd.remap
+	savepack: step 101: 保存文件：res://scripts/stage_surface_renderer.gd.remap
+	savepack: step 101: 保存文件：res://scripts/team_resonance.gd.remap
+	savepack: step 101: 保存文件：res://scripts/unit_visual_actor.gd.remap
+	savepack: step 101: 保存文件：res://scripts/vfx_pipeline.gd.remap
+	savepack: step 101: 保存文件：res://scripts/xlsx_reader.gd.remap
+	savepack: step 101: 保存文件：res://main.tscn.remap
+	savepack: step 101: 保存文件：res://.godot/global_script_class_cache.cfg
+	savepack: step 101: 保存文件：res://.godot/uid_cache.bin
+	savepack: step 101: 保存文件：res://project.binary
+savepack: end
+loading_editor_layout: begin: 正在加载编辑器 steps: 5
+	loading_editor_layout: step 0: 正在加载编辑器布局……
+loading_editor_layout: end

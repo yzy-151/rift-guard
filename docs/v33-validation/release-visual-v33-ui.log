@@ -1,0 +1,36 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 591.86 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 5060 Ti
+
+V33 UI PASS: main menu opens
+V33 UI PASS: settings opens from the main menu
+V33 UI PASS: settings closes back to the main menu
+V33 UI PASS: campaign mode opens stage selection
+V33 UI PASS: stage card opens formation
+V33 UI PASS: formation cards show replaceable animated character previews
+V33 UI PASS: visual evidence saved: 01-stage-and-formation
+V33 UI PASS: formation confirmation enters opening dialogue
+V33 UI PASS: opening dialogue presents two clickable replies
+V33 UI PASS: visual evidence saved: 02-dialogue-choice
+V33 UI PASS: dialogue reply is committed through pointer input
+V33 UI PASS: campaign battle starts after dialogue
+V33 UI PASS: character card drag deploys Traveler
+V33 UI PASS: deployment lands at the aimed battlefield position
+V33 UI PASS: deployed character enables active skill
+V33 UI PASS: active skill button enters targeting mode
+V33 UI PASS: battlefield click commits the active skill
+V33 UI PASS: ultimate button spends only the selected character energy
+V33 UI PASS: level-up opens the three-card reward screen
+V33 UI PASS: visual evidence saved: 03-card-choice
+V33 UI PASS: reward card click applies the chosen upgrade
+V33 UI PASS: pause button opens the tactical hub
+V33 UI PASS: pause hub refreshes mode, buffs and character stats
+V33 UI PASS: visual evidence saved: 04-pause-hub
+V33 UI PASS: pause settings button opens audio settings
+V33 UI PASS: pause formation button opens current squad
+V33 UI PASS: pause stage button opens stage selection
+V33 UI PASS: pause main-menu button returns to mode selection
+V33 UI PASS: endless mode starts through its real menu button
+V33 UI PASS: visual evidence saved: 05-endless-running
+V33 UI PASS: pause restart keeps the active mode and resets the stage
+V33 UI PASS: restart confirmation returns to playable endless battle
+V33 UI QA COMPLETE: 32 checks, 0 failures

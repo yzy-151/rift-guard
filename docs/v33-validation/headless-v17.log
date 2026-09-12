@@ -1,0 +1,18 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V17 PASS: mode menu opens
+V17 PASS: real pointer click enters endless mode
+V17 PASS: late endless spawn tick creates a dense group
+V17 PASS: real pointer click opens tactical pause
+V17 PASS: pause contains mode, stage, battle state and luck
+V17 PASS: pause contains build levels and three character sheets
+V17 PASS: settings, restart, squad, stage and menu actions are consolidated in pause
+V17 PASS: pause settings button opens volume settings
+V17 PASS: closing settings returns to paused battle
+V17 PASS: pause squad button opens formation
+V17 PASS: pause stage button opens stage list
+V17 PASS: first endless boss arrives at 90 seconds
+V17 PASS: boss changes into its third phase below 35 percent health
+V17 PASS: endless roster contains six mechanically distinct three-phase bosses
+V17 PASS: late campaign upgrades slow down sharply
+V17 QA COMPLETE: 15 checks, 0 failures

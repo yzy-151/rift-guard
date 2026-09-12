@@ -1,0 +1,25 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V29 PASS: V29 content and cross references validate
+V29 PASS: the playable roster remains twelve characters
+V29 PASS: all twelve characters own seven required combat animation states
+V29 PASS: visual acceptance matrix covers both facings for twelve heroes
+V29 PASS: visual matrix reports subpixel anchor error
+V29 PASS: telegraph and damage geometry share the acceptance tolerance
+V29 PASS: ability VFX is forced onto the damage frame
+V29 PASS: ability SFX is forced onto the damage frame
+V29 PASS: strict synchronized timeline validates
+V29 PASS: attack speed scales animation time without changing facing
+V29 PASS: animation emits its configured hit marker once
+V29 PASS: animation hit marker cannot double fire
+V29 PASS: unified visual actor preserves direction and fallback motion
+V29 PASS: six elements and eight reactions plus neutral own VFX themes
+V29 PASS: every VFX theme exposes color and impact contracts
+V29 PASS: overloaded reaction resolves its dedicated feedback theme
+V29 PASS: elemental hit resolves its projectile theme
+V29 PASS: feedback director recognizes frame-perfect impact payloads
+V29 PASS: battle view owns a synchronized visual actor for deployed heroes
+V29 PASS: battle effects carry data-driven visual themes
+V29 PASS: deployment UI exposes anchor and legal-placement feedback
+V29 PASS: deployment preview stores the validated release position
+V29 QA COMPLETE: 22 checks, 0 failures

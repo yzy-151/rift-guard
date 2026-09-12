@@ -1,0 +1,76 @@
+{
+  "executable": "C:\\Users\\23081\\Desktop\\codex\\rift-guard\\builds\\rift-guard-v33\\RiftGuard-V33.exe",
+  "bytes": 203298192,
+  "sha256": "4A37F910763C0E3C93D5F7B247542FD7B9CE6770AEBC2560908569B2897752FE",
+  "checks": [
+    {
+      "suite": "release-headless-v33",
+      "exit_code": 0,
+      "ok": true,
+      "summary": [
+        "V33 QA COMPLETE: 85 checks, 0 failures"
+      ],
+      "seconds": 3.04
+    },
+    {
+      "suite": "release-visual-v33",
+      "exit_code": 0,
+      "ok": true,
+      "summary": [
+        "V33 QA COMPLETE: 89 checks, 0 failures"
+      ],
+      "seconds": 6.17
+    },
+    {
+      "suite": "release-visual-v33-ui",
+      "exit_code": 0,
+      "ok": true,
+      "summary": [
+        "V33 UI QA COMPLETE: 32 checks, 0 failures"
+      ],
+      "seconds": 9.01
+    },
+    {
+      "suite": "release-visual-v17",
+      "exit_code": 0,
+      "ok": true,
+      "summary": [
+        "V17 QA COMPLETE: 15 checks, 0 failures"
+      ],
+      "seconds": 5.65
+    },
+    {
+      "suite": "release-normal-startup",
+      "exit_code": 0,
+      "ok": true,
+      "seconds": 5.52
+    }
+  ],
+  "restart_ok": true,
+  "restart_checks": [
+    {
+      "role": "write",
+      "pid": 38732,
+      "session": "run_567582c6f22e4942ad578343423a2b3c",
+      "exit_code": 0,
+      "ok": true,
+      "checks": 4
+    },
+    {
+      "role": "resume",
+      "pid": 43760,
+      "session": "run_567582c6f22e4942ad578343423a2b3c",
+      "exit_code": 0,
+      "ok": true,
+      "checks": 9
+    },
+    {
+      "role": "settled",
+      "pid": 44828,
+      "session": "run_567582c6f22e4942ad578343423a2b3c",
+      "exit_code": 0,
+      "ok": true,
+      "checks": 10
+    }
+  ]
+}

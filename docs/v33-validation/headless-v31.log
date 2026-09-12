@@ -1,0 +1,19 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V31 PASS: stage clear grants kill health and boss currency
+V31 PASS: stage reward cannot be claimed twice
+V31 PASS: shop generates three readable offers
+V31 PASS: shop purchase validates price and grants relic
+V31 PASS: resolved campaign node cannot be exploited twice
+V31 PASS: rest node grants a persistent expedition perk
+V31 PASS: hidden node records flag relationship and unlock payload
+V31 PASS: recruit node changes the active expedition squad
+V31 PASS: fortify affects next stage base and hero health
+V31 PASS: rested energy applies to every squad member
+V31 PASS: hidden elemental focus changes combat reaction damage
+V31 PASS: purchased relic is reapplied after stage reset
+V31 PASS: Helltaker-styled event panel presents three choices
+V31 PASS: campaign option responds to a real pointer hit path
+V31 PASS: successful pointer selection locks the one-shot node
+V31 PASS: final build records expedition economy and node choices
+V31 QA COMPLETE: 16 checks, 0 failures

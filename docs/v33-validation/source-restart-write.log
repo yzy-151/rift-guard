@@ -1,0 +1,8 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+V33 RESTART PASS: shared session stays inside isolated QA storage
+V33 RESTART PASS: writer starts with an unused checkpoint directory
+V33 RESTART PASS: writer persists a pending event before process exit
+V33 RESTART PASS: writer exits from the actual event screen
+V33 RESTART PROCESS: 32384 write
+V33 RESTART QA COMPLETE: 4 checks, 0 failures

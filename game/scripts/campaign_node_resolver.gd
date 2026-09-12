@@ -53,6 +53,7 @@ func apply_option(option: Dictionary, run_state) -> Dictionary:
 				return {"ok":false,"message":"该遗物已经持有。"}
 			message = "获得遗物：" + str(option.name)
 		"luck":
+			run_state.campaign_luck += float(option.value)
 			run_state.luck += float(option.value)
 			message = "幸运提高至 %.2f" % run_state.luck
 		"perk":
@@ -60,6 +61,7 @@ func apply_option(option: Dictionary, run_state) -> Dictionary:
 			message = "远征增益已生效：" + str(option.name)
 		"supply":
 			run_state.rift_shards += int(option.value)
+			run_state.campaign_luck += 0.05
 			run_state.luck += 0.05
 			message = "获得%d裂隙币" % int(option.value)
 		"recruit":
