@@ -44,6 +44,7 @@ var debug_damage_shape_error_max := 0.0
 var debug_route_overlap_alpha := 0.30
 var debug_telegraphs_visible := true
 var debug_portal_phases: Array[String] = []
+var debug_stage_layer_order: Array[String] = []
 var route_previews: Dictionary = {}
 var spawn_portals: Dictionary = {}
 var current_actor_transform := Transform2D.IDENTITY
@@ -67,9 +68,14 @@ var deploy_preview_valid := false
 var skill_point: Vector2 = Vector2(760, 360)
 var camera_center: Vector2 = Vector2(640, 360)
 var atlas: Texture2D = preload("res://assets/tiny-dungeon.png")
-var hell_stage_one: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0002.png")
-var hell_stage_two: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0003.png")
-var hell_stage_three: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0005.png")
+var stage_background_1: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0001.png")
+var stage_background_2: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0002.png")
+var stage_background_3: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0003.png")
+var stage_background_4: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0004.png")
+var stage_background_5: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0005.png")
+var stage_background_6: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0006.png")
+var stage_background_7: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0007.png")
+var stage_background_8: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0008.png")
 var crystal_texture: Texture2D = preload("res://assets/world/crystal-growth.svg")
 var furina_texture: Texture2D = preload("res://assets/characters/furina/furina-chibi-v1-alpha.png")
 var traveler_idle_atlas: Texture2D = preload("res://assets/characters/traveler_v18/idle.png")
@@ -339,13 +345,7 @@ func _draw() -> void:
 		visual.pos = Vector2.ZERO
 		_draw_effect(visual)
 		draw_set_transform(Vector2.ZERO)
-	if not sim.endless_mode:
-		# Foreground parapet gives the stage a solid front edge.
-		var front := PackedVector2Array([world_to_screen(Vector2(40, 580)), world_to_screen(Vector2(1240, 580)), Vector2(1240, 609), Vector2(40, 609)])
-		draw_colored_polygon(front, Color("#151018"))
-		draw_line(front[0], front[1], Color("#725054"), 2.0)
-		caption(Vector2(47, 595), "C I T A D E L   /   0 1", Color("#a68b91"), 11)
-		caption(Vector2(960, 594), "敌军推进方向   ←", Color("#c99593"), 12)
+	_draw_stage_foreground()
 	if sim.state == "between":
 		caption(Vector2(548, 127), "队伍休整  %.1fs" % sim.wave_timer, TEAL, 16)
 
@@ -659,44 +659,127 @@ func _build_stage_tile_cache(stage_id: String = "stage_01") -> void:
 		stage_decal_cache.append(PackedVector2Array([point, point + turn, point + turn + Vector2(10 + (i % 2) * 5, 6), point + turn + Vector2(25, 3)]))
 
 func _draw_stage() -> void:
+	debug_stage_layer_order.clear()
 	if sim.endless_mode:
 		_draw_endless_stage()
+		debug_stage_layer_order.assign(surface_renderer.STAGE_LAYER_ORDER.slice(0, 6))
 		return
 	if stage_tile_cache_id != sim.current_stage_id:
 		_build_stage_tile_cache(sim.current_stage_id)
+	var theme: Dictionary = surface_renderer.stage_theme(sim.current_stage_id)
 	var palette: Dictionary = STAGE_VISUAL.palette(sim.current_stage_id)
-	var floor_color: Color = palette.get("floor", Color("#302832"))
-	var accent_color: Color = palette.get("accent", Color("#c45a68"))
-	var backgrounds := {"stage_01": hell_stage_one, "stage_02": hell_stage_two, "stage_03": hell_stage_three}
-	var hell_background: Texture2D = backgrounds.get(sim.current_stage_id, hell_stage_one)
-	draw_texture_rect(hell_background, Rect2(0, 0, 1280, 720), false, STAGE_VISUAL.backdrop_tint)
+	_draw_stage_backdrop(theme, palette)
+	_draw_stage_atmosphere(theme, palette)
+	_draw_stage_ground(theme, palette)
+	_draw_stage_routes(theme, palette)
+	_draw_stage_terrain(theme, palette)
+	_draw_stage_architecture(theme, palette)
+
+func _stage_background(stage_id: String) -> Texture2D:
+	match int(surface_renderer.stage_theme(stage_id).get("background", 1)):
+		2: return stage_background_2
+		3: return stage_background_3
+		4: return stage_background_4
+		5: return stage_background_5
+		6: return stage_background_6
+		7: return stage_background_7
+		8: return stage_background_8
+	return stage_background_1
+
+func _stage_layer(name: String) -> void:
+	debug_stage_layer_order.append(name)
+
+func _draw_stage_backdrop(theme: Dictionary, palette: Dictionary) -> void:
+	_stage_layer("backdrop")
+	var background := _stage_background(sim.current_stage_id)
+	var accent: Color = palette.get("accent", Color("#c45a68"))
+	draw_texture_rect(background, Rect2(0, 0, 1280, 720), false, STAGE_VISUAL.backdrop_tint.lerp(accent.lightened(0.46), 0.09))
 	draw_rect(Rect2(0, 0, 1280, 720), STAGE_VISUAL.stage_veil)
 	draw_rect(Rect2(0, 82, 1032, 622), STAGE_VISUAL.arena_overlay)
-	# Far haze and moving embers keep the panorama separate from the tactical floor.
-	for band in 3:
-		var drift := fmod(clock * (7.0 + band * 3.0), 1180.0)
-		draw_colored_polygon(PackedVector2Array([Vector2(-180 + drift, 176 + band * 30), Vector2(280 + drift, 158 + band * 28), Vector2(610 + drift, 204 + band * 25), Vector2(90 + drift, 220 + band * 25)]), Color(accent_color, 0.035 + band * 0.012))
-	# Distant skyline, behind the wall.
+
+func _draw_stage_atmosphere(theme: Dictionary, palette: Dictionary) -> void:
+	_stage_layer("atmosphere")
+	var accent: Color = palette.get("accent", Color("#c45a68"))
+	var fog := float(theme.get("fog", 0.45))
+	for band in 4:
+		var drift := fmod(clock * (5.0 + band * 2.2) + band * 250.0, 1510.0)
+		var y := 146.0 + band * 35.0
+		draw_colored_polygon(PackedVector2Array([Vector2(-310 + drift, y), Vector2(140 + drift, y - 23), Vector2(520 + drift, y + 30), Vector2(30 + drift, y + 55)]), Color(accent, (0.025 + band * 0.008) * fog))
 	for i in 14:
 		var x: float = i * 100 - 40
 		var top: float = 105 + (i % 3) * 12
-		draw_rect(Rect2(x, top, 66, 100), Color("#302532"))
-		draw_colored_polygon(PackedVector2Array([Vector2(x - 7, top), Vector2(x + 33, top - 26), Vector2(x + 73, top)]), Color("#302532"))
-	var floor: PackedVector2Array = Stage.polygon(WORLD)
+		var silhouette := Color("#302532").lerp(accent.darkened(0.68), 0.20)
+		draw_rect(Rect2(x, top, 66, 100), silhouette)
+		draw_colored_polygon(PackedVector2Array([Vector2(x - 7, top), Vector2(x + 33, top - 26), Vector2(x + 73, top)]), silhouette)
+
+func _draw_stage_ground(theme: Dictionary, palette: Dictionary) -> void:
+	_stage_layer("ground")
+	var floor_color: Color = palette.get("floor", Color("#302832"))
+	var accent: Color = palette.get("accent", Color("#c45a68"))
+	var floor := Stage.polygon(WORLD)
 	floor_color.a = 0.94
 	draw_colored_polygon(floor, floor_color)
-	# Cached perspective tiles keep the 2.5D floor detailed without rebuilding geometry each frame.
 	for tile: Dictionary in stage_tile_cache:
 		draw_colored_polygon(tile.polygon, tile.color)
-	_draw_floor_decals(accent_color)
-	_draw_terrain_features()
-	draw_colored_polygon(Stage.polygon(Sim.MOVE_AREA), Color(0.67, 0.28, 0.32, 0.10))
-	var border: PackedVector2Array = Stage.polygon(Sim.MOVE_AREA)
+	_draw_ground_motif(str(theme.get("tile_style", "brick")), accent)
+	_draw_floor_decals(accent)
+	draw_colored_polygon(Stage.polygon(Sim.MOVE_AREA), Color(accent, 0.045))
+	var border := Stage.polygon(Sim.MOVE_AREA)
 	border.append(border[0])
-	draw_polyline(border, STAGE_VISUAL.border_color, 1.4, true)
-	# Inner bevel and outer rail make the tactical surface read as a dedicated layer.
-	draw_rect(ENDLESS_PLAYFIELD_SCREEN, Color(0.02, 0.01, 0.025, 0.28), false, 8.0)
-	draw_line(Vector2(22, 602), Vector2(1022, 602), Color(0.78, 0.28, 0.36, 0.34), 3.0, true)
+	draw_polyline(border, Color(accent, 0.38), 1.3, true)
+	draw_rect(ENDLESS_PLAYFIELD_SCREEN, Color(0.02, 0.01, 0.025, 0.24), false, 7.0)
+
+func _draw_ground_motif(style: String, accent: Color) -> void:
+	match style:
+		"corridor":
+			for lane_y in [220.0, 360.0, 500.0]:
+				draw_line(world_to_screen(Vector2(120, lane_y)), world_to_screen(Vector2(1160, lane_y)), Color(accent, 0.12), 3.0, true)
+				for seal in 6:
+					var point := world_to_screen(Vector2(210 + seal * 170, lane_y))
+					draw_arc(point, 9.0, 0, TAU, 6, Color(accent, 0.13), 1.5, true)
+		"shard":
+			for i in 16:
+				var center := world_to_screen(Vector2(120 + (i * 193) % 1040, 185 + (i * 83) % 335))
+				draw_polyline(PackedVector2Array([center + Vector2(-7, 8), center + Vector2(0, -12 - i % 3 * 3), center + Vector2(8, 8)]), Color(accent, 0.14), 1.6, true)
+		"bridge":
+			for x in [230.0, 510.0, 790.0, 1070.0]:
+				var top := world_to_screen(Vector2(x, 160))
+				var bottom := world_to_screen(Vector2(x, 555))
+				draw_line(top, bottom, Color(accent, 0.10), 4.0, true)
+				draw_line(top + Vector2(-18, 0), bottom + Vector2(18, 0), Color(accent, 0.06), 1.5, true)
+		"furnace":
+			for i in 12:
+				var center := world_to_screen(Vector2(135 + (i % 6) * 190, 220 + (i / 6) * 210))
+				draw_rect(Rect2(center - Vector2(35, 15), Vector2(70, 30)), Color(accent, 0.045), false, 2.0)
+				for rivet in [-1.0, 1.0]:
+					draw_circle(center + Vector2(rivet * 27, -9), 2.0, Color(accent, 0.18))
+		"gear":
+			for i in 7:
+				var center := world_to_screen(Vector2(150 + i * 165, 225 + (i % 3) * 115))
+				draw_arc(center, 18.0 + i % 2 * 8.0, i * 0.4, i * 0.4 + PI * 1.62, 12, Color(accent, 0.14), 2.0, true)
+				for tooth in 6:
+					var direction := Vector2.from_angle(tooth * TAU / 6.0 + i * 0.2)
+					draw_line(center + direction * 15.0, center + direction * 25.0, Color(accent, 0.10), 2.0, true)
+		"ice":
+			for i in 13:
+				var root := world_to_screen(Vector2(105 + (i * 211) % 1080, 185 + (i * 97) % 345))
+				var branch := Vector2(24 + i % 3 * 8, -9 + i % 4 * 6)
+				draw_polyline(PackedVector2Array([root, root + branch, root + branch + Vector2(13, -11), root + branch + Vector2(27, 5)]), Color(accent, 0.17), 1.8, true)
+		"siege":
+			for y in [205.0, 345.0, 485.0]:
+				var a := world_to_screen(Vector2(120, y))
+				var b := world_to_screen(Vector2(1160, y))
+				draw_dashed_line(a, b, Color(accent, 0.10), 2.0, 18.0, true)
+			for x in [350.0, 690.0, 1030.0]:
+				var center := world_to_screen(Vector2(x, 365))
+				draw_arc(center, 25.0, 0, TAU, 4, Color(accent, 0.14), 2.2, true)
+		_:
+			for world in [Vector2(220, 240), Vector2(610, 410), Vector2(1010, 250)]:
+				var center := world_to_screen(world)
+				draw_arc(center, 16.0, PI * 0.25, PI * 1.75, 6, Color(accent, 0.12), 1.7, true)
+
+func _draw_stage_routes(_theme: Dictionary, _palette: Dictionary) -> void:
+	_stage_layer("routes")
 	var routes: Dictionary = sim.stage_routes()
 	for route_id: String in routes:
 		var route: Array = routes[route_id]
@@ -705,28 +788,89 @@ func _draw_stage() -> void:
 		_draw_route_bed(route, route_id)
 		if route_previews.has(route_id):
 			_draw_route_preview(route, route_previews[route_id], route_id)
-	# Rear wall has height independent of the floor projection.
+
+func _draw_stage_terrain(_theme: Dictionary, _palette: Dictionary) -> void:
+	_stage_layer("terrain")
+	_draw_terrain_features()
+
+func _draw_stage_architecture(theme: Dictionary, palette: Dictionary) -> void:
+	_stage_layer("architecture")
+	var accent: Color = palette.get("accent", Color("#c45a68"))
+	var motif := str(theme.get("motif", "rampart"))
 	for i in 12:
-		var ground: Vector2 = world_to_screen(Vector2(45 + i * 105, 140))
-		draw_rect(Rect2(ground - Vector2(17, 48), Vector2(62, 48)), Color("#3e303c"))
-		draw_rect(Rect2(ground - Vector2(17, 48), Vector2(62, 5)), Color("#69505a"))
-		draw_colored_polygon(PackedVector2Array([ground + Vector2(-5, 0), ground + Vector2(-5, -28), ground + Vector2(14, -40), ground + Vector2(33, -28), ground + Vector2(33, 0)]), Color("#211923"))
-	# Foreground parapet is drawn last so units visually stand inside the arena.
-	draw_colored_polygon(PackedVector2Array([Vector2(12, 694), Vector2(1028, 694), Vector2(1028, 716), Vector2(12, 716)]), STAGE_VISUAL.foreground_color)
-	draw_line(Vector2(14, 694), Vector2(1028, 694), Color(accent_color, 0.54), 2.0, true)
-	for i in 13:
-		var rubble_x := 36.0 + i * 78.0
-		var rubble_h := 7.0 + float((i * 17) % 12)
-		draw_colored_polygon(PackedVector2Array([Vector2(rubble_x, 704), Vector2(rubble_x + 18, 704 - rubble_h), Vector2(rubble_x + 42, 704), Vector2(rubble_x + 25, 716)]), floor_color.darkened(0.28))
-		draw_line(Vector2(rubble_x + 3, 704), Vector2(rubble_x + 18, 704 - rubble_h), Color(accent_color, 0.28), 1.0, true)
-	for point in [Vector2(220, 145), Vector2(670, 145), Vector2(1120, 145)]:
-		var screen: Vector2 = world_to_screen(point)
-		draw_line(screen, screen + Vector2(0, -45), Color("#89737a"), 4)
-		draw_circle(screen + Vector2(0, -46), 5, Color("#e8967c"))
-		if not reduced_effects:
-			draw_circle(screen + Vector2(0, -46), 12 + sin(clock * 2) * 1.5, Color(STAGE_VISUAL.ember_color, 0.1))
-	_draw_foreground_embers(accent_color)
-	caption(world_to_screen(Vector2(205, 525)), "全域机动区", Color("#c79398"), 12)
+		var ground := world_to_screen(Vector2(45 + i * 105, 140))
+		var wall := Color("#3e303c").lerp(accent.darkened(0.62), 0.24)
+		draw_rect(Rect2(ground - Vector2(17, 48), Vector2(62, 48)), wall)
+		draw_rect(Rect2(ground - Vector2(17, 48), Vector2(62, 5)), Color(accent, 0.32))
+	_draw_stage_motif(motif, accent)
+	caption(Vector2(43, 122), "%s  /  %s" % [str(theme.get("title", "裂隙战场")), motif.to_upper()], Color(accent.lightened(0.32), 0.88), 13)
+
+func _draw_stage_motif(motif: String, accent: Color) -> void:
+	match motif:
+		"gallery":
+			for x in [190.0, 510.0, 830.0]:
+				draw_arc(Vector2(x, 221), 54.0, PI, TAU, 30, Color(accent, 0.38), 7.0, true)
+				draw_line(Vector2(x - 54, 221), Vector2(x - 54, 285), Color(accent, 0.18), 5.0, true)
+				draw_line(Vector2(x + 54, 221), Vector2(x + 54, 285), Color(accent, 0.18), 5.0, true)
+		"nest":
+			for i in 9:
+				var root := Vector2(90 + i * 118, 248 + (i % 2) * 42)
+				draw_colored_polygon(PackedVector2Array([root + Vector2(-14, 20), root + Vector2(0, -48 - i % 3 * 12), root + Vector2(16, 20)]), Color(accent, 0.19))
+		"skybridge":
+			for x in [170.0, 470.0, 770.0]:
+				draw_line(Vector2(x, 174), Vector2(x + 150, 174), Color(accent, 0.28), 8.0, true)
+				for cable in 4:
+					draw_line(Vector2(x + cable * 46, 174), Vector2(x + cable * 46 + 20, 221), Color(accent, 0.13), 2.0, true)
+		"forge":
+			for i in 6:
+				var furnace := Vector2(120 + i * 175, 220 + (i % 2) * 25)
+				draw_rect(Rect2(furnace - Vector2(28, 42), Vector2(56, 74)), Color("#21171a"))
+				draw_arc(furnace + Vector2(0, 10), 18.0, PI, TAU, 20, Color(accent, 0.85), 5.0, true)
+				draw_circle(furnace + Vector2(0, 10), 10.0 + sin(clock * 5.0 + i) * 2.0, Color(accent, 0.22))
+		"clock":
+			for i in 4:
+				var gear := Vector2(180 + i * 250, 230 + (i % 2) * 55)
+				draw_arc(gear, 34.0 + i % 2 * 10.0, clock * (0.10 + i * 0.02), TAU + clock * (0.10 + i * 0.02), 12, Color(accent, 0.34), 5.0, true)
+				for tooth in 8:
+					var direction := Vector2.from_angle(tooth * TAU / 8.0 + clock * 0.10)
+					draw_line(gear + direction * 29.0, gear + direction * 43.0, Color(accent, 0.28), 4.0, true)
+		"frost":
+			for i in 10:
+				var base := Vector2(70 + i * 112, 298 + (i % 3) * 37)
+				draw_colored_polygon(PackedVector2Array([base + Vector2(-13, 20), base + Vector2(0, -34 - i % 4 * 9), base + Vector2(13, 20)]), Color(accent, 0.25))
+				draw_line(base + Vector2(0, -26), base + Vector2(0, 12), Color(accent.lightened(0.42), 0.50), 2.0, true)
+		"eclipse":
+			var eclipse := Vector2(760, 176)
+			draw_circle(eclipse, 82.0, Color("#09070b"))
+			draw_arc(eclipse, 88.0 + sin(clock * 0.7) * 3.0, 0, TAU, 72, Color(accent, 0.36), 8.0, true)
+			for ray in 12:
+				var direction := Vector2.from_angle(ray * TAU / 12.0)
+				draw_line(eclipse + direction * 96.0, eclipse + direction * 122.0, Color(accent, 0.13), 3.0, true)
+		_:
+			for x in [180.0, 470.0, 760.0]:
+				draw_colored_polygon(PackedVector2Array([Vector2(x, 255), Vector2(x + 18, 178), Vector2(x + 36, 255)]), Color(accent, 0.17))
+
+func _draw_stage_foreground() -> void:
+	if debug_stage_layer_order.is_empty() or debug_stage_layer_order[-1] != "foreground":
+		_stage_layer("foreground")
+	if sim.endless_mode:
+		for edge in 4:
+			draw_rect(Rect2(edge * 4, edge * 4, 1280 - edge * 8, 720 - edge * 8), Color(0.03, 0.008, 0.025, 0.08), false, 4.0)
+		return
+	var palette := STAGE_VISUAL.palette(sim.current_stage_id)
+	var floor_color: Color = palette.get("floor", Color("#302832"))
+	var accent: Color = palette.get("accent", Color("#c45a68"))
+	var front := PackedVector2Array([world_to_screen(Vector2(40, 580)), world_to_screen(Vector2(1240, 580)), Vector2(1240, 718), Vector2(40, 718)])
+	draw_colored_polygon(front, STAGE_VISUAL.foreground_color.lerp(floor_color, 0.24))
+	draw_line(front[0], front[1], Color(accent, 0.58), 2.4, true)
+	for i in 15:
+		var rubble_x := 45.0 + i * 76.0
+		var rubble_h := 7.0 + float((i * 17) % 15)
+		draw_colored_polygon(PackedVector2Array([Vector2(rubble_x, 704), Vector2(rubble_x + 18, 704 - rubble_h), Vector2(rubble_x + 42, 704), Vector2(rubble_x + 25, 718)]), floor_color.darkened(0.28))
+		draw_line(Vector2(rubble_x + 3, 704), Vector2(rubble_x + 18, 704 - rubble_h), Color(accent, 0.28), 1.0, true)
+	_draw_foreground_embers(accent)
+	caption(Vector2(47, 702), "C I T A D E L   /   %s" % sim.current_stage_id.trim_prefix("stage_"), Color(accent.lightened(0.28), 0.72), 10)
+	caption(Vector2(840, 702), "敌军推进方向   ←", Color(accent.lightened(0.25), 0.78), 11)
 
 func _draw_floor_decals(accent: Color) -> void:
 	for crack: PackedVector2Array in stage_decal_cache:
@@ -801,7 +945,7 @@ func _draw_terrain_features() -> void:
 				caption(center + Vector2(-39, 27), "战技可破坏", Color("#ffc181"), 10)
 
 func _draw_endless_stage() -> void:
-	draw_texture_rect(hell_stage_three, Rect2(0, 0, 1280, 720), false, Color(0.34, 0.24, 0.30, 1.0))
+	draw_texture_rect(stage_background_8, Rect2(0, 0, 1280, 720), false, Color(0.34, 0.24, 0.30, 1.0))
 	draw_rect(Rect2(0, 0, 1280, 720), Color(0.035, 0.018, 0.045, 0.69))
 	# Broad overlapping slabs remove the old black checkerboard while retaining navigation scale.
 	var top_left := screen_to_world(Vector2.ZERO)
@@ -856,17 +1000,17 @@ func _draw_route_bed(route: Array, route_id: String = "main") -> void:
 	for i in range(route.size() - 1):
 		var a := world_to_screen(route[i])
 		var b := world_to_screen(route[i + 1])
-		draw_line(a + Vector2(0, 2), b + Vector2(0, 2), Color(0.02, 0.01, 0.025, 0.20), 12.0, true)
-		draw_line(a, b, Color(color, float(material.bed_alpha) * 0.34), 5.0, true)
-		draw_line(a, b, Color(color.lightened(0.26), 0.10), 1.2, true)
+		draw_line(a + Vector2(0, 2), b + Vector2(0, 2), Color(color.darkened(0.62), 0.055), 9.0, true)
+		draw_line(a, b, Color(color, 0.065), 2.4, true)
+		draw_line(a, b, Color(color.lightened(0.26), 0.045), 1.0, true)
 		var length := a.distance_to(b)
 		var steps := maxi(1, floori(length / 82.0))
 		for step in steps:
 			var point := a.lerp(b, (float(step) + 0.5) / float(steps))
 			var direction := (b - a).normalized()
 			var side := direction.rotated(PI * 0.5)
-			draw_line(point - side * 8.0, point + side * 8.0, Color(color, 0.10), 1.0, true)
-			draw_circle(point, 2.2, Color(color, 0.16))
+			draw_line(point - side * 8.0, point + side * 8.0, Color(color, 0.050), 1.0, true)
+			draw_circle(point, 1.8, Color(color, 0.085))
 
 func _draw_route_preview(route: Array, preview: Dictionary, route_id: String = "main") -> void:
 	var material: Dictionary = surface_renderer.route_material(route_id, bool(preview.get("flying", false)), bool(preview.get("boss", false)))

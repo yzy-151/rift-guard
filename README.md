@@ -11,9 +11,11 @@
 - 敌人包含近战、远程、飞行、护盾、增益与史莱姆家族，并配置六名三阶段 Boss。
 - 火、水、雷、冰、风、岩元素参与反应，旅行者可在局内选择元素并通过高阶卡牌获得双元素。
 
-## V46 UI 实验台与图文手册
+## V48 七层地图与 V46 UI 实验台
 
-V46 把剧情、选模式、选关、选角色、普通战斗、无尽战斗、强化卡和设置八类界面全部纳入 Godot UI 实验台；每页都带实机参考图，可拖动、缩放、替换贴图并安全写回 Profile。
+V48 将八个普通关卡拆为背景、气氛、地面、路线、地形、建筑和前景七层，并为前哨、回廊、母巢、空桥、熔炉、钟楼、冰原和蚀日围城建立独立主题；V46 的八页 Godot UI 实验台继续保留。
+
+![V48 地图视觉验收](docs/v48-validation/V48-map-contact-sheet.jpg)
 
 - [图文指导书（PDF，可下载）](output/pdf/Rift-Guard-UI-Visual-Editing-Guide.pdf)
 - [图文指导书（Markdown，适合在 GitHub 阅读）](docs/UI-VISUAL-EDITING-GUIDE.md)
@@ -27,7 +29,7 @@ V46 把剧情、选模式、选关、选角色、普通战斗、无尽战斗、�
 
 ## 运行
 
-- Windows 发布包：`builds/rift-guard-v46/RiftGuard-V46.exe`
+- Windows 发布包：`builds/rift-guard-v48/RiftGuard-V48.exe`
 - Godot 工程：`game/project.godot`
 - 设计分辨率：1280×720
 - 输出分辨率：1920×1080

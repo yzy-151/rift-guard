@@ -11,7 +11,8 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V46：八页 UI 实验台 / 图文编辑手册 / Profile 双向写回 / 1920×1080"
+config/version="48.0.0"
+config/description="V48：八关七层地图 / 独立主题与色板 / 动态路线与传送门 / 1920×1080"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
