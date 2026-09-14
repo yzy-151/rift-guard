@@ -21,7 +21,7 @@
       "power": 135,
       "radius": 135,
       "hit_frame_ratio": 0.46,
-      "targeting": "cone",
+      "targeting": "point",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -48,7 +48,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 24.0
     },
     "passive": {
       "name": "异界适应",
@@ -79,7 +80,7 @@
       "power": 170,
       "radius": 170,
       "hit_frame_ratio": 0.46,
-      "targeting": "ally_area",
+      "targeting": "point",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -106,7 +107,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 25.0
     },
     "passive": {
       "name": "静风守护",
@@ -137,7 +139,7 @@
       "power": 190,
       "radius": 190,
       "hit_frame_ratio": 0.46,
-      "targeting": "self",
+      "targeting": "point",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -155,7 +157,7 @@
       "power": 290,
       "radius": 290,
       "hit_frame_ratio": 0.58,
-      "targeting": "global",
+      "targeting": "point",
       "timeline": {
         "duration": 1.18,
         "anticipation": 0.496,
@@ -164,7 +166,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 26.0
     },
     "passive": {
       "name": "沙龙礼仪",
@@ -195,7 +198,7 @@
       "power": 190,
       "radius": 190,
       "hit_frame_ratio": 0.46,
-      "targeting": "line",
+      "targeting": "point",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -222,7 +225,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 25.0
     },
     "passive": {
       "name": "魔力潮涌",
@@ -253,7 +257,7 @@
       "power": 180,
       "radius": 180,
       "hit_frame_ratio": 0.46,
-      "targeting": "cone",
+      "targeting": "point",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -271,7 +275,7 @@
       "power": 340,
       "radius": 340,
       "hit_frame_ratio": 0.58,
-      "targeting": "global",
+      "targeting": "point",
       "timeline": {
         "duration": 1.18,
         "anticipation": 0.496,
@@ -280,7 +284,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 27.0
     },
     "passive": {
       "name": "安可节拍",
@@ -311,7 +316,7 @@
       "power": 160,
       "radius": 160,
       "hit_frame_ratio": 0.46,
-      "targeting": "line",
+      "targeting": "point",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -338,7 +343,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 26.0
     },
     "passive": {
       "name": "黑蛇意志",
@@ -369,7 +375,7 @@
       "power": 180,
       "radius": 180,
       "hit_frame_ratio": 0.46,
-      "targeting": "line",
+      "targeting": "point",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -387,7 +393,7 @@
       "power": 330,
       "radius": 330,
       "hit_frame_ratio": 0.58,
-      "targeting": "global",
+      "targeting": "point",
       "timeline": {
         "duration": 1.18,
         "anticipation": 0.496,
@@ -396,7 +402,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 26.0
     },
     "passive": {
       "name": "命运和弦",
@@ -454,7 +461,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 26.0
     },
     "passive": {
       "name": "精灵加护",
@@ -485,7 +493,7 @@
       "power": 170,
       "radius": 170,
       "hit_frame_ratio": 0.46,
-      "targeting": "line",
+      "targeting": "point",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -503,7 +511,7 @@
       "power": 320,
       "radius": 320,
       "hit_frame_ratio": 0.58,
-      "targeting": "global",
+      "targeting": "point",
       "timeline": {
         "duration": 1.18,
         "anticipation": 0.496,
@@ -512,7 +520,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 25.0
     },
     "passive": {
       "name": "回声大师",
@@ -570,7 +579,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 26.0
     },
     "passive": {
       "name": "三相同调",
@@ -628,7 +638,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 26.0
     },
     "passive": {
       "name": "战术链接",
@@ -677,7 +688,7 @@
       "power": 310,
       "radius": 310,
       "hit_frame_ratio": 0.58,
-      "targeting": "global",
+      "targeting": "point",
       "timeline": {
         "duration": 1.18,
         "anticipation": 0.496,
@@ -686,7 +697,8 @@
         "sfx_frame": 0.684,
         "recovery": 0.496,
         "shake": 0.78
-      }
+      },
+      "cooldown": 25.0
     },
     "passive": {
       "name": "代理网络",

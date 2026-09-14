@@ -2,7 +2,9 @@ extends Node2D
 signal stage_exit_finished
 ## All effects are cosmetic; gameplay remains in CombatSimulation.
 const Stage = preload("res://scripts/stage_projection.gd")
+const STAGE_VISUAL = preload("res://data/stage_visual_profile.tres")
 const WORLD = Rect2(40, 140, 1200, 440)
+const ENDLESS_PLAYFIELD_SCREEN = Rect2(16, 82, 1012, 622)
 const Sim = preload("res://scripts/combat_simulation.gd")
 const ReusableEffectPool = preload("res://scripts/reusable_effect_pool.gd")
 const SpriteAnchor = preload("res://scripts/sprite_anchor.gd")
@@ -10,6 +12,10 @@ const UnitVisualActor = preload("res://scripts/unit_visual_actor.gd")
 const CombatFeedbackDirector = preload("res://scripts/combat_feedback_director.gd")
 const StageSurfaceRenderer = preload("res://scripts/stage_surface_renderer.gd")
 const VfxPipeline = preload("res://scripts/vfx_pipeline.gd")
+const VFX_FLARE = preload("res://assets/vfx/third_party/kenney_particle/flare_01.png")
+const VFX_SPARK = preload("res://assets/vfx/third_party/kenney_particle/spark_05.png")
+const VFX_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_01.png")
+const VFX_TRACE = preload("res://assets/vfx/third_party/kenney_particle/trace_05.png")
 const INK = Color("#0c1017")
 const TEAL = Color("#8fdbc8")
 const RED = Color("#d66769")
@@ -23,6 +29,10 @@ var shot_flashes: Dictionary = {}
 var hero_attack_visuals: Dictionary = {}
 var hero_down_visuals: Dictionary = {}
 var projectile_trails: Dictionary = {}
+var redraw_accumulator: float = 0.0
+var stage_tile_cache: Array[Dictionary] = []
+var stage_tile_cache_id := ""
+var stage_decal_cache: Array[PackedVector2Array] = []
 var sprite_pivots: Dictionary = {}
 var enemy_visual_textures: Dictionary = {}
 var unit_visual_actors: Dictionary = {}
@@ -49,6 +59,7 @@ const STAGE_EXIT_MEET := Vector2(930, 360)
 var base_flash: float = 0.0
 var shake_trauma: float = 0.0
 var skill_targeting: bool = false
+var skill_preview_ultimate: bool = false
 var deploy_preview_active: bool = false
 var deploy_preview_id: int = -1
 var deploy_preview_point: Vector2 = Vector2.ZERO
@@ -102,6 +113,7 @@ func _ready() -> void:
 	font = SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
 	build_furina_actor()
+	_build_stage_tile_cache(sim.current_stage_id if sim != null else "stage_01")
 
 func _load_enemy_visuals() -> void:
 	enemy_visual_textures.clear()
@@ -153,17 +165,26 @@ func advance(dt: float) -> void:
 		if float(spawn_portals[route_id].life) <= 0.0:
 			spawn_portals.erase(route_id)
 	sync_furina_actor(dt)
-	queue_redraw()
+	redraw_accumulator += dt
+	var redraw_interval := 1.0 / (30.0 if reduced_effects else 60.0)
+	if redraw_accumulator >= redraw_interval:
+		redraw_accumulator = fmod(redraw_accumulator, redraw_interval)
+		queue_redraw()
 
 func world_to_screen(point: Vector2) -> Vector2:
 	if sim != null and sim.endless_mode:
-		return point - camera_center + Vector2(640, 360)
+		return point - camera_center + ENDLESS_PLAYFIELD_SCREEN.get_center()
 	return Stage.project(point)
 
 func screen_to_world(point: Vector2) -> Vector2:
 	if sim != null and sim.endless_mode:
-		return point + camera_center - Vector2(640, 360)
+		return point + camera_center - ENDLESS_PLAYFIELD_SCREEN.get_center()
 	return Stage.unproject(point)
+
+func visible_world_rect() -> Rect2:
+	if sim != null and sim.endless_mode:
+		return Rect2(screen_to_world(ENDLESS_PLAYFIELD_SCREEN.position), ENDLESS_PLAYFIELD_SCREEN.size)
+	return WORLD
 
 func world_depth_scale(point: Vector2) -> float:
 	return 1.0 if sim != null and sim.endless_mode else Stage.depth_scale(point)
@@ -407,6 +428,7 @@ func _draw_enemy_telegraphs() -> void:
 			draw_circle(center, radius, Color(0.95, 0.12, 0.18, 0.10 + (1.0-ratio)*0.16))
 			draw_arc(center, radius, -PI*0.5, -PI*0.5 + TAU*(1.0-ratio), 48, Color("#ff5267"), 4.0, true)
 			draw_line(world_to_screen(enemy.pos), center, Color(1.0,0.25,0.32,0.52), 2.0, true)
+			_draw_warning_reticle(center, radius, ratio, float(enemy.get("warning_timer", 0.0)), false)
 		if bool(enemy.get("special_pending", false)):
 			for warning_point: Variant in enemy.get("special_warning_positions", [enemy.pos]):
 				var center := world_to_screen(warning_point)
@@ -449,7 +471,24 @@ func _draw_enemy_telegraphs() -> void:
 				else:
 					draw_circle(center, radius, danger)
 					draw_arc(center, radius, clock*2.0, clock*2.0+PI*1.65, 64, Color("#ff334f"), 5.0, true)
-				caption(center+Vector2(-74,-radius-12),str(enemy.get("special_move_name","BOSS 危险预警")),Color("#fff0ef"),14)
+				var special_total := maxf(0.01, float(enemy.get("special_warning_total", 1.8)))
+				var special_ratio := clampf(float(enemy.get("special_warning", 0.0)) / special_total, 0.0, 1.0)
+				_draw_warning_reticle(center, radius, special_ratio, float(enemy.get("special_warning", 0.0)), true, str(enemy.get("special_move_name", "BOSS SKILL")))
+
+func _draw_warning_reticle(center: Vector2, radius: float, ratio: float, seconds: float, boss: bool, title: String = "") -> void:
+	var color := Color("#ff8b9a") if boss else Color("#ff5267")
+	var ring_radius := radius + (10.0 if boss else 6.0)
+	draw_arc(center, ring_radius, 0.0, TAU, 64, Color(color, 0.42), 1.5 if not boss else 2.4, true)
+	draw_arc(center, ring_radius, -PI * 0.5, -PI * 0.5 + TAU * (1.0 - ratio), 64, Color(color, 0.96), 4.0 if not boss else 6.0, true)
+	for tick in 8:
+		var angle := tick * TAU / 8.0
+		var direction := Vector2.from_angle(angle)
+		draw_line(center + direction * (ring_radius - 4.0), center + direction * (ring_radius + 7.0), Color(color, 0.86), 2.0, true)
+	draw_line(center + Vector2(-10, 0), center + Vector2(10, 0), Color(color, 0.72), 1.4, true)
+	draw_line(center + Vector2(0, -10), center + Vector2(0, 10), Color(color, 0.72), 1.4, true)
+	caption(center + Vector2(-13, 5), "%.1f" % maxf(0.0, seconds), Color("#fff4ee"), 15 if boss else 12)
+	if boss and not title.is_empty():
+		caption(center + Vector2(-minf(92.0, title.length() * 5.5), -ring_radius - 13.0), title, Color("#ffd2d8"), 13)
 
 func _draw_orbitals() -> void:
 	for orbital: Dictionary in sim.orbitals:
@@ -502,36 +541,35 @@ func _draw_skill_preview() -> void:
 	var hero: Dictionary = sim.heroes[selected_id]
 	var element: String = str(hero.get("element", "none"))
 	var color: Color = element_color(element)
-	var ability: Dictionary = hero.get("active_skill", {})
+	var ability: Dictionary = hero.get("ultimate", {}) if skill_preview_ultimate else hero.get("active_skill", {})
 	var radius: float = float(ability.get("radius", 170.0)) * (1.0 + sim.skill_area_bonus)
 	var center := world_to_screen(skill_point)
 	var hero_center := world_to_screen(hero.pos)
 	var radius_x := radius * 0.62 * world_depth_scale(skill_point)
 	var radius_y := radius_x * 0.32
-	var targeting := str(ability.get("targeting","point"))
-	if targeting == "line":
-		var direction := (center-hero_center).normalized()
-		var side := direction.orthogonal()*28.0
-		var length := maxf(120.0,radius_x*1.8)
-		var polygon := PackedVector2Array([hero_center+side,hero_center-side,hero_center+direction*length-side,hero_center+direction*length+side])
-		draw_colored_polygon(polygon,Color(color,0.14))
-		draw_polyline(PackedVector2Array([hero_center+side,hero_center+direction*length+side,hero_center+direction*length-side,hero_center-side]),Color(color,0.9),2.5,true)
-	elif targeting == "cone":
-		var direction := (center-hero_center).normalized()
-		var polygon := PackedVector2Array([hero_center,hero_center+direction.rotated(-0.48)*radius_x*1.6,hero_center+direction.rotated(0.48)*radius_x*1.6])
-		draw_colored_polygon(polygon,Color(color,0.14))
-		draw_polyline(PackedVector2Array([polygon[0],polygon[1],polygon[2],polygon[0]]),Color(color,0.9),2.5,true)
-	else:
-		var points := PackedVector2Array()
-		for i in 64:
-			var angle := i * TAU / 64.0
-			points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
-		draw_colored_polygon(points, Color(color, 0.12))
-		for segment in 12:
-			var start := segment * TAU / 12.0 + clock * 0.35
-			draw_arc(center, radius_x, start, start + 0.28, 5, Color(color, 0.95), 2.4, true)
-	draw_circle(center, 6.0 + sin(clock * 6.0) * 1.5, Color(color, 0.9))
-	caption(center + Vector2(-58, -radius_y - 18), sim.hero_skill_name(selected_id), color, 15)
+	var points := PackedVector2Array()
+	for i in 64:
+		var angle := i * TAU / 64.0
+		points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
+	draw_colored_polygon(points, Color(color, 0.16 if skill_preview_ultimate else 0.11))
+	for ring in 3:
+		var ring_scale := 1.0 - float(ring) * 0.14
+		draw_set_transform(center, 0.0, Vector2(1.0, radius_y / maxf(1.0, radius_x)))
+		draw_arc(Vector2.ZERO, radius_x * ring_scale, 0.0, TAU, 64, Color(color, 0.82 - ring * 0.20), 2.8 if ring == 0 else 1.2, true)
+		draw_set_transform(Vector2.ZERO)
+	for segment in 12:
+		var angle := segment * TAU / 12.0 + clock * (0.46 if skill_preview_ultimate else 0.28)
+		var a := center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y)
+		var b := center + Vector2(cos(angle + 0.18) * radius_x, sin(angle + 0.18) * radius_y)
+		draw_line(a, b, Color(color, 0.96), 3.0, true)
+	draw_dashed_line(hero_center, center, Color(color, 0.52), 1.5, 10.0, true)
+	draw_circle(center, 7.0 + sin(clock * 6.0) * 1.5, Color(color, 0.92))
+	draw_line(center - Vector2(15, 0), center + Vector2(15, 0), Color.WHITE, 1.4, true)
+	draw_line(center - Vector2(0, 10), center + Vector2(0, 10), Color.WHITE, 1.4, true)
+	var title: String = sim.hero_ultimate_name(selected_id) if skill_preview_ultimate else sim.hero_skill_name(selected_id)
+	var key_hint := "E · 终结技落点" if skill_preview_ultimate else "Q · 战技落点"
+	caption(center + Vector2(-72, -radius_y - 38), key_hint, Color.WHITE, 12)
+	caption(center + Vector2(-72, -radius_y - 20), title, color, 15)
 
 func _draw_skill_zone(zone: Dictionary) -> void:
 	var center := world_to_screen(zone.pos)
@@ -602,15 +640,42 @@ func _draw_range_indicator(hero: Dictionary) -> void:
 		draw_line(edge - tangent * 5.0, edge + tangent * 5.0, Color(color, 0.85), 2.0, true)
 	draw_arc(center, 12.0, 0, TAU, 32, Color(color, 0.28), 1.2, true)
 
+func _build_stage_tile_cache(stage_id: String = "stage_01") -> void:
+	stage_tile_cache.clear()
+	stage_decal_cache.clear()
+	stage_tile_cache_id = stage_id
+	var palette: Dictionary = STAGE_VISUAL.palette(stage_id)
+	var tile_a: Color = palette.get("tile_a", Color("#3d3440"))
+	var tile_b: Color = palette.get("tile_b", Color("#342d37"))
+	for row in 11:
+		for col in 20:
+			var rect := Rect2(40 + col * 60, 140 + row * 40, 60, 40)
+			var tile_color := tile_a if (row + col) % 2 == 0 else tile_b
+			stage_tile_cache.append({"polygon": Stage.polygon(rect.grow(-1)), "color": tile_color})
+	for i in 18:
+		var world := Vector2(88 + (i * 173) % 1080, 174 + (i * 97) % 338)
+		var point := world_to_screen(world)
+		var turn := Vector2(12 + (i % 3) * 3, -4 + (i % 4) * 2)
+		stage_decal_cache.append(PackedVector2Array([point, point + turn, point + turn + Vector2(10 + (i % 2) * 5, 6), point + turn + Vector2(25, 3)]))
+
 func _draw_stage() -> void:
 	if sim.endless_mode:
 		_draw_endless_stage()
 		return
+	if stage_tile_cache_id != sim.current_stage_id:
+		_build_stage_tile_cache(sim.current_stage_id)
+	var palette: Dictionary = STAGE_VISUAL.palette(sim.current_stage_id)
+	var floor_color: Color = palette.get("floor", Color("#302832"))
+	var accent_color: Color = palette.get("accent", Color("#c45a68"))
 	var backgrounds := {"stage_01": hell_stage_one, "stage_02": hell_stage_two, "stage_03": hell_stage_three}
 	var hell_background: Texture2D = backgrounds.get(sim.current_stage_id, hell_stage_one)
-	draw_texture_rect(hell_background, Rect2(0, 0, 1280, 720), false, Color.WHITE)
-	draw_rect(Rect2(0, 0, 1280, 720), Color(0.05, 0.02, 0.06, 0.42))
-	draw_rect(Rect2(0, 94, 1280, 512), Color(0.13, 0.08, 0.16, 0.72))
+	draw_texture_rect(hell_background, Rect2(0, 0, 1280, 720), false, STAGE_VISUAL.backdrop_tint)
+	draw_rect(Rect2(0, 0, 1280, 720), STAGE_VISUAL.stage_veil)
+	draw_rect(Rect2(0, 82, 1032, 622), STAGE_VISUAL.arena_overlay)
+	# Far haze and moving embers keep the panorama separate from the tactical floor.
+	for band in 3:
+		var drift := fmod(clock * (7.0 + band * 3.0), 1180.0)
+		draw_colored_polygon(PackedVector2Array([Vector2(-180 + drift, 176 + band * 30), Vector2(280 + drift, 158 + band * 28), Vector2(610 + drift, 204 + band * 25), Vector2(90 + drift, 220 + band * 25)]), Color(accent_color, 0.035 + band * 0.012))
 	# Distant skyline, behind the wall.
 	for i in 14:
 		var x: float = i * 100 - 40
@@ -618,18 +683,20 @@ func _draw_stage() -> void:
 		draw_rect(Rect2(x, top, 66, 100), Color("#302532"))
 		draw_colored_polygon(PackedVector2Array([Vector2(x - 7, top), Vector2(x + 33, top - 26), Vector2(x + 73, top)]), Color("#302532"))
 	var floor: PackedVector2Array = Stage.polygon(WORLD)
-	draw_colored_polygon(floor, Color(0.19, 0.15, 0.20, 0.90))
-	# Alternating stone tiles with perspective-correct seams.
-	for row in 11:
-		for col in 20:
-			var rect := Rect2(40 + col * 60, 140 + row * 40, 60, 40)
-			var tile_color := Color("#39313b") if (row + col) % 2 == 0 else Color("#342d37")
-			draw_colored_polygon(Stage.polygon(rect.grow(-1)), tile_color)
+	floor_color.a = 0.94
+	draw_colored_polygon(floor, floor_color)
+	# Cached perspective tiles keep the 2.5D floor detailed without rebuilding geometry each frame.
+	for tile: Dictionary in stage_tile_cache:
+		draw_colored_polygon(tile.polygon, tile.color)
+	_draw_floor_decals(accent_color)
 	_draw_terrain_features()
 	draw_colored_polygon(Stage.polygon(Sim.MOVE_AREA), Color(0.67, 0.28, 0.32, 0.10))
 	var border: PackedVector2Array = Stage.polygon(Sim.MOVE_AREA)
 	border.append(border[0])
-	draw_polyline(border, Color("#9a5961"), 1.4, true)
+	draw_polyline(border, STAGE_VISUAL.border_color, 1.4, true)
+	# Inner bevel and outer rail make the tactical surface read as a dedicated layer.
+	draw_rect(ENDLESS_PLAYFIELD_SCREEN, Color(0.02, 0.01, 0.025, 0.28), false, 8.0)
+	draw_line(Vector2(22, 602), Vector2(1022, 602), Color(0.78, 0.28, 0.36, 0.34), 3.0, true)
 	var routes: Dictionary = sim.stage_routes()
 	for route_id: String in routes:
 		var route: Array = routes[route_id]
@@ -644,13 +711,40 @@ func _draw_stage() -> void:
 		draw_rect(Rect2(ground - Vector2(17, 48), Vector2(62, 48)), Color("#3e303c"))
 		draw_rect(Rect2(ground - Vector2(17, 48), Vector2(62, 5)), Color("#69505a"))
 		draw_colored_polygon(PackedVector2Array([ground + Vector2(-5, 0), ground + Vector2(-5, -28), ground + Vector2(14, -40), ground + Vector2(33, -28), ground + Vector2(33, 0)]), Color("#211923"))
+	# Foreground parapet is drawn last so units visually stand inside the arena.
+	draw_colored_polygon(PackedVector2Array([Vector2(12, 694), Vector2(1028, 694), Vector2(1028, 716), Vector2(12, 716)]), STAGE_VISUAL.foreground_color)
+	draw_line(Vector2(14, 694), Vector2(1028, 694), Color(accent_color, 0.54), 2.0, true)
+	for i in 13:
+		var rubble_x := 36.0 + i * 78.0
+		var rubble_h := 7.0 + float((i * 17) % 12)
+		draw_colored_polygon(PackedVector2Array([Vector2(rubble_x, 704), Vector2(rubble_x + 18, 704 - rubble_h), Vector2(rubble_x + 42, 704), Vector2(rubble_x + 25, 716)]), floor_color.darkened(0.28))
+		draw_line(Vector2(rubble_x + 3, 704), Vector2(rubble_x + 18, 704 - rubble_h), Color(accent_color, 0.28), 1.0, true)
 	for point in [Vector2(220, 145), Vector2(670, 145), Vector2(1120, 145)]:
 		var screen: Vector2 = world_to_screen(point)
 		draw_line(screen, screen + Vector2(0, -45), Color("#89737a"), 4)
 		draw_circle(screen + Vector2(0, -46), 5, Color("#e8967c"))
 		if not reduced_effects:
-			draw_circle(screen + Vector2(0, -46), 12 + sin(clock * 2) * 1.5, Color(0.9, 0.4, 0.3, 0.1))
+			draw_circle(screen + Vector2(0, -46), 12 + sin(clock * 2) * 1.5, Color(STAGE_VISUAL.ember_color, 0.1))
+	_draw_foreground_embers(accent_color)
 	caption(world_to_screen(Vector2(205, 525)), "全域机动区", Color("#c79398"), 12)
+
+func _draw_floor_decals(accent: Color) -> void:
+	for crack: PackedVector2Array in stage_decal_cache:
+		draw_polyline(crack, Color(accent, 0.10), 1.1, true)
+	for world in [Vector2(175, 245), Vector2(585, 445), Vector2(1005, 265)]:
+		var center := world_to_screen(world)
+		draw_arc(center, 22.0, 0.18, PI * 1.45, 14, Color(accent, 0.09), 1.2, true)
+		draw_line(center + Vector2(-13, 8), center + Vector2(18, -5), Color(accent, 0.07), 1.0, true)
+
+func _draw_foreground_embers(accent: Color) -> void:
+	if reduced_effects:
+		return
+	for i in 9:
+		var travel := fmod(clock * (18.0 + i * 1.7) + i * 53.0, 118.0)
+		var x := 58.0 + float((i * 137) % 930)
+		var point := Vector2(x + sin(clock * 1.7 + i) * 7.0, 708.0 - travel)
+		var ember := STAGE_VISUAL.ember_color.lerp(accent, 0.35)
+		draw_circle(point, 1.4 + float(i % 3) * 0.45, Color(ember, 0.12 * (1.0 - travel / 118.0)))
 
 func _draw_terrain_features() -> void:
 	for feature: Dictionary in sim.terrain_features:
@@ -762,14 +856,17 @@ func _draw_route_bed(route: Array, route_id: String = "main") -> void:
 	for i in range(route.size() - 1):
 		var a := world_to_screen(route[i])
 		var b := world_to_screen(route[i + 1])
-		draw_line(a, b, Color(0.17, 0.11, 0.16, 0.24), 12.0, true)
-		draw_line(a, b, Color(color, float(material.bed_alpha)), 6.0, true)
+		draw_line(a + Vector2(0, 2), b + Vector2(0, 2), Color(0.02, 0.01, 0.025, 0.20), 12.0, true)
+		draw_line(a, b, Color(color, float(material.bed_alpha) * 0.34), 5.0, true)
+		draw_line(a, b, Color(color.lightened(0.26), 0.10), 1.2, true)
 		var length := a.distance_to(b)
-		var steps := maxi(1, floori(length / 68.0))
+		var steps := maxi(1, floori(length / 82.0))
 		for step in steps:
 			var point := a.lerp(b, (float(step) + 0.5) / float(steps))
 			var direction := (b - a).normalized()
-			draw_line(point - direction.rotated(PI * 0.5) * 3.0, point + direction.rotated(PI * 0.5) * 3.0, Color(color, 0.10), 1.0, true)
+			var side := direction.rotated(PI * 0.5)
+			draw_line(point - side * 8.0, point + side * 8.0, Color(color, 0.10), 1.0, true)
+			draw_circle(point, 2.2, Color(color, 0.16))
 
 func _draw_route_preview(route: Array, preview: Dictionary, route_id: String = "main") -> void:
 	var material: Dictionary = surface_renderer.route_material(route_id, bool(preview.get("flying", false)), bool(preview.get("boss", false)))
@@ -779,8 +876,8 @@ func _draw_route_preview(route: Array, preview: Dictionary, route_id: String = "
 	for i in range(route.size() - 1):
 		var a := world_to_screen(route[i])
 		var b := world_to_screen(route[i + 1])
-		draw_line(a, b, Color(color, 0.05 + pulse * 0.06), width + 10.0, true)
-		draw_dashed_line(a, b, Color(color, pulse * 0.70), width, 18.0, true)
+		draw_line(a, b, Color(color, 0.035 + pulse * 0.045), width + 7.0, true)
+		draw_dashed_line(a, b, Color(color, pulse * 0.76), width, 22.0, true)
 	for sample: Dictionary in surface_renderer.route_samples(route, clock, 8 if bool(preview.get("boss", false)) else 6, 0.18):
 		var point := world_to_screen(sample.point)
 		var ahead := world_to_screen(sample.point + sample.tangent * 12.0)
@@ -1099,7 +1196,7 @@ func _update_projectile_trails() -> void:
 		var current := Vector2(projectile.pos)
 		if history.is_empty() or Vector2(history[-1]).distance_to(current) > 1.0:
 			history.append(current)
-		while history.size() > 11:
+		while history.size() > (7 if reduced_effects else 11):
 			history.pop_front()
 		projectile_trails[key] = history
 	for key in projectile_trails.keys():
@@ -1125,9 +1222,15 @@ func _draw_projectile(projectile: Dictionary) -> void:
 		var a := world_to_screen(Vector2(history[i])) + Vector2(0, -18)
 		var b := world_to_screen(Vector2(history[i + 1])) + Vector2(0, -18)
 		var age := float(i + 1) / maxf(1.0, float(history.size()))
-		draw_line(a, b, Color(color, age * 0.13), 13.0 * age, true)
-		draw_line(a, b, Color(color.lightened(0.32), age * 0.68), 2.2 + age * 2.2, true)
+		draw_line(a, b, Color(color, age * 0.11), 17.0 * age, true)
+		draw_line(a, b, Color(color, age * 0.30), 7.0 * age, true)
+		draw_line(a, b, Color(color.lightened(0.42), age * 0.86), 1.8 + age * 2.2, true)
+	if not reduced_effects:
+		var flare_size := 28.0 if not bool(projectile.get("critical", false)) else 40.0
+		draw_texture_rect(VFX_FLARE, Rect2(point - Vector2.ONE * flare_size * 0.5, Vector2.ONE * flare_size), false, Color(color.lightened(0.35), 0.78))
 	draw_set_transform(point, direction.angle(), Vector2.ONE)
+	if not reduced_effects:
+		draw_texture_rect(VFX_TRACE, Rect2(-38, -7, 46, 14), false, Color(color, 0.52))
 	var critical_scale := 1.35 if bool(projectile.get("critical", false)) else 1.0
 	draw_circle(Vector2.ZERO, 12.0 * critical_scale, Color(color, 0.10))
 	draw_circle(Vector2.ZERO, 6.2 * critical_scale, Color(color, 0.42))
@@ -1272,8 +1375,12 @@ func _draw_effect(effect: Dictionary) -> void:
 	elif effect.kind == "hit":
 		var impact_size := 19 if int(effect.value) >= 200 else 16
 		var impact_color := element_color(str(effect.get("element", "")))
-		caption(effect.pos + Vector2(-8, -31 - t * 34), str(effect.value), Color(impact_color.lightened(0.38), fade), impact_size)
+		var number_lane := float((int(effect.value) + int(effect.pos.x)) % 4) * 8.0
+		caption(effect.pos + Vector2(-20 + number_lane, -31 - t * 34 - number_lane * 0.45), str(effect.value), Color(impact_color.lightened(0.38), fade), impact_size)
 		if not reduced_effects:
+			var impact_extent := 58.0 + t * 34.0
+			draw_texture_rect(VFX_FLARE, Rect2(effect.pos - Vector2.ONE * impact_extent * 0.5, Vector2.ONE * impact_extent), false, Color(impact_color.lightened(0.40), fade * (1.0 - t) * 0.88))
+			draw_texture_rect(VFX_SPARK, Rect2(effect.pos - Vector2.ONE * impact_extent * 0.62, Vector2.ONE * impact_extent * 1.24), false, Color(impact_color.lightened(0.24), fade * 0.74))
 			draw_circle(effect.pos, 12.0 * (1.0 - t), Color.WHITE, false, 3.0, true)
 			draw_arc(effect.pos, 10.0 + t * 42.0, -2.65, 0.75, 28, Color(impact_color, fade * 0.82), 4.2 * (1.0 - t) + 1.2, true)
 			for i in 10:
@@ -1390,6 +1497,11 @@ func _draw_melee_slash(effect: Dictionary, t: float, fade: float) -> void:
 
 func _draw_element_skill(center: Vector2, element: String, t: float, fade: float) -> void:
 	var color := element_color(element) if element != "none" else Color("#ffe4a3")
+	if not reduced_effects:
+		var magic_size := 176.0 + t * 116.0
+		draw_texture_rect(VFX_MAGIC, Rect2(center - Vector2.ONE * magic_size * 0.5, Vector2.ONE * magic_size), false, Color(color, fade * (1.0 - t * 0.45) * 0.42))
+		var core_size := 74.0 + sin(t * PI) * 42.0
+		draw_texture_rect(VFX_FLARE, Rect2(center - Vector2.ONE * core_size * 0.5, Vector2.ONE * core_size), false, Color(color.lightened(0.38), fade * 0.72))
 	draw_circle(center, 48.0 + sin(t * PI) * 26.0, Color(color, fade * 0.12))
 	match element:
 		"pyro":

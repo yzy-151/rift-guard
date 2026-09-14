@@ -1,99 +1,86 @@
-# Rift Guard / 裂隙守望
+# 裂隙守望 · Rift Guard
 
-《裂隙守望》是一款 2.5D 多角色塔防 + Roguelike 构筑 + 分支剧情游戏。玩家从角色卡把最多三名角色拖入战场，在多路线、动态入口和地形机制中守住基地；每名角色拥有独立被动、主动技能、终结技和能量条。
+《裂隙守望》是一款多角色路线防守、Roguelike 构筑与分支剧情结合的 2.5D 游戏原型。
 
-![战斗、技能与预警](docs/v20-validation/01-deployment-skills-telegraph.png)
+## 当前玩法
 
-## V33 核心玩法
+- 普通模式包含八个关卡，敌人沿多条路线进攻，关卡结束后触发剧情、角色解锁与下一关入口。
+- 无尽模式使用四屏地图，敌人从边缘持续追击，角色随旅行者移动并自动攻击。
+- 每次升级三选一强化，卡牌可无限叠加并形成弹道、召唤、反应、护盾与支援联动。
+- 十二名角色拥有独立主动技能、终结技、能量与冷却，Q/E 支持圆形范围和落点预览。
+- 敌人包含近战、远程、飞行、护盾、增益与史莱姆家族，并配置六名三阶段 Boss。
+- 火、水、雷、冰、风、岩元素参与反应，旅行者可在局内选择元素并通过高阶卡牌获得双元素。
 
-- **远征检查点**：主菜单可继续上次远征，保留编队、路线、裂隙币、遗物、远征幸运、增益与剧情关系；战斗从本关起点重开，待选事件原位恢复，已结算奖励不会重复领取。
-- **恢复与保存提示**：检查点交替写入两份记录，最新记录损坏时回退到上一份有效记录；保存失败会在当前界面显示提示。新远征在确认编队后更新检查点，无尽模式保留远征记录。
+## V46 UI 实验台与图文手册
 
-- **队伍共鸣**：十四套元素、角色羁绊和职业组合会直接改变攻击、生命、攻速、移速、反应、能量、护盾与幸运；三色与同元素核心互斥。
-- **战役事件闭环**：通关获得裂隙币；商店、休整、招募与隐藏节点均提供三选一，遗物、幸运、编队与远征增益可跨关卡生效。
-- **两种模式**：裂隙守望按八个关卡推进剧情、解锁角色与路线；无尽生存在大地图边缘持续刷怪并周期出现 Boss。
-- **十二名角色**：旅行者、希露菲、芙宁娜、洛琪希、知更鸟、阿米娅、丰川祥子、艾米莉亚、萨勒芬妮、风堇、凯尔希、铃。每人拥有唯一被动、主动技能、终结技、目标选择方式与战斗时间轴。
-- **部署与调度**：角色从待部署区拖入战场，可全地图移动；右键角色卡撤回，之后可重新部署。
-- **主动战斗**：`Q` 释放主动技能，`E` 在独立能量充满后释放终结技。伤害、透明特效、音效与震屏在命中帧同步触发。
-- **六种三阶段 Boss**：每个 Boss 拥有三套阶段招式、形状不同的攻击预警和阶段转换演出。
-- **战术契约**：每张地图提供击杀、反应或生存目标，完成后即时获得幸运、护盾、能量或治疗奖励。
-- **素材方向与锚点稳定**：带素材角色和怪物会按移动方向翻转，并以逐帧脚底中心锁定世界坐标。
-- **五种透明史莱姆**：风、雷、水、火史莱姆与史莱姆王已接入，使用弹跳、压缩、蓄力和受击拉伸。
+V46 把剧情、选模式、选关、选角色、普通战斗、无尽战斗、强化卡和设置八类界面全部纳入 Godot UI 实验台；每页都带实机参考图，可拖动、缩放、替换贴图并安全写回 Profile。
 
-![透明史莱姆素材预览](docs/v27-slimes-preview.png)
-- **竖向星轨剑阵**：2 / 3 / 6 柄对应 180° / 120° / 60° 间隔，9 级周期触发剑雨。
-- **31 个 Boss 阶段招式槽位（29 个独立动作）**：十八个阶段会轮换召唤、炮击、控制、回复和地形破坏，预警形状与实际判定一致。
-- **十一套地图模板**：折线、双线、汇流、十字、螺旋、三线、分叉、攻城、回环与可破坏捷径均由路线和地形数据生成。
-- **动态路线与传送门**：敌军出现前才显示沿路径流动的箭头；每条路线轮换多个出生点，传送门完整播放凝聚、展开、活跃和闭合。
-- **Boss 场地变化**：六名 Boss 的十八个阶段分别触发封路、安全区移动、风道、炮击网格、地形破坏和时间迟滞等事件。
-- **规模保护**：300 敌人、180 弹道和 120 短时特效进入分级预算，降级时继续保留伤害预警与关键命中。
-- **元素系统**：风、雷、火、水、岩、冰支持元素反应；旅行者关内锁定已选元素，神话构筑可同时持有两种元素。
-- **274 张强化卡**：五档稀有度，支持无限叠加、标签联动以及火球分裂、燃烧地面、陨石等卡牌进化。
-- **规则遗物**：八件遗物改变预警、复活、攻速、能量、反应倍率和岩造物生命等局内规则。
-- **敌方词缀**：狂暴、爆裂、吸血、闪现、镜像、护阵、增殖和技能封锁会在后期混合出现。
-- **构筑战报**：图鉴保存最近 20 局的强化等级、伤害贡献、技能次数、终结技次数、最高能量、闪避和最高叠层。
+- [图文指导书（PDF，可下载）](output/pdf/Rift-Guard-UI-Visual-Editing-Guide.pdf)
+- [图文指导书（Markdown，适合在 GitHub 阅读）](docs/UI-VISUAL-EDITING-GUIDE.md)
+- [Godot UI 素材与布局操作手册](docs/UI-GODOT-EDITING-MANUAL.md)
 
-![分支关卡地图](docs/v20-validation/02-branching-campaign-map.png)
+![模式选择](docs/ui-editing-guide/images/mode-annotated.jpg)
+
+![剧情分支](docs/ui-editing-guide/images/dialogue-annotated.jpg)
+
+![战斗界面](docs/ui-editing-guide/images/campaign_battle-annotated.jpg)
+
+## 运行
+
+- Windows 发布包：`builds/rift-guard-v46/RiftGuard-V46.exe`
+- Godot 工程：`game/project.godot`
+- 设计分辨率：1280×720
+- 输出分辨率：1920×1080
 
 ## 操作
 
-- `WASD` 或方向键：移动当前角色。
-- 鼠标左键：选择角色、移动、选卡和确认剧情回应。
-- 拖动底部角色卡：部署待命角色。
-- 右键底部角色卡：撤回已部署角色。
-- `1 / 2 / 3`：切换当前角色。
-- `Q`：释放主动技能；岩元素旅行者进入岩造物放置状态。
-- `E`：释放终结技。
-- `Space` 或 `Esc`：打开暂停战术中心。
-- `F2`：打开图鉴；`F5`：打开分支路线图。
+- WASD：移动当前角色
+- 鼠标右键：移动或取消技能瞄准
+- 1/2/3：切换角色
+- Q：主动技能
+- E：终结技
+- Space：暂停
+- F2：图鉴
+- F4：关卡选择
+- F6：剧情预览
+- F7：特效预览
+- F10：设置
 
-![最终构筑战报](docs/v20-validation/03-final-build-report.png)
+## UI 与剧情编辑
 
-## 可替换内容
+### 可以手动调整的界面
 
-角色、地图、技能、动画、特效和 UI 都通过数据或 manifest 引用，替换素材时无需重写战斗逻辑。
+UI 实验台目前覆盖八类运行界面：
 
-- 角色能力与时间轴：`game/data/v2/characters.json`
-- 队伍共鸣：`game/data/v2/team_resonances.json`
-- 动画状态配置：`game/data/v2/animation_profiles.json`
-- 透明特效配置：`game/data/v2/vfx_profiles.json`
-- Boss 三阶段招式：`game/data/v2/boss_patterns.json`
-- 地图模板：`game/data/v2/stage_templates.json`
-- 关卡与地形：`game/data/v2/stages.json`
-- 强化卡：`game/data/v2/cards.json`、`game/data/v2/mechanic_cards.json`
-- 遗物：`game/data/v2/relics.json`
-- 敌人词缀：`game/data/v2/enemy_affixes.json`
-- 敌人素材映射：`game/data/v2/enemy_visuals.json`
-- 敌人族群与行为：`game/data/v2/enemy_families.json`
-- 序列帧锚点：`game/data/v2/sprite_pivots.json`
-- 剧情与选择：`game/data/story.json`
-- 素材映射：`game/data/v2/asset_manifest.json`
-- 外置 Excel 配置：`content/game_config.xlsx`
-- 动画与透明特效交付规范：`docs/v25-asset-pipeline.md`
-- 角色素材就绪度：`docs/asset-readiness-v26.md`
-- V27 怪物与锚点素材流：`docs/v27-asset-pipeline.md`
-- V33 远征检查点与续玩：`docs/v33-release-notes.md`
-- V32 队伍共鸣与羁绊构筑：`docs/v32-release-notes.md`
-- V31 战役事件与跨关卡进度：`docs/v31-release-notes.md`
-- V30 地图、怪物与遭遇：`docs/v30-release-notes.md`
-- V29 战斗视觉与命中反馈：`docs/v29-release-notes.md`
-- V28 朝向锚点修复：`docs/v28-release-notes.md`
-- V27 发布说明：`docs/v27-release-notes.md`
-- V26 发布说明：`docs/v26-release-notes.md`
+1. `Dialogue`：剧情立绘、姓名、正文、两个分支选项框和底部操作区。
+2. `Mode`：普通模式、无尽模式、存档区和设置入口。
+3. `Mission`：关卡标题、八张关卡卡片、缩略图、状态和无尽入口。
+4. `Squad`：角色选择面板、角色卡网格、呼吸动画预览和确认按钮。
+5. `Campaign Battle`：普通战斗地图可视区、波次、右侧角色栏和 Q/E 技能格。
+6. `Endless Battle`：无尽战斗四屏地图视口、角色栏、强化栏和 Q/E 技能格。
+7. `Reward`：三选一强化卡、卡牌标签、标题、说明和构筑历史。
+8. `Settings`：音量滑杆、全屏、减弱震屏、重置和关闭按钮。
 
-## 技术基础
+### 在 Godot 中修改布局
 
-V30 增加统一地图表现节点、多出生点传送门、敌人族群数据、十八个 Boss 场地事件和分级表现预算；V29 的十二角色动画、命中同步与十五套元素反应主题继续保留。V28 的双向脚底锚点与阴影对齐继续保留，九张地图、十二名角色、六个三阶段 Boss 及其战术契约均由 JSON 配置驱动。
+1. 使用 Godot 4.4.1 打开 `game/project.godot`。
+2. 打开“项目 → 项目设置 → 插件”，确认 **Rift Guard UI Lab** 已启用。
+3. 在右侧 **UI 实验台**点击“打开实验台场景”，然后选择要调整的页面。
+4. 在 2D 视口拖动红色半透明框修改位置，拖角点修改尺寸；也可以在 Inspector 精确填写 `Position` 和 `Size`。
+5. 点击“校验并写回”，再运行对应界面确认效果；点击“刷新 / 撤销未写回”可放弃尚未保存的调整。
 
-## 运行与验收
+工程内部坐标为 1280×720，发布窗口为 1920×1080。将实机截图上的位移除以 1.5 即可换算为 Profile 坐标，例如截图向右移动 30 px，Profile 的 x 增加 20。
 
-Windows 构建位于 `builds/rift-guard-v33/RiftGuard-V33.exe`。Godot 4.4 工程入口为 `game/project.godot`。 默认输出分辨率为 1920×1080，逻辑画布为 1280×720。
+### 替换 UI 素材
 
-```powershell
-python tools/validate_v33.py
-python tools/validate_v33_visual.py
-python tools/validate_v33_ui.py
-python tools/validate_v33_release.py
-```
+UI 坐标的唯一数据源是 `game/data/ui_layout_profile.tres`，UI 贴图绑定的唯一数据源是 `game/data/ui_skin_profile.tres`，自定义透明素材放在 `game/assets/ui/custom/`。
 
-V33 验收覆盖检查点往返、损坏恢复、失败重开、奖励去重、路线门槛、保存错误提示和跨进程续玩；同时执行 V32、V31、V30、V29、V28、V26、V25、V20、V17 与八组底层回归，结果记录在 `docs/v33-validation/`。独立 UI 验收在两种分辨率下用真实鼠标走通菜单、设置、模式、关卡、编队、对话、部署、技能、终结技、卡牌与暂停入口。
+将透明 PNG 放入 `game/assets/ui/custom/` 后，可以直接在 `ui_skin_profile.tres` 的 Inspector 中把图片拖到对应 `Texture2D` 字段；也可以在实验台选中 `Skin_字段名`，替换 `Texture` 后点击“校验并写回”。框体素材应保留完整四角和透明边距，需要伸缩的面板优先使用适合九宫格的图片。
+
+Godot 右侧的“UI 实验台”可编辑 Dialogue、Mode、Mission、Squad、Campaign Battle、Endless Battle、Reward、Settings 和 Stage；完整操作见 [UI 手动编辑图文指导书](docs/UI-VISUAL-EDITING-GUIDE.md) 与 [Godot UI 素材与布局操作手册](docs/UI-GODOT-EDITING-MANUAL.md)。
+
+剧情姓名、正文、人物素材、左右/上下位置、缩放与翻转由 `content/game_config.xlsx` 管理。战场地形、地板、前景遮挡和关卡色板使用 `game/data/stage_visual_profile.tres`，攻击特效使用 `game/assets/vfx/`，技能图标使用 `game/assets/ui/icons/`。
+
+## 素材
+
+项目当前混合使用 Helltaker 风格界面资源、用户提供角色素材、Kenney 素材与第三方透明特效素材；各第三方资源的许可证文件保存在对应素材目录。

@@ -144,7 +144,7 @@ func run(game) -> void:
 	game.hud.signature = ""
 	game.hud.refresh(sim, 0)
 	expect(game.hud.pause_status_label.text.contains("PERF") and game.hud.pause_status_label.text.contains("契约"), "pause center exposes performance budget and contract progress")
-	expect(game.hud.skill_button.text.contains("主动技能"), "active skill HUD remains available after V26 interaction changes")
+	expect(game.hud.skill_name_label != null and not game.hud.skill_name_label.text.is_empty(), "active skill HUD remains available after V26 interaction changes")
 	await capture(game, "02-pause-contract-performance")
 	sim.toggle_pause()
 	sim.enemies.clear()

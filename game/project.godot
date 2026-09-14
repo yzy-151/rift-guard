@@ -11,9 +11,18 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V33：远征检查点 / 退出续玩 / 安全恢复"
+config/description="V46：八页 UI 实验台 / 图文编辑手册 / Profile 双向写回 / 1920×1080"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
+
+[autoload]
+
+BeckettRuntime="*res://addons/beckett/runtime/beckett_autoload.gd"
+
+[beckett]
+
+effort_schema=2
+dock_revealed=true
 
 [display]
 
@@ -22,6 +31,10 @@ window/size/viewport_height=720
 window/size/window_width_override=1920
 window/size/window_height_override=1080
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/beckett/plugin.cfg", "res://addons/rift_ui_lab/plugin.cfg")
 
 [rendering]
 

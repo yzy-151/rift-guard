@@ -6,6 +6,8 @@ const Preview = preload("res://scripts/character_breath_preview.gd")
 const WHITE := Color("#f3e9df")
 const MUTED := Color("#9a858e")
 const ACCENT := Color("#e7a0a4")
+const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
+const UI_SKIN = preload("res://data/ui_skin_profile.tres")
 const ELEMENT_COLORS := {
 	"none": Color("#e9d7ad"), "anemo": Color("#63e6c0"), "electro": Color("#bf83ff"),
 	"pyro": Color("#ff745c"), "hydro": Color("#5ab8ff"), "geo": Color("#e8b94d"), "cryo": Color("#9de7f2")
@@ -37,21 +39,23 @@ func build(owner_hud, game_database, state) -> void:
 	root.theme = owner_hud.get_child(0).theme
 	add_child(root)
 	var background := TextureRect.new()
-	background.texture = preload("res://assets/helltaker/backgrounds/chapterBG0008.png")
-	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	background.texture = UI_SKIN.squad_background
+	background.position = UI_LAYOUT.squad_background_rect.position
+	background.size = UI_LAYOUT.squad_background_rect.size
 	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(background)
 	owner_hud.bind(background, "squad_background")
 	var veil := ColorRect.new()
-	veil.color = Color(0.025, 0.012, 0.02, 0.90)
+	veil.color = Color(0.025, 0.012, 0.02, 0.76)
 	veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(veil)
-	var frame: Panel = owner_hud.panel(root, Rect2(48, 24, 1184, 672), Color("#171119"), Color("#9f4f60"))
+	var frame: Panel = owner_hud.panel(root, UI_LAYOUT.squad_frame_rect, Color("#171119"), Color("#9f4f60"))
 	owner_hud.bind(frame, "squad_frame")
-	owner_hud.ornament(frame, Rect2(-16, -16, 1216, 704))
+	var squad_ornament: NinePatchRect = owner_hud.ornament(frame, Rect2(-10, -10, 1204, 692))
+	squad_ornament.modulate = Color("#b64b5f")
 	owner_hud.label(frame, Vector2(30, 18), Vector2(650, 18), "P A R T Y   /   裂 隙 编 队", 11, ACCENT)
 	title = owner_hud.label(frame, Vector2(30, 40), Vector2(720, 36), "选择下一关出战角色", 27, WHITE)
 	owner_hud.bind(title, "squad_title")
@@ -64,18 +68,18 @@ func build(owner_hud, game_database, state) -> void:
 		order.append(id)
 	for i in order.size():
 		_build_character_card(frame, order[i], i)
-	confirm_button = owner_hud.button(frame, Rect2(324, 548, 536, 52), "确认编队并进入下一关   →", true)
+	confirm_button = owner_hud.button(frame, UI_LAYOUT.squad_confirm_rect, "确认编队并进入下一关   →", true)
 	owner_hud.bind(confirm_button, "squad_confirm")
 	confirm_button.add_theme_font_size_override("font_size", 17)
 	confirm_button.pressed.connect(confirm)
-	owner_hud.label(frame, Vector2(30, 622), Vector2(1124, 20), "◆ 点击角色卡加入或移出编队    ◆ 悬停可查看完整战斗数值    ◆ 解锁状态永久保留", 11, MUTED)
+	owner_hud.label(frame, UI_LAYOUT.squad_footer_rect.position, UI_LAYOUT.squad_footer_rect.size, "◆ 点击角色卡加入或移出编队    ◆ 悬停可查看完整战斗数值    ◆ 解锁状态永久保留", 11, MUTED)
 	root.hide()
 
 func _build_character_card(frame: Control, id: String, index: int) -> void:
 	var data: Dictionary = database.characters[id]
 	var col := index % 4
 	var row := index / 4
-	var card_rect := Rect2(30 + col * 285, 112 + row * 140, 270, 126)
+	var card_rect := Rect2(UI_LAYOUT.squad_grid_origin + Vector2(col * (UI_LAYOUT.squad_card_size.x + UI_LAYOUT.squad_card_gap.x), row * (UI_LAYOUT.squad_card_size.y + UI_LAYOUT.squad_card_gap.y)), UI_LAYOUT.squad_card_size)
 	var button: Button = hud.button(frame, card_rect, "", true)
 	hud.bind(button, "squad_character_%d" % (index + 1))
 	button.name = "Squad_" + id
@@ -85,8 +89,8 @@ func _build_character_card(frame: Control, id: String, index: int) -> void:
 	var element := str(data.element)
 	var color: Color = ELEMENT_COLORS.get(element, WHITE)
 	var preview = Preview.new()
-	preview.position = Vector2(10, 15)
-	preview.size = Vector2(88, 98)
+	preview.position = UI_LAYOUT.squad_preview_rect.position
+	preview.size = UI_LAYOUT.squad_preview_rect.size
 	button.add_child(preview)
 	var asset: Dictionary = database.assets.get(str(data.asset_key), {})
 	preview.configure(id, asset, color, not progress.unlocked_characters.has(id))

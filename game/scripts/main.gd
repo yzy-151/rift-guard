@@ -58,6 +58,9 @@ var pending_stage_id := ""
 var pending_stage_number := 0
 var stage_result_recorded := false
 var skill_aiming := false
+var ultimate_aiming := false
+var keyboard_moving := false
+var keyboard_move_timer := 0.0
 var dragging_hero_id: int = -1
 
 func _ready() -> void:
@@ -83,6 +86,7 @@ func _ready() -> void:
 	add_child(battle)
 	battle.stage_exit_finished.connect(advance_stage)
 	fx = preload("res://scripts/sheet_effects.gd").new()
+	fx.battle_view = battle
 	battle.add_child(fx)
 	hud = Hud.new()
 	hud.config = content
@@ -164,7 +168,12 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v33-restart-test" in OS.get_cmdline_user_args():
+	if "--v34-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v34_test")
+	elif "--v33-restart-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
 		set_physics_process(false)
@@ -312,6 +321,9 @@ func _ready() -> void:
 func _physics_process(dt: float) -> void:
 	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()):
 		return
+	if sim.endless_mode:
+		sim.set_active_view_rect(battle.visible_world_rect())
+	_update_selected_hero_keyboard(dt)
 	sim.tick(dt)
 	check_story()
 	process_events()
@@ -557,7 +569,7 @@ func select_hero(id: int) -> void:
 	if id < 0 or id >= sim.heroes.size():
 		return
 	selected_id = id
-	refresh()
+	set_skill_aiming(false)
 
 func set_formation_command(mode: String) -> void:
 	if story.active or sim.state not in ["running", "between"]:
@@ -676,7 +688,7 @@ func _input(event: InputEvent) -> void:
 			activate_selected_ultimate()
 			get_viewport().set_input_as_handled()
 			return
-		if event.keycode == KEY_ESCAPE and skill_aiming:
+		if event.keycode == KEY_ESCAPE and (skill_aiming or ultimate_aiming):
 			set_skill_aiming(false)
 			get_viewport().set_input_as_handled()
 			return
@@ -712,13 +724,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if sim.state not in ["running", "between", "stage_exit"]:
 		return
-	if event is InputEventMouseMotion and skill_aiming:
+	if event is InputEventMouseMotion and (skill_aiming or ultimate_aiming):
 		var hover_screen: Vector2 = battle.get_global_transform().affine_inverse() * event.position
 		battle.skill_point = battle.screen_to_world(hover_screen)
 		battle.queue_redraw()
 		return
 	if event is InputEventMouseButton and event.pressed:
-		if event.button_index == MOUSE_BUTTON_RIGHT and skill_aiming:
+		if event.button_index == MOUSE_BUTTON_RIGHT and (skill_aiming or ultimate_aiming):
 			set_skill_aiming(false)
 			get_viewport().set_input_as_handled()
 			return
@@ -737,6 +749,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and skill_aiming:
 			if sim.activate_hero_skill(selected_id, point):
 				set_skill_aiming(false)
+				process_events()
+				refresh()
+			return
+		if event.button_index == MOUSE_BUTTON_LEFT and ultimate_aiming:
+			if sim.activate_hero_ultimate(selected_id, point):
+				set_ultimate_aiming(false)
 				process_events()
 				refresh()
 			return
@@ -1130,28 +1148,67 @@ func toggle_skill_aiming() -> void:
 
 func set_skill_aiming(enabled: bool) -> void:
 	skill_aiming = enabled
-	battle.skill_targeting = enabled
-	if enabled and selected_id >= 0 and selected_id < sim.heroes.size():
-		battle.skill_point = sim.heroes[selected_id].pos + Vector2(220, 0)
-	hud.set_skill_aiming(enabled)
-	refresh()
+	if enabled:
+		ultimate_aiming = false
+	elif ultimate_aiming:
+		ultimate_aiming = false
+	_sync_ability_aiming(false)
 
 func activate_selected_ultimate() -> void:
+	if story.active or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or sim.state != "running":
+		return
 	if selected_id < 0 or selected_id >= sim.heroes.size():
 		return
-	var target: Vector2 = battle.skill_point
-	var closest: Dictionary = {}
-	for enemy: Dictionary in sim.enemies:
-		if enemy.hp > 0.0 and (closest.is_empty() or enemy.pos.distance_to(sim.heroes[selected_id].pos) < closest.pos.distance_to(sim.heroes[selected_id].pos)):
-			closest = enemy
-	if not closest.is_empty():
-		target = closest.pos
-	if sim.activate_hero_ultimate(selected_id, target):
-		process_events()
-		refresh()
+	var hero: Dictionary = sim.heroes[selected_id]
+	if not bool(hero.get("deployed", false)) or float(hero.get("ultimate_cooldown", 0.0)) > 0.0 or float(hero.get("energy", 0.0)) < float(hero.get("max_energy", 100.0)):
+		return
+	set_ultimate_aiming(not ultimate_aiming)
+
+func set_ultimate_aiming(enabled: bool) -> void:
+	ultimate_aiming = enabled
+	if enabled:
+		skill_aiming = false
+	_sync_ability_aiming(enabled)
+
+func _sync_ability_aiming(preview_ultimate: bool) -> void:
+	battle.skill_targeting = skill_aiming or ultimate_aiming
+	battle.skill_preview_ultimate = preview_ultimate and ultimate_aiming
+	if battle.skill_targeting and selected_id >= 0 and selected_id < sim.heroes.size():
+		var offset := Vector2(230, 0)
+		battle.skill_point = sim.heroes[selected_id].pos + offset
+	hud.set_skill_aiming(skill_aiming)
+	hud.set_ultimate_aiming(ultimate_aiming)
+	refresh()
+
+func _update_selected_hero_keyboard(dt: float) -> void:
+	keyboard_move_timer = maxf(0.0, keyboard_move_timer - dt)
+	if sim.state != "running" or selected_id < 0 or selected_id >= sim.heroes.size() or skill_aiming or ultimate_aiming:
+		keyboard_moving = false
+		return
+	var hero: Dictionary = sim.heroes[selected_id]
+	if hero.hp <= 0.0 or not bool(hero.get("deployed", false)):
+		keyboard_moving = false
+		return
+	var direction := Vector2(
+		float(Input.is_key_pressed(KEY_D)) - float(Input.is_key_pressed(KEY_A)),
+		float(Input.is_key_pressed(KEY_S)) - float(Input.is_key_pressed(KEY_W))
+	)
+	if direction.length_squared() > 0.0:
+		if keyboard_move_timer <= 0.0:
+			sim.command_move(selected_id, hero.pos + direction.normalized() * 96.0)
+			keyboard_move_timer = 0.07
+		keyboard_moving = true
+	elif keyboard_moving:
+		hero.target = hero.pos
+		hero.moving = false
+		keyboard_moving = false
+
 
 func handle_deploy_drag(hero_id: int, pressed: bool, screen_pos: Vector2) -> void:
 	if not pressed or sim.state not in ["running", "between"] or hero_id < 0 or hero_id >= sim.heroes.size():
+		return
+	if sim.endless_mode:
+		select_hero(hero_id)
 		return
 	if bool(sim.heroes[hero_id].get("deployed", false)):
 		select_hero(hero_id)
@@ -1217,6 +1274,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v34_test() -> void:
+	var suite = preload("res://scripts/qa_v34.gd").new()
 	await suite.run(self)
 
 func run_v33_restart_test() -> void:

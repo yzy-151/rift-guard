@@ -8,3 +8,17 @@ research/helltaker-reference/
 game/assets/vfx/third_party/cethiel_weapon_slash/source.zip
 game/assets/vfx/third_party/reactorcore_muzzle/source.zip
 *.tmp
+game/.mcp.json
+game/.cursor/
+game/.vscode/
+
+game/editor/ui_lab/.master_editing.lock
+game/data/*.ui_lab_tmp.tres
+.agents/
+AGENTS.md
+.tools/
+tools/node_modules/
+tools/artifact_runtime/
+tools/__pycache__/
+review/
+content/*.inspect.ndjson

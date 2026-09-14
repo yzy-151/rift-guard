@@ -1,6 +1,9 @@
 extends Control
 signal chosen(index: int)
+const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
+const UI_SKIN = preload("res://data/ui_skin_profile.tres")
 var buttons: Array[Button] = []
+var card_frames: Array[TextureRect] = []
 var tags: Array[Label] = []
 var titles: Array[Label] = []
 var previews: Array[Label] = []
@@ -13,8 +16,9 @@ func build(hud) -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	var hell_background := TextureRect.new()
-	hell_background.texture = preload("res://assets/helltaker/backgrounds/chapterBG0004.png")
-	hell_background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	hell_background.texture = UI_SKIN.reward_background
+	hell_background.position = UI_LAYOUT.reward_background_rect.position
+	hell_background.size = UI_LAYOUT.reward_background_rect.size
 	hell_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	hell_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	hell_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -28,23 +32,38 @@ func build(hud) -> void:
 	hud.bind(hud.label(self, Vector2(105, 111), Vector2(1000, 52), "选择这一次的突破", 34, Color("#efeee4")), "reward_title")
 	heading = hud.label(self, Vector2(108, 173), Vector2(1060, 24), "", 14, Color("#b69aa4"))
 	for i in 3:
-		var card: Button = hud.button(self, Rect2(105 + i * 360, 223, 350, 326), "", false)
+		var card_rect := Rect2(UI_LAYOUT.reward_grid_origin + Vector2(i * (UI_LAYOUT.reward_card_size.x + UI_LAYOUT.reward_card_gap.x), 0), UI_LAYOUT.reward_card_size)
+		var card: Button = hud.button(self, card_rect, "", false)
 		hud.bind(card, "reward_card_%d" % (i + 1))
+		var empty_style := StyleBoxEmpty.new()
+		for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+			card.add_theme_stylebox_override(state, empty_style)
+		var frame := TextureRect.new()
+		frame.texture = UI_SKIN.reward_card_red if i == 0 else UI_SKIN.reward_card_gray
+		frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		frame.stretch_mode = TextureRect.STRETCH_SCALE
+		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		card.add_child(frame)
+		card.move_child(frame, 0)
+		card_frames.append(frame)
+		card.focus_entered.connect(_focus_card.bind(i))
+		card.mouse_entered.connect(func(): card.grab_focus())
 		card.pressed.connect(func(): chosen.emit(i))
 		buttons.append(card)
-		tags.append(hud.label(card, Vector2(24, 19), Vector2(302, 23), "", 13, Color("#e3a2a5")))
-		titles.append(hud.label(card, Vector2(24, 58), Vector2(302, 42), "", 25, Color("#f3efe3")))
-		hud.panel(card, Rect2(24, 116, 302, 46), Color("#3d2631"), Color("#744656"))
-		var preview = hud.label(card, Vector2(34, 125), Vector2(282, 31), "", 15, Color("#f0d5c4"))
+		tags.append(hud.label(card, UI_LAYOUT.reward_tag_rect.position, UI_LAYOUT.reward_tag_rect.size, "", 13, Color("#e3a2a5")))
+		titles.append(hud.label(card, UI_LAYOUT.reward_title_rect.position, UI_LAYOUT.reward_title_rect.size, "", 25, Color("#f3efe3")))
+		hud.panel(card, UI_LAYOUT.reward_preview_rect, Color("#3d2631"), Color("#744656"))
+		var preview = hud.label(card, UI_LAYOUT.reward_preview_rect.position + Vector2(10, 9), UI_LAYOUT.reward_preview_rect.size - Vector2(20, 15), "", 15, Color("#f0d5c4"))
 		preview.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		previews.append(preview)
-		var description = hud.label(card, Vector2(24, 184), Vector2(302, 87), "", 15, Color("#c3adb4"))
+		var description = hud.label(card, UI_LAYOUT.reward_description_rect.position, UI_LAYOUT.reward_description_rect.size, "", 15, Color("#c3adb4"))
 		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		descriptions.append(description)
-		hud.label(card, Vector2(24, 280), Vector2(302, 26), "选择并继续    →    [%d]" % (i + 1), 14, Color("#e3a2a5"))
-	history_label = hud.label(self, Vector2(108, 581), Vector2(1060, 66), "", 14, Color("#bca7b0"))
+		hud.label(card, UI_LAYOUT.reward_action_rect.position, UI_LAYOUT.reward_action_rect.size, "选择并继续    →    [%d]" % (i + 1), 14, Color("#e3a2a5"))
+	history_label = hud.label(self, UI_LAYOUT.reward_history_rect.position, UI_LAYOUT.reward_history_rect.size, "", 14, Color("#bca7b0"))
 	history_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	hud.label(self, Vector2(108, 670), Vector2(1060, 25), "点击卡片 / 数字 1、2、3 选择     ·     Tab 切换焦点，Enter 确认     ·     强化持续到本局结束", 12, Color("#ae969f"))
+	hud.label(self, UI_LAYOUT.reward_footer_rect.position, UI_LAYOUT.reward_footer_rect.size, "点击卡片 / 数字 1、2、3 选择     ·     Tab 切换焦点，Enter 确认     ·     强化持续到本局结束", 12, Color("#ae969f"))
 	hide()
 
 func display(sim) -> void:
@@ -98,3 +117,9 @@ func display(sim) -> void:
 		buttons[i].focus_neighbor_bottom = buttons[i].get_path()
 	if opened:
 		buttons[0].grab_focus()
+		_focus_card(0)
+
+func _focus_card(index: int) -> void:
+	for i in card_frames.size():
+		card_frames[i].texture = UI_SKIN.reward_card_red if i == index else (UI_SKIN.reward_card_cyan if i == 2 else UI_SKIN.reward_card_gray)
+		buttons[i].modulate = Color.WHITE if i == index else Color(0.80, 0.76, 0.80, 0.92)

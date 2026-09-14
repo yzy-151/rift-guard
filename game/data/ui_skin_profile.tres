@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="RiftUISkinProfile" load_steps=28 format=3]
+
+[ext_resource type="Script" path="res://scripts/rift_ui_skin_profile.gd" id="1_skin"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/choice_gray.png" id="2_choice_gray"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/choice_red.png" id="3_choice_red"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/mode_card_gray.png" id="4_mode_gray"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/mode_card_red.png" id="5_mode_red"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/mission_card_gray.png" id="6_mission_gray"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/mission_card_red.png" id="7_mission_red"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/mission_card_locked.png" id="8_mission_locked"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/mission_endless.png" id="9_mission_endless"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/hud_hero_gray.png" id="10_hero_gray"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/hud_hero_red.png" id="11_hero_red"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/hud_skill_gray.png" id="12_skill_gray"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/hud_skill_red.png" id="13_skill_red"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/hud_ultimate_gray.png" id="14_ultimate_gray"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/hud_ultimate_red.png" id="15_ultimate_red"]
+[ext_resource type="Texture2D" path="res://assets/helltaker/ui/button.png" id="16_button"]
+[ext_resource type="Texture2D" path="res://assets/helltaker/ui/button hover.png" id="17_button_hover"]
+[ext_resource type="Texture2D" path="res://assets/helltaker/ui/button active.png" id="18_button_active"]
+[ext_resource type="Texture2D" path="res://assets/helltaker/ui/button on.png" id="19_panel"]
+[ext_resource type="Texture2D" path="res://assets/helltaker/backgrounds/dialogueBG_hell.png" id="20_dialogue_bg"]
+[ext_resource type="Texture2D" path="res://assets/helltaker/backgrounds/chapterBG0001.png" id="21_chapter_bg"]
+[ext_resource type="Texture2D" path="res://assets/helltaker/ui/button0003.png" id="22_dialogue_box"]
+
+[ext_resource type="Texture2D" path="res://assets/helltaker/backgrounds/chapterBG0008.png" id="23_squad_bg"]
+[ext_resource type="Texture2D" path="res://assets/helltaker/backgrounds/chapterBG0004.png" id="24_reward_bg"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/buff_card_gray.png" id="25_reward_gray"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/buff_card_red.png" id="26_reward_red"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/buff_card_cyan.png" id="27_reward_cyan"]
+[resource]
+script = ExtResource("1_skin")
+schema_version = 3
+common_button_normal = ExtResource("16_button")
+common_button_hover = ExtResource("17_button_hover")
+common_button_pressed = ExtResource("18_button_active")
+common_panel = ExtResource("19_panel")
+dialogue_background = ExtResource("20_dialogue_bg")
+dialogue_box = ExtResource("22_dialogue_box")
+choice_frame_gray = ExtResource("2_choice_gray")
+choice_frame_red = ExtResource("3_choice_red")
+mode_background = ExtResource("21_chapter_bg")
+mode_card_gray = ExtResource("4_mode_gray")
+mode_card_red = ExtResource("5_mode_red")
+mission_background = ExtResource("21_chapter_bg")
+mission_card_gray = ExtResource("6_mission_gray")
+mission_card_red = ExtResource("7_mission_red")
+mission_card_locked = ExtResource("8_mission_locked")
+mission_endless = ExtResource("9_mission_endless")
+squad_background = ExtResource("23_squad_bg")
+reward_background = ExtResource("24_reward_bg")
+reward_card_gray = ExtResource("25_reward_gray")
+reward_card_red = ExtResource("26_reward_red")
+reward_card_cyan = ExtResource("27_reward_cyan")
+settings_background = ExtResource("21_chapter_bg")
+battle_menu_background = ExtResource("21_chapter_bg")
+hero_frame_gray = ExtResource("10_hero_gray")
+hero_frame_red = ExtResource("11_hero_red")
+skill_frame_gray = ExtResource("12_skill_gray")
+skill_frame_red = ExtResource("13_skill_red")
+ultimate_frame_gray = ExtResource("14_ultimate_gray")
+ultimate_frame_red = ExtResource("15_ultimate_red")

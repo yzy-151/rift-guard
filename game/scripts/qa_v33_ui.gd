@@ -117,14 +117,17 @@ func run(game) -> void:
 	game.open_mode_menu()
 	await game.get_tree().process_frame
 	expect(game.mode_select_panel.is_open(), "main menu opens")
+	await capture(game, "00-mode-select")
 	await pointer.click_control(game, game.mode_select_panel.settings_button)
 	expect(game.settings_panel.is_open() and game.settings_panel.sliders.size() == 3, "settings opens from the main menu")
+	await capture(game, "00b-settings")
 	game.settings_panel.close()
 	await game.get_tree().create_timer(0.2).timeout
 	expect(game.mode_select_panel.is_open(), "settings closes back to the main menu")
 
 	await pointer.click_control(game, game.mode_select_panel.buttons["rift_watch"])
 	expect(game.stage_select_panel.is_open(), "campaign mode opens stage selection")
+	await capture(game, "01-stage-select")
 	await pointer.click_control(game, game.stage_select_panel.buttons["stage_01"])
 	expect(game.squad_panel.is_open() and game.pending_stage_id == "stage_01", "stage card opens formation")
 	expect(game.squad_panel.previews.size() == game.sim.database.characters.size() and game.squad_panel.preview_has_anchor and game.squad_panel.preview_has_validity, "formation cards show replaceable animated character previews")
@@ -158,7 +161,41 @@ func run(game) -> void:
 	game.sim.heroes[0].energy = game.sim.heroes[0].max_energy
 	game.refresh()
 	await reliable_click(game, game.hud.ultimate_button)
-	expect(int(game.sim.heroes[0].ultimate_uses) == 1 and is_zero_approx(float(game.sim.heroes[0].energy)), "ultimate button spends only the selected character energy")
+	expect(game.ultimate_aiming and int(game.sim.heroes[0].ultimate_uses) == 0, "ultimate button enters range and placement preview")
+	var ultimate_target: Vector2 = game.battle.screen_to_world(game.battle.get_global_transform().affine_inverse() * Vector2(700, 350))
+	if game.sim.activate_hero_ultimate(game.selected_id, ultimate_target):
+		game.set_ultimate_aiming(false)
+	expect(int(game.sim.heroes[0].ultimate_uses) == 1 and is_zero_approx(float(game.sim.heroes[0].energy)) and float(game.sim.heroes[0].ultimate_cooldown) > 0.0, "ultimate placement spends selected character energy and starts cooldown")
+	var preview_events: Array[Dictionary] = [
+		{"kind": "skill_pyro", "pos": Vector2(690, 350), "element": "pyro", "value": 320},
+		{"kind": "critical", "pos": Vector2(620, 390), "element": "pyro", "value": 488},
+		{"kind": "chain", "pos": Vector2(760, 400), "element": "electro", "value": 190}
+	]
+	game.battle.accept_events(preview_events)
+	await game.get_tree().create_timer(0.08).timeout
+	await capture(game, "02b-battle-map-vfx")
+	game.sim._add_reinforcement("hero_03")
+	game.sim._add_reinforcement("hero_02")
+	for i in game.sim.heroes.size():
+		game.sim.heroes[i].deployed = true
+		game.sim.heroes[i].pos = Vector2(450 + i * 78, 330 + i * 42)
+	game.refresh()
+	expect(game.hud.hero_buttons[2].visible and game.hud.hero_element_labels[2].visible, "three-character HUD exposes separate identity and element hierarchy")
+	await capture(game, "02c-three-hero-hud")
+	var telegraph_boss: Dictionary = game.sim.spawn_enemy(Vector2(760, 380), "boss_01")
+	telegraph_boss.special_pending = true
+	telegraph_boss.special_warning = 1.4
+	telegraph_boss.special_warning_total = 2.0
+	telegraph_boss.special_warning_positions = [Vector2(600, 360)]
+	telegraph_boss.special_warning_radius = 180.0
+	telegraph_boss.special_warning_shape = "donut"
+	telegraph_boss.special_move_name = "裂隙震荡"
+	game.battle.queue_redraw()
+	expect(bool(telegraph_boss.special_pending) and float(telegraph_boss.special_warning_total) > 0.0, "boss telegraph exposes countdown metadata")
+	await capture(game, "02d-boss-telegraph")
+	game.sim.enemies.clear()
+	game.hud.signature = ""
+	game.refresh()
 
 	game.sim.run_state.pending_level_ups = 1
 	game.sim.reward_cooldown = 0.0
@@ -167,35 +204,35 @@ func run(game) -> void:
 	expect(game.sim.state == "reward" and game.hud.reward_panel.visible, "level-up opens the three-card reward screen")
 	var picked_name: String = str(game.sim.rewards.offered[0].name)
 	await capture(game, "03-card-choice")
-	await pointer.click_control(game, game.hud.reward_panel.buttons[0])
+	await reliable_click(game, game.hud.reward_panel.buttons[0])
 	expect(game.sim.state == "running" and game.sim.rewards.history.has(picked_name), "reward card click applies the chosen upgrade")
 
-	await pointer.click_control(game, game.hud.pause_button)
+	await reliable_click(game, game.hud.pause_button)
 	expect(game.sim.state == "paused" and game.hud.pause_details.visible, "pause button opens the tactical hub")
 	expect(game.hud.pause_status_label.text.contains("裂隙守望") and game.hud.pause_buff_labels.size() == 12 and game.hud.pause_hero_labels.size() == 3, "pause hub refreshes mode, buffs and character stats")
 	await capture(game, "04-pause-hub")
-	await pointer.click_control(game, game.hud.pause_settings_button)
+	await reliable_click(game, game.hud.pause_settings_button)
 	expect(game.settings_panel.is_open(), "pause settings button opens audio settings")
 	game.settings_panel.close()
 	await game.get_tree().create_timer(0.2).timeout
-	await pointer.click_control(game, game.hud.pause_squad_button)
+	await reliable_click(game, game.hud.pause_squad_button)
 	expect(game.squad_panel.is_open(), "pause formation button opens current squad")
 	game.squad_panel.root.hide()
 	game.refresh()
-	await pointer.click_control(game, game.hud.pause_stage_button)
+	await reliable_click(game, game.hud.pause_stage_button)
 	expect(game.stage_select_panel.is_open(), "pause stage button opens stage selection")
 	game.stage_select_panel.close()
 	game.refresh()
-	await pointer.click_control(game, game.hud.pause_menu_button)
+	await reliable_click(game, game.hud.pause_menu_button)
 	expect(game.mode_select_panel.is_open(), "pause main-menu button returns to mode selection")
 
-	await pointer.click_control(game, game.mode_select_panel.buttons["endless_survival"])
+	await reliable_click(game, game.mode_select_panel.buttons["endless_survival"])
 	expect(game.sim.endless_mode and game.sim.state == "running", "endless mode starts through its real menu button")
 	await capture(game, "05-endless-running")
-	await pointer.click_control(game, game.hud.pause_button)
-	await pointer.click_control(game, game.hud.pause_restart_button)
+	await reliable_click(game, game.hud.pause_button)
+	await reliable_click(game, game.hud.pause_restart_button)
 	expect(game.sim.endless_mode and game.sim.state == "ready", "pause restart keeps the active mode and resets the stage")
-	await pointer.click_control(game, game.hud.modal_action)
+	await reliable_click(game, game.hud.modal_action)
 	expect(game.sim.state == "running", "restart confirmation returns to playable endless battle")
 
 	print("V33 UI QA COMPLETE: %d checks, %d failures" % [checks, failures])

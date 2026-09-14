@@ -28,6 +28,24 @@ const HT_PANEL = preload("res://assets/helltaker/ui/button on.png")
 const HT_HIGHLIGHT = preload("res://assets/helltaker/audio/button_menu_highlight_01.wav")
 const HT_CONFIRM = preload("res://assets/helltaker/audio/button_menu_confirm_01.wav")
 const HT_BOSS_WARNING = preload("res://assets/helltaker/audio/dialogue_start_epilogue_01.wav")
+const TRAVELER_PORTRAIT = preload("res://assets/characters/traveler_v18/idle.png")
+const FURINA_PORTRAIT = preload("res://assets/characters/furina/furina-chibi-v1-alpha.png")
+const UNIT_ATLAS = preload("res://assets/tiny-dungeon.png")
+const HUD_HERO_GRAY = preload("res://assets/ui/rift_v2/components/hud_hero_gray.png")
+const HUD_HERO_RED = preload("res://assets/ui/rift_v2/components/hud_hero_red.png")
+const HUD_SKILL_GRAY = preload("res://assets/ui/rift_v2/components/hud_skill_gray.png")
+const HUD_SKILL_RED = preload("res://assets/ui/rift_v2/components/hud_skill_red.png")
+const HUD_ULTIMATE_GRAY = preload("res://assets/ui/rift_v2/components/hud_ultimate_gray.png")
+const HUD_ULTIMATE_RED = preload("res://assets/ui/rift_v2/components/hud_ultimate_red.png")
+const ICON_SLASH = preload("res://assets/vfx/third_party/kenney_particle/slash_01.png")
+const ICON_TRACE = preload("res://assets/vfx/third_party/kenney_particle/trace_05.png")
+const ICON_SPARK = preload("res://assets/vfx/third_party/kenney_particle/spark_05.png")
+const ICON_FIRE = preload("res://assets/vfx/third_party/kenney_particle/fire_01.png")
+const ICON_CIRCLE = preload("res://assets/vfx/third_party/kenney_particle/circle_05.png")
+const ICON_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_03.png")
+const ICON_FLARE = preload("res://assets/vfx/third_party/kenney_particle/flare_01.png")
+const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
+const UI_SKIN = preload("res://data/ui_skin_profile.tres")
 var config
 var reward_panel
 var progression_label: Label
@@ -40,7 +58,9 @@ var arena_event_name := ""
 var arena_event_until_ms := 0
 var pause_button: Button
 var hero_buttons: Array[Button] = []
+var hero_card_frames: Array[NinePatchRect] = []
 var hero_name_labels: Array[Label] = []
+var hero_element_labels: Array[Label] = []
 var hero_statuses: Array[Label] = []
 var overlay: ColorRect
 var modal_card: Panel
@@ -51,17 +71,34 @@ var signature: String = ""
 var reduced: bool = false
 var muted: bool = false
 var background_buttons: Array[Button] = []
+var right_rail_shell: Panel
 var support_panel: Panel
+var command_rail: Panel
+var action_rail: Panel
 var support_labels: Array[Label] = []
 var buff_panel: Panel
 var buff_labels: Array[Label] = []
 var buff_icons: Array[TextureRect] = []
 var skill_button: Button
 var skill_icon: TextureRect
+var skill_frame: TextureRect
+var skill_cooldown_overlay: ColorRect
+var skill_cd_label: Label
+var skill_name_label: Label
+var skill_key_label: Label
 var ultimate_button: Button
 var ultimate_icon: TextureRect
+var ultimate_frame: TextureRect
+var ultimate_cooldown_overlay: ColorRect
+var ultimate_cd_label: Label
+var ultimate_name_label: Label
+var ultimate_key_label: Label
+var ability_hint_label: Label
+var preview_hint_label: Label
 var hero_energy_bars: Array[ProgressBar] = []
+var hero_portraits: Array[TextureRect] = []
 var skill_aiming: bool = false
+var ultimate_aiming: bool = false
 var boss_panel: Panel
 var boss_name_label: Label
 var boss_hp_bar: ProgressBar
@@ -111,39 +148,50 @@ func _ready() -> void:
 	add_child(ui_highlight)
 	add_child(ui_confirm)
 	add_child(boss_warning)
-	label(root, Vector2(34, 7), Vector2(560, 22), "R I F T   G U A R D     /     边 境 防 线", 13, TEAL)
-	bind(label(root, Vector2(32, 27), Vector2(700, 43), "模式一  /  裂隙守望", 32, WHITE), "game_title")
-	bind(label(root, Vector2(207, 40), Vector2(500, 24), "城门之下 · 守至黎明", 14, MUTED), "game_subtitle")
-	progression_label = label(root, Vector2(620, 47), Vector2(625, 22), "", 12, TEAL)
-	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	var archive_btn := button(root, Rect2(900, 8, 156, 36), "图鉴  [F2]", false)
+	panel(root, UI_LAYOUT.battle_title_rect, Color(0.045, 0.025, 0.045, 0.86), Color("#a34c60"))
+	label(root, Vector2(28, 8), Vector2(300, 16), "R I F T   G U A R D     /     边 境 防 线", 13, TEAL)
+	bind(label(root, Vector2(26, 24), Vector2(300, 30), "模式一  /  裂隙守望", 24, WHITE), "game_title")
+	bind(label(root, Vector2(178, 29), Vector2(154, 18), "城门之下 · 守至黎明", 11, MUTED), "game_subtitle")
+	var compact_status := panel(root, UI_LAYOUT.battle_status_rect, Color(0.035, 0.018, 0.032, 0.94), Color("#713746"))
+	progression_label = label(root, Vector2(366, 9), Vector2(382, 17), "", 10, TEAL)
+	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	progression_label.clip_text = true
+	base_label = label(root, Vector2(366, 29), Vector2(208, 20), "", 11, WHITE)
+	base_label.clip_text = true
+	wave_label = label(root, Vector2(578, 29), Vector2(80, 20), "", 10, TEAL)
+	wave_label.clip_text = true
+	count_label = label(root, Vector2(660, 29), Vector2(104, 20), "", 9, MUTED)
+	count_label.clip_text = true
+	status_label = label(root, Vector2(24, 59), Vector2(996, 18), "", 10, Color("#d9afc9"))
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var archive_btn := button(root, UI_LAYOUT.battle_archive_rect, "图鉴  [F2]", false)
 	archive_btn.pressed.connect(func(): compendium_action.emit())
-	pause_button = button(root, Rect2(1080, 8, 168, 36), "暂停  [空格]", false)
+	pause_button = button(root, UI_LAYOUT.battle_pause_rect, "暂停  [空格]", false)
 	bind(pause_button, "pause_button")
+	pause_button.position = UI_LAYOUT.battle_pause_rect.position
+	pause_button.size = UI_LAYOUT.battle_pause_rect.size
 	pause_button.pressed.connect(func(): pause_action.emit())
-	panel(root, Rect2(32, 74, 1216, 25), Color("#261d27"), Color("#543640"))
-	base_label = label(root, Vector2(48, 75), Vector2(240, 27), "", 15, TEAL)
-	wave_label = label(root, Vector2(333, 75), Vector2(180, 27), "", 15, WHITE)
-	count_label = label(root, Vector2(535, 75), Vector2(280, 27), "", 14, MUTED)
-	status_label = label(root, Vector2(879, 75), Vector2(340, 27), "", 14, TEAL)
-	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	support_panel = panel(root, Rect2(886, 106, 362, 106), Color(0.07, 0.045, 0.075, 0.92), Color("#864858"))
-	label(support_panel, Vector2(12, 6), Vector2(335, 20), "场 外 支 援  /  SUPPORT", 11, TEAL)
+	right_rail_shell = panel(root, UI_LAYOUT.battle_right_shell_rect, Color(0.018, 0.010, 0.020, 0.96), Color("#8d3f52"))
+	var right_rail_mark := label(right_rail_shell, Vector2(10, 574), Vector2(212, 18), "R I F T   C O M M A N D", 8, Color("#794452"))
+	right_rail_mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	right_rail_mark.hide()
+	support_panel = panel(root, Rect2(1040, 208, 224, 88), Color(0.07, 0.045, 0.075, 0.92), Color("#864858"))
+	label(support_panel, Vector2(10, 5), Vector2(204, 18), "场 外 支 援  /  SUPPORT", 11, TEAL)
 	for i in 4:
-		support_labels.append(label(support_panel, Vector2(12, 28 + i * 18), Vector2(335, 18), "", 12, WHITE))
+		support_labels.append(label(support_panel, Vector2(10, 25 + i * 14), Vector2(204, 14), "", 12, WHITE))
 	support_panel.hide()
-	buff_panel = panel(root, Rect2(32, 106, 430, 124), Color(0.07, 0.045, 0.075, 0.92), Color("#65506f"))
-	label(buff_panel, Vector2(12, 6), Vector2(405, 20), "本 局 强 化  /  BUILD", 11, Color("#d6b4f0"))
+	buff_panel = panel(root, UI_LAYOUT.battle_buff_rect, Color(0.07, 0.045, 0.075, 0.92), Color("#65506f"))
+	label(buff_panel, Vector2(10, 5), Vector2(204, 18), "本 局 强 化  /  BUILD", 11, Color("#d6b4f0"))
 	for i in 5:
-		buff_icons.append(icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(12, 29 + i * 18, 14, 14), Color("#d6b4f0")))
-		buff_labels.append(label(buff_panel, Vector2(32, 28 + i * 18), Vector2(370, 18), "", 10, WHITE))
+		buff_icons.append(icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(10, 27 + i * 13, 11, 11), Color("#d6b4f0")))
+		buff_labels.append(label(buff_panel, Vector2(25, 25 + i * 13), Vector2(188, 14), "", 10, WHITE))
 	buff_panel.hide()
-	boss_panel = panel(root, Rect2(475, 106, 400, 72), Color(0.055, 0.025, 0.04, 0.96), Color("#be435c"))
-	boss_name_label = label(boss_panel, Vector2(15, 7), Vector2(370, 22), "", 15, Color("#ff9cab"))
+	boss_panel = panel(root, Rect2(16, 101, 1012, 62), Color(0.055, 0.025, 0.04, 0.96), Color("#be435c"))
+	boss_name_label = label(boss_panel, Vector2(15, 7), Vector2(982, 22), "", 15, Color("#ff9cab"))
 	boss_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	boss_hp_bar = ProgressBar.new()
-	boss_hp_bar.position = Vector2(18, 34)
-	boss_hp_bar.size = Vector2(364, 20)
+	boss_hp_bar.position = Vector2(18, 33)
+	boss_hp_bar.size = Vector2(976, 18)
 	boss_hp_bar.show_percentage = false
 	var boss_bg := StyleBoxFlat.new()
 	boss_bg.bg_color = Color("#26131c")
@@ -156,13 +204,15 @@ func _ready() -> void:
 	boss_hp_bar.add_theme_stylebox_override("background", boss_bg)
 	boss_hp_bar.add_theme_stylebox_override("fill", boss_fill)
 	boss_panel.add_child(boss_hp_bar)
-	boss_hp_label = label(boss_panel, Vector2(18, 34), Vector2(364, 20), "", 12, WHITE)
+	boss_hp_label = label(boss_panel, Vector2(18, 33), Vector2(976, 18), "", 12, WHITE)
 	boss_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	boss_panel.hide()
-	wave_timeline_panel = panel(root, Rect2(475, 106, 400, 92), Color(0.055, 0.035, 0.065, 0.94), Color("#73556f"))
-	label(wave_timeline_panel, Vector2(14, 6), Vector2(370, 18), "敌 情 时 间 轴  /  NEXT WAVES", 10, Color("#d9afc9"))
+	wave_timeline_panel = panel(root, UI_LAYOUT.battle_timeline_rect, Color(0.055, 0.035, 0.065, 0.94), Color("#73556f"))
+	label(wave_timeline_panel, Vector2(10, 2), Vector2(150, 14), "NEXT / 敌情", 8, Color("#d9afc9"))
 	for i in 3:
-		wave_timeline_labels.append(label(wave_timeline_panel, Vector2(14, 27 + i * 19), Vector2(370, 18), "", 10, WHITE))
+		var timeline_item := label(wave_timeline_panel, Vector2(164 + i * 280, 2), Vector2(272, 33), "", 8, WHITE)
+		timeline_item.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		wave_timeline_labels.append(timeline_item)
 	wave_timeline_panel.hide()
 	boss_alert = label(root, Vector2(270, 248), Vector2(740, 96), "", 40, Color("#fff1ed"))
 	boss_alert.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -171,58 +221,144 @@ func _ready() -> void:
 	boss_alert.add_theme_constant_override("shadow_offset_x", 4)
 	boss_alert.add_theme_constant_override("shadow_offset_y", 4)
 	boss_alert.hide()
-	skill_button = button(root, Rect2(900, 540, 170, 62), "主动技能 [Q]", true)
-	skill_button.add_theme_font_size_override("font_size", 14)
-	var skill_icon_back := ColorRect.new()
-	skill_icon_back.position = Vector2(12, 10)
-	skill_icon_back.size = Vector2(40, 40)
-	skill_icon_back.color = Color("#ead9dc")
-	skill_icon_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	skill_button.add_child(skill_icon_back)
-	skill_icon = icon(skill_button, "res://assets/ui/icons/temporary/nieobie/skill.svg", Rect2(16, 14, 32, 32), WHITE)
+	command_rail = panel(root, UI_LAYOUT.battle_party_rect, Color(0.045, 0.022, 0.038, 0.88), Color("#b95868"))
+	bind(command_rail, "command_rail")
+	label(command_rail, Vector2(10, 8), Vector2(204, 18), "P A R T Y  /  出 战 队 伍", 10, TEAL)
+	label(command_rail, Vector2(10, 25), Vector2(204, 15), "点击切换 · WASD / 右键移动", 8, MUTED)
+	action_rail = panel(root, UI_LAYOUT.battle_action_rect, Color(0.035, 0.018, 0.032, 0.90), Color("#73404f"))
+	label(action_rail, Vector2(10, 7), Vector2(204, 16), "C O M B A T   /   战 斗 指 令", 9, Color("#d7aab0"))
+	skill_button = button(root, UI_LAYOUT.battle_skill_rect, "", true)
+	var ability_empty := StyleBoxEmpty.new()
+	for ability_state in ["normal", "hover", "pressed", "focus", "disabled"]:
+		skill_button.add_theme_stylebox_override(ability_state, ability_empty)
+	skill_button.add_theme_font_size_override("font_size", 10)
+	skill_frame = TextureRect.new()
+	skill_frame.texture = UI_SKIN.skill_frame_red
+	skill_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	skill_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	skill_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	skill_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	skill_button.add_child(skill_frame)
+	skill_icon = icon(skill_button, "res://assets/vfx/third_party/kenney_particle/slash_01.png", Rect2(25, 22, 46, 46), WHITE)
+	skill_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	skill_cooldown_overlay = ColorRect.new()
+	skill_cooldown_overlay.position = Vector2(5, 5)
+	skill_cooldown_overlay.size = Vector2(86, 86)
+	skill_cooldown_overlay.color = Color(0.015, 0.006, 0.018, 0.72)
+	skill_cooldown_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	skill_button.add_child(skill_cooldown_overlay)
+	skill_name_label = label(skill_button, Vector2(8, 5), Vector2(80, 17), "", 9, WHITE)
+	skill_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	skill_name_label.clip_text = true
+	var skill_key_plate := ColorRect.new()
+	skill_key_plate.position = Vector2(11, 68)
+	skill_key_plate.size = Vector2(74, 20)
+	skill_key_plate.color = Color(0.025, 0.010, 0.024, 0.86)
+	skill_key_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	skill_button.add_child(skill_key_plate)
+	skill_cd_label = label(skill_button, Vector2(4, 31), Vector2(88, 34), "READY", 22, Color("#fff4ec"))
+	skill_cd_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	skill_cd_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	skill_key_label = label(skill_button, Vector2(8, 70), Vector2(80, 18), "Q · 战技", 11, Color("#ffd9de"))
+	skill_key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	skill_cd_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	skill_cd_label.add_theme_constant_override("shadow_offset_y", 2)
 	skill_button.pressed.connect(func(): skill_action.emit())
-	ultimate_button = button(root, Rect2(1078, 540, 170, 62), "终结技 [E]", true)
-	ultimate_button.add_theme_font_size_override("font_size", 12)
-	var ultimate_back := ColorRect.new()
-	ultimate_back.position = Vector2(8, 10)
-	ultimate_back.size = Vector2(34, 40)
-	ultimate_back.color = Color("#ead9dc")
-	ultimate_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ultimate_button.add_child(ultimate_back)
-	ultimate_icon = icon(ultimate_button, "res://assets/ui/icons/temporary/nieobie/skill.svg", Rect2(10, 14, 30, 32), WHITE)
+	ultimate_button = button(root, UI_LAYOUT.battle_ultimate_rect, "", true)
+	for ability_state in ["normal", "hover", "pressed", "focus", "disabled"]:
+		ultimate_button.add_theme_stylebox_override(ability_state, ability_empty)
+	ultimate_button.add_theme_font_size_override("font_size", 10)
+	ultimate_frame = TextureRect.new()
+	ultimate_frame.texture = UI_SKIN.ultimate_frame_red
+	ultimate_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	ultimate_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	ultimate_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	ultimate_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ultimate_button.add_child(ultimate_frame)
+	ultimate_icon = icon(ultimate_button, "res://assets/vfx/third_party/kenney_particle/magic_03.png", Rect2(25, 22, 46, 46), WHITE)
+	ultimate_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ultimate_cooldown_overlay = ColorRect.new()
+	ultimate_cooldown_overlay.position = Vector2(5, 5)
+	ultimate_cooldown_overlay.size = Vector2(86, 86)
+	ultimate_cooldown_overlay.color = Color(0.015, 0.006, 0.018, 0.72)
+	ultimate_cooldown_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ultimate_button.add_child(ultimate_cooldown_overlay)
+	ultimate_name_label = label(ultimate_button, Vector2(8, 5), Vector2(80, 17), "", 9, WHITE)
+	ultimate_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ultimate_name_label.clip_text = true
+	var ultimate_key_plate := ColorRect.new()
+	ultimate_key_plate.position = Vector2(11, 68)
+	ultimate_key_plate.size = Vector2(74, 20)
+	ultimate_key_plate.color = Color(0.025, 0.010, 0.024, 0.86)
+	ultimate_key_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ultimate_button.add_child(ultimate_key_plate)
+	ultimate_cd_label = label(ultimate_button, Vector2(4, 31), Vector2(88, 34), "READY", 22, Color("#ffe7a5"))
+	ultimate_cd_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ultimate_cd_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	ultimate_key_label = label(ultimate_button, Vector2(8, 70), Vector2(80, 18), "E · 终结技", 11, Color("#fff0ae"))
+	ultimate_key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ultimate_cd_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	ultimate_cd_label.add_theme_constant_override("shadow_offset_y", 2)
 	ultimate_button.pressed.connect(func(): ultimate_action.emit())
-	var formation_specs := [["squad", "全队移动  Z"], ["follow", "跟随  X"], ["hold", "坚守  C"]]
+	var formation_specs := [["squad", "全队 Z"], ["follow", "跟随 X"], ["hold", "坚守 C"]]
 	for i in formation_specs.size():
 		var mode: String = str(formation_specs[i][0])
-		var formation_btn := button(root, Rect2(900 + i * 118, 502, 112, 30), str(formation_specs[i][1]), false)
-		formation_btn.add_theme_font_size_override("font_size", 10)
+		var formation_btn := button(root, Rect2(UI_LAYOUT.battle_formation_rect.position + Vector2(i * 70, 0), Vector2(66, UI_LAYOUT.battle_formation_rect.size.y)), str(formation_specs[i][1]), false)
+		formation_btn.add_theme_font_size_override("font_size", 9)
 		formation_btn.pressed.connect(func(): formation_action.emit(mode))
 		formation_buttons[mode] = formation_btn
 
 	for i in 3:
-		var hero_btn := button(root, Rect2(32 + i * 284, 616, 272, 88), "", true)
+		var hero_btn := button(root, Rect2(UI_LAYOUT.battle_hero_card_rect.position + UI_LAYOUT.battle_hero_card_gap * i, UI_LAYOUT.battle_hero_card_rect.size), "", true)
 		bind(hero_btn, "hero_card_%d" % (i + 1))
+		hero_btn.position = UI_LAYOUT.battle_hero_card_rect.position + UI_LAYOUT.battle_hero_card_gap * i
+		hero_btn.size = UI_LAYOUT.battle_hero_card_rect.size
 		hero_btn.name = "HeroCard%d" % (i + 1)
+		var hero_empty := StyleBoxEmpty.new()
+		for hero_state in ["normal", "hover", "pressed", "focus", "disabled"]:
+			hero_btn.add_theme_stylebox_override(hero_state, hero_empty)
+		var hero_frame := NinePatchRect.new()
+		hero_frame.texture = UI_SKIN.hero_frame_red if i == 0 else UI_SKIN.hero_frame_gray
+		hero_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		hero_frame.patch_margin_left = 38
+		hero_frame.patch_margin_right = 38
+		hero_frame.patch_margin_top = 28
+		hero_frame.patch_margin_bottom = 28
+		hero_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		hero_btn.add_child(hero_frame)
+		hero_card_frames.append(hero_frame)
 		var trim := Sprite2D.new()
 		trim.texture = preload("res://assets/helltaker/ui/W_selection.png")
-		trim.position = Vector2(242, 19)
-		trim.scale = Vector2(0.10, 0.10)
+		trim.position = Vector2(190, 16)
+		trim.scale = Vector2(0.075, 0.075)
 		hero_btn.add_child(trim)
 		hero_btn.pressed.connect(func(): select_action.emit(i))
 		hero_btn.gui_input.connect(_hero_card_input.bind(i))
 		hero_buttons.append(hero_btn)
-		var portrait := panel(hero_btn, Rect2(10, 9, 48, 48), Color("#33232d"), TEAL)
+		var portrait_frame := panel(hero_btn, Rect2(7, 7, 56, 58), Color("#33232d"), TEAL)
 		var portrait_back := ColorRect.new()
-		portrait_back.position = Vector2(5, 5)
-		portrait_back.size = Vector2(38, 38)
+		portrait_back.position = Vector2(4, 4)
+		portrait_back.size = Vector2(48, 50)
 		portrait_back.color = Color("#ead9dc")
 		portrait_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		portrait.add_child(portrait_back)
-		icon(portrait, "res://assets/ui/icons/temporary/nieobie/character.svg", Rect2(9, 9, 30, 30), WHITE)
-		hero_name_labels.append(label(hero_btn, Vector2(66, 5), Vector2(192, 23), "%d  未部署" % [i + 1], 14, WHITE))
+		portrait_frame.add_child(portrait_back)
+		var portrait_image := TextureRect.new()
+		portrait_image.position = Vector2(4, 4)
+		portrait_image.size = Vector2(48, 50)
+		portrait_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		portrait_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		portrait_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		portrait_frame.add_child(portrait_image)
+		hero_portraits.append(portrait_image)
+		hero_name_labels.append(label(hero_btn, Vector2(70, 6), Vector2(94, 18), "%d  未部署" % [i + 1], 12, WHITE))
+		var element_badge := label(hero_btn, Vector2(166, 6), Vector2(34, 18), "无", 10, MUTED)
+		element_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		element_badge.add_theme_color_override("font_outline_color", Color("#160d14"))
+		element_badge.add_theme_constant_override("outline_size", 2)
+		hero_element_labels.append(element_badge)
 		var hp_bar := ProgressBar.new()
-		hp_bar.position = Vector2(66, 31)
-		hp_bar.size = Vector2(190, 12)
+		hp_bar.position = Vector2(70, 29)
+		hp_bar.size = Vector2(130, 9)
 		hp_bar.show_percentage = false
 		var hp_bg := StyleBoxFlat.new()
 		hp_bg.bg_color = Color("#251923")
@@ -233,8 +369,8 @@ func _ready() -> void:
 		hero_btn.add_child(hp_bar)
 		hero_hp_bars.append(hp_bar)
 		var energy_bar := ProgressBar.new()
-		energy_bar.position = Vector2(66, 57)
-		energy_bar.size = Vector2(190, 5)
+		energy_bar.position = Vector2(70, 56)
+		energy_bar.size = Vector2(130, 5)
 		energy_bar.show_percentage = false
 		var energy_bg := StyleBoxFlat.new()
 		energy_bg.bg_color = Color("#251923")
@@ -244,11 +380,10 @@ func _ready() -> void:
 		energy_bar.add_theme_stylebox_override("fill", energy_fill)
 		hero_btn.add_child(energy_bar)
 		hero_energy_bars.append(energy_bar)
-		hero_statuses.append(label(hero_btn, Vector2(66, 43), Vector2(192, 18), "", 11, WHITE))
-		var details: String = "阻挡 2 人 · 移动会放行" if i == 0 else ("火系普攻 · 与水触发蒸发" if i == 1 else "水系普攻 · 自动治疗队友")
-		hero_details.append(label(hero_btn, Vector2(10, 64), Vector2(250, 18), details, 10, MUTED))
-	label(root, Vector2(900, 656), Vector2(348, 23), "1/2/3 选人 · 右键移动", 13, TEAL)
-	label(root, Vector2(900, 684), Vector2(348, 21), "M5 · F6 对话预览 / F7 特效预览", 12, MUTED)
+		hero_statuses.append(label(hero_btn, Vector2(70, 40), Vector2(130, 14), "", 9, WHITE))
+		hero_details.append(label(hero_btn, Vector2(70, 62), Vector2(130, 10), "", 8, MUTED))
+	ability_hint_label = label(root, UI_LAYOUT.battle_ability_hint_rect.position, UI_LAYOUT.battle_ability_hint_rect.size, "Q 战技 · E 终结技 · 右键取消", 8, TEAL)
+	preview_hint_label = label(root, UI_LAYOUT.battle_preview_hint_rect.position, UI_LAYOUT.battle_preview_hint_rect.size, "F6 剧情 / F7 特效预览", 7, MUTED)
 	background_buttons = [archive_btn, pause_button, skill_button, ultimate_button]
 	background_buttons.append_array(formation_buttons.values())
 	background_buttons.append_array(hero_buttons)
@@ -257,7 +392,7 @@ func _ready() -> void:
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.add_child(overlay)
 	var menu_background := TextureRect.new()
-	menu_background.texture = preload("res://assets/helltaker/backgrounds/chapterBG0001.png")
+	menu_background.texture = UI_SKIN.battle_menu_background
 	menu_background.position = Vector2.ZERO
 	menu_background.size = Vector2(1280, 720)
 	menu_background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -335,18 +470,25 @@ func label(parent: Node, at: Vector2, dimensions: Vector2, text: String, size: i
 	parent.add_child(item)
 	return item
 
-func style(fill: Color, border: Color) -> StyleBoxTexture:
-	var box := StyleBoxTexture.new()
-	box.texture = HT_PANEL
-	box.modulate_color = fill.lightened(0.32)
-	box.texture_margin_left = 5.0
-	box.texture_margin_top = 5.0
-	box.texture_margin_right = 5.0
-	box.texture_margin_bottom = 5.0
-	box.content_margin_left = 8.0
-	box.content_margin_top = 6.0
-	box.content_margin_right = 8.0
-	box.content_margin_bottom = 6.0
+func style(fill: Color, border: Color) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = fill
+	box.border_color = border
+	box.border_width_left = 3
+	box.border_width_top = 1
+	box.border_width_right = 1
+	box.border_width_bottom = 1
+	box.corner_radius_top_left = 7
+	box.corner_radius_top_right = 7
+	box.corner_radius_bottom_left = 7
+	box.corner_radius_bottom_right = 7
+	box.content_margin_left = 10.0
+	box.content_margin_top = 7.0
+	box.content_margin_right = 10.0
+	box.content_margin_bottom = 7.0
+	box.shadow_color = Color(0.0, 0.0, 0.0, 0.34)
+	box.shadow_size = 5
+	box.shadow_offset = Vector2(0, 3)
 	return box
 
 func button_style(texture: Texture2D, tint: Color = Color.WHITE) -> StyleBoxTexture:
@@ -361,6 +503,35 @@ func button_style(texture: Texture2D, tint: Color = Color.WHITE) -> StyleBoxText
 	box.content_margin_right = 9.0
 	return box
 
+func ability_style(fill: Color, border: Color, ultimate: bool) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = fill
+	box.border_color = border
+	box.set_border_width_all(2 if not ultimate else 3)
+	var radius: int = 28 if not ultimate else 38
+	box.corner_radius_top_left = radius
+	box.corner_radius_top_right = radius
+	box.corner_radius_bottom_left = radius
+	box.corner_radius_bottom_right = radius
+	box.content_margin_left = 52.0
+	box.content_margin_right = 8.0
+	box.content_margin_top = 8.0
+	box.content_margin_bottom = 8.0
+	box.shadow_color = Color(0.0, 0.0, 0.0, 0.42)
+	box.shadow_size = 8 if ultimate else 5
+	box.shadow_offset = Vector2(0, 3)
+	return box
+
+func apply_ability_style(item: Button, accent: Color, ultimate: bool) -> void:
+	item.alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	item.add_theme_color_override("font_color", Color("#fff7f1"))
+	item.add_theme_color_override("font_hover_color", Color.WHITE)
+	item.add_theme_color_override("font_pressed_color", Color.WHITE)
+	item.add_theme_stylebox_override("normal", ability_style(Color(0.08, 0.035, 0.06, 0.96), accent.darkened(0.12), ultimate))
+	item.add_theme_stylebox_override("hover", ability_style(Color(0.18, 0.055, 0.09, 0.98), accent.lightened(0.18), ultimate))
+	item.add_theme_stylebox_override("pressed", ability_style(Color(0.25, 0.045, 0.075, 1.0), Color.WHITE, ultimate))
+	item.add_theme_stylebox_override("focus", ability_style(Color(0.16, 0.045, 0.08, 1.0), accent.lightened(0.30), ultimate))
+	item.add_theme_stylebox_override("disabled", ability_style(Color(0.045, 0.035, 0.045, 0.84), Color(0.28, 0.23, 0.28, 0.72), ultimate))
 func panel(parent: Node, rect: Rect2, fill: Color, border: Color) -> Panel:
 	var item := Panel.new()
 	item.position = rect.position
@@ -378,10 +549,10 @@ func button(parent: Node, rect: Rect2, text: String, accent: bool) -> Button:
 	item.add_theme_color_override("font_color", WHITE)
 	item.add_theme_color_override("font_hover_color", Color.WHITE)
 	item.add_theme_font_size_override("font_size", 12)
-	item.add_theme_stylebox_override("normal", button_style(HT_BUTTON, Color("#fff0f0") if accent else Color.WHITE))
-	item.add_theme_stylebox_override("hover", button_style(HT_BUTTON_HOVER))
-	item.add_theme_stylebox_override("pressed", button_style(HT_BUTTON_ACTIVE))
-	item.add_theme_stylebox_override("focus", button_style(HT_BUTTON_HOVER, Color("#ffdddd")))
+	item.add_theme_stylebox_override("normal", button_style(UI_SKIN.common_button_normal, Color("#fff0f0") if accent else Color.WHITE))
+	item.add_theme_stylebox_override("hover", button_style(UI_SKIN.common_button_hover))
+	item.add_theme_stylebox_override("pressed", button_style(UI_SKIN.common_button_pressed))
+	item.add_theme_stylebox_override("focus", button_style(UI_SKIN.common_button_hover, Color("#ffdddd")))
 	item.mouse_entered.connect(func():
 		if ui_highlight != null and not bool(item.get_meta("dialogue_sound", false)):
 			ui_highlight.stop()
@@ -406,7 +577,7 @@ func icon(parent: Node, path: String, rect: Rect2, color: Color = Color.WHITE) -
 	return item
 
 func refresh(sim, selected_id: int) -> void:
-	var next_signature: String = str([sim.state, sim.base_hp, sim.base_max_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming, sim.formation_mode])
+	var next_signature: String = str([sim.state, sim.base_hp, sim.base_max_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming, ultimate_aiming, sim.formation_mode])
 	for enemy: Dictionary in sim.enemies:
 		if str(enemy.get("kind", "")).begins_with("boss_"):
 			next_signature += str([ceili(float(enemy.hp)), ceili(float(enemy.get("shield", 0.0)))])
@@ -414,7 +585,7 @@ func refresh(sim, selected_id: int) -> void:
 		var stage_clock := floori(sim.elapsed) if sim.endless_mode else floori(sim.stage_runtime.remaining_seconds())
 		next_signature += str([sim.run_state.traveler_element, sim.run_state.traveler_secondary_element, sim.run_state.luck, sim.run_state.pending_level_ups, sim.run_state.active_resonances, stage_clock, sim.upcoming_waves(3)])
 	for hero in sim.heroes:
-		next_signature += str([ceili(hero.hp), hero.moving, hero.blocked, hero.get("deployed", true), roundi(float(hero.get("energy", 0.0))), roundi(float(hero.get("skill_cooldown", 0.0)) * 10.0)])
+		next_signature += str([ceili(hero.hp), hero.moving, hero.blocked, hero.get("deployed", true), roundi(float(hero.get("energy", 0.0))), roundi(float(hero.get("skill_cooldown", 0.0)) * 10.0), roundi(float(hero.get("ultimate_cooldown", 0.0)) * 10.0)])
 	if next_signature == signature:
 		return
 	signature = next_signature
@@ -429,21 +600,22 @@ func refresh(sim, selected_id: int) -> void:
 		var seconds: int = floori(sim.elapsed) if sim.endless_mode else ceili(sim.stage_runtime.remaining_seconds())
 		var queued := "  ·  待选 ×%d" % sim.run_state.pending_level_ups if sim.run_state.pending_level_ups > 0 and sim.state != "reward" else ""
 		if sim.endless_mode:
-			progression_label.text = "旅行者 Lv.%d  ·  EXP %s%s  ·  %s元素  ·  幸运 %.2f  ·  生存 %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), sim.run_state.luck, seconds / 60, seconds % 60]
+			progression_label.text = "旅行者 Lv.%d · EXP %s%s · %s元素 · %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), seconds / 60, seconds % 60]
 			wave_label.text = "威胁等级   %02d" % maxi(1, floori(sim.elapsed / 45.0) + 1)
 		else:
-			progression_label.text = "水晶 Lv.%d  ·  EXP %s%s  ·  %s元素  ·  幸运 %.2f  ·  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), sim.run_state.luck, seconds / 60, seconds % 60]
+			progression_label.text = "水晶 Lv.%d · EXP %s%s · %s元素 · %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), seconds / 60, seconds % 60]
 			wave_label.text = "波次   %02d / %02d" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size()]
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
 		wave_label.text = "节点   %02d / 05" % sim.wave
-	count_label.text = ("击退 %02d  ·  敌军 %02d  ·  已部署 %d/%d  ·  契约 %s" % [sim.kills, sim.enemies.size(), sim.heroes.filter(func(h: Dictionary)->bool: return bool(h.get("deployed", true))).size(), sim.heroes.size(), sim.contract_status()]) if sim.v2_mode else ("击退 %02d  ·  在场 %02d  ·  蒸发 %02d" % [sim.kills, sim.enemies.size(), sim.reactions])
-	status_label.text = "无尽生存 · 右键移动 · 同行者自动跟随" if sim.endless_mode else "按 1/2/3 或点击角色卡选择"
+	count_label.text = "击退%02d · 敌%02d" % [sim.kills, sim.enemies.size()]
+	status_label.text = "无尽生存 · WASD / 右键移动 · 同行者自动跟随" if sim.endless_mode else "按 1/2/3 或点击右侧角色切换"
 	if Time.get_ticks_msec() < arena_event_until_ms:
 		status_label.text = "场地变化 · " + arena_event_name
 	refresh_skill(sim, selected_id)
 	refresh_supports(sim)
 	refresh_buffs(sim)
+	_layout_right_rail(sim)
 	refresh_boss(sim)
 	refresh_wave_timeline(sim)
 	refresh_formations(sim, selected_id)
@@ -463,20 +635,25 @@ func refresh(sim, selected_id: int) -> void:
 	pause_button.text = "继续  [空格]" if sim.state == "paused" else "暂停  [空格]"
 	for i in hero_buttons.size():
 		hero_buttons[i].visible = i < sim.heroes.size()
+		hero_buttons[i].disabled = i >= sim.heroes.size()
 	for i in sim.heroes.size():
 		var hero: Dictionary = sim.heroes[i]
 		hero_hp_bars[i].max_value = maxf(1.0, float(hero.max_hp))
 		hero_hp_bars[i].value = maxf(0.0, float(hero.hp))
 		hero_energy_bars[i].max_value = maxf(1.0, float(hero.get("max_energy", 100.0)))
 		hero_energy_bars[i].value = maxf(0.0, float(hero.get("energy", 0.0)))
-		hero_name_labels[i].text = "%d  %s / %s" % [i + 1, hero.name, hero.role]
+		hero_portraits[i].texture = portrait_texture(hero)
+		hero_name_labels[i].text = "%d  %s" % [i + 1, hero.name]
+		hero_element_labels[i].text = sim.element_name(str(hero.get("element", "none")))
 		var hero_color: Color = element_color(str(hero.get("element", ""))) if hero.get("character_id", "") == "traveler" and hero.get("element", "") != "" else Color(hero.color)
 		hero_name_labels[i].add_theme_color_override("font_color", hero_color)
-		hero_buttons[i].modulate = Color.WHITE if i == selected_id else Color("#91a0a8")
-		var status: String = "倒地" if hero.hp <= 0 else ("待部署 · 拖到战场" if not bool(hero.get("deployed", true)) else ("移动中" if hero.moving else "就绪"))
-		var mechanics := "弹道%d · 穿透%d · 暴击%d%%" % [int(hero.get("projectile_count", 1)), int(hero.get("pierce", 0)), roundi(float(hero.get("crit_chance", 0.0)) * 100.0)]
-		hero_details[i].text = "%s元素 · ATK %.0f · %.1f/s · %s" % [sim.element_name(str(hero.get("element", "none"))), hero.damage, hero.rate, mechanics]
-		hero_statuses[i].text = "%d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
+		hero_element_labels[i].add_theme_color_override("font_color", hero_color)
+		var hp_ratio := float(hero.hp) / maxf(1.0, float(hero.max_hp))
+		hero_buttons[i].modulate = Color("#ff7888") if hp_ratio <= 0.25 and hero.hp > 0.0 else (Color.WHITE if i == selected_id else Color("#91a0a8"))
+		hero_card_frames[i].texture = UI_SKIN.hero_frame_red if i == selected_id or hp_ratio <= 0.25 else UI_SKIN.hero_frame_gray
+		var status: String = "倒地" if hero.hp <= 0 else (("同行中" if sim.endless_mode else "待部署 · 拖到战场") if not bool(hero.get("deployed", true)) else ("移动中" if hero.moving else "就绪"))
+		hero_details[i].text = "ATK %.0f  ·  %.1f/s" % [hero.damage, hero.rate]
+		hero_statuses[i].text = "HP %d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
 	var was_visible: bool = overlay.visible
 	overlay.visible = sim.state in ["ready", "paused", "won", "lost"]
 	for control in background_buttons:
@@ -732,11 +909,15 @@ func refresh_pause_details(sim) -> void:
 		pause_hero_labels[i].text = "%d  %s  /  %s  /  %s\nHP %d/%d    ATK %.0f    ASPD %.2f/s\n射程 %.0f    护甲 %.0f    移速 %.0f    弹道 %d" % [i + 1, hero.name, hero.role, element_text, ceili(hero.hp), ceili(hero.max_hp), hero.damage, hero.rate, hero.range, hero.armor, hero.speed, int(hero.get("projectile_count", 1))]
 
 func refresh_buffs(sim) -> void:
-	buff_panel.visible = sim.v2_mode and not sim.run_state.buff_levels.is_empty() and sim.state in ["running", "between", "paused"]
+	buff_panel.visible = sim.v2_mode and sim.state in ["running", "between", "paused"]
 	for i in buff_labels.size():
 		buff_labels[i].text = ""
 		buff_icons[i].hide()
 	if not buff_panel.visible:
+		return
+	if sim.run_state.buff_levels.is_empty():
+		buff_labels[0].text = "◇ 等待首张强化卡"
+		buff_labels[0].add_theme_color_override("font_color", MUTED)
 		return
 	var names: Dictionary = {}
 	for card: Dictionary in sim.database.cards:
@@ -750,8 +931,42 @@ func refresh_buffs(sim) -> void:
 	if ids.size() > buff_labels.size():
 		buff_labels[-1].text = "◆ 另有 %d 项强化正在生效" % (ids.size() - buff_labels.size() + 1)
 
+func _layout_right_rail(sim) -> void:
+	var rail_y := UI_LAYOUT.battle_buff_rect.position.y
+	if buff_panel.visible:
+		buff_panel.position = Vector2(UI_LAYOUT.battle_buff_rect.position.x, rail_y)
+		buff_panel.size.y = 90.0
+		rail_y += 94.0
+	if support_panel.visible:
+		support_panel.position = Vector2(UI_LAYOUT.battle_buff_rect.position.x, rail_y)
+		support_panel.size.y = 82.0
+		rail_y += 86.0
+	command_rail.position = Vector2(UI_LAYOUT.battle_party_rect.position.x, rail_y)
+	var visible_heroes := clampi(sim.heroes.size(), 1, hero_buttons.size())
+	var command_height := 39.0 + visible_heroes * UI_LAYOUT.battle_hero_card_gap.y
+	command_rail.size.y = command_height
+	for i in hero_buttons.size():
+		hero_buttons[i].position = Vector2(UI_LAYOUT.battle_hero_card_rect.position.x, rail_y + 39.0 + i * UI_LAYOUT.battle_hero_card_gap.y)
+	var action_y := rail_y + command_height + 4.0
+	action_rail.position = Vector2(UI_LAYOUT.battle_action_rect.position.x, action_y)
+	action_rail.size.y = UI_LAYOUT.battle_action_rect.size.y
+	right_rail_shell.position = UI_LAYOUT.battle_right_shell_rect.position
+	right_rail_shell.size.y = minf(UI_LAYOUT.battle_right_shell_rect.size.y, action_y + UI_LAYOUT.battle_action_rect.size.y - UI_LAYOUT.battle_right_shell_rect.position.y)
+	skill_button.position = Vector2(UI_LAYOUT.battle_skill_rect.position.x, action_y + 22.0)
+	ultimate_button.position = Vector2(UI_LAYOUT.battle_ultimate_rect.position.x, action_y + 22.0)
+	ability_hint_label.position = Vector2(UI_LAYOUT.battle_ability_hint_rect.position.x, action_y + 120.0)
+	for i in formation_buttons.size():
+		var mode: String = ["squad", "follow", "hold"][i]
+		formation_buttons[mode].position = Vector2(UI_LAYOUT.battle_formation_rect.position.x + i * 70, action_y + 137.0)
+	preview_hint_label.position = Vector2(UI_LAYOUT.battle_preview_hint_rect.position.x, minf(700.0, action_y + 168.0))
+	right_rail_shell.visible = sim.v2_mode
+
 func set_skill_aiming(enabled: bool) -> void:
 	skill_aiming = enabled
+	signature = ""
+
+func set_ultimate_aiming(enabled: bool) -> void:
+	ultimate_aiming = enabled
 	signature = ""
 
 func refresh_skill(sim, selected_id: int) -> void:
@@ -767,18 +982,71 @@ func refresh_skill(sim, selected_id: int) -> void:
 		return
 	var element := str(hero.get("element", "none"))
 	var color := element_color(element)
-	skill_icon.modulate = color
-	ultimate_icon.modulate = color.lightened(0.18)
+	skill_icon.texture = skill_icon_for(element)
+	ultimate_icon.texture = ultimate_icon_for(element)
+	skill_frame.texture = UI_SKIN.skill_frame_red if skill_aiming else UI_SKIN.skill_frame_gray
+	ultimate_frame.texture = UI_SKIN.ultimate_frame_red if ultimate_aiming else UI_SKIN.ultimate_frame_gray
 	var cooldown := float(hero.get("skill_cooldown", 0.0))
+	skill_icon.modulate = Color(color.r, color.g, color.b, 0.22 if cooldown > 0.0 else 0.72)
+	ultimate_icon.modulate = Color(color.lightened(0.18).r, color.lightened(0.18).g, color.lightened(0.18).b, 0.58)
 	var deployed := bool(hero.get("deployed", false))
-	skill_button.text = "%s
-%s" % [sim.hero_skill_name(selected_id), "选取落点 · 右键取消" if skill_aiming else ("冷却 %.1fs" % cooldown if cooldown > 0.0 else "Q · 主动技能")]
+	skill_button.text = ""
+	skill_button.tooltip_text = ""
+	skill_name_label.text = sim.hero_skill_name(selected_id)
+	skill_cooldown_overlay.visible = cooldown > 0.0 or not deployed
+	skill_cd_label.text = "落点" if skill_aiming else ("%.1fs" % cooldown if cooldown > 0.0 else "READY")
+	skill_key_label.text = "Q · CD" if cooldown > 0.0 else "Q · 战技"
+	skill_cd_label.add_theme_color_override("font_color", Color("#ff9eaa") if cooldown > 0.0 else Color("#fff4ec"))
 	skill_button.disabled = sim.state != "running" or cooldown > 0.0 or not deployed
 	var energy := float(hero.get("energy", 0.0))
 	var maximum := float(hero.get("max_energy", 100.0))
-	ultimate_button.text = "%s
-E · %d/%d" % [sim.hero_ultimate_name(selected_id), roundi(energy), roundi(maximum)]
-	ultimate_button.disabled = sim.state != "running" or energy < maximum or not deployed
+	var ultimate_cooldown := float(hero.get("ultimate_cooldown", 0.0))
+	var energy_ready := energy >= maximum
+	var ultimate_status := "冷却 %.1fs" % ultimate_cooldown if ultimate_cooldown > 0.0 else "E · %d/%d" % [roundi(energy), roundi(maximum)]
+	ultimate_button.text = ""
+	ultimate_button.tooltip_text = ""
+	ultimate_name_label.text = sim.hero_ultimate_name(selected_id)
+	ultimate_cooldown_overlay.visible = ultimate_cooldown > 0.0 or not energy_ready or not deployed
+	ultimate_frame.modulate = Color("#fff2b4") if energy_ready and ultimate_cooldown <= 0.0 else Color.WHITE
+	ultimate_cd_label.text = "落点" if ultimate_aiming else ("%.1fs" % ultimate_cooldown if ultimate_cooldown > 0.0 else ("READY" if energy_ready else "%d%%" % roundi(energy / maxf(1.0, maximum) * 100.0)))
+	ultimate_key_label.text = "E · CD" if ultimate_cooldown > 0.0 else ("E · 终结技" if energy_ready else "E · 充能")
+	ultimate_cd_label.add_theme_color_override("font_color", Color("#ff9eaa") if ultimate_cooldown > 0.0 else Color("#fff0a8") if energy_ready else Color("#ffe7a5"))
+	ultimate_button.disabled = sim.state != "running" or ultimate_cooldown > 0.0 or not energy_ready or not deployed
+
+func skill_icon_for(element: String) -> Texture2D:
+	return {
+		"anemo": ICON_TRACE,
+		"electro": ICON_SPARK,
+		"pyro": ICON_FIRE,
+		"hydro": ICON_CIRCLE,
+		"geo": ICON_MAGIC,
+		"cryo": ICON_SPARK,
+	}.get(element, ICON_SLASH)
+
+func ultimate_icon_for(element: String) -> Texture2D:
+	return {
+		"anemo": ICON_MAGIC,
+		"electro": ICON_SPARK,
+		"pyro": ICON_FLARE,
+		"hydro": ICON_CIRCLE,
+		"geo": ICON_MAGIC,
+		"cryo": ICON_FLARE,
+	}.get(element, ICON_FLARE)
+
+func portrait_texture(hero: Dictionary) -> Texture2D:
+	var character_id := str(hero.get("character_id", ""))
+	if character_id == "traveler":
+		var traveler := AtlasTexture.new()
+		traveler.atlas = TRAVELER_PORTRAIT
+		traveler.region = Rect2(0, 0, 288, 288)
+		return traveler
+	if character_id == "hero_03":
+		return FURINA_PORTRAIT
+	var tile: Vector2 = hero.get("tile", Vector2.ZERO)
+	var fallback := AtlasTexture.new()
+	fallback.atlas = UNIT_ATLAS
+	fallback.region = Rect2(tile, Vector2(16, 16))
+	return fallback
 
 func _hero_card_input(event: InputEvent, hero_id: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
