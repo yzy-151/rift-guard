@@ -33,7 +33,7 @@ func run(game) -> void:
 	game.mode_select_panel.close(); game.hud.get_child(0).show()
 	var sim=game.sim; var db=sim.database
 	expect(db.errors.is_empty(),"all V25 data and cross references validate")
-	expect(db.characters.size()==12,"twelve-character roster remains stable")
+	expect(db.characters.size()==13,"thirteen-character roster remains stable")
 	var active_kinds:Dictionary={}; var ultimate_kinds:Dictionary={}
 	for id:String in db.characters:
 		var hero:Dictionary=db.characters[id]
@@ -42,7 +42,7 @@ func run(game) -> void:
 		var timeline:Dictionary=Timeline.compile(hero.active_skill,false)
 		expect(absf(float(timeline.hit_frame)-float(timeline.sfx_frame))<=0.04,"%s damage and SFX share its hit frame"%hero.name)
 	expect(active_kinds.size()==12 and ultimate_kinds.size()==12,"all active skills and ultimates use distinct gameplay kinds")
-	expect(db.animation_profiles.size()==12,"all characters have replaceable animation profiles")
+	expect(db.animation_profiles.size()==db.characters.size(),"all characters have replaceable animation profiles")
 	for id:String in db.animation_profiles:
 		var states:Dictionary=db.animation_profiles[id].get("states",{})
 		expect(["idle","run","attack","skill","ultimate","hurt","down","deploy"].all(func(key:String)->bool:return states.has(key)),"%s animation state set is complete"%id)
@@ -64,7 +64,8 @@ func run(game) -> void:
 	expect(budget.quality_scale<1.0 and budget.effect_cap()<PerformanceBudget.MAX_EFFECTS,"performance budget degrades cosmetic load under pressure")
 	var animator=AnimationStateMachine.new(); animator.setup(db.animation_profiles.traveler); animator.play("attack",-1.0); animator.tick(0.5)
 	expect(animator.state=="attack" and animator.frame_index()>0 and animator.facing<0.0,"animation state machine advances frames and preserves facing")
-	animator.tick(1.0); expect(animator.state=="idle","one-shot animation returns to idle")
+	animator.tick(2.0); expect(animator.state=="attack","replacement attack cycle loops while the attack state remains active")
+	animator.play("skill",-1.0); animator.tick(2.0); expect(animator.state=="idle","one-shot skill animation returns to idle")
 	expect(VfxPipeline.new().has_method("validate_profile") and VfxPipeline.validate_profile(db.vfx_profiles.impact_light),"transparent VFX import contract is executable")
 	var pool=EffectPool.new(); var pooled=pool.acquire({"kind":"hit"},0.3); pool.release(pooled); pool.acquire({"kind":"muzzle"},0.2)
 	expect(int(pool.stats().reused)==1,"reusable effect pool recycles visual dictionaries")

@@ -22,14 +22,14 @@ func run(game) -> void:
 	game.hud.get_child(0).show()
 	var db = game.sim.database
 	expect(db.errors.is_empty(), "V29 content and cross references validate")
-	expect(db.characters.size() == 12, "the playable roster remains twelve characters")
+	expect(db.characters.size() == 13, "the playable roster contains thirteen characters")
 	var states_complete := true
 	for character_id: String in db.characters:
 		var states: Dictionary = db.animation_profiles.get(character_id, {}).get("states", {})
 		for state in ["idle","run","attack","hurt","skill","ultimate","down"]:
 			states_complete = states_complete and states.has(state)
-	expect(states_complete, "all twelve characters own seven required combat animation states")
-	expect(game.battle.debug_visual_matrix.size() == 24, "visual acceptance matrix covers both facings for twelve heroes")
+	expect(states_complete, "all thirteen characters own seven required combat animation states")
+	expect(game.battle.debug_visual_matrix.size() == 26, "visual acceptance matrix covers both facings for thirteen heroes")
 	expect(game.battle.debug_anchor_error_max <= 0.5, "visual matrix reports subpixel anchor error")
 	expect(game.battle.debug_damage_shape_error_max <= 2.0, "telegraph and damage geometry share the acceptance tolerance")
 
@@ -41,7 +41,7 @@ func run(game) -> void:
 	var machine = AnimationMachine.new()
 	machine.setup(db.animation_profiles.traveler)
 	machine.play("attack",-1.0,2.0)
-	machine.tick(0.25)
+	machine.tick(float(db.animation_profiles.traveler.states.attack.duration) * 0.25)
 	expect(machine.facing == -1.0 and is_equal_approx(machine.normalized_time(),0.5), "attack speed scales animation time without changing facing")
 	expect(machine.consume_hit_event(), "animation emits its configured hit marker once")
 	expect(not machine.consume_hit_event(), "animation hit marker cannot double fire")

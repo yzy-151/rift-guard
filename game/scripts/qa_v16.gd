@@ -48,7 +48,7 @@ func reveal_choices(game) -> void:
 func run(game) -> void:
 	game.open_mode_menu()
 	await game.get_tree().process_frame
-	expect(game.sim.database.characters.size() == 12, "roster contains twelve data-driven characters")
+	expect(game.sim.database.characters.size() == 13, "roster contains thirteen data-driven characters")
 	expect(game.sim.database.cards.any(func(card: Dictionary) -> bool: return card.get("character_id", "") == "hero_12"), "new characters have selectable upgrade cards")
 	expect(game.audio_director.music_player.stream != null and game.audio_director.music_player.playing, "Helltaker music is packaged and playing at runtime")
 

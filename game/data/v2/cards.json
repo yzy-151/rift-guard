@@ -136,6 +136,142 @@
     ]
   },
   {
+    "id": "hero_01_attack_common",
+    "name": "锋刃强化",
+    "description": "少女：攻击力提高12%",
+    "rarity": "common",
+    "weight": 60,
+    "target": "character",
+    "character_id": "hero_01",
+    "effect": "attack_multiplier",
+    "value": 0.12,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "hero_01_health_common",
+    "name": "生命训练",
+    "description": "少女：最大生命提高15%",
+    "rarity": "common",
+    "weight": 60,
+    "target": "character",
+    "character_id": "hero_01",
+    "effect": "health_multiplier",
+    "value": 0.15,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
+  },
+  {
+    "id": "hero_01_speed_common",
+    "name": "节奏训练",
+    "description": "少女：攻击速度提高10%",
+    "rarity": "common",
+    "weight": 60,
+    "target": "character",
+    "character_id": "hero_01",
+    "effect": "attack_rate_multiplier",
+    "value": 0.1,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "hero_01_range_rare",
+    "name": "延伸战线",
+    "description": "少女：攻击范围提高40",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "character",
+    "character_id": "hero_01",
+    "effect": "range_flat",
+    "value": 40,
+    "max_stacks": 3,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "hero_01_armor_rare",
+    "name": "战术装甲",
+    "description": "少女：防御提高20",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "character",
+    "character_id": "hero_01",
+    "effect": "armor_flat",
+    "value": 20,
+    "max_stacks": 3,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
+  },
+  {
+    "id": "hero_01_move_rare",
+    "name": "快速调位",
+    "description": "少女：移动速度提高25",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "character",
+    "character_id": "hero_01",
+    "effect": "move_speed_flat",
+    "value": 25,
+    "max_stacks": 3,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "hero_01_special_epic",
+    "name": "终末圣歌",
+    "description": "少女：普攻获得范围顺劈并强化冰元素附着。",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "character_id": "hero_01",
+    "effect": "special_upgrade",
+    "value": true,
+    "max_stacks": 1,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "hero_01_signature_legendary",
+    "name": "寂月降临",
+    "description": "少女：攻击力与攻击速度大幅提高，终结技覆盖范围扩大。",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "character",
+    "character_id": "hero_01",
+    "effect": "signature_upgrade",
+    "value": true,
+    "max_stacks": 1,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
     "id": "hero_02_attack_common",
     "name": "锋刃强化",
     "description": "宵宫：攻击力提高12%",

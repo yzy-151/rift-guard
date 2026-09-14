@@ -36,8 +36,8 @@ func run(game) -> void:
 	game.hud.get_child(0).show()
 	var sim = game.sim
 	expect(sim.database.errors.is_empty(), "V20 data validates")
-	expect(sim.database.characters.size() == 12, "roster contains twelve unique characters")
-	var expected_names := ["旅行者", "希露菲", "芙宁娜", "洛琪希", "知更鸟", "阿米娅", "丰川祥子", "艾米莉亚", "萨勒芬妮", "风堇", "凯尔希", "铃"]
+	expect(sim.database.characters.size() == 13, "roster contains thirteen unique characters")
+	var expected_names := ["旅行者", "少女", "希露菲", "芙宁娜", "洛琪希", "知更鸟", "阿米娅", "丰川祥子", "艾米莉亚", "萨勒芬妮", "风堇", "凯尔希", "铃"]
 	var actual_names: Array[String] = []
 	for id: String in sim.database.characters:
 		var hero: Dictionary = sim.database.characters[id]

@@ -1,0 +1,218 @@
+{
+  "hero_01": {
+    "name": "少女",
+    "source_folder": "少女",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      121.429,
+      241.787
+    ],
+    "display_size": 150.0,
+    "fps": 24.0,
+    "crop": [
+      -20,
+      48,
+      640,
+      761
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/characters/sequences/hero_01/idle.png",
+        "frames": 31,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/characters/sequences/hero_01/run.png",
+        "frames": 35,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/characters/sequences/hero_01/attack.png",
+        "frames": 42,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/characters/sequences/hero_01/down.png",
+        "frames": 59,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "hero_02": {
+    "name": "希露菲",
+    "source_folder": "希露菲",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      92.828,
+      242.422
+    ],
+    "display_size": 150.0,
+    "fps": 24.0,
+    "crop": [
+      76,
+      42,
+      994,
+      1008
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/characters/sequences/hero_02/idle.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/characters/sequences/hero_02/run.png",
+        "frames": 29,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/characters/sequences/hero_02/attack.png",
+        "frames": 43,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/characters/sequences/hero_02/down.png",
+        "frames": 24,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "traveler": {
+    "name": "旅行者",
+    "source_folder": "荧",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      113.181,
+      224.13
+    ],
+    "display_size": 150.0,
+    "fps": 24.0,
+    "crop": [
+      -18,
+      118,
+      1044,
+      999
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/characters/sequences/traveler/idle.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/characters/sequences/traveler/run.png",
+        "frames": 14,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/characters/sequences/traveler/attack.png",
+        "frames": 37,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/characters/sequences/traveler/down.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "hero_06": {
+    "name": "阿米娅",
+    "source_folder": "阿米娅",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      107.924,
+      240.116
+    ],
+    "display_size": 150.0,
+    "fps": 24.0,
+    "crop": [
+      -18,
+      -20,
+      768,
+      770
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/characters/sequences/hero_06/idle.png",
+        "frames": 17,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/characters/sequences/hero_06/run.png",
+        "frames": 15,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/characters/sequences/hero_06/attack.png",
+        "frames": 48,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/characters/sequences/hero_06/down.png",
+        "frames": 45,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  }
+}

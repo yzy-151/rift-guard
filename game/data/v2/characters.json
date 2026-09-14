@@ -59,6 +59,65 @@
     "animation_profile": "traveler"
   },
   {
+    "id": "hero_01",
+    "name": "少女",
+    "role": "冰系咏唱",
+    "element": "cryo",
+    "max_hp": 410,
+    "armor": 22,
+    "attack": 50,
+    "attack_rate": 1.0,
+    "attack_range": 325,
+    "move_speed": 112,
+    "block": 0,
+    "can_hit_air": true,
+    "asset_key": "character.hero_01",
+    "unlocked_by_default": true,
+    "active_skill": {
+      "name": "静谧圣歌",
+      "kind": "cryo_chord",
+      "cooldown": 9.5,
+      "power": 185,
+      "radius": 185,
+      "hit_frame_ratio": 0.46,
+      "targeting": "point",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      }
+    },
+    "ultimate": {
+      "name": "寂月安魂曲",
+      "kind": "frozen_forest",
+      "energy_cost": 100,
+      "power": 320,
+      "radius": 320,
+      "hit_frame_ratio": 0.58,
+      "targeting": "point",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      },
+      "cooldown": 26.0
+    },
+    "passive": {
+      "name": "终末低语",
+      "kind": "requiem",
+      "description": "连续命中同一目标时逐步提高冰元素伤害。"
+    },
+    "animation_profile": "hero_01"
+  },
+  {
     "id": "hero_02",
     "name": "希露菲",
     "role": "风系支援",

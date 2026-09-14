@@ -40,4 +40,4 @@ func sample() -> Dictionary:
 		"hurt":
 			var squash := float(fallback.get("hurt_squash", 0.12))
 			scale = Vector2(1.0 + squash, 1.0 - squash)
-	return {"state":machine.state,"frame":machine.frame_index(),"facing":machine.facing,"scale":scale,"offset":offset,"hit_ready":machine.consume_hit_event()}
+	return {"state":machine.state,"frame":machine.frame_index(),"phase":machine.normalized_time(),"facing":machine.facing,"scale":scale,"offset":offset,"hit_ready":machine.consume_hit_event()}

@@ -77,6 +77,9 @@ func _ready() -> void:
 		qa_storage_path = qa_path
 		compendium = CompendiumState.new(qa_path.path_join("compendium.json"))
 		checkpoint_store = CampaignCheckpoint.new(qa_path.path_join("campaign-checkpoint"))
+	for character_id: String in sim.database.characters:
+		if bool(sim.database.characters[character_id].get("unlocked_by_default", false)):
+			compendium.unlocked_characters[character_id] = true
 	audio_director = AudioDirector.new()
 	if not qa_storage_path.is_empty():
 		audio_director.save_path = qa_storage_path.path_join("settings.json")
@@ -168,7 +171,12 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v48-test" in OS.get_cmdline_user_args():
+	if "--v49-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v49_test")
+	elif "--v48-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
 		set_physics_process(false)
@@ -1279,6 +1287,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v49_test() -> void:
+	var suite = preload("res://scripts/qa_v49.gd").new()
 	await suite.run(self)
 
 func run_v48_test() -> void:

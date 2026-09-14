@@ -9,6 +9,7 @@ const Sim = preload("res://scripts/combat_simulation.gd")
 const ReusableEffectPool = preload("res://scripts/reusable_effect_pool.gd")
 const SpriteAnchor = preload("res://scripts/sprite_anchor.gd")
 const UnitVisualActor = preload("res://scripts/unit_visual_actor.gd")
+const CharacterSequenceLibrary = preload("res://scripts/character_sequence_library.gd")
 const CombatFeedbackDirector = preload("res://scripts/combat_feedback_director.gd")
 const StageSurfaceRenderer = preload("res://scripts/stage_surface_renderer.gd")
 const VfxPipeline = preload("res://scripts/vfx_pipeline.gd")
@@ -36,6 +37,7 @@ var stage_decal_cache: Array[PackedVector2Array] = []
 var sprite_pivots: Dictionary = {}
 var enemy_visual_textures: Dictionary = {}
 var unit_visual_actors: Dictionary = {}
+var character_sequences = CharacterSequenceLibrary.new()
 var feedback_director = CombatFeedbackDirector.new()
 var surface_renderer = StageSurfaceRenderer.new()
 var debug_visual_matrix: Array[Dictionary] = []
@@ -253,8 +255,8 @@ func accept_events(batch: Array[Dictionary]) -> void:
 			"shot":
 				shot_flashes[event.hero_id] = 0.12
 				var hero: Dictionary = sim.heroes[event.hero_id]
-				var attack_duration := clampf(0.72 / maxf(0.55, float(hero.rate)), 0.22, 0.72)
-				hero_attack_visuals[event.hero_id] = {"elapsed": 0.0, "duration": attack_duration, "start_frame": 18}
+				var attack_duration := maxf(1.0 / 60.0, float(event.get("duration", 1.0 / maxf(0.1, float(hero.rate)))))
+				hero_attack_visuals[event.hero_id] = {"elapsed": 0.0, "duration": attack_duration}
 				if effects.size() < 260:
 					var facing := float(hero.get("facing", 1.0))
 					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","")},0.16))
@@ -1104,9 +1106,11 @@ func _draw_portal() -> void:
 func _draw_hero(hero: Dictionary) -> void:
 	var down: bool = hero.hp <= 0
 	var color := Color(hero.color)
+	var character_id := str(hero.get("character_id", ""))
 	var is_furina: bool = hero.get("visual", "") == "furina"
-	var is_traveler: bool = hero.get("character_id", "") == "traveler"
-	var bob: float = 0.0 if down or is_traveler else sin(clock * (14.0 if hero.moving else 3.0)) * (3.0 if hero.moving else 1.0)
+	var is_traveler: bool = character_id == "traveler"
+	var has_sequence := character_sequences.has_character(character_id)
+	var bob: float = 0.0 if down or is_traveler or has_sequence else sin(clock * (14.0 if hero.moving else 3.0)) * (3.0 if hero.moving else 1.0)
 	if selected_id == hero.id:
 		draw_arc(hero.pos + Vector2(0, 8), 31 if is_traveler else 29, 0, TAU, 36, color, 2)
 	var tint := Color("#67717a") if down else Color.WHITE
@@ -1118,7 +1122,9 @@ func _draw_hero(hero: Dictionary) -> void:
 		caption(hero.pos + Vector2(-9, -128 if is_traveler else -72), element_glyph(traveler_element), aura_color, 16)
 	if hero.flash > 0 and not reduced_effects:
 		tint = Color("#fff0eb")
-	if is_furina:
+	if has_sequence:
+		_draw_sequence_hero(hero, tint, down)
+	elif is_furina:
 		if shot_flashes.get(hero.id, 0.0) > 0.0 and not reduced_effects:
 			var pulse: float = shot_flashes.get(hero.id, 0.0) / 0.12
 			draw_circle(hero.pos + Vector2(30, -35), 7.0 + pulse * 5.0, Color(0.52, 0.88, 1.0, 0.16))
@@ -1139,9 +1145,9 @@ func _draw_hero(hero: Dictionary) -> void:
 			draw_circle(hero.pos + Vector2(29, -16 + bob), 5, color)
 			if shot_flashes.get(hero.id, 0.0) > 0 and not reduced_effects:
 				draw_circle(hero.pos + Vector2(37, -16), 8, color)
-	var tall_visual := is_furina or is_traveler
-	var label_y: float = -132.0 if is_traveler else (-108.0 if is_furina else -65.0)
-	var health_y: float = -120.0 if is_traveler else (-96.0 if is_furina else -53.0)
+	var tall_visual := has_sequence or is_furina or is_traveler
+	var label_y: float = -146.0 if has_sequence else (-132.0 if is_traveler else (-108.0 if is_furina else -65.0))
+	var health_y: float = -134.0 if has_sequence else (-120.0 if is_traveler else (-96.0 if is_furina else -53.0))
 	caption(hero.pos + Vector2(-29, label_y), "%d %s" % [hero.id + 1, hero.name], color, 13)
 	draw_rect(Rect2(hero.pos + Vector2(-25, health_y), Vector2(50, 4)), Color("#303942"))
 	draw_rect(Rect2(hero.pos + Vector2(-25, health_y), Vector2(50 * hero.hp / hero.max_hp, 4)), color)
@@ -1151,6 +1157,36 @@ func _draw_hero(hero: Dictionary) -> void:
 		caption(hero.pos + Vector2(-24, 30), "移动中", Color("#91a4ad"), 12)
 	elif hero.block > 0:
 		caption(hero.pos + Vector2(-28, 30), "阻挡 %d/%d" % [hero.blocked, hero.block], color, 12)
+
+func _draw_sequence_hero(hero: Dictionary, tint: Color, down: bool) -> void:
+	var character_id := str(hero.get("character_id", ""))
+	var runtime_state := "idle"
+	var frame := 0
+	var sample := visual_sample(hero)
+	if down:
+		runtime_state = "down"
+		frame = character_sequences.frame_at_time(character_id, runtime_state, float(hero_down_visuals.get(hero.id, 0.0)))
+	elif hero_attack_visuals.has(hero.id):
+		runtime_state = "attack"
+		var attack_visual: Dictionary = hero_attack_visuals[hero.id]
+		var attack_phase := clampf(float(attack_visual.elapsed) / maxf(0.01, float(attack_visual.duration)), 0.0, 0.999999)
+		frame = character_sequences.frame_at_phase(character_id, runtime_state, attack_phase)
+	else:
+		runtime_state = "run" if bool(hero.get("moving", false)) else str(sample.get("state", "idle"))
+		if runtime_state not in ["idle", "run", "attack", "skill", "ultimate", "hurt"]:
+			runtime_state = "idle"
+		frame = character_sequences.frame_at_phase(character_id, runtime_state, float(sample.get("phase", 0.0)))
+	var texture := character_sequences.texture(character_id, runtime_state)
+	if texture == null:
+		return
+	var source := character_sequences.source_rect(character_id, runtime_state, frame)
+	var cell := character_sequences.cell(character_id)
+	var pivot := character_sequences.pivot(character_id)
+	var base_size := character_sequences.display_size(character_id)
+	var hit_strength := clampf(float(hero.get("flash", 0.0)) / 0.12, 0.0, 1.0) if not reduced_effects else 0.0
+	var display_size := Vector2(base_size * (1.0 + hit_strength * 0.10), base_size * (1.0 - hit_strength * 0.08))
+	var foot := Vector2(hero.pos) + Vector2(0.0, HERO_FOOT_OFFSET)
+	_draw_anchored_texture_region(texture, foot, display_size, cell, pivot, float(hero.get("facing", 1.0)), 1.0, source, tint)
 
 func _draw_traveler(hero: Dictionary, tint: Color, down: bool) -> void:
 	var texture := traveler_idle_atlas

@@ -37,6 +37,7 @@ func run(game) -> void:
 	traveler.element = "pyro"
 	traveler.pos = Vector2(420, 370)
 	traveler.target = traveler.pos
+	traveler.deployed = true
 	var target: Dictionary = game.sim.spawn_enemy(Vector2(570, 370), "grunt")
 	target.hp *= 10.0
 	target.max_hp = target.hp
@@ -83,9 +84,9 @@ func run(game) -> void:
 	for id: String in game.sim.database.characters:
 		game.compendium.unlocked_characters[id] = true
 	game.squad_panel.open("stage_02", squad, [])
-	expect(game.squad_panel.buttons.size() == 12, "squad screen contains twelve independent character cards")
-	expect(game.squad_panel.previews.size() == 12, "every character card contains a breathing preview")
-	expect(int(game.squad_panel.previews["traveler"].atlas_frames) == 48, "traveler card plays the 48-frame breathing atlas")
+	expect(game.squad_panel.buttons.size() == game.sim.database.characters.size(), "squad screen contains every independent character card")
+	expect(game.squad_panel.previews.size() == game.sim.database.characters.size(), "every character card contains a breathing preview")
+	expect(int(game.squad_panel.previews["traveler"].atlas_frames) == 25, "traveler card plays the replacement 25-frame breathing atlas")
 	expect(int(game.squad_panel.previews["hero_03"].atlas_frames) == 8, "Furina card plays the available breathing atlas")
 	var card_list: Array = game.squad_panel.buttons.values()
 	var overlapping := false

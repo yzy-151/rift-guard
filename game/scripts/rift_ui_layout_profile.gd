@@ -29,6 +29,7 @@ class_name RiftUILayoutProfile
 @export var squad_background_rect := Rect2(0, 0, 1280, 720)
 @export var squad_frame_rect := Rect2(48, 24, 1184, 672)
 @export var squad_grid_origin := Vector2(30, 112)
+@export var squad_grid_view_rect := Rect2(30, 112, 1125, 410)
 @export var squad_card_size := Vector2(270, 126)
 @export var squad_card_gap := Vector2(15, 14)
 @export var squad_preview_rect := Rect2(10, 15, 88, 98)

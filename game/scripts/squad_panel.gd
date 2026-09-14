@@ -21,6 +21,8 @@ var confirm_button: Button
 var buttons: Dictionary = {}
 var state_labels: Dictionary = {}
 var previews: Dictionary = {}
+var grid_scroll: ScrollContainer
+var grid_host: Control
 var database
 var progress
 var hud
@@ -66,8 +68,20 @@ func build(owner_hud, game_database, state) -> void:
 	var order: Array[String] = []
 	for id: String in database.characters:
 		order.append(id)
+	grid_scroll = ScrollContainer.new()
+	grid_scroll.position = UI_LAYOUT.squad_grid_view_rect.position
+	grid_scroll.size = UI_LAYOUT.squad_grid_view_rect.size
+	grid_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	grid_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	grid_scroll.clip_contents = true
+	frame.add_child(grid_scroll)
+	owner_hud.bind(grid_scroll, "squad_grid_view")
+	grid_host = Control.new()
+	var row_count := ceili(float(order.size()) / 4.0)
+	grid_host.custom_minimum_size = Vector2(UI_LAYOUT.squad_grid_view_rect.size.x, row_count * UI_LAYOUT.squad_card_size.y + maxi(0, row_count - 1) * UI_LAYOUT.squad_card_gap.y)
+	grid_scroll.add_child(grid_host)
 	for i in order.size():
-		_build_character_card(frame, order[i], i)
+		_build_character_card(grid_host, order[i], i)
 	confirm_button = owner_hud.button(frame, UI_LAYOUT.squad_confirm_rect, "确认编队并进入下一关   →", true)
 	owner_hud.bind(confirm_button, "squad_confirm")
 	confirm_button.add_theme_font_size_override("font_size", 17)
@@ -79,9 +93,11 @@ func _build_character_card(frame: Control, id: String, index: int) -> void:
 	var data: Dictionary = database.characters[id]
 	var col := index % 4
 	var row := index / 4
-	var card_rect := Rect2(UI_LAYOUT.squad_grid_origin + Vector2(col * (UI_LAYOUT.squad_card_size.x + UI_LAYOUT.squad_card_gap.x), row * (UI_LAYOUT.squad_card_size.y + UI_LAYOUT.squad_card_gap.y)), UI_LAYOUT.squad_card_size)
+	var card_rect := Rect2(Vector2(col * (UI_LAYOUT.squad_card_size.x + UI_LAYOUT.squad_card_gap.x), row * (UI_LAYOUT.squad_card_size.y + UI_LAYOUT.squad_card_gap.y)), UI_LAYOUT.squad_card_size)
 	var button: Button = hud.button(frame, card_rect, "", true)
 	hud.bind(button, "squad_character_%d" % (index + 1))
+	button.position = card_rect.position
+	button.size = card_rect.size
 	button.name = "Squad_" + id
 	button.clip_contents = true
 	button.pressed.connect(toggle.bind(id))

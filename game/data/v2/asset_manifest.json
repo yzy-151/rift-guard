@@ -6,28 +6,38 @@
     "replace_hint": "替换 sprite 指向的透明 PNG/SVG；建议保持约 1:1.55 的宽高比"
   },
   "character.traveler": {
-    "portrait": "res://assets/portraits/jessica.png",
-    "idle": "res://assets/characters/traveler_v18/idle.png",
-    "move": "res://assets/characters/traveler_v18/run.png",
-    "attack": "res://assets/characters/traveler_v18/attack.png",
-    "hurt": "res://assets/tiny-dungeon.png",
-    "skill": "res://assets/tiny-dungeon.png",
-    "down": "res://assets/characters/traveler_v18/death.png",
-    "idle_frames": 48,
+    "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+    "idle": "res://assets/characters/sequences/traveler/idle.png",
+    "move": "res://assets/characters/sequences/traveler/run.png",
+    "attack": "res://assets/characters/sequences/traveler/attack.png",
+    "hurt": "res://assets/characters/sequences/traveler/portrait.png",
+    "skill": "res://assets/characters/sequences/traveler/attack.png",
+    "down": "res://assets/characters/sequences/traveler/down.png",
+    "idle_frames": 25,
     "idle_columns": 8,
     "idle_cell": [
-      288,
-      288
-    ]
+      256,
+      256
+    ],
+    "idle_fps": 24.0,
+    "sequence_profile": "traveler"
   },
   "character.hero_02": {
-    "portrait": "res://assets/portraits/jessica.png",
-    "idle": "res://assets/tiny-dungeon.png",
-    "move": "res://assets/tiny-dungeon.png",
-    "attack": "res://assets/tiny-dungeon.png",
-    "hurt": "res://assets/tiny-dungeon.png",
-    "skill": "res://assets/tiny-dungeon.png",
-    "down": "res://assets/tiny-dungeon.png"
+    "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+    "idle": "res://assets/characters/sequences/hero_02/idle.png",
+    "move": "res://assets/characters/sequences/hero_02/run.png",
+    "attack": "res://assets/characters/sequences/hero_02/attack.png",
+    "hurt": "res://assets/characters/sequences/hero_02/portrait.png",
+    "skill": "res://assets/characters/sequences/hero_02/attack.png",
+    "down": "res://assets/characters/sequences/hero_02/down.png",
+    "idle_frames": 25,
+    "idle_columns": 8,
+    "idle_cell": [
+      256,
+      256
+    ],
+    "idle_fps": 24.0,
+    "sequence_profile": "hero_02"
   },
   "character.hero_03": {
     "portrait": "res://assets/portraits/muelsyse.png",
@@ -63,13 +73,21 @@
     "down": "res://assets/tiny-dungeon.png"
   },
   "character.hero_06": {
-    "portrait": "res://assets/portraits/amiya.png",
-    "idle": "res://assets/tiny-dungeon.png",
-    "move": "res://assets/tiny-dungeon.png",
-    "attack": "res://assets/tiny-dungeon.png",
-    "hurt": "res://assets/tiny-dungeon.png",
-    "skill": "res://assets/tiny-dungeon.png",
-    "down": "res://assets/tiny-dungeon.png"
+    "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+    "idle": "res://assets/characters/sequences/hero_06/idle.png",
+    "move": "res://assets/characters/sequences/hero_06/run.png",
+    "attack": "res://assets/characters/sequences/hero_06/attack.png",
+    "hurt": "res://assets/characters/sequences/hero_06/portrait.png",
+    "skill": "res://assets/characters/sequences/hero_06/attack.png",
+    "down": "res://assets/characters/sequences/hero_06/down.png",
+    "idle_frames": 17,
+    "idle_columns": 8,
+    "idle_cell": [
+      256,
+      256
+    ],
+    "idle_fps": 24.0,
+    "sequence_profile": "hero_06"
   },
   "character.hero_07": {
     "portrait": "res://assets/portraits/saria.png",
@@ -124,5 +142,22 @@
     "hurt": "res://assets/tiny-dungeon.png",
     "skill": "res://assets/tiny-dungeon.png",
     "down": "res://assets/tiny-dungeon.png"
+  },
+  "character.hero_01": {
+    "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+    "idle": "res://assets/characters/sequences/hero_01/idle.png",
+    "move": "res://assets/characters/sequences/hero_01/run.png",
+    "attack": "res://assets/characters/sequences/hero_01/attack.png",
+    "hurt": "res://assets/characters/sequences/hero_01/portrait.png",
+    "skill": "res://assets/characters/sequences/hero_01/attack.png",
+    "down": "res://assets/characters/sequences/hero_01/down.png",
+    "idle_frames": 31,
+    "idle_columns": 8,
+    "idle_cell": [
+      256,
+      256
+    ],
+    "idle_fps": 24.0,
+    "sequence_profile": "hero_01"
   }
 }

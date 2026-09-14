@@ -7,6 +7,7 @@ var source_texture: Texture2D
 var atlas_frames := 0
 var atlas_columns := 1
 var atlas_cell := Vector2.ZERO
+var atlas_fps := 24.0
 var elapsed := 0.0
 var locked := false
 
@@ -24,6 +25,7 @@ func configure(id: String, asset: Dictionary, color: Color, is_locked: bool) -> 
 	var idle_path := str(asset.get("idle", ""))
 	atlas_frames = int(asset.get("idle_frames", 0))
 	atlas_columns = maxi(1, int(asset.get("idle_columns", 1)))
+	atlas_fps = maxf(1.0, float(asset.get("idle_fps", 24.0)))
 	var cell_data: Array = asset.get("idle_cell", [])
 	if atlas_frames > 0 and cell_data.size() >= 2 and ResourceLoader.exists(idle_path):
 		atlas_cell = Vector2(float(cell_data[0]), float(cell_data[1]))
@@ -52,13 +54,13 @@ func _draw() -> void:
 		var spark_pos := Vector2(size.x * 0.5, size.y * 0.62) + Vector2.from_angle(angle) * Vector2(size.x * 0.34, size.y * 0.20)
 		draw_circle(spark_pos, 1.5 + spark * 0.45, Color(element_color, 0.68))
 	if source_texture != null:
-		var breath := 1.0 + sin(elapsed * PI) * 0.018
-		var lift := sin(elapsed * PI) * 1.2
+		var breath := 1.0 if atlas_frames > 0 else 1.0 + sin(elapsed * PI) * 0.018
+		var lift := 0.0 if atlas_frames > 0 else sin(elapsed * PI) * 1.2
 		var bounds := Vector2(size.x - 10.0, size.y - 6.0) * breath
 		var destination := Rect2((size.x - bounds.x) * 0.5, size.y - bounds.y + lift, bounds.x, bounds.y)
 		var tint := Color(0.29, 0.29, 0.31, 0.82) if locked else Color.WHITE
 		if atlas_frames > 0:
-			var frame := posmod(floori(elapsed * 24.0), atlas_frames)
+			var frame := posmod(floori(elapsed * atlas_fps), atlas_frames)
 			var source := Rect2(Vector2(frame % atlas_columns, frame / atlas_columns) * atlas_cell, atlas_cell)
 			draw_texture_rect_region(source_texture, destination, source, tint)
 		else:

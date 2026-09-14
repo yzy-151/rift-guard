@@ -36,7 +36,7 @@ func run(game) -> void:
 	var db = sim.database
 	expect(db.errors.is_empty(), "V26 content validates")
 	expect(db.combat_contracts.size() == db.stages.size(), "every map owns one replaceable combat contract")
-	expect(int(db.asset_readiness.playable) == 12, "all twelve characters have a complete playable asset fallback")
+	expect(int(db.asset_readiness.playable) == 13, "all thirteen characters have complete playable assets")
 	expect(int(db.asset_readiness.final_ready) < 12, "asset readiness report distinguishes placeholders from final art")
 	var report_path := ProjectSettings.globalize_path("res://../docs/asset-readiness-v26.md")
 	var report_file := FileAccess.open(report_path, FileAccess.WRITE)

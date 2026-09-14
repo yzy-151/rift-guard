@@ -30,6 +30,8 @@ func tick(dt: float) -> void:
 	if elapsed >= duration:
 		if bool(definition.get("loop", false)):
 			elapsed = fmod(elapsed, duration)
+		elif bool(definition.get("hold_last", false)):
+			elapsed = duration
 		else:
 			play("idle", facing)
 
