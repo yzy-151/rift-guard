@@ -24,6 +24,7 @@ func _init() -> void:
 	characters = _by_id(_read_array("res://data/v2/characters.json"), "character")
 	cards.assign(_read_array("res://data/v2/cards.json"))
 	cards.append_array(_read_array("res://data/v2/mechanic_cards.json"))
+	_link_character_card_content()
 	stages = _by_id(_read_array("res://data/v2/stages.json"), "stage")
 	modes = _by_id(_read_array("res://data/v2/modes.json"), "mode")
 	assets = _read_dictionary("res://data/v2/asset_manifest.json")
@@ -46,6 +47,26 @@ func _init() -> void:
 		var reporter = preload("res://scripts/error_reporter.gd").new()
 		for message: String in errors: reporter.record("content",message)
 		reporter.flush()
+
+func _link_character_card_content() -> void:
+	# Character ids are authoritative: renamed/replaced characters update every card surface automatically.
+	for card: Dictionary in cards:
+		if str(card.get("target", "global")) != "character":
+			continue
+		var character_id := str(card.get("character_id", ""))
+		var character: Dictionary = characters.get(character_id, {})
+		if character.is_empty():
+			continue
+		var character_name := str(character.get("name", character_id))
+		card["character_name"] = character_name
+		for field in ["name", "description"]:
+			var text := str(card.get(field, ""))
+			text = text.replace("{character}", character_name)
+			if field == "description":
+				var separator := text.find("：")
+				if separator >= 0:
+					text = character_name + text.substr(separator)
+			card[field] = text
 
 func _read_json(path: String) -> Variant:
 	if not FileAccess.file_exists(path):

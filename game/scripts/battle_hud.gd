@@ -175,16 +175,16 @@ func _ready() -> void:
 	var right_rail_mark := label(right_rail_shell, Vector2(10, 574), Vector2(212, 18), "R I F T   C O M M A N D", 8, Color("#794452"))
 	right_rail_mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	right_rail_mark.hide()
-	support_panel = panel(root, Rect2(1040, 208, 224, 88), Color(0.07, 0.045, 0.075, 0.92), Color("#864858"))
+	support_panel = panel(root, Rect2(1032, 646, 222, 48), Color(0.07, 0.045, 0.075, 0.92), Color("#864858"))
 	label(support_panel, Vector2(10, 5), Vector2(204, 18), "场 外 支 援  /  SUPPORT", 11, TEAL)
-	for i in 4:
-		support_labels.append(label(support_panel, Vector2(10, 25 + i * 14), Vector2(204, 14), "", 12, WHITE))
+	for i in 2:
+		support_labels.append(label(support_panel, Vector2(10, 24 + i * 13), Vector2(202, 13), "", 10, WHITE))
 	support_panel.hide()
 	buff_panel = panel(root, UI_LAYOUT.battle_buff_rect, Color(0.07, 0.045, 0.075, 0.92), Color("#65506f"))
 	label(buff_panel, Vector2(10, 5), Vector2(204, 18), "本 局 强 化  /  BUILD", 11, Color("#d6b4f0"))
-	for i in 5:
-		buff_icons.append(icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(10, 27 + i * 13, 11, 11), Color("#d6b4f0")))
-		buff_labels.append(label(buff_panel, Vector2(25, 25 + i * 13), Vector2(188, 14), "", 10, WHITE))
+	for i in 2:
+		buff_icons.append(icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(10, 25 + i * 13, 11, 11), Color("#d6b4f0")))
+		buff_labels.append(label(buff_panel, Vector2(25, 23 + i * 13), Vector2(187, 14), "", 9, WHITE))
 	buff_panel.hide()
 	boss_panel = panel(root, Rect2(16, 101, 1012, 62), Color(0.055, 0.025, 0.04, 0.96), Color("#be435c"))
 	boss_name_label = label(boss_panel, Vector2(15, 7), Vector2(982, 22), "", 15, Color("#ff9cab"))
@@ -329,7 +329,7 @@ func _ready() -> void:
 		hero_card_frames.append(hero_frame)
 		var trim := Sprite2D.new()
 		trim.texture = preload("res://assets/helltaker/ui/W_selection.png")
-		trim.position = Vector2(190, 16)
+		trim.position = Vector2(194, 16)
 		trim.scale = Vector2(0.075, 0.075)
 		hero_btn.add_child(trim)
 		hero_btn.pressed.connect(func(): select_action.emit(i))
@@ -350,15 +350,15 @@ func _ready() -> void:
 		portrait_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		portrait_frame.add_child(portrait_image)
 		hero_portraits.append(portrait_image)
-		hero_name_labels.append(label(hero_btn, Vector2(70, 6), Vector2(94, 18), "%d  未部署" % [i + 1], 12, WHITE))
-		var element_badge := label(hero_btn, Vector2(166, 6), Vector2(34, 18), "无", 10, MUTED)
+		hero_name_labels.append(label(hero_btn, Vector2(70, 6), Vector2(88, 18), "%d  未部署" % [i + 1], 12, WHITE))
+		var element_badge := label(hero_btn, Vector2(160, 6), Vector2(40, 18), "无", 10, MUTED)
 		element_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		element_badge.add_theme_color_override("font_outline_color", Color("#160d14"))
 		element_badge.add_theme_constant_override("outline_size", 2)
 		hero_element_labels.append(element_badge)
 		var hp_bar := ProgressBar.new()
 		hp_bar.position = Vector2(70, 29)
-		hp_bar.size = Vector2(130, 9)
+		hp_bar.size = Vector2(96, 9)
 		hp_bar.show_percentage = false
 		var hp_bg := StyleBoxFlat.new()
 		hp_bg.bg_color = Color("#251923")
@@ -370,7 +370,7 @@ func _ready() -> void:
 		hero_hp_bars.append(hp_bar)
 		var energy_bar := ProgressBar.new()
 		energy_bar.position = Vector2(70, 56)
-		energy_bar.size = Vector2(130, 5)
+		energy_bar.size = Vector2(96, 5)
 		energy_bar.show_percentage = false
 		var energy_bg := StyleBoxFlat.new()
 		energy_bg.bg_color = Color("#251923")
@@ -642,7 +642,7 @@ func refresh(sim, selected_id: int) -> void:
 		hero_hp_bars[i].value = maxf(0.0, float(hero.hp))
 		hero_energy_bars[i].max_value = maxf(1.0, float(hero.get("max_energy", 100.0)))
 		hero_energy_bars[i].value = maxf(0.0, float(hero.get("energy", 0.0)))
-		hero_portraits[i].texture = portrait_texture(hero)
+		hero_portraits[i].texture = portrait_texture(hero, sim)
 		hero_name_labels[i].text = "%d  %s" % [i + 1, hero.name]
 		hero_element_labels[i].text = sim.element_name(str(hero.get("element", "none")))
 		var hero_color: Color = element_color(str(hero.get("element", ""))) if hero.get("character_id", "") == "traveler" and hero.get("element", "") != "" else Color(hero.color)
@@ -932,33 +932,33 @@ func refresh_buffs(sim) -> void:
 		buff_labels[-1].text = "◆ 另有 %d 项强化正在生效" % (ids.size() - buff_labels.size() + 1)
 
 func _layout_right_rail(sim) -> void:
-	var rail_y := UI_LAYOUT.battle_buff_rect.position.y
-	if buff_panel.visible:
-		buff_panel.position = Vector2(UI_LAYOUT.battle_buff_rect.position.x, rail_y)
-		buff_panel.size.y = 90.0
-		rail_y += 94.0
-	if support_panel.visible:
-		support_panel.position = Vector2(UI_LAYOUT.battle_buff_rect.position.x, rail_y)
-		support_panel.size.y = 82.0
-		rail_y += 86.0
-	command_rail.position = Vector2(UI_LAYOUT.battle_party_rect.position.x, rail_y)
-	var visible_heroes := clampi(sim.heroes.size(), 1, hero_buttons.size())
-	var command_height := 39.0 + visible_heroes * UI_LAYOUT.battle_hero_card_gap.y
-	command_rail.size.y = command_height
-	for i in hero_buttons.size():
-		hero_buttons[i].position = Vector2(UI_LAYOUT.battle_hero_card_rect.position.x, rail_y + 39.0 + i * UI_LAYOUT.battle_hero_card_gap.y)
-	var action_y := rail_y + command_height + 4.0
-	action_rail.position = Vector2(UI_LAYOUT.battle_action_rect.position.x, action_y)
-	action_rail.size.y = UI_LAYOUT.battle_action_rect.size.y
+	# The former right rail is now a compact bottom command deck, leaving the full width for combat.
 	right_rail_shell.position = UI_LAYOUT.battle_right_shell_rect.position
-	right_rail_shell.size.y = minf(UI_LAYOUT.battle_right_shell_rect.size.y, action_y + UI_LAYOUT.battle_action_rect.size.y - UI_LAYOUT.battle_right_shell_rect.position.y)
-	skill_button.position = Vector2(UI_LAYOUT.battle_skill_rect.position.x, action_y + 22.0)
-	ultimate_button.position = Vector2(UI_LAYOUT.battle_ultimate_rect.position.x, action_y + 22.0)
-	ability_hint_label.position = Vector2(UI_LAYOUT.battle_ability_hint_rect.position.x, action_y + 120.0)
+	right_rail_shell.size = UI_LAYOUT.battle_right_shell_rect.size
+	command_rail.position = UI_LAYOUT.battle_party_rect.position
+	command_rail.size = UI_LAYOUT.battle_party_rect.size
+	for i in hero_buttons.size():
+		hero_buttons[i].position = UI_LAYOUT.battle_hero_card_rect.position + UI_LAYOUT.battle_hero_card_gap * i
+		hero_buttons[i].size = UI_LAYOUT.battle_hero_card_rect.size
+	action_rail.position = UI_LAYOUT.battle_action_rect.position
+	action_rail.size = UI_LAYOUT.battle_action_rect.size
+	skill_button.position = UI_LAYOUT.battle_skill_rect.position
+	skill_button.size = UI_LAYOUT.battle_skill_rect.size
+	ultimate_button.position = UI_LAYOUT.battle_ultimate_rect.position
+	ultimate_button.size = UI_LAYOUT.battle_ultimate_rect.size
+	ability_hint_label.position = UI_LAYOUT.battle_ability_hint_rect.position
+	ability_hint_label.size = UI_LAYOUT.battle_ability_hint_rect.size
+	var formation_width := UI_LAYOUT.battle_formation_rect.size.x / 3.0 - 3.0
 	for i in formation_buttons.size():
 		var mode: String = ["squad", "follow", "hold"][i]
-		formation_buttons[mode].position = Vector2(UI_LAYOUT.battle_formation_rect.position.x + i * 70, action_y + 137.0)
-	preview_hint_label.position = Vector2(UI_LAYOUT.battle_preview_hint_rect.position.x, minf(700.0, action_y + 168.0))
+		formation_buttons[mode].position = UI_LAYOUT.battle_formation_rect.position + Vector2(i * (formation_width + 4.5), 0)
+		formation_buttons[mode].size = Vector2(formation_width, UI_LAYOUT.battle_formation_rect.size.y)
+	preview_hint_label.position = UI_LAYOUT.battle_preview_hint_rect.position
+	preview_hint_label.size = UI_LAYOUT.battle_preview_hint_rect.size
+	buff_panel.position = UI_LAYOUT.battle_buff_rect.position
+	buff_panel.size = UI_LAYOUT.battle_buff_rect.size
+	support_panel.position = UI_LAYOUT.battle_buff_rect.position + Vector2(0, 56)
+	support_panel.size = Vector2(UI_LAYOUT.battle_buff_rect.size.x, 48)
 	right_rail_shell.visible = sim.v2_mode
 
 func set_skill_aiming(enabled: bool) -> void:
@@ -1033,13 +1033,16 @@ func ultimate_icon_for(element: String) -> Texture2D:
 		"cryo": ICON_FLARE,
 	}.get(element, ICON_FLARE)
 
-func portrait_texture(hero: Dictionary) -> Texture2D:
+func portrait_texture(hero: Dictionary, sim_ref = null) -> Texture2D:
 	var character_id := str(hero.get("character_id", ""))
-	if character_id == "traveler":
-		var traveler := AtlasTexture.new()
-		traveler.atlas = TRAVELER_PORTRAIT
-		traveler.region = Rect2(0, 0, 288, 288)
-		return traveler
+	if sim_ref != null and sim_ref.database != null:
+		var character: Dictionary = sim_ref.database.characters.get(character_id, {})
+		var asset: Dictionary = sim_ref.database.assets.get(str(character.get("asset_key", "")), {})
+		var portrait_path := str(asset.get("portrait", ""))
+		if not portrait_path.is_empty() and ResourceLoader.exists(portrait_path):
+			var portrait_resource: Resource = ResourceLoader.load(portrait_path)
+			if portrait_resource is Texture2D:
+				return portrait_resource
 	if character_id == "hero_03":
 		return FURINA_PORTRAIT
 	var tile: Vector2 = hero.get("tile", Vector2.ZERO)

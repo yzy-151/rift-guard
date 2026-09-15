@@ -18,7 +18,7 @@ func run(game) -> void:
 	expect(game.sim.heroes.size() >= 1 and game.sim.heroes.all(func(hero: Dictionary) -> bool: return bool(hero.get("deployed", false))), "endless party starts deployed")
 	print("V34 CONFIG: loaded=" + str(game.content.loaded) + " path=" + str(game.content.path) + " errors=" + str(game.content.errors) + " row=" + str(game.content.ui.get("hero_card_1", {})))
 	print("V34 HUD POS: " + str(game.hud.hero_buttons[0].position) + " / " + str(game.hud.hero_buttons[1].position))
-	expect(game.hud.hero_buttons[0].position.x >= 1040.0 and game.hud.hero_buttons[1].position.y > game.hud.hero_buttons[0].position.y, "party HUD is arranged in the reserved right column")
+	expect(game.hud.hero_buttons[0].position.y >= 580.0 and game.hud.hero_buttons[1].position.x > game.hud.hero_buttons[0].position.x, "party HUD is arranged across the bottom command deck")
 	expect(game.hud.hero_portraits[0].texture != null, "party HUD uses a real character portrait")
 
 	for character: Dictionary in game.sim.database.characters.values():

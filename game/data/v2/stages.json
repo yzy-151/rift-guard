@@ -3550,11 +3550,19 @@
           70
         ],
         [
-          760,
-          280
+          660,
+          270
         ],
         [
-          1240,
+          830,
+          470
+        ],
+        [
+          1120,
+          520
+        ],
+        [
+          1280,
           720
         ]
       ],
@@ -3564,11 +3572,19 @@
           410
         ],
         [
-          2010,
-          520
+          2100,
+          410
         ],
         [
-          1240,
+          2020,
+          590
+        ],
+        [
+          1760,
+          690
+        ],
+        [
+          1280,
           720
         ]
       ],
@@ -3578,11 +3594,19 @@
           1335
         ],
         [
-          1590,
-          1040
+          1750,
+          1160
         ],
         [
-          1240,
+          1640,
+          1000
+        ],
+        [
+          1430,
+          970
+        ],
+        [
+          1280,
           720
         ]
       ],
@@ -3592,11 +3616,23 @@
           750
         ],
         [
-          470,
-          820
+          360,
+          750
         ],
         [
-          1240,
+          520,
+          850
+        ],
+        [
+          720,
+          970
+        ],
+        [
+          980,
+          900
+        ],
+        [
+          1280,
           720
         ]
       ]
@@ -3662,53 +3698,279 @@
     "template_id": "loop",
     "terrain": [
       {
-        "id": "endless_north_ruin",
+        "id": "endless_t_junction",
+        "type": "junction",
+        "rect": [
+          850,
+          500,
+          520,
+          360
+        ],
+        "label": "T字裂谷",
+        "layout": "t"
+      },
+      {
+        "id": "endless_cross_junction",
+        "type": "junction",
+        "rect": [
+          1300,
+          700,
+          480,
+          330
+        ],
+        "label": "十字祭道",
+        "layout": "cross"
+      },
+      {
+        "id": "endless_dual_junction",
+        "type": "junction",
+        "rect": [
+          650,
+          640,
+          270,
+          300
+        ],
+        "label": "双向回廊",
+        "layout": "dual"
+      },
+      {
+        "id": "endless_north_wall_left",
         "type": "blocked",
         "rect": [
-          820,
-          220,
+          760,
+          330,
+          440,
+          70
+        ],
+        "label": "北环断墙"
+      },
+      {
+        "id": "endless_north_gate",
+        "type": "door",
+        "rect": [
+          1200,
+          330,
           160,
-          90
+          70
         ],
-        "label": "北侧断墙"
+        "label": "北侧血门",
+        "hp": 720
       },
       {
-        "id": "endless_east_device",
-        "type": "mechanism",
+        "id": "endless_north_wall_right",
+        "type": "blocked",
         "rect": [
-          1760,
-          610,
-          90,
-          90
+          1360,
+          330,
+          440,
+          70
         ],
-        "label": "荒原机关",
-        "power": 55,
-        "radius": 210,
-        "interval": 4.2
+        "label": "北环断墙"
       },
       {
-        "id": "endless_south_low",
-        "type": "low_ground",
+        "id": "endless_south_wall_left",
+        "type": "blocked",
         "rect": [
-          1160,
-          990,
-          280,
-          120
+          760,
+          1040,
+          440,
+          70
         ],
-        "label": "猩红洼地",
-        "speed_scale": 0.75
+        "label": "南环断墙"
+      },
+      {
+        "id": "endless_south_gate",
+        "type": "door",
+        "rect": [
+          1200,
+          1040,
+          160,
+          70
+        ],
+        "label": "南侧血门",
+        "hp": 720
+      },
+      {
+        "id": "endless_south_wall_right",
+        "type": "blocked",
+        "rect": [
+          1360,
+          1040,
+          440,
+          70
+        ],
+        "label": "南环断墙"
+      },
+      {
+        "id": "endless_west_wall_upper",
+        "type": "blocked",
+        "rect": [
+          600,
+          330,
+          70,
+          310
+        ],
+        "label": "西环断墙"
+      },
+      {
+        "id": "endless_west_gate",
+        "type": "door",
+        "rect": [
+          600,
+          640,
+          70,
+          160
+        ],
+        "label": "西侧血门",
+        "hp": 720
+      },
+      {
+        "id": "endless_west_wall_lower",
+        "type": "blocked",
+        "rect": [
+          600,
+          800,
+          70,
+          310
+        ],
+        "label": "西环断墙"
+      },
+      {
+        "id": "endless_east_wall_upper",
+        "type": "blocked",
+        "rect": [
+          1890,
+          330,
+          70,
+          310
+        ],
+        "label": "东环断墙"
+      },
+      {
+        "id": "endless_east_gate",
+        "type": "door",
+        "rect": [
+          1890,
+          640,
+          70,
+          160
+        ],
+        "label": "东侧血门",
+        "hp": 720
+      },
+      {
+        "id": "endless_east_wall_lower",
+        "type": "blocked",
+        "rect": [
+          1890,
+          800,
+          70,
+          310
+        ],
+        "label": "东环断墙"
+      },
+      {
+        "id": "endless_t_bar",
+        "type": "blocked",
+        "rect": [
+          920,
+          570,
+          300,
+          58
+        ],
+        "label": "T字横墙"
+      },
+      {
+        "id": "endless_t_stem",
+        "type": "blocked",
+        "rect": [
+          920,
+          570,
+          58,
+          240
+        ],
+        "label": "T字纵墙"
+      },
+      {
+        "id": "endless_cross_bar",
+        "type": "blocked",
+        "rect": [
+          1360,
+          890,
+          390,
+          58
+        ],
+        "label": "十字横墙"
+      },
+      {
+        "id": "endless_cross_stem",
+        "type": "blocked",
+        "rect": [
+          1530,
+          720,
+          58,
+          170
+        ],
+        "label": "十字纵墙"
+      },
+      {
+        "id": "endless_dual_divider",
+        "type": "blocked",
+        "rect": [
+          760,
+          690,
+          58,
+          210
+        ],
+        "label": "双路隔墙"
       },
       {
         "id": "endless_west_high",
         "type": "high_ground",
         "rect": [
-          500,
-          520,
-          260,
-          110
+          300,
+          510,
+          230,
+          105
         ],
         "label": "西部高台",
         "attack_bonus": 0.16
+      },
+      {
+        "id": "endless_east_high",
+        "type": "high_ground",
+        "rect": [
+          2030,
+          820,
+          230,
+          105
+        ],
+        "label": "东部高台",
+        "attack_bonus": 0.16
+      },
+      {
+        "id": "endless_north_low",
+        "type": "low_ground",
+        "rect": [
+          1030,
+          150,
+          300,
+          110
+        ],
+        "label": "北侧血沼",
+        "speed_scale": 0.76
+      },
+      {
+        "id": "endless_south_low",
+        "type": "low_ground",
+        "rect": [
+          1260,
+          1180,
+          300,
+          110
+        ],
+        "label": "南侧血沼",
+        "speed_scale": 0.76
       }
     ],
     "route_material": {

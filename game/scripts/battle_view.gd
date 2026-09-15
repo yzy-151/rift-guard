@@ -4,7 +4,7 @@ signal stage_exit_finished
 const Stage = preload("res://scripts/stage_projection.gd")
 const STAGE_VISUAL = preload("res://data/stage_visual_profile.tres")
 const WORLD = Rect2(40, 140, 1200, 440)
-const ENDLESS_PLAYFIELD_SCREEN = Rect2(16, 82, 1012, 622)
+const ENDLESS_PLAYFIELD_SCREEN = Rect2(16, 88, 1248, 490)
 const Sim = preload("res://scripts/combat_simulation.gd")
 const ReusableEffectPool = preload("res://scripts/reusable_effect_pool.gd")
 const SpriteAnchor = preload("res://scripts/sprite_anchor.gd")
@@ -17,6 +17,8 @@ const VFX_FLARE = preload("res://assets/vfx/third_party/kenney_particle/flare_01
 const VFX_SPARK = preload("res://assets/vfx/third_party/kenney_particle/spark_05.png")
 const VFX_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_01.png")
 const VFX_TRACE = preload("res://assets/vfx/third_party/kenney_particle/trace_05.png")
+const WALL_TEXTURE = preload("res://assets/world/endless/wall_segment.svg")
+const DOOR_TEXTURE = preload("res://assets/world/endless/breakable_gate.svg")
 const INK = Color("#0c1017")
 const TEAL = Color("#8fdbc8")
 const RED = Color("#d66769")
@@ -664,7 +666,12 @@ func _draw_stage() -> void:
 	debug_stage_layer_order.clear()
 	if sim.endless_mode:
 		_draw_endless_stage()
-		debug_stage_layer_order.assign(surface_renderer.STAGE_LAYER_ORDER.slice(0, 6))
+		# Endless uses its own wide arena renderer, then reuses the data-driven
+		# terrain pass so walls, junctions and destructible doors stay editable in
+		# stages.json and participate in the same visual layer contract.
+		debug_stage_layer_order.assign(surface_renderer.STAGE_LAYER_ORDER.slice(0, 4))
+		_draw_stage_terrain({}, {})
+		_stage_layer("architecture")
 		return
 	if stage_tile_cache_id != sim.current_stage_id:
 		_build_stage_tile_cache(sim.current_stage_id)
@@ -892,15 +899,45 @@ func _draw_foreground_embers(accent: Color) -> void:
 		var ember := STAGE_VISUAL.ember_color.lerp(accent, 0.35)
 		draw_circle(point, 1.4 + float(i % 3) * 0.45, Color(ember, 0.12 * (1.0 - travel / 118.0)))
 
+func _terrain_screen_rect(area: Rect2) -> Rect2:
+	if sim.endless_mode:
+		return Rect2(world_to_screen(area.position), area.size)
+	var polygon := Stage.polygon(area)
+	var left := minf(polygon[0].x, polygon[3].x)
+	var top := minf(polygon[0].y, polygon[1].y)
+	var right := maxf(polygon[1].x, polygon[2].x)
+	var bottom := maxf(polygon[2].y, polygon[3].y)
+	return Rect2(left, top, right - left, bottom - top)
+
+func _terrain_polygon(area: Rect2) -> PackedVector2Array:
+	if not sim.endless_mode:
+		return Stage.polygon(area)
+	var screen := _terrain_screen_rect(area)
+	return PackedVector2Array([screen.position, Vector2(screen.end.x, screen.position.y), screen.end, Vector2(screen.position.x, screen.end.y)])
+
 func _draw_terrain_features() -> void:
 	for feature: Dictionary in sim.terrain_features:
 		var area: Rect2 = feature.get("area", Rect2())
 		if area.size == Vector2.ZERO:
 			continue
 		var kind := str(feature.get("type", ""))
-		var polygon := Stage.polygon(area)
+		var polygon := _terrain_polygon(area)
 		var center := world_to_screen(area.get_center())
-		if kind == "high_ground":
+		if kind == "junction":
+			var screen_area := _terrain_screen_rect(area)
+			var layout := str(feature.get("layout", "cross"))
+			draw_rect(screen_area, Color(0.18, 0.08, 0.12, 0.18), true)
+			draw_rect(screen_area, Color(0.88, 0.30, 0.40, 0.22), false, 2.0)
+			var arm := minf(screen_area.size.x, screen_area.size.y) * 0.28
+			draw_line(center - Vector2(arm, 0), center + Vector2(arm, 0), Color(0.94, 0.38, 0.46, 0.24), 12.0, true)
+			if layout in ["t", "cross"]:
+				draw_line(center, center + Vector2(0, arm if layout == "t" else arm), Color(0.94, 0.38, 0.46, 0.24), 12.0, true)
+			if layout == "cross":
+				draw_line(center, center - Vector2(0, arm), Color(0.94, 0.38, 0.46, 0.24), 12.0, true)
+			elif layout == "dual":
+				draw_line(center - Vector2(arm, 18), center + Vector2(arm, 18), Color(0.94, 0.38, 0.46, 0.20), 7.0, true)
+			caption(center + Vector2(-38, -16), str(feature.get("label", "路口")), Color("#d98291"), 9)
+		elif kind == "high_ground":
 			var lowered := PackedVector2Array()
 			for point in polygon:
 				lowered.append(point + Vector2(0, 10))
@@ -918,9 +955,13 @@ func _draw_terrain_features() -> void:
 				draw_line(polygon[0].lerp(polygon[3], float(i + 1) / 5.0), polygon[1].lerp(polygon[2], float(i + 1) / 5.0), Color(0.33, 0.57, 0.68, 0.22), 2.0, true)
 			caption(center + Vector2(-28, -8), "洼地 · 减速", Color("#88bfd4"), 10)
 		elif kind == "blocked":
-			draw_colored_polygon(polygon, Color(0.22, 0.07, 0.10, 0.92))
-			draw_polyline(PackedVector2Array([polygon[0], polygon[2], polygon[1], polygon[3], polygon[0]]), Color("#c34d60"), 3.0, true)
-			caption(center + Vector2(-26, -7), "不可通行", Color("#ff8795"), 10)
+			if sim.endless_mode:
+				draw_texture_rect(WALL_TEXTURE, _terrain_screen_rect(area), true, Color(0.92, 0.80, 0.84, 0.98))
+			else:
+				draw_colored_polygon(polygon, Color(0.22, 0.07, 0.10, 0.92))
+				draw_polyline(PackedVector2Array([polygon[0], polygon[2], polygon[1], polygon[3], polygon[0]]), Color("#c34d60"), 3.0, true)
+			if not sim.endless_mode:
+				caption(center + Vector2(-30, -7), str(feature.get("label", "不可通行")), Color("#ff8795"), 9)
 		elif kind == "mechanism":
 			var active: bool = sim.heroes.any(func(hero: Dictionary) -> bool: return hero.hp > 0.0 and area.grow(95.0).has_point(hero.pos))
 			var glow := Color("#ffbd62") if active else Color("#9c727a")
@@ -930,28 +971,31 @@ func _draw_terrain_features() -> void:
 			if active:
 				draw_arc(center, float(feature.get("radius", 180.0)) * 0.38, 0, TAU, 48, Color(glow, 0.10), 2.0, true)
 			caption(center + Vector2(-28, 37), "火力机关" if active else "靠近启动", glow, 10)
-		elif kind == "shortcut":
-			var broken := bool(feature.get("broken", false))
+		elif kind in ["shortcut", "door"]:
+			var broken := float(feature.get("hp", 0.0)) <= 0.0
 			if broken:
 				draw_colored_polygon(polygon, Color(0.25, 0.72, 0.52, 0.08))
 				draw_dashed_line(polygon[0], polygon[1], Color("#66d49d"), 2.0, 7.0, true)
 				caption(center + Vector2(-33, -6), "捷径已开启", Color("#83e1b2"), 10)
 			else:
-				draw_colored_polygon(polygon, Color(0.25, 0.13, 0.10, 0.92))
-				for i in 4:
-					var x := lerpf(polygon[0].x, polygon[1].x, float(i + 1) / 5.0)
-					draw_line(Vector2(x, polygon[0].y), Vector2(x, polygon[3].y), Color("#df8c5d"), 4.0, true)
+				if sim.endless_mode and kind == "door":
+					draw_texture_rect(DOOR_TEXTURE, _terrain_screen_rect(area), false, Color.WHITE)
+				else:
+					draw_colored_polygon(polygon, Color(0.25, 0.13, 0.10, 0.92))
+					for i in 4:
+						var x := lerpf(polygon[0].x, polygon[1].x, float(i + 1) / 5.0)
+						draw_line(Vector2(x, polygon[0].y), Vector2(x, polygon[3].y), Color("#df8c5d"), 4.0, true)
 				var hp_ratio := clampf(float(feature.get("hp", 0.0)) / maxf(1.0, float(feature.get("max_hp", 1.0))), 0.0, 1.0)
-				draw_rect(Rect2(center + Vector2(-31, -28), Vector2(62, 4)), Color("#291d20"))
-				draw_rect(Rect2(center + Vector2(-31, -28), Vector2(62 * hp_ratio, 4)), Color("#f2aa65"))
-				caption(center + Vector2(-39, 27), "战技可破坏", Color("#ffc181"), 10)
+				draw_rect(Rect2(center + Vector2(-38, -42), Vector2(76, 6)), Color("#291d20"))
+				draw_rect(Rect2(center + Vector2(-38, -42), Vector2(76 * hp_ratio, 6)), Color("#f2aa65"))
+				caption(center + Vector2(-43, 44), "战技破门" if kind == "door" else "战技可破坏", Color("#ffc181"), 10)
 
 func _draw_endless_stage() -> void:
 	draw_texture_rect(stage_background_8, Rect2(0, 0, 1280, 720), false, Color(0.34, 0.24, 0.30, 1.0))
 	draw_rect(Rect2(0, 0, 1280, 720), Color(0.035, 0.018, 0.045, 0.69))
 	# Broad overlapping slabs remove the old black checkerboard while retaining navigation scale.
-	var top_left := screen_to_world(Vector2.ZERO)
-	var bottom_right := screen_to_world(Vector2(1280, 720))
+	var top_left := screen_to_world(ENDLESS_PLAYFIELD_SCREEN.position)
+	var bottom_right := screen_to_world(ENDLESS_PLAYFIELD_SCREEN.end)
 	var cell := 192.0
 	var first_x := floorf(top_left.x / cell) * cell
 	var first_y := floorf(top_left.y / cell) * cell

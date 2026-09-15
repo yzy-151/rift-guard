@@ -473,7 +473,7 @@ func terrain_movement_scale(point: Vector2) -> float:
 
 func _resolve_walkable_target(point: Vector2) -> Vector2:
 	for feature: Dictionary in terrain_features:
-		var blocks := str(feature.get("type", "")) == "blocked" or (str(feature.get("type", "")) == "shortcut" and float(feature.get("hp", 0.0)) > 0.0)
+		var blocks := _feature_blocks(feature)
 		if not blocks or not feature.area.has_point(point):
 			continue
 		var area: Rect2 = feature.area
@@ -482,45 +482,102 @@ func _resolve_walkable_target(point: Vector2) -> Vector2:
 		return candidates[0]
 	return point
 
-func _terrain_blocks(point: Vector2) -> bool:
-	return not _terrain_blocker_at(point).is_empty()
+func _feature_blocks(feature: Dictionary) -> bool:
+	var kind := str(feature.get("type", ""))
+	return kind == "blocked" or (kind in ["shortcut", "door"] and float(feature.get("hp", 0.0)) > 0.0)
 
-func _terrain_blocker_at(point: Vector2) -> Dictionary:
+func _terrain_blocks(point: Vector2, radius: float = 7.0) -> bool:
+	return not _terrain_blocker_at(point, radius).is_empty()
+
+func _terrain_blocker_at(point: Vector2, radius: float = 7.0) -> Dictionary:
 	for feature: Dictionary in terrain_features:
-		var blocks := str(feature.get("type", "")) == "blocked" or (str(feature.get("type", "")) == "shortcut" and float(feature.get("hp", 0.0)) > 0.0)
-		if blocks and feature.area.grow(7.0).has_point(point):
+		if _feature_blocks(feature) and Rect2(feature.area).grow(radius).has_point(point):
 			return feature
 	return {}
 
+func _segment_hits_rect(from: Vector2, to: Vector2, rect: Rect2) -> bool:
+	var delta := to - from
+	var t_min := 0.0
+	var t_max := 1.0
+	if absf(delta.x) < 0.0001:
+		if from.x < rect.position.x or from.x > rect.end.x:
+			return false
+	else:
+		var tx1 := (rect.position.x - from.x) / delta.x
+		var tx2 := (rect.end.x - from.x) / delta.x
+		if tx1 > tx2:
+			var swap_x := tx1
+			tx1 = tx2
+			tx2 = swap_x
+		t_min = maxf(t_min, tx1)
+		t_max = minf(t_max, tx2)
+		if t_min > t_max:
+			return false
+	if absf(delta.y) < 0.0001:
+		return from.y >= rect.position.y and from.y <= rect.end.y
+	var ty1 := (rect.position.y - from.y) / delta.y
+	var ty2 := (rect.end.y - from.y) / delta.y
+	if ty1 > ty2:
+		var swap_y := ty1
+		ty1 = ty2
+		ty2 = swap_y
+	t_min = maxf(t_min, ty1)
+	t_max = minf(t_max, ty2)
+	return t_min <= t_max
+
+func _terrain_blocker_on_segment(from: Vector2, to: Vector2, radius: float = 5.0) -> Dictionary:
+	for feature: Dictionary in terrain_features:
+		if _feature_blocks(feature) and _segment_hits_rect(from, to, Rect2(feature.area).grow(radius)):
+			return feature
+	return {}
+
+func terrain_line_blocked(from: Vector2, to: Vector2, radius: float = 5.0) -> bool:
+	return not _terrain_blocker_on_segment(from, to, radius).is_empty()
+
+func _move_with_terrain(current: Vector2, target: Vector2, distance: float, radius: float = 16.0) -> Vector2:
+	if current.distance_squared_to(target) <= 0.01:
+		return current
+	var direct := current.move_toward(target, distance)
+	var blocker := _terrain_blocker_on_segment(current, direct, radius)
+	if blocker.is_empty():
+		return direct
+	var obstacle: Rect2 = Rect2(blocker.area).grow(radius + 7.0)
+	var waypoints := [
+		Vector2(obstacle.position.x - 2.0, obstacle.position.y - 2.0),
+		Vector2(obstacle.end.x + 2.0, obstacle.position.y - 2.0),
+		Vector2(obstacle.position.x - 2.0, obstacle.end.y + 2.0),
+		Vector2(obstacle.end.x + 2.0, obstacle.end.y + 2.0),
+	]
+	waypoints.sort_custom(func(a: Vector2, b: Vector2) -> bool:
+		return current.distance_to(a) + a.distance_to(target) < current.distance_to(b) + b.distance_to(target))
+	for waypoint: Vector2 in waypoints:
+		var candidate := current.move_toward(waypoint, distance)
+		if _terrain_blocker_on_segment(current, candidate, radius).is_empty():
+			return candidate
+	return current
+
 func _move_hero_with_terrain(hero: Dictionary, dt: float) -> void:
 	var distance := float(hero.speed) * terrain_movement_scale(hero.pos) * dt
-	var proposed: Vector2 = hero.pos.move_toward(hero.target, distance)
-	var blocker := _terrain_blocker_at(proposed)
-	if blocker.is_empty():
-		hero.pos = proposed
-		var conveyor := terrain_feature_at(hero.pos, "conveyor")
-		if not conveyor.is_empty():
-			var raw_direction: Array = conveyor.get("direction", [-1, 0])
-			var direction := Vector2(float(raw_direction[0]), float(raw_direction[1])).normalized()
-			hero.pos += direction * float(conveyor.get("force", 40.0)) * dt
-		return
-	var obstacle: Rect2 = blocker.area.grow(10.0)
-	var detour_y := obstacle.position.y - 6.0 if hero.pos.y <= obstacle.get_center().y else obstacle.end.y + 6.0
-	var tangent := Vector2(hero.pos.x, detour_y)
-	var slide: Vector2 = hero.pos.move_toward(tangent, distance)
-	if not _terrain_blocks(slide):
-		hero.pos = slide
+	hero.pos = _move_with_terrain(hero.pos, hero.target, distance, 17.0)
+	var conveyor := terrain_feature_at(hero.pos, "conveyor")
+	if not conveyor.is_empty():
+		var raw_direction: Array = conveyor.get("direction", [-1, 0])
+		var direction := Vector2(float(raw_direction[0]), float(raw_direction[1])).normalized()
+		var shifted: Vector2 = Vector2(hero.pos) + direction * float(conveyor.get("force", 40.0)) * dt
+		if not _terrain_blocks(shifted, 17.0):
+			hero.pos = shifted
 
 func damage_terrain_shortcuts(center: Vector2, radius: float, damage: float) -> int:
 	var broken := 0
 	for feature: Dictionary in terrain_features:
-		if str(feature.get("type", "")) != "shortcut" or float(feature.get("hp", 0.0)) <= 0.0:
+		if str(feature.get("type", "")) not in ["shortcut", "door"] or float(feature.get("hp", 0.0)) <= 0.0:
 			continue
 		if feature.area.get_center().distance_to(center) > radius:
 			continue
 		feature.hp = maxf(0.0, float(feature.hp) - damage)
 		events.append({"kind": "terrain_hit", "pos": feature.area.get_center(), "value": ceili(damage)})
 		if feature.hp <= 0.0:
+			feature.broken = true
 			broken += 1
 			events.append({"kind": "terrain_break", "pos": feature.area.get_center(), "value": str(feature.get("label", "捷径"))})
 	return broken
@@ -845,7 +902,8 @@ func _enemy_tick(dt: float) -> void:
 		e.special_timer = maxf(0, float(e.special_timer) - dt)
 		e.affix_timer = maxf(0.0, float(e.get("affix_timer", 0.0)) - dt)
 		if "blink" in e.get("affixes", []) and e.affix_timer <= 0.0:
-			e.pos.x -= 120.0
+			var blink_target: Vector2 = Vector2(e.pos) + Vector2(-120.0, 0.0)
+			e.pos = blink_target if bool(e.get("flying", false)) else _move_with_terrain(e.pos, blink_target, 120.0, maxf(12.0, float(e.get("size", 28.0)) * 0.34))
 			e.affix_timer = 5.0
 			events.append({"kind":"enemy_blink","pos":e.pos,"value":120})
 		elif "aegis" in e.get("affixes", []) and e.affix_timer <= 0.0:
@@ -871,7 +929,8 @@ func _enemy_tick(dt: float) -> void:
 			destination = route[route_index]
 		if absf(destination.x - e.pos.x) > 1.0:
 			e.facing = 1.0 if destination.x > e.pos.x else -1.0
-		var next_pos: Vector2 = e.pos.move_toward(destination, e.speed * speed_scale * dt)
+		var move_distance := float(e.speed) * speed_scale * dt
+		var next_pos: Vector2 = e.pos.move_toward(destination, move_distance) if bool(e.get("flying", false)) else _move_with_terrain(e.pos, destination, move_distance, maxf(12.0, float(e.get("size", 28.0)) * 0.34))
 		var one_way := terrain_feature_at(e.pos, "one_way")
 		if not one_way.is_empty():
 			var raw_direction: Array = one_way.get("direction", [-1, 0])
@@ -895,7 +954,7 @@ func _enemy_tick(dt: float) -> void:
 		var ranged_victim: Dictionary = {}
 		if float(e.get("attack_range", 0.0)) > 0.0:
 			for h: Dictionary in heroes:
-				if bool(h.get("deployed", false)) and h.hp > 0 and e.pos.distance_to(h.pos) <= float(e.attack_range):
+				if bool(h.get("deployed", false)) and h.hp > 0 and e.pos.distance_to(h.pos) <= float(e.attack_range) and (bool(e.get("flying", false)) or not terrain_line_blocked(e.pos, h.pos)):
 					if ranged_victim.is_empty() or e.pos.distance_to(h.pos) < e.pos.distance_to(ranged_victim.pos):
 						ranged_victim = h
 			if not ranged_victim.is_empty():
@@ -1067,6 +1126,8 @@ func _boss_damage_warned(enemy: Dictionary, multiplier: float, control: String =
 	var bounds := ENDLESS_ARENA.grow(-28.0) if endless_mode else MOVE_AREA
 	for hero: Dictionary in heroes:
 		if hero.hp <= 0.0 or not bool(hero.get("deployed", false)) or not _hero_in_boss_warning(hero, enemy):
+			continue
+		if not bool(enemy.get("flying", false)) and terrain_line_blocked(enemy.pos, hero.pos):
 			continue
 		var amount := float(enemy.damage) * multiplier
 		damage_hero(int(hero.id), amount)
@@ -1337,6 +1398,7 @@ func _execute_ability_impact(hero: Dictionary, ability: Dictionary, target: Vect
 					ally.energy = minf(ally.max_energy, ally.energy+30.0)
 		_:
 			_damage_area(target, radius, power, str(hero.element), hero.id)
+	damage_terrain_shortcuts(target, radius, maxf(90.0, power * (0.42 if ultimate else 0.30)))
 	if passive_kind == "encore_meter":
 		for ally: Dictionary in heroes: ally.skill_cooldown = maxf(0.0, ally.skill_cooldown-1.5)
 	hero.energy = minf(float(hero.max_energy), float(hero.energy) + (8.0 if run_state.equipped_relics.has("relic_resonant_core") else 0.0))
@@ -1435,7 +1497,8 @@ func _resolve_enemy_warning(enemy: Dictionary) -> void:
 				break
 	elif victim_id >= 0 and victim_id < heroes.size():
 		var victim: Dictionary = heroes[victim_id]
-		if bool(victim.get("deployed", false)) and victim.hp > 0.0 and victim.pos.distance_to(enemy.warning_pos) <= float(enemy.warning_radius):
+		var clear_shot := bool(enemy.get("flying", false)) or float(enemy.get("attack_range", 0.0)) <= 0.0 or not terrain_line_blocked(enemy.pos, victim.pos)
+		if bool(victim.get("deployed", false)) and victim.hp > 0.0 and victim.pos.distance_to(enemy.warning_pos) <= float(enemy.warning_radius) and clear_shot:
 			damage_hero(victim_id, enemy.damage)
 			if "suppressor" in enemy.get("affixes",[]):
 				victim.skill_cooldown = float(victim.get("skill_cooldown",0.0))+2.0
@@ -1692,7 +1755,7 @@ func _hero_tick() -> void:
 		var available: Array[Dictionary] = []
 		for e: Dictionary in enemies:
 			var can_target_air: bool = bool(h.get("can_hit_air", false)) or (h.get("character_id", "") == "traveler" and h.get("element", "") != "")
-			if e.hp > 0 and (not bool(e.get("flying", false)) or can_target_air) and is_in_attack_range(h, e.pos):
+			if e.hp > 0 and (not bool(e.get("flying", false)) or can_target_air) and is_in_attack_range(h, e.pos) and not terrain_line_blocked(h.pos, e.pos):
 				available.append(e)
 				if target.is_empty() or e.pos.x < target.pos.x:
 					target = e

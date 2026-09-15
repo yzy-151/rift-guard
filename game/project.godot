@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/version="49.0.0"
-config/description="V49：少女、希露菲、旅行者、阿米娅全序列动画 / 24 FPS / 死亡定格 / 1920×1080"
+config/version="50.0.0"
+config/description="V50：动态角色卡片 / 底部横向战斗HUD / 真实头像 / 无尽迷宫墙体与可破坏门 / 1920×1080"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
