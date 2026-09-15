@@ -1,0 +1,443 @@
+{
+  "grunt": {
+    "name": "木棍丘丘人",
+    "source_folder": "木棍丘丘人",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      116.88,
+      227.724
+    ],
+    "display_size": 118.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      28,
+      768,
+      755
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/grunt/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/grunt/run.png",
+        "frames": 19,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/grunt/attack.png",
+        "frames": 19,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/grunt/down.png",
+        "frames": 21,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "runner": {
+    "name": "哥布林",
+    "source_folder": "哥布林",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      127.682,
+      227.052
+    ],
+    "display_size": 105.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      77,
+      768,
+      768
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/runner/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/runner/run.png",
+        "frames": 19,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/runner/attack.png",
+        "frames": 22,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/runner/down.png",
+        "frames": 44,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "armored": {
+    "name": "铁桶僵尸",
+    "source_folder": "铁桶僵尸",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      114.974,
+      229.042
+    ],
+    "display_size": 130.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      28,
+      768,
+      750
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/armored/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/armored/run.png",
+        "frames": 60,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/armored/attack.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/armored/down.png",
+        "frames": 61,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "ranged": {
+    "name": "丘丘弓箭手",
+    "source_folder": "丘丘弓箭手",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      115.292,
+      217.13
+    ],
+    "display_size": 116.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      108,
+      768,
+      725
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/ranged/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/ranged/run.png",
+        "frames": 43,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/ranged/attack.png",
+        "frames": 53,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/ranged/down.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "buffer": {
+    "name": "丘丘萨满",
+    "source_folder": "丘丘萨满",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      118.054,
+      231.103
+    ],
+    "display_size": 128.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      0,
+      736,
+      736
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/buffer/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/buffer/run.png",
+        "frames": 29,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/buffer/attack.png",
+        "frames": 41,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/buffer/down.png",
+        "frames": 31,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "charger": {
+    "name": "野猪骑士",
+    "source_folder": "野猪骑士",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      111.161,
+      230.995
+    ],
+    "display_size": 150.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      48,
+      768,
+      762
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/charger/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/charger/run.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/charger/attack.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/charger/down.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "shielded": {
+    "name": "皮卡超人",
+    "source_folder": "皮卡超人",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      114.339,
+      240.151
+    ],
+    "display_size": 230.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      0,
+      768,
+      768
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/shielded/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/shielded/run.png",
+        "frames": 51,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/shielded/attack.png",
+        "frames": 44,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/shielded/down.png",
+        "frames": 31,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "splitter": {
+    "name": "哥布林茅房",
+    "source_folder": "哥布林茅房",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      103.6,
+      218.955
+    ],
+    "display_size": 185.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      164,
+      695,
+      768
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/splitter/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/splitter/run.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/splitter/attack.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/splitter/down.png",
+        "frames": 39,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    },
+    "procedural": "spawner_stretch"
+  }
+}

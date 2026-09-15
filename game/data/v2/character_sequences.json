@@ -64,7 +64,7 @@
       92.828,
       242.422
     ],
-    "display_size": 150.0,
+    "display_size": 142.5,
     "fps": 24.0,
     "crop": [
       76,
@@ -208,6 +208,171 @@
       "down": {
         "texture": "res://assets/characters/sequences/hero_06/down.png",
         "frames": 45,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "hero_03": {
+    "name": "芙宁娜",
+    "source_folder": "芙宁娜",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      117.129,
+      240.095
+    ],
+    "display_size": 150.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      14,
+      1010,
+      1024
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/characters/sequences/hero_03/idle.png",
+        "frames": 26,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/characters/sequences/hero_03/run.png",
+        "frames": 37,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/characters/sequences/hero_03/attack.png",
+        "frames": 23,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/characters/sequences/hero_03/down.png",
+        "frames": 48,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "hero_07": {
+    "name": "丰川祥子",
+    "source_folder": "丰川祥子",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      106.191,
+      230.96
+    ],
+    "display_size": 150.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      60,
+      758,
+      768
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/characters/sequences/hero_07/idle.png",
+        "frames": 24,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/characters/sequences/hero_07/run.png",
+        "frames": 27,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/characters/sequences/hero_07/attack.png",
+        "frames": 23,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/characters/sequences/hero_07/down.png",
+        "frames": 37,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "hero_08": {
+    "name": "艾米莉亚",
+    "source_folder": "艾米莉亚",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      102.822,
+      241.516
+    ],
+    "display_size": 150.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      0,
+      768,
+      754
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/characters/sequences/hero_08/idle.png",
+        "frames": 30,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/characters/sequences/hero_08/run.png",
+        "frames": 21,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/characters/sequences/hero_08/attack.png",
+        "frames": 31,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/characters/sequences/hero_08/down.png",
+        "frames": 36,
         "columns": 8,
         "fps": 24.0,
         "loop": false,

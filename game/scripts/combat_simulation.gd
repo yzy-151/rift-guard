@@ -636,8 +636,8 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 		shield *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
 		if kind.begins_with("boss_") and not endless_mode:
 			shield *= float(stage_runtime.definition.get("boss_health_multiplier", 1.0))
-	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 28, "charger": 20, "healer": 30, "splitter": 34, "warder": 32, "boss_01": 240, "boss_02": 280, "boss_03": 260, "boss_04": 320, "boss_05": 290, "boss_06": 310}
-	var first_special: float = float(enemy.get("boss_pulse", enemy.get("heal_interval", enemy.get("ward_interval", 0.0))))
+	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 38, "charger": 20, "healer": 30, "splitter": 42, "warder": 32, "slime_pyro": 11, "slime_electro": 11, "slime_anemo": 12, "slime_hydro": 14, "slime_cryo": 16, "boss_01": 240, "boss_02": 280, "boss_03": 260, "boss_04": 320, "boss_05": 290, "boss_06": 310}
+	var first_special: float = float(enemy.get("boss_pulse", enemy.get("spawn_interval", enemy.get("heal_interval", enemy.get("ward_interval", 0.0)))))
 	enemy.merge({"id": next_id, "kind": kind, "pos": point, "facing": -1.0, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "boss_cast_index": 0, "special_move": "pulse", "summons_done": 0, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10)), "attack_pending": false, "warning_timer": 0.0, "warning_pos": point, "warning_radius": 58.0, "special_pending": false, "special_warning": 0.0, "affixes": [], "affix_timer": 3.5})
 	_apply_enemy_affix(enemy)
 	enemies.append(enemy)
@@ -777,11 +777,11 @@ func _endless_spawn_tick(dt: float) -> void:
 	var build_levels := 0
 	for level: Variant in run_state.buff_levels.values():
 		build_levels += int(level)
-	var pool := ["grunt", "grunt", "runner", "runner", "grunt", "runner"]
+	var pool := ["grunt", "grunt", "runner", "runner", "slime_pyro", "slime_electro"]
 	if tier >= 2:
-		pool.append_array(["flyer", "charger"])
+		pool.append_array(["flyer", "charger", "slime_anemo", "slime_hydro"])
 	if tier >= 3:
-		pool.append_array(["armored", "buffer", "charger"])
+		pool.append_array(["armored", "buffer", "charger", "slime_cryo", "splitter"])
 	if tier >= 3 and build_levels >= 5:
 		pool.append("ranged")
 	if tier >= 6 and build_levels >= 14:
@@ -900,6 +900,7 @@ func _enemy_tick(dt: float) -> void:
 		e.frozen_timer = maxf(0, float(e.get("frozen_timer", 0.0)) - dt)
 		e.haste_timer = maxf(0, e.haste_timer - dt)
 		e.special_timer = maxf(0, float(e.special_timer) - dt)
+		e.spawn_pulse = maxf(0.0, float(e.get("spawn_pulse", 0.0)) - dt)
 		e.affix_timer = maxf(0.0, float(e.get("affix_timer", 0.0)) - dt)
 		if "blink" in e.get("affixes", []) and e.affix_timer <= 0.0:
 			var blink_target: Vector2 = Vector2(e.pos) + Vector2(-120.0, 0.0)
@@ -1017,7 +1018,22 @@ func _enemy_tick(dt: float) -> void:
 				if bool(warned_hero.get("deployed", false)) and warned_hero.hp > 0.0:
 					e.special_warning_positions.append(warned_hero.pos)
 					events.append({"kind":"enemy_warning","pos":warned_hero.pos,"source":e.pos,"radius":warning_radius,"life":lead,"boss":true,"shape":e.special_warning_shape,"name":e.special_move_name})
-		elif e.get("kind", "") == "healer" and e.special_timer <= 0.0:
+		elif bool(e.get("spawner", false)) and e.special_timer <= 0.0:
+			var spawned := 0
+			var local_spawned := enemies.filter(func(candidate: Dictionary) -> bool: return candidate.hp > 0.0 and str(candidate.get("spawned_by", "")) == str(e.id)).size()
+			for spawn_index in mini(int(e.get("spawn_count", 2)), maxi(0, int(e.get("spawn_limit", 8)) - local_spawned)):
+				var offset := Vector2(42.0 + spawn_index * 18.0, -26.0 + spawn_index * 52.0)
+				var child := spawn_enemy(Vector2(e.pos) + offset, str(e.get("spawn_kind", "runner")))
+				child.spawned_by = e.id
+				child.route_points = Array(e.get("route_points", [])).duplicate()
+				child.route_index = int(e.get("route_index", 0))
+				child.route_id = str(e.get("route_id", ""))
+				spawned += 1
+			e.special_timer = float(e.get("spawn_interval", 6.5))
+			e.spawn_pulse = 0.55
+			if spawned > 0:
+				events.append({"kind":"goblin_spawn","pos":e.pos,"value":spawned,"enemy_id":e.id})
+		elif e.get("kind", "") in ["healer", "slime_hydro"] and e.special_timer <= 0.0:
 			var healed := 0
 			for ally: Dictionary in enemies:
 				if ally.hp > 0.0 and ally.id != e.id and ally.pos.distance_to(e.pos) <= float(e.get("heal_radius", 190.0)):
@@ -1505,7 +1521,7 @@ func _resolve_enemy_warning(enemy: Dictionary) -> void:
 				events.append({"kind":"skill_suppressed","pos":victim.pos,"value":2})
 			hit = true
 			if float(enemy.get("attack_range", 0.0)) > 0.0:
-				events.append({"kind":"enemy_shot","pos":enemy.pos,"target":victim.pos,"value":ceili(enemy.damage)})
+				events.append({"kind":"enemy_shot","pos":enemy.pos,"target":victim.pos,"value":ceili(enemy.damage),"enemy_kind":str(enemy.get("kind",""))})
 	if hit and "vampiric" in enemy.get("affixes", []):
 		enemy.hp = minf(enemy.max_hp, enemy.hp + enemy.damage * 0.25)
 		events.append({"kind":"enemy_heal","pos":enemy.pos,"value":ceili(enemy.damage * 0.25)})
@@ -1797,8 +1813,8 @@ func _hero_tick() -> void:
 func attack_range_screen_radii(hero: Dictionary) -> Vector2:
 	var depth: float = StageProjection.depth_scale(hero.pos)
 	var terrain_range_scale := 1.22 if not terrain_feature_at(hero.pos, "high_ground").is_empty() else 1.0
-	var radius_x: float = minf(248.0, 35.0 + float(hero.range) * 0.56 * depth * terrain_range_scale)
-	return Vector2(radius_x, radius_x * 0.30)
+	var radius_x: float = minf(286.0, 42.0 + float(hero.range) * 0.62 * depth * terrain_range_scale)
+	return Vector2(radius_x, radius_x * 0.40)
 
 func is_in_attack_range(hero: Dictionary, point: Vector2) -> bool:
 	var center: Vector2 = StageProjection.project(hero.pos) + Vector2(0, 8)
@@ -1879,7 +1895,7 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String, source_her
 	if enemy.hp > 0.0 and str(enemy.get("kind", "")).begins_with("boss_"):
 		_update_boss_phase(enemy)
 	if enemy.hp <= 0:
-		if enemy.get("kind", "") == "splitter" and not bool(enemy.get("split_done", false)):
+		if enemy.get("kind", "") == "splitter" and not bool(enemy.get("spawner", false)) and not bool(enemy.get("split_done", false)):
 			enemy.split_done = true
 			for i in int(enemy.get("split_count", 2)):
 				var child := spawn_enemy(enemy.pos + Vector2(24.0 + i * 18.0, -22.0 + i * 44.0), "runner")
@@ -1917,7 +1933,12 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String, source_her
 			frenzy_milestone = milestone
 			events.append({"kind": "frenzy", "pos": enemy.pos, "value": milestone})
 		grant_xp(enemy.xp)
-		events.append({"kind": "death", "pos": enemy.pos})
+		if float(enemy.get("death_burst", 0.0)) > 0.0:
+			for hero: Dictionary in heroes:
+				if bool(hero.get("deployed", false)) and hero.hp > 0.0 and hero.pos.distance_to(enemy.pos) <= 105.0:
+					damage_hero(hero.id, float(enemy.death_burst))
+			events.append({"kind":"enemy_volatile","pos":enemy.pos,"value":int(enemy.death_burst)})
+		events.append({"kind": "death", "pos": enemy.pos, "enemy_kind": str(enemy.get("kind", "")), "facing": float(enemy.get("facing", -1.0)), "size": float(enemy.get("size", 48.0)), "color": str(enemy.get("color", "#ffffff"))})
 	return damage
 
 func _update_boss_phase(enemy: Dictionary) -> void:

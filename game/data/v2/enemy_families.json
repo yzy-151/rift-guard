@@ -1,27 +1,27 @@
 [
   {
     "id": "grunt",
-    "family": "slime",
-    "variant": "crimson",
+    "family": "hilichurl",
+    "variant": "club",
     "behavior": "pressure_advance",
-    "motion": "elastic_hop",
-    "visual": "slime_red"
+    "motion": "sequence",
+    "visual": "grunt"
   },
   {
     "id": "runner",
-    "family": "slime",
-    "variant": "amber",
+    "family": "goblin",
+    "variant": "scout",
     "behavior": "zigzag_dash",
-    "motion": "quick_squash",
-    "visual": "slime_orange"
+    "motion": "sequence",
+    "visual": "runner"
   },
   {
     "id": "armored",
-    "family": "slime",
-    "variant": "stone",
+    "family": "undead",
+    "variant": "bucket",
     "behavior": "armor_lock",
-    "motion": "heavy_bounce",
-    "visual": "slime_gray"
+    "motion": "sequence",
+    "visual": "armored"
   },
   {
     "id": "flyer",
@@ -33,34 +33,34 @@
   },
   {
     "id": "ranged",
-    "family": "slime",
-    "variant": "violet",
+    "family": "hilichurl",
+    "variant": "archer",
     "behavior": "ranged_volley",
-    "motion": "recoil_hop",
-    "visual": "slime_purple"
+    "motion": "sequence",
+    "visual": "ranged"
   },
   {
     "id": "buffer",
-    "family": "slime",
-    "variant": "gold",
+    "family": "hilichurl",
+    "variant": "shaman",
     "behavior": "haste_aura",
-    "motion": "pulse_bounce",
+    "motion": "sequence",
     "visual": "buffer"
   },
   {
     "id": "shielded",
-    "family": "slime",
-    "variant": "crystal",
-    "behavior": "shield_regen",
-    "motion": "guard_squash",
+    "family": "construct",
+    "variant": "pekka",
+    "behavior": "armor_lock",
+    "motion": "sequence",
     "visual": "shielded"
   },
   {
     "id": "charger",
-    "family": "slime",
-    "variant": "scarlet",
+    "family": "raider",
+    "variant": "hog",
     "behavior": "charge_burst",
-    "motion": "lean_dash",
+    "motion": "sequence",
     "visual": "charger"
   },
   {
@@ -73,10 +73,10 @@
   },
   {
     "id": "splitter",
-    "family": "slime",
-    "variant": "rose",
-    "behavior": "split_on_death",
-    "motion": "double_bounce",
+    "family": "goblin",
+    "variant": "hut",
+    "behavior": "periodic_spawn",
+    "motion": "sequence",
     "visual": "splitter"
   },
   {
@@ -182,5 +182,45 @@
     "behavior": "element_aura",
     "motion": "element_pulse",
     "visual": "buffer"
+  },
+  {
+    "id": "slime_pyro",
+    "family": "slime",
+    "variant": "pyro",
+    "behavior": "death_burst",
+    "motion": "charged_hop",
+    "visual": "slime_pyro"
+  },
+  {
+    "id": "slime_electro",
+    "family": "slime",
+    "variant": "electro",
+    "behavior": "split_on_death",
+    "motion": "double_bounce",
+    "visual": "slime_electro"
+  },
+  {
+    "id": "slime_anemo",
+    "family": "slime",
+    "variant": "anemo",
+    "behavior": "air_route",
+    "motion": "hover_swoop",
+    "visual": "slime_anemo"
+  },
+  {
+    "id": "slime_hydro",
+    "family": "slime",
+    "variant": "hydro",
+    "behavior": "healing_pulse",
+    "motion": "gentle_bob",
+    "visual": "slime_hydro"
+  },
+  {
+    "id": "slime_cryo",
+    "family": "slime",
+    "variant": "cryo",
+    "behavior": "slow_aura",
+    "motion": "guard_squash",
+    "visual": "slime_cryo"
   }
 ]

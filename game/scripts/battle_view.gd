@@ -10,6 +10,7 @@ const ReusableEffectPool = preload("res://scripts/reusable_effect_pool.gd")
 const SpriteAnchor = preload("res://scripts/sprite_anchor.gd")
 const UnitVisualActor = preload("res://scripts/unit_visual_actor.gd")
 const CharacterSequenceLibrary = preload("res://scripts/character_sequence_library.gd")
+const EnemySequenceLibrary = preload("res://scripts/enemy_sequence_library.gd")
 const CombatFeedbackDirector = preload("res://scripts/combat_feedback_director.gd")
 const StageSurfaceRenderer = preload("res://scripts/stage_surface_renderer.gd")
 const VfxPipeline = preload("res://scripts/vfx_pipeline.gd")
@@ -31,6 +32,7 @@ var clock: float = 0.0
 var shot_flashes: Dictionary = {}
 var hero_attack_visuals: Dictionary = {}
 var hero_down_visuals: Dictionary = {}
+var enemy_death_visuals: Array[Dictionary] = []
 var projectile_trails: Dictionary = {}
 var redraw_accumulator: float = 0.0
 var stage_tile_cache: Array[Dictionary] = []
@@ -40,6 +42,7 @@ var sprite_pivots: Dictionary = {}
 var enemy_visual_textures: Dictionary = {}
 var unit_visual_actors: Dictionary = {}
 var character_sequences = CharacterSequenceLibrary.new()
+var enemy_sequences = EnemySequenceLibrary.new()
 var feedback_director = CombatFeedbackDirector.new()
 var surface_renderer = StageSurfaceRenderer.new()
 var debug_visual_matrix: Array[Dictionary] = []
@@ -155,6 +158,12 @@ func advance(dt: float) -> void:
 			else:
 				hero_down_visuals.erase(hero.id)
 		_update_projectile_trails()
+	var living_deaths: Array[Dictionary] = []
+	for death_visual: Dictionary in enemy_death_visuals:
+		death_visual.elapsed = float(death_visual.get("elapsed", 0.0)) + dt
+		if float(death_visual.elapsed) <= float(death_visual.get("total", 0.6)):
+			living_deaths.append(death_visual)
+	enemy_death_visuals = living_deaths
 	base_flash = maxf(0.0, base_flash - dt)
 	shake_trauma = maxf(0.0, shake_trauma - dt * 3.8)
 	position = Vector2(sin(clock * 91.0), cos(clock * 73.0)) * shake_trauma * 5.0
@@ -242,6 +251,16 @@ func visual_sample(hero: Dictionary) -> Dictionary:
 
 func accept_events(batch: Array[Dictionary]) -> void:
 	for event in batch:
+		if event.kind == "death" and enemy_sequences.has_enemy(str(event.get("enemy_kind", ""))):
+			var enemy_id := str(event.enemy_kind)
+			enemy_death_visuals.append({
+				"kind": enemy_id,
+				"pos": Vector2(event.pos),
+				"facing": float(event.get("facing", -1.0)),
+				"size": float(event.get("size", 48.0)),
+				"elapsed": 0.0,
+				"total": enemy_sequences.duration(enemy_id, "down") + 0.16,
+			})
 		var feedback: Dictionary = feedback_director.observe(event)
 		match event.kind:
 			"route_warning":
@@ -262,10 +281,12 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				if effects.size() < 260:
 					var facing := float(hero.get("facing", 1.0))
 					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","")},0.16))
-			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "arena_event", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
+			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "arena_event", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "goblin_spawn", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
 				if sim != null and not sim.performance_budget.can_spawn_cosmetic(str(event.kind), effects.size()):
 					continue
 				var visual_event: Dictionary = event.duplicate(true)
+				if event.kind == "enemy_shot":
+					visual_event.direction = Vector2(event.get("target", event.pos)) - Vector2(event.pos)
 				visual_event.feedback_theme = feedback.theme
 				visual_event.feedback_theme_id = feedback.theme_id
 				var effect_duration := 0.6
@@ -318,7 +339,9 @@ func _draw() -> void:
 			_ground_circle(hero.target, 13.0, Color(hero.color))
 	var actors: Array[Dictionary] = []
 	for enemy in sim.enemies:
-		actors.append({"unit": enemy, "hero": false})
+		actors.append({"unit": enemy, "hero": false, "death": false})
+	for death_visual: Dictionary in enemy_death_visuals:
+		actors.append({"unit": death_visual, "hero": false, "death": true})
 	for hero in sim.heroes:
 		if bool(hero.get("deployed", true)):
 			actors.append({"unit": hero, "hero": true})
@@ -336,6 +359,8 @@ func _draw() -> void:
 		visual.pos = Vector2.ZERO
 		if actor.hero:
 			_draw_hero(visual)
+		elif bool(actor.get("death", false)):
+			_draw_enemy_death_visual(visual)
 		else:
 			_draw_enemy(visual)
 		draw_set_transform(Vector2.ZERO)
@@ -1281,7 +1306,7 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	var flying: bool = bool(enemy.get("flying", false))
 	var bob: float = sin(clock * (8.0 if not flying else 5.0) + enemy.id) * (2.0 if not flying else 7.0) - (22.0 if flying else 0.0)
 	var tint := Color("#fff5e5") if enemy.flash > 0 and not reduced_effects else Color(enemy.color)
-	var side: float = enemy.size
+	var side: float = maxf(float(enemy.size), enemy_sequences.display_size(str(enemy.kind)) * 0.72) if enemy_sequences.has_enemy(str(enemy.kind)) else float(enemy.size)
 	var body: Vector2 = enemy.pos + Vector2(0, -18 + bob)
 	# Distinct moving silhouettes remain readable even after replacement art is supplied.
 	match str(enemy.kind):
@@ -1318,7 +1343,9 @@ func _draw_enemy(enemy: Dictionary) -> void:
 			for ring in 2:
 				draw_arc(body, 31.0 + ring * 8.0 + sin(clock * 3.0) * 2.0, clock * (1.0 if ring == 0 else -1.0), TAU + clock * (1.0 if ring == 0 else -1.0), 6, Color(0.55, 0.67, 1.0, 0.52), 2.5, true)
 	var visual_id := str(enemy.kind)
-	if enemy_visual_textures.has(visual_id):
+	if enemy_sequences.has_enemy(visual_id):
+		_draw_sequence_enemy(enemy, bob)
+	elif enemy_visual_textures.has(visual_id):
 		_draw_slime_enemy(enemy, sim.database.enemy_visuals[visual_id], enemy_visual_textures[visual_id], bob)
 	elif visual_id in ["grunt", "runner", "charger"]:
 		_draw_animated_enemy(enemy, tint, bob)
@@ -1490,6 +1517,45 @@ func _draw_projectile(projectile: Dictionary) -> void:
 			draw_polyline(wave, Color.WHITE, 1.3, true)
 	draw_set_transform(Vector2.ZERO)
 
+func _draw_sequence_enemy(enemy: Dictionary, bob: float) -> void:
+	var enemy_id := str(enemy.kind)
+	var state := "attack" if bool(enemy.get("attack_pending", false)) or bool(enemy.get("special_pending", false)) else "run"
+	var frame := 0
+	if state == "attack":
+		var lead := 1.05 if float(enemy.get("attack_range", 0.0)) > 0.0 else 0.72
+		var phase := 1.0 - clampf(float(enemy.get("warning_timer", 0.0)) / lead, 0.0, 1.0)
+		frame = enemy_sequences.frame_at_phase(enemy_id, state, phase)
+	else:
+		frame = enemy_sequences.frame_at_time(enemy_id, state, clock + float(enemy.id) * 0.137)
+	var texture := enemy_sequences.texture(enemy_id, state)
+	if texture == null:
+		return
+	var base_size := enemy_sequences.display_size(enemy_id)
+	var scale := Vector2.ONE
+	if enemy_sequences.procedural(enemy_id) == "spawner_stretch":
+		var breathe := sin(clock * 2.6 + float(enemy.id)) * 0.025
+		var pulse := clampf(float(enemy.get("spawn_pulse", 0.0)) / 0.55, 0.0, 1.0)
+		scale = Vector2(1.0 + breathe + pulse * 0.16, 1.0 - breathe * 0.75 - pulse * 0.11)
+	elif float(enemy.get("flash", 0.0)) > 0.0:
+		scale = Vector2(1.10, 0.92)
+	var foot := Vector2(enemy.pos) + Vector2(0.0, ENEMY_FOOT_OFFSET + bob * 0.22)
+	var tint := Color("#fff0e8") if float(enemy.get("flash", 0.0)) > 0.0 and not reduced_effects else Color.WHITE
+	_draw_anchored_texture_region(texture, foot, Vector2(base_size, base_size) * scale, enemy_sequences.cell(enemy_id), enemy_sequences.pivot(enemy_id), float(enemy.get("facing", -1.0)), float(enemy_sequences.definition(enemy_id).get("native_facing", 1.0)), enemy_sequences.source_rect(enemy_id, state, frame), tint)
+
+func _draw_enemy_death_visual(enemy: Dictionary) -> void:
+	var enemy_id := str(enemy.get("kind", ""))
+	if not enemy_sequences.has_enemy(enemy_id):
+		return
+	var texture := enemy_sequences.texture(enemy_id, "down")
+	if texture == null:
+		return
+	var elapsed := float(enemy.get("elapsed", 0.0))
+	var frame := enemy_sequences.frame_at_time(enemy_id, "down", elapsed)
+	var base_size := enemy_sequences.display_size(enemy_id)
+	var total := float(enemy.get("total", enemy_sequences.duration(enemy_id, "down")))
+	var fade := clampf((total - elapsed) / 0.16, 0.0, 1.0) if elapsed > total - 0.16 else 1.0
+	_draw_anchored_texture_region(texture, Vector2(enemy.pos) + Vector2(0.0, ENEMY_FOOT_OFFSET), Vector2.ONE * base_size, enemy_sequences.cell(enemy_id), enemy_sequences.pivot(enemy_id), float(enemy.get("facing", -1.0)), float(enemy_sequences.definition(enemy_id).get("native_facing", 1.0)), enemy_sequences.source_rect(enemy_id, "down", frame), Color(1.0, 1.0, 1.0, fade))
+
 func _draw_animated_enemy(enemy: Dictionary, tint: Color, bob: float) -> void:
 	var speed_scale := 1.28 if str(enemy.kind) in ["runner", "charger"] else 1.0
 	var frame := posmod(floori(clock * 20.0 * speed_scale + enemy.id * 3.0), MONSTER_FRAMES)
@@ -1632,10 +1698,10 @@ func _draw_effect(effect: Dictionary) -> void:
 		for shard in 9:
 			var direction := Vector2.from_angle(-2.8 + shard * 0.38)
 			draw_line(effect.pos + direction * 19.0, effect.pos + direction * (42.0 + t * 48.0), Color(0.52, 0.84, 1.0, fade), 3.0, true)
-	elif effect.kind in ["crystal_guard", "enemy_guard", "enemy_heal", "split", "enemy_duplicate"]:
+	elif effect.kind in ["crystal_guard", "enemy_guard", "enemy_heal", "goblin_spawn", "split", "enemy_duplicate"]:
 		var helpful: bool = effect.kind in ["crystal_guard", "enemy_heal"]
 		var status_color := Color(0.50, 0.95, 0.70, fade) if helpful else Color(0.55, 0.68, 1.0, fade)
-		var status_name: String = str({"crystal_guard": "结晶护盾", "enemy_guard": "敌方加盾", "enemy_heal": "敌方治疗", "split": "分裂", "enemy_duplicate": "镜像增殖"}.get(effect.kind, effect.kind))
+		var status_name: String = str({"crystal_guard": "结晶护盾", "enemy_guard": "敌方加盾", "enemy_heal": "敌方治疗", "goblin_spawn": "哥布林出击", "split": "分裂", "enemy_duplicate": "镜像增殖"}.get(effect.kind, effect.kind))
 		draw_arc(effect.pos + Vector2(0, -18), 18 + t * 48, 0, TAU, 24, status_color, 3.0, true)
 		caption(effect.pos + Vector2(-38, -70 - t * 20), status_name, status_color, 15)
 	elif effect.kind == "boss_pulse":
@@ -1643,8 +1709,23 @@ func _draw_effect(effect: Dictionary) -> void:
 			draw_arc(effect.pos, 24.0 + ring * 22.0 + t * 95.0, 0, TAU, 48, Color(1.0, 0.20, 0.38, fade * (0.8 - ring * 0.14)), 4.0, true)
 		caption(effect.pos + Vector2(-48, -105 - t * 35), "裂隙震荡", Color(1.0, 0.55, 0.66, fade), 20)
 	elif effect.kind == "enemy_shot":
-		draw_line(effect.pos + Vector2(0, -22), effect.pos + Vector2(-120, -8), Color(1.0, 0.42, 0.30, fade), 3.0, true)
-		draw_circle(effect.pos + Vector2(-120.0 * t, -20.0 + t * 12.0), 4.0, Color(1.0, 0.8, 0.55, fade))
+		var direction: Vector2 = Vector2(effect.get("direction", Vector2.LEFT)).normalized()
+		if direction.length_squared() < 0.1:
+			direction = Vector2.LEFT
+		var travel: Vector2 = direction * 150.0
+		var projectile_point: Vector2 = Vector2(effect.pos) + Vector2(0, -22) + travel * t
+		var enemy_kind := str(effect.get("enemy_kind", ""))
+		if enemy_kind == "ranged":
+			var side := direction.orthogonal()
+			draw_line(projectile_point - direction * 16.0, projectile_point + direction * 12.0, Color(1.0, 0.86, 0.62, fade), 3.2, true)
+			draw_colored_polygon(PackedVector2Array([projectile_point + direction * 14.0, projectile_point + side * 5.0, projectile_point - side * 5.0]), Color(1.0, 0.52, 0.30, fade))
+		elif enemy_kind == "buffer":
+			for ring in 3:
+				draw_arc(projectile_point, 7.0 + ring * 4.0, clock * (1.0 + ring * 0.3), clock * (1.0 + ring * 0.3) + PI * 1.55, 18, Color(0.40, 1.0, 0.78, fade * (0.92 - ring * 0.22)), 2.5, true)
+			draw_circle(projectile_point, 5.0, Color(0.88, 1.0, 0.96, fade))
+		else:
+			draw_line(effect.pos + Vector2(0, -22), effect.pos + Vector2(0, -22) + travel, Color(1.0, 0.42, 0.30, fade * 0.45), 3.0, true)
+			draw_circle(projectile_point, 4.0, Color(1.0, 0.8, 0.55, fade))
 	elif effect.kind == "reward_taken":
 		var mythic := str(effect.get("rarity", "")) == "mythic"
 		var reward_color := Color(1.0, 0.38, 0.68, fade) if mythic else Color(1.0, 0.86, 0.54, fade)

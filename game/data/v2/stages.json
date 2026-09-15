@@ -173,7 +173,7 @@
     "waves": [
       {
         "at": 4,
-        "enemy_id": "grunt",
+        "enemy_id": "slime_pyro",
         "count": 18,
         "interval": 2.7,
         "route_id": "main"
@@ -222,7 +222,7 @@
       },
       {
         "at": 180,
-        "enemy_id": "grunt",
+        "enemy_id": "slime_pyro",
         "count": 35,
         "interval": 1.4,
         "route_id": "upper"
@@ -605,7 +605,7 @@
     "waves": [
       {
         "at": 4,
-        "enemy_id": "runner",
+        "enemy_id": "slime_electro",
         "count": 20,
         "interval": 2.1,
         "route_id": "upper"
@@ -654,7 +654,7 @@
       },
       {
         "at": 205,
-        "enemy_id": "runner",
+        "enemy_id": "slime_electro",
         "count": 48,
         "interval": 1.05,
         "route_id": "lower"
@@ -1075,7 +1075,7 @@
       },
       {
         "at": 78,
-        "enemy_id": "flyer",
+        "enemy_id": "slime_anemo",
         "count": 22,
         "interval": 1.75,
         "route_id": "upper"
@@ -1159,7 +1159,7 @@
       },
       {
         "at": 326,
-        "enemy_id": "flyer",
+        "enemy_id": "slime_anemo",
         "count": 38,
         "interval": 0.95,
         "route_id": "upper"
@@ -1556,7 +1556,7 @@
       },
       {
         "at": 124,
-        "enemy_id": "healer",
+        "enemy_id": "slime_hydro",
         "count": 28,
         "interval": 1.7800000000000002,
         "route_id": "upper"
@@ -2003,7 +2003,7 @@
       },
       {
         "at": 164,
-        "enemy_id": "warder",
+        "enemy_id": "slime_cryo",
         "count": 35,
         "interval": 1.59,
         "route_id": "upper"

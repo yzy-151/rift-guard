@@ -4,63 +4,92 @@
     "sprite": "res://assets/enemies/slimes/anemo_slime.png",
     "motion": "slime",
     "native_facing": 1,
-    "pivot": [256, 480],
+    "pivot": [
+      256,
+      480
+    ],
     "display_size": 92
   },
   {
     "id": "ranged",
-    "sprite": "res://assets/enemies/slimes/electro_slime.png",
-    "motion": "slime",
+    "sprite": "res://assets/enemies/sequences/ranged/portrait.png",
+    "motion": "sequence",
     "native_facing": 1,
-    "pivot": [256, 480],
-    "display_size": 92
+    "pivot": [
+      128,
+      240
+    ],
+    "display_size": 116,
+    "sequence_profile": "ranged"
   },
   {
     "id": "buffer",
-    "sprite": "res://assets/enemies/slimes/anemo_slime.png",
-    "motion": "slime",
+    "sprite": "res://assets/enemies/sequences/buffer/portrait.png",
+    "motion": "sequence",
     "native_facing": 1,
-    "pivot": [256, 480],
-    "display_size": 96
+    "pivot": [
+      128,
+      240
+    ],
+    "display_size": 128,
+    "sequence_profile": "buffer"
   },
   {
     "id": "shielded",
-    "sprite": "res://assets/enemies/slimes/hydro_slime.png",
-    "motion": "slime",
+    "sprite": "res://assets/enemies/sequences/shielded/portrait.png",
+    "motion": "sequence",
     "native_facing": 1,
-    "pivot": [256, 480],
-    "display_size": 104
+    "pivot": [
+      128,
+      240
+    ],
+    "display_size": 230,
+    "sequence_profile": "shielded"
   },
   {
     "id": "charger",
-    "sprite": "res://assets/enemies/slimes/pyro_slime.png",
-    "motion": "slime",
+    "sprite": "res://assets/enemies/sequences/charger/portrait.png",
+    "motion": "sequence",
     "native_facing": 1,
-    "pivot": [256, 480],
-    "display_size": 102
+    "pivot": [
+      128,
+      240
+    ],
+    "display_size": 150,
+    "sequence_profile": "charger"
   },
   {
     "id": "healer",
     "sprite": "res://assets/enemies/slimes/hydro_slime.png",
     "motion": "slime",
     "native_facing": 1,
-    "pivot": [256, 480],
+    "pivot": [
+      256,
+      480
+    ],
     "display_size": 94
   },
   {
     "id": "splitter",
-    "sprite": "res://assets/enemies/slimes/electro_slime.png",
-    "motion": "slime",
+    "sprite": "res://assets/enemies/sequences/splitter/portrait.png",
+    "motion": "sequence",
     "native_facing": 1,
-    "pivot": [256, 480],
-    "display_size": 98
+    "pivot": [
+      128,
+      240
+    ],
+    "display_size": 185,
+    "sequence_profile": "splitter"
   },
   {
     "id": "warder",
     "sprite": "res://assets/enemies/slimes/hydro_slime.png",
     "motion": "slime",
     "native_facing": 1,
-    "pivot": [256, 480],
+    "pivot": [
+      256,
+      480
+    ],
     "display_size": 100
   },
   {
@@ -68,7 +97,101 @@
     "sprite": "res://assets/enemies/slimes/slime_king.png",
     "motion": "slime",
     "native_facing": 1,
-    "pivot": [256, 480],
+    "pivot": [
+      256,
+      480
+    ],
     "display_size": 168
+  },
+  {
+    "id": "grunt",
+    "sprite": "res://assets/enemies/sequences/grunt/portrait.png",
+    "motion": "sequence",
+    "native_facing": 1,
+    "pivot": [
+      128,
+      240
+    ],
+    "display_size": 118,
+    "sequence_profile": "grunt"
+  },
+  {
+    "id": "runner",
+    "sprite": "res://assets/enemies/sequences/runner/portrait.png",
+    "motion": "sequence",
+    "native_facing": 1,
+    "pivot": [
+      128,
+      240
+    ],
+    "display_size": 105,
+    "sequence_profile": "runner"
+  },
+  {
+    "id": "armored",
+    "sprite": "res://assets/enemies/sequences/armored/portrait.png",
+    "motion": "sequence",
+    "native_facing": 1,
+    "pivot": [
+      128,
+      240
+    ],
+    "display_size": 130,
+    "sequence_profile": "armored"
+  },
+  {
+    "id": "slime_pyro",
+    "sprite": "res://assets/enemies/slimes/pyro_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [
+      256,
+      480
+    ],
+    "display_size": 96
+  },
+  {
+    "id": "slime_electro",
+    "sprite": "res://assets/enemies/slimes/electro_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [
+      256,
+      480
+    ],
+    "display_size": 96
+  },
+  {
+    "id": "slime_anemo",
+    "sprite": "res://assets/enemies/slimes/anemo_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [
+      256,
+      480
+    ],
+    "display_size": 96
+  },
+  {
+    "id": "slime_hydro",
+    "sprite": "res://assets/enemies/slimes/hydro_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [
+      256,
+      480
+    ],
+    "display_size": 96
+  },
+  {
+    "id": "slime_cryo",
+    "sprite": "res://assets/enemies/slimes/cryo_slime.png",
+    "motion": "slime",
+    "native_facing": 1,
+    "pivot": [
+      256,
+      480
+    ],
+    "display_size": 96
   }
 ]

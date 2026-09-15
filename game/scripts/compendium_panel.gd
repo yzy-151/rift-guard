@@ -2,6 +2,7 @@ extends CanvasLayer
 signal closed
 
 const Catalog = preload("res://scripts/combat_catalog.gd")
+const EnemySequenceLibrary = preload("res://scripts/enemy_sequence_library.gd")
 const WHITE := Color("#f3e9df")
 const MUTED := Color("#a9929b")
 const ACCENT := Color("#e7a0a4")
@@ -15,6 +16,7 @@ var database
 var progress
 var hud
 var active_tab := "characters"
+var enemy_sequences = EnemySequenceLibrary.new()
 
 func build(owner_hud, game_database, state) -> void:
 	hud = owner_hud
@@ -140,12 +142,20 @@ func _show_enemies() -> void:
 		if data.has("aura_radius"): traits.append("增益光环")
 		if data.has("shield"): traits.append("护盾")
 		if data.has("boss_pulse"): traits.append("Boss 脉冲")
+		if bool(data.get("spawner", false)): traits.append("产怪")
+		if float(data.get("large_scale", 1.0)) > 1.0: traits.append("大型")
+		if float(data.get("death_burst", 0.0)) > 0.0: traits.append("自爆")
 		var trait_text := " / ".join(traits) if not traits.is_empty() else "近战"
 		var body: String = "HP %.0f · 护甲 %.0f · 移速 %.0f · %s" % [data.hp, data.armor, data.speed, trait_text] if known else "遭遇该敌人后解锁战斗情报"
-		_add_row(str(data.name) if known else "未知敌影", body, Color(data.color) if known else MUTED, known)
+		var preview_path := ""
+		if known and enemy_sequences.has_enemy(id):
+			preview_path = enemy_sequences.portrait_path(id)
+		elif known and database.enemy_visuals.has(id):
+			preview_path = str(database.enemy_visuals[id].get("sprite", ""))
+		_add_row(str(data.name) if known else "未知敌影", body, Color(data.color) if known else MUTED, known, "", preview_path)
 	counter.text = "遭遇 %d / %d" % [discovered, Catalog.ENEMIES.size()]
 
-func _add_row(name: String, body: String, color: Color, known: bool, badge: String = "") -> void:
+func _add_row(name: String, body: String, color: Color, known: bool, badge: String = "", preview_path: String = "") -> void:
 	var row := Panel.new()
 	var row_height := 90.0 if active_tab == "builds" else 66.0
 	row.custom_minimum_size = Vector2(1082, row_height)
@@ -157,16 +167,26 @@ func _add_row(name: String, body: String, color: Color, known: bool, badge: Stri
 	mark.color = color
 	mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(mark)
-	var icon_name := "character" if active_tab == "characters" else ("card" if active_tab == "cards" else ("boss" if "Boss" in body else "skull"))
-	var icon_path := "res://assets/ui/icons/temporary/nieobie/%s.svg" % icon_name
-	if ResourceLoader.exists(icon_path):
-		var icon_back := ColorRect.new()
-		icon_back.position = Vector2(15, 12)
-		icon_back.size = Vector2(40, 40)
-		icon_back.color = Color("#ead9dc") if known else Color("#55474d")
-		icon_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		row.add_child(icon_back)
-		hud.icon(row, icon_path, Rect2(18, 15, 34, 34), color if known else MUTED)
+	var icon_back := ColorRect.new()
+	icon_back.position = Vector2(15, 12)
+	icon_back.size = Vector2(40, 40)
+	icon_back.color = Color("#ead9dc") if known else Color("#55474d")
+	icon_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(icon_back)
+	if not preview_path.is_empty() and ResourceLoader.exists(preview_path):
+		var portrait := TextureRect.new()
+		portrait.position = Vector2(17, 13)
+		portrait.size = Vector2(36, 38)
+		portrait.texture = ResourceLoader.load(preview_path)
+		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		row.add_child(portrait)
+	else:
+		var icon_name := "character" if active_tab == "characters" else ("card" if active_tab == "cards" else ("boss" if "Boss" in body else "skull"))
+		var icon_path := "res://assets/ui/icons/temporary/nieobie/%s.svg" % icon_name
+		if ResourceLoader.exists(icon_path):
+			hud.icon(row, icon_path, Rect2(18, 15, 34, 34), color if known else MUTED)
 	hud.label(row, Vector2(66, 8), Vector2(350, 26), name, 16, color)
 	var body_label: Label = hud.label(row, Vector2(66, 35), Vector2(850, row_height - 38.0), body, 11, WHITE if known else MUTED)
 	body_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

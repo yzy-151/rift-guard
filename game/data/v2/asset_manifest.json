@@ -40,19 +40,21 @@
     "sequence_profile": "hero_02"
   },
   "character.hero_03": {
-    "portrait": "res://assets/portraits/muelsyse.png",
-    "idle": "res://assets/characters/furina_frames/furina-motion-sheet.png",
-    "move": "res://assets/tiny-dungeon.png",
-    "attack": "res://assets/tiny-dungeon.png",
-    "hurt": "res://assets/tiny-dungeon.png",
-    "skill": "res://assets/tiny-dungeon.png",
-    "down": "res://assets/tiny-dungeon.png",
-    "idle_frames": 8,
+    "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+    "idle": "res://assets/characters/sequences/hero_03/idle.png",
+    "move": "res://assets/characters/sequences/hero_03/run.png",
+    "attack": "res://assets/characters/sequences/hero_03/attack.png",
+    "hurt": "res://assets/characters/sequences/hero_03/portrait.png",
+    "skill": "res://assets/characters/sequences/hero_03/attack.png",
+    "down": "res://assets/characters/sequences/hero_03/down.png",
+    "idle_frames": 26,
     "idle_columns": 8,
     "idle_cell": [
       256,
       256
-    ]
+    ],
+    "idle_fps": 24.0,
+    "sequence_profile": "hero_03"
   },
   "character.hero_04": {
     "portrait": "res://assets/portraits/jessica.png",
@@ -90,22 +92,38 @@
     "sequence_profile": "hero_06"
   },
   "character.hero_07": {
-    "portrait": "res://assets/portraits/saria.png",
-    "idle": "res://assets/tiny-dungeon.png",
-    "move": "res://assets/tiny-dungeon.png",
-    "attack": "res://assets/tiny-dungeon.png",
-    "hurt": "res://assets/tiny-dungeon.png",
-    "skill": "res://assets/tiny-dungeon.png",
-    "down": "res://assets/tiny-dungeon.png"
+    "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+    "idle": "res://assets/characters/sequences/hero_07/idle.png",
+    "move": "res://assets/characters/sequences/hero_07/run.png",
+    "attack": "res://assets/characters/sequences/hero_07/attack.png",
+    "hurt": "res://assets/characters/sequences/hero_07/portrait.png",
+    "skill": "res://assets/characters/sequences/hero_07/attack.png",
+    "down": "res://assets/characters/sequences/hero_07/down.png",
+    "idle_frames": 24,
+    "idle_columns": 8,
+    "idle_cell": [
+      256,
+      256
+    ],
+    "idle_fps": 24.0,
+    "sequence_profile": "hero_07"
   },
   "character.hero_08": {
-    "portrait": "res://assets/portraits/jessica.png",
-    "idle": "res://assets/tiny-dungeon.png",
-    "move": "res://assets/tiny-dungeon.png",
-    "attack": "res://assets/tiny-dungeon.png",
-    "hurt": "res://assets/tiny-dungeon.png",
-    "skill": "res://assets/tiny-dungeon.png",
-    "down": "res://assets/tiny-dungeon.png"
+    "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+    "idle": "res://assets/characters/sequences/hero_08/idle.png",
+    "move": "res://assets/characters/sequences/hero_08/run.png",
+    "attack": "res://assets/characters/sequences/hero_08/attack.png",
+    "hurt": "res://assets/characters/sequences/hero_08/portrait.png",
+    "skill": "res://assets/characters/sequences/hero_08/attack.png",
+    "down": "res://assets/characters/sequences/hero_08/down.png",
+    "idle_frames": 30,
+    "idle_columns": 8,
+    "idle_cell": [
+      256,
+      256
+    ],
+    "idle_fps": 24.0,
+    "sequence_profile": "hero_08"
   },
   "character.hero_09": {
     "portrait": "res://assets/portraits/jessica.png",
