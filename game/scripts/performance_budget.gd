@@ -1,6 +1,6 @@
 extends RefCounted
 
-const MAX_ENEMIES := 420
+const MAX_ENEMIES := 180
 const MAX_PROJECTILES := 720
 const MAX_EFFECTS := 320
 const MAX_DAMAGE_NUMBERS := 120
@@ -32,6 +32,8 @@ func quality_for_load(enemy_count: int, projectile_count: int, effect_count: int
 func can_spawn_cosmetic(kind: String, current: int) -> bool:
 	if kind in ["boss_phase", "boss_move", "enemy_warning", "ultimate_impact", "skill_impact", "synced_impact", "shield_break", "terrain_break"]:
 		return true
+	if quality_scale < 1.0 and kind in ["hit", "move", "muzzle", "slash", "chain", "splash", "goblin_spawn"]:
+		return current < (56 if quality_scale <= 0.58 else 88)
 	return current < effect_cap()
 
 func snapshot() -> Dictionary:

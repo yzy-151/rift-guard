@@ -32,6 +32,8 @@ var hud
 var selected_id: int = 0
 var muted: bool = false
 var sound: AudioStreamPlayer
+var attack_sound: AudioStreamPlayer
+var stage_enter_sound: AudioStreamPlayer
 var audio_director
 var settings_panel
 var campaign_map_panel
@@ -48,6 +50,7 @@ var qa_storage_path := ""
 var settings_from_menu := false
 var pending_endless_inheritance: Dictionary = {}
 var sound_timer: float = 0.0
+var attack_sound_timer: float = 0.0
 var test_mode: bool = false
 var compendium = CompendiumState.new()
 var compendium_panel
@@ -121,11 +124,22 @@ func _ready() -> void:
 	checkpoint_warning.hide()
 	checkpoint_overlay.hide()
 	sound = AudioStreamPlayer.new()
-	sound.stream = preload("res://assets/hit.ogg")
+	sound.stream = preload("res://assets/sfx/combat_hit.wav")
 	sound.bus = "SFX"
 	sound.volume_db = -18
 	sound.max_polyphony = 3
 	add_child(sound)
+	attack_sound = AudioStreamPlayer.new()
+	attack_sound.stream = preload("res://assets/sfx/combat_attack.wav")
+	attack_sound.bus = "SFX"
+	attack_sound.volume_db = -15
+	attack_sound.max_polyphony = 4
+	add_child(attack_sound)
+	stage_enter_sound = AudioStreamPlayer.new()
+	stage_enter_sound.stream = preload("res://assets/helltaker/audio/button_chapter_confirm_01.wav")
+	stage_enter_sound.bus = "SFX"
+	stage_enter_sound.volume_db = -11
+	add_child(stage_enter_sound)
 	dialogue = preload("res://scripts/dialogue_panel.gd").new()
 	add_child(dialogue)
 	dialogue.config = content
@@ -171,7 +185,12 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v51-test" in OS.get_cmdline_user_args():
+	if "--v52-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v52_test")
+	elif "--v51-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
 		set_physics_process(false)
@@ -378,6 +397,7 @@ func _process(dt: float) -> void:
 			hud.signature = ""
 			refresh()
 	sound_timer = maxf(0.0, sound_timer - dt)
+	attack_sound_timer = maxf(0.0, attack_sound_timer - dt)
 	if not story.active and not picker.visible and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open() and not settings_panel.is_open() and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
 		battle.advance(dt)
 		fx.advance(dt)
@@ -387,6 +407,10 @@ func process_events() -> void:
 	battle.accept_events(batch)
 	fx.accept(batch)
 	for event in batch:
+		if event.kind == "shot" and not muted and not test_mode and attack_sound_timer <= 0.0:
+			attack_sound.pitch_scale = 0.96 + float(int(event.get("hero_id", 0)) % 3) * 0.035
+			attack_sound.play()
+			attack_sound_timer = 0.11 if sim.enemies.size() < 90 else 0.18
 		if event.kind == "regroup":
 			sound.stop()
 		if event.kind == "route_warning":
@@ -1012,6 +1036,9 @@ func confirm_next_squad(squad: Array[String]) -> void:
 	if pending_stage_id.is_empty():
 		return
 	story.reset()
+	if stage_enter_sound != null and not muted and not test_mode:
+		stage_enter_sound.stop()
+		stage_enter_sound.play()
 	sim.reset_stage(pending_stage_id, squad, sim.run_seed + 1)
 	if not sim.endless_mode:
 		var campaign_nodes := CampaignCheckpoint.nodes(sim.database)
@@ -1218,7 +1245,7 @@ func _update_selected_hero_keyboard(dt: float) -> void:
 	)
 	if direction.length_squared() > 0.0:
 		if keyboard_move_timer <= 0.0:
-			sim.command_move(selected_id, hero.pos + direction.normalized() * 96.0)
+			sim.command_move(selected_id, hero.pos + direction.normalized() * 96.0, false)
 			keyboard_move_timer = 0.07
 		keyboard_moving = true
 	elif keyboard_moving:
@@ -1297,6 +1324,10 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v52_test() -> void:
+	var suite = preload("res://scripts/qa_v52.gd").new()
 	await suite.run(self)
 
 func run_v51_test() -> void:

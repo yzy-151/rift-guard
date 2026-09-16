@@ -17,7 +17,7 @@ STATE_FOLDERS = {
     "down": ("death", False, True),
 }
 CHARACTERS = {
-    "hero_03": {"folder": "芙宁娜", "name": "芙宁娜", "display_size": 150.0},
+    "hero_03": {"folder": "芙宁娜", "name": "芙宁娜", "display_size": 159.0},
     "hero_07": {"folder": "丰川祥子", "name": "丰川祥子", "display_size": 150.0},
     "hero_08": {"folder": "艾米莉亚", "name": "艾米莉亚", "display_size": 150.0},
 }
@@ -28,7 +28,7 @@ ENEMIES = {
     "ranged": {"folder": "丘丘弓箭手", "name": "丘丘弓箭手", "display_size": 116.0},
     "buffer": {"folder": "丘丘萨满", "name": "丘丘萨满", "display_size": 128.0},
     "charger": {"folder": "野猪骑士", "name": "野猪骑士", "display_size": 150.0},
-    "shielded": {"folder": "皮卡超人", "name": "皮卡超人", "display_size": 230.0},
+    "shielded": {"folder": "皮卡超人", "name": "皮卡超人", "display_size": 345.0},
     "splitter": {"folder": "哥布林茅房", "name": "哥布林茅房", "display_size": 185.0, "procedural": "spawner_stretch"},
 }
 
@@ -152,7 +152,8 @@ def main() -> None:
             definition,
             "res://assets/characters/sequences",
         )
-    char_manifest["hero_02"]["display_size"] = round(float(char_manifest["hero_02"].get("display_size", 150.0)) * 0.95, 3)
+    char_manifest["hero_02"]["display_size"] = 150.0
+    char_manifest["traveler"]["display_size"] = 159.0
     write_json(char_manifest_path, char_manifest)
 
     enemy_manifest = {}

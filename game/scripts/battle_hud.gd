@@ -29,7 +29,6 @@ const HT_HIGHLIGHT = preload("res://assets/helltaker/audio/button_menu_highlight
 const HT_CONFIRM = preload("res://assets/helltaker/audio/button_menu_confirm_01.wav")
 const HT_BOSS_WARNING = preload("res://assets/helltaker/audio/dialogue_start_epilogue_01.wav")
 const TRAVELER_PORTRAIT = preload("res://assets/characters/traveler_v18/idle.png")
-const FURINA_PORTRAIT = preload("res://assets/characters/furina/furina-chibi-v1-alpha.png")
 const UNIT_ATLAS = preload("res://assets/tiny-dungeon.png")
 const HUD_HERO_GRAY = preload("res://assets/ui/rift_v2/components/hud_hero_gray.png")
 const HUD_HERO_RED = preload("res://assets/ui/rift_v2/components/hud_hero_red.png")
@@ -186,13 +185,18 @@ func _ready() -> void:
 		buff_icons.append(icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(10, 25 + i * 13, 11, 11), Color("#d6b4f0")))
 		buff_labels.append(label(buff_panel, Vector2(25, 23 + i * 13), Vector2(187, 14), "", 9, WHITE))
 	buff_panel.hide()
-	boss_panel = panel(root, Rect2(16, 101, 1012, 62), Color(0.055, 0.025, 0.04, 0.96), Color("#be435c"))
-	boss_name_label = label(boss_panel, Vector2(15, 7), Vector2(982, 22), "", 15, Color("#ff9cab"))
+	var boss_panel_rect: Rect2 = UI_LAYOUT.battle_boss_panel_rect
+	boss_panel = panel(root, boss_panel_rect, Color(0.035, 0.018, 0.03, 0.93), Color("#a8334d"))
+	var boss_name_rect: Rect2 = UI_LAYOUT.battle_boss_name_rect
+	boss_name_label = label(boss_panel, boss_name_rect.position, boss_name_rect.size, "", 12, Color("#ff9cab"))
 	boss_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	boss_hp_bar = ProgressBar.new()
-	boss_hp_bar.position = Vector2(18, 33)
-	boss_hp_bar.size = Vector2(976, 18)
+	var boss_bar_rect: Rect2 = UI_LAYOUT.battle_boss_bar_rect
+	boss_hp_bar.position = boss_bar_rect.position
+	boss_hp_bar.size = boss_bar_rect.size
 	boss_hp_bar.show_percentage = false
+	boss_hp_bar.add_theme_font_size_override("font_size", 1)
+	boss_hp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var boss_bg := StyleBoxFlat.new()
 	boss_bg.bg_color = Color("#26131c")
 	boss_bg.border_color = Color("#64303d")
@@ -204,8 +208,11 @@ func _ready() -> void:
 	boss_hp_bar.add_theme_stylebox_override("background", boss_bg)
 	boss_hp_bar.add_theme_stylebox_override("fill", boss_fill)
 	boss_panel.add_child(boss_hp_bar)
-	boss_hp_label = label(boss_panel, Vector2(18, 33), Vector2(976, 18), "", 12, WHITE)
-	boss_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	boss_hp_bar.position = boss_bar_rect.position
+	boss_hp_bar.size = boss_bar_rect.size
+	var boss_value_rect: Rect2 = UI_LAYOUT.battle_boss_value_rect
+	boss_hp_label = label(boss_panel, boss_value_rect.position, boss_value_rect.size, "", 10, WHITE)
+	boss_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	boss_panel.hide()
 	wave_timeline_panel = panel(root, UI_LAYOUT.battle_timeline_rect, Color(0.055, 0.035, 0.065, 0.94), Color("#73556f"))
 	label(wave_timeline_panel, Vector2(10, 2), Vector2(150, 14), "NEXT / 敌情", 8, Color("#d9afc9"))
@@ -358,7 +365,7 @@ func _ready() -> void:
 		hero_element_labels.append(element_badge)
 		var hp_bar := ProgressBar.new()
 		hp_bar.position = Vector2(70, 29)
-		hp_bar.size = Vector2(96, 9)
+		hp_bar.size = UI_LAYOUT.battle_hero_hp_bar_size
 		hp_bar.show_percentage = false
 		var hp_bg := StyleBoxFlat.new()
 		hp_bg.bg_color = Color("#251923")
@@ -370,7 +377,7 @@ func _ready() -> void:
 		hero_hp_bars.append(hp_bar)
 		var energy_bar := ProgressBar.new()
 		energy_bar.position = Vector2(70, 56)
-		energy_bar.size = Vector2(96, 5)
+		energy_bar.size = UI_LAYOUT.battle_hero_energy_bar_size
 		energy_bar.show_percentage = false
 		var energy_bg := StyleBoxFlat.new()
 		energy_bg.bg_color = Color("#251923")
@@ -712,10 +719,11 @@ func refresh_boss(sim) -> void:
 		return
 	var shield: float = float(active.get("shield", 0.0))
 	var hp: float = maxf(0.0, float(active.hp))
-	boss_name_label.text = "◆  B O S S   /   %s   PHASE %s  ◆" % [str(active.get("name", "裂隙首领")), ["I", "II", "III"][clampi(int(active.get("boss_phase", 1)) - 1, 0, 2)]]
+	boss_name_label.text = "◆  %s  ·  PHASE %s  ◆" % [str(active.get("name", "裂隙首领")), ["I", "II", "III"][clampi(int(active.get("boss_phase", 1)) - 1, 0, 2)]]
 	boss_hp_bar.max_value = maxf(1.0, float(active.max_hp))
 	boss_hp_bar.value = hp
-	boss_hp_label.text = "%d / %d%s" % [ceili(hp), ceili(float(active.max_hp)), "   ◇ 护盾 %d" % ceili(shield) if shield > 0.0 else ""]
+	var hp_percent := roundi(hp / maxf(1.0, float(active.max_hp)) * 100.0)
+	boss_hp_label.text = "HP %d%%   %d / %d%s" % [hp_percent, ceili(hp), ceili(float(active.max_hp)), "   ◇ %d" % ceili(shield) if shield > 0.0 else ""]
 
 func refresh_wave_timeline(sim) -> void:
 	var active_boss := boss_panel.visible
@@ -1044,7 +1052,9 @@ func portrait_texture(hero: Dictionary, sim_ref = null) -> Texture2D:
 			if portrait_resource is Texture2D:
 				return portrait_resource
 	if character_id == "hero_03":
-		return FURINA_PORTRAIT
+		var latest_portrait_path := "res://assets/characters/sequences/hero_03/portrait.png"
+		if ResourceLoader.exists(latest_portrait_path):
+			return ResourceLoader.load(latest_portrait_path)
 	var tile: Vector2 = hero.get("tile", Vector2.ZERO)
 	var fallback := AtlasTexture.new()
 	fallback.atlas = UNIT_ATLAS

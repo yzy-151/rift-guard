@@ -84,7 +84,6 @@ var stage_background_6: Texture2D = preload("res://assets/helltaker/backgrounds/
 var stage_background_7: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0007.png")
 var stage_background_8: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0008.png")
 var crystal_texture: Texture2D = preload("res://assets/world/crystal-growth.svg")
-var furina_texture: Texture2D = preload("res://assets/characters/furina/furina-chibi-v1-alpha.png")
 var traveler_idle_atlas: Texture2D = preload("res://assets/characters/traveler_v18/idle.png")
 var traveler_run_atlas: Texture2D = preload("res://assets/characters/traveler_v18/run.png")
 var traveler_attack_atlas: Texture2D = preload("res://assets/characters/traveler_v18/attack.png")
@@ -96,7 +95,6 @@ const MONSTER_CELL := 256.0
 const MONSTER_FRAMES := 30
 const HERO_FOOT_OFFSET := 8.0
 const ENEMY_FOOT_OFFSET := 12.0
-var furina_actor
 var font: SystemFont
 var slash_frames: Array[Texture2D] = [
 	preload("res://assets/vfx/third_party/cethiel_weapon_slash/files/Alternative 1/1/Alternative_1_01.png"),
@@ -125,7 +123,6 @@ func _ready() -> void:
 	_build_visual_matrix()
 	font = SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
-	build_furina_actor()
 	_build_stage_tile_cache(sim.current_stage_id if sim != null else "stage_01")
 
 func _load_enemy_visuals() -> void:
@@ -183,7 +180,6 @@ func advance(dt: float) -> void:
 		spawn_portals[route_id].life = float(spawn_portals[route_id].life) - dt
 		if float(spawn_portals[route_id].life) <= 0.0:
 			spawn_portals.erase(route_id)
-	sync_furina_actor(dt)
 	redraw_accumulator += dt
 	var redraw_interval := 1.0 / (30.0 if reduced_effects else 60.0)
 	if redraw_accumulator >= redraw_interval:
@@ -207,24 +203,6 @@ func visible_world_rect() -> Rect2:
 
 func world_depth_scale(point: Vector2) -> float:
 	return 1.0 if sim != null and sim.endless_mode else Stage.depth_scale(point)
-
-func build_furina_actor() -> void:
-	if furina_actor != null:
-		return
-	furina_actor = preload("res://scripts/furina_frame_actor.gd").new()
-	add_child(furina_actor)
-	call_deferred("sync_furina_actor")
-
-func sync_furina_actor(dt: float = 0.0) -> void:
-	if furina_actor == null or sim == null:
-		return
-	for hero: Dictionary in sim.heroes:
-		if hero.get("character_id", "") == "hero_03" and bool(hero.get("deployed", true)):
-			furina_actor.visible = true
-			var shot_life: float = shot_flashes.get(hero.id, 0.0)
-			furina_actor.sync(hero, world_to_screen(hero.pos), world_depth_scale(hero.pos), shot_life, reduced_effects, dt)
-			return
-	furina_actor.visible = false
 
 func _build_visual_matrix() -> void:
 	debug_visual_matrix.clear()
@@ -251,7 +229,7 @@ func visual_sample(hero: Dictionary) -> Dictionary:
 
 func accept_events(batch: Array[Dictionary]) -> void:
 	for event in batch:
-		if event.kind == "death" and enemy_sequences.has_enemy(str(event.get("enemy_kind", ""))):
+		if event.kind == "death" and enemy_sequences.has_enemy(str(event.get("enemy_kind", ""))) and enemy_death_visuals.size() < (24 if sim != null and sim.enemies.size() >= 100 else 48):
 			var enemy_id := str(event.enemy_kind)
 			enemy_death_visuals.append({
 				"kind": enemy_id,
@@ -278,7 +256,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				var hero: Dictionary = sim.heroes[event.hero_id]
 				var attack_duration := maxf(1.0 / 60.0, float(event.get("duration", 1.0 / maxf(0.1, float(hero.rate)))))
 				hero_attack_visuals[event.hero_id] = {"elapsed": 0.0, "duration": attack_duration}
-				if effects.size() < 260:
+				if sim == null or sim.performance_budget.can_spawn_cosmetic("muzzle", effects.size()):
 					var facing := float(hero.get("facing", 1.0))
 					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","")},0.16))
 			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "arena_event", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "goblin_spawn", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
@@ -436,8 +414,12 @@ func _draw_stage_exit() -> void:
 	var aura_color := element_color(stage_exit_element)
 	draw_circle(actor + Vector2(0, -19), 30.0 + sin(clock * 4.0) * 1.5, Color(aura_color, 0.10))
 	draw_arc(actor + Vector2(0, 5), 24.0, clock, clock + PI * 1.55, 28, Color(aura_color, 0.86), 2.2, true)
-	if stage_exit_character_id == "hero_03":
-		draw_texture_rect(furina_texture, Rect2(actor + Vector2(-27, -69), Vector2(54, 72)), false, Color.WHITE)
+	if character_sequences.has_character(stage_exit_character_id):
+		var newcomer_texture := character_sequences.texture(stage_exit_character_id, "idle")
+		if newcomer_texture != null:
+			var newcomer_source := character_sequences.source_rect(stage_exit_character_id, "idle", 0)
+			var newcomer_size := minf(108.0, character_sequences.display_size(stage_exit_character_id))
+			_draw_anchored_texture_region(newcomer_texture, actor + Vector2(0, 8), Vector2.ONE * newcomer_size, character_sequences.cell(stage_exit_character_id), character_sequences.pivot(stage_exit_character_id), -1.0, 1.0, newcomer_source, Color.WHITE)
 	else:
 		var atlas_index := maxi(0, int(stage_exit_character_id.trim_prefix("hero_")) - 1)
 		var tile := Vector2(atlas_index * 16, 112)
@@ -1176,7 +1158,6 @@ func _draw_hero(hero: Dictionary) -> void:
 	var down: bool = hero.hp <= 0
 	var color := Color(hero.color)
 	var character_id := str(hero.get("character_id", ""))
-	var is_furina: bool = hero.get("visual", "") == "furina"
 	var is_traveler: bool = character_id == "traveler"
 	var has_sequence := character_sequences.has_character(character_id)
 	var bob: float = 0.0 if down or is_traveler or has_sequence else sin(clock * (14.0 if hero.moving else 3.0)) * (3.0 if hero.moving else 1.0)
@@ -1193,11 +1174,6 @@ func _draw_hero(hero: Dictionary) -> void:
 		tint = Color("#fff0eb")
 	if has_sequence:
 		_draw_sequence_hero(hero, tint, down)
-	elif is_furina:
-		if shot_flashes.get(hero.id, 0.0) > 0.0 and not reduced_effects:
-			var pulse: float = shot_flashes.get(hero.id, 0.0) / 0.12
-			draw_circle(hero.pos + Vector2(30, -35), 7.0 + pulse * 5.0, Color(0.52, 0.88, 1.0, 0.16))
-			draw_arc(hero.pos + Vector2(30, -35), 9.0 + pulse * 7.0, -1.25, 1.25, 16, Color("#a9ecff"), 2.0, true)
 	elif is_traveler:
 		_draw_traveler(hero, tint, down)
 	else:
@@ -1210,13 +1186,13 @@ func _draw_hero(hero: Dictionary) -> void:
 		if hero.block > 0 and not is_traveler:
 			draw_rect(Rect2(hero.pos + Vector2(17, -24), Vector2(16, 25)), Color("#a8a687"))
 			draw_rect(Rect2(hero.pos + Vector2(21, -21), Vector2(8, 18)), Color("#445b5e"))
-		elif not is_furina and not is_traveler:
+		elif not is_traveler:
 			draw_circle(hero.pos + Vector2(29, -16 + bob), 5, color)
 			if shot_flashes.get(hero.id, 0.0) > 0 and not reduced_effects:
 				draw_circle(hero.pos + Vector2(37, -16), 8, color)
-	var tall_visual := has_sequence or is_furina or is_traveler
-	var label_y: float = -146.0 if has_sequence else (-132.0 if is_traveler else (-108.0 if is_furina else -65.0))
-	var health_y: float = -134.0 if has_sequence else (-120.0 if is_traveler else (-96.0 if is_furina else -53.0))
+	var tall_visual := has_sequence or is_traveler
+	var label_y: float = -146.0 if has_sequence else (-132.0 if is_traveler else -65.0)
+	var health_y: float = -134.0 if has_sequence else (-120.0 if is_traveler else -53.0)
 	caption(hero.pos + Vector2(-29, label_y), "%d %s" % [hero.id + 1, hero.name], color, 13)
 	draw_rect(Rect2(hero.pos + Vector2(-25, health_y), Vector2(50, 4)), Color("#303942"))
 	draw_rect(Rect2(hero.pos + Vector2(-25, health_y), Vector2(50 * hero.hp / hero.max_hp, 4)), color)
@@ -1286,21 +1262,6 @@ func _draw_traveler(hero: Dictionary, tint: Color, down: bool) -> void:
 	if not reduced_effects:
 		draw_circle(hero.pos + Vector2(0, -35), 36.0 + sin(clock * 2.2) * 2.0, Color(1.0, 0.76, 0.48, 0.055))
 	_draw_anchored_texture_region(texture, foot, Vector2(width, height), Vector2(TRAVELER_CELL, TRAVELER_CELL), pivot, facing, 1.0, source, tint)
-
-func _draw_furina(hero: Dictionary, tint: Color, bob: float, down: bool) -> void:
-	if down:
-		draw_texture_rect(furina_texture, Rect2(hero.pos + Vector2(-40, -29), Vector2(80, 42)), false, tint)
-		return
-	var attacking: bool = shot_flashes.get(hero.id, 0.0) > 0.0
-	var stride: float = sin(clock * 14.0) if hero.moving else 0.0
-	var width: float = 55.0 + absf(stride) * 2.0 + (5.0 if attacking else 0.0)
-	var height: float = 94.0 - absf(stride) * 3.0 - (4.0 if attacking else 0.0)
-	var origin: Vector2 = hero.pos + Vector2(-width * 0.5 + (4.0 if attacking else 0.0), -height + 9.0 + bob)
-	if not reduced_effects:
-		draw_circle(hero.pos + Vector2(0, -27), 29.0 + sin(clock * 2.4) * 2.0, Color(0.32, 0.73, 0.92, 0.08))
-	draw_texture_rect(furina_texture, Rect2(origin, Vector2(width, height)), false, tint)
-	if attacking and not reduced_effects:
-		draw_arc(hero.pos + Vector2(29, -45), 10.0, -1.2, 1.2, 14, Color("#a9ecff"), 2.2, true)
 
 func _draw_enemy(enemy: Dictionary) -> void:
 	var flying: bool = bool(enemy.get("flying", false))

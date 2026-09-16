@@ -56,7 +56,9 @@ func run(game) -> void:
 			expect(is_equal_approx(float(definition.get("fps", 0.0)), 24.0), "%s %s plays at 24 FPS" % [character_id, state])
 			expect(character_sequences.texture(character_id, state) != null, "%s %s atlas loads" % [character_id, state])
 		expect(character_sequences.frame_at_time(character_id, "down", 999.0) == int(character_counts[character_id].down) - 1, character_id + " death holds the last frame")
-	expect(is_equal_approx(character_sequences.display_size("hero_02"), 142.5), "希露菲 is scaled to 95 percent")
+	expect(is_equal_approx(character_sequences.display_size("hero_02"), 150.0), "希露菲 is restored to original size")
+	expect(is_equal_approx(character_sequences.display_size("traveler"), 159.0), "traveler is scaled to 106 percent")
+	expect(is_equal_approx(character_sequences.display_size("hero_03"), 159.0), "Furina is scaled to 106 percent")
 	var database = game.sim.database
 	expect(str(database.characters.hero_03.element) == "hydro" and str(database.characters.hero_03.role) == "水系法师", "芙宁娜 is a hydro mage")
 	expect(str(database.characters.hero_07.element) == "anemo" and "乐律" in str(database.characters.hero_07.role), "丰川祥子 is an anemo music mage")
@@ -84,8 +86,8 @@ func run(game) -> void:
 
 	expect(str(Catalog.ENEMIES.ranged.name) == "丘丘弓箭手" and str(Catalog.ENEMIES.ranged.projectile_style) == "arrow", "丘丘弓箭手 uses ranged arrow projectiles")
 	expect(str(Catalog.ENEMIES.buffer.name) == "丘丘萨满" and str(Catalog.ENEMIES.buffer.projectile_style) == "anemo_orb", "丘丘萨满 uses ranged spell projectiles")
-	expect(str(Catalog.ENEMIES.shielded.name) == "皮卡超人" and is_equal_approx(float(Catalog.ENEMIES.shielded.large_scale), 2.5), "皮卡超人 is configured as a 2.5x large enemy")
-	expect(is_equal_approx(float(Catalog.ENEMIES.shielded.speed), 20.0) and enemy_sequences.display_size("shielded") >= 230.0, "皮卡超人 is slower and visibly larger")
+	expect(str(Catalog.ENEMIES.shielded.name) == "皮卡超人" and is_equal_approx(float(Catalog.ENEMIES.shielded.large_scale), 3.75), "皮卡超人 is configured as a 3.75x large enemy")
+	expect(is_equal_approx(float(Catalog.ENEMIES.shielded.speed), 20.0) and enemy_sequences.display_size("shielded") >= 345.0, "皮卡超人 is slower and visibly larger")
 	expect(str(Catalog.ENEMIES.splitter.name) == "哥布林茅房" and bool(Catalog.ENEMIES.splitter.spawner), "哥布林茅房 is a stationary spawner")
 	expect(enemy_sequences.procedural("splitter") == "spawner_stretch", "哥布林茅房 uses procedural spawn stretch")
 	var slime_names := {"slime_pyro":"火史莱姆", "slime_electro":"雷史莱姆", "slime_anemo":"风史莱姆", "slime_hydro":"水史莱姆", "slime_cryo":"冰史莱姆"}
@@ -106,16 +108,16 @@ func run(game) -> void:
 	hut.special_timer = 0.0
 	game.sim._enemy_tick(0.016)
 	var children: Array = game.sim.enemies.filter(func(enemy: Dictionary) -> bool: return str(enemy.get("spawned_by", "")) == str(hut.id))
-	expect(children.size() == 2 and children.all(func(enemy: Dictionary) -> bool: return str(enemy.kind) == "runner"), "哥布林茅房 spawns two goblins per cycle")
-	expect(game.sim.events.any(func(event: Dictionary) -> bool: return str(event.kind) == "goblin_spawn" and int(event.value) == 2), "goblin spawn event drives stretch and VFX")
+	expect(children.size() == 1 and children.all(func(enemy: Dictionary) -> bool: return str(enemy.kind) == "runner"), "哥布林茅房 spawns one goblin per cycle")
+	expect(game.sim.events.any(func(event: Dictionary) -> bool: return str(event.kind) == "goblin_spawn" and int(event.value) == 1), "goblin spawn event drives stretch and VFX")
 	expect(children.all(func(enemy: Dictionary) -> bool: return str(enemy.route_id) == "center"), "spawned goblins inherit the hut route")
-	for child_index in range(2, 8):
+	for child_index in range(1, 5):
 		var child: Dictionary = game.sim.spawn_enemy(Vector2(980 + child_index * 5, 360), "runner")
 		child.spawned_by = hut.id
 	var before_limit: int = game.sim.enemies.size()
 	hut.special_timer = 0.0
 	game.sim._enemy_tick(0.016)
-	expect(game.sim.enemies.size() == before_limit, "哥布林茅房 respects the eight-goblin live cap")
+	expect(game.sim.enemies.size() == before_limit, "哥布林茅房 respects the five-goblin live cap")
 
 	var hero: Dictionary = game.sim.heroes[0]
 	var radii: Vector2 = game.sim.attack_range_screen_radii(hero)
@@ -150,7 +152,7 @@ func run(game) -> void:
 	var showcase_events: Array[Dictionary] = [
 		{"kind":"enemy_shot", "pos":Vector2(1010,245), "target":Vector2(600,330), "enemy_kind":"ranged", "value":21},
 		{"kind":"enemy_shot", "pos":Vector2(1140,370), "target":Vector2(560,390), "enemy_kind":"buffer", "value":18},
-		{"kind":"goblin_spawn", "pos":Vector2(1080,250), "value":2},
+		{"kind":"goblin_spawn", "pos":Vector2(1080,250), "value":1},
 	]
 	game.battle.accept_events(showcase_events)
 	await capture(game, "new-characters-and-monsters")

@@ -70,7 +70,7 @@ visuals = load(visual_path)
 by_id = {row["id"]: row for row in visuals}
 sequence_sizes = {
     "grunt":118, "runner":105, "armored":130, "ranged":116,
-    "buffer":128, "charger":150, "shielded":230, "splitter":185,
+    "buffer":128, "charger":150, "shielded":345, "splitter":185,
 }
 for enemy_id, size in sequence_sizes.items():
     by_id[enemy_id] = {
@@ -142,9 +142,9 @@ catalog_replacements = {
     '"armored": {"name": "重甲兽", "hp": 185.0, "armor": 85.0, "speed": 35.0, "damage": 27.0, "rate": 0.85, "leak": 15, "color": "#b19fc9", "size": 62.0}': '"armored": {"name": "铁桶僵尸", "hp": 230.0, "armor": 92.0, "speed": 31.0, "damage": 29.0, "rate": 0.82, "leak": 15, "color": "#b19fc9", "size": 62.0}',
     '"ranged": {"name": "蚀骨弩手", "hp": 128.0, "armor": 12.0, "speed": 43.0, "damage": 21.0, "rate": 0.72, "leak": 12, "color": "#e58b73", "size": 48.0, "attack_range": 275.0}': '"ranged": {"name": "丘丘弓箭手", "hp": 128.0, "armor": 12.0, "speed": 43.0, "damage": 21.0, "rate": 0.72, "leak": 12, "color": "#e58b73", "size": 48.0, "attack_range": 300.0, "projectile_style": "arrow"}',
     '"buffer": {"name": "咏唱祭司", "hp": 155.0, "armor": 18.0, "speed": 38.0, "damage": 9.0, "rate": 0.65, "leak": 14, "color": "#cf7fda", "size": 54.0, "aura_radius": 155.0}': '"buffer": {"name": "丘丘萨满", "hp": 155.0, "armor": 18.0, "speed": 36.0, "damage": 18.0, "rate": 0.68, "leak": 14, "color": "#67d8b0", "size": 54.0, "attack_range": 300.0, "aura_radius": 155.0, "projectile_style": "anemo_orb"}',
-    '"shielded": {"name": "壁垒卫士", "hp": 210.0, "armor": 38.0, "speed": 31.0, "damage": 31.0, "rate": 0.78, "leak": 20, "color": "#76a6d8", "size": 66.0, "shield": 180.0}': '"shielded": {"name": "皮卡超人", "hp": 520.0, "armor": 105.0, "speed": 20.0, "damage": 55.0, "rate": 0.64, "leak": 28, "color": "#76a6d8", "size": 92.0, "shield": 260.0, "large_scale": 2.5}',
+    '"shielded": {"name": "壁垒卫士", "hp": 210.0, "armor": 38.0, "speed": 31.0, "damage": 31.0, "rate": 0.78, "leak": 20, "color": "#76a6d8", "size": 66.0, "shield": 180.0}': '"shielded": {"name": "皮卡超人", "hp": 520.0, "armor": 105.0, "speed": 20.0, "damage": 55.0, "rate": 0.64, "leak": 28, "color": "#76a6d8", "size": 92.0, "shield": 260.0, "large_scale": 3.75}',
     '"charger": {"name": "裂蹄冲锋者", "hp": 145.0, "armor": 18.0, "speed": 48.0, "damage": 34.0, "rate": 0.92, "leak": 16, "color": "#ef795b", "size": 58.0, "charge_multiplier": 2.15}': '"charger": {"name": "野猪骑士", "hp": 175.0, "armor": 20.0, "speed": 50.0, "damage": 38.0, "rate": 0.92, "leak": 16, "color": "#ef795b", "size": 58.0, "charge_multiplier": 2.15}',
-    '"splitter": {"name": "孳生母体", "hp": 240.0, "armor": 26.0, "speed": 32.0, "damage": 20.0, "rate": 0.82, "leak": 22, "color": "#d77aa9", "size": 72.0, "split_count": 2}': '"splitter": {"name": "哥布林茅房", "hp": 680.0, "armor": 38.0, "speed": 0.0, "damage": 0.0, "rate": 0.5, "leak": 32, "color": "#d77aa9", "size": 90.0, "spawner": true, "spawn_kind": "runner", "spawn_count": 2, "spawn_interval": 6.5, "spawn_limit": 8}',
+    '"splitter": {"name": "孳生母体", "hp": 240.0, "armor": 26.0, "speed": 32.0, "damage": 20.0, "rate": 0.82, "leak": 22, "color": "#d77aa9", "size": 72.0, "split_count": 2}': '"splitter": {"name": "哥布林茅房", "hp": 680.0, "armor": 38.0, "speed": 0.0, "damage": 0.0, "rate": 0.5, "leak": 32, "color": "#d77aa9", "size": 90.0, "spawner": true, "spawn_kind": "runner", "spawn_count": 1, "spawn_interval": 7.5, "spawn_limit": 5}',
     '"boss_02": {"name": "黑曜母巢"': '"boss_02": {"name": "史莱姆王"',
 }
 for old, new in catalog_replacements.items():

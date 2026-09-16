@@ -64,7 +64,7 @@
       92.828,
       242.422
     ],
-    "display_size": 142.5,
+    "display_size": 150.0,
     "fps": 24.0,
     "crop": [
       76,
@@ -118,7 +118,7 @@
       113.181,
       224.13
     ],
-    "display_size": 150.0,
+    "display_size": 159.0,
     "fps": 24.0,
     "crop": [
       -18,
@@ -226,7 +226,7 @@
       117.129,
       240.095
     ],
-    "display_size": 150.0,
+    "display_size": 159.0,
     "native_facing": 1,
     "fps": 24.0,
     "crop": [
