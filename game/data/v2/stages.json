@@ -40,11 +40,20 @@
         "type": "blocked",
         "rect": [
           760,
-          255,
+          265,
           105,
           72
         ],
-        "label": "断墙"
+        "label": "灌木阻挡",
+        "collision_shape": "ellipse",
+        "collision_scale": [
+          0.76,
+          0.56
+        ],
+        "collision_offset": [
+          0,
+          9
+        ]
       },
       {
         "id": "watch_device",
@@ -65,43 +74,40 @@
         "type": "shortcut",
         "rect": [
           585,
-          330,
-          68,
-          82
+          326,
+          76,
+          88
         ],
         "label": "裂隙封门",
-        "hp": 460
+        "hp": 460,
+        "collision_scale": [
+          0.82,
+          0.72
+        ],
+        "collision_offset": [
+          0,
+          5
+        ]
       },
       {
         "id": "wind_breakable_gate",
         "type": "shortcut",
         "rect": [
           405,
-          330,
-          72,
-          82
+          326,
+          76,
+          88
         ],
         "label": "风蚀封门",
-        "hp": 380
-      },
-      {
-        "id": "moving_platform",
-        "type": "moving_platform",
-        "rect": [
-          680,
-          235,
-          150,
-          62
+        "hp": 420,
+        "collision_scale": [
+          0.82,
+          0.72
         ],
-        "label": "浮空平台",
-        "axis": [
-          1,
-          0
-        ],
-        "distance": 70,
-        "period": 4.0,
-        "range_bonus": 0.3,
-        "attack_bonus": 0.12
+        "collision_offset": [
+          0,
+          5
+        ]
       },
       {
         "id": "conveyor",

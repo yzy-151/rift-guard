@@ -22,8 +22,10 @@ const REACTION_COOLDOWN: float = 0.5
 const HEAL_RANGE: float = 310.0
 const HEAL_AMOUNT: float = 22.0
 const ENDLESS_BOSS_IDS := ["boss_01", "boss_02", "boss_03", "boss_04", "boss_05", "boss_06"]
-const ENDLESS_ACTIVE_CAP := 160
-const ENDLESS_LOW_TIER_CAP := 42
+const ENDLESS_ACTIVE_CAP_EARLY := 108
+const ENDLESS_ACTIVE_CAP_LATE := 140
+const ENDLESS_LOW_TIER_CAP_EARLY := 42
+const ENDLESS_LOW_TIER_CAP_LATE := 24
 const ENDLESS_HUT_CAP := 2
 const ENDLESS_LOW_TIER_IDS := ["grunt", "runner", "slime_pyro", "slime_electro", "slime_anemo", "slime_hydro", "slime_cryo"]
 
@@ -105,6 +107,7 @@ var combat_contract: Dictionary = {}
 var contract_completed: bool = false
 var contract_reward_text: String = ""
 var recent_spawn_kinds: Array[String] = []
+var enemy_support_scan_timer: float = 0.0
 
 func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 	v2_mode = enable_v2
@@ -168,6 +171,7 @@ func reset(seed_value: int = -1) -> void:
 	contract_completed = false
 	contract_reward_text = ""
 	recent_spawn_kinds.clear()
+	enemy_support_scan_timer = 0.0
 	next_construct_id = 0
 	reaction_damage_bonus = 0.0
 	reaction_radius_bonus = 0.0
@@ -257,6 +261,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	contract_completed = false
 	contract_reward_text = ""
 	recent_spawn_kinds.clear()
+	enemy_support_scan_timer = 0.0
 	combat_contract = database.combat_contracts.get(stage_id, {}).duplicate(true)
 	next_construct_id = 0
 	reaction_damage_bonus = 0.0
@@ -468,11 +473,30 @@ func _load_terrain(stage_definition: Dictionary) -> void:
 		feature.max_hp = float(feature.hp)
 		terrain_features.append(feature)
 
+func _feature_collision_rect(feature: Dictionary) -> Rect2:
+	var area := Rect2(feature.get("area", Rect2()))
+	var raw_scale: Array = feature.get("collision_scale", [1.0, 1.0])
+	var scale := Vector2(float(raw_scale[0]), float(raw_scale[1])) if raw_scale.size() >= 2 else Vector2.ONE
+	var raw_offset: Array = feature.get("collision_offset", [0.0, 0.0])
+	var offset := Vector2(float(raw_offset[0]), float(raw_offset[1])) if raw_offset.size() >= 2 else Vector2.ZERO
+	var size := area.size * scale
+	return Rect2(area.get_center() + offset - size * 0.5, size)
+
+func _feature_contains(feature: Dictionary, point: Vector2, radius: float = 0.0) -> bool:
+	var collision := _feature_collision_rect(feature)
+	if str(feature.get("collision_shape", "rect")) != "ellipse":
+		return collision.grow(radius).has_point(point)
+	var radii := collision.size * 0.5 + Vector2.ONE * radius
+	if radii.x <= 0.0 or radii.y <= 0.0:
+		return false
+	var normalized := (point - collision.get_center()) / radii
+	return normalized.length_squared() <= 1.0
+
 func terrain_feature_at(point: Vector2, kind: String = "") -> Dictionary:
 	for feature: Dictionary in terrain_features:
 		if not kind.is_empty() and str(feature.get("type", "")) != kind:
 			continue
-		if feature.area.has_point(point):
+		if _feature_contains(feature, point):
 			return feature
 	return {}
 
@@ -493,9 +517,9 @@ func terrain_movement_scale(point: Vector2) -> float:
 func _resolve_walkable_target(point: Vector2) -> Vector2:
 	for feature: Dictionary in terrain_features:
 		var blocks := _feature_blocks(feature)
-		if not blocks or not feature.area.has_point(point):
+		if not blocks or not _feature_contains(feature, point):
 			continue
-		var area: Rect2 = feature.area
+		var area := _feature_collision_rect(feature)
 		var candidates := [Vector2(area.position.x - 8.0, point.y), Vector2(area.end.x + 8.0, point.y), Vector2(point.x, area.position.y - 8.0), Vector2(point.x, area.end.y + 8.0)]
 		candidates.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.distance_squared_to(point) < b.distance_squared_to(point))
 		return candidates[0]
@@ -510,7 +534,7 @@ func _terrain_blocks(point: Vector2, radius: float = 7.0) -> bool:
 
 func _terrain_blocker_at(point: Vector2, radius: float = 7.0) -> Dictionary:
 	for feature: Dictionary in terrain_features:
-		if _feature_blocks(feature) and Rect2(feature.area).grow(radius).has_point(point):
+		if _feature_blocks(feature) and _feature_contains(feature, point, radius):
 			return feature
 	return {}
 
@@ -544,9 +568,26 @@ func _segment_hits_rect(from: Vector2, to: Vector2, rect: Rect2) -> bool:
 	t_max = minf(t_max, ty2)
 	return t_min <= t_max
 
+func _segment_hits_ellipse(from: Vector2, to: Vector2, ellipse_rect: Rect2, radius: float = 0.0) -> bool:
+	var radii := ellipse_rect.size * 0.5 + Vector2.ONE * radius
+	if radii.x <= 0.0 or radii.y <= 0.0:
+		return false
+	var start := (from - ellipse_rect.get_center()) / radii
+	var finish := (to - ellipse_rect.get_center()) / radii
+	var delta := finish - start
+	var length_sq := delta.length_squared()
+	var t := clampf(-start.dot(delta) / length_sq, 0.0, 1.0) if length_sq > 0.0001 else 0.0
+	return (start + delta * t).length_squared() <= 1.0
+
+func _feature_segment_hits(feature: Dictionary, from: Vector2, to: Vector2, radius: float) -> bool:
+	var collision := _feature_collision_rect(feature)
+	if str(feature.get("collision_shape", "rect")) == "ellipse":
+		return _segment_hits_ellipse(from, to, collision, radius)
+	return _segment_hits_rect(from, to, collision.grow(radius))
+
 func _terrain_blocker_on_segment(from: Vector2, to: Vector2, radius: float = 5.0) -> Dictionary:
 	for feature: Dictionary in terrain_features:
-		if _feature_blocks(feature) and _segment_hits_rect(from, to, Rect2(feature.area).grow(radius)):
+		if _feature_blocks(feature) and _feature_segment_hits(feature, from, to, radius):
 			return feature
 	return {}
 
@@ -560,7 +601,7 @@ func _move_with_terrain(current: Vector2, target: Vector2, distance: float, radi
 	var blocker := _terrain_blocker_on_segment(current, direct, radius)
 	if blocker.is_empty():
 		return direct
-	var obstacle: Rect2 = Rect2(blocker.area).grow(radius + 7.0)
+	var obstacle: Rect2 = _feature_collision_rect(blocker).grow(radius + 7.0)
 	var waypoints := [
 		Vector2(obstacle.position.x - 2.0, obstacle.position.y - 2.0),
 		Vector2(obstacle.end.x + 2.0, obstacle.position.y - 2.0),
@@ -693,7 +734,7 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 			shield *= float(stage_runtime.definition.get("boss_health_multiplier", 1.0))
 	var xp_values := {"grunt": 10, "runner": 8, "armored": 22, "flyer": 12, "ranged": 15, "buffer": 24, "shielded": 38, "charger": 20, "healer": 30, "splitter": 42, "warder": 32, "slime_pyro": 11, "slime_electro": 11, "slime_anemo": 12, "slime_hydro": 14, "slime_cryo": 16, "boss_01": 240, "boss_02": 280, "boss_03": 260, "boss_04": 320, "boss_05": 290, "boss_06": 310}
 	var first_special: float = float(enemy.get("boss_pulse", enemy.get("spawn_interval", enemy.get("heal_interval", enemy.get("ward_interval", 0.0)))))
-	enemy.merge({"id": next_id, "kind": kind, "pos": point, "facing": -1.0, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "boss_cast_index": 0, "special_move": "pulse", "summons_done": 0, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10)), "attack_pending": false, "warning_timer": 0.0, "warning_pos": point, "warning_radius": 58.0, "special_pending": false, "special_warning": 0.0, "affixes": [], "affix_timer": 3.5})
+	enemy.merge({"id": next_id, "kind": kind, "pos": point, "facing": -1.0, "max_hp": enemy.hp, "flash": 0.0, "attack_timer": 0.7, "blocked_by": -1, "aura": "", "aura_timer": 0.0, "reaction_timer": 0.0, "slow_timer": 0.0, "frozen_timer": 0.0, "haste_timer": 0.0, "shield": shield, "max_shield": shield, "special_timer": first_special, "split_done": false, "boss_phase": 1, "boss_cast_index": 0, "special_move": "pulse", "summons_done": 0, "route_points": [], "route_index": 0, "route_id": "", "xp": int(xp_values.get(kind, 10)), "attack_pending": false, "warning_timer": 0.0, "warning_pos": point, "warning_radius": 58.0, "special_pending": false, "special_warning": 0.0, "affixes": [], "affix_timer": 3.5, "nav_probe_timer": 0.0, "nav_clear": false})
 	_apply_enemy_affix(enemy)
 	enemies.append(enemy)
 	return enemy
@@ -820,12 +861,50 @@ func _contract_tick() -> void:
 	events.append({"kind":"contract_complete","pos":heroes[0].pos if not heroes.is_empty() else Vector2(640,360),"value":str(combat_contract.get("name","战术契约")),"reward":contract_reward_text})
 
 
+func _endless_tier() -> int:
+	return maxi(1, floori(elapsed / 45.0) + 1)
+
+func _endless_active_cap() -> int:
+	var progression := clampf(elapsed / 540.0, 0.0, 1.0)
+	var cap := roundi(lerpf(ENDLESS_ACTIVE_CAP_EARLY, ENDLESS_ACTIVE_CAP_LATE, progression))
+	if performance_budget.quality_scale <= 0.58:
+		cap = mini(cap, 112)
+	elif performance_budget.quality_scale < 1.0:
+		cap = mini(cap, 126)
+	return cap
+
+func _endless_low_tier_cap() -> int:
+	var progression := clampf(elapsed / 420.0, 0.0, 1.0)
+	return roundi(lerpf(ENDLESS_LOW_TIER_CAP_EARLY, ENDLESS_LOW_TIER_CAP_LATE, progression))
+
+func _endless_enemy_scales(tier: int) -> Dictionary:
+	# Early enemies stay readable; late pressure comes from quality and stats
+	# instead of an unbounded count of cheap units.
+	return {
+		"health": 0.78 + elapsed / 185.0 + pow(float(tier), 1.24) * 0.12,
+		"damage": 0.76 + elapsed / 420.0 + float(tier) * 0.055,
+		"speed": minf(1.34, 0.93 + float(tier) * 0.024),
+		"xp": minf(2.25, 0.92 + float(tier) * 0.075),
+	}
+
+func _apply_endless_scaling(enemy: Dictionary, tier: int, strength: float = 1.0) -> void:
+	var scales := _endless_enemy_scales(tier)
+	var health_scale := lerpf(1.0, float(scales.health), strength)
+	var damage_scale := lerpf(1.0, float(scales.damage), strength)
+	enemy.hp *= health_scale
+	enemy.max_hp = enemy.hp
+	enemy.damage *= damage_scale
+	enemy.speed *= lerpf(1.0, float(scales.speed), strength)
+	enemy.xp = maxi(1, roundi(float(enemy.get("xp", 10)) * lerpf(1.0, float(scales.xp), strength)))
+	enemy.endless_rank = tier
+
 func _endless_spawn_tick(dt: float) -> void:
 	_spawn_endless_boss_if_due()
 	endless_spawn_timer -= dt
-	if endless_spawn_timer > 0.0 or enemies.size() >= ENDLESS_ACTIVE_CAP:
+	var active_cap := _endless_active_cap()
+	if endless_spawn_timer > 0.0 or enemies.size() >= active_cap:
 		return
-	var tier := maxi(1, floori(elapsed / 45.0) + 1)
+	var tier := _endless_tier()
 	var build_levels := 0
 	for level: Variant in run_state.buff_levels.values():
 		build_levels += int(level)
@@ -840,32 +919,33 @@ func _endless_spawn_tick(dt: float) -> void:
 		pool.append_array(["ranged", "shielded", "healer", "splitter", "warder"])
 	elif tier >= 5:
 		pool.append_array(["shielded", "healer"])
+	if tier >= 8:
+		# Shift late waves toward fewer meaningful threats.
+		pool.append_array(["armored", "charger", "shielded", "warder", "healer"])
+	var low_tier_cap := _endless_low_tier_cap()
 	var low_tier_count := _endless_kind_count(ENDLESS_LOW_TIER_IDS)
 	var hut_count := _endless_kind_count(["splitter"])
-	var available_slots := ENDLESS_ACTIVE_CAP - enemies.size()
-	var batch := mini(available_slots, mini(7, 2 + floori((tier - 1) / 2.0)))
+	var available_slots := active_cap - enemies.size()
+	var batch := mini(available_slots, mini(6, 2 + floori((tier - 1) / 2.0)))
 	for i in batch:
 		var side := (kills + next_id + i * 3) % 4
 		var ratio := fposmod(sin(float(next_id + i * 19) * 12.9898) * 43758.5453, 1.0)
 		var kind: String = pool[(next_id + i * 5 + tier) % pool.size()]
 		if kind == "splitter" and hut_count >= ENDLESS_HUT_CAP:
 			kind = _endless_quality_enemy(tier, i)
-		if kind in ENDLESS_LOW_TIER_IDS and low_tier_count >= ENDLESS_LOW_TIER_CAP:
+		if kind in ENDLESS_LOW_TIER_IDS and low_tier_count >= low_tier_cap:
 			kind = _endless_quality_enemy(tier, i)
 		kind = _balanced_spawn_kind(kind)
 		var point := _endless_interior_spawn_point(side, ratio) if kind == "splitter" else _endless_edge_point(side, ratio)
 		var enemy := spawn_enemy(point, kind)
+		_apply_endless_scaling(enemy, tier)
 		if kind == "splitter":
 			hut_count += 1
 		elif kind in ENDLESS_LOW_TIER_IDS:
 			low_tier_count += 1
-		var health_scale := 1.08 + elapsed / 170.0 + pow(float(tier), 1.20) * 0.10
-		enemy.hp *= health_scale
-		enemy.max_hp = enemy.hp
-		enemy.damage *= 1.08 + elapsed / 310.0
-		if enemies.size() < 90 or kind not in ENDLESS_LOW_TIER_IDS:
+		if enemies.size() < 84 or kind not in ENDLESS_LOW_TIER_IDS:
 			events.append({"kind": "route_spawn", "pos": point, "route_id": "edge_%d" % side, "flying": bool(enemy.get("flying", false))})
-	endless_spawn_timer += maxf(0.30, 1.05 - elapsed * 0.00135)
+	endless_spawn_timer += maxf(0.38, 1.16 - elapsed * 0.0012)
 
 func _endless_kind_count(kinds: Array) -> int:
 	return enemies.filter(func(enemy: Dictionary) -> bool: return enemy.hp > 0.0 and str(enemy.get("kind", "")) in kinds).size()
@@ -896,8 +976,32 @@ func _endless_edge_point(side: int, ratio: float) -> Vector2:
 		2: return Vector2(lerpf(ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x, ratio), ENDLESS_ARENA.position.y)
 		_: return Vector2(lerpf(ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x, ratio), ENDLESS_ARENA.end.y)
 
+func _make_room_for_endless_boss() -> void:
+	var active_cap := _endless_active_cap()
+	while enemies.size() >= active_cap:
+		var removal_index := -1
+		for index in enemies.size():
+			var candidate: Dictionary = enemies[index]
+			if candidate.hp > 0.0 and str(candidate.get("kind", "")) in ENDLESS_LOW_TIER_IDS:
+				removal_index = index
+				break
+		if removal_index < 0:
+			for index in enemies.size():
+				if not str(enemies[index].get("kind", "")).begins_with("boss_"):
+					removal_index = index
+					break
+		if removal_index < 0:
+			return
+		enemies.remove_at(removal_index)
+		culled_spawns += 1
+
 func _spawn_endless_boss_if_due() -> void:
 	while endless_mode and elapsed >= endless_next_boss_at:
+		var active_bosses := enemies.filter(func(enemy: Dictionary) -> bool: return enemy.hp > 0.0 and str(enemy.get("kind", "")).begins_with("boss_")).size()
+		if active_bosses >= 2:
+			endless_next_boss_at = elapsed + 18.0
+			return
+		_make_room_for_endless_boss()
 		var boss_id: String = ENDLESS_BOSS_IDS[endless_boss_index % ENDLESS_BOSS_IDS.size()]
 		var cycle := floori(endless_boss_index / float(ENDLESS_BOSS_IDS.size()))
 		var side := endless_boss_index % 4
@@ -997,7 +1101,7 @@ func _terrain_detour_waypoint(current: Vector2, destination: Vector2, radius: fl
 	var blocker := _terrain_blocker_on_segment(current, destination, radius)
 	if blocker.is_empty():
 		return destination
-	var obstacle := Rect2(blocker.area).grow(radius + 18.0)
+	var obstacle := _feature_collision_rect(blocker).grow(radius + 18.0)
 	var candidates := [
 		Vector2(obstacle.position.x - 8.0, obstacle.position.y - 8.0),
 		Vector2(obstacle.end.x + 8.0, obstacle.position.y - 8.0),
@@ -1024,18 +1128,24 @@ func _terrain_detour_waypoint(current: Vector2, destination: Vector2, radius: fl
 
 func _enemy_navigation_target(enemy: Dictionary, destination: Vector2, radius: float, dt: float) -> Vector2:
 	enemy.nav_timer = maxf(0.0, float(enemy.get("nav_timer", 0.0)) - dt)
-	if not terrain_line_blocked(enemy.pos, destination, radius):
-		enemy.erase("nav_waypoint")
-		return destination
+	enemy.nav_probe_timer = maxf(0.0, float(enemy.get("nav_probe_timer", 0.0)) - dt)
 	if enemy.has("nav_waypoint"):
 		var cached: Vector2 = enemy.nav_waypoint
-		if enemy.pos.distance_to(cached) > 18.0 and float(enemy.nav_timer) > 0.0 and _terrain_blocker_on_segment(enemy.pos, cached, radius).is_empty():
+		if enemy.pos.distance_squared_to(cached) > 324.0 and float(enemy.nav_timer) > 0.0:
+			enemy.nav_clear = false
 			return cached
 		enemy.erase("nav_waypoint")
+	if bool(enemy.get("nav_clear", false)) and float(enemy.nav_probe_timer) > 0.0:
+		return destination
+	enemy.nav_probe_timer = 0.16 + float(int(enemy.get("id", 0)) % 5) * 0.018
+	if not terrain_line_blocked(enemy.pos, destination, radius):
+		enemy.nav_clear = true
+		return destination
+	enemy.nav_clear = false
 	var waypoint := _terrain_detour_waypoint(enemy.pos, destination, radius)
 	if waypoint != enemy.pos:
 		enemy.nav_waypoint = waypoint
-		enemy.nav_timer = 3.2
+		enemy.nav_timer = 2.4
 	return waypoint
 
 func _nearby_destructible_door(point: Vector2, radius: float) -> Dictionary:
@@ -1064,12 +1174,17 @@ func _attack_terrain_door(enemy: Dictionary, door: Dictionary) -> void:
 			candidate.erase("nav_waypoint")
 			candidate.nav_timer = 0.0
 func _enemy_tick(dt: float) -> void:
-	for source: Dictionary in enemies:
-		if source.hp <= 0 or source.get("kind", "") != "buffer":
-			continue
-		for ally: Dictionary in enemies:
-			if ally.hp > 0 and ally.id != source.id and ally.pos.distance_to(source.pos) <= float(source.get("aura_radius", 0.0)):
-				ally.haste_timer = 0.25
+	enemy_support_scan_timer -= dt
+	if enemy_support_scan_timer <= 0.0:
+		enemy_support_scan_timer = 0.20
+		for source: Dictionary in enemies:
+			if source.hp <= 0 or source.get("kind", "") != "buffer":
+				continue
+			var aura_radius := float(source.get("aura_radius", 0.0))
+			var aura_radius_sq := aura_radius * aura_radius
+			for ally: Dictionary in enemies:
+				if ally.hp > 0 and ally.id != source.id and ally.pos.distance_squared_to(source.pos) <= aura_radius_sq:
+					ally.haste_timer = 0.25
 	for e in enemies:
 		if e.hp <= 0:
 			continue
@@ -1099,6 +1214,10 @@ func _enemy_tick(dt: float) -> void:
 			events.append({"kind":"enemy_guard","pos":e.pos,"value":guarded})
 		if e.aura_timer <= 0:
 			e.aura = ""
+		var offscreen_lod := endless_mode and not str(e.get("kind", "")).begins_with("boss_") and not active_view_rect.grow(220.0).has_point(e.pos)
+		if offscreen_lod and posmod(int(e.id) + floori(elapsed * 60.0), 2) != 0:
+			continue
+		var movement_dt := dt * (2.0 if offscreen_lod else 1.0)
 		var speed_scale: float = (0.0 if e.frozen_timer > 0.0 else (0.7 if e.slow_timer > 0 else 1.0)) * (1.35 if e.haste_timer > 0 else 1.0)
 		if not bool(e.get("flying", false)):
 			speed_scale *= terrain_movement_scale(e.pos)
@@ -1112,11 +1231,12 @@ func _enemy_tick(dt: float) -> void:
 		var navigation_radius := maxf(12.0, float(e.get("size", 28.0)) * 0.34)
 		var route_destination := destination
 		if not bool(e.get("flying", false)) and float(e.get("speed", 0.0)) > 0.0:
-			destination = _enemy_navigation_target(e, destination, navigation_radius, dt)
+			destination = _enemy_navigation_target(e, destination, navigation_radius, movement_dt)
 		if absf(destination.x - e.pos.x) > 1.0:
 			e.facing = 1.0 if destination.x > e.pos.x else -1.0
-		var move_distance := float(e.speed) * speed_scale * dt
-		var next_pos: Vector2 = e.pos.move_toward(destination, move_distance) if bool(e.get("flying", false)) else _move_with_terrain(e.pos, destination, move_distance, navigation_radius)
+		var move_distance := float(e.speed) * speed_scale * movement_dt
+		var direct_move := bool(e.get("flying", false)) or bool(e.get("nav_clear", false))
+		var next_pos: Vector2 = e.pos.move_toward(destination, move_distance) if direct_move else _move_with_terrain(e.pos, destination, move_distance, navigation_radius)
 		var terrain_door: Dictionary = {} if bool(e.get("flying", false)) else _nearby_destructible_door(e.pos, navigation_radius)
 		if not terrain_door.is_empty():
 			next_pos = e.pos
@@ -1212,11 +1332,13 @@ func _enemy_tick(dt: float) -> void:
 			var local_spawned := enemies.filter(func(candidate: Dictionary) -> bool: return candidate.hp > 0.0 and str(candidate.get("spawned_by", "")) == str(e.id)).size()
 			var spawn_capacity := maxi(0, int(e.get("spawn_limit", 5)) - local_spawned)
 			if endless_mode:
-				spawn_capacity = mini(spawn_capacity, maxi(0, ENDLESS_ACTIVE_CAP - enemies.size()))
-				spawn_capacity = mini(spawn_capacity, maxi(0, ENDLESS_LOW_TIER_CAP - _endless_kind_count(ENDLESS_LOW_TIER_IDS)))
+				spawn_capacity = mini(spawn_capacity, maxi(0, _endless_active_cap() - enemies.size()))
+				spawn_capacity = mini(spawn_capacity, maxi(0, _endless_low_tier_cap() - _endless_kind_count(ENDLESS_LOW_TIER_IDS)))
 			for spawn_index in mini(int(e.get("spawn_count", 1)), spawn_capacity):
 				var offset := Vector2(42.0 + spawn_index * 18.0, -26.0 + spawn_index * 52.0)
 				var child := spawn_enemy(Vector2(e.pos) + offset, str(e.get("spawn_kind", "runner")))
+				if endless_mode:
+					_apply_endless_scaling(child, _endless_tier(), 0.72)
 				child.spawned_by = e.id
 				child.route_points = Array(e.get("route_points", [])).duplicate()
 				child.route_index = int(e.get("route_index", 0))
@@ -1320,11 +1442,11 @@ func _execute_boss_special(enemy: Dictionary) -> void:
 func _bounded_endless_summon_kind(kind: String, index: int) -> String:
 	if not endless_mode:
 		return kind
-	if enemies.size() >= ENDLESS_ACTIVE_CAP:
+	if enemies.size() >= _endless_active_cap():
 		return ""
 	if kind == "splitter" and _endless_kind_count(["splitter"]) >= ENDLESS_HUT_CAP:
 		return _endless_quality_enemy(maxi(1, floori(elapsed / 45.0) + 1), index)
-	if kind in ENDLESS_LOW_TIER_IDS and _endless_kind_count(ENDLESS_LOW_TIER_IDS) >= ENDLESS_LOW_TIER_CAP:
+	if kind in ENDLESS_LOW_TIER_IDS and _endless_kind_count(ENDLESS_LOW_TIER_IDS) >= _endless_low_tier_cap():
 		return _endless_quality_enemy(maxi(1, floori(elapsed / 45.0) + 1), index)
 	return kind
 
@@ -1341,6 +1463,8 @@ func _boss_summon(enemy: Dictionary, kind: String, count: int) -> int:
 		if endless_mode and resolved_kind == "splitter":
 			spawn_point = _endless_interior_spawn_point(index % 4, 0.24 + fposmod(index * 0.27, 0.52))
 		var minion := spawn_enemy(spawn_point, resolved_kind)
+		if endless_mode:
+			_apply_endless_scaling(minion, _endless_tier(), 0.78)
 		minion.hp *= 0.72 + int(enemy.get("boss_phase", 1)) * 0.08
 		minion.max_hp = minion.hp
 		spawned += 1

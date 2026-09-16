@@ -1,9 +1,9 @@
 extends RefCounted
 
-const MAX_ENEMIES := 180
-const MAX_PROJECTILES := 720
-const MAX_EFFECTS := 320
-const MAX_DAMAGE_NUMBERS := 120
+const MAX_ENEMIES := 140
+const MAX_PROJECTILES := 560
+const MAX_EFFECTS := 240
+const MAX_DAMAGE_NUMBERS := 90
 
 var quality_scale := 1.0
 var last_frame_ms := 0.0

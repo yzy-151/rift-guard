@@ -220,6 +220,10 @@ func visible_world_rect() -> Rect2:
 func world_depth_scale(point: Vector2) -> float:
 	return 1.0 if sim != null and sim.endless_mode else Stage.depth_scale(point)
 
+func _render_point_visible(point: Vector2, margin: float = 160.0) -> bool:
+	return sim == null or not sim.endless_mode or visible_world_rect().grow(margin).has_point(point)
+
+
 func _is_chapter_one_stage() -> bool:
 	return sim != null and str(sim.current_stage_id) in CHAPTER1_STAGE_IDS
 
@@ -351,9 +355,11 @@ func _draw() -> void:
 	if deploy_preview_active:
 		_draw_deploy_preview()
 	for zone: Dictionary in sim.skill_effects:
-		_draw_skill_zone(zone)
+		if _render_point_visible(Vector2(zone.get("pos", Vector2.ZERO)), 180.0):
+			_draw_skill_zone(zone)
 	for construct: Dictionary in sim.geo_constructs:
-		_draw_geo_construct(construct)
+		if _render_point_visible(Vector2(construct.get("pos", Vector2.ZERO)), 140.0):
+			_draw_geo_construct(construct)
 	if skill_targeting:
 		_draw_skill_preview()
 	if selected_id >= 0:
@@ -365,12 +371,15 @@ func _draw() -> void:
 			draw_dashed_line(world_to_screen(hero.pos), world_to_screen(hero.target), Color(hero.color, 0.6), 1.0, 7.0)
 			_ground_circle(hero.target, 13.0, Color(hero.color))
 	var actors: Array[Dictionary] = []
+	var render_world := visible_world_rect().grow(180.0) if sim.endless_mode else WORLD
 	for enemy in sim.enemies:
-		actors.append({"unit": enemy, "hero": false, "death": false})
+		if render_world.has_point(enemy.pos):
+			actors.append({"unit": enemy, "hero": false, "death": false})
 	for death_visual: Dictionary in enemy_death_visuals:
-		actors.append({"unit": death_visual, "hero": false, "death": true})
+		if render_world.has_point(death_visual.pos):
+			actors.append({"unit": death_visual, "hero": false, "death": true})
 	for hero in sim.heroes:
-		if bool(hero.get("deployed", true)):
+		if bool(hero.get("deployed", true)) and render_world.has_point(hero.pos):
 			actors.append({"unit": hero, "hero": true})
 	actors.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.unit.pos.y < b.unit.pos.y)
 	for actor in actors:
@@ -380,7 +389,9 @@ func _draw() -> void:
 		current_actor_transform = Transform2D(Vector2(scale_factor, 0.0), Vector2(0.0, scale_factor), point)
 		draw_set_transform_matrix(current_actor_transform)
 		var shadow_foot := Vector2(0.0, HERO_FOOT_OFFSET if actor.hero else ENEMY_FOOT_OFFSET)
-		draw_ellipse_shadow(shadow_foot - Vector2(0.0, 9.0), 28.0 if actor.hero else unit.size * 0.48, Color(0, 0, 0, 0.5))
+		var keep_shadow := bool(actor.hero) or not reduced_effects or str(unit.get("kind", "")).begins_with("boss_") or int(unit.get("id", 0)) % 2 == 0
+		if keep_shadow:
+			draw_ellipse_shadow(shadow_foot - Vector2(0.0, 9.0), 28.0 if actor.hero else unit.size * 0.48, Color(0, 0, 0, 0.5))
 		draw_set_transform_matrix(current_actor_transform)
 		var visual: Dictionary = unit.duplicate()
 		visual.pos = Vector2.ZERO
@@ -392,8 +403,11 @@ func _draw() -> void:
 			_draw_enemy(visual)
 		draw_set_transform(Vector2.ZERO)
 	for projectile in sim.projectiles:
-		_draw_projectile(projectile)
+		if _render_point_visible(Vector2(projectile.get("pos", Vector2.ZERO)), 120.0):
+			_draw_projectile(projectile)
 	for effect in effects:
+		if not _render_point_visible(Vector2(effect.get("pos", Vector2.ZERO)), 180.0):
+			continue
 		var point: Vector2 = world_to_screen(effect.pos)
 		var scale_factor: float = world_depth_scale(effect.pos)
 		draw_set_transform(point, 0, Vector2(scale_factor, scale_factor))
@@ -481,8 +495,9 @@ func _draw_stage_exit() -> void:
 
 func _draw_enemy_telegraphs() -> void:
 	for enemy: Dictionary in sim.enemies:
-		if bool(enemy.get("attack_pending", false)) and float(enemy.get("attack_range", 0.0)) > 0.0:
-			var center := world_to_screen(enemy.get("warning_pos", enemy.pos))
+		var warning_world: Vector2 = enemy.get("warning_pos", enemy.pos)
+		if bool(enemy.get("attack_pending", false)) and float(enemy.get("attack_range", 0.0)) > 0.0 and _render_point_visible(warning_world, 120.0):
+			var center := world_to_screen(warning_world)
 			var radius := float(enemy.get("warning_radius", 60.0)) * 0.62 * world_depth_scale(enemy.pos)
 			var ratio := clampf(float(enemy.get("warning_timer", 0.0)) / 1.05, 0.0, 1.0)
 			draw_circle(center, radius, Color(0.95, 0.12, 0.18, 0.10 + (1.0-ratio)*0.16))
@@ -491,6 +506,8 @@ func _draw_enemy_telegraphs() -> void:
 			_draw_warning_reticle(center, radius, ratio, float(enemy.get("warning_timer", 0.0)), false)
 		if bool(enemy.get("special_pending", false)):
 			for warning_point: Variant in enemy.get("special_warning_positions", [enemy.pos]):
+				if not _render_point_visible(Vector2(warning_point), 220.0):
+					continue
 				var center := world_to_screen(warning_point)
 				var source := world_to_screen(enemy.pos)
 				var radius := float(enemy.get("special_warning_radius",150.0))*0.62*world_depth_scale(warning_point)
@@ -757,15 +774,12 @@ func _stage_layer(name: String) -> void:
 func _draw_stage_backdrop(theme: Dictionary, palette: Dictionary) -> void:
 	_stage_layer("backdrop")
 	if _is_chapter_one_stage():
-		var playfield: Rect2 = UI_LAYOUT.battle_playfield_rect
-		var texture_size := STAGE_VISUAL.chapter1_background.get_size()
-		var crop_height := texture_size.x * playfield.size.y / playfield.size.x
-		var crop_y := clampf((texture_size.y - crop_height) * 0.42, 0.0, maxf(0.0, texture_size.y - crop_height))
-		var source := Rect2(0.0, crop_y, texture_size.x, minf(crop_height, texture_size.y))
-		draw_texture_rect_region(STAGE_VISUAL.chapter1_background, playfield, source, Color(0.72, 0.80, 0.74, 1.0), false, true)
-		draw_rect(playfield, Color(0.018, 0.028, 0.026, 0.16))
-		draw_rect(Rect2(playfield.position, Vector2(playfield.size.x, 108.0)), Color(0.55, 0.68, 0.62, 0.13))
-		draw_rect(playfield, Color("#d43b50"), false, 2.0)
+		# Keep the non-playable canvas quiet. Grass is reserved for the exact
+		# battle rectangle in the ground pass instead of being composited over a
+		# second scenic image.
+		draw_rect(Rect2(0, 0, 1280, 720), Color("#11161a"))
+		draw_rect(Rect2(0, 0, 1280, 84), Color("#090b0e"))
+		draw_rect(Rect2(0, 580, 1280, 140), Color("#080a0d"))
 		return
 	var background := _stage_background(sim.current_stage_id)
 	var accent: Color = palette.get("accent", Color("#c45a68"))
@@ -799,18 +813,19 @@ func _draw_stage_ground(theme: Dictionary, palette: Dictionary) -> void:
 	var accent: Color = palette.get("accent", Color("#c45a68"))
 	if _is_chapter_one_stage():
 		var playfield: Rect2 = UI_LAYOUT.battle_playfield_rect
-		var ground_rect := Rect2(playfield.position + Vector2(0, 88), Vector2(playfield.size.x, playfield.size.y - 88))
+		var ground_rect := playfield
 		var ground_size := STAGE_VISUAL.chapter1_ground.get_size()
 		var crop_height := ground_size.x * ground_rect.size.y / ground_rect.size.x
-		var crop_y := clampf((ground_size.y - crop_height) * 0.56, 0.0, maxf(0.0, ground_size.y - crop_height))
+		var crop_y := clampf((ground_size.y - crop_height) * 0.50, 0.0, maxf(0.0, ground_size.y - crop_height))
 		var source := Rect2(0.0, crop_y, ground_size.x, minf(crop_height, ground_size.y))
-		draw_texture_rect_region(STAGE_VISUAL.chapter1_ground, ground_rect, source, Color(0.92, 0.97, 0.88, 1.0), false, true)
-		draw_rect(ground_rect, Color(0.025, 0.055, 0.022, 0.08))
+		draw_texture_rect_region(STAGE_VISUAL.chapter1_ground, ground_rect, source, Color(0.88, 0.94, 0.84, 1.0), false, true)
+		draw_rect(ground_rect, Color(0.018, 0.045, 0.018, 0.10))
 		_draw_chapter_one_grid()
 		draw_colored_polygon(Stage.polygon(Sim.MOVE_AREA), Color(accent, 0.012))
 		var chapter_border := Stage.polygon(Sim.MOVE_AREA)
 		chapter_border.append(chapter_border[0])
-		draw_polyline(chapter_border, Color("#f2efd0", 0.28), 1.2, true)
+		draw_polyline(chapter_border, Color("#e6efd1", 0.36), 1.5, true)
+		draw_rect(ground_rect, Color("#d43b50", 0.72), false, 2.0)
 		return
 	var floor := Stage.polygon(WORLD)
 	floor_color.a = 0.94
@@ -826,20 +841,20 @@ func _draw_stage_ground(theme: Dictionary, palette: Dictionary) -> void:
 	draw_rect(ENDLESS_PLAYFIELD_SCREEN, Color(0.02, 0.01, 0.025, 0.24), false, 7.0)
 
 func _draw_chapter_one_grid() -> void:
-	for world_y in range(220, 581, 40):
+	for world_y in range(140, 581, 40):
 		for world_x in range(40, 1240, 60):
 			var cell := Rect2(world_x, world_y, 60, 40)
 			var checker := int(world_x / 60 + world_y / 40)
-			draw_colored_polygon(Stage.polygon(cell), Color(0.18, 0.28, 0.12, 0.075 if checker % 2 == 0 else 0.035))
-	var major := Color(0.12, 0.22, 0.09, 0.36)
-	var minor := Color(0.14, 0.28, 0.10, 0.22)
-	for world_y in range(220, 581, 40):
+			draw_colored_polygon(Stage.polygon(cell), Color(0.12, 0.22, 0.08, 0.10 if checker % 2 == 0 else 0.045))
+	var major := Color(0.10, 0.19, 0.07, 0.46)
+	var minor := Color(0.13, 0.25, 0.09, 0.29)
+	for world_y in range(140, 581, 40):
 		var a := world_to_screen(Vector2(40, world_y))
 		var b := world_to_screen(Vector2(1240, world_y))
-		draw_line(a, b, major if (world_y - 220) % 80 == 0 else minor, 1.15, true)
+		draw_line(a, b, major if (world_y - 140) % 80 == 0 else minor, 1.15, true)
 	for world_x in range(40, 1241, 60):
 		var points := PackedVector2Array()
-		for world_y in range(220, 581, 30):
+		for world_y in range(140, 581, 30):
 			points.append(world_to_screen(Vector2(world_x, world_y)))
 		if points.size() > 1:
 			draw_polyline(points, major if (world_x - 40) % 120 == 0 else minor, 1.15, true)
@@ -1028,14 +1043,17 @@ func _terrain_polygon(area: Rect2) -> PackedVector2Array:
 	var screen := _terrain_screen_rect(area)
 	return PackedVector2Array([screen.position, Vector2(screen.end.x, screen.position.y), screen.end, Vector2(screen.position.x, screen.end.y)])
 
+func _grounded_feature_rect(screen_area: Rect2, scale: Vector2, ground_offset: float = 0.0) -> Rect2:
+	var size := screen_area.size * scale
+	var ground_y := screen_area.end.y + ground_offset
+	return Rect2(Vector2(screen_area.get_center().x - size.x * 0.5, ground_y - size.y), size)
+
 func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector2, feature: Dictionary) -> bool:
 	var screen_area := _terrain_screen_rect(area)
 	if kind == "high_ground":
-		var high_rect := Rect2(Vector2.ZERO, screen_area.size * Vector2(0.82, 0.88))
-		high_rect.position = Vector2(screen_area.get_center().x - high_rect.size.x * 0.5, screen_area.end.y - high_rect.size.y)
-		draw_ellipse_shadow(Vector2(high_rect.get_center().x, high_rect.end.y - 9.0), high_rect.size.x * 0.43, Color(0, 0, 0, 0.32))
+		var high_rect := _grounded_feature_rect(screen_area, Vector2(0.90, 1.0), 4.0)
 		draw_texture_rect(STAGE_VISUAL.chapter1_high_platform, high_rect, false, Color("#eef7d7"))
-		caption(Vector2(high_rect.position.x + 10, high_rect.end.y + 14), "高台 · 伤害+22% · 射程+38%", Color("#f3f1c8"), 8)
+		caption(Vector2(high_rect.position.x + 10, high_rect.end.y + 12), "高台 · 伤害+22% · 射程+38%", Color("#f3f1c8"), 8)
 		return true
 	if kind == "moving_platform":
 		var moving_rect := Rect2(Vector2.ZERO, screen_area.size * Vector2(0.92, 1.15))
@@ -1061,16 +1079,15 @@ func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector
 		draw_arc(center, minf(screen_area.size.x, screen_area.size.y) * 0.30, 0, TAU, 24, Color(0.72, 0.56, 1.0, 0.34 * pulse), 2.0, true)
 		return true
 	if kind == "blocked":
-		var bush_rect := screen_area.grow(9.0)
-		bush_rect.position.y -= 5.0
-		draw_ellipse_shadow(Vector2(bush_rect.get_center().x, bush_rect.end.y - 9.0), bush_rect.size.x * 0.37, Color(0, 0, 0, 0.34))
+		var bush_rect := _grounded_feature_rect(screen_area, Vector2(1.06, 1.08), 3.0)
+		var bush_ground := Vector2(bush_rect.get_center().x, bush_rect.end.y - 5.0)
+		draw_ellipse_shadow(bush_ground - Vector2(0, 9), bush_rect.size.x * 0.31, Color(0, 0, 0, 0.31))
 		draw_texture_rect(STAGE_VISUAL.chapter1_bush, bush_rect, false, Color.WHITE)
 		return true
 	if kind == "mechanism":
 		var active: bool = sim.heroes.any(func(hero: Dictionary) -> bool: return bool(hero.get("deployed", false)) and hero.hp > 0.0 and area.grow(95.0).has_point(hero.pos))
 		var glow := Color("#8ff0cb") if active else Color("#719b89")
 		var mechanism_rect := Rect2(center + Vector2(-28, -76), Vector2(56, 100))
-		draw_ellipse_shadow(center + Vector2(0, 15), 27.0, Color(0, 0, 0, 0.38))
 		draw_circle(center + Vector2(0, -28), 28.0 + sin(clock * 4.0) * 3.0, Color(glow, 0.10 if active else 0.04))
 		draw_texture_rect(STAGE_VISUAL.chapter1_mechanism, mechanism_rect, false, Color.WHITE if active else Color(0.72, 0.76, 0.72, 1.0))
 		caption(center + Vector2(-47, 34), "超远程支援 · 5.5秒" if active else "角色靠近后启动", glow, 8)
@@ -1081,9 +1098,7 @@ func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector
 			draw_dashed_line(Vector2(screen_area.position.x, screen_area.end.y), screen_area.end, Color("#8ee6a6"), 2.0, 7.0, true)
 			caption(center + Vector2(-34, 4), "通道已开启", Color("#9af0b8"), 9)
 			return true
-		var barricade_rect := screen_area.grow(5.0)
-		barricade_rect.position.y -= 6.0
-		draw_ellipse_shadow(Vector2(barricade_rect.get_center().x, barricade_rect.end.y - 9.0), barricade_rect.size.x * 0.39, Color(0, 0, 0, 0.36))
+		var barricade_rect := _grounded_feature_rect(screen_area, Vector2(1.12, 1.10), 4.0)
 		draw_texture_rect(STAGE_VISUAL.chapter1_barricade, barricade_rect, false, Color.WHITE)
 		if kind != "one_way":
 			var hp_ratio := clampf(float(feature.get("hp", 0.0)) / maxf(1.0, float(feature.get("max_hp", 1.0))), 0.0, 1.0)
@@ -1205,7 +1220,9 @@ func _draw_endless_stage() -> void:
 
 func _draw_base_projected() -> void:
 	var point: Vector2 = world_to_screen(Vector2(100, 365))
-	draw_ellipse_shadow(point + (Vector2(0, 6) if _is_chapter_one_stage() else Vector2(0, 15)), 46.0 if _is_chapter_one_stage() else 52.0, Color(0, 0, 0, 0.40))
+	var chapter_ground := point + Vector2(0, 44)
+	if not _is_chapter_one_stage():
+		draw_ellipse_shadow(point + Vector2(0, 15), 52.0, Color(0, 0, 0, 0.40))
 	var tint: Color = RED if base_flash > 0.0 and not reduced_effects else Color("#b9f3d6")
 	var glow := 0.75 + sin(clock * 3.4) * 0.18
 	draw_circle(point + Vector2(0, -38), 44.0 + glow * 7.0, Color(tint, 0.055))
@@ -1213,7 +1230,7 @@ func _draw_base_projected() -> void:
 	draw_arc(point + Vector2(0, -38), 38.0, -clock * 0.7, TAU - clock * 0.7, 40, Color(tint, 0.42), 2.0, true)
 	if _is_chapter_one_stage():
 		var crystal_modulate := Color("#ff8f94") if base_flash > 0.0 and not reduced_effects else Color.WHITE
-		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(point + Vector2(-55, -177), Vector2(110, 192)), false, crystal_modulate)
+		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(Vector2(point.x - 88.0, chapter_ground.y - 307.0), Vector2(176, 307)), false, crystal_modulate)
 	else:
 		draw_texture_rect(crystal_texture, Rect2(point + Vector2(-38, -105), Vector2(76, 120)), false, tint)
 		draw_colored_polygon(PackedVector2Array([point + Vector2(-43, 17), point + Vector2(-29, 5), point + Vector2(29, 5), point + Vector2(43, 17), point + Vector2(31, 31), point + Vector2(-31, 31)]), Color("#382934"))
@@ -1443,18 +1460,9 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	var tint := Color("#fff5e5") if enemy.flash > 0 and not reduced_effects else Color(enemy.color)
 	var side: float = maxf(float(enemy.size), enemy_sequences.display_size(str(enemy.kind)) * 0.72) if enemy_sequences.has_enemy(str(enemy.kind)) else float(enemy.size)
 	var body: Vector2 = enemy.pos + Vector2(0, -18 + bob)
-	# Distinct moving silhouettes remain readable even after replacement art is supplied.
+	# Only gameplay-critical support and shield states receive extra markers.
+	# Movement class, flight and range are communicated by the animation itself.
 	match str(enemy.kind):
-		"runner":
-			for trail in 3:
-				draw_line(body + Vector2(12 + trail * 7, -8 + trail * 8), body + Vector2(37 + trail * 8, -8 + trail * 8), Color(0.95, 0.72, 0.34, 0.42 - trail * 0.10), 3.0, true)
-		"flyer":
-			var flap := 8.0 + sin(clock * 10.0 + enemy.id) * 6.0
-			draw_colored_polygon(PackedVector2Array([body + Vector2(-8, -7), body + Vector2(-42, -flap), body + Vector2(-28, 11), body]), Color(0.32, 0.78, 0.82, 0.78))
-			draw_colored_polygon(PackedVector2Array([body + Vector2(8, -7), body + Vector2(42, -flap), body + Vector2(28, 11), body]), Color(0.32, 0.78, 0.82, 0.78))
-		"ranged":
-			draw_arc(body + Vector2(-9, 0), 30.0, -1.15, 1.15, 16, Color("#ffad82"), 4.0, true)
-			draw_line(body + Vector2(-20, -27), body + Vector2(-20, 27), Color("#ffe0b8"), 2.0, true)
 		"buffer":
 			for rune in 3:
 				var angle := clock * 2.2 + rune * TAU / 3.0
@@ -1464,19 +1472,6 @@ func _draw_enemy(enemy: Dictionary) -> void:
 			var shield := PackedVector2Array([body + Vector2(-38, -28), body + Vector2(-13, -35), body + Vector2(-9, 22), body + Vector2(-28, 36), body + Vector2(-43, 17)])
 			draw_colored_polygon(shield, Color("#385b78"))
 			draw_polyline(PackedVector2Array([shield[0], shield[1], shield[2], shield[3], shield[4], shield[0]]), Color("#91d1ef"), 3.0, true)
-		"charger":
-			for trail in 4:
-				draw_line(body + Vector2(20 + trail * 5, -18 + trail * 11), body + Vector2(64 + trail * 8, -18 + trail * 11), Color(1.0, 0.38, 0.24, 0.46 - trail * 0.08), 4.0, true)
-			draw_colored_polygon(PackedVector2Array([body + Vector2(-14, -24), body + Vector2(-38, -45), body + Vector2(-29, -12)]), Color("#ff895f"))
-		"healer":
-			draw_line(body + Vector2(-29, 0), body + Vector2(29, 0), Color("#8cf0b1"), 7.0, true)
-			draw_line(body + Vector2(0, -29), body + Vector2(0, 29), Color("#8cf0b1"), 7.0, true)
-		"splitter":
-			draw_circle(body + Vector2(-24, 9), 15.0 + sin(clock * 5.0) * 2.0, Color(0.77, 0.30, 0.58, 0.70))
-			draw_circle(body + Vector2(24, -4), 13.0 - sin(clock * 5.0) * 2.0, Color(0.90, 0.45, 0.67, 0.70))
-		"warder":
-			for ring in 2:
-				draw_arc(body, 31.0 + ring * 8.0 + sin(clock * 3.0) * 2.0, clock * (1.0 if ring == 0 else -1.0), TAU + clock * (1.0 if ring == 0 else -1.0), 6, Color(0.55, 0.67, 1.0, 0.52), 2.5, true)
 	var visual_id := str(enemy.kind)
 	if enemy_sequences.has_enemy(visual_id):
 		_draw_sequence_enemy(enemy, bob)
@@ -1495,33 +1490,11 @@ func _draw_enemy(enemy: Dictionary) -> void:
 		draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44, 3)), Color("#24394e"))
 		draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44 * shield_ratio, 3)), Color("#66c8ff"))
 		draw_arc(enemy.pos + Vector2(0, -20 + bob), side * 0.48, -2.7, 0.35, 22, Color(0.45, 0.82, 1.0, 0.72), 2.5, true)
-	if enemy.kind == "armored":
-		draw_arc(enemy.pos + Vector2(0, -18), 24, -PI * 0.4, PI * 0.4, 12, Color("#c5b2e3"), 3)
-		caption(enemy.pos + Vector2(-7, 27), "甲", Color("#c5b2e3"), 12)
-	elif enemy.kind == "runner":
-		caption(enemy.pos + Vector2(-7, 27), "疾", Color("#e6c77b"), 12)
-	elif enemy.kind == "flyer":
-		draw_polyline(PackedVector2Array([enemy.pos + Vector2(-31, -25 + bob), enemy.pos + Vector2(-12, -15 + bob), enemy.pos + Vector2(0, -31 + bob), enemy.pos + Vector2(12, -15 + bob), enemy.pos + Vector2(31, -25 + bob)]), Color("#9ef1ed"), 3.0, true)
-		caption(enemy.pos + Vector2(-7, 27), "空", Color("#80d7d7"), 12)
-	elif enemy.kind == "ranged":
-		draw_line(enemy.pos + Vector2(-27, -15), enemy.pos + Vector2(25, -15), Color("#ffab88"), 3.0, true)
-		caption(enemy.pos + Vector2(-7, 27), "远", Color("#e58b73"), 12)
-	elif enemy.kind == "buffer":
+	if enemy.kind == "buffer":
 		draw_arc(enemy.pos + Vector2(0, -20), 30.0 + sin(clock * 2.0) * 3.0, 0, TAU, 32, Color(0.85, 0.42, 0.95, 0.5), 2.0, true)
 		caption(enemy.pos + Vector2(-7, 27), "增", Color("#cf7fda"), 12)
 	elif enemy.kind == "shielded":
 		caption(enemy.pos + Vector2(-7, 27), "盾", Color("#76a6d8"), 12)
-	elif enemy.kind == "charger":
-		draw_line(enemy.pos + Vector2(-34, -18), enemy.pos + Vector2(28, -18), Color("#ff8b61"), 4.0, true)
-		caption(enemy.pos + Vector2(-7, 27), "冲", Color("#ef795b"), 12)
-	elif enemy.kind == "healer":
-		draw_arc(enemy.pos + Vector2(0, -20), 27.0 + sin(clock * 3.0) * 3.0, 0, TAU, 28, Color(0.45, 0.95, 0.66, 0.6), 2.0, true)
-		caption(enemy.pos + Vector2(-7, 27), "疗", Color("#75d6a2"), 12)
-	elif enemy.kind == "splitter":
-		caption(enemy.pos + Vector2(-7, 27), "裂", Color("#d77aa9"), 12)
-	elif enemy.kind == "warder":
-		draw_arc(enemy.pos + Vector2(0, -20), 31.0, 0, TAU, 6, Color(0.55, 0.67, 1.0, 0.72), 2.5, true)
-		caption(enemy.pos + Vector2(-7, 27), "护", Color("#8ba4e8"), 12)
 	elif str(enemy.kind).begins_with("boss_"):
 		var style := str(enemy.get("boss_style", "commander"))
 		var phase := int(enemy.get("boss_phase", 1))

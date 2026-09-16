@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/version="56.0.0"
-config/description="V51：三角色全序列动画 / 八类怪物动画 / 远程弹道 / 哥布林茅房产怪 / 元素史莱姆 / 扩展攻击范围与地图 / 1920×1080"
+config/version="57.0.0"
+config/description="V57：第一关蒙德战场修整 / 地形碰撞校准 / 无尽模式性能预算与敌人数值分层 / 1920×1080"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
