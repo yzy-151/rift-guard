@@ -58,7 +58,7 @@ var arena_event_name := ""
 var arena_event_until_ms := 0
 var pause_button: Button
 var hero_buttons: Array[Button] = []
-var hero_card_frames: Array[NinePatchRect] = []
+var hero_card_frames: Array[TextureRect] = []
 var hero_name_labels: Array[Label] = []
 var hero_element_labels: Array[Label] = []
 var hero_statuses: Array[Label] = []
@@ -104,7 +104,7 @@ var boss_name_label: Label
 var boss_hp_bar: ProgressBar
 var boss_hp_label: Label
 var boss_alert: Label
-var boss_alert_frame: NinePatchRect
+var boss_alert_frame: TextureRect
 var boss_scene_tint: ColorRect
 var boss_warning: AudioStreamPlayer
 var wave_timeline_panel: Panel
@@ -151,17 +151,18 @@ func _ready() -> void:
 	add_child(ui_highlight)
 	add_child(ui_confirm)
 	add_child(boss_warning)
-	var topbar := NinePatchRect.new()
-	topbar.texture = UI_SKIN.battle_topbar
+	var topbar := Panel.new()
 	topbar.position = UI_LAYOUT.battle_status_rect.position
 	topbar.size = UI_LAYOUT.battle_status_rect.size
-	topbar.patch_margin_left = 48
-	topbar.patch_margin_right = 48
-	topbar.patch_margin_top = 16
-	topbar.patch_margin_bottom = 16
-	topbar.modulate = Color("#fff0f1")
+	topbar.add_theme_stylebox_override("panel", hud_shelf_style(Color(0.018, 0.007, 0.012, 0.97), Color("#a5273d"), 1))
 	topbar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(topbar)
+	var top_rule := ColorRect.new()
+	top_rule.position = Vector2(16, 62)
+	top_rule.size = Vector2(1248, 2)
+	top_rule.color = Color("#ef3150")
+	top_rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(top_rule)
 	var brand_accent := ColorRect.new()
 	brand_accent.position = UI_LAYOUT.battle_title_rect.position + Vector2(0, 8)
 	brand_accent.size = Vector2(4, 39)
@@ -174,24 +175,24 @@ func _ready() -> void:
 	var brand_subtitle := label(root, UI_LAYOUT.battle_title_rect.position + Vector2(15, 34), Vector2(185, 14), "RIFT GUARD  /  CHAPTER I", 8, Color("#ff526a"))
 	brand_subtitle.add_theme_constant_override("outline_size", 2)
 	brand_subtitle.add_theme_color_override("font_outline_color", Color("#16070c"))
-	for separator_x in [232.0, 834.0, 1132.0]:
+	for separator_x in [232.0, 830.0, 1138.0]:
 		var separator := ColorRect.new()
 		separator.position = Vector2(separator_x, 15)
 		separator.size = Vector2(1, 42)
 		separator.color = Color("#6e2637")
 		separator.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		root.add_child(separator)
-	progression_label = label(root, Vector2(250, 13), Vector2(565, 21), "", 11, WHITE)
+	progression_label = label(root, Vector2(250, 10), Vector2(565, 21), "", 11, WHITE)
 	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	progression_label.clip_text = true
-	base_label = label(root, Vector2(850, 13), Vector2(270, 21), "", 11, TEAL)
+	base_label = label(root, Vector2(850, 10), Vector2(270, 21), "", 11, TEAL)
 	base_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	base_label.clip_text = true
-	wave_label = label(root, Vector2(250, 38), Vector2(160, 18), "", 9, Color("#ff7185"))
+	wave_label = label(root, Vector2(250, 35), Vector2(150, 18), "", 9, Color("#ff7185"))
 	wave_label.clip_text = true
-	count_label = label(root, Vector2(418, 38), Vector2(160, 18), "", 9, WHITE)
+	count_label = label(root, Vector2(410, 35), Vector2(150, 18), "", 9, WHITE)
 	count_label.clip_text = true
-	status_label = label(root, Vector2(586, 38), Vector2(534, 18), "", 9, MUTED)
+	status_label = label(root, Vector2(570, 35), Vector2(550, 18), "", 9, MUTED)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	status_label.clip_text = true
 	var archive_btn := button(root, UI_LAYOUT.battle_archive_rect, "图鉴  [F2]", false)
@@ -203,7 +204,8 @@ func _ready() -> void:
 	pause_button.position = UI_LAYOUT.battle_pause_rect.position
 	pause_button.size = UI_LAYOUT.battle_pause_rect.size
 	pause_button.pressed.connect(func(): pause_action.emit())
-	right_rail_shell = panel(root, UI_LAYOUT.battle_right_shell_rect, Color(0.018, 0.010, 0.020, 0.96), Color("#8d3f52"))
+	right_rail_shell = panel(root, UI_LAYOUT.battle_right_shell_rect, Color(0.018, 0.008, 0.015, 0.97), Color("#8d3f52"))
+	right_rail_shell.add_theme_stylebox_override("panel", hud_shelf_style(Color(0.018, 0.008, 0.015, 0.97), Color("#7b2638"), 1))
 	var right_rail_mark := label(right_rail_shell, Vector2(10, 574), Vector2(212, 18), "R I F T   C O M M A N D", 8, Color("#794452"))
 	right_rail_mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	right_rail_mark.hide()
@@ -212,7 +214,8 @@ func _ready() -> void:
 	for i in 2:
 		support_labels.append(label(support_panel, Vector2(10, 24 + i * 13), Vector2(202, 13), "", 10, WHITE))
 	support_panel.hide()
-	buff_panel = panel(root, UI_LAYOUT.battle_buff_rect, Color(0.07, 0.045, 0.075, 0.92), Color("#65506f"))
+	buff_panel = panel(root, UI_LAYOUT.battle_buff_rect, Color(0.04, 0.018, 0.036, 0.90), Color("#65506f"))
+	buff_panel.add_theme_stylebox_override("panel", hud_shelf_style(Color(0.04, 0.018, 0.036, 0.90), Color("#70415d"), 1))
 	label(buff_panel, Vector2(10, 5), Vector2(204, 18), "本 局 强 化  /  BUILD", 11, Color("#d6b4f0"))
 	for i in 2:
 		buff_icons.append(icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(10, 25 + i * 13, 11, 11), Color("#d6b4f0")))
@@ -259,17 +262,9 @@ func _ready() -> void:
 	boss_hp_label = label(boss_panel, boss_value_rect.position, boss_value_rect.size, "", 10, WHITE)
 	boss_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	boss_panel.hide()
-	wave_timeline_panel = panel(root, UI_LAYOUT.battle_timeline_rect, Color(0.025, 0.010, 0.024, 0.96), Color("#d13b55"))
-	var timeline_frame := NinePatchRect.new()
-	timeline_frame.texture = UI_SKIN.hero_frame_red
-	timeline_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	timeline_frame.patch_margin_left = 36
-	timeline_frame.patch_margin_right = 36
-	timeline_frame.patch_margin_top = 14
-	timeline_frame.patch_margin_bottom = 14
-	timeline_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	wave_timeline_panel.add_child(timeline_frame)
-	var timeline_item := label(wave_timeline_panel, Vector2(16, 2), Vector2(208, 24), "", 10, WHITE)
+	wave_timeline_panel = panel(root, UI_LAYOUT.battle_timeline_rect, Color(0.025, 0.010, 0.024, 0.94), Color("#d13b55"))
+	wave_timeline_panel.add_theme_stylebox_override("panel", counter_badge_style())
+	var timeline_item := label(wave_timeline_panel, Vector2(10, 1), Vector2(188, 23), "", 10, WHITE)
 	timeline_item.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	timeline_item.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	wave_timeline_labels.append(timeline_item)
@@ -280,18 +275,16 @@ func _ready() -> void:
 	boss_scene_tint.color = Color(0.48, 0.015, 0.045, 0.0)
 	boss_scene_tint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(boss_scene_tint)
-	boss_alert_frame = NinePatchRect.new()
+	boss_alert_frame = TextureRect.new()
 	boss_alert_frame.texture = UI_SKIN.choice_frame_red
-	boss_alert_frame.position = Vector2(205, 222)
-	boss_alert_frame.size = Vector2(870, 138)
-	boss_alert_frame.patch_margin_left = 52
-	boss_alert_frame.patch_margin_right = 52
-	boss_alert_frame.patch_margin_top = 30
-	boss_alert_frame.patch_margin_bottom = 30
+	boss_alert_frame.position = Vector2(180, 235)
+	boss_alert_frame.size = Vector2(920, 92)
+	boss_alert_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	boss_alert_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	boss_alert_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(boss_alert_frame)
 	boss_alert_frame.hide()
-	boss_alert = label(root, Vector2(270, 240), Vector2(740, 104), "", 40, Color("#fff1ed"))
+	boss_alert = label(root, Vector2(240, 234), Vector2(800, 108), "", 40, Color("#fff1ed"))
 	boss_alert.add_theme_font_override("font", DISPLAY_FONT)
 	boss_alert.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	boss_alert.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -299,12 +292,14 @@ func _ready() -> void:
 	boss_alert.add_theme_constant_override("shadow_offset_x", 4)
 	boss_alert.add_theme_constant_override("shadow_offset_y", 4)
 	boss_alert.hide()
-	command_rail = panel(root, UI_LAYOUT.battle_party_rect, Color(0.045, 0.022, 0.038, 0.88), Color("#b95868"))
+	command_rail = panel(root, UI_LAYOUT.battle_party_rect, Color(0.035, 0.014, 0.028, 0.84), Color("#b95868"))
+	command_rail.add_theme_stylebox_override("panel", hud_shelf_style(Color(0.035, 0.014, 0.028, 0.84), Color("#9d3d50"), 1))
 	bind(command_rail, "command_rail")
-	label(command_rail, Vector2(10, 8), Vector2(204, 18), "P A R T Y  /  出 战 队 伍", 10, TEAL)
-	label(command_rail, Vector2(10, 25), Vector2(204, 15), "点击切换 · WASD / 右键移动", 8, MUTED)
-	action_rail = panel(root, UI_LAYOUT.battle_action_rect, Color(0.035, 0.018, 0.032, 0.90), Color("#73404f"))
-	label(action_rail, Vector2(10, 7), Vector2(204, 16), "C O M B A T   /   战 斗 指 令", 9, Color("#d7aab0"))
+	label(command_rail, Vector2(10, 2), Vector2(204, 14), "P A R T Y  /  出 战 队 伍", 8, TEAL)
+	label(command_rail, Vector2(430, 2), Vector2(204, 14), "1 / 2 / 3 切换 · 拖放部署", 7, MUTED)
+	action_rail = panel(root, UI_LAYOUT.battle_action_rect, Color(0.028, 0.012, 0.024, 0.88), Color("#73404f"))
+	action_rail.add_theme_stylebox_override("panel", hud_shelf_style(Color(0.028, 0.012, 0.024, 0.88), Color("#73404f"), 1))
+	label(action_rail, Vector2(10, 2), Vector2(204, 14), "C O M B A T   /   战 斗 指 令", 8, Color("#d7aab0"))
 	skill_button = button(root, UI_LAYOUT.battle_skill_rect, "", true)
 	var ability_empty := StyleBoxEmpty.new()
 	for ability_state in ["normal", "hover", "pressed", "focus", "disabled"]:
@@ -395,47 +390,40 @@ func _ready() -> void:
 		var hero_empty := StyleBoxEmpty.new()
 		for hero_state in ["normal", "hover", "pressed", "focus", "disabled"]:
 			hero_btn.add_theme_stylebox_override(hero_state, hero_empty)
-		var hero_frame := NinePatchRect.new()
+		var hero_frame := TextureRect.new()
 		hero_frame.texture = UI_SKIN.hero_frame_red if i == 0 else UI_SKIN.hero_frame_gray
 		hero_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		hero_frame.patch_margin_left = 38
-		hero_frame.patch_margin_right = 38
-		hero_frame.patch_margin_top = 28
-		hero_frame.patch_margin_bottom = 28
+		hero_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		hero_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		hero_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		hero_btn.add_child(hero_frame)
 		hero_card_frames.append(hero_frame)
-		var trim := Sprite2D.new()
-		trim.texture = preload("res://assets/helltaker/ui/W_selection.png")
-		trim.position = Vector2(194, 16)
-		trim.scale = Vector2(0.075, 0.075)
-		hero_btn.add_child(trim)
 		hero_btn.pressed.connect(func(): select_action.emit(i))
 		hero_btn.gui_input.connect(_hero_card_input.bind(i))
 		hero_buttons.append(hero_btn)
-		var portrait_frame := panel(hero_btn, Rect2(7, 7, 56, 58), Color("#33232d"), TEAL)
+		var portrait_frame := panel(hero_btn, Rect2(7, 10, 46, 50), Color("#33232d"), TEAL)
 		var portrait_back := ColorRect.new()
-		portrait_back.position = Vector2(4, 4)
-		portrait_back.size = Vector2(48, 50)
+		portrait_back.position = Vector2(3, 3)
+		portrait_back.size = Vector2(40, 44)
 		portrait_back.color = Color("#ead9dc")
 		portrait_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		portrait_frame.add_child(portrait_back)
 		var portrait_image := TextureRect.new()
-		portrait_image.position = Vector2(4, 4)
-		portrait_image.size = Vector2(48, 50)
+		portrait_image.position = Vector2(3, 3)
+		portrait_image.size = Vector2(40, 44)
 		portrait_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		portrait_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		portrait_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		portrait_frame.add_child(portrait_image)
 		hero_portraits.append(portrait_image)
-		hero_name_labels.append(label(hero_btn, Vector2(70, 6), Vector2(88, 18), "%d  未部署" % [i + 1], 12, WHITE))
-		var element_badge := label(hero_btn, Vector2(160, 6), Vector2(40, 18), "无", 10, MUTED)
+		hero_name_labels.append(label(hero_btn, Vector2(58, 5), Vector2(96, 18), "%d  未部署" % [i + 1], 12, WHITE))
+		var element_badge := label(hero_btn, Vector2(158, 5), Vector2(34, 18), "无", 10, MUTED)
 		element_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		element_badge.add_theme_color_override("font_outline_color", Color("#160d14"))
 		element_badge.add_theme_constant_override("outline_size", 2)
 		hero_element_labels.append(element_badge)
 		var hp_bar := ProgressBar.new()
-		hp_bar.position = Vector2(70, 29)
+		hp_bar.position = Vector2(58, 27)
 		hp_bar.size = UI_LAYOUT.battle_hero_hp_bar_size
 		hp_bar.show_percentage = false
 		var hp_bg := StyleBoxFlat.new()
@@ -445,11 +433,11 @@ func _ready() -> void:
 		hp_bar.add_theme_stylebox_override("background", hp_bg)
 		hp_bar.add_theme_stylebox_override("fill", hp_fill)
 		hero_btn.add_child(hp_bar)
-		hp_bar.position = Vector2(70, 29)
+		hp_bar.position = Vector2(58, 27)
 		hp_bar.size = UI_LAYOUT.battle_hero_hp_bar_size
 		hero_hp_bars.append(hp_bar)
 		var energy_bar := ProgressBar.new()
-		energy_bar.position = Vector2(70, 56)
+		energy_bar.position = Vector2(58, 52)
 		energy_bar.size = UI_LAYOUT.battle_hero_energy_bar_size
 		energy_bar.show_percentage = false
 		var energy_bg := StyleBoxFlat.new()
@@ -459,11 +447,11 @@ func _ready() -> void:
 		energy_bar.add_theme_stylebox_override("background", energy_bg)
 		energy_bar.add_theme_stylebox_override("fill", energy_fill)
 		hero_btn.add_child(energy_bar)
-		energy_bar.position = Vector2(70, 56)
+		energy_bar.position = Vector2(58, 52)
 		energy_bar.size = UI_LAYOUT.battle_hero_energy_bar_size
 		hero_energy_bars.append(energy_bar)
-		hero_statuses.append(label(hero_btn, Vector2(70, 40), Vector2(130, 14), "", 9, WHITE))
-		hero_details.append(label(hero_btn, Vector2(70, 62), Vector2(130, 10), "", 8, MUTED))
+		hero_statuses.append(label(hero_btn, Vector2(58, 34), Vector2(134, 14), "", 9, WHITE))
+		hero_details.append(label(hero_btn, Vector2(58, 56), Vector2(134, 10), "", 8, MUTED))
 	ability_hint_label = label(root, UI_LAYOUT.battle_ability_hint_rect.position, UI_LAYOUT.battle_ability_hint_rect.size, "Q 战技 · E 终结技 · 右键取消", 8, TEAL)
 	preview_hint_label = label(root, UI_LAYOUT.battle_preview_hint_rect.position, UI_LAYOUT.battle_preview_hint_rect.size, "F6 剧情 / F7 特效预览", 7, MUTED)
 	background_buttons = [archive_btn, pause_button, skill_button, ultimate_button]
@@ -573,6 +561,32 @@ func style(fill: Color, border: Color) -> StyleBoxFlat:
 	box.shadow_offset = Vector2(0, 3)
 	return box
 
+func hud_shelf_style(fill: Color, border: Color, border_width: int = 1) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = fill
+	box.border_color = border
+	box.set_border_width_all(border_width)
+	box.corner_radius_top_left = 3
+	box.corner_radius_top_right = 3
+	box.corner_radius_bottom_left = 3
+	box.corner_radius_bottom_right = 3
+	box.content_margin_left = 8.0
+	box.content_margin_right = 8.0
+	box.shadow_color = Color(0.0, 0.0, 0.0, 0.46)
+	box.shadow_size = 4
+	box.shadow_offset = Vector2(0, 2)
+	return box
+
+func counter_badge_style() -> StyleBoxFlat:
+	var box := hud_shelf_style(Color(0.018, 0.006, 0.014, 0.95), Color("#c9324d"), 1)
+	box.corner_radius_top_left = 12
+	box.corner_radius_top_right = 2
+	box.corner_radius_bottom_left = 2
+	box.corner_radius_bottom_right = 12
+	box.border_width_left = 3
+	box.border_width_right = 3
+	box.shadow_size = 3
+	return box
 func compact_hud_button_style(fill: Color, border: Color) -> StyleBoxFlat:
 	var box := StyleBoxFlat.new()
 	box.bg_color = fill
@@ -718,7 +732,7 @@ func refresh(sim, selected_id: int) -> void:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
 		wave_label.text = "节点   %02d / 05" % sim.wave
 	count_label.text = "击退%02d · 敌%02d" % [sim.kills, sim.enemies.size()]
-	status_label.text = "无尽生存 · WASD / 右键移动 · 同行者自动跟随" if sim.endless_mode else "按 1/2/3 或点击右侧角色切换"
+	status_label.text = "无尽生存 · WASD / 右键移动 · 同行者自动跟随" if sim.endless_mode else "按 1/2/3 或点击底部角色卡切换"
 	if Time.get_ticks_msec() < arena_event_until_ms:
 		status_label.text = "场地变化 · " + arena_event_name
 	refresh_skill(sim, selected_id)
@@ -760,7 +774,7 @@ func refresh(sim, selected_id: int) -> void:
 		var hp_ratio := float(hero.hp) / maxf(1.0, float(hero.max_hp))
 		hero_buttons[i].modulate = Color("#ff7888") if hp_ratio <= 0.25 and hero.hp > 0.0 else (Color.WHITE if i == selected_id else Color("#91a0a8"))
 		hero_card_frames[i].texture = UI_SKIN.hero_frame_red if i == selected_id or hp_ratio <= 0.25 else UI_SKIN.hero_frame_gray
-		var status: String = "倒地" if hero.hp <= 0 else (("同行中" if sim.endless_mode else "待部署 · 拖到战场") if not bool(hero.get("deployed", true)) else ("移动中" if hero.moving else "就绪"))
+		var status: String = "倒地" if hero.hp <= 0 else (("同行" if sim.endless_mode else "待命") if not bool(hero.get("deployed", true)) else ("移动中" if hero.moving else "就绪"))
 		hero_details[i].text = "ATK %.0f  ·  %.1f/s" % [hero.damage, hero.rate]
 		hero_statuses[i].text = "HP %d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
 	var was_visible: bool = overlay.visible
@@ -859,18 +873,18 @@ func announce_route_warning(event: Dictionary) -> void:
 		boss_warning.play()
 
 
-func _show_boss_alert(copy: String, pitch: float = 0.82, hold: float = 0.78) -> void:
+func _show_boss_alert(copy: String, pitch: float = 0.82, hold: float = 1.20) -> void:
 	if boss_warning != null and not muted:
 		boss_warning.stop()
 		boss_warning.pitch_scale = pitch
 		boss_warning.volume_db = -8.0
 		boss_warning.play()
 	boss_alert.text = copy
-	boss_alert.position = Vector2(270, 240)
+	boss_alert.position = Vector2(240, 234)
 	boss_alert.modulate = Color(1, 1, 1, 0)
 	boss_alert.scale = Vector2(1.12, 1.12)
 	boss_alert.pivot_offset = boss_alert.size * 0.5
-	boss_alert_frame.position = Vector2(205, 222)
+	boss_alert_frame.position = Vector2(180, 235)
 	boss_alert_frame.modulate = Color(1, 1, 1, 0)
 	boss_alert_frame.scale = Vector2(0.94, 0.94)
 	boss_alert_frame.pivot_offset = boss_alert_frame.size * 0.5
@@ -899,14 +913,14 @@ func announce_contract(name: String, reward: String) -> void:
 	await _show_boss_alert("C O N T R A C T   C L E A R\n%s  ·  %s" % [name, reward], 1.22, 0.82)
 
 func announce_boss(name: String) -> void:
-	await _show_boss_alert("W A R N I N G\n%s  降 临" % name, 0.82, 0.82)
+	await _show_boss_alert("W A R N I N G\n%s  降 临" % name, 0.82, 1.85)
 func announce_arena_event(kind: String, duration: float) -> void:
 	arena_event_name = kind.replace("_", " ").to_upper()
 	arena_event_until_ms = Time.get_ticks_msec() + roundi(minf(duration, 6.0) * 1000.0)
 
 func announce_boss_phase(name: String, phase: int) -> void:
 	var header := "P H A S E   II" if phase == 2 else "F I N A L   P H A S E"
-	await _show_boss_alert("%s\n%s  狂 暴 阶 段" % [header, name], 1.08 if phase == 2 else 0.88, 0.72)
+	await _show_boss_alert("%s\n%s  狂 暴 阶 段" % [header, name], 1.08 if phase == 2 else 0.88, 1.20)
 	if boss_warning != null:
 		boss_warning.pitch_scale = 1.0
 func result_grade(base_hp: int, streak: int) -> String:
@@ -1159,3 +1173,9 @@ func bind(control: Control, id: String) -> Control:
 	if config != null:
 		config.apply_ui(control, id)
 	return control
+
+
+
+
+
+

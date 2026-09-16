@@ -19,8 +19,33 @@ const VFX_FLARE = preload("res://assets/vfx/third_party/kenney_particle/flare_01
 const VFX_SPARK = preload("res://assets/vfx/third_party/kenney_particle/spark_05.png")
 const VFX_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_01.png")
 const VFX_TRACE = preload("res://assets/vfx/third_party/kenney_particle/trace_05.png")
-const WALL_TEXTURE = preload("res://assets/world/endless/wall_segment.svg")
-const DOOR_TEXTURE = preload("res://assets/world/endless/breakable_gate.svg")
+## 无尽模式墙体与大门素材（石块 / 锁箱 / 铁箱，来源见 assets/world/endless/README.md）
+const WALL_STONES: Array[Texture2D] = [
+	preload("res://assets/world/endless/stone_wall_a.png"),
+	preload("res://assets/world/endless/stone_wall_b.png"),
+	preload("res://assets/world/endless/stone_wall_c.png"),
+]
+## 石块素材里"整块"和"只有顶面"的区域（纵向叠放只裁顶面）
+const WALL_STONE_FULL := Rect2(11, 10, 78, 83)
+const WALL_STONE_TOP := Rect2(11, 10, 78, 48)
+## 纵向墙块距收紧系数：小于 1 表示靠下的块压住上一块的底缘，只露顶面
+const WALL_STACK_TIGHTNESS := 0.82
+## 横墙上的门 = 锁箱；竖墙上的门 = 铁箱
+const GATE_CHEST_TEXTURE = preload("res://assets/world/endless/gate_chest_h.png")
+const GATE_CHEST_FULL := Rect2(3, 3, 93, 92)
+const GATE_CRATE_TEXTURE = preload("res://assets/world/endless/gate_crate_v.png")
+const GATE_CRATE_FULL := Rect2(1, 1, 78, 83)
+const ENDLESS_FLOOR_TILES: Array[Texture2D] = [
+	preload("res://assets/world/endless/helltaker/labFloor0001.png"),
+	preload("res://assets/world/endless/helltaker/labFloor0002.png"),
+	preload("res://assets/world/endless/helltaker/labFloor0003.png"),
+	preload("res://assets/world/endless/helltaker/labFloor0004.png"),
+	preload("res://assets/world/endless/helltaker/labFloor0005.png"),
+	preload("res://assets/world/endless/helltaker/labFloor0006.png"),
+	preload("res://assets/world/endless/helltaker/labFloor0007.png"),
+	preload("res://assets/world/endless/helltaker/labFloor0008.png"),
+]
+const ENDLESS_BOSS_FLOOR = preload("res://assets/world/endless/helltaker/bossFloor.png")
 const CHAPTER1_STAGE_IDS := ["stage_01"]
 const CHAPTER1_BLEND_SHADER = preload("res://shaders/chapter1_scene_blend.gdshader")
 
@@ -278,6 +303,8 @@ func _try_merge_dense_vfx(event: Dictionary) -> bool:
 	return false
 func accept_events(batch: Array[Dictionary]) -> void:
 	for event in batch:
+		if sim != null and sim.endless_mode and event.has("pos") and str(event.get("kind", "")) not in ["boss_arrival", "boss_phase", "arena_event", "lost", "won"] and not _render_point_visible(Vector2(event.pos), 260.0):
+			continue
 		if event.kind == "death" and enemy_sequences.has_enemy(str(event.get("enemy_kind", ""))) and enemy_death_visuals.size() < (24 if sim != null and sim.enemies.size() >= 100 else 48):
 			var enemy_id := str(event.enemy_kind)
 			enemy_death_visuals.append({
@@ -307,7 +334,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				hero_attack_visuals[event.hero_id] = {"elapsed": 0.0, "duration": attack_duration}
 				if sim == null or sim.performance_budget.can_spawn_cosmetic("muzzle", effects.size()):
 					var facing := float(hero.get("facing", 1.0))
-					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","")},0.16))
+					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","") ,"style":str(event.get("style", hero.get("attack_style", "standard")))},0.16))
 			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "arena_event", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "goblin_spawn", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
 				if _try_merge_dense_vfx(event):
 					continue
@@ -1043,6 +1070,69 @@ func _terrain_polygon(area: Rect2) -> PackedVector2Array:
 	var screen := _terrain_screen_rect(area)
 	return PackedVector2Array([screen.position, Vector2(screen.end.x, screen.position.y), screen.end, Vector2(screen.position.x, screen.end.y)])
 
+## 用整数网格把一块贴图拼满目标矩形，自动挑最不变形的 cols x rows 组合。
+func _stitch_cells(source: Rect2, target: Rect2, max_cells: int = 64) -> Array[Rect2]:
+	var cells: Array[Rect2] = []
+	if target.size.x <= 0.0 or target.size.y <= 0.0 or source.size.x <= 0.0 or source.size.y <= 0.0:
+		return cells
+	var aspect := source.size.x / source.size.y
+	var best_cols := 1
+	var best_rows := 1
+	var best_error := INF
+	for cols in range(1, 13):
+		for rows in range(1, 13):
+			if cols * rows > max_cells:
+				continue
+			var cell := Vector2(target.size.x / float(cols), target.size.y / float(rows))
+			var error := absf(log((cell.x / cell.y) / aspect)) + 0.05 * float(cols * rows)
+			if error < best_error:
+				best_error = error
+				best_cols = cols
+				best_rows = rows
+	var cell_size := Vector2(target.size.x / float(best_cols), target.size.y / float(best_rows))
+	for row in best_rows:
+		for column in best_cols:
+			cells.append(Rect2(target.position + Vector2(column * cell_size.x, row * cell_size.y), cell_size))
+	return cells
+
+## 无尽模式墙体：横墙铺整块石块，竖墙只露顶面、靠下的压在上面、块距收紧。
+func _draw_endless_wall(target: Rect2) -> void:
+	if target.size.y > target.size.x:
+		_draw_endless_wall_column(target)
+		return
+	var cells := _stitch_cells(WALL_STONE_FULL, target)
+	for index in cells.size():
+		draw_texture_rect_region(WALL_STONES[index % WALL_STONES.size()], cells[index], WALL_STONE_FULL)
+
+## 纵墙格位：只露顶面、块距收紧、底边贴齐地块，靠下的块后画因此压住上一块的底缘。
+func _wall_column_cells(target: Rect2) -> Array[Rect2]:
+	var band := WALL_STONE_TOP
+	var block_height := target.size.x * band.size.y / band.size.x
+	var rows := maxi(1, int(round(target.size.y / maxf(8.0, block_height * WALL_STACK_TIGHTNESS))))
+	var pitch := target.size.y / float(rows)
+	var top := target.end.y - block_height - float(rows - 1) * pitch
+	var cells: Array[Rect2] = []
+	for index in rows:
+		cells.append(Rect2(target.position.x, top + float(index) * pitch, target.size.x, block_height))
+	return cells
+
+func _draw_endless_wall_column(target: Rect2) -> void:
+	var band := WALL_STONE_TOP
+	var cells := _wall_column_cells(target)
+	for index in cells.size():
+		draw_texture_rect_region(WALL_STONES[index % WALL_STONES.size()], cells[index], band)
+
+## 无尽模式可破坏大门：横墙上的门用锁箱，竖墙上的门用铁箱。
+func _gate_asset(target: Rect2) -> Array:
+	if target.size.y > target.size.x:
+		return [GATE_CRATE_TEXTURE, GATE_CRATE_FULL]
+	return [GATE_CHEST_TEXTURE, GATE_CHEST_FULL]
+
+func _draw_endless_gate(target: Rect2) -> void:
+	var asset := _gate_asset(target)
+	for cell: Rect2 in _stitch_cells(asset[1], target):
+		draw_texture_rect_region(asset[0], cell, asset[1])
+
 func _grounded_feature_rect(screen_area: Rect2, scale: Vector2, ground_offset: float = 0.0) -> Rect2:
 	var size := screen_area.size * scale
 	var ground_y := screen_area.end.y + ground_offset
@@ -1149,7 +1239,7 @@ func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_fe
 			caption(center + Vector2(-28, -8), "洼地 · 减速", Color("#88bfd4"), 10)
 		elif kind == "blocked":
 			if sim.endless_mode:
-				draw_texture_rect(WALL_TEXTURE, _terrain_screen_rect(area), true, Color(0.92, 0.80, 0.84, 0.98))
+				_draw_endless_wall(_terrain_screen_rect(area))
 			else:
 				draw_colored_polygon(polygon, Color(0.22, 0.07, 0.10, 0.92))
 				draw_polyline(PackedVector2Array([polygon[0], polygon[2], polygon[1], polygon[3], polygon[0]]), Color("#c34d60"), 3.0, true)
@@ -1172,7 +1262,7 @@ func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_fe
 				caption(center + Vector2(-33, -6), "捷径已开启", Color("#83e1b2"), 10)
 			else:
 				if sim.endless_mode and kind == "door":
-					draw_texture_rect(DOOR_TEXTURE, _terrain_screen_rect(area), false, Color.WHITE)
+					_draw_endless_gate(_terrain_screen_rect(area))
 				else:
 					draw_colored_polygon(polygon, Color(0.25, 0.13, 0.10, 0.92))
 					for i in 4:
@@ -1186,20 +1276,24 @@ func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_fe
 func _draw_endless_stage() -> void:
 	draw_texture_rect(stage_background_8, Rect2(0, 0, 1280, 720), false, Color(0.34, 0.24, 0.30, 1.0))
 	draw_rect(Rect2(0, 0, 1280, 720), Color(0.035, 0.018, 0.045, 0.69))
-	# Broad overlapping slabs remove the old black checkerboard while retaining navigation scale.
+	# 100×100 Helltaker floor modules are placed as squares, preserving their original ratio.
 	var top_left := screen_to_world(ENDLESS_PLAYFIELD_SCREEN.position)
 	var bottom_right := screen_to_world(ENDLESS_PLAYFIELD_SCREEN.end)
-	var cell := 192.0
+	var cell := 100.0
 	var first_x := floorf(top_left.x / cell) * cell
 	var first_y := floorf(top_left.y / cell) * cell
 	for x in range(int(first_x), int(bottom_right.x + cell), int(cell)):
 		for y in range(int(first_y), int(bottom_right.y + cell), int(cell)):
-			var checker := posmod(floori(x / cell) + floori(y / cell), 4)
-			var tile_color: Color = [Color("#302630"), Color("#352932"), Color("#2f252f"), Color("#392b33")][checker]
-			draw_rect(Rect2(world_to_screen(Vector2(x - 1, y - 1)), Vector2(cell + 2, cell + 2)), tile_color)
-			var seed := absi(x * 13 + y * 7)
-			var crack := world_to_screen(Vector2(x + 28 + seed % 88, y + 34 + seed % 61))
-			draw_polyline(PackedVector2Array([crack, crack + Vector2(17, 5), crack + Vector2(26, 18), crack + Vector2(42, 22)]), Color(0.86, 0.49, 0.50, 0.08), 1.5, true)
+			var tile_index := posmod(floori(x / cell) * 3 + floori(y / cell) * 5, ENDLESS_FLOOR_TILES.size())
+			var tile_rect := Rect2(world_to_screen(Vector2(x, y)), Vector2(cell, cell))
+			draw_texture_rect(ENDLESS_FLOOR_TILES[tile_index], tile_rect, false, Color(0.63, 0.48, 0.55, 0.92))
+			draw_rect(tile_rect, Color(0.16, 0.025, 0.06, 0.13))
+	# The central contract dais uses the matching square boss-floor module.
+	var dais_center := world_to_screen(Sim.ENDLESS_ARENA.get_center())
+	for dx in range(-1, 2):
+		for dy in range(-1, 2):
+			var dais_rect := Rect2(dais_center + Vector2(dx * cell, dy * cell) - Vector2(cell * 0.5, cell * 0.5), Vector2(cell, cell))
+			draw_texture_rect(ENDLESS_BOSS_FLOOR, dais_rect, false, Color(0.72, 0.52, 0.58, 0.88))
 	var center := world_to_screen(Sim.ENDLESS_ARENA.get_center())
 	for radius in [220.0, 360.0, 515.0]:
 		draw_arc(center, radius + sin(clock * 0.8 + radius) * 3.0, 0, TAU, 112, Color(0.88, 0.34, 0.42, 0.075), 3.0, true)
@@ -1576,6 +1670,7 @@ func _draw_projectile(projectile: Dictionary) -> void:
 	if direction.length_squared() < 0.1:
 		direction = Vector2.RIGHT
 	var element := str(projectile.get("element", ""))
+	var attack_style := str(projectile.get("style", "standard"))
 	var color := element_color(element)
 	for i in range(maxi(0, history.size() - 1)):
 		var a := world_to_screen(Vector2(history[i])) + Vector2(0, -18)
@@ -1623,6 +1718,30 @@ func _draw_projectile(projectile: Dictionary) -> void:
 				wave.append(Vector2(cos(angle) * 13.0, sin(angle) * 10.0))
 			draw_polyline(wave, Color("#fff3c6"), 4.0, true)
 			draw_polyline(wave, Color.WHITE, 1.3, true)
+	match attack_style:
+		"music_note":
+			draw_circle(Vector2(-2, 4), 5.0, Color(color.lightened(0.35), 0.95), false, 2.4, true)
+			draw_line(Vector2(2, 3), Vector2(2, -13), Color.WHITE, 2.6, true)
+			draw_line(Vector2(2, -13), Vector2(10, -10), Color(color.lightened(0.42), 0.95), 2.4, true)
+		"arcane_lance":
+			draw_colored_polygon(PackedVector2Array([Vector2(22, 0), Vector2(-9, -6), Vector2(-17, 0), Vector2(-9, 6)]), Color(color.lightened(0.32), 0.92))
+			draw_line(Vector2(-20, 0), Vector2(22, 0), Color.WHITE, 2.2, true)
+		"hydro_salon", "tidal_orb":
+			for orbit in 3:
+				var orbit_angle := clock * (2.4 + orbit * 0.35) + orbit * TAU / 3.0
+				draw_circle(Vector2.from_angle(orbit_angle) * (10.0 + orbit * 2.0), 2.8, Color(color.lightened(0.38), 0.88))
+		"wind_seed", "quantum_gate":
+			for ring in 2:
+				draw_arc(Vector2.ZERO, 10.0 + ring * 5.0, clock + ring * 1.4, clock + ring * 1.4 + PI * 1.35, 18, Color(color.lightened(0.25), 0.92 - ring * 0.22), 2.4, true)
+		"frost_shard", "frost_bloom":
+			for shard in 4:
+				var shard_dir := Vector2.from_angle(shard * PI * 0.5)
+				draw_line(shard_dir * 5.0, shard_dir * 15.0, Color("#f4ffff"), 2.0, true)
+		"mon3tr":
+			draw_rect(Rect2(-10, -7, 20, 14), Color(color.darkened(0.30), 0.82), true)
+			draw_rect(Rect2(-10, -7, 20, 14), Color.WHITE, false, 2.0)
+		"ether_shot":
+			draw_arc(Vector2.ZERO, 14.0, -1.2, 1.2, 18, Color("#f0d8ff"), 3.0, true)
 	draw_set_transform(Vector2.ZERO)
 
 func _draw_sequence_enemy(enemy: Dictionary, bob: float) -> void:
@@ -1787,6 +1906,14 @@ func _draw_effect(effect: Dictionary) -> void:
 				var start := 5.0 + t * (12.0 + i % 3 * 4.0)
 				var finish := start + 11.0 + (i % 4) * 5.0
 				draw_line(effect.pos + direction * start, effect.pos + direction * finish, Color(impact_color.lightened(0.28), fade * 0.90), 3.2 - (i % 3) * 0.5, true)
+			var impact_style := str(effect.get("style", "standard"))
+			if impact_style in ["music_note", "hydro_salon", "quantum_gate"]:
+				for ring in 2:
+					draw_arc(effect.pos, 24.0 + ring * 13.0 + t * 46.0, clock + ring, clock + ring + PI * 1.5, 28, Color(impact_color.lightened(0.30), fade * (0.78 - ring * 0.20)), 3.8 - ring, true)
+			elif impact_style in ["arcane_lance", "blade_wave", "mon3tr"]:
+				for ray in 6:
+					var ray_dir := Vector2.from_angle(ray * TAU / 6.0 + 0.25)
+					draw_line(effect.pos + ray_dir * 12.0, effect.pos + ray_dir * (48.0 + t * 54.0), Color(impact_color.lightened(0.44), fade * 0.92), 4.0, true)
 	elif effect.kind == "critical":
 		var critical_color := Color(1.0, 0.46, 0.22, fade)
 		caption(effect.pos + Vector2(-54, -82 - t * 42), "CRITICAL  %d" % int(effect.value), critical_color, 23)
@@ -1990,3 +2117,5 @@ func element_color(element: String) -> Color:
 
 func element_glyph(element: String) -> String:
 	return {"anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, "")
+
+

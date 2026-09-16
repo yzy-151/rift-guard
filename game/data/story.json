@@ -34,7 +34,8 @@
           "campaign_node": "c1_elite"
         },
         {
-          "text": "追查裂隙边缘微弱的求救信号。",
+          "text": "独自踏进裂隙，直接抓住求救者。",
+          "death_reason": "你把伪装成求救信号的裂隙猎手当成了同伴。",
           "result": "hidden_character",
           "unlock_character": "hero_08",
           "response_portrait": "muelsyse",
@@ -266,3 +267,4 @@
     }
   ]
 }
+

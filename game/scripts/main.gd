@@ -126,14 +126,14 @@ func _ready() -> void:
 	sound = AudioStreamPlayer.new()
 	sound.stream = preload("res://assets/sfx/combat_hit.wav")
 	sound.bus = "SFX"
-	sound.volume_db = -18
-	sound.max_polyphony = 3
+	sound.volume_db = -9
+	sound.max_polyphony = 6
 	add_child(sound)
 	attack_sound = AudioStreamPlayer.new()
 	attack_sound.stream = preload("res://assets/sfx/combat_attack.wav")
 	attack_sound.bus = "SFX"
-	attack_sound.volume_db = -15
-	attack_sound.max_polyphony = 4
+	attack_sound.volume_db = -7
+	attack_sound.max_polyphony = 8
 	add_child(attack_sound)
 	stage_enter_sound = AudioStreamPlayer.new()
 	stage_enter_sound.stream = preload("res://assets/helltaker/audio/button_chapter_confirm_01.wav")
@@ -185,7 +185,22 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v57-performance-test" in OS.get_cmdline_user_args():
+	if "--v59-visual-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v59_visual_test")
+	elif "--v58-visual-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v58_visual_test")
+	elif "--v58-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v58_test")
+	elif "--v57-performance-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
 		set_physics_process(false)
@@ -438,9 +453,12 @@ func process_events() -> void:
 	fx.accept(batch)
 	for event in batch:
 		if event.kind == "shot" and not muted and not test_mode and attack_sound_timer <= 0.0:
-			attack_sound.pitch_scale = 0.96 + float(int(event.get("hero_id", 0)) % 3) * 0.035
+			var attack_style := str(event.get("style", "standard"))
+			var style_pitch: float = float({"blade_wave":0.88,"frost_shard":1.12,"wind_seed":1.18,"hydro_salon":1.04,"tidal_orb":0.82,"music_note":1.26,"arcane_lance":0.94,"frost_bloom":0.90,"quantum_gate":1.16,"mon3tr":0.78,"ether_shot":1.22}.get(attack_style, 1.0))
+			attack_sound.pitch_scale = float(style_pitch) + float(int(event.get("hero_id", 0)) % 3) * 0.018
+			attack_sound.volume_db = -5.5 if attack_style in ["blade_wave","tidal_orb","arcane_lance","mon3tr"] else -7.0
 			attack_sound.play()
-			attack_sound_timer = 0.11 if sim.enemies.size() < 90 else 0.18
+			attack_sound_timer = 0.08 if sim.enemies.size() < 90 else 0.14
 		if event.kind == "regroup":
 			sound.stop()
 		if event.kind == "route_warning":
@@ -459,7 +477,7 @@ func process_events() -> void:
 			sound.play()
 			sound_timer = 0.12
 		if event.kind == "hit" and not muted and not test_mode and sound_timer <= 0.0:
-			sound.volume_db = -18.0
+			sound.volume_db = -8.0
 			sound.pitch_scale = 0.94 + float(sim.shots_fired % 3) * 0.06
 			sound.play()
 			sound_timer = 0.065
@@ -1354,6 +1372,18 @@ func run_v9_test() -> void:
 
 func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
+	await suite.run(self)
+
+func run_v59_visual_test() -> void:
+	var suite = preload("res://scripts/qa_v59_visual.gd").new()
+	await suite.run(self)
+
+func run_v58_visual_test() -> void:
+	var suite = preload("res://scripts/qa_v58_visual.gd").new()
+	await suite.run(self)
+
+func run_v58_test() -> void:
+	var suite = preload("res://scripts/qa_v58.gd").new()
 	await suite.run(self)
 
 func run_v57_performance_test() -> void:

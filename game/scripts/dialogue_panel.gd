@@ -28,7 +28,23 @@ var history_button: Button
 var skip_button: Button
 var controls: Array[Button] = []
 var choice_buttons: Array[Button] = []
-var choice_frames: Array[NinePatchRect] = []
+var choice_frames: Array[TextureRect] = []
+## 选中态放大 + 亮色，未选中态缩小 + 暗色（参考 Helltaker 选项框）
+const CHOICE_SELECTED_SCALE := 1.06
+const CHOICE_IDLE_SCALE := 0.94
+const CHOICE_SELECTED_FONT_SIZE := 20
+const CHOICE_IDLE_FONT_SIZE := 17
+const DEATH_FRAMES: Array[Texture2D] = [
+	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0001.png"),
+	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0002.png"),
+	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0003.png"),
+	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0004.png"),
+	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0005.png"),
+	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0006.png"),
+	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0007.png"),
+	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0008.png"),
+	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0009.png"),
+]
 var letters: float = 0.0
 var auto_mode: bool = false
 var auto_timer: float = 0.0
@@ -42,7 +58,10 @@ var line_ended: bool = false
 var end_sound: AudioStreamPlayer
 var dialogue_highlight: AudioStreamPlayer
 var dialogue_confirm: AudioStreamPlayer
-
+var death_overlay: ColorRect
+var death_texture: TextureRect
+var death_reason_label: Label
+var death_playing := false
 func build(ui, story) -> void:
 	hud = ui
 	director = story
@@ -102,12 +121,6 @@ func build(ui, story) -> void:
 	dialogue_box.position = UI_LAYOUT.dialogue_box_rect.position
 	dialogue_box.size = UI_LAYOUT.dialogue_box_rect.size
 	name_label = hud.label(root, UI_LAYOUT.dialogue_name_rect.position, UI_LAYOUT.dialogue_name_rect.size, "", 24, Color("#f0b4ae"))
-	var speaker_rule := ColorRect.new()
-	speaker_rule.position = Vector2(562, 499)
-	speaker_rule.size = Vector2(156, 2)
-	speaker_rule.color = Color("#d66769")
-	speaker_rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(speaker_rule)
 	body = RichTextLabel.new()
 	body.position = UI_LAYOUT.dialogue_body_rect.position
 	body.size = UI_LAYOUT.dialogue_body_rect.size
@@ -133,13 +146,11 @@ func build(ui, story) -> void:
 		var empty_style := StyleBoxEmpty.new()
 		for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 			choice_button.add_theme_stylebox_override(state, empty_style)
-		var choice_frame := NinePatchRect.new()
+		var choice_frame := TextureRect.new()
 		choice_frame.texture = UI_SKIN.choice_frame_gray
 		choice_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		choice_frame.patch_margin_left = 112
-		choice_frame.patch_margin_right = 112
-		choice_frame.patch_margin_top = 26
-		choice_frame.patch_margin_bottom = 26
+		choice_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		choice_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		choice_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		choice_frame.show_behind_parent = true
 		choice_button.add_child(choice_frame)
@@ -196,6 +207,25 @@ func build(ui, story) -> void:
 	transition_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	transition_texture.hide()
 	root.add_child(transition_texture)
+	death_overlay = ColorRect.new()
+	death_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	death_overlay.color = Color(0.006, 0.003, 0.010, 0.98)
+	death_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	root.add_child(death_overlay)
+	death_texture = TextureRect.new()
+	death_texture.position = Vector2(0, 90)
+	death_texture.size = Vector2(1280, 392)
+	death_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	death_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	death_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	death_overlay.add_child(death_texture)
+	death_reason_label = hud.label(death_overlay, Vector2(170, 500), Vector2(940, 112), "", 22, Color("#f5e8df"))
+	death_reason_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	death_reason_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	death_reason_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	death_reason_label.add_theme_color_override("font_shadow_color", Color("#8e1f37"))
+	death_reason_label.add_theme_constant_override("shadow_offset_y", 3)
+	death_overlay.hide()
 	root.hide()
 	cue_sound = AudioStreamPlayer.new()
 	cue_sound.stream = preload("res://assets/helltaker/audio/dialogue_start_01.wav")
@@ -304,8 +334,8 @@ func show_line() -> void:
 	name_label.text = "◆  %s  ◆" % str(line.speaker)
 	dialogue_box.modulate = Color(1, 1, 1, 0)
 	name_label.modulate = Color.WHITE
-	progress.position = Vector2(440, 548)
-	progress.size = Vector2(400, 18)
+	progress.position = UI_LAYOUT.dialogue_progress_rect.position
+	progress.size = UI_LAYOUT.dialogue_progress_rect.size
 	progress.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	progress.modulate = Color.WHITE
 	body.show()
@@ -400,8 +430,8 @@ func _configure_choices(line: Dictionary) -> void:
 func _reveal_choices() -> void:
 	if not director.has_choices() or history_panel.visible:
 		return
-	progress.position = Vector2(440, 548)
-	progress.size = Vector2(400, 18)
+	progress.position = UI_LAYOUT.dialogue_progress_rect.position
+	progress.size = UI_LAYOUT.dialogue_progress_rect.size
 	progress.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	progress.modulate = Color("#f0b4ae")
 	var dim_dialogue := create_tween().set_parallel(true).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
@@ -415,40 +445,81 @@ func _reveal_choices() -> void:
 		var home: Vector2 = item.get_meta("home_position", item.position)
 		item.pivot_offset = item.size * 0.5
 		item.position = home + Vector2(-220, 0)
-		item.scale = Vector2(0.94, 0.94)
+		item.scale = _choice_scale(false)
 		item.modulate = Color(1, 1, 1, 0)
 		item.show()
 		item.disabled = false
 		item.focus_mode = Control.FOCUS_ALL
 		var reveal := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		reveal.tween_property(item, "position", home, 0.28).set_delay(i * 0.085)
-		reveal.tween_property(item, "scale", Vector2.ONE, 0.24).set_delay(i * 0.085)
 		reveal.tween_property(item, "modulate", Color.WHITE, 0.14).set_delay(i * 0.085)
 	if not options.is_empty():
 		choice_buttons[0].grab_focus()
 		_set_choice_focus(0)
 
+## 选中：亮色描边 + 放大 + 字号更大；未选中：暗色描边 + 缩小 + 字号更小。
+func _choice_scale(selected: bool) -> Vector2:
+	var value := CHOICE_SELECTED_SCALE if selected else CHOICE_IDLE_SCALE
+	return Vector2(value, value)
+
 func _set_choice_focus(index: int) -> void:
 	for i in choice_frames.size():
 		var selected := i == index
 		choice_frames[i].texture = UI_SKIN.choice_frame_red if selected else UI_SKIN.choice_frame_gray
-		choice_frames[i].modulate = Color.WHITE if selected else Color(0.72, 0.62, 0.66, 0.86)
-		choice_buttons[i].add_theme_color_override("font_color", Color("#fff4eb") if selected else Color("#a99199"))
-		choice_buttons[i].add_theme_color_override("font_focus_color", Color("#fff4eb") if selected else Color("#a99199"))
-		choice_buttons[i].add_theme_color_override("font_hover_color", Color("#fff4eb") if selected else Color("#a99199"))
-		choice_buttons[i].add_theme_color_override("font_shadow_color", Color(0.02, 0.0, 0.01, 0.95))
-		choice_buttons[i].add_theme_constant_override("shadow_offset_y", 2)
+		choice_frames[i].modulate = Color.WHITE if selected else Color(0.88, 0.84, 0.86, 0.95)
+		var button: Button = choice_buttons[i]
+		button.add_theme_font_size_override("font_size", CHOICE_SELECTED_FONT_SIZE if selected else CHOICE_IDLE_FONT_SIZE)
+		button.add_theme_color_override("font_color", Color("#fff6ef") if selected else Color("#9a8b93"))
+		button.add_theme_color_override("font_focus_color", Color("#fff6ef") if selected else Color("#9a8b93"))
+		button.add_theme_color_override("font_hover_color", Color("#fff6ef") if selected else Color("#b7a5ad"))
+		button.add_theme_color_override("font_shadow_color", Color(0.02, 0.0, 0.01, 0.95))
+		button.add_theme_constant_override("shadow_offset_y", 2)
+		var target := _choice_scale(selected)
+		if button.visible and not button.scale.is_equal_approx(target):
+			create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT).tween_property(button, "scale", target, 0.12)
 
 func choose_option(choice_index: int) -> void:
-	if not line_ended or history_panel.visible:
+	if not line_ended or history_panel.visible or death_playing:
 		return
 	var options: Array = director.current().get("choices", [])
 	if choice_index < 0 or choice_index >= options.size():
 		return
 	var chosen: Dictionary = options[choice_index].duplicate(true)
+	var death_reason := str(chosen.get("death_reason", ""))
+	if not death_reason.is_empty():
+		await _play_choice_death(death_reason)
+		return
 	if director.choose(choice_index):
 		choice_committed.emit(chosen)
 		show_line()
+
+func _play_choice_death(reason: String) -> void:
+	death_playing = true
+	for item in choice_buttons:
+		item.disabled = true
+	death_reason_label.text = "死亡原因\n" + reason
+	death_reason_label.modulate = Color(1, 1, 1, 0)
+	death_reason_label.scale = Vector2(1.08, 1.08)
+	death_reason_label.pivot_offset = death_reason_label.size * 0.5
+	death_overlay.modulate = Color(1, 1, 1, 0)
+	death_overlay.show()
+	var fade_in := create_tween()
+	fade_in.tween_property(death_overlay, "modulate:a", 1.0, 0.12)
+	await fade_in.finished
+	for frame in DEATH_FRAMES:
+		death_texture.texture = frame
+		await get_tree().create_timer(0.085).timeout
+	var reason_pop := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	reason_pop.tween_property(death_reason_label, "modulate:a", 1.0, 0.12)
+	reason_pop.tween_property(death_reason_label, "scale", Vector2.ONE, 0.20)
+	await reason_pop.finished
+	await get_tree().create_timer(1.15).timeout
+	var fade_out := create_tween()
+	fade_out.tween_property(death_overlay, "modulate:a", 0.0, 0.20)
+	await fade_out.finished
+	death_overlay.hide()
+	death_playing = false
+	_reveal_choices()
 
 func activate_choice_at(point: Vector2) -> bool:
 	if not root.visible or history_panel.visible:
@@ -546,3 +617,7 @@ func set_picture(item: TextureRect, alias: String, at: Vector2, dimensions: Vect
 	item.position = at
 	item.size = dimensions * factor
 	item.flip_h = flipped
+
+
+
+
