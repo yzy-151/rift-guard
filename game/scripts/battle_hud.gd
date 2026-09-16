@@ -151,14 +151,6 @@ func _ready() -> void:
 	add_child(ui_highlight)
 	add_child(ui_confirm)
 	add_child(boss_warning)
-	var logo := TextureRect.new()
-	logo.texture = UI_SKIN.battle_logo
-	logo.position = UI_LAYOUT.battle_title_rect.position
-	logo.size = UI_LAYOUT.battle_title_rect.size
-	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	logo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(logo)
 	var topbar := NinePatchRect.new()
 	topbar.texture = UI_SKIN.battle_topbar
 	topbar.position = UI_LAYOUT.battle_status_rect.position
@@ -167,27 +159,46 @@ func _ready() -> void:
 	topbar.patch_margin_right = 48
 	topbar.patch_margin_top = 16
 	topbar.patch_margin_bottom = 16
+	topbar.modulate = Color("#fff0f1")
 	topbar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(topbar)
-	progression_label = label(root, UI_LAYOUT.battle_status_rect.position + Vector2(28, 8), Vector2(606, 20), "", 10, WHITE)
+	var brand_accent := ColorRect.new()
+	brand_accent.position = UI_LAYOUT.battle_title_rect.position + Vector2(0, 8)
+	brand_accent.size = Vector2(4, 39)
+	brand_accent.color = Color("#ff3655")
+	brand_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(brand_accent)
+	var brand_title := label(root, UI_LAYOUT.battle_title_rect.position + Vector2(13, -1), Vector2(184, 34), "裂 隙 守 望", 23, WHITE)
+	brand_title.add_theme_font_override("font", DISPLAY_FONT)
+	brand_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	var brand_subtitle := label(root, UI_LAYOUT.battle_title_rect.position + Vector2(15, 34), Vector2(185, 14), "RIFT GUARD  /  CHAPTER I", 8, Color("#ff526a"))
+	brand_subtitle.add_theme_constant_override("outline_size", 2)
+	brand_subtitle.add_theme_color_override("font_outline_color", Color("#16070c"))
+	for separator_x in [232.0, 834.0, 1132.0]:
+		var separator := ColorRect.new()
+		separator.position = Vector2(separator_x, 15)
+		separator.size = Vector2(1, 42)
+		separator.color = Color("#6e2637")
+		separator.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		root.add_child(separator)
+	progression_label = label(root, Vector2(250, 13), Vector2(565, 21), "", 11, WHITE)
 	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	progression_label.clip_text = true
-	base_label = label(root, UI_LAYOUT.battle_status_rect.position + Vector2(642, 8), Vector2(270, 20), "", 10, TEAL)
+	base_label = label(root, Vector2(850, 13), Vector2(270, 21), "", 11, TEAL)
 	base_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	base_label.clip_text = true
-	wave_label = label(root, Vector2.ZERO, Vector2.ZERO, "", 9, TEAL)
+	wave_label = label(root, Vector2(250, 38), Vector2(160, 18), "", 9, Color("#ff7185"))
 	wave_label.clip_text = true
-	wave_label.hide()
-	count_label = label(root, Vector2.ZERO, Vector2.ZERO, "", 9, MUTED)
+	count_label = label(root, Vector2(418, 38), Vector2(160, 18), "", 9, WHITE)
 	count_label.clip_text = true
-	count_label.hide()
-	status_label = label(root, Vector2.ZERO, Vector2.ZERO, "", 9, Color("#d9afc9"))
-	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	status_label.hide()
+	status_label = label(root, Vector2(586, 38), Vector2(534, 18), "", 9, MUTED)
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	status_label.clip_text = true
 	var archive_btn := button(root, UI_LAYOUT.battle_archive_rect, "图鉴  [F2]", false)
 	archive_btn.pressed.connect(func(): compendium_action.emit())
 	archive_btn.hide()
 	pause_button = button(root, UI_LAYOUT.battle_pause_rect, "Ⅱ  暂停", false)
+	apply_compact_hud_button_style(pause_button)
 	bind(pause_button, "pause_button")
 	pause_button.position = UI_LAYOUT.battle_pause_rect.position
 	pause_button.size = UI_LAYOUT.battle_pause_rect.size
@@ -562,6 +573,33 @@ func style(fill: Color, border: Color) -> StyleBoxFlat:
 	box.shadow_offset = Vector2(0, 3)
 	return box
 
+func compact_hud_button_style(fill: Color, border: Color) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = fill
+	box.border_color = border
+	box.set_border_width_all(2)
+	box.corner_radius_top_left = 4
+	box.corner_radius_top_right = 4
+	box.corner_radius_bottom_left = 4
+	box.corner_radius_bottom_right = 4
+	box.content_margin_left = 10.0
+	box.content_margin_right = 10.0
+	box.shadow_color = Color(0.0, 0.0, 0.0, 0.48)
+	box.shadow_size = 5
+	box.shadow_offset = Vector2(0, 2)
+	return box
+
+func apply_compact_hud_button_style(item: Button) -> void:
+	item.add_theme_font_override("font", DISPLAY_FONT)
+	item.add_theme_font_size_override("font_size", 12)
+	item.add_theme_color_override("font_color", WHITE)
+	item.add_theme_color_override("font_hover_color", Color.WHITE)
+	item.add_theme_color_override("font_pressed_color", Color.WHITE)
+	item.add_theme_stylebox_override("normal", compact_hud_button_style(Color("#14090e"), Color("#c52f4a")))
+	item.add_theme_stylebox_override("hover", compact_hud_button_style(Color("#2a0c16"), Color("#ff526a")))
+	item.add_theme_stylebox_override("pressed", compact_hud_button_style(Color("#3a0d1a"), Color("#ff8b9b")))
+	item.add_theme_stylebox_override("focus", compact_hud_button_style(Color("#220b13"), Color("#ff526a")))
+	item.add_theme_stylebox_override("disabled", compact_hud_button_style(Color("#100c10"), Color("#51303a")))
 func button_style(texture: Texture2D, tint: Color = Color.WHITE) -> StyleBoxTexture:
 	var box := StyleBoxTexture.new()
 	box.texture = texture

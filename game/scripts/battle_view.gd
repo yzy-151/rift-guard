@@ -3,6 +3,7 @@ signal stage_exit_finished
 ## All effects are cosmetic; gameplay remains in CombatSimulation.
 const Stage = preload("res://scripts/stage_projection.gd")
 const STAGE_VISUAL = preload("res://data/stage_visual_profile.tres")
+const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 const WORLD = Rect2(40, 140, 1200, 440)
 const ENDLESS_PLAYFIELD_SCREEN = Rect2(16, 88, 1248, 490)
 const Sim = preload("res://scripts/combat_simulation.gd")
@@ -743,9 +744,15 @@ func _stage_layer(name: String) -> void:
 func _draw_stage_backdrop(theme: Dictionary, palette: Dictionary) -> void:
 	_stage_layer("backdrop")
 	if _is_chapter_one_stage():
-		draw_texture_rect(STAGE_VISUAL.chapter1_background, Rect2(0, 0, 1280, 720), false, Color(0.96, 0.98, 0.94, 1.0))
-		draw_rect(Rect2(0, 0, 1280, 720), Color(0.025, 0.045, 0.030, 0.10))
-		draw_rect(Rect2(0, 326, 1280, 394), Color(0.08, 0.13, 0.045, 0.08))
+		var playfield: Rect2 = UI_LAYOUT.battle_playfield_rect
+		var texture_size := STAGE_VISUAL.chapter1_background.get_size()
+		var crop_height := texture_size.x * playfield.size.y / playfield.size.x
+		var crop_y := clampf((texture_size.y - crop_height) * 0.42, 0.0, maxf(0.0, texture_size.y - crop_height))
+		var source := Rect2(0.0, crop_y, texture_size.x, minf(crop_height, texture_size.y))
+		draw_texture_rect_region(STAGE_VISUAL.chapter1_background, playfield, source, Color(0.94, 0.98, 0.94, 1.0), false, true)
+		draw_rect(playfield, Color(0.018, 0.035, 0.025, 0.10))
+		draw_rect(Rect2(playfield.position, Vector2(playfield.size.x, 72.0)), Color(0.02, 0.025, 0.035, 0.18))
+		draw_rect(playfield, Color("#d43b50"), false, 2.0)
 		return
 	var background := _stage_background(sim.current_stage_id)
 	var accent: Color = palette.get("accent", Color("#c45a68"))
@@ -778,29 +785,18 @@ func _draw_stage_ground(theme: Dictionary, palette: Dictionary) -> void:
 	var floor_color: Color = palette.get("floor", Color("#302832"))
 	var accent: Color = palette.get("accent", Color("#c45a68"))
 	if _is_chapter_one_stage():
-		var ground_quad := PackedVector2Array([
-			Vector2(203, 337),
-			Vector2(1077, 337),
-			Vector2(1264, 578),
-			Vector2(16, 578)
-		])
-		var ground_uv := PackedVector2Array([
-			Vector2(0, 0),
-			Vector2(1, 0),
-			Vector2(1, 1),
-			Vector2(0, 1)
-		])
-		var ground_colors := PackedColorArray([
-			Color(1, 1, 1, 0.82),
-			Color(1, 1, 1, 0.82),
-			Color.WHITE,
-			Color.WHITE
-		])
-		draw_polygon(ground_quad, ground_colors, ground_uv, STAGE_VISUAL.chapter1_ground)
-		draw_colored_polygon(Stage.polygon(Sim.MOVE_AREA), Color(accent, 0.025))
+		var playfield: Rect2 = UI_LAYOUT.battle_playfield_rect
+		var ground_size := STAGE_VISUAL.chapter1_ground.get_size()
+		var crop_height := ground_size.x * playfield.size.y / playfield.size.x
+		var crop_y := clampf((ground_size.y - crop_height) * 0.56, 0.0, maxf(0.0, ground_size.y - crop_height))
+		var source := Rect2(0.0, crop_y, ground_size.x, minf(crop_height, ground_size.y))
+		draw_texture_rect_region(STAGE_VISUAL.chapter1_ground, playfield, source, Color(0.88, 0.94, 0.82, 0.68), false, true)
+		draw_rect(playfield, Color(0.03, 0.07, 0.025, 0.09))
+		_draw_chapter_one_grid()
+		draw_colored_polygon(Stage.polygon(Sim.MOVE_AREA), Color(accent, 0.018))
 		var chapter_border := Stage.polygon(Sim.MOVE_AREA)
 		chapter_border.append(chapter_border[0])
-		draw_polyline(chapter_border, Color(accent, 0.24), 1.2, true)
+		draw_polyline(chapter_border, Color("#f2efd0", 0.18), 1.0, true)
 		return
 	var floor := Stage.polygon(WORLD)
 	floor_color.a = 0.94
@@ -814,6 +810,20 @@ func _draw_stage_ground(theme: Dictionary, palette: Dictionary) -> void:
 	border.append(border[0])
 	draw_polyline(border, Color(accent, 0.38), 1.3, true)
 	draw_rect(ENDLESS_PLAYFIELD_SCREEN, Color(0.02, 0.01, 0.025, 0.24), false, 7.0)
+
+func _draw_chapter_one_grid() -> void:
+	var major := Color(0.16, 0.28, 0.12, 0.14)
+	var minor := Color(0.18, 0.34, 0.14, 0.065)
+	for world_y in range(140, 581, 40):
+		var a := world_to_screen(Vector2(40, world_y))
+		var b := world_to_screen(Vector2(1240, world_y))
+		draw_line(a, b, major if (world_y - 140) % 80 == 0 else minor, 1.0, true)
+	for world_x in range(40, 1241, 60):
+		var points := PackedVector2Array()
+		for world_y in range(140, 581, 36):
+			points.append(world_to_screen(Vector2(world_x, world_y)))
+		if points.size() > 1:
+			draw_polyline(points, major if (world_x - 40) % 120 == 0 else minor, 1.0, true)
 func _draw_ground_motif(style: String, accent: Color) -> void:
 	match style:
 		"corridor":
@@ -1166,7 +1176,7 @@ func _draw_base_projected() -> void:
 	draw_arc(point + Vector2(0, -38), 38.0, -clock * 0.7, TAU - clock * 0.7, 40, Color(tint, 0.42), 2.0, true)
 	if _is_chapter_one_stage():
 		var crystal_modulate := Color("#ff8f94") if base_flash > 0.0 and not reduced_effects else Color.WHITE
-		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(point + Vector2(-48, -151), Vector2(96, 169)), false, crystal_modulate)
+		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(point + Vector2(-34, -106), Vector2(68, 120)), false, crystal_modulate)
 	else:
 		draw_texture_rect(crystal_texture, Rect2(point + Vector2(-38, -105), Vector2(76, 120)), false, tint)
 		draw_colored_polygon(PackedVector2Array([point + Vector2(-43, 17), point + Vector2(-29, 5), point + Vector2(29, 5), point + Vector2(43, 17), point + Vector2(31, 31), point + Vector2(-31, 31)]), Color("#382934"))
