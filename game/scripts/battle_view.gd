@@ -21,12 +21,14 @@ const VFX_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_01
 const VFX_TRACE = preload("res://assets/vfx/third_party/kenney_particle/trace_05.png")
 const WALL_TEXTURE = preload("res://assets/world/endless/wall_segment.svg")
 const DOOR_TEXTURE = preload("res://assets/world/endless/breakable_gate.svg")
-const CHAPTER1_STAGE_IDS := ["stage_01", "stage_02", "stage_03"]
+const CHAPTER1_STAGE_IDS := ["stage_01"]
+const CHAPTER1_BLEND_SHADER = preload("res://shaders/chapter1_scene_blend.gdshader")
 
 const INK = Color("#0c1017")
 const TEAL = Color("#8fdbc8")
 const RED = Color("#d66769")
 var sim
+var chapter1_blend_material: ShaderMaterial
 var selected_id: int = 0
 var reduced_effects: bool = false
 var effects: Array[Dictionary] = []
@@ -120,6 +122,9 @@ var muzzle_ion_frames: Array[Texture2D] = [
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	chapter1_blend_material = ShaderMaterial.new()
+	chapter1_blend_material.shader = CHAPTER1_BLEND_SHADER
+	_update_chapter1_material()
 	sprite_pivots = SpriteAnchor.load_catalog()
 	_load_enemy_visuals()
 	feedback_director.setup(sim.database if sim != null else null)
@@ -127,6 +132,13 @@ func _ready() -> void:
 	font = SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
 	_build_stage_tile_cache(sim.current_stage_id if sim != null else "stage_01")
+
+func _update_chapter1_material() -> void:
+	if _is_chapter_one_stage():
+		if material != chapter1_blend_material:
+			material = chapter1_blend_material
+	elif material != null:
+		material = null
 
 func _load_enemy_visuals() -> void:
 	enemy_visual_textures.clear()
@@ -139,6 +151,7 @@ func _load_enemy_visuals() -> void:
 			enemy_visual_textures[enemy_id] = texture
 
 func advance(dt: float) -> void:
+	_update_chapter1_material()
 	clock += dt
 	_sync_unit_visuals(dt)
 	if sim != null and sim.endless_mode and not sim.heroes.is_empty():
@@ -749,9 +762,9 @@ func _draw_stage_backdrop(theme: Dictionary, palette: Dictionary) -> void:
 		var crop_height := texture_size.x * playfield.size.y / playfield.size.x
 		var crop_y := clampf((texture_size.y - crop_height) * 0.42, 0.0, maxf(0.0, texture_size.y - crop_height))
 		var source := Rect2(0.0, crop_y, texture_size.x, minf(crop_height, texture_size.y))
-		draw_texture_rect_region(STAGE_VISUAL.chapter1_background, playfield, source, Color(0.94, 0.98, 0.94, 1.0), false, true)
-		draw_rect(playfield, Color(0.018, 0.035, 0.025, 0.10))
-		draw_rect(Rect2(playfield.position, Vector2(playfield.size.x, 72.0)), Color(0.02, 0.025, 0.035, 0.18))
+		draw_texture_rect_region(STAGE_VISUAL.chapter1_background, playfield, source, Color(0.72, 0.80, 0.74, 1.0), false, true)
+		draw_rect(playfield, Color(0.018, 0.028, 0.026, 0.16))
+		draw_rect(Rect2(playfield.position, Vector2(playfield.size.x, 108.0)), Color(0.55, 0.68, 0.62, 0.13))
 		draw_rect(playfield, Color("#d43b50"), false, 2.0)
 		return
 	var background := _stage_background(sim.current_stage_id)
@@ -786,17 +799,18 @@ func _draw_stage_ground(theme: Dictionary, palette: Dictionary) -> void:
 	var accent: Color = palette.get("accent", Color("#c45a68"))
 	if _is_chapter_one_stage():
 		var playfield: Rect2 = UI_LAYOUT.battle_playfield_rect
+		var ground_rect := Rect2(playfield.position + Vector2(0, 88), Vector2(playfield.size.x, playfield.size.y - 88))
 		var ground_size := STAGE_VISUAL.chapter1_ground.get_size()
-		var crop_height := ground_size.x * playfield.size.y / playfield.size.x
+		var crop_height := ground_size.x * ground_rect.size.y / ground_rect.size.x
 		var crop_y := clampf((ground_size.y - crop_height) * 0.56, 0.0, maxf(0.0, ground_size.y - crop_height))
 		var source := Rect2(0.0, crop_y, ground_size.x, minf(crop_height, ground_size.y))
-		draw_texture_rect_region(STAGE_VISUAL.chapter1_ground, playfield, source, Color(0.88, 0.94, 0.82, 0.68), false, true)
-		draw_rect(playfield, Color(0.03, 0.07, 0.025, 0.09))
+		draw_texture_rect_region(STAGE_VISUAL.chapter1_ground, ground_rect, source, Color(0.92, 0.97, 0.88, 1.0), false, true)
+		draw_rect(ground_rect, Color(0.025, 0.055, 0.022, 0.08))
 		_draw_chapter_one_grid()
-		draw_colored_polygon(Stage.polygon(Sim.MOVE_AREA), Color(accent, 0.018))
+		draw_colored_polygon(Stage.polygon(Sim.MOVE_AREA), Color(accent, 0.012))
 		var chapter_border := Stage.polygon(Sim.MOVE_AREA)
 		chapter_border.append(chapter_border[0])
-		draw_polyline(chapter_border, Color("#f2efd0", 0.18), 1.0, true)
+		draw_polyline(chapter_border, Color("#f2efd0", 0.28), 1.2, true)
 		return
 	var floor := Stage.polygon(WORLD)
 	floor_color.a = 0.94
@@ -812,18 +826,23 @@ func _draw_stage_ground(theme: Dictionary, palette: Dictionary) -> void:
 	draw_rect(ENDLESS_PLAYFIELD_SCREEN, Color(0.02, 0.01, 0.025, 0.24), false, 7.0)
 
 func _draw_chapter_one_grid() -> void:
-	var major := Color(0.16, 0.28, 0.12, 0.14)
-	var minor := Color(0.18, 0.34, 0.14, 0.065)
-	for world_y in range(140, 581, 40):
+	for world_y in range(220, 581, 40):
+		for world_x in range(40, 1240, 60):
+			var cell := Rect2(world_x, world_y, 60, 40)
+			var checker := int(world_x / 60 + world_y / 40)
+			draw_colored_polygon(Stage.polygon(cell), Color(0.18, 0.28, 0.12, 0.075 if checker % 2 == 0 else 0.035))
+	var major := Color(0.12, 0.22, 0.09, 0.36)
+	var minor := Color(0.14, 0.28, 0.10, 0.22)
+	for world_y in range(220, 581, 40):
 		var a := world_to_screen(Vector2(40, world_y))
 		var b := world_to_screen(Vector2(1240, world_y))
-		draw_line(a, b, major if (world_y - 140) % 80 == 0 else minor, 1.0, true)
+		draw_line(a, b, major if (world_y - 220) % 80 == 0 else minor, 1.15, true)
 	for world_x in range(40, 1241, 60):
 		var points := PackedVector2Array()
-		for world_y in range(140, 581, 36):
+		for world_y in range(220, 581, 30):
 			points.append(world_to_screen(Vector2(world_x, world_y)))
 		if points.size() > 1:
-			draw_polyline(points, major if (world_x - 40) % 120 == 0 else minor, 1.0, true)
+			draw_polyline(points, major if (world_x - 40) % 120 == 0 else minor, 1.15, true)
 func _draw_ground_motif(style: String, accent: Color) -> void:
 	match style:
 		"corridor":
@@ -1011,31 +1030,50 @@ func _terrain_polygon(area: Rect2) -> PackedVector2Array:
 
 func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector2, feature: Dictionary) -> bool:
 	var screen_area := _terrain_screen_rect(area)
-	if kind in ["high_ground", "moving_platform"]:
-		var high_rect := Rect2(Vector2.ZERO, screen_area.size * Vector2(0.78, 0.82))
-		high_rect.position = Vector2(screen_area.get_center().x - high_rect.size.x * 0.5, screen_area.end.y - high_rect.size.y + 3.0)
-		draw_ellipse_shadow(Vector2(high_rect.get_center().x, high_rect.end.y - 3.0), high_rect.size.x * 0.44, Color(0, 0, 0, 0.24))
+	if kind == "high_ground":
+		var high_rect := Rect2(Vector2.ZERO, screen_area.size * Vector2(0.82, 0.88))
+		high_rect.position = Vector2(screen_area.get_center().x - high_rect.size.x * 0.5, screen_area.end.y - high_rect.size.y)
+		draw_ellipse_shadow(Vector2(high_rect.get_center().x, high_rect.end.y - 9.0), high_rect.size.x * 0.43, Color(0, 0, 0, 0.32))
 		draw_texture_rect(STAGE_VISUAL.chapter1_high_platform, high_rect, false, Color("#eef7d7"))
-		caption(center + Vector2(-45, screen_area.size.y * 0.38), str(feature.get("label", "防御高台")), Color("#eaf7c7"), 9)
+		caption(Vector2(high_rect.position.x + 10, high_rect.end.y + 14), "高台 · 伤害+22% · 射程+38%", Color("#f3f1c8"), 8)
 		return true
-	if kind in ["low_ground", "conveyor", "trap"]:
-		var low_rect := screen_area.grow(8.0)
-		var low_tint := Color("#d8c7ff") if kind == "trap" else Color(1, 1, 1, 0.94)
-		draw_texture_rect(STAGE_VISUAL.chapter1_lowland, low_rect, false, low_tint)
-		caption(center + Vector2(-35, 4), str(feature.get("label", "泥沼洼地")), Color("#d8e7ae"), 9)
+	if kind == "moving_platform":
+		var moving_rect := Rect2(Vector2.ZERO, screen_area.size * Vector2(0.92, 1.15))
+		moving_rect.position = Vector2(screen_area.get_center().x - moving_rect.size.x * 0.5, screen_area.end.y - moving_rect.size.y)
+		draw_ellipse_shadow(Vector2(moving_rect.get_center().x, moving_rect.end.y - 9.0), moving_rect.size.x * 0.42, Color(0, 0, 0, 0.34))
+		draw_texture_rect(STAGE_VISUAL.chapter1_moving_platform, moving_rect, false, Color.WHITE)
+		caption(Vector2(moving_rect.position.x + 8, moving_rect.end.y + 13), "载人移动 · 射程强化", Color("#a9f2d4"), 8)
+		return true
+	if kind == "low_ground":
+		var low_rect := screen_area.grow(5.0)
+		draw_texture_rect(STAGE_VISUAL.chapter1_lowland, low_rect, false, Color.WHITE)
+		caption(Vector2(low_rect.position.x + 12, low_rect.get_center().y), "沼泽减速 28%", Color("#e4dfae"), 9)
+		return true
+	if kind == "conveyor":
+		draw_colored_polygon(_terrain_polygon(area), Color(0.28, 0.62, 0.42, 0.11))
+		for arrow in 4:
+			var arrow_center := screen_area.position + Vector2(28.0 + arrow * screen_area.size.x / 4.3, screen_area.size.y * 0.52)
+			draw_polyline(PackedVector2Array([arrow_center + Vector2(10, -6), arrow_center, arrow_center + Vector2(10, 6)]), Color("#d4f4b8", 0.38), 2.0, true)
+		return true
+	if kind == "trap":
+		var pulse := 0.72 + sin(clock * 3.2) * 0.16
+		draw_circle(center, minf(screen_area.size.x, screen_area.size.y) * 0.34, Color(0.58, 0.40, 0.90, 0.08 * pulse))
+		draw_arc(center, minf(screen_area.size.x, screen_area.size.y) * 0.30, 0, TAU, 24, Color(0.72, 0.56, 1.0, 0.34 * pulse), 2.0, true)
 		return true
 	if kind == "blocked":
-		var bush_rect := screen_area.grow(13.0)
-		bush_rect.position.y -= 7.0
-		draw_ellipse_shadow(Vector2(bush_rect.get_center().x, bush_rect.end.y - 2.0), bush_rect.size.x * 0.38, Color(0, 0, 0, 0.26))
+		var bush_rect := screen_area.grow(9.0)
+		bush_rect.position.y -= 5.0
+		draw_ellipse_shadow(Vector2(bush_rect.get_center().x, bush_rect.end.y - 9.0), bush_rect.size.x * 0.37, Color(0, 0, 0, 0.34))
 		draw_texture_rect(STAGE_VISUAL.chapter1_bush, bush_rect, false, Color.WHITE)
 		return true
 	if kind == "mechanism":
-		var active: bool = sim.heroes.any(func(hero: Dictionary) -> bool: return hero.hp > 0.0 and area.grow(95.0).has_point(hero.pos))
-		var glow := Color("#f6e58c") if active else Color("#8fd8ba")
-		draw_circle(center + Vector2(0, -18), 28.0 + sin(clock * 4.0) * 3.0, Color(glow, 0.12))
-		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(center + Vector2(-24, -64), Vector2(48, 82)), false, Color.WHITE)
-		caption(center + Vector2(-30, 34), "风之机关" if active else "靠近启动", glow, 9)
+		var active: bool = sim.heroes.any(func(hero: Dictionary) -> bool: return bool(hero.get("deployed", false)) and hero.hp > 0.0 and area.grow(95.0).has_point(hero.pos))
+		var glow := Color("#8ff0cb") if active else Color("#719b89")
+		var mechanism_rect := Rect2(center + Vector2(-28, -76), Vector2(56, 100))
+		draw_ellipse_shadow(center + Vector2(0, 15), 27.0, Color(0, 0, 0, 0.38))
+		draw_circle(center + Vector2(0, -28), 28.0 + sin(clock * 4.0) * 3.0, Color(glow, 0.10 if active else 0.04))
+		draw_texture_rect(STAGE_VISUAL.chapter1_mechanism, mechanism_rect, false, Color.WHITE if active else Color(0.72, 0.76, 0.72, 1.0))
+		caption(center + Vector2(-47, 34), "超远程支援 · 5.5秒" if active else "角色靠近后启动", glow, 8)
 		return true
 	if kind in ["shortcut", "door", "one_way"]:
 		var broken := kind != "one_way" and float(feature.get("hp", 0.0)) <= 0.0
@@ -1043,18 +1081,17 @@ func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector
 			draw_dashed_line(Vector2(screen_area.position.x, screen_area.end.y), screen_area.end, Color("#8ee6a6"), 2.0, 7.0, true)
 			caption(center + Vector2(-34, 4), "通道已开启", Color("#9af0b8"), 9)
 			return true
-		var barricade_rect := screen_area.grow(7.0)
-		barricade_rect.position.y -= 9.0
-		draw_ellipse_shadow(Vector2(barricade_rect.get_center().x, barricade_rect.end.y - 2.0), barricade_rect.size.x * 0.40, Color(0, 0, 0, 0.25))
+		var barricade_rect := screen_area.grow(5.0)
+		barricade_rect.position.y -= 6.0
+		draw_ellipse_shadow(Vector2(barricade_rect.get_center().x, barricade_rect.end.y - 9.0), barricade_rect.size.x * 0.39, Color(0, 0, 0, 0.36))
 		draw_texture_rect(STAGE_VISUAL.chapter1_barricade, barricade_rect, false, Color.WHITE)
 		if kind != "one_way":
 			var hp_ratio := clampf(float(feature.get("hp", 0.0)) / maxf(1.0, float(feature.get("max_hp", 1.0))), 0.0, 1.0)
-			draw_rect(Rect2(center + Vector2(-34, -42), Vector2(68, 5)), Color("#293020"))
-			draw_rect(Rect2(center + Vector2(-34, -42), Vector2(68 * hp_ratio, 5)), Color("#f0c46a"))
-			caption(center + Vector2(-35, 37), "战技可破坏", Color("#ffe59a"), 9)
+			draw_rect(Rect2(center + Vector2(-30, -38), Vector2(60, 4)), Color("#293020"))
+			draw_rect(Rect2(center + Vector2(-30, -38), Vector2(60 * hp_ratio, 4)), Color("#f0c46a"))
+			caption(center + Vector2(-35, 34), "战技可破坏", Color("#ffe59a"), 8)
 		return true
 	return false
-
 func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_features:
 		var area: Rect2 = feature.get("area", Rect2())
 		if area.size == Vector2.ZERO:
@@ -1168,7 +1205,7 @@ func _draw_endless_stage() -> void:
 
 func _draw_base_projected() -> void:
 	var point: Vector2 = world_to_screen(Vector2(100, 365))
-	draw_ellipse_shadow(point + Vector2(0, 15), 52, Color(0, 0, 0, 0.40))
+	draw_ellipse_shadow(point + (Vector2(0, 6) if _is_chapter_one_stage() else Vector2(0, 15)), 46.0 if _is_chapter_one_stage() else 52.0, Color(0, 0, 0, 0.40))
 	var tint: Color = RED if base_flash > 0.0 and not reduced_effects else Color("#b9f3d6")
 	var glow := 0.75 + sin(clock * 3.4) * 0.18
 	draw_circle(point + Vector2(0, -38), 44.0 + glow * 7.0, Color(tint, 0.055))
@@ -1176,7 +1213,7 @@ func _draw_base_projected() -> void:
 	draw_arc(point + Vector2(0, -38), 38.0, -clock * 0.7, TAU - clock * 0.7, 40, Color(tint, 0.42), 2.0, true)
 	if _is_chapter_one_stage():
 		var crystal_modulate := Color("#ff8f94") if base_flash > 0.0 and not reduced_effects else Color.WHITE
-		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(point + Vector2(-34, -106), Vector2(68, 120)), false, crystal_modulate)
+		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(point + Vector2(-55, -177), Vector2(110, 192)), false, crystal_modulate)
 	else:
 		draw_texture_rect(crystal_texture, Rect2(point + Vector2(-38, -105), Vector2(76, 120)), false, tint)
 		draw_colored_polygon(PackedVector2Array([point + Vector2(-43, 17), point + Vector2(-29, 5), point + Vector2(29, 5), point + Vector2(43, 17), point + Vector2(31, 31), point + Vector2(-31, 31)]), Color("#382934"))

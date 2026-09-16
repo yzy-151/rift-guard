@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="256" viewBox="0 0 512 256">
+ <defs><linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d8d1b3"/><stop offset="1" stop-color="#756f62"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+ <ellipse cx="256" cy="214" rx="202" ry="25" fill="#08120e" opacity=".55"/>
+ <path d="M48 154 118 76 396 76 466 154 404 208 108 208Z" fill="#252822" stroke="#101511" stroke-width="12"/>
+ <path d="M70 144 130 91 382 91 442 144 389 184 122 184Z" fill="url(#stone)" stroke="#486b58" stroke-width="7"/>
+ <path d="M116 139H396M164 98l-18 82M256 94v89M348 98l18 82" stroke="#4d6253" stroke-width="4" opacity=".6"/>
+ <path d="M183 139 256 107 329 139 256 171Z" fill="none" stroke="#62e0bd" stroke-width="8" filter="url(#glow)"/>
+ <circle cx="256" cy="139" r="11" fill="#eaffdf" stroke="#62e0bd" stroke-width="5"/>
+</svg>

@@ -478,6 +478,8 @@ func terrain_feature_at(point: Vector2, kind: String = "") -> Dictionary:
 
 func terrain_attack_scale(point: Vector2) -> float:
 	var feature := terrain_feature_at(point, "high_ground")
+	if feature.is_empty():
+		feature = terrain_feature_at(point, "moving_platform")
 	return 1.0 + float(feature.get("attack_bonus", 0.18)) if not feature.is_empty() else 1.0
 
 func terrain_movement_scale(point: Vector2) -> float:
@@ -634,10 +636,18 @@ func _terrain_tick(dt: float) -> void:
 		var kind := str(feature.get("type", ""))
 		feature.clock = float(feature.get("clock", 0.0)) + dt
 		if kind == "moving_platform":
+			var old_area: Rect2 = feature.area
 			var raw_axis: Array = feature.get("axis", [1, 0])
 			var axis := Vector2(float(raw_axis[0]), float(raw_axis[1])).normalized()
 			var offset := sin(float(feature.clock) * TAU / maxf(0.5, float(feature.get("period", 4.0)))) * float(feature.get("distance", 100.0))
-			feature.area = Rect2(feature.base_area.position + axis * offset, feature.base_area.size)
+			var new_area := Rect2(feature.base_area.position + axis * offset, feature.base_area.size)
+			var platform_delta := new_area.position - old_area.position
+			feature.area = new_area
+			if platform_delta.length_squared() > 0.0:
+				for hero: Dictionary in heroes:
+					if bool(hero.get("deployed", false)) and hero.hp > 0.0 and old_area.grow(6.0).has_point(hero.pos):
+						hero.pos += platform_delta
+						hero.target += platform_delta
 		feature.timer = maxf(0.0, float(feature.get("timer", 0.0)) - dt)
 		if kind not in ["mechanism", "trap", "weather"] or feature.timer > 0.0:
 			continue
@@ -2013,8 +2023,11 @@ func _hero_tick() -> void:
 
 func attack_range_screen_radii(hero: Dictionary) -> Vector2:
 	var depth: float = StageProjection.depth_scale(hero.pos)
-	var terrain_range_scale := 1.22 if not terrain_feature_at(hero.pos, "high_ground").is_empty() else 1.0
-	var radius_x: float = minf(286.0, 42.0 + float(hero.range) * 0.62 * depth * terrain_range_scale)
+	var range_feature := terrain_feature_at(hero.pos, "high_ground")
+	if range_feature.is_empty():
+		range_feature = terrain_feature_at(hero.pos, "moving_platform")
+	var terrain_range_scale := 1.0 + float(range_feature.get("range_bonus", 0.35)) if not range_feature.is_empty() else 1.0
+	var radius_x: float = minf(330.0, 42.0 + float(hero.range) * 0.62 * depth * terrain_range_scale)
 	return Vector2(radius_x, radius_x * 0.40)
 
 func is_in_attack_range(hero: Dictionary, point: Vector2) -> bool:

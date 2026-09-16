@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="384" viewBox="0 0 256 384">
+ <defs><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9d4be"/><stop offset="1" stop-color="#575d58"/></linearGradient><filter id="g"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+ <ellipse cx="128" cy="345" rx="72" ry="17" fill="#07130e" opacity=".62"/>
+ <path d="M72 326 91 279h74l19 47-27 25H99Z" fill="#252a25" stroke="#111713" stroke-width="8"/>
+ <path d="M102 286 112 169h32l10 117Z" fill="url(#metal)" stroke="#39463f" stroke-width="7"/>
+ <path d="M81 171 99 116l29-24 29 24 18 55-47 34Z" fill="#303833" stroke="#111713" stroke-width="8"/>
+ <circle cx="128" cy="147" r="38" fill="#132b24" stroke="#6ce8c0" stroke-width="7" filter="url(#g)"/>
+ <path d="M128 116 140 141 166 147 140 154 128 178 116 154 90 147 116 141Z" fill="#dffff3"/>
+ <path d="M90 295h76M99 318h58" stroke="#6ce8c0" stroke-width="6"/>
+</svg>

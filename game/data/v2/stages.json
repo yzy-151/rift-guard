@@ -15,12 +15,13 @@
         "type": "high_ground",
         "rect": [
           235,
-          175,
+          235,
           245,
           105
         ],
         "label": "瞭望高台",
-        "attack_bonus": 0.18
+        "attack_bonus": 0.22,
+        "range_bonus": 0.38
       },
       {
         "id": "watch_low",
@@ -49,15 +50,15 @@
         "id": "watch_device",
         "type": "mechanism",
         "rect": [
-          505,
-          278,
+          515,
+          300,
           76,
           76
         ],
-        "label": "赤月机关",
-        "power": 62,
-        "radius": 185,
-        "interval": 3.6
+        "label": "风脉自动机关",
+        "power": 70,
+        "radius": 900,
+        "interval": 5.5
       },
       {
         "id": "watch_shortcut",
@@ -72,26 +73,23 @@
         "hp": 460
       },
       {
-        "id": "one_way_gate",
-        "type": "one_way",
+        "id": "wind_breakable_gate",
+        "type": "shortcut",
         "rect": [
-          430,
-          250,
-          78,
-          72
+          405,
+          330,
+          72,
+          82
         ],
-        "label": "单向风门",
-        "direction": [
-          -1,
-          0
-        ]
+        "label": "风蚀封门",
+        "hp": 380
       },
       {
         "id": "moving_platform",
         "type": "moving_platform",
         "rect": [
-          610,
-          185,
+          680,
+          235,
           150,
           62
         ],
@@ -100,8 +98,10 @@
           1,
           0
         ],
-        "distance": 120,
-        "period": 4.0
+        "distance": 70,
+        "period": 4.0,
+        "range_bonus": 0.3,
+        "attack_bonus": 0.12
       },
       {
         "id": "conveyor",
