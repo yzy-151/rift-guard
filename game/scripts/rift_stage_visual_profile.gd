@@ -10,23 +10,31 @@ class_name RiftStageVisualProfile
 @export var foreground_color := Color(0.08, 0.04, 0.075, 0.88)
 @export var ember_color := Color("#e86a5f")
 
+@export_group("Chapter 1 - Mondstadt Assets")
+@export var chapter1_background: Texture2D
+@export var chapter1_ground: Texture2D
+@export var chapter1_crystal: Texture2D
+@export var chapter1_lowland: Texture2D
+@export var chapter1_high_platform: Texture2D
+@export var chapter1_barricade: Texture2D
+@export var chapter1_bush: Texture2D
 @export_group("Stage 01 - Rift Outpost")
-@export var stage_01_floor := Color("#302832")
-@export var stage_01_tile_a := Color("#3d3440")
-@export var stage_01_tile_b := Color("#342d37")
-@export var stage_01_accent := Color("#c45a68")
+@export var stage_01_floor := Color("#486342")
+@export var stage_01_tile_a := Color("#718d55")
+@export var stage_01_tile_b := Color("#607a49")
+@export var stage_01_accent := Color("#71d5b1")
 
 @export_group("Stage 02 - Crimson Gallery")
-@export var stage_02_floor := Color("#29263a")
-@export var stage_02_tile_a := Color("#37354a")
-@export var stage_02_tile_b := Color("#2e2d40")
-@export var stage_02_accent := Color("#a57ac7")
+@export var stage_02_floor := Color("#405f46")
+@export var stage_02_tile_a := Color("#698450")
+@export var stage_02_tile_b := Color("#587345")
+@export var stage_02_accent := Color("#90d7b9")
 
 @export_group("Stage 03 - Obsidian Nest")
-@export var stage_03_floor := Color("#272d35")
-@export var stage_03_tile_a := Color("#343c45")
-@export var stage_03_tile_b := Color("#2c333c")
-@export var stage_03_accent := Color("#c77a68")
+@export var stage_03_floor := Color("#3e5b42")
+@export var stage_03_tile_a := Color("#6f8250")
+@export var stage_03_tile_b := Color("#5d7146")
+@export var stage_03_accent := Color("#e8b86c")
 
 @export_group("Stage 04 - Sky Crossroads")
 @export var stage_04_floor := Color("#25323a")

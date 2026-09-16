@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RiftUISkinProfile" load_steps=28 format=3]
+[gd_resource type="Resource" script_class="RiftUISkinProfile" load_steps=30 format=3]
 
 [ext_resource type="Script" path="res://scripts/rift_ui_skin_profile.gd" id="1_skin"]
 [ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/choice_gray.png" id="2_choice_gray"]
@@ -28,6 +28,8 @@
 [ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/buff_card_gray.png" id="25_reward_gray"]
 [ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/buff_card_red.png" id="26_reward_red"]
 [ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/buff_card_cyan.png" id="27_reward_cyan"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/hud_topbar.png" id="28_battle_topbar"]
+[ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/hud_logo.png" id="29_battle_logo"]
 [resource]
 script = ExtResource("1_skin")
 schema_version = 3
@@ -54,6 +56,8 @@ reward_card_red = ExtResource("26_reward_red")
 reward_card_cyan = ExtResource("27_reward_cyan")
 settings_background = ExtResource("21_chapter_bg")
 battle_menu_background = ExtResource("21_chapter_bg")
+battle_topbar = ExtResource("28_battle_topbar")
+battle_logo = ExtResource("29_battle_logo")
 hero_frame_gray = ExtResource("10_hero_gray")
 hero_frame_red = ExtResource("11_hero_red")
 skill_frame_gray = ExtResource("12_skill_gray")

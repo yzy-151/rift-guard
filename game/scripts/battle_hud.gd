@@ -151,27 +151,43 @@ func _ready() -> void:
 	add_child(ui_highlight)
 	add_child(ui_confirm)
 	add_child(boss_warning)
-	panel(root, UI_LAYOUT.battle_title_rect, Color(0.045, 0.025, 0.045, 0.86), Color("#a34c60"))
-	label(root, Vector2(28, 8), Vector2(300, 16), "R I F T   G U A R D     /     边 境 防 线", 13, TEAL)
-	var game_title := label(root, Vector2(26, 24), Vector2(300, 30), "模式一  /  裂隙守望", 24, WHITE)
-	game_title.add_theme_font_override("font", DISPLAY_FONT)
-	bind(game_title, "game_title")
-	bind(label(root, Vector2(178, 29), Vector2(154, 18), "城门之下 · 守至黎明", 11, MUTED), "game_subtitle")
-	var compact_status := panel(root, UI_LAYOUT.battle_status_rect, Color(0.035, 0.018, 0.032, 0.94), Color("#713746"))
-	progression_label = label(root, Vector2(366, 9), Vector2(382, 17), "", 10, TEAL)
+	var logo := TextureRect.new()
+	logo.texture = UI_SKIN.battle_logo
+	logo.position = UI_LAYOUT.battle_title_rect.position
+	logo.size = UI_LAYOUT.battle_title_rect.size
+	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	logo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(logo)
+	var topbar := NinePatchRect.new()
+	topbar.texture = UI_SKIN.battle_topbar
+	topbar.position = UI_LAYOUT.battle_status_rect.position
+	topbar.size = UI_LAYOUT.battle_status_rect.size
+	topbar.patch_margin_left = 48
+	topbar.patch_margin_right = 48
+	topbar.patch_margin_top = 16
+	topbar.patch_margin_bottom = 16
+	topbar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(topbar)
+	progression_label = label(root, UI_LAYOUT.battle_status_rect.position + Vector2(28, 8), Vector2(606, 20), "", 10, WHITE)
 	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	progression_label.clip_text = true
-	base_label = label(root, Vector2(366, 29), Vector2(208, 20), "", 11, WHITE)
+	base_label = label(root, UI_LAYOUT.battle_status_rect.position + Vector2(642, 8), Vector2(270, 20), "", 10, TEAL)
+	base_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	base_label.clip_text = true
-	wave_label = label(root, Vector2(578, 29), Vector2(80, 20), "", 10, TEAL)
+	wave_label = label(root, Vector2.ZERO, Vector2.ZERO, "", 9, TEAL)
 	wave_label.clip_text = true
-	count_label = label(root, Vector2(660, 29), Vector2(104, 20), "", 9, MUTED)
+	wave_label.hide()
+	count_label = label(root, Vector2.ZERO, Vector2.ZERO, "", 9, MUTED)
 	count_label.clip_text = true
-	status_label = label(root, Vector2(24, 59), Vector2(996, 18), "", 10, Color("#d9afc9"))
+	count_label.hide()
+	status_label = label(root, Vector2.ZERO, Vector2.ZERO, "", 9, Color("#d9afc9"))
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status_label.hide()
 	var archive_btn := button(root, UI_LAYOUT.battle_archive_rect, "图鉴  [F2]", false)
 	archive_btn.pressed.connect(func(): compendium_action.emit())
-	pause_button = button(root, UI_LAYOUT.battle_pause_rect, "暂停  [空格]", false)
+	archive_btn.hide()
+	pause_button = button(root, UI_LAYOUT.battle_pause_rect, "Ⅱ  暂停", false)
 	bind(pause_button, "pause_button")
 	pause_button.position = UI_LAYOUT.battle_pause_rect.position
 	pause_button.size = UI_LAYOUT.battle_pause_rect.size
@@ -242,7 +258,7 @@ func _ready() -> void:
 	timeline_frame.patch_margin_bottom = 14
 	timeline_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	wave_timeline_panel.add_child(timeline_frame)
-	var timeline_item := label(wave_timeline_panel, Vector2(18, 3), Vector2(304, 25), "", 10, WHITE)
+	var timeline_item := label(wave_timeline_panel, Vector2(16, 2), Vector2(208, 24), "", 10, WHITE)
 	timeline_item.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	timeline_item.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	wave_timeline_labels.append(timeline_item)
@@ -646,19 +662,19 @@ func refresh(sim, selected_id: int) -> void:
 	signature = next_signature
 	if sim.endless_mode:
 		var traveler: Dictionary = sim.heroes[0] if not sim.heroes.is_empty() else {}
-		base_label.text = "◆ 旅行者 HP %d/%d   ◇ 护盾 %03d" % [ceili(float(traveler.get("hp", 0.0))), ceili(float(traveler.get("max_hp", 0.0))), ceili(sim.crystal_shield)]
+		base_label.text = "◆ HP %d/%d  ◇盾 %d" % [ceili(float(traveler.get("hp", 0.0))), ceili(float(traveler.get("max_hp", 0.0))), ceili(sim.crystal_shield)]
 	else:
-		base_label.text = "◆ 基地 %03d/%03d   ◇ 结晶盾 %03d" % [sim.base_hp, sim.base_max_hp, ceili(sim.crystal_shield)] if sim.v2_mode else "◆  基地完整度    %03d / %03d" % [sim.base_hp, sim.base_max_hp]
+		base_label.text = "◆ 基地 %d/%d  ◇盾 %d" % [sim.base_hp, sim.base_max_hp, ceili(sim.crystal_shield)] if sim.v2_mode else "◆ 基地 %d/%d" % [sim.base_hp, sim.base_max_hp]
 	if sim.v2_mode:
 		var next_xp: int = sim.endless_next_threshold() if sim.endless_mode else sim.crystal.next_threshold(sim.run_state)
 		var xp_text: String = "MAX" if next_xp < 0 else "%d / %d" % [sim.run_state.crystal_xp, next_xp]
 		var seconds: int = floori(sim.elapsed) if sim.endless_mode else ceili(sim.stage_runtime.remaining_seconds())
-		var queued := "  ·  待选 ×%d" % sim.run_state.pending_level_ups if sim.run_state.pending_level_ups > 0 and sim.state != "reward" else ""
+		var queued := "  +%d卡" % sim.run_state.pending_level_ups if sim.run_state.pending_level_ups > 0 and sim.state != "reward" else ""
 		if sim.endless_mode:
-			progression_label.text = "旅行者 Lv.%d · EXP %s%s · %s元素 · %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), seconds / 60, seconds % 60]
+			progression_label.text = "旅行者 Lv.%d  •  EXP %s%s  •  %s元素  •  幸运 %.2f  •  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), sim.run_state.luck, seconds / 60, seconds % 60]
 			wave_label.text = "威胁等级   %02d" % maxi(1, floori(sim.elapsed / 45.0) + 1)
 		else:
-			progression_label.text = "水晶 Lv.%d · EXP %s%s · %s元素 · %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), seconds / 60, seconds % 60]
+			progression_label.text = "水晶 Lv.%d  •  EXP %s%s  •  %s元素  •  幸运 %.2f  •  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), sim.run_state.luck, seconds / 60, seconds % 60]
 			wave_label.text = "波次   %02d / %02d" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size()]
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
@@ -687,7 +703,7 @@ func refresh(sim, selected_id: int) -> void:
 	if not resonance_text.is_empty():
 		status_label.text += " · 共鸣 " + resonance_text
 	pause_button.disabled = sim.state in ["ready", "won", "lost", "reward", "stage_exit"]
-	pause_button.text = "继续  [空格]" if sim.state == "paused" else "暂停  [空格]"
+	pause_button.text = "▶  继续" if sim.state == "paused" else "Ⅱ  暂停"
 	for i in hero_buttons.size():
 		hero_buttons[i].visible = i < sim.heroes.size()
 		hero_buttons[i].disabled = i >= sim.heroes.size()
@@ -781,13 +797,13 @@ func refresh_wave_timeline(sim) -> void:
 	var upcoming: Array[Dictionary] = sim.upcoming_waves(1)
 	var alive: int = sim.enemies.filter(func(enemy: Dictionary) -> bool: return float(enemy.get("hp", 0.0)) > 0.0).size()
 	if upcoming.is_empty():
-		wave_timeline_labels[0].text = "◆  敌军 %02d  ·  最后一轮  ◆" % alive
+		wave_timeline_labels[0].text = "◆  怪物 %02d / %02d" % [alive, alive]
 		wave_timeline_labels[0].add_theme_color_override("font_color", MUTED)
 		return
 	var item: Dictionary = upcoming[0]
 	var eta := ceili(float(item.get("eta", 0.0)))
 	var prefix := "BOSS" if bool(item.get("boss", false)) else "%02ds" % eta
-	wave_timeline_labels[0].text = "◆  敌军 %02d  ·  %s  %s ×%d  ◆" % [alive, prefix, str(item.get("enemy_name", "敌军")), int(item.get("count", 1))]
+	wave_timeline_labels[0].text = "◆  怪物 %02d / %02d  ·  %s" % [alive, alive + int(item.get("count", 1)), prefix]
 	wave_timeline_labels[0].add_theme_color_override("font_color", Color("#ff899c") if bool(item.get("boss", false)) else WHITE)
 func refresh_formations(sim, selected_id: int) -> void:
 	for mode: String in formation_buttons:

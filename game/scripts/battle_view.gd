@@ -20,6 +20,8 @@ const VFX_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_01
 const VFX_TRACE = preload("res://assets/vfx/third_party/kenney_particle/trace_05.png")
 const WALL_TEXTURE = preload("res://assets/world/endless/wall_segment.svg")
 const DOOR_TEXTURE = preload("res://assets/world/endless/breakable_gate.svg")
+const CHAPTER1_STAGE_IDS := ["stage_01", "stage_02", "stage_03"]
+
 const INK = Color("#0c1017")
 const TEAL = Color("#8fdbc8")
 const RED = Color("#d66769")
@@ -203,6 +205,9 @@ func visible_world_rect() -> Rect2:
 
 func world_depth_scale(point: Vector2) -> float:
 	return 1.0 if sim != null and sim.endless_mode else Stage.depth_scale(point)
+
+func _is_chapter_one_stage() -> bool:
+	return sim != null and str(sim.current_stage_id) in CHAPTER1_STAGE_IDS
 
 func _build_visual_matrix() -> void:
 	debug_visual_matrix.clear()
@@ -737,15 +742,25 @@ func _stage_layer(name: String) -> void:
 
 func _draw_stage_backdrop(theme: Dictionary, palette: Dictionary) -> void:
 	_stage_layer("backdrop")
+	if _is_chapter_one_stage():
+		draw_texture_rect(STAGE_VISUAL.chapter1_background, Rect2(0, 0, 1280, 720), false, Color(0.96, 0.98, 0.94, 1.0))
+		draw_rect(Rect2(0, 0, 1280, 720), Color(0.025, 0.045, 0.030, 0.10))
+		draw_rect(Rect2(0, 326, 1280, 394), Color(0.08, 0.13, 0.045, 0.08))
+		return
 	var background := _stage_background(sim.current_stage_id)
 	var accent: Color = palette.get("accent", Color("#c45a68"))
 	draw_texture_rect(background, Rect2(0, 0, 1280, 720), false, STAGE_VISUAL.backdrop_tint.lerp(accent.lightened(0.46), 0.09))
 	draw_rect(Rect2(0, 0, 1280, 720), STAGE_VISUAL.stage_veil)
 	draw_rect(Rect2(0, 82, 1032, 622), STAGE_VISUAL.arena_overlay)
-
 func _draw_stage_atmosphere(theme: Dictionary, palette: Dictionary) -> void:
 	_stage_layer("atmosphere")
 	var accent: Color = palette.get("accent", Color("#c45a68"))
+	if _is_chapter_one_stage():
+		for band in 3:
+			var drift := fmod(clock * (3.0 + band) + band * 360.0, 1620.0)
+			var y := 275.0 + band * 34.0
+			draw_colored_polygon(PackedVector2Array([Vector2(-360 + drift, y), Vector2(90 + drift, y - 18), Vector2(510 + drift, y + 18), Vector2(30 + drift, y + 38)]), Color(0.84, 0.94, 0.82, 0.035 + band * 0.01))
+		return
 	var fog := float(theme.get("fog", 0.45))
 	for band in 4:
 		var drift := fmod(clock * (5.0 + band * 2.2) + band * 250.0, 1510.0)
@@ -762,6 +777,31 @@ func _draw_stage_ground(theme: Dictionary, palette: Dictionary) -> void:
 	_stage_layer("ground")
 	var floor_color: Color = palette.get("floor", Color("#302832"))
 	var accent: Color = palette.get("accent", Color("#c45a68"))
+	if _is_chapter_one_stage():
+		var ground_quad := PackedVector2Array([
+			Vector2(203, 337),
+			Vector2(1077, 337),
+			Vector2(1264, 578),
+			Vector2(16, 578)
+		])
+		var ground_uv := PackedVector2Array([
+			Vector2(0, 0),
+			Vector2(1, 0),
+			Vector2(1, 1),
+			Vector2(0, 1)
+		])
+		var ground_colors := PackedColorArray([
+			Color(1, 1, 1, 0.82),
+			Color(1, 1, 1, 0.82),
+			Color.WHITE,
+			Color.WHITE
+		])
+		draw_polygon(ground_quad, ground_colors, ground_uv, STAGE_VISUAL.chapter1_ground)
+		draw_colored_polygon(Stage.polygon(Sim.MOVE_AREA), Color(accent, 0.025))
+		var chapter_border := Stage.polygon(Sim.MOVE_AREA)
+		chapter_border.append(chapter_border[0])
+		draw_polyline(chapter_border, Color(accent, 0.24), 1.2, true)
+		return
 	var floor := Stage.polygon(WORLD)
 	floor_color.a = 0.94
 	draw_colored_polygon(floor, floor_color)
@@ -774,7 +814,6 @@ func _draw_stage_ground(theme: Dictionary, palette: Dictionary) -> void:
 	border.append(border[0])
 	draw_polyline(border, Color(accent, 0.38), 1.3, true)
 	draw_rect(ENDLESS_PLAYFIELD_SCREEN, Color(0.02, 0.01, 0.025, 0.24), false, 7.0)
-
 func _draw_ground_motif(style: String, accent: Color) -> void:
 	match style:
 		"corridor":
@@ -842,6 +881,9 @@ func _draw_stage_terrain(_theme: Dictionary, _palette: Dictionary) -> void:
 func _draw_stage_architecture(theme: Dictionary, palette: Dictionary) -> void:
 	_stage_layer("architecture")
 	var accent: Color = palette.get("accent", Color("#c45a68"))
+	if _is_chapter_one_stage():
+		caption(Vector2(34, 82), "M O N D S T A D T   /   蒙 德 城 郊", Color(accent.lightened(0.20), 0.82), 11)
+		return
 	var motif := str(theme.get("motif", "rampart"))
 	for i in 12:
 		var ground := world_to_screen(Vector2(45 + i * 105, 140))
@@ -903,6 +945,11 @@ func _draw_stage_foreground() -> void:
 		for edge in 4:
 			draw_rect(Rect2(edge * 4, edge * 4, 1280 - edge * 8, 720 - edge * 8), Color(0.03, 0.008, 0.025, 0.08), false, 4.0)
 		return
+	if _is_chapter_one_stage():
+		var chapter_accent: Color = STAGE_VISUAL.palette(sim.current_stage_id).get("accent", Color("#72d8b7"))
+		draw_line(Vector2(16, 578), Vector2(1264, 578), Color(chapter_accent, 0.42), 2.0, true)
+		caption(Vector2(42, 571), "CHAPTER I  ·  蒙德城郊", Color(chapter_accent.lightened(0.18), 0.72), 9)
+		return
 	var palette := STAGE_VISUAL.palette(sim.current_stage_id)
 	var floor_color: Color = palette.get("floor", Color("#302832"))
 	var accent: Color = palette.get("accent", Color("#c45a68"))
@@ -952,14 +999,61 @@ func _terrain_polygon(area: Rect2) -> PackedVector2Array:
 	var screen := _terrain_screen_rect(area)
 	return PackedVector2Array([screen.position, Vector2(screen.end.x, screen.position.y), screen.end, Vector2(screen.position.x, screen.end.y)])
 
-func _draw_terrain_features() -> void:
-	for feature: Dictionary in sim.terrain_features:
+func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector2, feature: Dictionary) -> bool:
+	var screen_area := _terrain_screen_rect(area)
+	if kind in ["high_ground", "moving_platform"]:
+		var high_rect := Rect2(Vector2.ZERO, screen_area.size * Vector2(0.78, 0.82))
+		high_rect.position = Vector2(screen_area.get_center().x - high_rect.size.x * 0.5, screen_area.end.y - high_rect.size.y + 3.0)
+		draw_ellipse_shadow(Vector2(high_rect.get_center().x, high_rect.end.y - 3.0), high_rect.size.x * 0.44, Color(0, 0, 0, 0.24))
+		draw_texture_rect(STAGE_VISUAL.chapter1_high_platform, high_rect, false, Color("#eef7d7"))
+		caption(center + Vector2(-45, screen_area.size.y * 0.38), str(feature.get("label", "防御高台")), Color("#eaf7c7"), 9)
+		return true
+	if kind in ["low_ground", "conveyor", "trap"]:
+		var low_rect := screen_area.grow(8.0)
+		var low_tint := Color("#d8c7ff") if kind == "trap" else Color(1, 1, 1, 0.94)
+		draw_texture_rect(STAGE_VISUAL.chapter1_lowland, low_rect, false, low_tint)
+		caption(center + Vector2(-35, 4), str(feature.get("label", "泥沼洼地")), Color("#d8e7ae"), 9)
+		return true
+	if kind == "blocked":
+		var bush_rect := screen_area.grow(13.0)
+		bush_rect.position.y -= 7.0
+		draw_ellipse_shadow(Vector2(bush_rect.get_center().x, bush_rect.end.y - 2.0), bush_rect.size.x * 0.38, Color(0, 0, 0, 0.26))
+		draw_texture_rect(STAGE_VISUAL.chapter1_bush, bush_rect, false, Color.WHITE)
+		return true
+	if kind == "mechanism":
+		var active: bool = sim.heroes.any(func(hero: Dictionary) -> bool: return hero.hp > 0.0 and area.grow(95.0).has_point(hero.pos))
+		var glow := Color("#f6e58c") if active else Color("#8fd8ba")
+		draw_circle(center + Vector2(0, -18), 28.0 + sin(clock * 4.0) * 3.0, Color(glow, 0.12))
+		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(center + Vector2(-24, -64), Vector2(48, 82)), false, Color.WHITE)
+		caption(center + Vector2(-30, 34), "风之机关" if active else "靠近启动", glow, 9)
+		return true
+	if kind in ["shortcut", "door", "one_way"]:
+		var broken := kind != "one_way" and float(feature.get("hp", 0.0)) <= 0.0
+		if broken:
+			draw_dashed_line(Vector2(screen_area.position.x, screen_area.end.y), screen_area.end, Color("#8ee6a6"), 2.0, 7.0, true)
+			caption(center + Vector2(-34, 4), "通道已开启", Color("#9af0b8"), 9)
+			return true
+		var barricade_rect := screen_area.grow(7.0)
+		barricade_rect.position.y -= 9.0
+		draw_ellipse_shadow(Vector2(barricade_rect.get_center().x, barricade_rect.end.y - 2.0), barricade_rect.size.x * 0.40, Color(0, 0, 0, 0.25))
+		draw_texture_rect(STAGE_VISUAL.chapter1_barricade, barricade_rect, false, Color.WHITE)
+		if kind != "one_way":
+			var hp_ratio := clampf(float(feature.get("hp", 0.0)) / maxf(1.0, float(feature.get("max_hp", 1.0))), 0.0, 1.0)
+			draw_rect(Rect2(center + Vector2(-34, -42), Vector2(68, 5)), Color("#293020"))
+			draw_rect(Rect2(center + Vector2(-34, -42), Vector2(68 * hp_ratio, 5)), Color("#f0c46a"))
+			caption(center + Vector2(-35, 37), "战技可破坏", Color("#ffe59a"), 9)
+		return true
+	return false
+
+func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_features:
 		var area: Rect2 = feature.get("area", Rect2())
 		if area.size == Vector2.ZERO:
 			continue
 		var kind := str(feature.get("type", ""))
 		var polygon := _terrain_polygon(area)
 		var center := world_to_screen(area.get_center())
+		if _is_chapter_one_stage() and _draw_chapter_one_terrain_feature(kind, area, center, feature):
+			continue
 		if kind == "junction":
 			var screen_area := _terrain_screen_rect(area)
 			var layout := str(feature.get("layout", "cross"))
@@ -1064,19 +1158,22 @@ func _draw_endless_stage() -> void:
 
 func _draw_base_projected() -> void:
 	var point: Vector2 = world_to_screen(Vector2(100, 365))
-	draw_ellipse_shadow(point + Vector2(0, 15), 52, Color(0, 0, 0, 0.48))
-	var tint: Color = RED if base_flash > 0.0 and not reduced_effects else Color("#e3b7ba")
+	draw_ellipse_shadow(point + Vector2(0, 15), 52, Color(0, 0, 0, 0.40))
+	var tint: Color = RED if base_flash > 0.0 and not reduced_effects else Color("#b9f3d6")
 	var glow := 0.75 + sin(clock * 3.4) * 0.18
 	draw_circle(point + Vector2(0, -38), 44.0 + glow * 7.0, Color(tint, 0.055))
 	draw_circle(point + Vector2(0, -38), 30.0 + glow * 5.0, Color(tint, 0.10))
 	draw_arc(point + Vector2(0, -38), 38.0, -clock * 0.7, TAU - clock * 0.7, 40, Color(tint, 0.42), 2.0, true)
-	draw_texture_rect(crystal_texture, Rect2(point + Vector2(-38, -105), Vector2(76, 120)), false, tint)
-	draw_colored_polygon(PackedVector2Array([point + Vector2(-43, 17), point + Vector2(-29, 5), point + Vector2(29, 5), point + Vector2(43, 17), point + Vector2(31, 31), point + Vector2(-31, 31)]), Color("#382934"))
-	draw_polyline(PackedVector2Array([point + Vector2(-43, 17), point + Vector2(-29, 5), point + Vector2(29, 5), point + Vector2(43, 17)]), Color("#a06d7b"), 2.0, true)
-	draw_rect(Rect2(point + Vector2(-40, 46), Vector2(83, 6)), Color("#241d26"))
+	if _is_chapter_one_stage():
+		var crystal_modulate := Color("#ff8f94") if base_flash > 0.0 and not reduced_effects else Color.WHITE
+		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(point + Vector2(-48, -151), Vector2(96, 169)), false, crystal_modulate)
+	else:
+		draw_texture_rect(crystal_texture, Rect2(point + Vector2(-38, -105), Vector2(76, 120)), false, tint)
+		draw_colored_polygon(PackedVector2Array([point + Vector2(-43, 17), point + Vector2(-29, 5), point + Vector2(29, 5), point + Vector2(43, 17), point + Vector2(31, 31), point + Vector2(-31, 31)]), Color("#382934"))
+		draw_polyline(PackedVector2Array([point + Vector2(-43, 17), point + Vector2(-29, 5), point + Vector2(29, 5), point + Vector2(43, 17)]), Color("#a06d7b"), 2.0, true)
+	draw_rect(Rect2(point + Vector2(-40, 46), Vector2(83, 6)), Color("#243026"))
 	draw_rect(Rect2(point + Vector2(-40, 46), Vector2(83 * sim.base_hp / maxf(1.0, sim.base_max_hp), 6)), tint)
-	caption(point + Vector2(-35, 72), "基地核心", tint, 13)
-
+	caption(point + Vector2(-42, 72), "风神像核心" if _is_chapter_one_stage() else "基地核心", tint, 12)
 func _draw_route_bed(route: Array, route_id: String = "main") -> void:
 	var material: Dictionary = surface_renderer.route_material(route_id)
 	var color: Color = material.color

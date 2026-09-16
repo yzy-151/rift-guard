@@ -39,6 +39,8 @@ class_name RiftUISkinProfile
 
 @export_group("Battle HUD")
 @export var battle_menu_background: Texture2D
+@export var battle_topbar: Texture2D
+@export var battle_logo: Texture2D
 @export var hero_frame_gray: Texture2D
 @export var hero_frame_red: Texture2D
 @export var skill_frame_gray: Texture2D
