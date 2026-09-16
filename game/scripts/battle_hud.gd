@@ -45,6 +45,7 @@ const ICON_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_0
 const ICON_FLARE = preload("res://assets/vfx/third_party/kenney_particle/flare_01.png")
 const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 const UI_SKIN = preload("res://data/ui_skin_profile.tres")
+const DISPLAY_FONT = preload("res://assets/fonts/TiejiliSC-Regular.ttf")
 var config
 var reward_panel
 var progression_label: Label
@@ -103,6 +104,8 @@ var boss_name_label: Label
 var boss_hp_bar: ProgressBar
 var boss_hp_label: Label
 var boss_alert: Label
+var boss_alert_frame: NinePatchRect
+var boss_scene_tint: ColorRect
 var boss_warning: AudioStreamPlayer
 var wave_timeline_panel: Panel
 var wave_timeline_labels: Array[Label] = []
@@ -139,8 +142,9 @@ func _ready() -> void:
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var ui_theme := Theme.new()
 	var font := SystemFont.new()
-	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
-	ui_theme.default_font = preload("res://assets/fonts/TiejiliSC-Regular.ttf")
+	font.font_names = PackedStringArray(["Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC"])
+	font.font_weight = 600
+	ui_theme.default_font = font
 	ui_theme.default_font_size = 13
 	root.theme = ui_theme
 	add_child(root)
@@ -149,7 +153,9 @@ func _ready() -> void:
 	add_child(boss_warning)
 	panel(root, UI_LAYOUT.battle_title_rect, Color(0.045, 0.025, 0.045, 0.86), Color("#a34c60"))
 	label(root, Vector2(28, 8), Vector2(300, 16), "R I F T   G U A R D     /     边 境 防 线", 13, TEAL)
-	bind(label(root, Vector2(26, 24), Vector2(300, 30), "模式一  /  裂隙守望", 24, WHITE), "game_title")
+	var game_title := label(root, Vector2(26, 24), Vector2(300, 30), "模式一  /  裂隙守望", 24, WHITE)
+	game_title.add_theme_font_override("font", DISPLAY_FONT)
+	bind(game_title, "game_title")
 	bind(label(root, Vector2(178, 29), Vector2(154, 18), "城门之下 · 守至黎明", 11, MUTED), "game_subtitle")
 	var compact_status := panel(root, UI_LAYOUT.battle_status_rect, Color(0.035, 0.018, 0.032, 0.94), Color("#713746"))
 	progression_label = label(root, Vector2(366, 9), Vector2(382, 17), "", 10, TEAL)
@@ -186,10 +192,22 @@ func _ready() -> void:
 		buff_labels.append(label(buff_panel, Vector2(25, 23 + i * 13), Vector2(187, 14), "", 9, WHITE))
 	buff_panel.hide()
 	var boss_panel_rect: Rect2 = UI_LAYOUT.battle_boss_panel_rect
-	boss_panel = panel(root, boss_panel_rect, Color(0.035, 0.018, 0.03, 0.93), Color("#a8334d"))
+	boss_panel = panel(root, boss_panel_rect, Color(0.025, 0.010, 0.022, 0.96), Color("#d6415b"))
+	var boss_frame := NinePatchRect.new()
+	boss_frame.texture = UI_SKIN.hero_frame_red
+	boss_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	boss_frame.patch_margin_left = 42
+	boss_frame.patch_margin_right = 42
+	boss_frame.patch_margin_top = 24
+	boss_frame.patch_margin_bottom = 24
+	boss_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	boss_panel.add_child(boss_frame)
 	var boss_name_rect: Rect2 = UI_LAYOUT.battle_boss_name_rect
-	boss_name_label = label(boss_panel, boss_name_rect.position, boss_name_rect.size, "", 12, Color("#ff9cab"))
+	boss_name_label = label(boss_panel, boss_name_rect.position, boss_name_rect.size, "", 15, Color("#ffb1bc"))
 	boss_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	boss_name_label.add_theme_font_override("font", DISPLAY_FONT)
+	boss_name_label.add_theme_color_override("font_shadow_color", Color("#480714"))
+	boss_name_label.add_theme_constant_override("shadow_offset_y", 2)
 	boss_hp_bar = ProgressBar.new()
 	var boss_bar_rect: Rect2 = UI_LAYOUT.battle_boss_bar_rect
 	boss_hp_bar.position = boss_bar_rect.position
@@ -214,14 +232,40 @@ func _ready() -> void:
 	boss_hp_label = label(boss_panel, boss_value_rect.position, boss_value_rect.size, "", 10, WHITE)
 	boss_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	boss_panel.hide()
-	wave_timeline_panel = panel(root, UI_LAYOUT.battle_timeline_rect, Color(0.055, 0.035, 0.065, 0.94), Color("#73556f"))
-	label(wave_timeline_panel, Vector2(10, 2), Vector2(150, 14), "NEXT / 敌情", 8, Color("#d9afc9"))
-	for i in 3:
-		var timeline_item := label(wave_timeline_panel, Vector2(164 + i * 280, 2), Vector2(272, 33), "", 8, WHITE)
-		timeline_item.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		wave_timeline_labels.append(timeline_item)
+	wave_timeline_panel = panel(root, UI_LAYOUT.battle_timeline_rect, Color(0.025, 0.010, 0.024, 0.96), Color("#d13b55"))
+	var timeline_frame := NinePatchRect.new()
+	timeline_frame.texture = UI_SKIN.hero_frame_red
+	timeline_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	timeline_frame.patch_margin_left = 36
+	timeline_frame.patch_margin_right = 36
+	timeline_frame.patch_margin_top = 14
+	timeline_frame.patch_margin_bottom = 14
+	timeline_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	wave_timeline_panel.add_child(timeline_frame)
+	var timeline_item := label(wave_timeline_panel, Vector2(18, 3), Vector2(304, 25), "", 10, WHITE)
+	timeline_item.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	timeline_item.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	wave_timeline_labels.append(timeline_item)
 	wave_timeline_panel.hide()
-	boss_alert = label(root, Vector2(270, 248), Vector2(740, 96), "", 40, Color("#fff1ed"))
+	boss_scene_tint = ColorRect.new()
+	boss_scene_tint.position = UI_LAYOUT.battle_playfield_rect.position
+	boss_scene_tint.size = UI_LAYOUT.battle_playfield_rect.size
+	boss_scene_tint.color = Color(0.48, 0.015, 0.045, 0.0)
+	boss_scene_tint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(boss_scene_tint)
+	boss_alert_frame = NinePatchRect.new()
+	boss_alert_frame.texture = UI_SKIN.choice_frame_red
+	boss_alert_frame.position = Vector2(205, 222)
+	boss_alert_frame.size = Vector2(870, 138)
+	boss_alert_frame.patch_margin_left = 52
+	boss_alert_frame.patch_margin_right = 52
+	boss_alert_frame.patch_margin_top = 30
+	boss_alert_frame.patch_margin_bottom = 30
+	boss_alert_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(boss_alert_frame)
+	boss_alert_frame.hide()
+	boss_alert = label(root, Vector2(270, 240), Vector2(740, 104), "", 40, Color("#fff1ed"))
+	boss_alert.add_theme_font_override("font", DISPLAY_FONT)
 	boss_alert.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	boss_alert.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	boss_alert.add_theme_color_override("font_shadow_color", Color("#9e203c"))
@@ -374,6 +418,8 @@ func _ready() -> void:
 		hp_bar.add_theme_stylebox_override("background", hp_bg)
 		hp_bar.add_theme_stylebox_override("fill", hp_fill)
 		hero_btn.add_child(hp_bar)
+		hp_bar.position = Vector2(70, 29)
+		hp_bar.size = UI_LAYOUT.battle_hero_hp_bar_size
 		hero_hp_bars.append(hp_bar)
 		var energy_bar := ProgressBar.new()
 		energy_bar.position = Vector2(70, 56)
@@ -386,6 +432,8 @@ func _ready() -> void:
 		energy_bar.add_theme_stylebox_override("background", energy_bg)
 		energy_bar.add_theme_stylebox_override("fill", energy_fill)
 		hero_btn.add_child(energy_bar)
+		energy_bar.position = Vector2(70, 56)
+		energy_bar.size = UI_LAYOUT.battle_hero_energy_bar_size
 		hero_energy_bars.append(energy_bar)
 		hero_statuses.append(label(hero_btn, Vector2(70, 40), Vector2(130, 14), "", 9, WHITE))
 		hero_details.append(label(hero_btn, Vector2(70, 62), Vector2(130, 10), "", 8, MUTED))
@@ -730,19 +778,17 @@ func refresh_wave_timeline(sim) -> void:
 	wave_timeline_panel.visible = sim.v2_mode and not sim.endless_mode and sim.state in ["running", "paused", "between"] and not active_boss
 	if not wave_timeline_panel.visible:
 		return
-	var upcoming: Array[Dictionary] = sim.upcoming_waves(3)
-	var route_names := {"upper": "上路", "main": "中路", "lower": "下路", "air": "空路", "zigzag": "折线", "flank": "侧路"}
-	for i in wave_timeline_labels.size():
-		if i >= upcoming.size():
-			wave_timeline_labels[i].text = "—  暂无后续敌情"
-			wave_timeline_labels[i].add_theme_color_override("font_color", MUTED)
-			continue
-		var item: Dictionary = upcoming[i]
-		var eta := ceili(float(item.get("eta", 0.0)))
-		var prefix := "BOSS" if bool(item.get("boss", false)) else ("%02d:%02d" % [eta / 60, eta % 60])
-		wave_timeline_labels[i].text = "%s   %s   %s ×%d" % [prefix, route_names.get(str(item.get("route_id", "main")), str(item.get("route_id", "main"))), str(item.get("enemy_name", "敌军")), int(item.get("count", 1))]
-		wave_timeline_labels[i].add_theme_color_override("font_color", Color("#ff8398") if bool(item.get("boss", false)) else WHITE)
-
+	var upcoming: Array[Dictionary] = sim.upcoming_waves(1)
+	var alive: int = sim.enemies.filter(func(enemy: Dictionary) -> bool: return float(enemy.get("hp", 0.0)) > 0.0).size()
+	if upcoming.is_empty():
+		wave_timeline_labels[0].text = "◆  敌军 %02d  ·  最后一轮  ◆" % alive
+		wave_timeline_labels[0].add_theme_color_override("font_color", MUTED)
+		return
+	var item: Dictionary = upcoming[0]
+	var eta := ceili(float(item.get("eta", 0.0)))
+	var prefix := "BOSS" if bool(item.get("boss", false)) else "%02ds" % eta
+	wave_timeline_labels[0].text = "◆  敌军 %02d  ·  %s  %s ×%d  ◆" % [alive, prefix, str(item.get("enemy_name", "敌军")), int(item.get("count", 1))]
+	wave_timeline_labels[0].add_theme_color_override("font_color", Color("#ff899c") if bool(item.get("boss", false)) else WHITE)
 func refresh_formations(sim, selected_id: int) -> void:
 	for mode: String in formation_buttons:
 		var item: Button = formation_buttons[mode]
@@ -759,85 +805,56 @@ func announce_route_warning(event: Dictionary) -> void:
 		boss_warning.play()
 
 
-func announce_contract(name: String, reward: String) -> void:
+func _show_boss_alert(copy: String, pitch: float = 0.82, hold: float = 0.78) -> void:
 	if boss_warning != null and not muted:
 		boss_warning.stop()
-		boss_warning.pitch_scale = 1.22
-		boss_warning.volume_db = -11.0
-		boss_warning.play()
-	boss_alert.text = "C O N T R A C T   C L E A R
-%s  ·  %s" % [name, reward]
-	boss_alert.position = Vector2(270, 228)
-	boss_alert.modulate = Color(1,1,1,0)
-	boss_alert.scale = Vector2(1.12,1.12)
-	boss_alert.pivot_offset = boss_alert.size*0.5
-	boss_alert.show()
-	var tween := create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(boss_alert,"modulate:a",1.0,0.14)
-	tween.tween_property(boss_alert,"scale",Vector2.ONE,0.20).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	await tween.finished
-	await get_tree().create_timer(0.82).timeout
-	var out := create_tween()
-	out.tween_property(boss_alert,"modulate:a",0.0,0.24)
-	await out.finished
-	boss_alert.hide()
-
-
-func announce_boss(name: String) -> void:
-	if boss_warning != null and not muted:
-		boss_warning.stop()
-		boss_warning.pitch_scale = 0.82
+		boss_warning.pitch_scale = pitch
 		boss_warning.volume_db = -8.0
 		boss_warning.play()
-	boss_alert.text = "W A R N I N G\n%s  降 临" % name
-	boss_alert.position = Vector2(270, 228)
+	boss_alert.text = copy
+	boss_alert.position = Vector2(270, 240)
 	boss_alert.modulate = Color(1, 1, 1, 0)
-	boss_alert.scale = Vector2(1.16, 1.16)
+	boss_alert.scale = Vector2(1.12, 1.12)
 	boss_alert.pivot_offset = boss_alert.size * 0.5
+	boss_alert_frame.position = Vector2(205, 222)
+	boss_alert_frame.modulate = Color(1, 1, 1, 0)
+	boss_alert_frame.scale = Vector2(0.94, 0.94)
+	boss_alert_frame.pivot_offset = boss_alert_frame.size * 0.5
+	boss_scene_tint.color.a = 0.0
+	boss_scene_tint.show()
+	boss_alert_frame.show()
 	boss_alert.show()
-	var tween := create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(boss_alert, "modulate:a", 1.0, 0.16)
-	tween.tween_property(boss_alert, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	await tween.finished
-	await get_tree().create_timer(0.72).timeout
-	var out := create_tween()
-	out.set_parallel(true)
-	out.tween_property(boss_alert, "modulate:a", 0.0, 0.28)
-	out.tween_property(boss_alert, "position:y", 210.0, 0.28)
+	var entrance := create_tween().set_parallel(true)
+	entrance.tween_property(boss_scene_tint, "color:a", 0.24, 0.15).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+	entrance.tween_property(boss_alert_frame, "modulate:a", 1.0, 0.12)
+	entrance.tween_property(boss_alert_frame, "scale", Vector2.ONE, 0.24).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	entrance.tween_property(boss_alert, "modulate:a", 1.0, 0.12).set_delay(0.04)
+	entrance.tween_property(boss_alert, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await entrance.finished
+	await get_tree().create_timer(hold).timeout
+	var out := create_tween().set_parallel(true)
+	out.tween_property(boss_alert, "modulate:a", 0.0, 0.24)
+	out.tween_property(boss_alert_frame, "modulate:a", 0.0, 0.24)
+	out.tween_property(boss_scene_tint, "color:a", 0.0, 0.32)
 	await out.finished
 	boss_alert.hide()
+	boss_alert_frame.hide()
+	boss_scene_tint.hide()
 
+func announce_contract(name: String, reward: String) -> void:
+	await _show_boss_alert("C O N T R A C T   C L E A R\n%s  ·  %s" % [name, reward], 1.22, 0.82)
+
+func announce_boss(name: String) -> void:
+	await _show_boss_alert("W A R N I N G\n%s  降 临" % name, 0.82, 0.82)
 func announce_arena_event(kind: String, duration: float) -> void:
 	arena_event_name = kind.replace("_", " ").to_upper()
 	arena_event_until_ms = Time.get_ticks_msec() + roundi(minf(duration, 6.0) * 1000.0)
 
 func announce_boss_phase(name: String, phase: int) -> void:
-	if boss_warning != null and not muted:
-		boss_warning.stop()
-		boss_warning.pitch_scale = 1.08 if phase == 2 else 0.88
-		boss_warning.volume_db = -8.0
-		boss_warning.play()
-	boss_alert.text = "%s\n%s  狂 暴 阶 段" % ["P H A S E   II" if phase == 2 else "F I N A L   P H A S E", name]
-	boss_alert.position = Vector2(270, 228)
-	boss_alert.modulate = Color(1, 1, 1, 0)
-	boss_alert.scale = Vector2(1.20, 1.20)
-	boss_alert.pivot_offset = boss_alert.size * 0.5
-	boss_alert.show()
-	var tween := create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(boss_alert, "modulate:a", 1.0, 0.14)
-	tween.tween_property(boss_alert, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	await tween.finished
-	await get_tree().create_timer(0.72).timeout
-	var out := create_tween()
-	out.tween_property(boss_alert, "modulate:a", 0.0, 0.26)
-	await out.finished
-	boss_alert.hide()
+	var header := "P H A S E   II" if phase == 2 else "F I N A L   P H A S E"
+	await _show_boss_alert("%s\n%s  狂 暴 阶 段" % [header, name], 1.08 if phase == 2 else 0.88, 0.72)
 	if boss_warning != null:
 		boss_warning.pitch_scale = 1.0
-
 func result_grade(base_hp: int, streak: int) -> String:
 	if base_hp >= 85 and streak >= 20:
 		return "S"

@@ -104,6 +104,7 @@ var culled_spawns: int = 0
 var combat_contract: Dictionary = {}
 var contract_completed: bool = false
 var contract_reward_text: String = ""
+var recent_spawn_kinds: Array[String] = []
 
 func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 	v2_mode = enable_v2
@@ -166,6 +167,7 @@ func reset(seed_value: int = -1) -> void:
 	combat_contract = {}
 	contract_completed = false
 	contract_reward_text = ""
+	recent_spawn_kinds.clear()
 	next_construct_id = 0
 	reaction_damage_bonus = 0.0
 	reaction_radius_bonus = 0.0
@@ -254,6 +256,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	combat_contract = {}
 	contract_completed = false
 	contract_reward_text = ""
+	recent_spawn_kinds.clear()
 	combat_contract = database.combat_contracts.get(stage_id, {}).duplicate(true)
 	next_construct_id = 0
 	reaction_damage_bonus = 0.0
@@ -839,6 +842,7 @@ func _endless_spawn_tick(dt: float) -> void:
 			kind = _endless_quality_enemy(tier, i)
 		if kind in ENDLESS_LOW_TIER_IDS and low_tier_count >= ENDLESS_LOW_TIER_CAP:
 			kind = _endless_quality_enemy(tier, i)
+		kind = _balanced_spawn_kind(kind)
 		var point := _endless_interior_spawn_point(side, ratio) if kind == "splitter" else _endless_edge_point(side, ratio)
 		var enemy := spawn_enemy(point, kind)
 		if kind == "splitter":
@@ -940,7 +944,31 @@ func _stage_spawn_tick(dt: float) -> void:
 			events.append({"kind": "wave", "value": wave})
 			events.append({"kind": "boss_arrival", "pos": boss.pos, "value": str(boss.get("name", boss_id)), "enemy_id": boss.id})
 
+func _balanced_spawn_kind(requested: String) -> String:
+	if requested.begins_with("boss_"):
+		return requested
+	var elapsed_tier := maxi(1, floori(elapsed / 60.0) + 1)
+	var caps := {
+		"ranged": 2 + mini(3, floori(elapsed_tier / 2.0)),
+		"buffer": 1 + mini(2, floori(elapsed_tier / 3.0)),
+		"splitter": 1 if not endless_mode else ENDLESS_HUT_CAP,
+		"shielded": 1 + mini(2, floori(elapsed_tier / 3.0)),
+		"healer": 1 + mini(2, floori(elapsed_tier / 4.0)),
+		"warder": 1 + mini(2, floori(elapsed_tier / 4.0)),
+	}
+	var chosen := requested
+	var active_same := enemies.filter(func(enemy: Dictionary) -> bool: return enemy.hp > 0.0 and str(enemy.get("kind", "")) == requested).size()
+	var repeated := recent_spawn_kinds.size() >= 2 and recent_spawn_kinds[-1] == requested and recent_spawn_kinds[-2] == requested
+	if (caps.has(requested) and active_same >= int(caps[requested])) or repeated:
+		var fallback := ["grunt", "runner", "slime_pyro", "slime_electro", "armored", "slime_anemo"]
+		fallback = fallback.filter(func(kind: String) -> bool: return kind != requested and not (recent_spawn_kinds.size() > 0 and kind == recent_spawn_kinds[-1]))
+		chosen = fallback[posmod(next_id + enemies.size(), fallback.size())]
+	recent_spawn_kinds.append(chosen)
+	while recent_spawn_kinds.size() > 8:
+		recent_spawn_kinds.pop_front()
+	return chosen
 func spawn_on_route(kind: String, route_id: String, sequence: int = 0) -> Dictionary:
+	kind = _balanced_spawn_kind(kind)
 	var points := stage_route(route_id)
 	var starts := stage_spawn_points(route_id)
 	var start: Vector2 = starts[posmod(sequence, starts.size())] if not starts.is_empty() else (points[0] if not points.is_empty() else Vector2(1160, stage_lane_map().get(route_id, LANES[1])))
@@ -968,7 +996,8 @@ func _terrain_detour_waypoint(current: Vector2, destination: Vector2, radius: fl
 	]
 	var usable: Array[Vector2] = []
 	for candidate: Vector2 in candidates:
-		if not ENDLESS_ARENA.grow(-radius).has_point(candidate):
+		var navigation_bounds := ENDLESS_ARENA if endless_mode else MOVE_AREA
+		if not navigation_bounds.grow(-radius).has_point(candidate):
 			continue
 		if not _terrain_blocker_at(candidate, radius).is_empty():
 			continue
@@ -999,6 +1028,31 @@ func _enemy_navigation_target(enemy: Dictionary, destination: Vector2, radius: f
 		enemy.nav_timer = 3.2
 	return waypoint
 
+func _nearby_destructible_door(point: Vector2, radius: float) -> Dictionary:
+	var nearest: Dictionary = {}
+	var best_distance := INF
+	for feature: Dictionary in terrain_features:
+		if str(feature.get("type", "")) != "door" or float(feature.get("hp", 0.0)) <= 0.0:
+			continue
+		var area := Rect2(feature.area).grow(radius + 26.0)
+		var center := Rect2(feature.area).get_center()
+		var distance := point.distance_to(center)
+		if area.has_point(point) and distance < best_distance:
+			nearest = feature
+			best_distance = distance
+	return nearest
+
+func _attack_terrain_door(enemy: Dictionary, door: Dictionary) -> void:
+	if door.is_empty() or float(enemy.get("attack_timer", 0.0)) > 0.0:
+		return
+	door.hp = maxf(0.0, float(door.get("hp", 0.0)) - float(enemy.get("damage", 1.0)))
+	enemy.attack_timer = 1.0 / maxf(0.1, float(enemy.get("rate", 1.0)))
+	var center := Rect2(door.area).get_center()
+	events.append({"kind": "terrain_hit" if door.hp > 0.0 else "terrain_break", "pos": center, "value": ceili(float(enemy.get("damage", 1.0)))})
+	if door.hp <= 0.0:
+		for candidate: Dictionary in enemies:
+			candidate.erase("nav_waypoint")
+			candidate.nav_timer = 0.0
 func _enemy_tick(dt: float) -> void:
 	for source: Dictionary in enemies:
 		if source.hp <= 0 or source.get("kind", "") != "buffer":
@@ -1046,20 +1100,25 @@ func _enemy_tick(dt: float) -> void:
 		if not endless_mode and not route.is_empty() and route_index < route.size():
 			destination = route[route_index]
 		var navigation_radius := maxf(12.0, float(e.get("size", 28.0)) * 0.34)
-		if endless_mode and not bool(e.get("flying", false)) and float(e.get("speed", 0.0)) > 0.0:
+		var route_destination := destination
+		if not bool(e.get("flying", false)) and float(e.get("speed", 0.0)) > 0.0:
 			destination = _enemy_navigation_target(e, destination, navigation_radius, dt)
 		if absf(destination.x - e.pos.x) > 1.0:
 			e.facing = 1.0 if destination.x > e.pos.x else -1.0
 		var move_distance := float(e.speed) * speed_scale * dt
 		var next_pos: Vector2 = e.pos.move_toward(destination, move_distance) if bool(e.get("flying", false)) else _move_with_terrain(e.pos, destination, move_distance, navigation_radius)
+		var terrain_door: Dictionary = {} if bool(e.get("flying", false)) else _nearby_destructible_door(e.pos, navigation_radius)
+		if not terrain_door.is_empty():
+			next_pos = e.pos
+			_attack_terrain_door(e, terrain_door)
 		var one_way := terrain_feature_at(e.pos, "one_way")
 		if not one_way.is_empty():
 			var raw_direction: Array = one_way.get("direction", [-1, 0])
 			var allowed_direction := Vector2(float(raw_direction[0]), float(raw_direction[1])).normalized()
 			if (destination - e.pos).normalized().dot(allowed_direction) < 0.0:
 				next_pos = e.pos
-		if not endless_mode and e.pos.distance_to(destination) <= maxf(4.0, e.speed * speed_scale * dt + 1.0):
-			e.pos = destination
+		if not endless_mode and e.pos.distance_to(route_destination) <= maxf(4.0, e.speed * speed_scale * dt + 1.0):
+			e.pos = route_destination
 			e.route_index = route_index + 1
 			route_index += 1
 			next_pos = e.pos
@@ -1639,7 +1698,8 @@ func _begin_enemy_warning(enemy: Dictionary, victim: Dictionary = {}, construct:
 	enemy.warning_radius = 52.0 if float(enemy.get("attack_range", 0.0)) <= 0.0 else 86.0
 	enemy.warning_victim = int(victim.get("id", -1))
 	enemy.warning_construct = int(construct.get("id", -1))
-	events.append({"kind":"enemy_warning","pos":enemy.warning_pos,"source":enemy.pos,"radius":enemy.warning_radius,"life":lead,"boss":false})
+	if float(enemy.get("attack_range", 0.0)) > 0.0:
+		events.append({"kind":"enemy_warning","pos":enemy.warning_pos,"source":enemy.pos,"radius":enemy.warning_radius,"life":lead,"boss":false})
 
 func _resolve_enemy_warning(enemy: Dictionary) -> void:
 	enemy.attack_pending = false
@@ -1662,7 +1722,7 @@ func _resolve_enemy_warning(enemy: Dictionary) -> void:
 				events.append({"kind":"skill_suppressed","pos":victim.pos,"value":2})
 			hit = true
 			if float(enemy.get("attack_range", 0.0)) > 0.0:
-				events.append({"kind":"enemy_shot","pos":enemy.pos,"target":victim.pos,"value":ceili(enemy.damage),"enemy_kind":str(enemy.get("kind",""))})
+				events.append({"kind":"enemy_shot","pos":enemy.pos,"target":victim.pos,"value":ceili(enemy.damage),"enemy_kind":str(enemy.get("kind","")),"duration":clampf(enemy.pos.distance_to(victim.pos) / 620.0, 0.28, 0.72)})
 	if hit and "vampiric" in enemy.get("affixes", []):
 		enemy.hp = minf(enemy.max_hp, enemy.hp + enemy.damage * 0.25)
 		events.append({"kind":"enemy_heal","pos":enemy.pos,"value":ceili(enemy.damage * 0.25)})

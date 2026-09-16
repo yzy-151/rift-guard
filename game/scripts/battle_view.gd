@@ -227,6 +227,32 @@ func visual_sample(hero: Dictionary) -> Dictionary:
 	var id := str(hero.get("character_id", ""))
 	return unit_visual_actors[id].sample() if unit_visual_actors.has(id) else {"scale":Vector2.ONE,"offset":Vector2.ZERO}
 
+func _dense_vfx_group(kind: String) -> String:
+	if kind in ["hit", "critical", "slash", "splash", "chain", "pierce", "multishot", "orbit_hit"]:
+		return "impact"
+	if kind in ["vaporize", "melt", "overloaded", "superconduct", "electro_charged", "swirl", "crystallize", "shatter", "swirl_spread"]:
+		return "reaction"
+	return ""
+
+func _try_merge_dense_vfx(event: Dictionary) -> bool:
+	if sim == null or sim.enemies.size() < 60:
+		return false
+	var group := _dense_vfx_group(str(event.get("kind", "")))
+	if group.is_empty():
+		return false
+	var radius := 78.0 if sim.enemies.size() < 100 else 104.0
+	for index in range(effects.size() - 1, -1, -1):
+		var existing: Dictionary = effects[index]
+		if str(existing.get("merge_group", "")) != group:
+			continue
+		if Vector2(existing.get("pos", Vector2.ZERO)).distance_to(Vector2(event.get("pos", Vector2.ZERO))) > radius:
+			continue
+		existing.life = maxf(float(existing.get("life", 0.0)), 0.16)
+		if event.get("value", 0) is int or event.get("value", 0) is float:
+			existing.value = float(existing.get("value", 0.0)) + float(event.get("value", 0.0))
+		effects[index] = existing
+		return true
+	return false
 func accept_events(batch: Array[Dictionary]) -> void:
 	for event in batch:
 		if event.kind == "death" and enemy_sequences.has_enemy(str(event.get("enemy_kind", ""))) and enemy_death_visuals.size() < (24 if sim != null and sim.enemies.size() >= 100 else 48):
@@ -260,14 +286,18 @@ func accept_events(batch: Array[Dictionary]) -> void:
 					var facing := float(hero.get("facing", 1.0))
 					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","")},0.16))
 			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "arena_event", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "goblin_spawn", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
+				if _try_merge_dense_vfx(event):
+					continue
 				if sim != null and not sim.performance_budget.can_spawn_cosmetic(str(event.kind), effects.size()):
 					continue
 				var visual_event: Dictionary = event.duplicate(true)
+				visual_event.merge_group = _dense_vfx_group(str(event.kind))
 				if event.kind == "enemy_shot":
 					visual_event.direction = Vector2(event.get("target", event.pos)) - Vector2(event.pos)
+					visual_event.target = Vector2(event.get("target", event.pos))
 				visual_event.feedback_theme = feedback.theme
 				visual_event.feedback_theme_id = feedback.theme_id
-				var effect_duration := 0.6
+				var effect_duration := float(event.get("duration", 0.6))
 				if str(event.kind).begins_with("skill_"):
 					effect_duration = 1.05
 				elif event.kind == "slash":
@@ -432,7 +462,7 @@ func _draw_stage_exit() -> void:
 
 func _draw_enemy_telegraphs() -> void:
 	for enemy: Dictionary in sim.enemies:
-		if bool(enemy.get("attack_pending", false)):
+		if bool(enemy.get("attack_pending", false)) and float(enemy.get("attack_range", 0.0)) > 0.0:
 			var center := world_to_screen(enemy.get("warning_pos", enemy.pos))
 			var radius := float(enemy.get("warning_radius", 60.0)) * 0.62 * world_depth_scale(enemy.pos)
 			var ratio := clampf(float(enemy.get("warning_timer", 0.0)) / 1.05, 0.0, 1.0)
@@ -1670,12 +1700,17 @@ func _draw_effect(effect: Dictionary) -> void:
 			draw_arc(effect.pos, 24.0 + ring * 22.0 + t * 95.0, 0, TAU, 48, Color(1.0, 0.20, 0.38, fade * (0.8 - ring * 0.14)), 4.0, true)
 		caption(effect.pos + Vector2(-48, -105 - t * 35), "裂隙震荡", Color(1.0, 0.55, 0.66, fade), 20)
 	elif effect.kind == "enemy_shot":
-		var direction: Vector2 = Vector2(effect.get("direction", Vector2.LEFT)).normalized()
-		if direction.length_squared() < 0.1:
-			direction = Vector2.LEFT
-		var travel: Vector2 = direction * 150.0
-		var projectile_point: Vector2 = Vector2(effect.pos) + Vector2(0, -22) + travel * t
+		var travel: Vector2 = Vector2(effect.get("direction", Vector2.LEFT))
+		if travel.length_squared() < 0.1:
+			travel = Vector2.LEFT * 80.0
+		var start := Vector2(0, -22)
+		var landing := travel + Vector2(0, -12)
+		var arc_height := clampf(travel.length() * 0.16, 22.0, 58.0)
+		var projectile_point := start.lerp(landing, t) + Vector2(0, -sin(t * PI) * arc_height)
+		var tangent := (landing - start) + Vector2(0, -cos(t * PI) * arc_height * PI)
+		var direction := tangent.normalized()
 		var enemy_kind := str(effect.get("enemy_kind", ""))
+		draw_ellipse_shadow(landing + Vector2(0, 9), 12.0 * (1.0 - t * 0.4), Color(0, 0, 0, fade * 0.30))
 		if enemy_kind == "ranged":
 			var side := direction.orthogonal()
 			draw_line(projectile_point - direction * 16.0, projectile_point + direction * 12.0, Color(1.0, 0.86, 0.62, fade), 3.2, true)
@@ -1685,8 +1720,11 @@ func _draw_effect(effect: Dictionary) -> void:
 				draw_arc(projectile_point, 7.0 + ring * 4.0, clock * (1.0 + ring * 0.3), clock * (1.0 + ring * 0.3) + PI * 1.55, 18, Color(0.40, 1.0, 0.78, fade * (0.92 - ring * 0.22)), 2.5, true)
 			draw_circle(projectile_point, 5.0, Color(0.88, 1.0, 0.96, fade))
 		else:
-			draw_line(effect.pos + Vector2(0, -22), effect.pos + Vector2(0, -22) + travel, Color(1.0, 0.42, 0.30, fade * 0.45), 3.0, true)
+			draw_line(start, projectile_point, Color(1.0, 0.42, 0.30, fade * 0.25), 2.0, true)
 			draw_circle(projectile_point, 4.0, Color(1.0, 0.8, 0.55, fade))
+		if t > 0.88:
+			var impact_alpha := (t - 0.88) / 0.12
+			draw_arc(landing, 7.0 + impact_alpha * 18.0, 0, TAU, 22, Color(1.0, 0.48, 0.32, fade * (1.0 - impact_alpha)), 2.5, true)
 	elif effect.kind == "reward_taken":
 		var mythic := str(effect.get("rarity", "")) == "mythic"
 		var reward_color := Color(1.0, 0.38, 0.68, fade) if mythic else Color(1.0, 0.86, 0.54, fade)

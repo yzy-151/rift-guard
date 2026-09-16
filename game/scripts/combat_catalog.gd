@@ -10,7 +10,7 @@ const ENEMIES = {
 	"runner": {"name": "哥布林", "hp": 72.0, "armor": 0.0, "speed": 92.0, "damage": 12.0, "rate": 1.35, "leak": 6, "color": "#e6c77b", "size": 39.0},
 	"armored": {"name": "铁桶僵尸", "hp": 230.0, "armor": 92.0, "speed": 31.0, "damage": 29.0, "rate": 0.82, "leak": 15, "color": "#b19fc9", "size": 62.0},
 	"flyer": {"name": "浮空猎手", "hp": 88.0, "armor": 8.0, "speed": 78.0, "damage": 12.0, "rate": 1.15, "leak": 9, "color": "#80d7d7", "size": 43.0, "flying": true},
-	"ranged": {"name": "丘丘弓箭手", "hp": 128.0, "armor": 12.0, "speed": 43.0, "damage": 21.0, "rate": 0.72, "leak": 12, "color": "#e58b73", "size": 48.0, "attack_range": 300.0, "projectile_style": "arrow"},
+	"ranged": {"name": "丘丘弓箭手", "hp": 128.0, "armor": 12.0, "speed": 43.0, "damage": 21.0, "rate": 0.72, "leak": 12, "color": "#e58b73", "size": 48.0, "attack_range": 235.0, "projectile_style": "arrow"},
 	"buffer": {"name": "丘丘萨满", "hp": 155.0, "armor": 18.0, "speed": 36.0, "damage": 18.0, "rate": 0.68, "leak": 14, "color": "#67d8b0", "size": 54.0, "attack_range": 300.0, "aura_radius": 155.0, "projectile_style": "anemo_orb"},
 	"shielded": {"name": "皮卡超人", "hp": 520.0, "armor": 105.0, "speed": 20.0, "damage": 55.0, "rate": 0.64, "leak": 28, "color": "#76a6d8", "size": 92.0, "shield": 260.0, "large_scale": 3.75},
 	"charger": {"name": "野猪骑士", "hp": 175.0, "armor": 20.0, "speed": 50.0, "damage": 38.0, "rate": 0.92, "leak": 16, "color": "#ef795b", "size": 58.0, "charge_multiplier": 2.15},

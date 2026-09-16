@@ -311,14 +311,15 @@ func show_line() -> void:
 	body.show()
 	body.bbcode_enabled = true
 	body.text = "[center]%s[/center]" % str(line.text)
-	body.visible_characters = 0
+	body.visible_characters = -1
 	body.modulate = Color(1, 1, 1, 0)
-	letters = 0.0
-	line_ended = false
+	letters = float(body.get_total_character_count())
+	line_ended = true
 	auto_timer = 0.0
 	_configure_choices(line)
 	progress.text = ("" if director.has_choices() else "战场已暂停   ·   %02d / %02d" % [director.index + 1, director.lines.size()])
 	_animate_line_entrance(str(line.get("highlight", "main")))
+	_reveal_choices_after_pop(director.index)
 	if cue_sound != null:
 		cue_sound.pitch_scale = 0.98 + float(director.index % 3) * 0.035
 		cue_sound.play()
@@ -339,6 +340,8 @@ func _animate_line_entrance(highlight: String) -> void:
 	portrait.modulate = Color(main_tint.r, main_tint.g, main_tint.b, 0.0)
 	partner.modulate = Color(partner_tint.r, partner_tint.g, partner_tint.b, 0.0)
 	dialogue_box.position.x = -940.0
+	body.pivot_offset = body.size * 0.5
+	body.scale = Vector2(1.055, 1.055)
 	var entrance := create_tween().set_parallel(true)
 	entrance.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	entrance.tween_property(portrait, "position", main_target, 0.34)
@@ -352,10 +355,18 @@ func _animate_line_entrance(highlight: String) -> void:
 	entrance.set_trans(Tween.TRANS_EXPO)
 	entrance.tween_property(dialogue_box, "position:x", 250.0, 0.22)
 	entrance.tween_property(body, "modulate", Color.WHITE, 0.13).set_delay(0.10)
+	entrance.tween_property(body, "scale", Vector2.ONE, 0.20).set_delay(0.08)
 	if highlight == "main":
 		portrait.position.x -= 16.0
 	else:
 		partner.position.x += 16.0
+
+func _reveal_choices_after_pop(expected_index: int) -> void:
+	await get_tree().create_timer(0.16).timeout
+	if root != null and root.visible and director.active and director.index == expected_index:
+		if end_sound != null:
+			end_sound.play()
+		_reveal_choices()
 
 func _process(dt: float) -> void:
 	if root == null or not root.visible or history_panel.visible:
@@ -366,17 +377,10 @@ func _process(dt: float) -> void:
 		transition_texture.texture = load("res://assets/helltaker/transitions/transition%04d.png" % (frame + 2))
 		if transition_time <= 0.0:
 			transition_texture.hide()
-	letters += dt * 52.0
-	body.visible_characters = mini(int(letters), body.get_total_character_count())
-	if not line_ended and body.visible_characters >= body.get_total_character_count():
-		line_ended = true
-		end_sound.play()
-		_reveal_choices()
-	if body.visible_characters >= body.get_total_character_count() and auto_mode:
+	if line_ended and auto_mode and not director.has_choices():
 		auto_timer += dt
 		if auto_timer > 2.0:
 			advance()
-
 func _configure_choices(line: Dictionary) -> void:
 	var options: Array = line.get("choices", [])
 	for i in choice_buttons.size():
@@ -470,7 +474,7 @@ func advance() -> void:
 		_reveal_choices()
 		return
 	if director.advance():
-		body.visible_characters = 0
+		body.visible_characters = -1
 		body.modulate = Color(1, 1, 1, 0)
 		show_line()
 	else:

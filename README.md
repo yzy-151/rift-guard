@@ -11,6 +11,21 @@
 - 敌人包含近战、远程、飞行、护盾、增益与史莱姆家族，并配置六名三阶段 Boss。
 - 火、水、雷、冰、风、岩元素参与反应，旅行者可在局内选择元素并通过高阶卡牌获得双元素。
 
+## V53 战斗 HUD、Boss 演出与敌人逻辑升级
+
+V53 将顶部三段敌情条收成中央小型敌情牌，队伍生命/能量条完整收进角色卡；Boss 使用更厚的风格化血条、红色场景染色与入场预警演出。近战敌人不再显示攻击范围，丘丘弓箭手射程降低且箭矢飞抵真实落点；高密度特效按空间合并但保留全部伤害，刷怪编队和墙门寻路也已重构。
+
+剧情正文取消打字机，改为整段文字轻微放大后回落；小字与数值改用规整半粗字体，Helltaker 风格装饰字体仅用于大标题、关卡与 Boss。
+
+![V53 紧凑敌情牌](docs/v53-validation/battle-compact-forecast.png)
+
+![V53 Boss 入场](docs/v53-validation/battle-boss-hud.png)
+
+![V53 剧情选项](docs/v53-validation/dialogue-instant-choice.png)
+
+- V53 发布说明：[V53-RELEASE-NOTES.md](docs/V53-RELEASE-NOTES.md)
+- Windows 发布包：`builds/rift-guard-v53/RiftGuard-V53.exe`
+
 ## V52 战斗表现、性能与音频修整
 
 V52 移除芙宁娜全部旧运行时素材，只保留 `hero_03` 新帧序列；旅行者与芙宁娜放大至 106%，希露菲恢复原尺寸，皮卡超人提升为 3.75 倍大型单位。键盘移动不再生成点击标记，队友改为沿旅行者历史轨迹延迟跟随，底部角色生命条与能量条进一步压窄。
@@ -20,7 +35,7 @@ V52 移除芙宁娜全部旧运行时素材，只保留 `hero_03` 新帧序列�
 ![V52 紧凑 Boss 血条验收](docs/v52-validation/compact-boss-hud.png)
 
 - V52 发布说明：[V52-RELEASE-NOTES.md](docs/V52-RELEASE-NOTES.md)
-- Windows 发布包：`builds/rift-guard-v52/RiftGuard-V52.exe`
+- V52 历史发布包已由 V53 替换。
 
 ## V51 三角色与八类怪物全序列动画
 
@@ -74,7 +89,7 @@ V48 将八个普通关卡拆为背景、气氛、地面、路线、地形、建�
 
 ## 运行
 
-- Windows 发布包：`builds/rift-guard-v52/RiftGuard-V52.exe`
+- Windows 发布包：`builds/rift-guard-v53/RiftGuard-V53.exe`
 - Godot 工程：`game/project.godot`
 - 发布规格（窗口与验收截图）：1920×1080
 - UI 实验台逻辑坐标：1280×720（运行时按 1.5 倍等比缩放）
