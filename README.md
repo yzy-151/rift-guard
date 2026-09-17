@@ -45,7 +45,7 @@
 - Godot 工程：`game/project.godot`
 - 设计与验收分辨率：`1920×1080`
 - UI 实验台逻辑坐标：`1280×720`，运行时等比缩放
-- Windows 发布包：`builds/rift-guard-v61/RiftGuard-V61.exe`
+- Windows 发布包：`builds/rift-guard-v62/RiftGuard-V62.exe`
 
 使用 Godot 4.4.1 打开工程后运行主场景即可。UI 布局与素材替换方法见 [Godot UI 编辑手册](docs/UI-GODOT-EDITING-MANUAL.md)。
 
