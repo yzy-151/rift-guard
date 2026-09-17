@@ -116,7 +116,7 @@ func close() -> void:
 		closed.emit())
 
 func _reset_defaults() -> void:
-	var defaults := {"master": 0.82, "music": 0.62, "sfx": 0.78, "fullscreen": false, "reduced_effects": false}
+	var defaults := {"master": 0.82, "music": 0.46, "sfx": 0.90, "fullscreen": false, "reduced_effects": false}
 	for key: String in defaults:
 		setting_changed.emit(key, defaults[key])
 	open(defaults)

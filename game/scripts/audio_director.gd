@@ -10,8 +10,8 @@ const TRACKS := {
 
 var values := {
 	"master": 0.82,
-	"music": 0.62,
-	"sfx": 0.78,
+	"music": 0.46,
+	"sfx": 0.90,
 	"fullscreen": false,
 	"reduced_effects": false
 }

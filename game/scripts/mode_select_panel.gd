@@ -9,15 +9,24 @@ const MUTED := Color("#a99199")
 const ACCENT := Color("#ff4f66")
 const DARK := Color("#09070b")
 const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
+const MODE_GRAY = preload("res://assets/ui/rift_v2/components/mode_card_gray.png")
+const MODE_RED = preload("res://assets/ui/rift_v2/components/mode_card_red.png")
+const CHECKPOINT_SKIN = preload("res://assets/ui/rift_v2/components/mode_checkpoint.png")
+const SMALL_BUTTON = preload("res://assets/ui/rift_v2/components/button_small.png")
+const SETTINGS_SKIN = preload("res://assets/ui/rift_v2/components/mission_header.png")
+const CONTINUE_GLYPH = preload("res://assets/ui/rift_v2/components/ritCode0001.png")
 
 var root: Control
 var hud
 var buttons: Dictionary = {}
 var card_panels: Dictionary = {}
+var action_skins: Dictionary = {}
 var settings_button: Button
 var continue_button: Button
 var checkpoint_title: Label
 var checkpoint_detail: Label
+var select_sound: AudioStreamPlayer
+var confirm_sound: AudioStreamPlayer
 
 func build(owner_hud) -> void:
 	hud = owner_hud
@@ -40,11 +49,13 @@ func build(owner_hud) -> void:
 	rule.color = ACCENT
 	root.add_child(rule)
 	owner_hud.label(root, Vector2(74, 124), Vector2(760, 20), "不同模式使用独立规则与地图，强化均可无限叠加。", 12, MUTED)
-	settings_button = _command_button(Rect2(1030, 54, 180, 46), "⚙  设置  F10")
-	settings_button.pressed.connect(func(): settings_requested.emit())
+	settings_button = _textured_button(root, Rect2(1030, 52, 180, 47), SETTINGS_SKIN, "⚙  设置  F10", true)
+	settings_button.pressed.connect(func(): _play(confirm_sound); settings_requested.emit())
 	_build_mode_card(Rect2(70, 176, 548, 330), "rift_watch", "01", "裂隙守望", "多角色路线防守", "八关剧情战役 · 折线路径 · 固定 Boss\n守卫水晶，并在每关重建卡牌构筑", "进入关卡选择", "res://assets/ui/rift_v2/stage_thumbnails/stage_03.png", true)
 	_build_mode_card(Rect2(662, 176, 548, 330), "endless_survival", "∞", "无尽生存", "四屏追击生存", "四边刷怪 · 无限升级 · 动态地形\n操纵旅行者移动，同行者跟随攻击", "立即进入荒原", "res://assets/ui/rift_v2/stage_thumbnails/stage_08.png", false)
 	_build_checkpoint()
+	select_sound = _audio("res://assets/helltaker/audio/button_chapter_highlight_01.wav", -7.0)
+	confirm_sound = _audio("res://assets/helltaker/audio/button_menu_confirm_01.wav", -4.0)
 	root.hide()
 
 func _add_red_horizon() -> void:
@@ -69,10 +80,11 @@ func _build_mode_card(rect: Rect2, id: String, number: String, title: String, su
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 		item.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	buttons[id] = item
-	var panel := Panel.new()
+	var panel := NinePatchRect.new()
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.add_theme_stylebox_override("panel", _card_style(active, false))
+	panel.texture = MODE_RED if active else MODE_GRAY
+	_set_nine_patch(panel, 38)
 	item.add_child(panel)
 	card_panels[id] = panel
 	var preview := TextureRect.new()
@@ -100,31 +112,45 @@ func _build_mode_card(rect: Rect2, id: String, number: String, title: String, su
 	hud.label(item, Vector2(34, 158), Vector2(470, 26), subtitle, 16, ACCENT if active else Color("#b899a0"))
 	var copy: Label = hud.label(item, Vector2(34, 204), Vector2(470, 58), description, 13, MUTED)
 	copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	var action := Panel.new()
+	var action := TextureRect.new()
 	action.position = Vector2(34, 274)
-	action.size = Vector2(350, 40)
+	action.size = Vector2(352, 40)
 	action.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	action.add_theme_stylebox_override("panel", _action_style(active))
+	action.texture = SMALL_BUTTON
+	action.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	action.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	action.modulate = Color.WHITE if active else Color(0.48, 0.46, 0.49, 0.82)
 	item.add_child(action)
+	action_skins[id] = action
 	var action_label: Label = hud.label(action, Vector2(18, 7), Vector2(312, 25), action_text + "   →", 15, WHITE)
 	action_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	item.focus_entered.connect(_focus_mode.bind(id))
-	item.mouse_entered.connect(func(): item.grab_focus())
-	item.pressed.connect(func(): root.hide(); chosen.emit(id))
+	item.mouse_entered.connect(func(): _play(select_sound); item.grab_focus())
+	item.pressed.connect(func(): _play(confirm_sound); root.hide(); chosen.emit(id))
 
 func _build_checkpoint() -> void:
-	var panel := Panel.new()
+	var panel := TextureRect.new()
 	panel.position = Vector2(70, 544)
-	panel.size = Vector2(1140, 126)
-	panel.add_theme_stylebox_override("panel", _checkpoint_style())
+	panel.size = Vector2(1140, 147)
+	panel.texture = CHECKPOINT_SKIN
+	panel.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	panel.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	root.add_child(panel)
 	var glyph: Label = hud.label(panel, Vector2(22, 30), Vector2(42, 48), "♆", 32, ACCENT)
 	glyph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	checkpoint_title = hud.label(panel, Vector2(78, 18), Vector2(720, 28), "远征检查点", 19, WHITE)
 	checkpoint_detail = hud.label(panel, Vector2(78, 50), Vector2(740, 48), "", 11, MUTED)
 	checkpoint_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	continue_button = _command_button(Rect2(862, 580, 310, 54), "继续远征   →")
-	continue_button.pressed.connect(func(): continue_requested.emit())
+	continue_button = _textured_button(root, Rect2(862, 584, 310, 54), SMALL_BUTTON, "", true)
+	var continue_icon := TextureRect.new()
+	continue_icon.texture = CONTINUE_GLYPH
+	continue_icon.position = Vector2(55, 2)
+	continue_icon.size = Vector2(200, 50)
+	continue_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	continue_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	continue_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	continue_button.add_child(continue_icon)
+	continue_button.pressed.connect(func(): _play(confirm_sound); continue_requested.emit())
 
 func _command_button(rect: Rect2, text_value: String) -> Button:
 	var item: Button = hud.button(root, rect, text_value, false)
@@ -170,13 +196,48 @@ func _button_style(fill: Color, border: Color) -> StyleBoxFlat:
 func _focus_mode(id: String) -> void:
 	for mode_id: String in card_panels:
 		var focused := mode_id == id
-		card_panels[mode_id].add_theme_stylebox_override("panel", _card_style(mode_id == "rift_watch", focused))
-		buttons[mode_id].modulate = Color.WHITE if focused else Color(0.82, 0.79, 0.82, 0.96)
+		card_panels[mode_id].texture = MODE_RED if focused else MODE_GRAY
+		buttons[mode_id].modulate = Color.WHITE if focused else Color(0.72, 0.70, 0.73, 0.94)
+		action_skins[mode_id].modulate = Color("#ff526a") if focused else Color(0.44,0.42,0.45,0.82)
+
+func _textured_button(parent: Control, rect: Rect2, texture: Texture2D, text_value: String, bright: bool) -> Button:
+	var item: Button = hud.button(parent, rect, text_value, false)
+	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+		item.add_theme_stylebox_override(state, StyleBoxEmpty.new())
+	var skin := TextureRect.new()
+	skin.texture = texture
+	skin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	skin.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	skin.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	skin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	skin.modulate = Color("#ff526a") if bright else Color(0.78, 0.74, 0.79, 0.94)
+	item.add_child(skin)
+	item.move_child(skin, 0)
+	item.mouse_entered.connect(func(): _play(select_sound); skin.modulate = Color.WHITE)
+	item.mouse_exited.connect(func(): skin.modulate = Color("#ff526a") if bright else Color(0.78, 0.74, 0.79, 0.94))
+	return item
+
+func _set_nine_patch(node: NinePatchRect, margin: int) -> void:
+	for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
+		node.set_patch_margin(side, margin)
+
+func _audio(path: String, gain: float) -> AudioStreamPlayer:
+	var player := AudioStreamPlayer.new()
+	player.stream = load(path)
+	player.bus = "SFX"
+	player.volume_db = gain
+	add_child(player)
+	return player
+
+func _play(player: AudioStreamPlayer) -> void:
+	if player != null:
+		player.stop()
+		player.play()
 
 func activate_at(point: Vector2) -> bool:
 	if not is_open(): return false
-	if continue_button != null and not continue_button.disabled and continue_button.get_global_rect().has_point(point): continue_requested.emit(); return true
-	if settings_button != null and settings_button.get_global_rect().has_point(point): settings_requested.emit(); return true
+	if continue_button != null and not continue_button.disabled and continue_button.get_global_rect().has_point(point): _play(confirm_sound); continue_requested.emit(); return true
+	if settings_button != null and settings_button.get_global_rect().has_point(point): _play(confirm_sound); settings_requested.emit(); return true
 	for id: String in buttons:
 		var item: Button = buttons[id]
 		if not item.disabled and item.get_global_rect().has_point(point): item.pressed.emit(); return true

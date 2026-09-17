@@ -3,6 +3,9 @@ extends CanvasLayer
 signal confirmed(squad: Array[String])
 signal cancelled
 const Preview = preload("res://scripts/character_breath_preview.gd")
+const CARD_SKIN = preload("res://assets/ui/rift_v2/components/mode_card_red.png")
+const BUTTON_SKIN = preload("res://assets/ui/rift_v2/components/button0003.png")
+const LEIGAI_FONT = preload("res://assets/fonts/Leigai.ttf")
 const WHITE := Color("#f3e9df")
 const MUTED := Color("#a69098")
 const ACCENT := Color("#ff5668")
@@ -19,6 +22,7 @@ var buttons: Dictionary = {}
 var state_labels: Dictionary = {}
 var previews: Dictionary = {}
 var card_panels: Dictionary = {}
+var card_frames: Dictionary = {}
 var grid_scroll: ScrollContainer
 var grid_host: Control
 var database
@@ -39,6 +43,7 @@ var detail_confirm: Button
 var detail_close: Button
 var detail_id := ""
 var select_sound: AudioStreamPlayer
+var confirm_sound: AudioStreamPlayer
 
 func build(owner_hud, game_database, state) -> void:
 	hud = owner_hud; database = game_database; progress = state; layer = 45
@@ -50,17 +55,16 @@ func build(owner_hud, game_database, state) -> void:
 	title = hud.label(frame, Vector2(28,38), Vector2(720,36), "选择下一关出战角色", 27, WHITE)
 	subtitle = hud.label(frame, Vector2(28,76), Vector2(850,20), "旅行者固定出战 · 最多选择三名角色 · 点击卡片查看详情", 12, MUTED)
 	count_label = hud.label(frame, Vector2(930,42), Vector2(220,28), "", 16, ACCENT); count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	back_button = _button(frame, Rect2(1035,82,120,36), "← 返回", false); back_button.pressed.connect(func(): root.hide(); cancelled.emit())
 	var rule := ColorRect.new(); rule.position = Vector2(28,112); rule.size = Vector2(1156,2); rule.color = Color("#9d4657"); frame.add_child(rule)
 	grid_scroll = ScrollContainer.new(); grid_scroll.position = Vector2(28,130); grid_scroll.size = Vector2(1156,426); grid_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; grid_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO; grid_scroll.clip_contents = true; frame.add_child(grid_scroll)
 	grid_host = Control.new(); var order: Array[String] = []; for id: String in database.characters: order.append(id)
 	var rows := ceili(float(order.size()) / 4.0); grid_host.custom_minimum_size = Vector2(1138, rows * 126 + maxi(0,rows-1)*14 + 8); grid_scroll.add_child(grid_host)
 	for i in order.size(): _build_character_card(order[i], i)
-	confirm_button = _button(frame, Rect2(735,588,420,50), "确认编队并进入下一关   →", true); confirm_button.add_theme_font_size_override("font_size",16); confirm_button.pressed.connect(confirm)
-	back_button = _button(frame, Rect2(28,588,160,50), "← 返回选关", false); back_button.pressed.connect(func(): root.hide(); cancelled.emit())
-	hud.label(frame, Vector2(218,601), Vector2(480,24), "滚轮浏览角色 · 红色高亮为当前出战", 11, MUTED)
+	back_button = _button(frame, Rect2(28,588,546,50), "←  返回上一级", false); back_button.pressed.connect(func(): root.hide(); cancelled.emit())
+	confirm_button = _button(frame, Rect2(609,588,546,50), "确认编队并进入下一关  →", true); confirm_button.add_theme_font_size_override("font_size",16); confirm_button.pressed.connect(confirm)
 	_build_detail()
-	select_sound = AudioStreamPlayer.new(); select_sound.stream = preload("res://assets/helltaker/audio/button_chapter_highlight_01.wav"); select_sound.bus="SFX"; select_sound.volume_db=-12; add_child(select_sound)
+	select_sound = AudioStreamPlayer.new(); select_sound.stream = preload("res://assets/helltaker/audio/button_chapter_highlight_01.wav"); select_sound.bus="SFX"; select_sound.volume_db=-7; add_child(select_sound)
+	confirm_sound = AudioStreamPlayer.new(); confirm_sound.stream = preload("res://assets/helltaker/audio/button_chapter_confirm_01.wav"); confirm_sound.bus="SFX"; confirm_sound.volume_db=-3; add_child(confirm_sound)
 	root.hide()
 
 func _build_character_card(id: String, index: int) -> void:
@@ -68,7 +72,16 @@ func _build_character_card(id: String, index: int) -> void:
 	var rect := Rect2(Vector2(col*282,row*140),Vector2(268,126)); var item: Button = hud.button(grid_host,rect,"",true); item.position=rect.position; item.size=rect.size; item.name="Squad_"+id
 	for s in ["normal","hover","pressed","focus","disabled"]: item.add_theme_stylebox_override(s,StyleBoxEmpty.new())
 	buttons[id]=item
-	var panel:=Panel.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); panel.mouse_filter=Control.MOUSE_FILTER_IGNORE; panel.add_theme_stylebox_override("panel",_card_style(Color("#6c414b"),false)); item.add_child(panel); card_panels[id]=panel
+	var panel:=Panel.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); panel.mouse_filter=Control.MOUSE_FILTER_IGNORE; panel.add_theme_stylebox_override("panel",StyleBoxEmpty.new()); item.add_child(panel); card_panels[id]=panel
+	var frame_skin:=NinePatchRect.new()
+	frame_skin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame_skin.texture=CARD_SKIN
+	frame_skin.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]:
+		frame_skin.set_patch_margin(side,34)
+	frame_skin.modulate=Color(1,1,1,0.34)
+	panel.add_child(frame_skin)
+	card_frames[id]=frame_skin
 	var element:=str(data.get("element","none")); var color:Color=ELEMENT_COLORS.get(element,WHITE)
 	var preview=Preview.new(); preview.position=Vector2(9,12); preview.size=Vector2(88,102); panel.add_child(preview); preview.configure(id,database.assets.get(str(data.get("asset_key","")),{}),color,not progress.unlocked_characters.has(id)); previews[id]=preview
 	var badge: Label = hud.label(panel,Vector2(108,13),Vector2(32,23),_element_glyph(element),12,color); badge.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
@@ -77,7 +90,7 @@ func _build_character_card(id: String, index: int) -> void:
 	hud.label(panel,Vector2(108,51),Vector2(146,18),str(data.get("role","战斗成员")),10,WHITE)
 	hud.label(panel,Vector2(108,73),Vector2(146,18),"HP %d  ·  ATK %d"%[int(data.get("max_hp",0)),int(data.get("attack",0))],9,MUTED)
 	var state: Label = hud.label(panel,Vector2(108,99),Vector2(146,17),"",10,ACCENT); state.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT; state_labels[id]=state
-	item.pressed.connect(_open_detail.bind(id)); item.mouse_entered.connect(func(): item.grab_focus(); _play_select())
+	item.pressed.connect(_open_detail.bind(id)); item.mouse_entered.connect(_card_hover.bind(id,true)); item.mouse_exited.connect(_card_hover.bind(id,false))
 
 func _build_detail() -> void:
 	detail_panel=Panel.new(); detail_panel.position=Vector2(52,32); detail_panel.size=Vector2(1108,620); detail_panel.add_theme_stylebox_override("panel",_panel_style(Color("#ff5a6d"),3)); detail_panel.hide(); frame.add_child(detail_panel)
@@ -89,35 +102,35 @@ func _build_detail() -> void:
 	detail_stats=VBoxContainer.new(); detail_stats.position=Vector2(430,125); detail_stats.size=Vector2(620,230); detail_stats.add_theme_constant_override("separation",8); detail_panel.add_child(detail_stats)
 	var q_icon:=_ability_icon(detail_panel,Vector2(430,372),"Q",Color("#ff6173")); detail_skill_title=hud.label(detail_panel,Vector2(486,370),Vector2(560,24),"",15,WHITE); detail_skill_body=hud.label(detail_panel,Vector2(486,397),Vector2(560,48),"",11,MUTED); detail_skill_body.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	var e_icon:=_ability_icon(detail_panel,Vector2(430,458),"E",Color("#f2c86f")); detail_ultimate_title=hud.label(detail_panel,Vector2(486,456),Vector2(560,24),"",15,WHITE); detail_ultimate_body=hud.label(detail_panel,Vector2(486,483),Vector2(560,48),"",11,MUTED); detail_ultimate_body.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-	detail_close=_button(detail_panel,Rect2(30,552,176,42),"← 返回角色列表",false); detail_close.pressed.connect(func(): detail_panel.hide())
-	detail_confirm=_button(detail_panel,Rect2(724,546,330,48),"确认选择",true); detail_confirm.pressed.connect(_confirm_detail)
+	detail_close=_button(detail_panel,Rect2(30,546,500,50),"←  返回角色列表",false); detail_close.pressed.connect(func(): detail_panel.hide())
+	detail_confirm=_button(detail_panel,Rect2(556,546,500,50),"确认选择  →",true); detail_confirm.pressed.connect(_confirm_detail)
 
 func _ability_icon(parent:Control,pos:Vector2,key:String,color:Color)->Panel:
 	var p:=Panel.new(); p.position=pos; p.size=Vector2(44,44); p.add_theme_stylebox_override("panel",_panel_style(color,2)); parent.add_child(p); var l: Label = hud.label(p,Vector2.ZERO,p.size,key,20,color); l.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; l.vertical_alignment=VERTICAL_ALIGNMENT_CENTER; return p
 
 func _open_detail(id:String)->void:
 	if not progress.unlocked_characters.has(id): return
-	_play_select(); detail_id=id; var data:Dictionary=database.characters[id]; var color:Color=ELEMENT_COLORS.get(str(data.get("element","none")),WHITE)
+	_play_confirm(); detail_id=id; var data:Dictionary=database.characters[id]; var color:Color=ELEMENT_COLORS.get(str(data.get("element","none")),WHITE)
 	detail_name.text="%s  /  %s"%[str(data.get("name",id)),_element_name(str(data.get("element","none")))]
 	detail_name.add_theme_color_override("font_color",color); detail_role.text=str(data.get("role","战斗成员"))
 	detail_preview.configure(id,database.assets.get(str(data.get("asset_key","")),{}),color,false)
 	for child in detail_stats.get_children(): child.queue_free()
 	var stats=[{"n":"生命","v":float(data.get("max_hp",1)),"m":900.0},{"n":"攻击","v":float(data.get("attack",1)),"m":80.0},{"n":"护甲","v":float(data.get("armor",1)),"m":80.0},{"n":"射程","v":float(data.get("attack_range",1)),"m":500.0},{"n":"攻速","v":float(data.get("attack_rate",1)),"m":2.5},{"n":"移速","v":float(data.get("move_speed",1)),"m":150.0}]
 	for stat in stats: _add_stat_bar(str(stat.n),float(stat.v),float(stat.m),color)
-	var skill:Dictionary=data.get("skill",{}); var ultimate:Dictionary=data.get("ultimate",{})
-	detail_skill_title.text="Q · "+str(skill.get("name","主动战技")); detail_skill_body.text=str(skill.get("description","释放角色专属战技。"))
-	detail_ultimate_title.text="E · "+str(ultimate.get("name","终结技")); detail_ultimate_body.text=str(ultimate.get("description","消耗能量释放终结技。"))
+	var skill:Dictionary=data.get("active_skill",{}); var ultimate:Dictionary=data.get("ultimate",{})
+	detail_skill_title.text="Q · "+str(skill.get("name","主动战技")); detail_skill_body.text=_ability_description(skill,false)
+	detail_ultimate_title.text="E · "+str(ultimate.get("name","终结技")); detail_ultimate_body.text=_ability_description(ultimate,true)
 	detail_confirm.text="移出队伍" if id in selected and id!="traveler" else ("已固定出战" if id=="traveler" else "确认选择")
 	detail_confirm.disabled=id=="traveler"; detail_panel.show(); detail_close.grab_focus()
 
 func _add_stat_bar(stat_name:String,value:float,maximum:float,color:Color)->void:
 	var row:=Control.new(); row.custom_minimum_size=Vector2(610,28); detail_stats.add_child(row)
-	var name_label: Label = hud.label(row,Vector2(0,3),Vector2(72,22),stat_name,11,WHITE)
+	var name_label: Label = hud.label(row,Vector2(0,1),Vector2(72,26),stat_name,12,WHITE); name_label.vertical_alignment=VERTICAL_ALIGNMENT_CENTER; name_label.add_theme_font_override("font",LEIGAI_FONT)
 	var track:=ProgressBar.new(); track.position=Vector2(78,5); track.size=Vector2(420,18); track.min_value=0; track.max_value=maximum; track.value=minf(value,maximum); track.show_percentage=false
 	var bg:=StyleBoxFlat.new(); bg.bg_color=Color("#21171e"); bg.corner_radius_top_left=3; bg.corner_radius_top_right=3; bg.corner_radius_bottom_left=3; bg.corner_radius_bottom_right=3
 	var fill:=StyleBoxFlat.new(); fill.bg_color=Color(color,0.82); fill.corner_radius_top_left=3; fill.corner_radius_top_right=3; fill.corner_radius_bottom_left=3; fill.corner_radius_bottom_right=3
 	track.add_theme_stylebox_override("background",bg); track.add_theme_stylebox_override("fill",fill); row.add_child(track)
-	var value_label: Label = hud.label(row,Vector2(510,2),Vector2(92,23),("%.2f"%value if stat_name=="攻速" else "%d"%roundi(value)),12,color); value_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
+	var value_label: Label = hud.label(row,Vector2(510,1),Vector2(92,26),("%.2f"%value if stat_name=="攻速" else "%d"%roundi(value)),12,color); value_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT; value_label.vertical_alignment=VERTICAL_ALIGNMENT_CENTER; value_label.add_theme_font_override("font",LEIGAI_FONT)
 
 func _confirm_detail()->void:
 	if detail_id.is_empty() or detail_id=="traveler": return
@@ -141,11 +154,11 @@ func confirm()->void:
 func activate_at(point:Vector2)->bool:
 	if not is_open():return false
 	if detail_panel.visible:
-		if detail_close.get_global_rect().has_point(point):detail_panel.hide();return true
-		if not detail_confirm.disabled and detail_confirm.get_global_rect().has_point(point):_confirm_detail();return true
+		if detail_close.get_global_rect().has_point(point):_play_confirm();detail_panel.hide();return true
+		if not detail_confirm.disabled and detail_confirm.get_global_rect().has_point(point):_play_confirm();_confirm_detail();return true
 		return true
-	if back_button.get_global_rect().has_point(point):root.hide();cancelled.emit();return true
-	if not confirm_button.disabled and confirm_button.get_global_rect().has_point(point):confirm();return true
+	if back_button.get_global_rect().has_point(point):_play_confirm();root.hide();cancelled.emit();return true
+	if not confirm_button.disabled and confirm_button.get_global_rect().has_point(point):_play_confirm();confirm();return true
 	for id:String in buttons:
 		if not buttons[id].disabled and buttons[id].get_global_rect().has_point(point):_open_detail(id);return true
 	return false
@@ -154,17 +167,65 @@ func _refresh()->void:
 	count_label.text="出战  %d / 3"%selected.size(); confirm_button.disabled=selected.is_empty() or selected.size()>3
 	for id:String in buttons:
 		var known: bool = progress.unlocked_characters.has(id); buttons[id].disabled=not known; var chosen:=id in selected
-		card_panels[id].add_theme_stylebox_override("panel",_card_style(ACCENT if chosen else (Color("#65414a") if known else Color("#30272b")),chosen)); state_labels[id].text="◆ 出战中" if chosen else ("点击查看详情" if known else "LOCKED / 未解锁"); state_labels[id].add_theme_color_override("font_color",ACCENT if chosen else MUTED); previews[id].set_locked(not known); buttons[id].modulate=Color.WHITE if known else Color(0.38,0.35,0.37,1)
+		card_frames[id].modulate=Color.WHITE if chosen else (Color(1,1,1,0.34) if known else Color(0.35,0.33,0.35,0.20)); state_labels[id].text="◆ 出战中" if chosen else ("点击查看详情" if known else "LOCKED / 未解锁"); state_labels[id].add_theme_color_override("font_color",ACCENT if chosen else MUTED); previews[id].set_locked(not known); buttons[id].modulate=Color.WHITE if known else Color(0.38,0.35,0.37,1)
 func _button(parent:Control,rect:Rect2,text_value:String,primary:bool)->Button:
-	var b: Button = hud.button(parent,rect,text_value,primary); b.add_theme_stylebox_override("normal",_button_style(Color("#43131f") if primary else Color("#171218"),ACCENT if primary else Color("#72505a"))); b.add_theme_stylebox_override("hover",_button_style(Color("#5b1727"),Color("#ff8796"))); b.add_theme_stylebox_override("focus",_button_style(Color("#5b1727"),Color("#ff8796"))); return b
+	var b: Button = hud.button(parent,rect,text_value,false)
+	for state in ["normal","hover","pressed","focus","disabled"]: b.add_theme_stylebox_override(state,StyleBoxEmpty.new())
+	var skin:=TextureRect.new(); skin.texture=BUTTON_SKIN; skin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); skin.expand_mode=TextureRect.EXPAND_IGNORE_SIZE; skin.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED; skin.mouse_filter=Control.MOUSE_FILTER_IGNORE; skin.modulate=Color("#ff526a") if primary else Color("#9b5663"); b.add_child(skin); b.move_child(skin,0)
+	b.mouse_entered.connect(func(): _play_select(); skin.modulate=Color.WHITE)
+	b.mouse_exited.connect(func(): skin.modulate=Color("#ff526a") if primary else Color("#9b5663"))
+	b.pressed.connect(_play_confirm)
+	return b
 func _button_style(fill:Color,border:Color)->StyleBoxFlat:
 	var s:=StyleBoxFlat.new();s.bg_color=fill;s.border_color=border;s.set_border_width_all(2);s.corner_radius_top_left=4;s.corner_radius_top_right=4;s.corner_radius_bottom_left=4;s.corner_radius_bottom_right=4;return s
 func _panel_style(border:Color,width:int)->StyleBoxFlat:
 	var s:=StyleBoxFlat.new();s.bg_color=Color(0.045,0.023,0.034,0.98);s.border_color=border;s.set_border_width_all(width);s.corner_radius_top_left=5;s.corner_radius_top_right=5;s.corner_radius_bottom_left=5;s.corner_radius_bottom_right=5;return s
 func _card_style(border:Color,selected_state:bool)->StyleBoxFlat:
 	var s:=_panel_style(border,3 if selected_state else 1);s.bg_color=Color("#140c12");s.shadow_color=Color(ACCENT,0.25 if selected_state else 0.0);s.shadow_size=7 if selected_state else 0;return s
+func _card_hover(id:String,entered:bool)->void:
+	if not progress.unlocked_characters.has(id): return
+	if entered:
+		buttons[id].grab_focus(); _play_select(); card_frames[id].modulate=Color.WHITE
+	else:
+		card_frames[id].modulate=Color.WHITE if id in selected else Color(1,1,1,0.34)
+
+func _ability_description(data:Dictionary,is_ultimate:bool)->String:
+	var kind:=str(data.get("kind",""))
+	var effect: String = str({
+		"blade_wave":"斩出贯穿剑气并击退沿途敌人",
+		"cryo_chord":"冰霜和弦冻结并削弱范围内目标",
+		"heal_gust":"治疗队友并赋予短暂风盾与加速",
+		"salon_summon":"召唤沙龙成员持续追击并附着水元素",
+		"hydro_burst":"引爆水浪造成范围伤害与水元素附着",
+		"sonic_wave":"释放音浪贯穿敌群并触发乐律增幅",
+		"arcane_lance":"发射高穿透源石长枪压制直线目标",
+		"frost_bloom":"绽放冰花冻结区域并持续造成冰伤",
+		"echo_shot":"发射回响弹并在目标间追加弹射",
+		"tribbie_gate":"部署量子门，使弹道复制并折跃攻击",
+		"mon3tr":"召唤 Mon3tr 冲锋拦截并撕裂敌阵",
+		"bangboo":"呼叫邦布协同射击并标记高威胁目标",
+		"starfall":"召唤星落轰击大范围并造成强击退",
+		"frozen_forest":"展开冻结领域，持续冰封并造成多段伤害",
+		"anemo_domain":"展开风域，持续牵引敌人并强化队友",
+		"hydro_fanfare":"进入万众狂欢，强化全队并引爆水元素",
+		"storm_field":"召唤雷暴领域，连续落雷触发感电",
+		"team_concert":"开启团队演唱会，大幅强化攻速与暴击",
+		"chimera":"释放奇美拉进行范围碾压与持续压制",
+		"fate_symphony":"奏响命运交响，扩散风元素并强化乐律",
+		"encore":"触发安可，复制近期支援并提升弹道数量",
+		"trinity_field":"展开三重共鸣领域，复制攻击与元素反应",
+		"meltdown":"命令 Mon3tr 熔毁，造成巨额范围爆发",
+		"network_overdrive":"全域超频邦布网络，提升射速并齐射"
+	}.get(kind,"释放角色专属能力并改变战场局势"))
+	var power:=int(data.get("power",0)); var radius:=int(data.get("radius",0))
+	if is_ultimate:
+		return "%s。威力 %d%% · 范围 %d · 能量 %d · 冷却 %.1fs"%[effect,power,radius,int(data.get("energy_cost",0)),float(data.get("cooldown",0.0))]
+	return "%s。威力 %d%% · 范围 %d · 冷却 %.1fs"%[effect,power,radius,float(data.get("cooldown",0.0))]
+
 func _play_select()->void:
 	if select_sound!=null:select_sound.stop();select_sound.play()
+func _play_confirm()->void:
+	if confirm_sound!=null:confirm_sound.stop();confirm_sound.play()
 func _element_name(element:String)->String:return {"none":"无元素","anemo":"风元素","electro":"雷元素","pyro":"火元素","hydro":"水元素","geo":"岩元素","cryo":"冰元素"}.get(element,element)
 func _element_glyph(element:String)->String:return {"none":"无","anemo":"风","electro":"雷","pyro":"火","hydro":"水","geo":"岩","cryo":"冰"}.get(element,"?")
 

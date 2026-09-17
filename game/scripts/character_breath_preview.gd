@@ -57,11 +57,13 @@ func _draw() -> void:
 		var breath := 1.0 if atlas_frames > 0 else 1.0 + sin(elapsed * PI) * 0.018
 		var lift := 0.0 if atlas_frames > 0 else sin(elapsed * PI) * 1.2
 		var bounds := Vector2(size.x - 10.0, size.y - 6.0) * breath
-		var destination := Rect2((size.x - bounds.x) * 0.5, size.y - bounds.y + lift, bounds.x, bounds.y)
 		var tint := Color(0.29, 0.29, 0.31, 0.82) if locked else Color.WHITE
 		if atlas_frames > 0:
 			var frame := posmod(floori(elapsed * atlas_fps), atlas_frames)
 			var source := Rect2(Vector2(frame % atlas_columns, frame / atlas_columns) * atlas_cell, atlas_cell)
+			var atlas_scale := minf(bounds.x / maxf(1.0, atlas_cell.x), bounds.y / maxf(1.0, atlas_cell.y))
+			var atlas_fitted := atlas_cell * atlas_scale
+			var destination := Rect2(Vector2((size.x - atlas_fitted.x) * 0.5, size.y - atlas_fitted.y + lift), atlas_fitted)
 			draw_texture_rect_region(source_texture, destination, source, tint)
 		else:
 			var texture_size := source_texture.get_size()
