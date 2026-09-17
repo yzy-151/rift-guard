@@ -1,7 +1,7 @@
 extends Resource
 class_name RiftUILayoutProfile
 
-@export var schema_version := 3
+@export var schema_version := 4
 
 @export_group("Mode Select")
 @export var mode_header_rect := Rect2(54, 22, 790, 134)
@@ -56,17 +56,19 @@ class_name RiftUILayoutProfile
 
 @export_group("Reward Select")
 @export var reward_background_rect := Rect2(0, 0, 1280, 720)
-@export var reward_header_rect := Rect2(105, 72, 1060, 128)
-@export var reward_grid_origin := Vector2(105, 223)
-@export var reward_card_size := Vector2(350, 326)
-@export var reward_card_gap := Vector2(10, 0)
-@export var reward_tag_rect := Rect2(24, 19, 302, 23)
-@export var reward_title_rect := Rect2(24, 58, 302, 42)
-@export var reward_preview_rect := Rect2(24, 116, 302, 46)
-@export var reward_description_rect := Rect2(24, 184, 302, 87)
-@export var reward_action_rect := Rect2(24, 280, 302, 26)
-@export var reward_history_rect := Rect2(108, 581, 1060, 66)
-@export var reward_footer_rect := Rect2(108, 670, 1060, 25)
+@export var reward_header_rect := Rect2(92, 38, 1096, 116)
+@export var reward_grid_origin := Vector2(140, 182)
+@export var reward_card_size := Vector2(300, 400)
+@export var reward_card_gap := Vector2(40, 0)
+@export var reward_tag_rect := Rect2(28, 36, 120, 37)
+@export var reward_title_rect := Rect2(35, 72, 145, 38)
+@export var reward_icon_slot_rect := Rect2(182, 41, 90, 90)
+@export var reward_icon_rect := Rect2(198, 57, 58, 58)
+@export var reward_preview_rect := Rect2(28, 143, 244, 47)
+@export var reward_description_rect := Rect2(28, 198, 244, 103)
+@export var reward_action_rect := Rect2(28, 310, 244, 38)
+@export var reward_history_rect := Rect2(140, 604, 1000, 48)
+@export var reward_footer_rect := Rect2(140, 676, 1000, 22)
 
 @export_group("Settings")
 @export var settings_background_rect := Rect2(0, 0, 1280, 720)

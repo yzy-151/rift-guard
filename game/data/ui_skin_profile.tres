@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="RiftUISkinProfile" load_steps=30 format=3]
+[gd_resource type="Resource" script_class="RiftUISkinProfile" load_steps=56 format=3]
 
 [ext_resource type="Script" path="res://scripts/rift_ui_skin_profile.gd" id="1_skin"]
 [ext_resource type="Texture2D" path="res://assets/ui/custom/choice_frame_dim.png" id="2_choice_gray"]
@@ -30,9 +30,36 @@
 [ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/buff_card_cyan.png" id="27_reward_cyan"]
 [ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/hud_topbar.png" id="28_battle_topbar"]
 [ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/hud_logo.png" id="29_battle_logo"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/01_rarity_frames/rarity_01_common_white_rgba.png" id="30_reward_common"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/01_rarity_frames/rarity_02_rare_blue_rgba.png" id="31_reward_rare"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/01_rarity_frames/rarity_03_epic_purple_rgba.png" id="32_reward_epic"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/01_rarity_frames/rarity_04_legendary_orange_rgba.png" id="33_reward_legendary"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/01_rarity_frames/rarity_05_genesis_rgba.png" id="34_reward_genesis"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/02_card_components/component_action_box_rgba.png" id="35_reward_action"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/02_card_components/component_detail_box_rgba.png" id="36_reward_detail"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/02_card_components/component_icon_slot_rgba.png" id="37_reward_icon_slot"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/02_card_components/component_small_tag_rgba.png" id="38_reward_tag"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/02_card_components/component_summary_box_rgba.png" id="39_reward_summary"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/01_fireball_rgba.png" id="40_reward_icon_fireball"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/02_water_ring_rgba.png" id="41_reward_icon_water_ring"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/03_lightning_rgba.png" id="42_reward_icon_lightning"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/04_ice_shard_rgba.png" id="43_reward_icon_ice_shard"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/05_tornado_rgba.png" id="44_reward_icon_tornado"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/06_laser_rgba.png" id="45_reward_icon_laser"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/07_rock_meteor_rgba.png" id="46_reward_icon_rock_meteor"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/08_healing_heart_rgba.png" id="47_reward_icon_healing_heart"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/09_arrow_rain_rgba.png" id="48_reward_icon_arrow_rain"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/10_sword_slash_rgba.png" id="49_reward_icon_sword_slash"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/11_shield_rgba.png" id="50_reward_icon_shield"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/12_speed_boot_rgba.png" id="51_reward_icon_speed_boot"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/13_poison_rgba.png" id="52_reward_icon_poison"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/14_summon_crystal_rgba.png" id="53_reward_icon_summon_crystal"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/15_explosion_rgba.png" id="54_reward_icon_explosion"]
+[ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/16_time_slow_rgba.png" id="55_reward_icon_time_slow"]
+
 [resource]
 script = ExtResource("1_skin")
-schema_version = 3
+schema_version = 4
 common_button_normal = ExtResource("16_button")
 common_button_hover = ExtResource("17_button_hover")
 common_button_pressed = ExtResource("18_button_active")
@@ -54,6 +81,32 @@ reward_background = ExtResource("24_reward_bg")
 reward_card_gray = ExtResource("25_reward_gray")
 reward_card_red = ExtResource("26_reward_red")
 reward_card_cyan = ExtResource("27_reward_cyan")
+reward_frame_common = ExtResource("30_reward_common")
+reward_frame_rare = ExtResource("31_reward_rare")
+reward_frame_epic = ExtResource("32_reward_epic")
+reward_frame_legendary = ExtResource("33_reward_legendary")
+reward_frame_genesis = ExtResource("34_reward_genesis")
+reward_component_action = ExtResource("35_reward_action")
+reward_component_detail = ExtResource("36_reward_detail")
+reward_component_icon_slot = ExtResource("37_reward_icon_slot")
+reward_component_tag = ExtResource("38_reward_tag")
+reward_component_summary = ExtResource("39_reward_summary")
+reward_icon_fireball = ExtResource("40_reward_icon_fireball")
+reward_icon_water_ring = ExtResource("41_reward_icon_water_ring")
+reward_icon_lightning = ExtResource("42_reward_icon_lightning")
+reward_icon_ice_shard = ExtResource("43_reward_icon_ice_shard")
+reward_icon_tornado = ExtResource("44_reward_icon_tornado")
+reward_icon_laser = ExtResource("45_reward_icon_laser")
+reward_icon_rock_meteor = ExtResource("46_reward_icon_rock_meteor")
+reward_icon_healing_heart = ExtResource("47_reward_icon_healing_heart")
+reward_icon_arrow_rain = ExtResource("48_reward_icon_arrow_rain")
+reward_icon_sword_slash = ExtResource("49_reward_icon_sword_slash")
+reward_icon_shield = ExtResource("50_reward_icon_shield")
+reward_icon_speed_boot = ExtResource("51_reward_icon_speed_boot")
+reward_icon_poison = ExtResource("52_reward_icon_poison")
+reward_icon_summon_crystal = ExtResource("53_reward_icon_summon_crystal")
+reward_icon_explosion = ExtResource("54_reward_icon_explosion")
+reward_icon_time_slow = ExtResource("55_reward_icon_time_slow")
 settings_background = ExtResource("21_chapter_bg")
 battle_menu_background = ExtResource("21_chapter_bg")
 battle_topbar = ExtResource("28_battle_topbar")
