@@ -3703,30 +3703,7 @@
     },
     "template_id": "loop",
     "terrain": [
-      {
-        "id": "endless_t_junction",
-        "type": "junction",
-        "rect": [
-          850,
-          500,
-          520,
-          360
-        ],
-        "label": "T字裂谷",
-        "layout": "t"
-      },
-      {
-        "id": "endless_cross_junction",
-        "type": "junction",
-        "rect": [
-          1300,
-          700,
-          480,
-          330
-        ],
-        "label": "十字祭道",
-        "layout": "cross"
-      },
+
       {
         "id": "endless_dual_junction",
         "type": "junction",
@@ -3875,50 +3852,7 @@
         ],
         "label": "东环断墙"
       },
-      {
-        "id": "endless_t_bar",
-        "type": "blocked",
-        "rect": [
-          920,
-          570,
-          300,
-          58
-        ],
-        "label": "T字横墙"
-      },
-      {
-        "id": "endless_t_stem",
-        "type": "blocked",
-        "rect": [
-          920,
-          570,
-          58,
-          240
-        ],
-        "label": "T字纵墙"
-      },
-      {
-        "id": "endless_cross_bar",
-        "type": "blocked",
-        "rect": [
-          1360,
-          890,
-          390,
-          58
-        ],
-        "label": "十字横墙"
-      },
-      {
-        "id": "endless_cross_stem",
-        "type": "blocked",
-        "rect": [
-          1530,
-          720,
-          58,
-          170
-        ],
-        "label": "十字纵墙"
-      },
+
       {
         "id": "endless_dual_divider",
         "type": "blocked",
@@ -3987,3 +3921,4 @@
     }
   }
 ]
+

@@ -312,6 +312,7 @@ func _ready() -> void:
 	skill_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	skill_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	skill_button.add_child(skill_frame)
+	skill_frame.hide()
 	skill_icon = icon(skill_button, "res://assets/vfx/third_party/kenney_particle/slash_01.png", Rect2(25, 22, 46, 46), WHITE)
 	skill_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	skill_cooldown_overlay = ColorRect.new()
@@ -348,6 +349,7 @@ func _ready() -> void:
 	ultimate_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	ultimate_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ultimate_button.add_child(ultimate_frame)
+	ultimate_frame.hide()
 	ultimate_icon = icon(ultimate_button, "res://assets/vfx/third_party/kenney_particle/magic_03.png", Rect2(25, 22, 46, 46), WHITE)
 	ultimate_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ultimate_cooldown_overlay = ColorRect.new()
@@ -397,6 +399,7 @@ func _ready() -> void:
 		hero_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		hero_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		hero_btn.add_child(hero_frame)
+		hero_frame.hide()
 		hero_card_frames.append(hero_frame)
 		hero_btn.pressed.connect(func(): select_action.emit(i))
 		hero_btn.gui_input.connect(_hero_card_input.bind(i))
@@ -481,23 +484,22 @@ func _ready() -> void:
 	modal_action = button(modal_card, Rect2(42, 281, 536, 47), "", true)
 	modal_action.pressed.connect(func(): primary_action.emit())
 	pause_details = panel(overlay, Rect2(55, 28, 1170, 664), Color("#171119"), Color("#a34c60"))
-	ornament(pause_details, Rect2(-18, -18, 1206, 700))
 	var pause_scrim := ColorRect.new()
 	pause_scrim.position = Vector2(18, 12)
 	pause_scrim.size = Vector2(1134, 640)
-	pause_scrim.color = Color(0.035, 0.025, 0.045, 0.96)
+	pause_scrim.color = Color(0.020, 0.012, 0.019, 0.985)
 	pause_scrim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pause_details.add_child(pause_scrim)
 	var build_column := ColorRect.new()
 	build_column.position = Vector2(22, 112)
 	build_column.size = Vector2(520, 380)
-	build_column.color = Color(0.10, 0.065, 0.11, 0.96)
+	build_column.color = Color(0.060, 0.030, 0.050, 0.96)
 	build_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pause_details.add_child(build_column)
 	var stats_column := ColorRect.new()
 	stats_column.position = Vector2(558, 112)
 	stats_column.size = Vector2(590, 380)
-	stats_column.color = Color(0.12, 0.055, 0.075, 0.96)
+	stats_column.color = Color(0.070, 0.025, 0.040, 0.96)
 	stats_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pause_details.add_child(stats_column)
 	label(pause_details, Vector2(34, 20), Vector2(720, 20), "P A U S E   /   战 术 暂 停", 11, TEAL)
@@ -509,19 +511,19 @@ func _ready() -> void:
 	label(pause_details, Vector2(570, 120), Vector2(550, 22), "当 前 角 色 数 值", 13, Color("#ffb0b7"))
 	for i in 3:
 		pause_hero_labels.append(label(pause_details, Vector2(570, 151 + i * 108), Vector2(550, 98), "", 12, WHITE))
-	pause_settings_button = button(pause_details, Rect2(34, 514, 258, 42), "设置 / 音量   [F10]", false)
+	pause_settings_button = button(pause_details, Rect2(34, 514, 258, 42), "⚙  设置", false)
 	pause_settings_button.pressed.connect(func(): settings_action.emit())
-	pause_restart_button = button(pause_details, Rect2(306, 514, 258, 42), "重新开始   [R]", false)
+	pause_restart_button = button(pause_details, Rect2(306, 514, 258, 42), "↻  重开", false)
 	pause_restart_button.pressed.connect(func(): restart_action.emit())
-	pause_squad_button = button(pause_details, Rect2(578, 514, 258, 42), "调整编队   [F3]", false)
+	pause_squad_button = button(pause_details, Rect2(578, 514, 258, 42), "◆  编队", false)
 	pause_squad_button.pressed.connect(func(): squad_action.emit())
-	pause_stage_button = button(pause_details, Rect2(850, 514, 258, 42), "选择关卡   [F4]", false)
+	pause_stage_button = button(pause_details, Rect2(850, 514, 258, 42), "▦  关卡", false)
 	pause_stage_button.pressed.connect(func(): stage_action.emit())
-	pause_menu_button = button(pause_details, Rect2(34, 574, 340, 46), "返回主菜单", false)
+	pause_menu_button = button(pause_details, Rect2(34, 574, 340, 46), "⌂  主菜单", false)
 	pause_menu_button.pressed.connect(func(): main_menu_action.emit())
-	pause_map_button = button(pause_details, Rect2(390, 574, 340, 46), "分支路线图   [F5]", false)
+	pause_map_button = button(pause_details, Rect2(390, 574, 340, 46), "◇  路线", false)
 	pause_map_button.pressed.connect(func(): map_action.emit())
-	var pause_continue := button(pause_details, Rect2(746, 574, 362, 46), "继续防守   [空格]", true)
+	var pause_continue := button(pause_details, Rect2(746, 574, 362, 46), "▶  继续防守", true)
 	pause_continue.pressed.connect(func(): primary_action.emit())
 	pause_details.hide()
 	reward_panel = preload("res://scripts/reward_panel.gd").new()
@@ -723,10 +725,10 @@ func refresh(sim, selected_id: int) -> void:
 		var seconds: int = floori(sim.elapsed) if sim.endless_mode else ceili(sim.stage_runtime.remaining_seconds())
 		var queued := "  +%d卡" % sim.run_state.pending_level_ups if sim.run_state.pending_level_ups > 0 and sim.state != "reward" else ""
 		if sim.endless_mode:
-			progression_label.text = "旅行者 Lv.%d  •  EXP %s%s  •  %s元素  •  幸运 %.2f  •  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), sim.run_state.luck, seconds / 60, seconds % 60]
+			progression_label.text = "旅行者 Lv.%d  •  EXP %s%s  •  %s元素  •  幸运 %.2f  •  %02d:%02d  •  %s" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), sim.run_state.luck, seconds / 60, seconds % 60, str(sim.database.stages.get(sim.current_stage_id, {}).get("name", sim.current_stage_id))]
 			wave_label.text = "威胁等级   %02d" % maxi(1, floori(sim.elapsed / 45.0) + 1)
 		else:
-			progression_label.text = "水晶 Lv.%d  •  EXP %s%s  •  %s元素  •  幸运 %.2f  •  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), sim.run_state.luck, seconds / 60, seconds % 60]
+			progression_label.text = "水晶 Lv.%d  •  EXP %s%s  •  %s元素  •  幸运 %.2f  •  %02d:%02d  •  %s" % [sim.run_state.crystal_level, xp_text, queued, sim.traveler_element_display(), sim.run_state.luck, seconds / 60, seconds % 60, str(sim.database.stages.get(sim.current_stage_id, {}).get("name", sim.current_stage_id))]
 			wave_label.text = "波次   %02d / %02d" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size()]
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
@@ -774,6 +776,8 @@ func refresh(sim, selected_id: int) -> void:
 		var hp_ratio := float(hero.hp) / maxf(1.0, float(hero.max_hp))
 		hero_buttons[i].modulate = Color("#ff7888") if hp_ratio <= 0.25 and hero.hp > 0.0 else (Color.WHITE if i == selected_id else Color("#91a0a8"))
 		hero_card_frames[i].texture = UI_SKIN.hero_frame_red if i == selected_id or hp_ratio <= 0.25 else UI_SKIN.hero_frame_gray
+		for hero_state in ["normal", "hover", "pressed", "focus", "disabled"]:
+			hero_buttons[i].add_theme_stylebox_override(hero_state, _battle_card_style(hero_color if i == selected_id else Color("#74414d"), i == selected_id))
 		var status: String = "倒地" if hero.hp <= 0 else (("同行" if sim.endless_mode else "待命") if not bool(hero.get("deployed", true)) else ("移动中" if hero.moving else "就绪"))
 		hero_details[i].text = "ATK %.0f  ·  %.1f/s" % [hero.damage, hero.rate]
 		hero_statuses[i].text = "HP %d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
@@ -999,7 +1003,7 @@ func refresh_pause_details(sim) -> void:
 		var element_text: String = str(sim.element_name(str(hero.get("element", "none"))))
 		if not str(hero.get("secondary_element", "")).is_empty():
 			element_text += " + " + sim.element_name(str(hero.secondary_element))
-		pause_hero_labels[i].text = "%d  %s  /  %s  /  %s\nHP %d/%d    ATK %.0f    ASPD %.2f/s\n射程 %.0f    护甲 %.0f    移速 %.0f    弹道 %d" % [i + 1, hero.name, hero.role, element_text, ceili(hero.hp), ceili(hero.max_hp), hero.damage, hero.rate, hero.range, hero.armor, hero.speed, int(hero.get("projectile_count", 1))]
+		pause_hero_labels[i].text = "%d  %s  ·  %s  ·  %s\nHP  %4d / %-4d     ATK  %4.0f     ASPD  %.2f/s\nRNG %4.0f          DEF  %4.0f     SPD   %4.0f     ×%d" % [i + 1, hero.name, hero.role, element_text, ceili(hero.hp), ceili(hero.max_hp), hero.damage, hero.rate, hero.range, hero.armor, hero.speed, int(hero.get("projectile_count", 1))]
 
 func refresh_buffs(sim) -> void:
 	buff_panel.visible = sim.v2_mode and sim.state in ["running", "between", "paused"]
@@ -1179,3 +1183,19 @@ func bind(control: Control, id: String) -> Control:
 
 
 
+
+
+
+func _battle_card_style(border: Color, focused: bool) -> StyleBoxFlat:
+	var box := StyleBoxFlat.new()
+	box.bg_color = Color(0.045, 0.022, 0.034, 0.98)
+	box.border_color = border
+	box.set_border_width_all(2 if focused else 1)
+	box.border_width_left = 4 if focused else 2
+	box.corner_radius_top_left = 4
+	box.corner_radius_top_right = 4
+	box.corner_radius_bottom_left = 4
+	box.corner_radius_bottom_right = 4
+	box.shadow_color = Color(border, 0.22 if focused else 0.0)
+	box.shadow_size = 6 if focused else 0
+	return box

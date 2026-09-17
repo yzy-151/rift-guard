@@ -62,6 +62,8 @@ var death_overlay: ColorRect
 var death_texture: TextureRect
 var death_reason_label: Label
 var death_playing := false
+var booper: TextureRect
+var booper_elapsed := 0.0
 func build(ui, story) -> void:
 	hud = ui
 	director = story
@@ -136,6 +138,13 @@ func build(ui, story) -> void:
 	body.size = UI_LAYOUT.dialogue_body_rect.size
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	progress = hud.label(root, UI_LAYOUT.dialogue_progress_rect.position, UI_LAYOUT.dialogue_progress_rect.size, "", 11, Color("#b9a2a9"))
+	booper = TextureRect.new()
+	booper.position = Vector2(614, 568)
+	booper.size = Vector2(52, 30)
+	booper.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	booper.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	booper.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(booper)
 	for i in 2:
 		var choice_button := action(UI_LAYOUT.dialogue_choice_rects[i], "", choose_option.bind(i))
 		choice_button.add_theme_font_size_override("font_size", 18)
@@ -163,25 +172,31 @@ func build(ui, story) -> void:
 		choice_button.disabled = true
 		choice_button.focus_mode = Control.FOCUS_NONE
 		choice_buttons.append(choice_button)
-	advance_button = action(UI_LAYOUT.dialogue_advance_rect, "继续  [Enter]", advance)
-	auto_button = action(UI_LAYOUT.dialogue_auto_rect, "自动：关", func():
+	advance_button = action(UI_LAYOUT.dialogue_advance_rect, "", advance)
+	advance_button.hide()
+	auto_button = action(Rect2(1178, 666, 34, 30), "A", func():
 		auto_mode = not auto_mode
 		auto_timer = 0.0
-		auto_button.text = "自动：开" if auto_mode else "自动：关")
-	history_button = action(UI_LAYOUT.dialogue_history_rect, "历史  [H]", toggle_history)
-	skip_button = action(UI_LAYOUT.dialogue_skip_rect, "跳过本段 [Esc]", skip)
+		auto_button.text = "A+" if auto_mode else "A")
+	history_button = action(Rect2(1138, 666, 34, 30), "≡", toggle_history)
+	skip_button = action(Rect2(1098, 666, 34, 30), "»", skip)
 	hud.bind(advance_button, "dialog_continue")
 	hud.bind(auto_button, "dialog_auto")
 	hud.bind(history_button, "dialog_history")
 	hud.bind(skip_button, "dialog_skip")
-	advance_button.position = UI_LAYOUT.dialogue_advance_rect.position
-	advance_button.size = UI_LAYOUT.dialogue_advance_rect.size
-	auto_button.position = UI_LAYOUT.dialogue_auto_rect.position
-	auto_button.size = UI_LAYOUT.dialogue_auto_rect.size
-	history_button.position = UI_LAYOUT.dialogue_history_rect.position
-	history_button.size = UI_LAYOUT.dialogue_history_rect.size
-	skip_button.position = UI_LAYOUT.dialogue_skip_rect.position
-	skip_button.size = UI_LAYOUT.dialogue_skip_rect.size
+	advance_button.text = ""
+	advance_button.position = Vector2(-200, -200)
+	advance_button.size = Vector2(1, 1)
+	advance_button.hide()
+	auto_button.text = "A"
+	auto_button.position = Vector2(1190, 675)
+	auto_button.size = Vector2(34, 30)
+	history_button.text = "≡"
+	history_button.position = Vector2(1148, 675)
+	history_button.size = Vector2(34, 30)
+	skip_button.text = "»"
+	skip_button.position = Vector2(1106, 675)
+	skip_button.size = Vector2(34, 30)
 	for i in controls.size():
 		controls[i].focus_next = controls[(i + 1) % controls.size()].get_path()
 		controls[i].focus_previous = controls[(i + controls.size() - 1) % controls.size()].get_path()
@@ -347,7 +362,8 @@ func show_line() -> void:
 	line_ended = true
 	auto_timer = 0.0
 	_configure_choices(line)
-	progress.text = ("" if director.has_choices() else "战场已暂停   ·   %02d / %02d" % [director.index + 1, director.lines.size()])
+	progress.text = ""
+	booper.visible = not director.has_choices()
 	_animate_line_entrance(str(line.get("highlight", "main")))
 	_reveal_choices_after_pop(director.index)
 	if cue_sound != null:
@@ -401,6 +417,10 @@ func _reveal_choices_after_pop(expected_index: int) -> void:
 func _process(dt: float) -> void:
 	if root == null or not root.visible or history_panel.visible:
 		return
+	booper_elapsed += dt
+	if booper != null and booper.visible:
+		var booper_frame := posmod(floori(booper_elapsed * 20.0), 28) + 1
+		booper.texture = load("res://assets/helltaker/dialogue_booper/booper%04d.png" % booper_frame)
 	if transition_time > 0.0:
 		transition_time = maxf(0.0, transition_time - dt)
 		var frame := clampi(28 - floori(transition_time / 0.52 * 28.0), 0, 28)
@@ -421,12 +441,13 @@ func _configure_choices(line: Dictionary) -> void:
 		if i < options.size():
 			item.text = str(options[i].get("text", ""))
 	var has_choices := not options.is_empty()
-	advance_button.disabled = has_choices
+	advance_button.disabled = true
+	advance_button.visible = false
 	auto_button.disabled = has_choices
-	advance_button.visible = not has_choices
 	auto_button.visible = not has_choices
 	history_button.visible = not has_choices
 	skip_button.visible = not has_choices
+	booper.visible = not has_choices
 func _reveal_choices() -> void:
 	if not director.has_choices() or history_panel.visible:
 		return
@@ -522,13 +543,26 @@ func _play_choice_death(reason: String) -> void:
 	_reveal_choices()
 
 func activate_choice_at(point: Vector2) -> bool:
-	if not root.visible or history_panel.visible:
+	if not root.visible or history_panel.visible or death_playing:
 		return false
 	for item in choice_buttons:
 		if item.visible and not item.disabled and item.get_global_rect().has_point(point):
 			choose_option(choice_buttons.find(item))
 			return true
-	return false
+	if director.has_choices():
+		return true
+	if skip_button.visible and skip_button.get_global_rect().has_point(point):
+		skip()
+		return true
+	if history_button.visible and history_button.get_global_rect().has_point(point):
+		toggle_history()
+		return true
+	if auto_button.visible and auto_button.get_global_rect().has_point(point):
+		auto_mode = not auto_mode
+		auto_button.text = "A+" if auto_mode else "A"
+		return true
+	advance()
+	return true
 
 func advance() -> void:
 	if not director.active or history_panel.visible:
@@ -617,6 +651,10 @@ func set_picture(item: TextureRect, alias: String, at: Vector2, dimensions: Vect
 	item.position = at
 	item.size = dimensions * factor
 	item.flip_h = flipped
+
+
+
+
 
 
 

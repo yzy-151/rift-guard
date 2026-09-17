@@ -11,6 +11,18 @@
 - 敌人包含近战、远程、飞行、护盾、增益与史莱姆家族，并配置六名三阶段 Boss。
 - 火、水、雷、冰、风、岩元素参与反应，旅行者可在局内选择元素并通过高阶卡牌获得双元素。
 
+## V60 全页面UI与角色详情
+
+V60统一重做模式、选关、编队、角色详情、剧情、暂停和战斗底栏。所有主要容器改用等比例或代码绘制的红黑面板，选关缩略图使用真实战斗截图，选角支持滚轮与breath动画详情，剧情改为点击画面推进并加入booper动态提示。
+
+![V60 模式选择](docs/v60-validation/01-mode-select.png)
+
+![V60 角色详情](docs/v60-validation/04-character-detail.png)
+
+![V60 剧情推进](docs/v60-validation/05a-dialogue-booper.png)
+
+- V60发布说明：[V60-RELEASE-NOTES.md](docs/V60-RELEASE-NOTES.md)
+- Windows发布包：`builds/rift-guard-v60/RiftGuard-V60.exe`
 ## V59 战斗UI与剧情死亡反馈
 
 V59 重构了1920×1080战斗界面：顶部压缩为连续状态带，怪物数量改为中央小型徽标，底部改为单层指令台；角色卡、Q/E技能框、选队确认按钮、剧情选项框和Boss警告装饰均保持素材原始比例，不再通过任意宽高拉伸填充。
@@ -213,4 +225,5 @@ Godot 右侧的“UI 实验台”可编辑 Dialogue、Mode、Mission、Squad、C
 ## 素材
 
 项目当前混合使用 Helltaker 风格界面资源、用户提供角色素材、Kenney 素材与第三方透明特效素材；各第三方资源的许可证文件保存在对应素材目录。
+
 

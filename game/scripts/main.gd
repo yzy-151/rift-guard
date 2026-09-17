@@ -154,10 +154,12 @@ func _ready() -> void:
 	add_child(squad_panel)
 	squad_panel.build(hud, sim.database, compendium)
 	squad_panel.confirmed.connect(confirm_next_squad)
+	squad_panel.cancelled.connect(func(): stage_select_panel.open())
 	stage_select_panel = StageSelectPanel.new()
 	add_child(stage_select_panel)
 	stage_select_panel.build(hud, sim.database, compendium)
 	stage_select_panel.chosen.connect(choose_stage)
+	stage_select_panel.cancelled.connect(func(): mode_select_panel.open())
 	mode_select_panel = ModeSelectPanel.new()
 	add_child(mode_select_panel)
 	mode_select_panel.build(hud)
@@ -185,7 +187,12 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v59-visual-test" in OS.get_cmdline_user_args():
+	if "--v60-visual-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v60_visual_test")
+	elif "--v59-visual-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
 		set_physics_process(false)
@@ -1374,6 +1381,10 @@ func run_v10_test() -> void:
 	var suite = preload("res://scripts/qa_v10.gd").new()
 	await suite.run(self)
 
+func run_v60_visual_test() -> void:
+	var suite = preload("res://scripts/qa_v60_visual.gd").new()
+	await suite.run(self)
+
 func run_v59_visual_test() -> void:
 	var suite = preload("res://scripts/qa_v59_visual.gd").new()
 	await suite.run(self)
@@ -1499,3 +1510,7 @@ func run_v16_test() -> void:
 func run_v15_test() -> void:
 	var suite = preload("res://scripts/qa_v15.gd").new()
 	await suite.run(self)
+
+
+
+

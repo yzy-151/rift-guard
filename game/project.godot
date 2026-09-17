@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V59：战斗HUD重构 / 等比例UI / 错误选项死亡回放 / Helltaker无尽地图拼装 / 1920×1080"
-config/version="59.0.0"
+config/description="V60：全页面UI重构 / 角色详情 / 剧情booper / 战斗缩略图 / 无尽地图精简 / 1920×1080"
+config/version="60.0.0"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
@@ -42,4 +42,5 @@ enabled=PackedStringArray("res://addons/beckett/plugin.cfg", "res://addons/rift_
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 environment/defaults/default_clear_color=Color(0.047, 0.059, 0.075, 1)
+
 
