@@ -83,7 +83,7 @@ func _build_character_card(id: String, index: int) -> void:
 	panel.add_child(frame_skin)
 	card_frames[id]=frame_skin
 	var element:=str(data.get("element","none")); var color:Color=ELEMENT_COLORS.get(element,WHITE)
-	var preview=Preview.new(); preview.position=Vector2(24,25); preview.size=Vector2(88,108); panel.add_child(preview); preview.configure(id,database.assets.get(str(data.get("asset_key","")),{}),color,not progress.unlocked_characters.has(id)); previews[id]=preview
+	var preview=Preview.new(); preview.position=Vector2(24,25); preview.size=Vector2(88,108); panel.add_child(preview); preview.configure(id,database.assets.get(str(data.get("asset_key","")),{}),color,not _is_character_unlocked(id)); previews[id]=preview
 	var badge: Label = hud.label(panel,Vector2(122,27),Vector2(30,22),_element_glyph(element),11,color); badge.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	hud.label(panel,Vector2(155,26),Vector2(88,24),str(data.get("name",id)),15,color)
 	var divider:=ColorRect.new(); divider.position=Vector2(122,55); divider.size=Vector2(121,1); divider.color=Color(color,0.35); panel.add_child(divider)
@@ -108,8 +108,15 @@ func _build_detail() -> void:
 func _ability_icon(parent:Control,pos:Vector2,key:String,color:Color)->Panel:
 	var p:=Panel.new(); p.position=pos; p.size=Vector2(44,44); p.add_theme_stylebox_override("panel",_panel_style(color,2)); parent.add_child(p); var l: Label = hud.label(p,Vector2.ZERO,p.size,key,20,color); l.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; l.vertical_alignment=VERTICAL_ALIGNMENT_CENTER; return p
 
+func _is_character_ready(id:String)->bool:
+	var data: Dictionary = database.characters.get(id,{})
+	return bool(data.get("content_ready",false))
+
+func _is_character_unlocked(id:String)->bool:
+	return _is_character_ready(id) and progress.unlocked_characters.has(id)
+
 func _open_detail(id:String)->void:
-	if not progress.unlocked_characters.has(id): return
+	if not _is_character_unlocked(id): return
 	_play_confirm(); detail_id=id; var data:Dictionary=database.characters[id]; var color:Color=ELEMENT_COLORS.get(str(data.get("element","none")),WHITE)
 	detail_name.text="%s  /  %s"%[str(data.get("name",id)),_element_name(str(data.get("element","none")))]
 	detail_name.add_theme_color_override("font_color",color); detail_role.text=str(data.get("role","战斗成员"))
@@ -142,10 +149,10 @@ func open(stage_id:String,current_squad:Array[String],newly_unlocked:Array=[])->
 	next_stage_id=stage_id
 	for value in newly_unlocked:
 		var id:=str(value)
-		if not id.is_empty(): progress.unlocked_characters[id]=true
+		if not id.is_empty() and _is_character_ready(id): progress.unlocked_characters[id]=true
 	progress.save_progress(); selected=["traveler"]
 	for id in current_squad:
-		if id!="traveler" and progress.unlocked_characters.has(id) and selected.size()<3: selected.append(id)
+		if id!="traveler" and _is_character_unlocked(id) and selected.size()<3: selected.append(id)
 	var stage:Dictionary=database.stages.get(stage_id,{}); title.text="下一关：%s"%stage.get("name",stage_id); subtitle.text="旅行者固定出战 · 最多选择三名角色 · 点击卡片查看详情"
 	grid_scroll.scroll_vertical=0; detail_panel.hide(); _refresh(); root.show(); confirm_button.grab_focus()
 func confirm()->void:
@@ -166,7 +173,7 @@ func is_open()->bool:return root!=null and root.visible
 func _refresh()->void:
 	count_label.text="出战  %d / 3"%selected.size(); confirm_button.disabled=selected.is_empty() or selected.size()>3
 	for id:String in buttons:
-		var known: bool = progress.unlocked_characters.has(id); buttons[id].disabled=not known; var chosen:=id in selected
+		var known: bool = _is_character_unlocked(id); buttons[id].disabled=not known; var chosen:=id in selected
 		card_frames[id].modulate=Color.WHITE if chosen else (Color(1,1,1,0.34) if known else Color(0.35,0.33,0.35,0.20)); state_labels[id].text="◆ 出战中" if chosen else ("点击查看详情" if known else "LOCKED / 未解锁"); state_labels[id].add_theme_color_override("font_color",ACCENT if chosen else MUTED); previews[id].set_locked(not known); buttons[id].modulate=Color.WHITE if known else Color(0.38,0.35,0.37,1)
 func _button(parent:Control,rect:Rect2,text_value:String,primary:bool)->Button:
 	var b: Button = hud.button(parent,rect,text_value,false)
@@ -183,7 +190,7 @@ func _panel_style(border:Color,width:int)->StyleBoxFlat:
 func _card_style(border:Color,selected_state:bool)->StyleBoxFlat:
 	var s:=_panel_style(border,3 if selected_state else 1);s.bg_color=Color("#140c12");s.shadow_color=Color(ACCENT,0.25 if selected_state else 0.0);s.shadow_size=7 if selected_state else 0;return s
 func _card_hover(id:String,entered:bool)->void:
-	if not progress.unlocked_characters.has(id): return
+	if not _is_character_unlocked(id): return
 	if entered:
 		buttons[id].grab_focus(); _play_select(); card_frames[id].modulate=Color.WHITE
 	else:

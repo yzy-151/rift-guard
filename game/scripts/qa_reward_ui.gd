@@ -32,6 +32,8 @@ func run(game) -> void:
 	await _settle(game)
 	_expect(game.hud.reward_panel.visible, "三选一增益页已显示")
 	_expect(game.hud.reward_panel.buttons.size() == 3, "页面仅显示三张可选卡")
+	_expect(_all_artwork_uniform(game.hud.reward_panel), "外框、五组件与图标全部保持等比例缩放")
+	_expect(game.hud.reward_panel.hover_sound.stream != null, "悬停卡牌已绑定对话选择提示音")
 	_expect(_capture(game, directory, "01-reward-default.png"), "默认卡牌状态截图")
 	game.hud.reward_panel.buttons[1].grab_focus()
 	await game.get_tree().create_timer(0.24).timeout
@@ -42,6 +44,19 @@ func run(game) -> void:
 	print("REWARD UI QA COMPLETE: %d checks, %d failures -> %s" % [checks, failures, directory])
 	game.get_tree().quit(failures)
 
+func _all_artwork_uniform(panel) -> bool:
+	var sprites: Array[Sprite2D] = []
+	for frame: Sprite2D in panel.card_frames:
+		sprites.append(frame)
+	for icon: Sprite2D in panel.icons:
+		sprites.append(icon)
+	for group in panel.component_nodes:
+		for component: Sprite2D in group:
+			sprites.append(component)
+	for sprite: Sprite2D in sprites:
+		if not is_equal_approx(sprite.scale.x, sprite.scale.y):
+			return false
+	return sprites.size() == 18
 func _expect(ok: bool, message: String) -> void:
 	checks += 1
 	if ok:

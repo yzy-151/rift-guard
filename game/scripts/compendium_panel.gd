@@ -92,7 +92,7 @@ func _show_characters() -> void:
 	var unlocked := 0
 	for id: String in database.characters:
 		var data: Dictionary = database.characters[id]
-		var known: bool = progress.unlocked_characters.has(id)
+		var known: bool = bool(data.get("content_ready", false)) and progress.unlocked_characters.has(id)
 		unlocked += int(known)
 		var name: String = str(data.name) if known else "？？？"
 		var skill: Dictionary = data.get("active_skill", {})

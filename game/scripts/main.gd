@@ -81,7 +81,10 @@ func _ready() -> void:
 		compendium = CompendiumState.new(qa_path.path_join("compendium.json"))
 		checkpoint_store = CampaignCheckpoint.new(qa_path.path_join("campaign-checkpoint"))
 	for character_id: String in sim.database.characters:
-		if bool(sim.database.characters[character_id].get("unlocked_by_default", false)):
+		var character_data: Dictionary = sim.database.characters[character_id]
+		if not bool(character_data.get("content_ready", false)):
+			compendium.unlocked_characters.erase(character_id)
+		elif bool(character_data.get("unlocked_by_default", false)):
 			compendium.unlocked_characters[character_id] = true
 	audio_director = AudioDirector.new()
 	if not qa_storage_path.is_empty():

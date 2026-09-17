@@ -69,8 +69,8 @@ func build(hud) -> void:
 	header_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(header_glow)
 	hud.label(self, Vector2(96, 40), Vector2(1088, 20), "R I F T   G U A R D     /     战 地 补 给", 13, Color("#e9a5ad"))
-	hud.bind(hud.label(self, Vector2(92, 72), Vector2(920, 42), "选择这一次的突破", 30, WHITE), "reward_title")
-	heading = hud.label(self, Vector2(96, 148), Vector2(1088, 22), "", 12, MUTED)
+	hud.bind(hud.label(self, Vector2(92, 72), Vector2(920, 38), "选择这一次的突破", 28, WHITE), "reward_title")
+	heading = hud.label(self, Vector2(96, 154), Vector2(1088, 18), "", 11, MUTED)
 
 	for i in 3:
 		_build_card(hud, i)
@@ -113,25 +113,25 @@ func _build_card(hud, index: int) -> void:
 	glow_panels.append(glow)
 
 	var frame: Sprite2D = _scaled_sprite(card, UI_SKIN.reward_frame_common, Rect2(Vector2.ZERO, rect.size))
+	frame.z_index = 20
 	card_frames.append(frame)
 
 	component_nodes.append([])
-	_add_component(card, UI_SKIN.reward_component_tag, UI_LAYOUT.reward_tag_rect, index)
 	_add_component(card, UI_SKIN.reward_component_icon_slot, UI_LAYOUT.reward_icon_slot_rect, index)
 	_add_component(card, UI_SKIN.reward_component_summary, UI_LAYOUT.reward_preview_rect, index)
 	_add_component(card, UI_SKIN.reward_component_detail, UI_LAYOUT.reward_description_rect, index)
 	_add_component(card, UI_SKIN.reward_component_action, UI_LAYOUT.reward_action_rect, index)
 
-	var tag: Label = hud.label(card, UI_LAYOUT.reward_tag_rect.position + Vector2(9, 6), UI_LAYOUT.reward_tag_rect.size - Vector2(18, 11), "", 10, WHITE)
+	var tag: Label = hud.label(card, UI_LAYOUT.reward_tag_rect.position, UI_LAYOUT.reward_tag_rect.size, "", 10, WHITE)
 	tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	tag.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	tags.append(tag)
-	var title: Label = hud.label(card, UI_LAYOUT.reward_title_rect.position, UI_LAYOUT.reward_title_rect.size, "", 21, WHITE)
+	var title: Label = hud.label(card, UI_LAYOUT.reward_title_rect.position, UI_LAYOUT.reward_title_rect.size, "", 19, WHITE)
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	titles.append(title)
 	var title_rule := ColorRect.new()
-	title_rule.position = Vector2(35, 105)
-	title_rule.size = Vector2(123, 3)
+	title_rule.position = Vector2(35, 111)
+	title_rule.size = Vector2(136, 2)
 	title_rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	card.add_child(title_rule)
 	title_rules.append(title_rule)
@@ -139,7 +139,7 @@ func _build_card(hud, index: int) -> void:
 	var icon: Sprite2D = _scaled_sprite(card, UI_SKIN.reward_icon_summon_crystal, UI_LAYOUT.reward_icon_rect)
 	icons.append(icon)
 
-	var summary: Label = hud.label(card, UI_LAYOUT.reward_preview_rect.position + Vector2(12, 6), UI_LAYOUT.reward_preview_rect.size - Vector2(24, 12), "", 16, WHITE)
+	var summary: Label = hud.label(card, UI_LAYOUT.reward_preview_rect.position + Vector2(12, 6), UI_LAYOUT.reward_preview_rect.size - Vector2(24, 12), "", 11, WHITE)
 	summary.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	summary.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -151,7 +151,7 @@ func _build_card(hud, index: int) -> void:
 	action.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	action.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	action_labels.append(action)
-	var action_index: Label = hud.label(card, UI_LAYOUT.reward_action_rect.position + Vector2(195, 5), Vector2(36, UI_LAYOUT.reward_action_rect.size.y - 10), "", 12, WHITE)
+	var action_index: Label = hud.label(card, UI_LAYOUT.reward_action_rect.position + Vector2(184, 5), Vector2(36, UI_LAYOUT.reward_action_rect.size.y - 10), "", 12, WHITE)
 	action_index.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	action_index.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	action_index_labels.append(action_index)
@@ -170,7 +170,8 @@ func _scaled_sprite(parent: CanvasItem, texture: Texture2D, rect: Rect2) -> Spri
 	sprite.centered = false
 	sprite.position = rect.position
 	var texture_size := texture.get_size()
-	sprite.scale = Vector2(rect.size.x / texture_size.x, rect.size.y / texture_size.y)
+	var uniform_scale := minf(rect.size.x / texture_size.x, rect.size.y / texture_size.y)
+	sprite.scale = Vector2.ONE * uniform_scale
 	parent.add_child(sprite)
 	return sprite
 
@@ -181,8 +182,7 @@ func display(sim) -> void:
 	if offer_key != key:
 		offer_key = key
 		if sim.v2_mode:
-			var level_owner := "旅行者" if sim.endless_mode else "水晶"
-			heading.text = "%s Lv.%d  ·  幸运 %.2f  ·  待选择 %d  ·  本局种子 %d" % [level_owner, sim.run_state.crystal_level, sim.run_state.luck, sim.run_state.pending_level_ups, sim.run_seed]
+			heading.text = "水晶 Lv.%d  ·  幸运 %.2f" % [sim.run_state.crystal_level, sim.run_state.luck]
 		else:
 			heading.text = "节点 %d / 5 已完成  ·  小队 Lv.%d  ·  三项中选择一项  ·  本局种子 %d" % [sim.wave, sim.team_level, sim.run_seed]
 		for i in 3:
@@ -259,7 +259,7 @@ func _focus_card(index: int) -> void:
 		var tween := create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		focus_tweens[i] = tween
 		tween.tween_property(buttons[i], "scale", Vector2.ONE * (1.045 if selected else 0.965), 0.13)
-		tween.tween_property(buttons[i], "modulate", Color.WHITE if selected else Color(0.64, 0.64, 0.69, 0.92), 0.13)
+		tween.tween_property(buttons[i], "modulate", Color(0.82, 0.82, 0.84, 1.0) if selected else Color(0.50, 0.50, 0.54, 0.88), 0.13)
 		buttons[i].z_index = 3 if selected else i
 		glow_panels[i].visible = false
 
@@ -299,10 +299,10 @@ func _rarity_name(rarity: String) -> String:
 	return {"common":"普通", "rare":"稀有", "epic":"史诗", "legendary":"传奇", "genesis":"创世"}.get(rarity, "普通")
 
 func _rarity_color(rarity: String) -> Color:
-	return {"common":Color("#eef3f8"), "rare":Color("#35a9ff"), "epic":Color("#c94cff"), "legendary":Color("#ff9d28"), "genesis":Color("#54e8ff")}.get(rarity, Color("#eef3f8"))
+	return {"common":Color("#d9dee3"), "rare":Color("#3c91c7"), "epic":Color("#a64bc4"), "legendary":Color("#d28a35"), "genesis":Color("#58bec8")}.get(rarity, Color("#eef3f8"))
 
 func _rarity_secondary(rarity: String) -> Color:
-	return Color("#ff4f9f") if rarity == "genesis" else _rarity_color(rarity)
+	return Color("#c95f91") if rarity == "genesis" else _rarity_color(rarity)
 
 func _rarity_frame(rarity: String) -> Texture2D:
 	return {
