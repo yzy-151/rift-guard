@@ -49,10 +49,10 @@ func build(owner_hud) -> void:
 	rule.color = ACCENT
 	root.add_child(rule)
 	owner_hud.label(root, Vector2(74, 124), Vector2(760, 20), "不同模式使用独立规则与地图，强化均可无限叠加。", 12, MUTED)
-	settings_button = _textured_button(root, Rect2(1030, 52, 180, 47), SETTINGS_SKIN, "⚙  设置  F10", true)
+	settings_button = _textured_button(root, Rect2(1026, 50, 196, 52), SETTINGS_SKIN, "⚙  设置  F10", true)
 	settings_button.pressed.connect(func(): _play(confirm_sound); settings_requested.emit())
-	_build_mode_card(Rect2(70, 176, 548, 330), "rift_watch", "01", "裂隙守望", "多角色路线防守", "八关剧情战役 · 折线路径 · 固定 Boss\n守卫水晶，并在每关重建卡牌构筑", "进入关卡选择", "res://assets/ui/rift_v2/stage_thumbnails/stage_03.png", true)
-	_build_mode_card(Rect2(662, 176, 548, 330), "endless_survival", "∞", "无尽生存", "四屏追击生存", "四边刷怪 · 无限升级 · 动态地形\n操纵旅行者移动，同行者跟随攻击", "立即进入荒原", "res://assets/ui/rift_v2/stage_thumbnails/stage_08.png", false)
+	_build_mode_card(Rect2(64, 176, 560, 330), "rift_watch", "01", "裂隙守望", "多角色路线防守", "八关剧情战役 · 折线路径 · 固定 Boss\n守卫水晶，并在每关重建卡牌构筑", "进入关卡选择", "res://assets/ui/rift_v2/stage_thumbnails/stage_03.png", true)
+	_build_mode_card(Rect2(656, 176, 560, 330), "endless_survival", "∞", "无尽生存", "四屏追击生存", "四边刷怪 · 无限升级 · 动态地形\n操纵旅行者移动，同行者跟随攻击", "立即进入荒原", "res://assets/ui/rift_v2/stage_thumbnails/stage_08.png", false)
 	_build_checkpoint()
 	select_sound = _audio("res://assets/helltaker/audio/button_chapter_highlight_01.wav", -7.0)
 	confirm_sound = _audio("res://assets/helltaker/audio/button_menu_confirm_01.wav", -4.0)
@@ -80,41 +80,42 @@ func _build_mode_card(rect: Rect2, id: String, number: String, title: String, su
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 		item.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	buttons[id] = item
-	var panel := NinePatchRect.new()
+	var panel := Panel.new()
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.texture = MODE_RED if active else MODE_GRAY
-	_set_nine_patch(panel, 38)
+	panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	item.add_child(panel)
-	card_panels[id] = panel
 	var preview := TextureRect.new()
 	preview.texture = load(image_path)
-	preview.position = Vector2(5, 5)
-	preview.size = Vector2(rect.size.x - 10, rect.size.y - 10)
+	preview.position = Vector2(28, 24)
+	preview.size = Vector2(rect.size.x - 56, rect.size.y - 48)
 	preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	preview.modulate = Color(0.72, 0.55, 0.58, 0.45 if active else 0.28)
 	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(preview)
 	var shade := ColorRect.new()
-	shade.position = Vector2(5, 5)
+	shade.position = preview.position
 	shade.size = preview.size
 	shade.color = Color(0.02, 0.006, 0.014, 0.58)
 	shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(shade)
-	var accent_bar := ColorRect.new()
-	accent_bar.position = Vector2(0, 0)
-	accent_bar.size = Vector2(8, rect.size.y)
-	accent_bar.color = ACCENT if active else Color("#5e5861")
-	panel.add_child(accent_bar)
-	hud.label(item, Vector2(32, 28), Vector2(120, 60), number, 48, ACCENT if active else Color("#80777f"))
-	hud.label(item, Vector2(34, 112), Vector2(470, 44), title, 31, WHITE)
-	hud.label(item, Vector2(34, 158), Vector2(470, 26), subtitle, 16, ACCENT if active else Color("#b899a0"))
-	var copy: Label = hud.label(item, Vector2(34, 204), Vector2(470, 58), description, 13, MUTED)
+	var frame_skin := TextureRect.new()
+	frame_skin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame_skin.texture = MODE_RED if active else MODE_GRAY
+	frame_skin.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame_skin.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	frame_skin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_child(frame_skin)
+	card_panels[id] = frame_skin
+	hud.label(item, Vector2(48, 32), Vector2(120, 58), number, 46, ACCENT if active else Color("#80777f"))
+	hud.label(item, Vector2(48, 108), Vector2(456, 42), title, 30, WHITE)
+	hud.label(item, Vector2(48, 151), Vector2(456, 25), subtitle, 15, ACCENT if active else Color("#b899a0"))
+	var copy: Label = hud.label(item, Vector2(48, 191), Vector2(456, 50), description, 13, MUTED)
 	copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var action := TextureRect.new()
-	action.position = Vector2(34, 274)
-	action.size = Vector2(352, 40)
+	action.position = Vector2(48, 242)
+	action.size = Vector2(180, 45)
 	action.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	action.texture = SMALL_BUTTON
 	action.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -122,7 +123,7 @@ func _build_mode_card(rect: Rect2, id: String, number: String, title: String, su
 	action.modulate = Color.WHITE if active else Color(0.48, 0.46, 0.49, 0.82)
 	item.add_child(action)
 	action_skins[id] = action
-	var action_label: Label = hud.label(action, Vector2(18, 7), Vector2(312, 25), action_text + "   →", 15, WHITE)
+	var action_label: Label = hud.label(action, Vector2(10, 9), Vector2(160, 26), action_text + "  →", 14, WHITE)
 	action_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	item.focus_entered.connect(_focus_mode.bind(id))
 	item.mouse_entered.connect(func(): _play(select_sound); item.grab_focus())
@@ -141,10 +142,10 @@ func _build_checkpoint() -> void:
 	checkpoint_title = hud.label(panel, Vector2(78, 18), Vector2(720, 28), "远征检查点", 19, WHITE)
 	checkpoint_detail = hud.label(panel, Vector2(78, 50), Vector2(740, 48), "", 11, MUTED)
 	checkpoint_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	continue_button = _textured_button(root, Rect2(862, 584, 310, 54), SMALL_BUTTON, "", true)
+	continue_button = _textured_button(root, Rect2(860, 580, 312, 78), SMALL_BUTTON, "", true)
 	var continue_icon := TextureRect.new()
 	continue_icon.texture = CONTINUE_GLYPH
-	continue_icon.position = Vector2(55, 2)
+	continue_icon.position = Vector2(56, 14)
 	continue_icon.size = Vector2(200, 50)
 	continue_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	continue_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -201,7 +202,7 @@ func _focus_mode(id: String) -> void:
 		action_skins[mode_id].modulate = Color("#ff526a") if focused else Color(0.44,0.42,0.45,0.82)
 
 func _textured_button(parent: Control, rect: Rect2, texture: Texture2D, text_value: String, bright: bool) -> Button:
-	var item: Button = hud.button(parent, rect, text_value, false)
+	var item: Button = hud.button(parent, rect, "", false)
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 		item.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	var skin := TextureRect.new()
@@ -213,6 +214,11 @@ func _textured_button(parent: Control, rect: Rect2, texture: Texture2D, text_val
 	skin.modulate = Color("#ff526a") if bright else Color(0.78, 0.74, 0.79, 0.94)
 	item.add_child(skin)
 	item.move_child(skin, 0)
+	if not text_value.is_empty():
+		var caption: Label = hud.label(item, Vector2.ZERO, rect.size, text_value, 15, WHITE)
+		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	item.mouse_entered.connect(func(): _play(select_sound); skin.modulate = Color.WHITE)
 	item.mouse_exited.connect(func(): skin.modulate = Color("#ff526a") if bright else Color(0.78, 0.74, 0.79, 0.94))
 	return item

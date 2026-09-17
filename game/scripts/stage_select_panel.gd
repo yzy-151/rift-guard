@@ -11,7 +11,7 @@ const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 const BUFF_GRAY = preload("res://assets/ui/rift_v2/components/buff_card_gray.png")
 const BUFF_RED = preload("res://assets/ui/rift_v2/components/buff_card_red.png")
 const ENDLESS_SKIN = preload("res://assets/ui/rift_v2/components/mission_endless.png")
-const SMALL_BUTTON = preload("res://assets/ui/rift_v2/components/button_small.png")
+const HEADER_BUTTON = preload("res://assets/ui/rift_v2/components/mission_header.png")
 
 var root: Control
 var buttons: Dictionary = {}
@@ -36,7 +36,7 @@ func build(owner_hud, game_database, state) -> void:
 	owner_hud.label(root, Vector2(46, 48), Vector2(720, 48), "选择作战区域", 35, WHITE)
 	var rule := ColorRect.new(); rule.position = Vector2(46, 106); rule.size = Vector2(456, 3); rule.color = ACCENT; root.add_child(rule)
 	owner_hud.label(root, Vector2(46, 116), Vector2(920, 18), "通关前一关后解锁下一关 · 选择后进入编队", 11, MUTED)
-	back_button = _textured_button(Rect2(1084, 62, 142, 42), "←  返回", false)
+	back_button = _textured_button(Rect2(1030, 50, 196, 52), "←  返回", false)
 	back_button.pressed.connect(func(): _play(confirm_sound); close(); cancelled.emit())
 	var ids: Array = database.modes.get("rift_watch", {}).get("stage_ids", [])
 	for i in ids.size(): _build_stage_card(i, str(ids[i]), database.stages[str(ids[i])])
@@ -47,51 +47,54 @@ func build(owner_hud, game_database, state) -> void:
 
 func _build_stage_card(index: int, id: String, stage: Dictionary) -> void:
 	var col := index % 4; var row := int(index / 4)
-	var rect := Rect2(Vector2(48 + col * 300, 154 + row * 224), Vector2(284, 206))
+	var rect := Rect2(Vector2(48 + col * 299, 132 + row * 254), Vector2(286, 253))
 	var item: Button = hud.button(root, rect, "", index == 0); item.name = "Stage_%02d" % (index + 1)
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]: item.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	buttons[id] = item
 	var panel := Panel.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); panel.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new()); item.add_child(panel); card_panels[id] = panel
-	var frame := NinePatchRect.new(); frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); frame.texture = BUFF_RED if index == 0 else BUFF_GRAY; frame.mouse_filter = Control.MOUSE_FILTER_IGNORE; _set_nine_patch(frame, 28); panel.add_child(frame); card_frames[id] = frame
-	var number_strip := ColorRect.new(); number_strip.position = Vector2(0, 0); number_strip.size = Vector2(52, 35); number_strip.color = ACCENT if index == 0 else Color("#524850"); panel.add_child(number_strip)
-	var number: Label = hud.label(panel, Vector2(4, 4), Vector2(44, 26), "%02d" % (index + 1), 15, WHITE); number.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hud.label(panel, Vector2(62, 5), Vector2(202, 27), str(stage.name), 15, WHITE)
-	var preview := TextureRect.new(); preview.texture = load("res://assets/ui/stage_thumbnails_v60/battle_%02d.png" % (index + 1)); preview.position = Vector2(10, 39); preview.size = Vector2(264, 82); preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED; preview.clip_contents = true; preview.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_child(preview); stage_previews[id] = preview
+	var frame := TextureRect.new(); frame.position = Vector2(22, 0); frame.size = Vector2(242, 253); frame.texture = BUFF_RED if index == 0 else BUFF_GRAY; frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; frame.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_child(frame); card_frames[id] = frame
+	var preview_clip := Control.new(); preview_clip.position = Vector2(48, 48); preview_clip.size = Vector2(190, 80); preview_clip.clip_contents = true; preview_clip.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_child(preview_clip)
+	var preview := TextureRect.new(); preview.texture = load("res://assets/ui/stage_thumbnails_v60/battle_%02d.png" % (index + 1)); preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED; preview.mouse_filter = Control.MOUSE_FILTER_IGNORE; preview_clip.add_child(preview); stage_previews[id] = preview
+	var number: Label = hud.label(panel, Vector2(48, 17), Vector2(32, 24), "%02d" % (index + 1), 14, ACCENT if index == 0 else MUTED)
+	hud.label(panel, Vector2(82, 17), Vector2(154, 24), str(stage.name), 14, WHITE)
 	var boss: Dictionary = Catalog.ENEMIES.get(str(stage.boss_id), {})
-	hud.label(panel, Vector2(12, 128), Vector2(260, 18), "◷ %d:%02d  ·  %s" % [int(stage.duration_seconds) / 60, int(stage.duration_seconds) % 60, boss.get("name", stage.boss_id)], 10, MUTED)
-	var status: Label = hud.label(panel, Vector2(12, 149), Vector2(260, 37), "", 9, WHITE); status_labels[id] = status
-	var action: Label = hud.label(panel, Vector2(12, 184), Vector2(260, 18), "进入编队   →", 11, ACCENT); action.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	var lock: Label = hud.label(panel, Vector2(20, 59), Vector2(244, 44), "🔒  LOCKED", 19, ACCENT); lock.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; lock.vertical_alignment = VERTICAL_ALIGNMENT_CENTER; lock.hide(); lock_labels[id] = lock
+	hud.label(panel, Vector2(48, 136), Vector2(190, 18), "◷ %d:%02d  ·  %s" % [int(stage.duration_seconds) / 60, int(stage.duration_seconds) % 60, boss.get("name", stage.boss_id)], 9, MUTED)
+	var status: Label = hud.label(panel, Vector2(48, 158), Vector2(190, 38), "", 9, WHITE); status_labels[id] = status
+	var action: Label = hud.label(panel, Vector2(48, 207), Vector2(190, 18), "进入编队   →", 11, ACCENT); action.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	var lock: Label = hud.label(panel, Vector2(48, 65), Vector2(190, 44), "🔒  LOCKED", 18, ACCENT); lock.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; lock.vertical_alignment = VERTICAL_ALIGNMENT_CENTER; lock.hide(); lock_labels[id] = lock
 	item.focus_entered.connect(_focus_stage.bind(id)); item.mouse_entered.connect(func(): item.grab_focus(); _play(select_sound)); item.pressed.connect(select.bind(id))
 
 func _build_endless() -> void:
 	var id := "stage_endless"
-	var item: Button = hud.button(root, Rect2(48, 610, 1180, 94), "", true)
+	var item: Button = hud.button(root, Rect2(48, 640, 1180, 72), "", true)
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]: item.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	buttons[id] = item
 	var panel := Panel.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); panel.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new()); item.add_child(panel); card_panels[id] = panel
-	var frame := TextureRect.new(); frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); frame.texture = ENDLESS_SKIN; frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; frame.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_child(frame); card_frames[id] = frame
-	var icon: Label = hud.label(panel, Vector2(28, 18), Vector2(72, 52), "∞", 35, ACCENT); icon.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hud.label(panel, Vector2(108, 25), Vector2(330, 28), "无尽生存 / 猩红荒原", 20, WHITE)
-	hud.label(panel, Vector2(440, 34), Vector2(540, 22), "四屏追击 · 动态地形 · 旅行者升级 · 无限构筑", 12, MUTED)
-	var enter: Label = hud.label(panel, Vector2(1000, 31), Vector2(145, 26), "进入荒原  →", 14, WHITE); enter.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	var frame := TextureRect.new(); frame.position = Vector2(140, 0); frame.size = Vector2(900, 72); frame.texture = ENDLESS_SKIN; frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; frame.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_child(frame); card_frames[id] = frame
+	var mode_copy: Label = hud.label(panel, Vector2(250, 19), Vector2(570, 30), "四屏追击 · 动态地形 · 旅行者升级 · 无限构筑", 16, WHITE)
+	mode_copy.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var enter: Label = hud.label(panel, Vector2(858, 18), Vector2(150, 32), "进入荒原  →", 16, WHITE); enter.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	item.focus_entered.connect(_focus_stage.bind(id)); item.mouse_entered.connect(func(): item.grab_focus(); _play(select_sound)); item.pressed.connect(select.bind(id))
 
 func _card_style(unlocked: bool, focused: bool, locked: bool) -> StyleBoxFlat:
 	var box := StyleBoxFlat.new(); box.bg_color = Color("#100b11") if unlocked else Color("#0b0a0c"); box.border_color = ACCENT if focused else (Color("#746971") if unlocked else Color("#352f35")); box.set_border_width_all(3 if focused else 2); box.corner_radius_top_left = 5; box.corner_radius_top_right = 5; box.corner_radius_bottom_left = 5; box.corner_radius_bottom_right = 5; box.shadow_color = Color(ACCENT, 0.20 if focused else 0.04); box.shadow_size = 8 if focused else 2; return box
 
 func _textured_button(rect: Rect2, text_value: String, primary: bool) -> Button:
-	var item: Button = hud.button(root, rect, text_value, false)
+	var item: Button = hud.button(root, rect, "", false)
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 		item.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	var skin := TextureRect.new()
-	skin.texture = SMALL_BUTTON
+	skin.texture = HEADER_BUTTON
 	skin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	skin.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	skin.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	skin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	skin.modulate = Color.WHITE if primary else Color(0.58,0.55,0.59,0.88)
 	item.add_child(skin); item.move_child(skin,0)
+	var caption: Label = hud.label(item, Vector2.ZERO, rect.size, text_value, 15, WHITE)
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	item.mouse_entered.connect(func(): _play(select_sound); skin.modulate = Color.WHITE)
 	item.mouse_exited.connect(func(): skin.modulate = Color.WHITE if primary else Color(0.58,0.55,0.59,0.88))
 	return item

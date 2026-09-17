@@ -58,7 +58,7 @@ func build(owner_hud, game_database, state) -> void:
 	var rule := ColorRect.new(); rule.position = Vector2(28,112); rule.size = Vector2(1156,2); rule.color = Color("#9d4657"); frame.add_child(rule)
 	grid_scroll = ScrollContainer.new(); grid_scroll.position = Vector2(28,130); grid_scroll.size = Vector2(1156,426); grid_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; grid_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO; grid_scroll.clip_contents = true; frame.add_child(grid_scroll)
 	grid_host = Control.new(); var order: Array[String] = []; for id: String in database.characters: order.append(id)
-	var rows := ceili(float(order.size()) / 4.0); grid_host.custom_minimum_size = Vector2(1138, rows * 126 + maxi(0,rows-1)*14 + 8); grid_scroll.add_child(grid_host)
+	var rows := ceili(float(order.size()) / 4.0); grid_host.custom_minimum_size = Vector2(1138, rows * 158 + maxi(0,rows-1)*14 + 8); grid_scroll.add_child(grid_host)
 	for i in order.size(): _build_character_card(order[i], i)
 	back_button = _button(frame, Rect2(28,588,546,50), "←  返回上一级", false); back_button.pressed.connect(func(): root.hide(); cancelled.emit())
 	confirm_button = _button(frame, Rect2(609,588,546,50), "确认编队并进入下一关  →", true); confirm_button.add_theme_font_size_override("font_size",16); confirm_button.pressed.connect(confirm)
@@ -69,27 +69,27 @@ func build(owner_hud, game_database, state) -> void:
 
 func _build_character_card(id: String, index: int) -> void:
 	var data: Dictionary = database.characters[id]; var col := index % 4; var row := int(index / 4)
-	var rect := Rect2(Vector2(col*282,row*140),Vector2(268,126)); var item: Button = hud.button(grid_host,rect,"",true); item.position=rect.position; item.size=rect.size; item.name="Squad_"+id
+	var rect := Rect2(Vector2(col*282,row*172),Vector2(268,158)); var item: Button = hud.button(grid_host,rect,"",true); item.position=rect.position; item.size=rect.size; item.name="Squad_"+id
 	for s in ["normal","hover","pressed","focus","disabled"]: item.add_theme_stylebox_override(s,StyleBoxEmpty.new())
 	buttons[id]=item
 	var panel:=Panel.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); panel.mouse_filter=Control.MOUSE_FILTER_IGNORE; panel.add_theme_stylebox_override("panel",StyleBoxEmpty.new()); item.add_child(panel); card_panels[id]=panel
-	var frame_skin:=NinePatchRect.new()
+	var frame_skin:=TextureRect.new()
 	frame_skin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	frame_skin.texture=CARD_SKIN
+	frame_skin.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+	frame_skin.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	frame_skin.mouse_filter=Control.MOUSE_FILTER_IGNORE
-	for side in [SIDE_LEFT,SIDE_TOP,SIDE_RIGHT,SIDE_BOTTOM]:
-		frame_skin.set_patch_margin(side,34)
 	frame_skin.modulate=Color(1,1,1,0.34)
 	panel.add_child(frame_skin)
 	card_frames[id]=frame_skin
 	var element:=str(data.get("element","none")); var color:Color=ELEMENT_COLORS.get(element,WHITE)
-	var preview=Preview.new(); preview.position=Vector2(9,12); preview.size=Vector2(88,102); panel.add_child(preview); preview.configure(id,database.assets.get(str(data.get("asset_key","")),{}),color,not progress.unlocked_characters.has(id)); previews[id]=preview
-	var badge: Label = hud.label(panel,Vector2(108,13),Vector2(32,23),_element_glyph(element),12,color); badge.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
-	hud.label(panel,Vector2(146,12),Vector2(108,25),str(data.get("name",id)),17,color)
-	var divider:=ColorRect.new(); divider.position=Vector2(108,43); divider.size=Vector2(146,1); divider.color=Color(color,0.35); panel.add_child(divider)
-	hud.label(panel,Vector2(108,51),Vector2(146,18),str(data.get("role","战斗成员")),10,WHITE)
-	hud.label(panel,Vector2(108,73),Vector2(146,18),"HP %d  ·  ATK %d"%[int(data.get("max_hp",0)),int(data.get("attack",0))],9,MUTED)
-	var state: Label = hud.label(panel,Vector2(108,99),Vector2(146,17),"",10,ACCENT); state.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT; state_labels[id]=state
+	var preview=Preview.new(); preview.position=Vector2(24,25); preview.size=Vector2(88,108); panel.add_child(preview); preview.configure(id,database.assets.get(str(data.get("asset_key","")),{}),color,not progress.unlocked_characters.has(id)); previews[id]=preview
+	var badge: Label = hud.label(panel,Vector2(122,27),Vector2(30,22),_element_glyph(element),11,color); badge.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+	hud.label(panel,Vector2(155,26),Vector2(88,24),str(data.get("name",id)),15,color)
+	var divider:=ColorRect.new(); divider.position=Vector2(122,55); divider.size=Vector2(121,1); divider.color=Color(color,0.35); panel.add_child(divider)
+	hud.label(panel,Vector2(122,64),Vector2(121,18),str(data.get("role","战斗成员")),9,WHITE)
+	hud.label(panel,Vector2(122,87),Vector2(121,18),"HP %d · ATK %d"%[int(data.get("max_hp",0)),int(data.get("attack",0))],8,MUTED)
+	var state: Label = hud.label(panel,Vector2(122,116),Vector2(121,17),"",9,ACCENT); state.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT; state_labels[id]=state
 	item.pressed.connect(_open_detail.bind(id)); item.mouse_entered.connect(_card_hover.bind(id,true)); item.mouse_exited.connect(_card_hover.bind(id,false))
 
 func _build_detail() -> void:
