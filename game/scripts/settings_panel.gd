@@ -8,12 +8,12 @@ const MUTED := Color("#b49ba2")
 const ACCENT := Color("#ed5d6f")
 const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 const UI_SKIN = preload("res://data/ui_skin_profile.tres")
+const SETTINGS_FRAME = preload("res://assets/ui/rift_v2/components/mode_card_red.png")
 
 var hud
 var root: Control
 var sliders: Dictionary = {}
 var value_labels: Dictionary = {}
-var fullscreen_button: Button
 var reduced_button: Button
 var close_button: Button
 var syncing := false
@@ -39,31 +39,34 @@ func build(owner_hud) -> void:
 	veil.color = Color(0.025, 0.012, 0.025, 0.90)
 	veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(veil)
-	var frame: Panel = owner_hud.panel(root, UI_LAYOUT.settings_frame_rect, Color("#21151f"), Color("#b9465b"))
-	owner_hud.ornament(frame, Rect2(-22, -20, 804, 644))
-	owner_hud.label(frame, Vector2(48, 32), Vector2(650, 20), "S E T T I N G S   /   系 统 设 置", 12, ACCENT)
-	owner_hud.label(frame, Vector2(48, 65), Vector2(650, 44), "调整游戏体验", 31, WHITE)
-	owner_hud.label(frame, Vector2(50, 111), Vector2(650, 26), "F10 随时打开 · Esc 返回", 13, MUTED)
-	_add_slider(frame, "master", "总音量", 0)
-	_add_slider(frame, "music", "背景音乐", 1)
-	_add_slider(frame, "sfx", "音效与界面反馈", 2)
-	fullscreen_button = owner_hud.button(frame, UI_LAYOUT.settings_fullscreen_rect, "显示模式", false)
-	fullscreen_button.pressed.connect(func():
-		if syncing: return
-		var enabled := not bool(fullscreen_button.get_meta("enabled", false))
-		fullscreen_button.set_meta("enabled", enabled)
-		fullscreen_button.text = "全屏：开" if enabled else "全屏：关"
-		setting_changed.emit("fullscreen", enabled))
-	reduced_button = owner_hud.button(frame, UI_LAYOUT.settings_reduced_rect, "战斗反馈", false)
+	var frame: Panel = owner_hud.panel(root, UI_LAYOUT.settings_frame_rect, Color(0.04, 0.018, 0.032, 0.96), Color(0, 0, 0, 0))
+	var frame_skin := TextureRect.new()
+	frame_skin.texture = SETTINGS_FRAME
+	frame_skin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame_skin.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame_skin.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	frame_skin.modulate = Color(0.78, 0.76, 0.78, 0.92)
+	frame_skin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.add_child(frame_skin)
+	frame.move_child(frame_skin, 0)
+	var content := Control.new()
+	content.position = Vector2(70, 22)
+	content.size = Vector2(760, 487)
+	frame.add_child(content)
+	owner_hud.label(content, Vector2(48, 32), Vector2(650, 20), "S E T T I N G S   /   系 统 设 置", 12, ACCENT)
+	owner_hud.label(content, Vector2(48, 65), Vector2(650, 44), "调整游戏体验", 31, WHITE)
+	owner_hud.label(content, Vector2(50, 111), Vector2(650, 26), "F10 随时打开 · Esc 返回", 13, MUTED)
+	_add_slider(content, "master", "总音量", 0)
+	_add_slider(content, "music", "背景音乐", 1)
+	_add_slider(content, "sfx", "音效与界面反馈", 2)
+	reduced_button = owner_hud.button(content, UI_LAYOUT.settings_reduced_rect, "战斗反馈", false)
 	reduced_button.pressed.connect(func():
 		if syncing: return
 		var enabled := not bool(reduced_button.get_meta("enabled", false))
 		reduced_button.set_meta("enabled", enabled)
 		reduced_button.text = "低特效：开" if enabled else "低特效：关"
 		setting_changed.emit("reduced_effects", enabled))
-	var reset_button: Button = owner_hud.button(frame, UI_LAYOUT.settings_reset_rect, "恢复默认设置", false)
-	reset_button.pressed.connect(_reset_defaults)
-	close_button = owner_hud.button(frame, UI_LAYOUT.settings_close_rect, "保存并返回   [Esc]", true)
+	close_button = owner_hud.button(content, UI_LAYOUT.settings_close_rect, "保存并返回   [Esc]", true)
 	close_button.pressed.connect(close)
 	root.hide()
 
@@ -92,9 +95,6 @@ func open(settings: Dictionary) -> void:
 		var value := clampf(float(settings.get(key, 1.0)), 0.0, 1.0) * 100.0
 		sliders[key].value = value
 		value_labels[key].text = "%d%%" % roundi(value)
-	var fullscreen := bool(settings.get("fullscreen", false))
-	fullscreen_button.set_meta("enabled", fullscreen)
-	fullscreen_button.text = "全屏：开" if fullscreen else "全屏：关"
 	var reduced := bool(settings.get("reduced_effects", false))
 	reduced_button.set_meta("enabled", reduced)
 	reduced_button.text = "低特效：开" if reduced else "低特效：关"

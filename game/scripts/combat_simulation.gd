@@ -13,6 +13,10 @@ const TeamResonance = preload("res://scripts/team_resonance.gd")
 const XP_THRESHOLDS = [80, 190, 330, 500]
 const Catalog = preload("res://scripts/combat_catalog.gd")
 const MOVE_AREA = Rect2(40, 140, 1200, 440)
+const GRID_ORIGIN := Vector2(40, 140)
+const GRID_CELL_SIZE := Vector2(60, 40)
+const GRID_COLUMNS := 20
+const GRID_ROWS := 11
 const STAGE_EXIT_AREA = Rect2(185, 215, 900, 320)
 const ENDLESS_ARENA = Rect2(80, 80, 2400, 1280)
 const LANES = [270.0, 360.0, 450.0]
@@ -300,7 +304,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 			"secondary_element": run_state.traveler_secondary_element if id == "traveler" and run_state.traveler_secondary_element != "none" else "",
 			"hp": float(source.max_hp), "armor": float(source.armor), "damage": float(source.attack),
 			"rate": float(source.attack_rate), "range": float(source.attack_range), "speed": float(source.move_speed),
-			"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
+			"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": _nearest_walkable_point(starts[i], 17.0),
 			"color": colors[i], "tile": Vector2(i * 16, 112), "visual": "furina" if id == "hero_03" else ""
 		}
 		h.merge({"id": i, "max_hp": h.hp, "target": h.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": h.damage, "base_hp": h.hp, "base_rate": h.rate, "cleave": id == "traveler", "cleave_ratio": 0.90, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0, "deployed": endless_mode, "energy": 0.0, "max_energy": float(source.get("ultimate", {}).get("energy_cost", 100.0)), "skill_cooldown": 0.0, "ultimate_cooldown": 0.0, "ultimate_cooldown_max": 0.0, "active_skill": source.get("active_skill", {}).duplicate(true), "ultimate": source.get("ultimate", {}).duplicate(true), "passive": source.get("passive", {}).duplicate(true), "animation_state":"idle", "status_timer":0.0, "damage_reduction":0.0, "damage_done": 0.0, "skill_uses": 0, "ultimate_uses": 0, "max_energy_seen": 0.0, "revived": false, "follow_independent": false})
@@ -447,7 +451,7 @@ func _add_reinforcement(character_id: String) -> bool:
 		"character_id": character_id, "name": source.name, "role": source.role, "element": element, "secondary_element": "",
 		"hp": float(source.max_hp), "armor": float(source.armor), "damage": float(source.attack),
 		"rate": float(source.attack_rate), "range": float(source.attack_range), "speed": float(source.move_speed),
-		"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": starts[i],
+		"block": int(source.block), "can_hit_air": bool(source.can_hit_air), "pos": _nearest_walkable_point(starts[i], 17.0),
 		"color": colors[i], "tile": Vector2(i * 16, 112), "visual": "furina" if character_id == "hero_03" else ""
 	}
 	hero.merge({"id": i, "max_hp": hero.hp, "target": hero.pos, "moving": false, "facing": 1.0, "attack_timer": 0.0, "heal_timer": 1.0, "heal_power": HEAL_AMOUNT, "personal_heal_interval": 2.6, "blocked": 0, "flash": 0.0, "shots": 0, "base_damage": hero.damage, "base_hp": hero.hp, "base_rate": hero.rate, "cleave": false, "cleave_ratio": 0.45, "splash": false, "slow": false, "projectile_count": 1, "pierce": 0, "chain_count": 0, "blast_radius": 0.0, "echo_ratio": 0.0, "crit_chance": 0.0, "deployed": endless_mode, "energy": 0.0, "max_energy": float(source.get("ultimate", {}).get("energy_cost", 100.0)), "skill_cooldown": 0.0, "ultimate_cooldown": 0.0, "ultimate_cooldown_max": 0.0, "active_skill": source.get("active_skill", {}).duplicate(true), "ultimate": source.get("ultimate", {}).duplicate(true), "passive": source.get("passive", {}).duplicate(true), "animation_state":"idle", "status_timer":0.0, "damage_reduction":0.0, "damage_done": 0.0, "skill_uses": 0, "ultimate_uses": 0, "max_energy_seen": 0.0, "revived": false, "follow_independent": false})
@@ -558,12 +562,34 @@ func _load_terrain(stage_definition: Dictionary) -> void:
 		if raw_rect.size() < 4:
 			continue
 		feature.area = Rect2(float(raw_rect[0]), float(raw_rect[1]), float(raw_rect[2]), float(raw_rect[3]))
+		if current_stage_id != "stage_01" and not endless_mode:
+			feature.grid_cells = _grid_cells_for_area(feature.area)
+			feature.area = _grid_cells_bounds(feature.grid_cells)
 		feature.base_area = feature.area
 		feature.clock = 0.0
 		feature.timer = minf(1.0, float(feature.get("interval", 4.0)))
 		feature.hp = float(feature.get("hp", 0.0))
 		feature.max_hp = float(feature.hp)
 		terrain_features.append(feature)
+
+func _grid_cells_for_area(area: Rect2) -> Array[Rect2]:
+	var first_col := clampi(floori((area.position.x - GRID_ORIGIN.x) / GRID_CELL_SIZE.x), 0, GRID_COLUMNS - 1)
+	var last_col := clampi(ceili((area.end.x - GRID_ORIGIN.x) / GRID_CELL_SIZE.x) - 1, 0, GRID_COLUMNS - 1)
+	var first_row := clampi(floori((area.position.y - GRID_ORIGIN.y) / GRID_CELL_SIZE.y), 0, GRID_ROWS - 1)
+	var last_row := clampi(ceili((area.end.y - GRID_ORIGIN.y) / GRID_CELL_SIZE.y) - 1, 0, GRID_ROWS - 1)
+	var cells: Array[Rect2] = []
+	for row in range(first_row, last_row + 1):
+		for column in range(first_col, last_col + 1):
+			cells.append(Rect2(GRID_ORIGIN + Vector2(column * GRID_CELL_SIZE.x, row * GRID_CELL_SIZE.y), GRID_CELL_SIZE))
+	return cells
+
+func _grid_cells_bounds(cells: Array) -> Rect2:
+	if cells.is_empty():
+		return Rect2()
+	var bounds: Rect2 = cells[0]
+	for i in range(1, cells.size()):
+		bounds = bounds.merge(Rect2(cells[i]))
+	return bounds
 
 func _feature_collision_rect(feature: Dictionary) -> Rect2:
 	var area := Rect2(feature.get("area", Rect2()))
@@ -575,6 +601,12 @@ func _feature_collision_rect(feature: Dictionary) -> Rect2:
 	return Rect2(area.get_center() + offset - size * 0.5, size)
 
 func _feature_contains(feature: Dictionary, point: Vector2, radius: float = 0.0) -> bool:
+	var grid_cells: Array = feature.get("grid_cells", [])
+	if not grid_cells.is_empty():
+		for cell: Variant in grid_cells:
+			if Rect2(cell).grow(radius).has_point(point):
+				return true
+		return false
 	var collision := _feature_collision_rect(feature)
 	if str(feature.get("collision_shape", "rect")) != "ellipse":
 		return collision.grow(radius).has_point(point)
@@ -593,10 +625,8 @@ func terrain_feature_at(point: Vector2, kind: String = "") -> Dictionary:
 	return {}
 
 func terrain_attack_scale(point: Vector2) -> float:
-	var feature := terrain_feature_at(point, "high_ground")
-	if feature.is_empty():
-		feature = terrain_feature_at(point, "moving_platform")
-	return 1.0 + float(feature.get("attack_bonus", 0.18)) if not feature.is_empty() else 1.0
+	var feature := terrain_feature_at(point, "attack_ground")
+	return 1.0 + float(feature.get("attack_bonus", 0.30)) if not feature.is_empty() else 1.0
 
 func terrain_movement_scale(point: Vector2) -> float:
 	var feature := terrain_feature_at(point, "low_ground")
@@ -606,16 +636,25 @@ func terrain_movement_scale(point: Vector2) -> float:
 		scale *= 0.88
 	return scale
 
+func _movement_bounds() -> Rect2:
+	return ENDLESS_ARENA.grow(-28.0) if endless_mode else MOVE_AREA.grow(-18.0)
+
+func _nearest_walkable_point(point: Vector2, radius: float = 17.0) -> Vector2:
+	var bounds := _movement_bounds()
+	var origin := Vector2(clampf(point.x, bounds.position.x, bounds.end.x), clampf(point.y, bounds.position.y, bounds.end.y))
+	if not _terrain_blocks(origin, radius):
+		return origin
+	for ring in range(1, 13):
+		var distance := float(ring) * 18.0
+		for step in range(24):
+			var candidate := origin + Vector2.from_angle(TAU * float(step) / 24.0) * distance
+			candidate = Vector2(clampf(candidate.x, bounds.position.x, bounds.end.x), clampf(candidate.y, bounds.position.y, bounds.end.y))
+			if not _terrain_blocks(candidate, radius):
+				return candidate
+	return bounds.get_center()
+
 func _resolve_walkable_target(point: Vector2) -> Vector2:
-	for feature: Dictionary in terrain_features:
-		var blocks := _feature_blocks(feature)
-		if not blocks or not _feature_contains(feature, point):
-			continue
-		var area := _feature_collision_rect(feature)
-		var candidates := [Vector2(area.position.x - 8.0, point.y), Vector2(area.end.x + 8.0, point.y), Vector2(point.x, area.position.y - 8.0), Vector2(point.x, area.end.y + 8.0)]
-		candidates.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.distance_squared_to(point) < b.distance_squared_to(point))
-		return candidates[0]
-	return point
+	return _nearest_walkable_point(point, 17.0)
 
 func _feature_blocks(feature: Dictionary) -> bool:
 	var kind := str(feature.get("type", ""))
@@ -709,15 +748,13 @@ func _move_with_terrain(current: Vector2, target: Vector2, distance: float, radi
 	return current
 
 func _move_hero_with_terrain(hero: Dictionary, dt: float) -> void:
+	if _terrain_blocks(hero.pos, 17.0):
+		hero.pos = _nearest_walkable_point(hero.pos, 17.0)
+		hero.target = hero.pos
+	else:
+		hero.target = _nearest_walkable_point(hero.target, 17.0)
 	var distance := float(hero.speed) * terrain_movement_scale(hero.pos) * dt
 	hero.pos = _move_with_terrain(hero.pos, hero.target, distance, 17.0)
-	var conveyor := terrain_feature_at(hero.pos, "conveyor")
-	if not conveyor.is_empty():
-		var raw_direction: Array = conveyor.get("direction", [-1, 0])
-		var direction := Vector2(float(raw_direction[0]), float(raw_direction[1])).normalized()
-		var shifted: Vector2 = Vector2(hero.pos) + direction * float(conveyor.get("force", 40.0)) * dt
-		if not _terrain_blocks(shifted, 17.0):
-			hero.pos = shifted
 
 func _reset_follow_history() -> void:
 	follow_history.clear()
@@ -770,19 +807,6 @@ func _terrain_tick(dt: float) -> void:
 	for feature: Dictionary in terrain_features:
 		var kind := str(feature.get("type", ""))
 		feature.clock = float(feature.get("clock", 0.0)) + dt
-		if kind == "moving_platform":
-			var old_area: Rect2 = feature.area
-			var raw_axis: Array = feature.get("axis", [1, 0])
-			var axis := Vector2(float(raw_axis[0]), float(raw_axis[1])).normalized()
-			var offset := sin(float(feature.clock) * TAU / maxf(0.5, float(feature.get("period", 4.0)))) * float(feature.get("distance", 100.0))
-			var new_area := Rect2(feature.base_area.position + axis * offset, feature.base_area.size)
-			var platform_delta := new_area.position - old_area.position
-			feature.area = new_area
-			if platform_delta.length_squared() > 0.0:
-				for hero: Dictionary in heroes:
-					if bool(hero.get("deployed", false)) and hero.hp > 0.0 and old_area.grow(6.0).has_point(hero.pos):
-						hero.pos += platform_delta
-						hero.target += platform_delta
 		feature.timer = maxf(0.0, float(feature.get("timer", 0.0)) - dt)
 		if kind not in ["mechanism", "trap", "weather"] or feature.timer > 0.0:
 			continue
@@ -790,8 +814,7 @@ func _terrain_tick(dt: float) -> void:
 			feature.timer = float(feature.get("pulse_interval", 8.0))
 			for enemy: Dictionary in enemies:
 				if enemy.hp > 0.0 and feature.area.has_point(enemy.pos):
-					enemy.aura = str(feature.get("element", "anemo"))
-					enemy.aura_timer = 3.0
+					enemy.aura = str(feature.get("element", "anemo")); enemy.aura_timer = 3.0
 			events.append({"kind":"weather_pulse","pos":feature.area.get_center(),"value":str(feature.get("element","anemo"))})
 			continue
 		var active: bool = kind == "trap" or heroes.any(func(hero: Dictionary) -> bool: return bool(hero.get("deployed", false)) and hero.hp > 0.0 and feature.area.grow(95.0).has_point(hero.pos))
@@ -801,8 +824,11 @@ func _terrain_tick(dt: float) -> void:
 		for enemy: Dictionary in enemies.duplicate():
 			var in_area: bool = feature.area.has_point(enemy.pos) if kind == "trap" else enemy.pos.distance_to(feature.area.get_center()) <= float(feature.get("radius", 185.0))
 			if enemy.hp > 0.0 and in_area:
-				apply_hit(enemy, float(feature.get("power", 60.0)), str(feature.get("element", "pyro")))
-				hit_count += 1
+				apply_hit(enemy, float(feature.get("power", 60.0)), str(feature.get("element", "pyro"))); hit_count += 1
+		if kind == "trap":
+			for hero: Dictionary in heroes:
+				if bool(hero.get("deployed", false)) and hero.hp > 0.0 and feature.area.has_point(hero.pos):
+					damage_hero(int(hero.id), float(feature.get("hero_power", 14.0))); hit_count += 1
 		feature.timer = float(feature.get("interval", 3.5))
 		if hit_count > 0:
 			events.append({"kind":"trap_pulse" if kind == "trap" else "mechanism_pulse","pos":feature.area.get_center(),"value":hit_count})
@@ -812,6 +838,7 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 	if v2_mode and database != null and database.enemy_families.has(kind):
 		var family_definition: Dictionary = database.enemy_families[kind]
 		enemy.merge({"family":family_definition.get("family", "rift"), "variant":family_definition.get("variant", kind), "behavior":family_definition.get("behavior", "pressure_advance"), "motion":family_definition.get("motion", "elastic_hop"), "visual_family":family_definition.get("visual", kind)}, true)
+	enemy.hp *= 1.40
 	enemy.hp *= 1.0 + maxf(0.0, wave - 1) * 0.10
 	if v2_mode and stage_runtime != null:
 		enemy.hp *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
@@ -1338,8 +1365,7 @@ func _enemy_tick(dt: float) -> void:
 		if absf(destination.x - e.pos.x) > 1.0:
 			e.facing = 1.0 if destination.x > e.pos.x else -1.0
 		var move_distance := float(e.speed) * speed_scale * movement_dt
-		var direct_move := bool(e.get("flying", false)) or bool(e.get("nav_clear", false))
-		var next_pos: Vector2 = e.pos.move_toward(destination, move_distance) if direct_move else _move_with_terrain(e.pos, destination, move_distance, navigation_radius)
+		var next_pos: Vector2 = _orthogonal_enemy_step(e.pos, destination, move_distance, navigation_radius)
 		var terrain_door: Dictionary = {} if bool(e.get("flying", false)) else _nearby_destructible_door(e.pos, navigation_radius)
 		if not terrain_door.is_empty():
 			next_pos = e.pos
@@ -1590,6 +1616,9 @@ func _boss_damage_warned(enemy: Dictionary, multiplier: float, control: String =
 			hero.pos = Vector2(clampf(hero.pos.x + away.x * 78.0, bounds.position.x, bounds.end.x), clampf(hero.pos.y + away.y * 78.0, bounds.position.y, bounds.end.y))
 		elif control == "pull":
 			hero.pos = hero.pos.move_toward(enemy.pos, 92.0)
+		if control in ["knockback", "pull"]:
+			hero.pos = _nearest_walkable_point(hero.pos, 17.0)
+			hero.target = hero.pos
 		elif control in ["slow", "silence"]:
 			hero.skill_cooldown = float(hero.get("skill_cooldown", 0.0)) + (2.0 if control == "slow" else 4.0)
 		if control == "drain":
@@ -1799,7 +1828,8 @@ func _execute_ability_impact(hero: Dictionary, ability: Dictionary, target: Vect
 			_damage_area(target, radius, power*0.65, "hydro", hero.id)
 			skill_effects.append({"kind":"storm_field","pos":target,"life":9.0,"pulse":0.0,"power":power*0.22,"area":radius/190.0,"hero_id":hero.id})
 		"sonic_wave":
-			_damage_area(target, radius, power, "anemo", hero.id, "pull")
+			_damage_area(target, radius, power * 1.15, "pyro", hero.id, "knockback")
+			skill_effects.append({"kind":"burning_ground","pos":target,"life":5.0,"pulse":0.0,"power":power*0.20,"area":radius/105.0,"hero_id":hero.id})
 		"team_concert":
 			for ally: Dictionary in heroes:
 				if bool(ally.get("deployed", false)) and ally.hp > 0.0:
@@ -1815,7 +1845,8 @@ func _execute_ability_impact(hero: Dictionary, ability: Dictionary, target: Vect
 		"cryo_chord":
 			_damage_area(target, radius, power, "cryo", hero.id, "freeze")
 		"fate_symphony":
-			_damage_area(target, radius, power, "cryo", hero.id, "freeze")
+			_damage_area(target, radius, power * 1.35, "pyro", hero.id, "knockback")
+			skill_effects.append({"kind":"burning_ground","pos":target,"life":10.0,"pulse":0.0,"power":power*0.28,"area":radius/105.0,"hero_id":hero.id})
 			for ally: Dictionary in heroes: ally.crit_chance = minf(0.85, ally.crit_chance+0.18)
 		"frost_bloom":
 			_damage_area(target, radius, power, "cryo", hero.id, "freeze")
@@ -2251,8 +2282,6 @@ func _hero_tick() -> void:
 func attack_range_screen_radii(hero: Dictionary) -> Vector2:
 	var depth: float = StageProjection.depth_scale(hero.pos)
 	var range_feature := terrain_feature_at(hero.pos, "high_ground")
-	if range_feature.is_empty():
-		range_feature = terrain_feature_at(hero.pos, "moving_platform")
 	var terrain_range_scale := 1.0 + float(range_feature.get("range_bonus", 0.35)) if not range_feature.is_empty() else 1.0
 	var radius_x: float = minf(330.0, 42.0 + float(hero.range) * 0.62 * depth * terrain_range_scale)
 	return Vector2(radius_x, radius_x * 0.40)
@@ -2684,6 +2713,36 @@ func stage_lanes() -> Array:
 	var mapping := stage_lane_map()
 	return [mapping.upper, mapping.main, mapping.lower]
 
+func _snap_route_center(point: Vector2) -> Vector2:
+	var origin := Vector2(70.0, 160.0)
+	var step := Vector2(60.0, 40.0)
+	return Vector2(origin.x + roundf((point.x - origin.x) / step.x) * step.x, origin.y + roundf((point.y - origin.y) / step.y) * step.y)
+
+func _orthogonalize_route(points: Array[Vector2]) -> Array[Vector2]:
+	var result: Array[Vector2] = []
+	for point: Vector2 in points:
+		var snapped := _snap_route_center(point)
+		if result.is_empty():
+			result.append(snapped); continue
+		var previous := result[-1]
+		if absf(snapped.x - previous.x) > 0.1 and absf(snapped.y - previous.y) > 0.1:
+			var corner := Vector2(snapped.x, previous.y) if result.size() % 2 == 0 else Vector2(previous.x, snapped.y)
+			if not corner.is_equal_approx(previous): result.append(corner)
+		if not snapped.is_equal_approx(result[-1]): result.append(snapped)
+	return result
+
+func _orthogonal_enemy_step(current: Vector2, target: Vector2, distance: float, radius: float) -> Vector2:
+	var delta := target - current
+	if delta.length_squared() <= 0.01: return current
+	var horizontal := Vector2(target.x, current.y)
+	var vertical := Vector2(current.x, target.y)
+	var candidates: Array[Vector2] = [horizontal, vertical] if absf(delta.x) >= absf(delta.y) else [vertical, horizontal]
+	for axis_target: Vector2 in candidates:
+		if axis_target.distance_squared_to(current) <= 0.01: continue
+		var candidate := current.move_toward(axis_target, distance)
+		if _terrain_blocker_on_segment(current, candidate, radius).is_empty(): return candidate
+	return current
+
 func stage_route(route_id: String) -> Array[Vector2]:
 	var result: Array[Vector2] = []
 	if not v2_mode or stage_runtime == null:
@@ -2692,7 +2751,7 @@ func stage_route(route_id: String) -> Array[Vector2]:
 	for value in configured.get(route_id, []):
 		if value is Array and value.size() >= 2:
 			result.append(Vector2(float(value[0]), float(value[1])))
-	return result
+	return _orthogonalize_route(result)
 
 func stage_spawn_points(route_id: String) -> Array[Vector2]:
 	var result: Array[Vector2] = []
@@ -2701,7 +2760,7 @@ func stage_spawn_points(route_id: String) -> Array[Vector2]:
 	var configured: Dictionary = stage_runtime.definition.get("spawn_points", {})
 	for value in configured.get(route_id, []):
 		if value is Array and value.size() >= 2:
-			result.append(Vector2(float(value[0]), float(value[1])))
+			result.append(_snap_route_center(Vector2(float(value[0]), float(value[1]))))
 	return result
 
 func stage_routes() -> Dictionary:

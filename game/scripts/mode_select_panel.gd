@@ -49,7 +49,7 @@ func build(owner_hud) -> void:
 	rule.color = ACCENT
 	root.add_child(rule)
 	owner_hud.label(root, Vector2(74, 124), Vector2(760, 20), "不同模式使用独立规则与地图，强化均可无限叠加。", 12, MUTED)
-	settings_button = _textured_button(root, Rect2(1026, 50, 196, 52), SETTINGS_SKIN, "⚙  设置  F10", true)
+	settings_button = _textured_button(root, Rect2(1026, 50, 196, 52), SETTINGS_SKIN, "⚙  设置  F10", false)
 	settings_button.pressed.connect(func(): _play(confirm_sound); settings_requested.emit())
 	_build_mode_card(Rect2(64, 176, 560, 330), "rift_watch", "01", "裂隙守望", "多角色路线防守", "八关剧情战役 · 折线路径 · 固定 Boss\n守卫水晶，并在每关重建卡牌构筑", "进入关卡选择", "res://assets/ui/rift_v2/stage_thumbnails/stage_03.png", true)
 	_build_mode_card(Rect2(656, 176, 560, 330), "endless_survival", "∞", "无尽生存", "四屏追击生存", "四边刷怪 · 无限升级 · 动态地形\n操纵旅行者移动，同行者跟随攻击", "立即进入荒原", "res://assets/ui/rift_v2/stage_thumbnails/stage_08.png", false)
@@ -113,18 +113,10 @@ func _build_mode_card(rect: Rect2, id: String, number: String, title: String, su
 	hud.label(item, Vector2(48, 151), Vector2(456, 25), subtitle, 15, ACCENT if active else Color("#b899a0"))
 	var copy: Label = hud.label(item, Vector2(48, 191), Vector2(456, 50), description, 13, MUTED)
 	copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	var action := TextureRect.new()
-	action.position = Vector2(48, 242)
-	action.size = Vector2(180, 45)
-	action.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	action.texture = SMALL_BUTTON
-	action.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	action.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	action.modulate = Color.WHITE if active else Color(0.48, 0.46, 0.49, 0.82)
-	item.add_child(action)
-	action_skins[id] = action
-	var action_label: Label = hud.label(action, Vector2(10, 9), Vector2(160, 26), action_text + "  →", 14, WHITE)
+	var action_label: Label = hud.label(item, Vector2(70, 248), Vector2(260, 30), action_text + "  →", 14, WHITE)
 	action_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	action_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	action_skins[id] = action_label
 	item.focus_entered.connect(_focus_mode.bind(id))
 	item.mouse_entered.connect(func(): _play(select_sound); item.grab_focus())
 	item.pressed.connect(func(): _play(confirm_sound); root.hide(); chosen.emit(id))
@@ -137,20 +129,16 @@ func _build_checkpoint() -> void:
 	panel.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	panel.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	root.add_child(panel)
-	var glyph: Label = hud.label(panel, Vector2(22, 30), Vector2(42, 48), "♆", 32, ACCENT)
-	glyph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	checkpoint_title = hud.label(panel, Vector2(78, 18), Vector2(720, 28), "远征检查点", 19, WHITE)
-	checkpoint_detail = hud.label(panel, Vector2(78, 50), Vector2(740, 48), "", 11, MUTED)
+	checkpoint_title = hud.label(panel, Vector2(96, 32), Vector2(650, 28), "远征检查点", 19, WHITE)
+	checkpoint_detail = hud.label(panel, Vector2(96, 64), Vector2(650, 46), "", 11, MUTED)
 	checkpoint_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	continue_button = _textured_button(root, Rect2(860, 580, 312, 78), SMALL_BUTTON, "", true)
-	var continue_icon := TextureRect.new()
-	continue_icon.texture = CONTINUE_GLYPH
-	continue_icon.position = Vector2(56, 14)
-	continue_icon.size = Vector2(200, 50)
-	continue_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	continue_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	continue_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	continue_button.add_child(continue_icon)
+	continue_button = hud.button(panel, Rect2(790, 39, 265, 66), "载入检查点  →", false)
+	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+		continue_button.add_theme_stylebox_override(state, StyleBoxEmpty.new())
+	continue_button.add_theme_font_size_override("font_size", 16)
+	continue_button.mouse_entered.connect(func(): _play(select_sound); continue_button.modulate = Color.WHITE)
+	continue_button.mouse_exited.connect(func(): continue_button.modulate = Color(0.76, 0.72, 0.76, 0.92))
+	continue_button.modulate = Color(0.76, 0.72, 0.76, 0.92)
 	continue_button.pressed.connect(func(): _play(confirm_sound); continue_requested.emit())
 
 func _command_button(rect: Rect2, text_value: String) -> Button:
@@ -199,7 +187,7 @@ func _focus_mode(id: String) -> void:
 		var focused := mode_id == id
 		card_panels[mode_id].texture = MODE_RED if focused else MODE_GRAY
 		buttons[mode_id].modulate = Color.WHITE if focused else Color(0.72, 0.70, 0.73, 0.94)
-		action_skins[mode_id].modulate = Color("#ff526a") if focused else Color(0.44,0.42,0.45,0.82)
+		action_skins[mode_id].modulate = Color.WHITE if focused else Color(0.58, 0.55, 0.59, 0.88)
 
 func _textured_button(parent: Control, rect: Rect2, texture: Texture2D, text_value: String, bright: bool) -> Button:
 	var item: Button = hud.button(parent, rect, "", false)

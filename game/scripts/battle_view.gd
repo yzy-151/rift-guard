@@ -19,6 +19,11 @@ const VFX_FLARE = preload("res://assets/vfx/third_party/kenney_particle/flare_01
 const VFX_SPARK = preload("res://assets/vfx/third_party/kenney_particle/spark_05.png")
 const VFX_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_01.png")
 const VFX_TRACE = preload("res://assets/vfx/third_party/kenney_particle/trace_05.png")
+const TILE_HAZARD = preload("res://assets/world/terrain_tiles_v64/target_EXPORT0001.png")
+const TILE_HIGH_GROUND = preload("res://assets/world/terrain_tiles_v64/pentaGraphic 1.png")
+const TILE_LOW_GROUND = preload("res://assets/world/terrain_tiles_v64/PORTAL0012.png")
+const TILE_ATTACK_GROUND = preload("res://assets/world/terrain_tiles_v64/huge_vfx0002.png")
+const TILE_BLOCKED = preload("res://assets/world/terrain_tiles_v64/labLaser0002.png")
 ## 无尽模式墙体与大门素材（石块 / 锁箱 / 铁箱，来源见 assets/world/endless/README.md）
 const WALL_STONES: Array[Texture2D] = [
 	preload("res://assets/world/endless/stone_wall_a.png"),
@@ -967,10 +972,7 @@ func _draw_stage_architecture(theme: Dictionary, palette: Dictionary) -> void:
 func _draw_stage_motif(motif: String, accent: Color) -> void:
 	match motif:
 		"gallery":
-			for x in [190.0, 510.0, 830.0]:
-				draw_arc(Vector2(x, 221), 54.0, PI, TAU, 30, Color(accent, 0.38), 7.0, true)
-				draw_line(Vector2(x - 54, 221), Vector2(x - 54, 285), Color(accent, 0.18), 5.0, true)
-				draw_line(Vector2(x + 54, 221), Vector2(x + 54, 285), Color(accent, 0.18), 5.0, true)
+			pass
 		"nest":
 			for i in 9:
 				var root := Vector2(90 + i * 118, 248 + (i % 2) * 42)
@@ -1197,6 +1199,32 @@ func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector
 			caption(center + Vector2(-35, 34), "战技可破坏", Color("#ffe59a"), 8)
 		return true
 	return false
+func _terrain_cells(feature: Dictionary) -> Array[Rect2]:
+	var cells: Array[Rect2] = []
+	for value: Variant in feature.get("grid_cells", []):
+		if value is Rect2:
+			cells.append(value)
+	if cells.is_empty():
+		var area: Rect2 = feature.get("area", Rect2())
+		if area.size != Vector2.ZERO:
+			cells.append(area)
+	return cells
+
+func _terrain_tile_active(area: Rect2) -> bool:
+	return sim.heroes.any(func(hero: Dictionary) -> bool: return bool(hero.get("deployed", false)) and hero.hp > 0.0 and area.has_point(hero.pos))
+
+func _draw_effect_tiles(texture: Texture2D, feature: Dictionary, tint: Color = Color.WHITE) -> void:
+	var source_size := Vector2(texture.get_size())
+	for cell: Rect2 in _terrain_cells(feature):
+		var screen_cell := _terrain_screen_rect(cell)
+		var active := _terrain_tile_active(cell)
+		var fit_scale := minf(screen_cell.size.x * 0.68 / maxf(1.0, source_size.x), screen_cell.size.y * 0.72 / maxf(1.0, source_size.y))
+		var draw_size := source_size * fit_scale * (1.10 if active else 1.0)
+		var draw_rect := Rect2(screen_cell.get_center() - draw_size * 0.5, draw_size)
+		if active:
+			draw_circle(screen_cell.get_center(), minf(draw_size.x, draw_size.y) * 0.52, Color(0.48, 0.03, 0.06, 0.20))
+		draw_texture_rect(texture, draw_rect, false, Color("#7e202b") if active else tint)
+
 func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_features:
 		var area: Rect2 = feature.get("area", Rect2())
 		if area.size == Vector2.ZERO:
@@ -1221,57 +1249,18 @@ func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_fe
 				draw_line(center - Vector2(arm, 18), center + Vector2(arm, 18), Color(0.94, 0.38, 0.46, 0.20), 7.0, true)
 			caption(center + Vector2(-38, -16), str(feature.get("label", "路口")), Color("#d98291"), 9)
 		elif kind == "high_ground":
-			var lowered := PackedVector2Array()
-			for point in polygon:
-				lowered.append(point + Vector2(0, 10))
-			draw_colored_polygon(lowered, Color("#17131d"))
-			draw_colored_polygon(polygon, Color(0.30, 0.25, 0.34, 0.96))
-			draw_polyline(PackedVector2Array([polygon[0], polygon[1], polygon[2], polygon[3], polygon[0]]), Color("#c2a0ca"), 2.0, true)
-			for i in 3:
-				var mark := center + Vector2(-34 + i * 34, 2)
-				draw_polyline(PackedVector2Array([mark + Vector2(-7, 5), mark + Vector2(0, -3), mark + Vector2(7, 5)]), Color(0.84, 0.70, 0.88, 0.72), 2.0, true)
-			caption(center + Vector2(-34, -18), "高台 · 攻击/射程强化", Color("#e6c9e9"), 10)
+			_draw_effect_tiles(TILE_HIGH_GROUND, feature)
 		elif kind == "low_ground":
-			draw_colored_polygon(polygon, Color(0.12, 0.16, 0.22, 0.84))
-			draw_polyline(PackedVector2Array([polygon[0], polygon[1], polygon[2], polygon[3], polygon[0]]), Color("#56829a"), 2.0, true)
-			for i in 4:
-				draw_line(polygon[0].lerp(polygon[3], float(i + 1) / 5.0), polygon[1].lerp(polygon[2], float(i + 1) / 5.0), Color(0.33, 0.57, 0.68, 0.22), 2.0, true)
-			caption(center + Vector2(-28, -8), "洼地 · 减速", Color("#88bfd4"), 10)
+			_draw_effect_tiles(TILE_LOW_GROUND, feature)
+		elif kind == "trap":
+			_draw_effect_tiles(TILE_HAZARD, feature)
+		elif kind == "attack_ground":
+			_draw_effect_tiles(TILE_ATTACK_GROUND, feature)
 		elif kind == "blocked":
-			if sim.endless_mode:
-				_draw_endless_wall(_terrain_screen_rect(area))
-			else:
-				draw_colored_polygon(polygon, Color(0.22, 0.07, 0.10, 0.92))
-				draw_polyline(PackedVector2Array([polygon[0], polygon[2], polygon[1], polygon[3], polygon[0]]), Color("#c34d60"), 3.0, true)
-			if not sim.endless_mode:
-				caption(center + Vector2(-30, -7), str(feature.get("label", "不可通行")), Color("#ff8795"), 9)
-		elif kind == "mechanism":
-			var active: bool = sim.heroes.any(func(hero: Dictionary) -> bool: return hero.hp > 0.0 and area.grow(95.0).has_point(hero.pos))
-			var glow := Color("#ffbd62") if active else Color("#9c727a")
-			draw_colored_polygon(polygon, Color(glow, 0.12 if active else 0.07))
-			draw_arc(center, 24.0 + sin(clock * 4.0) * 3.0, clock, clock + PI * 1.65, 6, Color(glow, 0.82), 3.0, true)
-			draw_arc(center, 12.0, -clock * 1.5, TAU - clock * 1.5, 6, Color(glow, 0.90), 2.0, true)
-			if active:
-				draw_arc(center, float(feature.get("radius", 180.0)) * 0.38, 0, TAU, 48, Color(glow, 0.10), 2.0, true)
-			caption(center + Vector2(-28, 37), "火力机关" if active else "靠近启动", glow, 10)
-		elif kind in ["shortcut", "door"]:
-			var broken := float(feature.get("hp", 0.0)) <= 0.0
-			if broken:
-				draw_colored_polygon(polygon, Color(0.25, 0.72, 0.52, 0.08))
-				draw_dashed_line(polygon[0], polygon[1], Color("#66d49d"), 2.0, 7.0, true)
-				caption(center + Vector2(-33, -6), "捷径已开启", Color("#83e1b2"), 10)
-			else:
-				if sim.endless_mode and kind == "door":
-					_draw_endless_gate(_terrain_screen_rect(area))
-				else:
-					draw_colored_polygon(polygon, Color(0.25, 0.13, 0.10, 0.92))
-					for i in 4:
-						var x := lerpf(polygon[0].x, polygon[1].x, float(i + 1) / 5.0)
-						draw_line(Vector2(x, polygon[0].y), Vector2(x, polygon[3].y), Color("#df8c5d"), 4.0, true)
-				var hp_ratio := clampf(float(feature.get("hp", 0.0)) / maxf(1.0, float(feature.get("max_hp", 1.0))), 0.0, 1.0)
-				draw_rect(Rect2(center + Vector2(-38, -42), Vector2(76, 6)), Color("#291d20"))
-				draw_rect(Rect2(center + Vector2(-38, -42), Vector2(76 * hp_ratio, 6)), Color("#f2aa65"))
-				caption(center + Vector2(-43, 44), "战技破门" if kind == "door" else "战技可破坏", Color("#ffc181"), 10)
+			if sim.endless_mode: _draw_endless_wall(_terrain_screen_rect(area))
+			else: _draw_effect_tiles(TILE_BLOCKED, feature)
+		elif kind in ["shortcut", "door"] and sim.endless_mode:
+			if float(feature.get("hp", 0.0)) > 0.0: _draw_endless_gate(_terrain_screen_rect(area))
 
 func _draw_endless_stage() -> void:
 	draw_texture_rect(stage_background_8, Rect2(0, 0, 1280, 720), false, Color(0.34, 0.24, 0.30, 1.0))

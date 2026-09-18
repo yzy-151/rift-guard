@@ -40,28 +40,27 @@ func build(owner_hud, game_database, state) -> void:
 	back_button.pressed.connect(func(): _play(confirm_sound); close(); cancelled.emit())
 	var ids: Array = database.modes.get("rift_watch", {}).get("stage_ids", [])
 	for i in ids.size(): _build_stage_card(i, str(ids[i]), database.stages[str(ids[i])])
-	_build_endless()
 	select_sound = AudioStreamPlayer.new(); select_sound.stream = preload("res://assets/helltaker/audio/button_chapter_highlight_01.wav"); select_sound.bus = "SFX"; select_sound.volume_db = -7; add_child(select_sound)
 	confirm_sound = AudioStreamPlayer.new(); confirm_sound.stream = preload("res://assets/helltaker/audio/button_chapter_confirm_01.wav"); confirm_sound.bus = "SFX"; confirm_sound.volume_db = -4; add_child(confirm_sound)
 	root.hide()
 
 func _build_stage_card(index: int, id: String, stage: Dictionary) -> void:
 	var col := index % 4; var row := int(index / 4)
-	var rect := Rect2(Vector2(48 + col * 299, 132 + row * 254), Vector2(286, 253))
+	var rect := Rect2(Vector2(70 + col * 285, 132 + row * 278), Vector2(278, 258))
 	var item: Button = hud.button(root, rect, "", index == 0); item.name = "Stage_%02d" % (index + 1)
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]: item.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	buttons[id] = item
 	var panel := Panel.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); panel.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new()); item.add_child(panel); card_panels[id] = panel
-	var frame := TextureRect.new(); frame.position = Vector2(22, 0); frame.size = Vector2(242, 253); frame.texture = BUFF_RED if index == 0 else BUFF_GRAY; frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; frame.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_child(frame); card_frames[id] = frame
-	var preview_clip := Control.new(); preview_clip.position = Vector2(48, 48); preview_clip.size = Vector2(190, 80); preview_clip.clip_contents = true; preview_clip.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_child(preview_clip)
+	var frame := TextureRect.new(); frame.position = Vector2(10, 0); frame.size = Vector2(258, 258); frame.texture = BUFF_RED if index == 0 else BUFF_GRAY; frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED; frame.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_child(frame); card_frames[id] = frame
+	var preview_clip := Control.new(); preview_clip.position = Vector2(34, 49); preview_clip.size = Vector2(210, 88); preview_clip.clip_contents = true; preview_clip.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_child(preview_clip)
 	var preview := TextureRect.new(); preview.texture = load("res://assets/ui/stage_thumbnails_v60/battle_%02d.png" % (index + 1)); preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED; preview.mouse_filter = Control.MOUSE_FILTER_IGNORE; preview_clip.add_child(preview); stage_previews[id] = preview
-	var number: Label = hud.label(panel, Vector2(48, 17), Vector2(32, 24), "%02d" % (index + 1), 14, ACCENT if index == 0 else MUTED)
-	hud.label(panel, Vector2(82, 17), Vector2(154, 24), str(stage.name), 14, WHITE)
+	var number: Label = hud.label(panel, Vector2(34, 18), Vector2(32, 24), "%02d" % (index + 1), 14, ACCENT if index == 0 else MUTED)
+	hud.label(panel, Vector2(68, 18), Vector2(176, 24), str(stage.name), 14, WHITE)
 	var boss: Dictionary = Catalog.ENEMIES.get(str(stage.boss_id), {})
-	hud.label(panel, Vector2(48, 136), Vector2(190, 18), "◷ %d:%02d  ·  %s" % [int(stage.duration_seconds) / 60, int(stage.duration_seconds) % 60, boss.get("name", stage.boss_id)], 9, MUTED)
-	var status: Label = hud.label(panel, Vector2(48, 158), Vector2(190, 38), "", 9, WHITE); status_labels[id] = status
-	var action: Label = hud.label(panel, Vector2(48, 207), Vector2(190, 18), "进入编队   →", 11, ACCENT); action.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	var lock: Label = hud.label(panel, Vector2(48, 65), Vector2(190, 44), "🔒  LOCKED", 18, ACCENT); lock.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; lock.vertical_alignment = VERTICAL_ALIGNMENT_CENTER; lock.hide(); lock_labels[id] = lock
+	hud.label(panel, Vector2(34, 145), Vector2(210, 18), "◷ %d:%02d  ·  %s" % [int(stage.duration_seconds) / 60, int(stage.duration_seconds) % 60, boss.get("name", stage.boss_id)], 9, MUTED)
+	var status: Label = hud.label(panel, Vector2(34, 168), Vector2(210, 38), "", 9, WHITE); status_labels[id] = status
+	var action: Label = hud.label(panel, Vector2(34, 218), Vector2(210, 18), "进入编队   →", 11, ACCENT); action.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	var lock: Label = hud.label(panel, Vector2(34, 72), Vector2(210, 44), "🔒  LOCKED", 18, ACCENT); lock.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; lock.vertical_alignment = VERTICAL_ALIGNMENT_CENTER; lock.hide(); lock_labels[id] = lock
 	item.focus_entered.connect(_focus_stage.bind(id)); item.mouse_entered.connect(func(): item.grab_focus(); _play(select_sound)); item.pressed.connect(select.bind(id))
 
 func _build_endless() -> void:

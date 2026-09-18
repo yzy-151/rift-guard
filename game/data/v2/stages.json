@@ -4,7 +4,7 @@
     "name": "裂隙前哨",
     "duration_seconds": 345,
     "boss_at_seconds": 290,
-    "boss_id": "boss_01",
+    "boss_id": "boss_02",
     "enemy_health_multiplier": 1.12,
     "enemy_damage_multiplier": 0.38,
     "enemy_speed_multiplier": 1.03,
@@ -186,21 +186,21 @@
       },
       {
         "at": 45,
-        "enemy_id": "runner",
+        "enemy_id": "grunt",
         "count": 14,
         "interval": 2.3,
         "route_id": "upper"
       },
       {
         "at": 65,
-        "enemy_id": "runner",
+        "enemy_id": "grunt",
         "count": 14,
         "interval": 2.3,
         "route_id": "lower"
       },
       {
         "at": 90,
-        "enemy_id": "flyer",
+        "enemy_id": "slime_anemo",
         "count": 12,
         "interval": 2.5,
         "route_id": "upper"
@@ -235,7 +235,7 @@
       },
       {
         "at": 190,
-        "enemy_id": "healer",
+        "enemy_id": "slime_hydro",
         "count": 5,
         "interval": 7,
         "route_id": "main"
@@ -249,35 +249,35 @@
       },
       {
         "at": 225,
-        "enemy_id": "charger",
+        "enemy_id": "armored",
         "count": 16,
         "interval": 1.65,
         "route_id": "upper"
       },
       {
         "at": 240,
-        "enemy_id": "runner",
+        "enemy_id": "grunt",
         "count": 40,
         "interval": 1.3,
         "route_id": "lower"
       },
       {
         "at": 270,
-        "enemy_id": "flyer",
+        "enemy_id": "slime_anemo",
         "count": 24,
         "interval": 1.5,
         "route_id": "upper"
       },
       {
         "at": 255,
-        "enemy_id": "splitter",
+        "enemy_id": "slime_pyro",
         "count": 6,
         "interval": 5.2,
         "route_id": "lower"
       },
       {
         "at": 278,
-        "enemy_id": "warder",
+        "enemy_id": "buffer",
         "count": 5,
         "interval": 5.8,
         "route_id": "main"
@@ -484,77 +484,37 @@
       },
       {
         "id": "tide_device",
-        "type": "mechanism",
+        "type": "attack_ground",
         "rect": [
           540,
           385,
           78,
           76
         ],
-        "label": "潮汐机关",
-        "power": 78,
-        "radius": 200,
-        "interval": 3.2
-      },
-      {
-        "id": "tide_shortcut",
-        "type": "shortcut",
-        "rect": [
-          655,
-          305,
-          72,
-          90
-        ],
-        "label": "血锁闸门",
-        "hp": 620
+        "label": "攻击增幅地砖",
+        "attack_bonus": 0.3
       },
       {
         "id": "one_way_gate",
-        "type": "one_way",
+        "type": "blocked",
         "rect": [
           430,
           250,
           78,
           72
         ],
-        "label": "单向风门",
-        "direction": [
-          -1,
-          0
-        ]
+        "label": "裂隙石墙"
       },
       {
         "id": "moving_platform",
-        "type": "moving_platform",
+        "type": "blocked",
         "rect": [
           610,
           185,
           150,
           62
         ],
-        "label": "浮空平台",
-        "axis": [
-          1,
-          0
-        ],
-        "distance": 120,
-        "period": 4.0
-      },
-      {
-        "id": "conveyor",
-        "type": "conveyor",
-        "rect": [
-          720,
-          450,
-          210,
-          68
-        ],
-        "label": "裂隙流带",
-        "direction": [
-          -1,
-          0
-        ],
-        "force": 48
+        "label": "裂隙石墙"
       },
       {
         "id": "element_trap",
@@ -565,10 +525,11 @@
           100,
           82
         ],
-        "label": "元素陷阱",
+        "label": "持续伤害地砖",
         "element": "electro",
         "power": 32,
-        "interval": 2.8
+        "interval": 0.85,
+        "hero_power": 14.0
       },
       {
         "id": "weather",
@@ -920,77 +881,37 @@
       },
       {
         "id": "nest_device",
-        "type": "mechanism",
+        "type": "attack_ground",
         "rect": [
           470,
           300,
           82,
           82
         ],
-        "label": "黑曜处刑台",
-        "power": 280,
-        "radius": 280,
-        "interval": 1.6
-      },
-      {
-        "id": "nest_shortcut",
-        "type": "shortcut",
-        "rect": [
-          570,
-          365,
-          76,
-          96
-        ],
-        "label": "核心外壳",
-        "hp": 840
+        "label": "攻击增幅地砖",
+        "attack_bonus": 0.3
       },
       {
         "id": "one_way_gate",
-        "type": "one_way",
+        "type": "blocked",
         "rect": [
           430,
           250,
           78,
           72
         ],
-        "label": "单向风门",
-        "direction": [
-          -1,
-          0
-        ]
+        "label": "裂隙石墙"
       },
       {
         "id": "moving_platform",
-        "type": "moving_platform",
+        "type": "blocked",
         "rect": [
           610,
           185,
           150,
           62
         ],
-        "label": "浮空平台",
-        "axis": [
-          1,
-          0
-        ],
-        "distance": 120,
-        "period": 4.0
-      },
-      {
-        "id": "conveyor",
-        "type": "conveyor",
-        "rect": [
-          720,
-          450,
-          210,
-          68
-        ],
-        "label": "裂隙流带",
-        "direction": [
-          -1,
-          0
-        ],
-        "force": 48
+        "label": "裂隙石墙"
       },
       {
         "id": "element_trap",
@@ -1001,10 +922,11 @@
           100,
           82
         ],
-        "label": "元素陷阱",
+        "label": "持续伤害地砖",
         "element": "electro",
         "power": 32,
-        "interval": 2.8
+        "interval": 0.85,
+        "hero_power": 14.0
       },
       {
         "id": "weather",
@@ -1387,77 +1309,37 @@
       },
       {
         "id": "stage_04_mechanism_3",
-        "type": "mechanism",
+        "type": "attack_ground",
         "rect": [
           470,
           300,
           82,
           82
         ],
-        "label": "黑曜处刑台",
-        "power": 280,
-        "radius": 280,
-        "interval": 1.6
-      },
-      {
-        "id": "stage_04_shortcut_4",
-        "type": "shortcut",
-        "rect": [
-          570,
-          365,
-          76,
-          96
-        ],
-        "label": "核心外壳",
-        "hp": 840
+        "label": "攻击增幅地砖",
+        "attack_bonus": 0.3
       },
       {
         "id": "stage_04_one_way_5",
-        "type": "one_way",
+        "type": "blocked",
         "rect": [
           430,
           250,
           78,
           72
         ],
-        "label": "单向风门",
-        "direction": [
-          -1,
-          0
-        ]
+        "label": "裂隙石墙"
       },
       {
         "id": "stage_04_moving_platform_6",
-        "type": "moving_platform",
+        "type": "blocked",
         "rect": [
           610,
           185,
           150,
           62
         ],
-        "label": "浮空平台",
-        "axis": [
-          1,
-          0
-        ],
-        "distance": 120,
-        "period": 4.0
-      },
-      {
-        "id": "stage_04_conveyor_7",
-        "type": "conveyor",
-        "rect": [
-          720,
-          450,
-          210,
-          68
-        ],
-        "label": "裂隙流带",
-        "direction": [
-          -1,
-          0
-        ],
-        "force": 48
+        "label": "裂隙石墙"
       },
       {
         "id": "stage_04_trap_8",
@@ -1468,10 +1350,11 @@
           100,
           82
         ],
-        "label": "元素陷阱",
+        "label": "持续伤害地砖",
         "element": "electro",
         "power": 38,
-        "interval": 2.8
+        "interval": 0.85,
+        "hero_power": 14.0
       },
       {
         "id": "stage_04_weather_9",
@@ -1820,77 +1703,37 @@
       },
       {
         "id": "stage_05_mechanism_3",
-        "type": "mechanism",
+        "type": "attack_ground",
         "rect": [
           470,
           300,
           82,
           82
         ],
-        "label": "黑曜处刑台",
-        "power": 280,
-        "radius": 280,
-        "interval": 1.6
-      },
-      {
-        "id": "stage_05_shortcut_4",
-        "type": "shortcut",
-        "rect": [
-          570,
-          365,
-          76,
-          96
-        ],
-        "label": "核心外壳",
-        "hp": 840
+        "label": "攻击增幅地砖",
+        "attack_bonus": 0.3
       },
       {
         "id": "stage_05_one_way_5",
-        "type": "one_way",
+        "type": "blocked",
         "rect": [
           430,
           250,
           78,
           72
         ],
-        "label": "单向风门",
-        "direction": [
-          -1,
-          0
-        ]
+        "label": "裂隙石墙"
       },
       {
         "id": "stage_05_moving_platform_6",
-        "type": "moving_platform",
+        "type": "blocked",
         "rect": [
           610,
           185,
           150,
           62
         ],
-        "label": "浮空平台",
-        "axis": [
-          1,
-          0
-        ],
-        "distance": 120,
-        "period": 4.0
-      },
-      {
-        "id": "stage_05_conveyor_7",
-        "type": "conveyor",
-        "rect": [
-          720,
-          450,
-          210,
-          68
-        ],
-        "label": "裂隙流带",
-        "direction": [
-          -1,
-          0
-        ],
-        "force": 48
+        "label": "裂隙石墙"
       },
       {
         "id": "stage_05_trap_8",
@@ -1901,10 +1744,11 @@
           100,
           82
         ],
-        "label": "元素陷阱",
+        "label": "持续伤害地砖",
         "element": "electro",
         "power": 45,
-        "interval": 2.8
+        "interval": 0.85,
+        "hero_power": 14.0
       },
       {
         "id": "stage_05_weather_9",
@@ -2261,77 +2105,37 @@
       },
       {
         "id": "stage_06_mechanism_3",
-        "type": "mechanism",
+        "type": "attack_ground",
         "rect": [
           470,
           300,
           82,
           82
         ],
-        "label": "黑曜处刑台",
-        "power": 280,
-        "radius": 280,
-        "interval": 1.6
-      },
-      {
-        "id": "stage_06_shortcut_4",
-        "type": "shortcut",
-        "rect": [
-          570,
-          365,
-          76,
-          96
-        ],
-        "label": "核心外壳",
-        "hp": 840
+        "label": "攻击增幅地砖",
+        "attack_bonus": 0.3
       },
       {
         "id": "stage_06_one_way_5",
-        "type": "one_way",
+        "type": "blocked",
         "rect": [
           430,
           250,
           78,
           72
         ],
-        "label": "单向风门",
-        "direction": [
-          -1,
-          0
-        ]
+        "label": "裂隙石墙"
       },
       {
         "id": "stage_06_moving_platform_6",
-        "type": "moving_platform",
+        "type": "blocked",
         "rect": [
           610,
           185,
           150,
           62
         ],
-        "label": "浮空平台",
-        "axis": [
-          1,
-          0
-        ],
-        "distance": 120,
-        "period": 4.0
-      },
-      {
-        "id": "stage_06_conveyor_7",
-        "type": "conveyor",
-        "rect": [
-          720,
-          450,
-          210,
-          68
-        ],
-        "label": "裂隙流带",
-        "direction": [
-          -1,
-          0
-        ],
-        "force": 48
+        "label": "裂隙石墙"
       },
       {
         "id": "stage_06_trap_8",
@@ -2342,10 +2146,11 @@
           100,
           82
         ],
-        "label": "元素陷阱",
+        "label": "持续伤害地砖",
         "element": "electro",
         "power": 52,
-        "interval": 2.8
+        "interval": 0.85,
+        "hero_power": 14.0
       },
       {
         "id": "stage_06_weather_9",
@@ -2698,77 +2503,37 @@
       },
       {
         "id": "stage_07_mechanism_3",
-        "type": "mechanism",
+        "type": "attack_ground",
         "rect": [
           470,
           300,
           82,
           82
         ],
-        "label": "黑曜处刑台",
-        "power": 280,
-        "radius": 280,
-        "interval": 1.6
-      },
-      {
-        "id": "stage_07_shortcut_4",
-        "type": "shortcut",
-        "rect": [
-          570,
-          365,
-          76,
-          96
-        ],
-        "label": "核心外壳",
-        "hp": 840
+        "label": "攻击增幅地砖",
+        "attack_bonus": 0.3
       },
       {
         "id": "stage_07_one_way_5",
-        "type": "one_way",
+        "type": "blocked",
         "rect": [
           430,
           250,
           78,
           72
         ],
-        "label": "单向风门",
-        "direction": [
-          -1,
-          0
-        ]
+        "label": "裂隙石墙"
       },
       {
         "id": "stage_07_moving_platform_6",
-        "type": "moving_platform",
+        "type": "blocked",
         "rect": [
           610,
           185,
           150,
           62
         ],
-        "label": "浮空平台",
-        "axis": [
-          1,
-          0
-        ],
-        "distance": 120,
-        "period": 4.0
-      },
-      {
-        "id": "stage_07_conveyor_7",
-        "type": "conveyor",
-        "rect": [
-          720,
-          450,
-          210,
-          68
-        ],
-        "label": "裂隙流带",
-        "direction": [
-          -1,
-          0
-        ],
-        "force": 48
+        "label": "裂隙石墙"
       },
       {
         "id": "stage_07_trap_8",
@@ -2779,10 +2544,11 @@
           100,
           82
         ],
-        "label": "元素陷阱",
+        "label": "持续伤害地砖",
         "element": "electro",
         "power": 59,
-        "interval": 2.8
+        "interval": 0.85,
+        "hero_power": 14.0
       },
       {
         "id": "stage_07_weather_9",
@@ -3135,77 +2901,37 @@
       },
       {
         "id": "stage_08_mechanism_3",
-        "type": "mechanism",
+        "type": "attack_ground",
         "rect": [
           470,
           300,
           82,
           82
         ],
-        "label": "黑曜处刑台",
-        "power": 280,
-        "radius": 280,
-        "interval": 1.6
-      },
-      {
-        "id": "stage_08_shortcut_4",
-        "type": "shortcut",
-        "rect": [
-          570,
-          365,
-          76,
-          96
-        ],
-        "label": "核心外壳",
-        "hp": 840
+        "label": "攻击增幅地砖",
+        "attack_bonus": 0.3
       },
       {
         "id": "stage_08_one_way_5",
-        "type": "one_way",
+        "type": "blocked",
         "rect": [
           430,
           250,
           78,
           72
         ],
-        "label": "单向风门",
-        "direction": [
-          -1,
-          0
-        ]
+        "label": "裂隙石墙"
       },
       {
         "id": "stage_08_moving_platform_6",
-        "type": "moving_platform",
+        "type": "blocked",
         "rect": [
           610,
           185,
           150,
           62
         ],
-        "label": "浮空平台",
-        "axis": [
-          1,
-          0
-        ],
-        "distance": 120,
-        "period": 4.0
-      },
-      {
-        "id": "stage_08_conveyor_7",
-        "type": "conveyor",
-        "rect": [
-          720,
-          450,
-          210,
-          68
-        ],
-        "label": "裂隙流带",
-        "direction": [
-          -1,
-          0
-        ],
-        "force": 48
+        "label": "裂隙石墙"
       },
       {
         "id": "stage_08_trap_8",
@@ -3216,10 +2942,11 @@
           100,
           82
         ],
-        "label": "元素陷阱",
+        "label": "持续伤害地砖",
         "element": "electro",
         "power": 66,
-        "interval": 2.8
+        "interval": 0.85,
+        "hero_power": 14.0
       },
       {
         "id": "stage_08_weather_9",
@@ -3703,7 +3430,6 @@
     },
     "template_id": "loop",
     "terrain": [
-
       {
         "id": "endless_dual_junction",
         "type": "junction",
@@ -3852,7 +3578,6 @@
         ],
         "label": "东环断墙"
       },
-
       {
         "id": "endless_dual_divider",
         "type": "blocked",
@@ -3921,4 +3646,3 @@
     }
   }
 ]
-

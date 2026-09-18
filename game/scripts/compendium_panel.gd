@@ -39,7 +39,7 @@ func build(owner_hud, game_database, state) -> void:
 	veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.add_child(veil)
 	var frame: Panel = owner_hud.panel(root, Rect2(54, 40, 1172, 640), Color("#171119"), Color("#9f4f60"))
-	owner_hud.ornament(frame, Rect2(-18, -18, 1208, 676))
+	frame.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	owner_hud.label(frame, Vector2(34, 21), Vector2(520, 20), "A R C H I V E   /   裂 隙 档 案", 12, ACCENT)
 	title = owner_hud.label(frame, Vector2(34, 47), Vector2(520, 42), "角色图鉴", 30, WHITE)
 	counter = owner_hud.label(frame, Vector2(640, 54), Vector2(405, 28), "", 14, MUTED)

@@ -3,7 +3,8 @@ extends CanvasLayer
 signal confirmed(squad: Array[String])
 signal cancelled
 const Preview = preload("res://scripts/character_breath_preview.gd")
-const CARD_SKIN = preload("res://assets/ui/rift_v2/components/mode_card_red.png")
+const CARD_SKIN_RED = preload("res://assets/ui/rift_v2/components/mode_card_red.png")
+const CARD_SKIN_GRAY = preload("res://assets/ui/rift_v2/components/mode_card_gray.png")
 const BUTTON_SKIN = preload("res://assets/ui/rift_v2/components/button0003.png")
 const LEIGAI_FONT = preload("res://assets/fonts/Leigai.ttf")
 const WHITE := Color("#f3e9df")
@@ -25,6 +26,7 @@ var card_panels: Dictionary = {}
 var card_frames: Dictionary = {}
 var grid_scroll: ScrollContainer
 var grid_host: Control
+var character_order: Array[String] = []
 var database
 var progress
 var hud
@@ -57,10 +59,13 @@ func build(owner_hud, game_database, state) -> void:
 	count_label = hud.label(frame, Vector2(930,42), Vector2(220,28), "", 16, ACCENT); count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	var rule := ColorRect.new(); rule.position = Vector2(28,112); rule.size = Vector2(1156,2); rule.color = Color("#9d4657"); frame.add_child(rule)
 	grid_scroll = ScrollContainer.new(); grid_scroll.position = Vector2(28,130); grid_scroll.size = Vector2(1156,426); grid_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; grid_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO; grid_scroll.clip_contents = true; frame.add_child(grid_scroll)
-	grid_host = Control.new(); var order: Array[String] = []; for id: String in database.characters: order.append(id)
-	var rows := ceili(float(order.size()) / 4.0); grid_host.custom_minimum_size = Vector2(1138, rows * 158 + maxi(0,rows-1)*14 + 8); grid_scroll.add_child(grid_host)
-	for i in order.size(): _build_character_card(order[i], i)
-	back_button = _button(frame, Rect2(28,588,546,50), "←  返回上一级", false); back_button.pressed.connect(func(): root.hide(); cancelled.emit())
+	grid_host = Control.new(); for id: String in database.characters: character_order.append(id)
+	character_order.sort_custom(func(a: String, b: String) -> bool:
+		var a_unlocked := _is_character_unlocked(a); var b_unlocked := _is_character_unlocked(b)
+		return a_unlocked if a_unlocked != b_unlocked else a.naturalnocasecmp_to(b) < 0)
+	var rows := ceili(float(character_order.size()) / 4.0); grid_host.custom_minimum_size = Vector2(1138, rows * 158 + maxi(0,rows-1)*14 + 8); grid_scroll.add_child(grid_host)
+	for i in character_order.size(): _build_character_card(character_order[i], i)
+	back_button = _button(frame, Rect2(28,588,546,50), "←  返回上一级", true); back_button.pressed.connect(func(): root.hide(); cancelled.emit())
 	confirm_button = _button(frame, Rect2(609,588,546,50), "确认编队并进入下一关  →", true); confirm_button.add_theme_font_size_override("font_size",16); confirm_button.pressed.connect(confirm)
 	_build_detail()
 	select_sound = AudioStreamPlayer.new(); select_sound.stream = preload("res://assets/helltaker/audio/button_chapter_highlight_01.wav"); select_sound.bus="SFX"; select_sound.volume_db=-7; add_child(select_sound)
@@ -75,7 +80,7 @@ func _build_character_card(id: String, index: int) -> void:
 	var panel:=Panel.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); panel.mouse_filter=Control.MOUSE_FILTER_IGNORE; panel.add_theme_stylebox_override("panel",StyleBoxEmpty.new()); item.add_child(panel); card_panels[id]=panel
 	var frame_skin:=TextureRect.new()
 	frame_skin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	frame_skin.texture=CARD_SKIN
+	frame_skin.texture=CARD_SKIN_GRAY
 	frame_skin.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
 	frame_skin.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	frame_skin.mouse_filter=Control.MOUSE_FILTER_IGNORE
@@ -90,7 +95,7 @@ func _build_character_card(id: String, index: int) -> void:
 	hud.label(panel,Vector2(122,64),Vector2(121,18),str(data.get("role","战斗成员")),9,WHITE)
 	hud.label(panel,Vector2(122,87),Vector2(121,18),"HP %d · ATK %d"%[int(data.get("max_hp",0)),int(data.get("attack",0))],8,MUTED)
 	var state: Label = hud.label(panel,Vector2(122,116),Vector2(121,17),"",9,ACCENT); state.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT; state_labels[id]=state
-	item.pressed.connect(_open_detail.bind(id)); item.mouse_entered.connect(_card_hover.bind(id,true)); item.mouse_exited.connect(_card_hover.bind(id,false))
+	item.pressed.connect(_open_detail.bind(id)); item.mouse_entered.connect(_card_hover.bind(id,true)); item.mouse_exited.connect(_card_hover.bind(id,false)); item.gui_input.connect(_card_scroll_input)
 
 func _build_detail() -> void:
 	detail_panel=Panel.new(); detail_panel.position=Vector2(52,32); detail_panel.size=Vector2(1108,620); detail_panel.add_theme_stylebox_override("panel",_panel_style(Color("#ff5a6d"),3)); detail_panel.hide(); frame.add_child(detail_panel)
@@ -174,7 +179,15 @@ func _refresh()->void:
 	count_label.text="出战  %d / 3"%selected.size(); confirm_button.disabled=selected.is_empty() or selected.size()>3
 	for id:String in buttons:
 		var known: bool = _is_character_unlocked(id); buttons[id].disabled=not known; var chosen:=id in selected
-		card_frames[id].modulate=Color.WHITE if chosen else (Color(1,1,1,0.34) if known else Color(0.35,0.33,0.35,0.20)); state_labels[id].text="◆ 出战中" if chosen else ("点击查看详情" if known else "LOCKED / 未解锁"); state_labels[id].add_theme_color_override("font_color",ACCENT if chosen else MUTED); previews[id].set_locked(not known); buttons[id].modulate=Color.WHITE if known else Color(0.38,0.35,0.37,1)
+		card_frames[id].texture=CARD_SKIN_RED if chosen else CARD_SKIN_GRAY; card_frames[id].modulate=Color.WHITE if chosen else (Color(0.82,0.82,0.84,0.78) if known else Color(0.32,0.31,0.33,0.20)); state_labels[id].text="◆ 出战中" if chosen else ("点击查看详情" if known else "LOCKED / 未解锁"); state_labels[id].add_theme_color_override("font_color",ACCENT if chosen else MUTED); previews[id].set_locked(not known); buttons[id].modulate=Color.WHITE if known else Color(0.38,0.35,0.37,1)
+func _layout_character_cards()->void:
+	var ordered: Array[String] = []
+	for id: String in buttons: ordered.append(id)
+	ordered.sort_custom(func(a: String, b: String) -> bool:
+		var a_unlocked := _is_character_unlocked(a); var b_unlocked := _is_character_unlocked(b)
+		return a_unlocked if a_unlocked != b_unlocked else a.naturalnocasecmp_to(b) < 0)
+	for index in ordered.size():
+		buttons[ordered[index]].position = Vector2((index % 4) * 282, int(index / 4) * 172)
 func _button(parent:Control,rect:Rect2,text_value:String,primary:bool)->Button:
 	var b: Button = hud.button(parent,rect,text_value,false)
 	for state in ["normal","hover","pressed","focus","disabled"]: b.add_theme_stylebox_override(state,StyleBoxEmpty.new())
@@ -194,7 +207,15 @@ func _card_hover(id:String,entered:bool)->void:
 	if entered:
 		buttons[id].grab_focus(); _play_select(); card_frames[id].modulate=Color.WHITE
 	else:
-		card_frames[id].modulate=Color.WHITE if id in selected else Color(1,1,1,0.34)
+		card_frames[id].modulate=Color.WHITE if id in selected else Color(0.82,0.82,0.84,0.78)
+
+func _card_scroll_input(event: InputEvent) -> void:
+	if not event is InputEventMouseButton or not event.pressed:
+		return
+	if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+		grid_scroll.scroll_vertical = maxi(0, grid_scroll.scroll_vertical - 96)
+	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+		grid_scroll.scroll_vertical += 96
 
 func _ability_description(data:Dictionary,is_ultimate:bool)->String:
 	var kind:=str(data.get("kind",""))
@@ -204,7 +225,7 @@ func _ability_description(data:Dictionary,is_ultimate:bool)->String:
 		"heal_gust":"治疗队友并赋予短暂风盾与加速",
 		"salon_summon":"召唤沙龙成员持续追击并附着水元素",
 		"hydro_burst":"引爆水浪造成范围伤害与水元素附着",
-		"sonic_wave":"释放音浪贯穿敌群并触发乐律增幅",
+		"sonic_wave":"奏出灼热音浪，造成火元素范围伤害并击退敌人",
 		"arcane_lance":"发射高穿透源石长枪压制直线目标",
 		"frost_bloom":"绽放冰花冻结区域并持续造成冰伤",
 		"echo_shot":"发射回响弹并在目标间追加弹射",
@@ -218,7 +239,7 @@ func _ability_description(data:Dictionary,is_ultimate:bool)->String:
 		"storm_field":"召唤雷暴领域，连续落雷触发感电",
 		"team_concert":"开启团队演唱会，大幅强化攻速与暴击",
 		"chimera":"释放奇美拉进行范围碾压与持续压制",
-		"fate_symphony":"奏响命运交响，扩散风元素并强化乐律",
+		"fate_symphony":"引燃焰色交响领域并强化全队暴击",
 		"encore":"触发安可，复制近期支援并提升弹道数量",
 		"trinity_field":"展开三重共鸣领域，复制攻击与元素反应",
 		"meltdown":"命令 Mon3tr 熔毁，造成巨额范围爆发",
@@ -235,4 +256,3 @@ func _play_confirm()->void:
 	if confirm_sound!=null:confirm_sound.stop();confirm_sound.play()
 func _element_name(element:String)->String:return {"none":"无元素","anemo":"风元素","electro":"雷元素","pyro":"火元素","hydro":"水元素","geo":"岩元素","cryo":"冰元素"}.get(element,element)
 func _element_glyph(element:String)->String:return {"none":"无","anemo":"风","electro":"雷","pyro":"火","hydro":"水","geo":"岩","cryo":"冰"}.get(element,"?")
-

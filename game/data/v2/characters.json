@@ -35,7 +35,7 @@
     "ultimate": {
       "name": "星落裁决",
       "kind": "starfall",
-      "energy_cost": 80,
+      "energy_cost": 130,
       "power": 330,
       "radius": 330,
       "hit_frame_ratio": 0.58,
@@ -49,7 +49,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 24.0
+      "cooldown": 40.0
     },
     "passive": {
       "name": "异界适应",
@@ -95,7 +95,7 @@
     "ultimate": {
       "name": "寂月安魂曲",
       "kind": "frozen_forest",
-      "energy_cost": 100,
+      "energy_cost": 165,
       "power": 320,
       "radius": 320,
       "hit_frame_ratio": 0.58,
@@ -109,7 +109,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 26.0
+      "cooldown": 42.9
     },
     "passive": {
       "name": "终末低语",
@@ -155,7 +155,7 @@
     "ultimate": {
       "name": "无咏风域",
       "kind": "anemo_domain",
-      "energy_cost": 90,
+      "energy_cost": 150,
       "power": 260,
       "radius": 260,
       "hit_frame_ratio": 0.58,
@@ -169,7 +169,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 25.0
+      "cooldown": 41.2
     },
     "passive": {
       "name": "静风守护",
@@ -215,7 +215,7 @@
     "ultimate": {
       "name": "万众狂欢",
       "kind": "hydro_fanfare",
-      "energy_cost": 100,
+      "energy_cost": 165,
       "power": 290,
       "radius": 290,
       "hit_frame_ratio": 0.58,
@@ -229,7 +229,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 26.0
+      "cooldown": 42.9
     },
     "passive": {
       "name": "沙龙礼仪",
@@ -275,7 +275,7 @@
     "ultimate": {
       "name": "豪雷积层云",
       "kind": "storm_field",
-      "energy_cost": 90,
+      "energy_cost": 150,
       "power": 300,
       "radius": 300,
       "hit_frame_ratio": 0.58,
@@ -289,7 +289,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 25.0
+      "cooldown": 41.2
     },
     "passive": {
       "name": "魔力潮涌",
@@ -335,7 +335,7 @@
     "ultimate": {
       "name": "千音迭奏",
       "kind": "team_concert",
-      "energy_cost": 110,
+      "energy_cost": 180,
       "power": 340,
       "radius": 340,
       "hit_frame_ratio": 0.58,
@@ -349,7 +349,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 27.0
+      "cooldown": 44.5
     },
     "passive": {
       "name": "安可节拍",
@@ -395,7 +395,7 @@
     "ultimate": {
       "name": "奇美拉",
       "kind": "chimera",
-      "energy_cost": 100,
+      "energy_cost": 165,
       "power": 300,
       "radius": 300,
       "hit_frame_ratio": 0.58,
@@ -409,7 +409,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 26.0
+      "cooldown": 42.9
     },
     "passive": {
       "name": "黑蛇意志",
@@ -422,8 +422,8 @@
   {
     "id": "hero_07",
     "name": "丰川祥子",
-    "role": "风系乐律法师",
-    "element": "anemo",
+    "role": "火系乐律法师",
+    "element": "pyro",
     "max_hp": 430,
     "armor": 28,
     "attack": 38,
@@ -435,7 +435,7 @@
     "asset_key": "character.hero_07",
     "unlocked_by_default": false,
     "active_skill": {
-      "name": "苍风奏鸣",
+      "name": "灼热乐章",
       "kind": "sonic_wave",
       "cooldown": 10.0,
       "power": 180,
@@ -450,12 +450,14 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "element": "pyro",
+      "description": "奏出灼热音浪，造成火元素范围伤害并击退敌人。"
     },
     "ultimate": {
-      "name": "命运风暴交响",
+      "name": "焰色交响曲",
       "kind": "fate_symphony",
-      "energy_cost": 100,
+      "energy_cost": 165,
       "power": 330,
       "radius": 330,
       "hit_frame_ratio": 0.58,
@@ -469,7 +471,9 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 26.0
+      "cooldown": 42.9,
+      "element": "pyro",
+      "description": "引燃交响领域，造成高额火元素范围伤害并强化全队暴击。"
     },
     "passive": {
       "name": "命运和弦",
@@ -515,7 +519,7 @@
     "ultimate": {
       "name": "冰结之森",
       "kind": "frozen_forest",
-      "energy_cost": 100,
+      "energy_cost": 165,
       "power": 315,
       "radius": 315,
       "hit_frame_ratio": 0.58,
@@ -529,7 +533,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 26.0
+      "cooldown": 42.9
     },
     "passive": {
       "name": "精灵加护",
@@ -575,7 +579,7 @@
     "ultimate": {
       "name": "炫音返场",
       "kind": "encore",
-      "energy_cost": 90,
+      "energy_cost": 150,
       "power": 320,
       "radius": 320,
       "hit_frame_ratio": 0.58,
@@ -589,7 +593,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 25.0
+      "cooldown": 41.2
     },
     "passive": {
       "name": "回声大师",
@@ -635,7 +639,7 @@
     "ultimate": {
       "name": "三相共鸣",
       "kind": "trinity_field",
-      "energy_cost": 100,
+      "energy_cost": 165,
       "power": 325,
       "radius": 325,
       "hit_frame_ratio": 0.58,
@@ -649,7 +653,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 26.0
+      "cooldown": 42.9
     },
     "passive": {
       "name": "三相同调",
@@ -695,7 +699,7 @@
     "ultimate": {
       "name": "指令：熔毁",
       "kind": "meltdown",
-      "energy_cost": 100,
+      "energy_cost": 165,
       "power": 280,
       "radius": 280,
       "hit_frame_ratio": 0.58,
@@ -709,7 +713,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 26.0
+      "cooldown": 42.9
     },
     "passive": {
       "name": "战术链接",
@@ -755,7 +759,7 @@
     "ultimate": {
       "name": "绳网超频",
       "kind": "network_overdrive",
-      "energy_cost": 90,
+      "energy_cost": 150,
       "power": 310,
       "radius": 310,
       "hit_frame_ratio": 0.58,
@@ -769,7 +773,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 25.0
+      "cooldown": 41.2
     },
     "passive": {
       "name": "代理网络",
