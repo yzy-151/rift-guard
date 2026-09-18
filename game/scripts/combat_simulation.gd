@@ -55,6 +55,8 @@ var heroes: Array[Dictionary] = []
 var enemies: Array[Dictionary] = []
 var enemy_lookup: Dictionary = {}
 var projectiles: Array[Dictionary] = []
+var enemy_projectiles: Array[Dictionary] = []
+var pending_troop_spawns: Array[Dictionary] = []
 var events: Array[Dictionary] = []
 var base_hp: int = 100
 var base_max_hp: int = 100
@@ -71,6 +73,7 @@ var next_projectile_id: int = 0
 var supports: Dictionary = {}
 var execute_threshold: float = 0.0
 var death_burst_ratio: float = 0.0
+var rejected_recruits: Dictionary = {}
 var elite_damage_bonus: float = 0.0
 var kill_frenzy_step: float = 0.0
 var frenzy_milestone: int = 0
@@ -93,6 +96,7 @@ var reward_cooldown: float = 0.0
 var endless_mode: bool = false
 var active_view_rect: Rect2 = ENDLESS_ARENA
 var endless_spawn_timer: float = 0.0
+var troop_convoy_timer: float = 72.0
 var endless_next_boss_at: float = 90.0
 var endless_boss_index: int = 0
 var terrain_features: Array[Dictionary] = []
@@ -124,6 +128,7 @@ func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 func reset(seed_value: int = -1) -> void:
 	endless_mode = false
 	endless_spawn_timer = 0.0
+	troop_convoy_timer = 72.0
 	endless_next_boss_at = 90.0
 	endless_boss_index = 0
 	active_view_rect = ENDLESS_ARENA
@@ -142,8 +147,8 @@ func reset(seed_value: int = -1) -> void:
 	regroup_ratio = 0.2
 	state = "ready"
 	previous_state = "running"
-	base_hp = 100
-	base_max_hp = 100
+	base_hp = 12
+	base_max_hp = 12
 	wave = 0
 	kills = 0
 	shots_fired = 0
@@ -190,9 +195,12 @@ func reset(seed_value: int = -1) -> void:
 	kill_streak_timer = 0.0
 	reward_cooldown = 0.0
 	heroes.clear()
+	rejected_recruits.clear()
 	enemies.clear()
 	enemy_lookup.clear()
 	projectiles.clear()
+	enemy_projectiles.clear()
+	pending_troop_spawns.clear()
 	next_projectile_id = 0
 	events.clear()
 	for i in Catalog.HEROES.size():
@@ -205,6 +213,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	current_stage_id = stage_id
 	endless_mode = stage_id == "stage_endless"
 	endless_spawn_timer = 0.15
+	troop_convoy_timer = 72.0
 	endless_next_boss_at = 90.0
 	endless_boss_index = 0
 	active_view_rect = ENDLESS_ARENA
@@ -233,8 +242,8 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	team_level = 1
 	state = "ready"
 	previous_state = "running"
-	base_hp = 100
-	base_max_hp = 100
+	base_hp = 12
+	base_max_hp = 12
 	wave = 0
 	kills = 0
 	shots_fired = 0
@@ -282,9 +291,12 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	kill_streak_timer = 0.0
 	reward_cooldown = 0.0
 	heroes.clear()
+	rejected_recruits.clear()
 	enemies.clear()
 	enemy_lookup.clear()
 	projectiles.clear()
+	enemy_projectiles.clear()
+	pending_troop_spawns.clear()
 	next_projectile_id = 0
 	events.clear()
 	var starts := [Vector2(505, 360), Vector2(375, 295), Vector2(345, 430)]
@@ -418,7 +430,7 @@ func _configure_character_identity(hero: Dictionary) -> void:
 			hero.rate *= 1.22
 			hero.echo_ratio = maxf(0.42, float(hero.echo_ratio))
 		"hero_10":
-			hero.attack_style = "quantum_gate"
+			hero.attack_style = "wind_seed"
 			hero.projectile_count = maxi(2, int(hero.projectile_count))
 			hero.chain_count = maxi(2, int(hero.chain_count))
 		"hero_11":
@@ -427,6 +439,10 @@ func _configure_character_identity(hero: Dictionary) -> void:
 			hero.damage_reduction = maxf(0.12, float(hero.damage_reduction))
 			hero.splash = true
 			hero.blast_radius = maxf(72.0, float(hero.blast_radius))
+		"hero_13":
+			hero.attack_style = "needle"
+			hero.splash = true
+			hero.blast_radius = maxf(52.0, float(hero.blast_radius))
 		"hero_12":
 			hero.attack_style = "ether_shot"
 			hero.rate *= 1.25
@@ -889,6 +905,9 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 	if v2_mode and not bool(enemy.get("flying", false)):
 		point = _nearest_walkable_point(point, maxf(12.0, float(enemy.get("size", 28.0)) * 0.34))
 	enemy.hp *= 1.40
+	# Ground pressure is deliberately much higher than airborne pressure.
+	if not bool(enemy.get("flying", false)):
+		enemy.hp *= 3.0
 	enemy.hp *= 1.0 + maxf(0.0, wave - 1) * 0.10
 	if v2_mode and stage_runtime != null:
 		enemy.hp *= float(stage_runtime.definition.get("enemy_health_multiplier", 1.0))
@@ -943,6 +962,7 @@ func tick(dt: float) -> void:
 		h.skill_cooldown = maxf(0.0, float(h.get("skill_cooldown", 0.0)) - dt)
 		h.ultimate_cooldown = maxf(0.0, float(h.get("ultimate_cooldown", 0.0)) - dt)
 		h.flash = maxf(0.0, h.flash - dt)
+		h.invulnerable_timer = maxf(0.0, float(h.get("invulnerable_timer", 0.0)) - dt)
 		h.moving = h.hp > 0 and bool(h.get("deployed", true)) and h.pos.distance_to(h.target) > 0.5
 		if float(h.get("status_timer",0.0)) <= 0.0: h.animation_state = "run" if h.moving else "idle"
 		if h.moving:
@@ -964,13 +984,16 @@ func tick(dt: float) -> void:
 		_stage_spawn_tick(dt)
 	else:
 		_spawn_tick(dt)
+	_troop_spawn_tick(dt)
 	_skill_effect_tick(dt)
 	_terrain_tick(dt)
 	_enemy_tick(dt)
+	_enemy_projectile_tick(dt)
 	var party_wiped := endless_mode and (heroes.is_empty() or heroes.all(func(hero: Dictionary) -> bool: return float(hero.get("hp", 0.0)) <= 0.0))
 	if base_hp <= 0 or party_wiped:
 		state = "lost"
 		projectiles.clear()
+		enemy_projectiles.clear()
 		events.append({"kind": "lost"})
 		return
 	_hero_tick()
@@ -1070,6 +1093,10 @@ func _apply_endless_scaling(enemy: Dictionary, tier: int, strength: float = 1.0)
 
 func _endless_spawn_tick(dt: float) -> void:
 	_spawn_endless_boss_if_due()
+	troop_convoy_timer -= dt
+	if _endless_tier() >= 4 and troop_convoy_timer <= 0.0 and enemies.size() + 7 <= _endless_active_cap():
+		_spawn_endless_troop_group()
+		troop_convoy_timer = 72.0
 	endless_spawn_timer -= dt
 	var active_cap := _endless_active_cap()
 	if endless_spawn_timer > 0.0 or enemies.size() >= active_cap:
@@ -1080,9 +1107,9 @@ func _endless_spawn_tick(dt: float) -> void:
 		build_levels += int(level)
 	var pool := ["grunt", "grunt", "runner", "runner", "slime_pyro", "slime_electro"]
 	if tier >= 2:
-		pool.append_array(["flyer", "charger", "slime_anemo", "slime_hydro"])
+		pool.append_array(["flyer", "charger", "slime_anemo", "slime_hydro", "rift_bat", "originium_bug"])
 	if tier >= 3:
-		pool.append_array(["armored", "buffer", "charger", "slime_cryo", "splitter"])
+		pool.append_array(["armored", "buffer", "charger", "slime_cryo", "splitter", "hilichurl_brute"])
 	if tier >= 3 and build_levels >= 5:
 		pool.append("ranged")
 	if tier >= 6 and build_levels >= 14:
@@ -1116,6 +1143,16 @@ func _endless_spawn_tick(dt: float) -> void:
 		if enemies.size() < 84 or kind not in ENDLESS_LOW_TIER_IDS:
 			events.append({"kind": "route_spawn", "pos": point, "route_id": "edge_%d" % side, "flying": bool(enemy.get("flying", false))})
 	endless_spawn_timer += maxf(0.38, 1.16 - elapsed * 0.0012)
+
+func _spawn_endless_troop_group() -> void:
+	var group := ["troop_cannon", "troop_melee", "troop_melee", "troop_melee", "troop_ranged", "troop_ranged", "troop_ranged"]
+	var tier := _endless_tier()
+	var side := posmod(next_id, 4)
+	for index in group.size():
+		var point := _endless_edge_point(side, 0.32 + float(index) * 0.055)
+		var enemy := spawn_enemy(point, group[index])
+		_apply_endless_scaling(enemy, tier)
+		events.append({"kind":"route_spawn","pos":point,"route_id":"edge_%d" % side,"flying":false})
 
 func _endless_kind_count(kinds: Array) -> int:
 	return enemies.filter(func(enemy: Dictionary) -> bool: return enemy.hp > 0.0 and str(enemy.get("kind", "")) in kinds).size()
@@ -1200,6 +1237,8 @@ func _spawn_tick(dt: float) -> void:
 func begin_stage_exit() -> void:
 	state = "stage_exit"
 	projectiles.clear()
+	enemy_projectiles.clear()
+	pending_troop_spawns.clear()
 	enemies.clear()
 	enemy_lookup.clear()
 	skill_effects.clear()
@@ -1220,7 +1259,9 @@ func _stage_spawn_tick(dt: float) -> void:
 			events.append(event)
 		elif event.kind == "spawn":
 			wave = maxi(wave, int(event.get("wave", wave)))
-			if performance_budget.allow_enemy(enemies.size()):
+			if str(event.enemy_id) == "troop_cannon":
+				_spawn_troop_group_on_route(str(event.route_id), int(event.get("sequence", 0)))
+			elif performance_budget.allow_enemy(enemies.size()):
 				spawn_on_route(str(event.enemy_id), str(event.route_id), int(event.get("sequence", 0)))
 			else:
 				culled_spawns += 1
@@ -1231,8 +1272,24 @@ func _stage_spawn_tick(dt: float) -> void:
 			events.append({"kind": "wave", "value": wave})
 			events.append({"kind": "boss_arrival", "pos": boss.pos, "value": str(boss.get("name", boss_id)), "enemy_id": boss.id})
 
+func _spawn_troop_group_on_route(route_id: String, sequence: int) -> void:
+	var group := ["troop_cannon", "troop_melee", "troop_melee", "troop_melee", "troop_ranged", "troop_ranged", "troop_ranged"]
+	spawn_on_route(group[0], route_id, sequence)
+	for index in range(1, group.size()):
+		pending_troop_spawns.append({"kind":group[index],"route_id":route_id,"sequence":sequence + index,"delay":float(index) * 0.16})
+
+func _troop_spawn_tick(dt: float) -> void:
+	var waiting: Array[Dictionary] = []
+	for item: Dictionary in pending_troop_spawns:
+		item.delay = float(item.delay) - dt
+		if float(item.delay) <= 0.0:
+			spawn_on_route(str(item.kind), str(item.route_id), int(item.sequence))
+		else:
+			waiting.append(item)
+	pending_troop_spawns = waiting
+
 func _balanced_spawn_kind(requested: String) -> String:
-	if requested.begins_with("boss_"):
+	if requested.begins_with("boss_") or requested.begins_with("troop_"):
 		return requested
 	var elapsed_tier := maxi(1, floori(elapsed / 60.0) + 1)
 	var caps := {
@@ -1396,6 +1453,12 @@ func _enemy_tick(dt: float) -> void:
 					guarded += 1
 			e.affix_timer = 5.5
 			events.append({"kind":"enemy_guard","pos":e.pos,"value":guarded})
+		if str(e.get("kind", "")) == "hilichurl_brute" and not bool(e.get("attack_stance", false)):
+			for hero: Dictionary in heroes:
+				if bool(hero.get("deployed", false)) and float(hero.get("hp", 0.0)) > 0.0 and Vector2(e.pos).distance_to(hero.pos) <= 300.0:
+					e.attack_stance = true
+					e.speed = float(e.speed) * 2.0
+					break
 		if e.aura_timer <= 0:
 			e.aura = ""
 		var speed_scale: float = (0.0 if e.frozen_timer > 0.0 else (0.7 if e.slow_timer > 0 else 1.0)) * (1.35 if e.haste_timer > 0 else 1.0)
@@ -1723,8 +1786,16 @@ func damage_construct(id: int, damage: float) -> void:
 			events.append({"kind": "geo_break", "pos": construct.pos})
 		return
 
+func deployment_slot_unlocked(hero_id: int) -> bool:
+	if endless_mode:
+		return true
+	if rejected_recruits.has(hero_id):
+		return false
+	var required_level: int = [1, 3, 10][clampi(hero_id, 0, 2)]
+	return run_state.crystal_level >= required_level
+
 func deploy_hero(hero_id: int, point: Vector2) -> bool:
-	if state not in ["running", "between"] or hero_id < 0 or hero_id >= heroes.size():
+	if state not in ["running", "between"] or hero_id < 0 or hero_id >= heroes.size() or not deployment_slot_unlocked(hero_id):
 		return false
 	var hero: Dictionary = heroes[hero_id]
 	if hero.hp <= 0.0:
@@ -1862,6 +1933,19 @@ func _execute_ability_impact(hero: Dictionary, ability: Dictionary, target: Vect
 	if passive_kind == "mana_surge": power *= 1.0 + float(hero.energy) / maxf(1.0, float(hero.max_energy)) * 0.35
 	if passive_kind == "resolve" and float(hero.hp) / maxf(1.0, float(hero.max_hp)) <= 0.5: power *= 1.45
 	match kind:
+		"healing_surge":
+			_heal_heroes(target, radius, power, 0.0)
+		"wind_cut":
+			_damage_area(target, radius, power, "anemo", int(hero.id))
+		"thread_shelter":
+			for ally: Dictionary in heroes:
+				if bool(ally.get("deployed", false)) and float(ally.get("hp", 0.0)) > 0.0 and Vector2(ally.pos).distance_to(hero.pos) <= radius:
+					ally.invulnerable_timer = maxf(float(ally.get("invulnerable_timer", 0.0)), 5.0)
+					events.append({"kind":"crystal_guard","pos":ally.pos,"value":5})
+		"renewing_breeze":
+			skill_effects.append({"kind":"renewing_breeze","pos":target,"life":12.0,"pulse":0.0,"power":power,"area":radius,"hero_id":hero.id})
+		"needle_barrage":
+			skill_effects.append({"kind":"needle_barrage","pos":target,"life":1.6,"pulse":0.0,"power":power,"area":radius,"hero_id":hero.id,"remaining":12})
 		"heal_gust":
 			_heal_heroes(hero.pos, radius, power * 0.42, 34.0)
 			for ally: Dictionary in heroes:
@@ -2040,12 +2124,15 @@ func _resolve_enemy_warning(enemy: Dictionary) -> void:
 		var within_attack_range: bool = attack_range <= 0.0 or enemy.pos.distance_to(victim.pos) <= attack_range
 		var clear_shot: bool = within_attack_range and (bool(enemy.get("flying", false)) or attack_range <= 0.0 or not terrain_line_blocked(enemy.pos, victim.pos))
 		if bool(victim.get("deployed", false)) and victim.hp > 0.0 and victim.pos.distance_to(enemy.warning_pos) <= float(enemy.warning_radius) and clear_shot:
-			damage_hero(victim_id, enemy.damage)
+			if str(enemy.get("kind", "")) == "troop_ranged":
+				enemy_projectiles.append({"pos":enemy.pos,"target_id":victim_id,"damage":float(enemy.damage),"speed":350.0,"life":3.5})
+			else:
+				damage_hero(victim_id, enemy.damage)
 			if "suppressor" in enemy.get("affixes",[]):
 				victim.skill_cooldown = float(victim.get("skill_cooldown",0.0))+2.0
 				events.append({"kind":"skill_suppressed","pos":victim.pos,"value":2})
 			hit = true
-			if float(enemy.get("attack_range", 0.0)) > 0.0:
+			if float(enemy.get("attack_range", 0.0)) > 0.0 and str(enemy.get("kind", "")) != "troop_ranged":
 				events.append({"kind":"enemy_shot","pos":enemy.pos,"target":victim.pos,"value":ceili(enemy.damage),"enemy_kind":str(enemy.get("kind","")),"duration":clampf(enemy.pos.distance_to(victim.pos) / 620.0, 0.28, 0.72)})
 	if hit and "vampiric" in enemy.get("affixes", []):
 		enemy.hp = minf(enemy.max_hp, enemy.hp + enemy.damage * 0.25)
@@ -2208,7 +2295,18 @@ func _skill_effect_tick(dt: float) -> void:
 		effect.pulse = float(effect.pulse) - dt
 		if effect.kind == "anemo_tornado":
 			effect.pos.x = minf(1140.0, effect.pos.x + 52.0 * dt)
-		if effect.pulse <= 0.0:
+		if effect.kind == "renewing_breeze" and effect.pulse <= 0.0:
+			effect.pulse += 0.85
+			_heal_heroes(effect.pos, float(effect.area), float(effect.power), 0.0)
+		elif effect.kind == "needle_barrage" and effect.pulse <= 0.0 and int(effect.remaining) > 0:
+			effect.pulse += 0.10
+			effect.remaining = int(effect.remaining) - 1
+			var candidates := enemies.filter(func(e: Dictionary) -> bool: return e.hp > 0.0 and e.pos.distance_to(effect.pos) <= float(effect.area))
+			if not candidates.is_empty():
+				var selected: Dictionary = candidates[posmod(int(effect.remaining), candidates.size())]
+				_damage_area(selected.pos, 45.0, float(effect.power), "", int(effect.hero_id))
+				events.append({"kind":"orbit_hit","pos":selected.pos,"value":ceili(float(effect.power))})
+		elif effect.pulse <= 0.0:
 			effect.pulse += 0.42 if effect.kind == "anemo_tornado" else 0.85
 			for enemy: Dictionary in enemies.duplicate():
 				if enemy.hp <= 0.0 or not _ability_target_visible(enemy.pos):
@@ -2239,9 +2337,29 @@ func _skill_effect_tick(dt: float) -> void:
 			surviving.append(effect)
 	skill_effects = surviving
 
+func _enemy_projectile_tick(dt: float) -> void:
+	var active: Array[Dictionary] = []
+	for projectile: Dictionary in enemy_projectiles:
+		projectile.life = float(projectile.life) - dt
+		if projectile.life <= 0.0:
+			continue
+		var target_id := int(projectile.target_id)
+		if target_id < 0 or target_id >= heroes.size():
+			continue
+		var hero: Dictionary = heroes[target_id]
+		if hero.hp <= 0.0 or not bool(hero.get("deployed", false)):
+			continue
+		projectile.pos = Vector2(projectile.pos).move_toward(hero.pos, float(projectile.speed) * dt)
+		if Vector2(projectile.pos).distance_to(hero.pos) <= 16.0:
+			damage_hero(target_id, float(projectile.damage))
+			events.append({"kind":"hit","pos":hero.pos,"value":ceili(float(projectile.damage))})
+		else:
+			active.append(projectile)
+	enemy_projectiles = active
+
 func damage_hero(id: int, raw_damage: float) -> void:
 	var h: Dictionary = heroes[id]
-	if h.hp <= 0:
+	if h.hp <= 0 or float(h.get("invulnerable_timer", 0.0)) > 0.0:
 		return
 	if crystal_shield > 0.0:
 		var absorbed := minf(crystal_shield, raw_damage)

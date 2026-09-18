@@ -112,7 +112,7 @@ func _show_cards() -> void:
 		var tag_text := " / ".join(card.get("tags", []))
 		var evolution := " · 可进化" if not card.get("evolutions", []).is_empty() else ""
 		var card_body := "%s\n标签：%s%s" % [str(card.description), tag_text, evolution]
-		_add_row(str(card.name) if known else "？？？", card_body if known else "在升级三选一中首次获得后记录", _rarity_color(rarity) if known else MUTED, known, _rarity_name(rarity) if known else "未发现")
+		_add_row(str(card.name) if known else "？？？", card_body if known else "在升级三选一中首次获得后记录", _rarity_color(rarity) if known else MUTED, known, _rarity_name(rarity) if known else "未发现", _card_icon_path(str(card.get("effect", ""))) if known else "")
 	counter.text = "发现 %d / %d" % [discovered, database.cards.size()]
 
 func _show_builds() -> void:
@@ -157,7 +157,7 @@ func _show_enemies() -> void:
 
 func _add_row(name: String, body: String, color: Color, known: bool, badge: String = "", preview_path: String = "") -> void:
 	var row := Panel.new()
-	var row_height := 90.0 if active_tab == "builds" else 66.0
+	var row_height := 90.0 if active_tab == "builds" else (72.0 if active_tab == "cards" else 66.0)
 	row.custom_minimum_size = Vector2(1082, row_height)
 	row.add_theme_stylebox_override("panel", hud.style(Color("#261b26") if known else Color("#171317"), color.darkened(0.45)))
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -168,14 +168,14 @@ func _add_row(name: String, body: String, color: Color, known: bool, badge: Stri
 	mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(mark)
 	var icon_back := ColorRect.new()
-	icon_back.position = Vector2(15, 12)
+	icon_back.position = Vector2(15, 8)
 	icon_back.size = Vector2(40, 40)
 	icon_back.color = Color("#ead9dc") if known else Color("#55474d")
 	icon_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(icon_back)
 	if not preview_path.is_empty() and ResourceLoader.exists(preview_path):
 		var portrait := TextureRect.new()
-		portrait.position = Vector2(17, 13)
+		portrait.position = Vector2(17, 9)
 		portrait.size = Vector2(36, 38)
 		portrait.texture = ResourceLoader.load(preview_path)
 		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -186,10 +186,12 @@ func _add_row(name: String, body: String, color: Color, known: bool, badge: Stri
 		var icon_name := "character" if active_tab == "characters" else ("card" if active_tab == "cards" else ("boss" if "Boss" in body else "skull"))
 		var icon_path := "res://assets/ui/icons/temporary/nieobie/%s.svg" % icon_name
 		if ResourceLoader.exists(icon_path):
-			hud.icon(row, icon_path, Rect2(18, 15, 34, 34), color if known else MUTED)
-	hud.label(row, Vector2(66, 8), Vector2(350, 26), name, 16, color)
-	var body_label: Label = hud.label(row, Vector2(66, 35), Vector2(850, row_height - 38.0), body, 11, WHITE if known else MUTED)
+			hud.icon(row, icon_path, Rect2(18, 11, 34, 34), color if known else MUTED)
+	hud.label(row, Vector2(66, 4), Vector2(350, 25), name, 16, color)
+	var body_label: Label = hud.label(row, Vector2(66, 28), Vector2(850, row_height - 29.0), body, 11, WHITE if known else MUTED)
 	body_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	var line_spacing := -3 if active_tab == "cards" else 0
+	body_label.add_theme_constant_override("line_spacing", line_spacing)
 	if not badge.is_empty():
 		var tag: Label = hud.label(row, Vector2(920, 19), Vector2(132, 27), badge, 13, color)
 		tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -205,3 +207,17 @@ func _element_name(element: String) -> String:
 
 func _element_color(element: String) -> Color:
 	return {"none": WHITE, "anemo": Color("#63e6c0"), "electro": Color("#bf83ff"), "pyro": Color("#ff745c"), "hydro": Color("#5ab8ff"), "geo": Color("#e8b94d"), "cryo": Color("#9de7f2")}.get(element, WHITE)
+
+func _card_icon_path(effect: String) -> String:
+	var file_name: String = {
+		"attack_multiplier":"10_sword_slash_rgba.png", "squad_attack_multiplier":"10_sword_slash_rgba.png",
+		"health_multiplier":"08_healing_heart_rgba.png", "squad_health_multiplier":"08_healing_heart_rgba.png", "crystal_heal":"08_healing_heart_rgba.png",
+		"attack_rate_multiplier":"12_speed_boot_rgba.png", "squad_rate_multiplier":"12_speed_boot_rgba.png", "move_speed_flat":"12_speed_boot_rgba.png",
+		"range_flat":"09_arrow_rain_rgba.png", "squad_range_flat":"09_arrow_rain_rgba.png",
+		"armor_flat":"11_shield_rgba.png", "squad_armor_flat":"11_shield_rgba.png", "crystal_health_flat":"14_summon_crystal_rgba.png",
+		"assign_traveler_element":"14_summon_crystal_rgba.png", "element_mastery_flat":"03_lightning_rgba.png", "squad_mastery_flat":"03_lightning_rgba.png",
+		"element_technique":"06_laser_rgba.png", "special_upgrade":"15_explosion_rgba.png", "signature_upgrade":"15_explosion_rgba.png",
+		"squad_crit_flat":"10_sword_slash_rgba.png", "squad_chain":"03_lightning_rgba.png", "last_stand":"11_shield_rgba.png",
+		"reaction_overdrive":"15_explosion_rgba.png", "reaction_bonus":"01_fireball_rgba.png"
+	}.get(effect, "14_summon_crystal_rgba.png")
+	return "res://assets/ui/skill_icons_v64/" + file_name

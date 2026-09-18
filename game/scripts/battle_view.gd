@@ -66,6 +66,7 @@ var effect_pool = ReusableEffectPool.new()
 var clock: float = 0.0
 var shot_flashes: Dictionary = {}
 var hero_attack_visuals: Dictionary = {}
+var departing_recruit: Dictionary = {}
 var hero_down_visuals: Dictionary = {}
 var enemy_death_visuals: Array[Dictionary] = []
 var projectile_trails: Dictionary = {}
@@ -231,6 +232,24 @@ func advance(dt: float) -> void:
 	if redraw_accumulator >= redraw_interval:
 		redraw_accumulator = fmod(redraw_accumulator, redraw_interval)
 		queue_redraw()
+
+func play_recruit_departure(character_id: String, start_point: Vector2) -> void:
+	if character_sequences.texture(character_id, "run") == null:
+		return
+	var target := Vector2(100, 365)
+	var started_at := Time.get_ticks_msec()
+	departing_recruit = {"character_id": character_id, "pos": start_point, "frame": 0}
+	while true:
+		var elapsed := float(Time.get_ticks_msec() - started_at) / 1000.0
+		var progress := clampf(elapsed / 1.35, 0.0, 1.0)
+		departing_recruit.pos = start_point.lerp(target, progress)
+		departing_recruit.frame = character_sequences.frame_at_time(character_id, "run", elapsed)
+		queue_redraw()
+		if progress >= 1.0:
+			break
+		await get_tree().process_frame
+	departing_recruit.clear()
+	queue_redraw()
 
 func world_to_screen(point: Vector2) -> Vector2:
 	if sim != null and sim.endless_mode:
@@ -434,9 +453,18 @@ func _draw() -> void:
 		else:
 			_draw_enemy(visual)
 		draw_set_transform(Vector2.ZERO)
+	if not departing_recruit.is_empty():
+		_draw_departing_recruit()
 	for projectile in sim.projectiles:
 		if _render_point_visible(Vector2(projectile.get("pos", Vector2.ZERO)), 120.0):
 			_draw_projectile(projectile)
+	for projectile: Dictionary in sim.enemy_projectiles:
+		if _render_point_visible(Vector2(projectile.pos), 120.0):
+			var point := world_to_screen(Vector2(projectile.pos)) + Vector2(0, -17)
+			var size := 8.0 * world_depth_scale(Vector2(projectile.pos))
+			draw_circle(point, size + 4.0, Color(0.26, 0.12, 0.42, 0.38))
+			draw_circle(point, size, Color(0.60, 0.38, 0.88, 0.95))
+			draw_circle(point + Vector2(-2, -2), size * 0.38, Color(0.94, 0.86, 1.0, 0.96))
 	for effect in effects:
 		if not _render_point_visible(Vector2(effect.get("pos", Vector2.ZERO)), 180.0):
 			continue
@@ -1218,7 +1246,7 @@ func _draw_effect_tiles(texture: Texture2D, feature: Dictionary, tint: Color = C
 	for cell: Rect2 in _terrain_cells(feature):
 		var screen_cell := _terrain_screen_rect(cell)
 		var active := _terrain_tile_active(cell)
-		var fit_scale := minf(screen_cell.size.x * 0.68 / maxf(1.0, source_size.x), screen_cell.size.y * 0.72 / maxf(1.0, source_size.y))
+		var fit_scale := minf(screen_cell.size.x * 0.84 / maxf(1.0, source_size.x), screen_cell.size.y * 0.86 / maxf(1.0, source_size.y))
 		var draw_size := source_size * fit_scale * (1.10 if active else 1.0)
 		var draw_rect := Rect2(screen_cell.get_center() - draw_size * 0.5, draw_size)
 		if active:
@@ -1735,9 +1763,11 @@ func _draw_projectile(projectile: Dictionary) -> void:
 
 func _draw_sequence_enemy(enemy: Dictionary, bob: float) -> void:
 	var enemy_id := str(enemy.kind)
-	var state := "attack" if bool(enemy.get("attack_pending", false)) or bool(enemy.get("special_pending", false)) else "run"
+	var state := "attack" if bool(enemy.get("attack_pending", false)) or bool(enemy.get("special_pending", false)) or bool(enemy.get("attack_stance", false)) else "run"
 	var frame := 0
-	if state == "attack":
+	if state == "attack" and not bool(enemy.get("attack_pending", false)) and not bool(enemy.get("special_pending", false)):
+		frame = enemy_sequences.frame_at_time(enemy_id, state, clock + float(enemy.id) * 0.137)
+	elif state == "attack":
 		var lead := 1.05 if float(enemy.get("attack_range", 0.0)) > 0.0 else 0.72
 		var phase := 1.0 - clampf(float(enemy.get("warning_timer", 0.0)) / lead, 0.0, 1.0)
 		frame = enemy_sequences.frame_at_phase(enemy_id, state, phase)
@@ -1805,6 +1835,21 @@ func _draw_slime_enemy(enemy: Dictionary, definition: Dictionary, texture: Textu
 	var pivot := Vector2(float(pivot_value[0]), float(pivot_value[1]))
 	var art_tint := Color("#fff0e8") if float(enemy.get("flash",0.0)) > 0.0 and not reduced_effects else Color.WHITE
 	_draw_anchored_texture_region(texture, foot, display_size, texture.get_size(), pivot, float(enemy.get("facing", -1.0)), float(definition.get("native_facing", 1.0)), Rect2(Vector2.ZERO, texture.get_size()), art_tint)
+
+func _draw_departing_recruit() -> void:
+	var character_id := str(departing_recruit.character_id)
+	var texture := character_sequences.texture(character_id, "run")
+	if texture == null:
+		return
+	var world_point: Vector2 = departing_recruit.pos
+	var screen_point := world_to_screen(world_point)
+	var scale_factor := world_depth_scale(world_point)
+	current_actor_transform = Transform2D(Vector2(scale_factor, 0.0), Vector2(0.0, scale_factor), screen_point)
+	draw_set_transform_matrix(current_actor_transform)
+	draw_ellipse_shadow(Vector2(0, HERO_FOOT_OFFSET - 9), 28.0, Color(0, 0, 0, 0.45))
+	var display_size := character_sequences.display_size(character_id)
+	_draw_anchored_texture_region(texture, Vector2(0, HERO_FOOT_OFFSET), Vector2(display_size, display_size), character_sequences.cell(character_id), character_sequences.pivot(character_id), -1.0, 1.0, character_sequences.source_rect(character_id, "run", int(departing_recruit.frame)), Color.WHITE)
+	draw_set_transform(Vector2.ZERO)
 
 func _draw_anchored_texture_region(texture: Texture2D, anchor: Vector2, display_size: Vector2, source_size: Vector2, source_pivot: Vector2, facing: float, native_facing: float, source: Rect2, tint: Color) -> void:
 	var placement_data := SpriteAnchor.placement(display_size, source_size, source_pivot, facing, native_facing)
@@ -2106,5 +2151,3 @@ func element_color(element: String) -> Color:
 
 func element_glyph(element: String) -> String:
 	return {"anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, "")
-
-

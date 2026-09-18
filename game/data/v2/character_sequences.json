@@ -379,5 +379,170 @@
         "hold_last": true
       }
     }
+  },
+  "hero_04": {
+    "name": "洛琪希",
+    "source_folder": "洛琪希",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      98.577,
+      239.723
+    ],
+    "display_size": 150.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      0,
+      736,
+      736
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/characters/sequences/hero_04/idle.png",
+        "frames": 26,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/characters/sequences/hero_04/run.png",
+        "frames": 17,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/characters/sequences/hero_04/attack.png",
+        "frames": 31,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/characters/sequences/hero_04/down.png",
+        "frames": 37,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "hero_10": {
+    "name": "风堇",
+    "source_folder": "风堇",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      104.462,
+      238.065
+    ],
+    "display_size": 150.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      0,
+      736,
+      736
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/characters/sequences/hero_10/idle.png",
+        "frames": 24,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/characters/sequences/hero_10/run.png",
+        "frames": 32,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/characters/sequences/hero_10/attack.png",
+        "frames": 33,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/characters/sequences/hero_10/down.png",
+        "frames": 42,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "hero_13": {
+    "name": "格温",
+    "source_folder": "格温",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      94.848,
+      227.842
+    ],
+    "display_size": 155.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      64,
+      736,
+      736
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/characters/sequences/hero_13/idle.png",
+        "frames": 41,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/characters/sequences/hero_13/run.png",
+        "frames": 23,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/characters/sequences/hero_13/attack.png",
+        "frames": 24,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/characters/sequences/hero_13/down.png",
+        "frames": 33,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
   }
 }

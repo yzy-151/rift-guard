@@ -222,5 +222,53 @@
     "behavior": "slow_aura",
     "motion": "guard_squash",
     "visual": "slime_cryo"
+  },
+  {
+    "id": "troop_cannon",
+    "family": "troop",
+    "variant": "troop_cannon",
+    "behavior": "pressure_advance",
+    "motion": "sequence",
+    "visual": "troop_cannon"
+  },
+  {
+    "id": "troop_melee",
+    "family": "troop",
+    "variant": "troop_melee",
+    "behavior": "pressure_advance",
+    "motion": "sequence",
+    "visual": "troop_melee"
+  },
+  {
+    "id": "troop_ranged",
+    "family": "troop",
+    "variant": "troop_ranged",
+    "behavior": "ranged_volley",
+    "motion": "sequence",
+    "visual": "troop_ranged"
+  },
+  {
+    "id": "hilichurl_brute",
+    "family": "hilichurl",
+    "variant": "hilichurl_brute",
+    "behavior": "pressure_advance",
+    "motion": "sequence",
+    "visual": "hilichurl_brute"
+  },
+  {
+    "id": "rift_bat",
+    "family": "riftwing",
+    "variant": "rift_bat",
+    "behavior": "air_route",
+    "motion": "sequence",
+    "visual": "rift_bat"
+  },
+  {
+    "id": "originium_bug",
+    "family": "originium",
+    "variant": "originium_bug",
+    "behavior": "pressure_advance",
+    "motion": "sequence",
+    "visual": "originium_bug"
   }
 ]

@@ -46,6 +46,7 @@ var detail_close: Button
 var detail_id := ""
 var select_sound: AudioStreamPlayer
 var confirm_sound: AudioStreamPlayer
+var card_click_sound: AudioStreamPlayer
 
 func build(owner_hud, game_database, state) -> void:
 	hud = owner_hud; database = game_database; progress = state; layer = 45
@@ -68,8 +69,9 @@ func build(owner_hud, game_database, state) -> void:
 	back_button = _button(frame, Rect2(28,588,546,50), "←  返回上一级", true); back_button.pressed.connect(func(): root.hide(); cancelled.emit())
 	confirm_button = _button(frame, Rect2(609,588,546,50), "确认编队并进入下一关  →", true); confirm_button.add_theme_font_size_override("font_size",16); confirm_button.pressed.connect(confirm)
 	_build_detail()
-	select_sound = AudioStreamPlayer.new(); select_sound.stream = preload("res://assets/helltaker/audio/button_chapter_highlight_01.wav"); select_sound.bus="SFX"; select_sound.volume_db=-7; add_child(select_sound)
-	confirm_sound = AudioStreamPlayer.new(); confirm_sound.stream = preload("res://assets/helltaker/audio/button_chapter_confirm_01.wav"); confirm_sound.bus="SFX"; confirm_sound.volume_db=-3; add_child(confirm_sound)
+	select_sound = AudioStreamPlayer.new(); select_sound.stream = preload("res://assets/helltaker/audio/button_dialogue_highlight_01.wav"); select_sound.bus="SFX"; select_sound.volume_db=-6; add_child(select_sound)
+	confirm_sound = AudioStreamPlayer.new(); confirm_sound.stream = preload("res://assets/helltaker/audio/button_dialogue_confirm_01.wav"); confirm_sound.bus="SFX"; confirm_sound.volume_db=-2; add_child(confirm_sound)
+	card_click_sound = AudioStreamPlayer.new(); card_click_sound.stream = preload("res://assets/helltaker/audio/button_menu_confirm_01.wav"); card_click_sound.bus="SFX"; card_click_sound.volume_db=-3; add_child(card_click_sound)
 	root.hide()
 
 func _build_character_card(id: String, index: int) -> void:
@@ -122,7 +124,7 @@ func _is_character_unlocked(id:String)->bool:
 
 func _open_detail(id:String)->void:
 	if not _is_character_unlocked(id): return
-	_play_confirm(); detail_id=id; var data:Dictionary=database.characters[id]; var color:Color=ELEMENT_COLORS.get(str(data.get("element","none")),WHITE)
+	_play_card_click(); detail_id=id; var data:Dictionary=database.characters[id]; var color:Color=ELEMENT_COLORS.get(str(data.get("element","none")),WHITE)
 	detail_name.text="%s  /  %s"%[str(data.get("name",id)),_element_name(str(data.get("element","none")))]
 	detail_name.add_theme_color_override("font_color",color); detail_role.text=str(data.get("role","战斗成员"))
 	detail_preview.configure(id,database.assets.get(str(data.get("asset_key","")),{}),color,false)
@@ -254,5 +256,7 @@ func _play_select()->void:
 	if select_sound!=null:select_sound.stop();select_sound.play()
 func _play_confirm()->void:
 	if confirm_sound!=null:confirm_sound.stop();confirm_sound.play()
+func _play_card_click()->void:
+	if card_click_sound!=null:card_click_sound.stop();card_click_sound.play()
 func _element_name(element:String)->String:return {"none":"无元素","anemo":"风元素","electro":"雷元素","pyro":"火元素","hydro":"水元素","geo":"岩元素","cryo":"冰元素"}.get(element,element)
 func _element_glyph(element:String)->String:return {"none":"无","anemo":"风","electro":"雷","pyro":"火","hydro":"水","geo":"岩","cryo":"冰"}.get(element,"?")

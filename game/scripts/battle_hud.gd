@@ -79,6 +79,7 @@ var hero_card_frames: Array[TextureRect] = []
 var hero_name_labels: Array[Label] = []
 var hero_element_labels: Array[Label] = []
 var hero_statuses: Array[Label] = []
+var hero_lock_labels: Array[Label] = []
 var overlay: ColorRect
 var modal_card: Panel
 var modal_title: Label
@@ -93,9 +94,16 @@ var support_panel: Panel
 var command_rail: Panel
 var action_rail: Panel
 var support_labels: Array[Label] = []
+var support_details: Array[Dictionary] = []
 var buff_panel: Panel
 var buff_labels: Array[Label] = []
 var buff_icons: Array[TextureRect] = []
+var buff_details: Array[Dictionary] = []
+var info_popover: Panel
+var info_title: Label
+var info_body: Label
+var last_sim
+var last_selected_id := -1
 var skill_button: Button
 var skill_icon: TextureRect
 var skill_frame: TextureRect
@@ -132,6 +140,7 @@ var pause_menu_button: Button
 var pause_status_label: Label
 var pause_settings_button: Button
 var pause_restart_button: Button
+var restart_dialog: ConfirmationDialog
 var pause_squad_button: Button
 var pause_stage_button: Button
 var pause_map_button: Button
@@ -225,8 +234,8 @@ func _ready() -> void:
 	pause_button.position = UI_LAYOUT.battle_pause_rect.position
 	pause_button.size = UI_LAYOUT.battle_pause_rect.size
 	pause_button.pressed.connect(func(): pause_action.emit())
-	right_rail_shell = panel(root, UI_LAYOUT.battle_right_shell_rect, Color(0.018, 0.008, 0.015, 0.97), Color("#8d3f52"))
-	right_rail_shell.add_theme_stylebox_override("panel", hud_shelf_style(Color(0.018, 0.008, 0.015, 0.97), Color("#7b2638"), 1))
+	right_rail_shell = panel(root, UI_LAYOUT.battle_right_shell_rect, Color(0.018, 0.022, 0.065, 0.62), Color("#8d3f52"))
+	right_rail_shell.add_theme_stylebox_override("panel", hud_shelf_style(Color(0.018, 0.022, 0.065, 0.62), Color("#7b2638"), 1))
 	for separator_x in [670.0, 930.0]:
 		var deck_separator := ColorRect.new()
 		deck_separator.position = Vector2(separator_x, 596)
@@ -239,8 +248,14 @@ func _ready() -> void:
 	right_rail_mark.hide()
 	support_panel = panel(root, Rect2(840, 9, 285, 48), Color(0, 0, 0, 0), Color(0, 0, 0, 0))
 	support_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
-	for i in 3:
-		support_labels.append(label(support_panel, Vector2(8, 3 + i * 14), Vector2(269, 14), "", 8, WHITE))
+	for i in 6:
+		var column := int(i / 3)
+		var row := i % 3
+		var support_label := label(support_panel, Vector2(8 + column * 141, 3 + row * 14), Vector2(137, 14), "", 8, WHITE)
+		support_label.mouse_filter = Control.MOUSE_FILTER_STOP
+		support_label.gui_input.connect(_support_label_input.bind(i))
+		support_labels.append(support_label)
+		support_details.append({})
 	support_panel.hide()
 	buff_panel = panel(root, UI_LAYOUT.battle_buff_rect, Color(0.04, 0.018, 0.036, 0.90), Color("#65506f"))
 	buff_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
@@ -249,9 +264,19 @@ func _ready() -> void:
 	for i in 15:
 		var column := i % 5
 		var row := int(i / 5)
-		buff_icons.append(icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(7 + column * 61, 8 + row * 29, 18, 18), Color("#d6b4f0")))
+		var buff_icon := icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(7 + column * 61, 8 + row * 29, 18, 18), Color("#d6b4f0"))
+		buff_icon.mouse_filter = Control.MOUSE_FILTER_STOP
+		buff_icon.gui_input.connect(_buff_icon_input.bind(i))
+		buff_icons.append(buff_icon)
+		buff_details.append({})
 		buff_labels.append(label(buff_panel, Vector2(29 + column * 61, 7 + row * 29), Vector2(30, 20), "", 8, WHITE))
 	buff_panel.hide()
+	info_popover = panel(root, Rect2(884, 430, 340, 142), Color(0.018, 0.022, 0.065, 0.68), Color("#d94f66"))
+	info_popover.mouse_filter = Control.MOUSE_FILTER_STOP
+	info_title = label(info_popover, Vector2(18, 14), Vector2(304, 28), "", 16, Color("#ffb3bd"))
+	info_body = label(info_popover, Vector2(18, 45), Vector2(304, 82), "", 11, WHITE)
+	info_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	info_popover.hide()
 	var boss_panel_rect: Rect2 = UI_LAYOUT.battle_boss_panel_rect
 	boss_panel = panel(root, boss_panel_rect, Color(0.025, 0.010, 0.022, 0.96), Color("#d6415b"))
 	var boss_frame := NinePatchRect.new()
@@ -366,7 +391,9 @@ func _ready() -> void:
 	skill_key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skill_cd_label.add_theme_color_override("font_shadow_color", Color.BLACK)
 	skill_cd_label.add_theme_constant_override("shadow_offset_y", 2)
-	skill_button.pressed.connect(func(): skill_action.emit())
+	skill_button.pressed.connect(func():
+		_show_ability_info(false)
+		skill_action.emit())
 	ultimate_button = button(root, UI_LAYOUT.battle_ultimate_rect, "", true)
 	ultimate_button.clip_contents = true
 	for ability_state in ["normal", "hover", "pressed", "focus", "disabled"]:
@@ -404,7 +431,9 @@ func _ready() -> void:
 	ultimate_key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ultimate_cd_label.add_theme_color_override("font_shadow_color", Color.BLACK)
 	ultimate_cd_label.add_theme_constant_override("shadow_offset_y", 2)
-	ultimate_button.pressed.connect(func(): ultimate_action.emit())
+	ultimate_button.pressed.connect(func():
+		_show_ability_info(true)
+		ultimate_action.emit())
 	var formation_specs := [["squad", "全队 Z"], ["follow", "跟随 X"], ["hold", "坚守 C"]]
 	for i in formation_specs.size():
 		var mode: String = str(formation_specs[i][0])
@@ -434,6 +463,13 @@ func _ready() -> void:
 		hero_btn.pressed.connect(func(): select_action.emit(i))
 		hero_btn.gui_input.connect(_hero_card_input.bind(i))
 		hero_buttons.append(hero_btn)
+		var lock_label := label(hero_btn, Vector2(8, 11), Vector2(44, 48), "🔒", 22, Color("#ff667b"))
+		lock_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lock_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		lock_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+		lock_label.add_theme_constant_override("shadow_offset_y", 2)
+		lock_label.hide()
+		hero_lock_labels.append(lock_label)
 		var portrait_frame := panel(hero_btn, Rect2(7, 10, 46, 50), Color("#33232d"), TEAL)
 		var portrait_back := ColorRect.new()
 		portrait_back.position = Vector2(3, 3)
@@ -544,7 +580,7 @@ func _ready() -> void:
 	pause_settings_button = button(pause_details, Rect2(34, 514, 340, 42), "⚙  设置", false)
 	pause_settings_button.pressed.connect(func(): settings_action.emit())
 	pause_restart_button = button(pause_details, Rect2(390, 514, 340, 42), "↻  重开", false)
-	pause_restart_button.pressed.connect(func(): restart_action.emit())
+	pause_restart_button.pressed.connect(request_restart_confirmation)
 	pause_squad_button = button(pause_details, Rect2(746, 514, 362, 42), "▦  图鉴", false)
 	pause_squad_button.pressed.connect(func(): compendium_action.emit())
 	pause_stage_button = button(pause_details, Rect2(), "", false)
@@ -555,6 +591,15 @@ func _ready() -> void:
 	pause_map_button.pressed.connect(func(): map_action.emit())
 	var pause_continue := button(pause_details, Rect2(746, 574, 362, 46), "▶  继续防守", true)
 	pause_continue.pressed.connect(func(): primary_action.emit())
+	restart_dialog = ConfirmationDialog.new()
+	restart_dialog.title = "确认重开"
+	restart_dialog.dialog_text = "确定放弃当前战斗进度并重新开始本关吗？"
+	restart_dialog.ok_button_text = "重开本关"
+	restart_dialog.cancel_button_text = "返回设置"
+	restart_dialog.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_PRIMARY_SCREEN
+	restart_dialog.min_size = Vector2i(520, 210)
+	restart_dialog.confirmed.connect(func(): restart_action.emit())
+	overlay.add_child(restart_dialog)
 	pause_details.hide()
 	reward_panel = preload("res://scripts/reward_panel.gd").new()
 	root.add_child(reward_panel)
@@ -735,6 +780,8 @@ func icon(parent: Node, path: String, rect: Rect2, color: Color = Color.WHITE) -
 	return item
 
 func refresh(sim, selected_id: int) -> void:
+	last_sim = sim
+	last_selected_id = selected_id
 	var next_signature: String = str([sim.state, sim.base_hp, sim.base_max_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming, ultimate_aiming, sim.formation_mode])
 	for enemy: Dictionary in sim.enemies:
 		if str(enemy.get("kind", "")).begins_with("boss_"):
@@ -794,16 +841,19 @@ func refresh(sim, selected_id: int) -> void:
 	pause_button.text = "▶  继续" if sim.state == "paused" else "Ⅱ  暂停"
 	for i in hero_buttons.size():
 		hero_buttons[i].visible = i < sim.heroes.size()
-		hero_buttons[i].disabled = i >= sim.heroes.size()
+		hero_buttons[i].disabled = i >= sim.heroes.size() or (i < sim.heroes.size() and not sim.deployment_slot_unlocked(i))
 	for i in sim.heroes.size():
 		var hero: Dictionary = sim.heroes[i]
+		hero_lock_labels[i].visible = not sim.deployment_slot_unlocked(i)
+		if hero_lock_labels[i].visible:
+			hero_lock_labels[i].move_to_front()
 		hero_hp_bars[i].max_value = maxf(1.0, float(hero.max_hp))
 		hero_hp_bars[i].value = maxf(0.0, float(hero.hp))
 		hero_energy_bars[i].max_value = maxf(1.0, float(hero.get("max_energy", 100.0)))
 		hero_energy_bars[i].value = maxf(0.0, float(hero.get("energy", 0.0)))
 		hero_portraits[i].texture = portrait_texture(hero, sim)
 		hero_name_labels[i].text = "%d  %s" % [i + 1, hero.name]
-		hero_element_labels[i].text = sim.element_name(str(hero.get("element", "none")))
+		hero_element_labels[i].text = "Lv.%d" % [1, 3, 10][i] if hero_lock_labels[i].visible else sim.element_name(str(hero.get("element", "none")))
 		var hero_color: Color = element_color(str(hero.get("element", ""))) if hero.get("character_id", "") == "traveler" and hero.get("element", "") != "" else Color(hero.color)
 		hero_name_labels[i].add_theme_color_override("font_color", hero_color)
 		hero_element_labels[i].add_theme_color_override("font_color", hero_color)
@@ -825,7 +875,7 @@ func refresh(sim, selected_id: int) -> void:
 		reward_panel.hide()
 	if overlay.visible:
 		pause_details.visible = sim.state == "paused"
-		modal_card.visible = sim.state != "paused"
+		modal_card.visible = sim.state not in ["paused", "lost"]
 		if sim.state == "paused":
 			refresh_pause_details(sim)
 		modal_action.focus_next = modal_action.get_path()
@@ -853,7 +903,7 @@ func refresh(sim, selected_id: int) -> void:
 				var grade := result_grade(base_percent, sim.best_streak)
 				var unlock_copy := "下一作战区域已解锁。" if sim.v2_mode and sim.current_stage_id != "stage_03" else "本章作战区域已全部完成。"
 				modal_title.text = "防线守住了"
-				modal_copy.text = "评级 %s  ·  击退 %d  ·  基地 %d%%  ·  最高连杀 %d\n元素反应 %d 次  ·  %s\n本关构筑将在进入下一关时重置，可按 F4 选择关卡。" % [grade, sim.kills, base_percent, sim.best_streak, sim.reactions, unlock_copy]
+				modal_copy.text = "评级 %s  ·  击退 %d  ·  基地 %d  ·  最高连杀 %d\n元素反应 %d 次  ·  %s\n本关构筑将在进入下一关时重置，可按 F4 选择关卡。" % [grade, sim.kills, base_percent, sim.best_streak, sim.reactions, unlock_copy]
 				modal_action.text = "再守一次   →   [Enter]"
 			"lost":
 				modal_title.text = "核心已经失守"
@@ -972,8 +1022,9 @@ func result_grade(base_hp: int, streak: int) -> String:
 
 func refresh_supports(sim) -> void:
 	support_panel.visible = sim.v2_mode and not sim.supports.is_empty() and sim.state in ["running", "between", "paused"]
-	for item in support_labels:
-		item.text = ""
+	for i in support_labels.size():
+		support_labels[i].text = ""
+		support_details[i] = {}
 	if not support_panel.visible:
 		return
 	var names := {
@@ -988,8 +1039,15 @@ func refresh_supports(sim) -> void:
 			break
 		var support: Dictionary = sim.supports[key]
 		var info: Array = names.get(key, [key, WHITE])
-		support_labels[row].text = "◆ %s   ×%d   %.1fs" % [info[0], int(support.stacks), maxf(0.0, float(support.timer))]
+		support_labels[row].text = "◆ %s ×%d %.1fs" % [info[0], int(support.stacks), maxf(0.0, float(support.timer))]
 		support_labels[row].add_theme_color_override("font_color", info[1])
+		var effect_text: String = {
+			"support_barrage": "赤月炮弹周期轰击敌群，造成范围伤害。",
+			"support_crossfire": "交叉火力周期齐射场上的敌人。",
+			"support_heal": "潮汐急救周期恢复场上友军生命。",
+			"support_finale": "终幕齐射周期集中攻击所有敌人。",
+		}.get(key, "持续提供场外支援。")
+		support_details[row] = {"title": "%s · ×%d" % [info[0], int(support.stacks)], "body": "%s 威力 %d · 间隔 %.1fs · 下次 %.1fs" % [effect_text, int(support.get("power", 0)), float(support.get("interval", 0.0)), maxf(0.0, float(support.timer))]}
 		row += 1
 
 func resonance_summary(sim) -> String:
@@ -1044,6 +1102,7 @@ func refresh_buffs(sim) -> void:
 	for i in buff_labels.size():
 		buff_labels[i].text = ""
 		buff_icons[i].hide()
+		buff_details[i] = {}
 	if not buff_panel.visible or sim.run_state.buff_levels.is_empty():
 		return
 	var cards: Dictionary = {}
@@ -1064,7 +1123,9 @@ func refresh_buffs(sim) -> void:
 		var rarity := str(card.get("rarity", "common")); var effect := str(card.get("effect", ""))
 		buff_icons[i].texture = _buff_icon_for(effect)
 		buff_icons[i].modulate = rarity_color.get(rarity, WHITE)
-		buff_icons[i].tooltip_text = "%s · Lv.%d" % [str(card.get("name", id)), int(sim.run_state.buff_levels[id])]
+		var level := int(sim.run_state.buff_levels[id])
+		buff_icons[i].tooltip_text = "%s · Lv.%d" % [str(card.get("name", id)), level]
+		buff_details[i] = {"title": "%s  ·  Lv.%d" % [str(card.get("name", id)), level], "body": str(card.get("description", "暂无说明"))}
 		buff_icons[i].show()
 		buff_labels[i].text = "Lv.%d" % int(sim.run_state.buff_levels[id])
 		buff_labels[i].add_theme_color_override("font_color", rarity_color.get(rarity, WHITE))
@@ -1148,7 +1209,7 @@ func refresh_skill(sim, selected_id: int) -> void:
 	skill_cd_label.text = "落点" if skill_aiming else ("%.1fs" % cooldown if cooldown > 0.0 else "READY")
 	skill_key_label.text = "Q冷却" if cooldown > 0.0 else "Q战技"
 	skill_cd_label.add_theme_color_override("font_color", Color("#ff9eaa") if cooldown > 0.0 else Color("#fff4ec"))
-	skill_button.disabled = sim.state != "running" or cooldown > 0.0 or not deployed
+	skill_button.disabled = sim.state != "running"
 	var energy := float(hero.get("energy", 0.0))
 	var maximum := float(hero.get("max_energy", 100.0))
 	var ultimate_cooldown := float(hero.get("ultimate_cooldown", 0.0))
@@ -1162,7 +1223,7 @@ func refresh_skill(sim, selected_id: int) -> void:
 	ultimate_cd_label.text = "落点" if ultimate_aiming else ("%.1fs" % ultimate_cooldown if ultimate_cooldown > 0.0 else ("READY" if energy_ready else "%d%%" % roundi(energy / maxf(1.0, maximum) * 100.0)))
 	ultimate_key_label.text = "E冷却" if ultimate_cooldown > 0.0 else ("E终极" if energy_ready else "E充能")
 	ultimate_cd_label.add_theme_color_override("font_color", Color("#ff9eaa") if ultimate_cooldown > 0.0 else Color("#fff0a8") if energy_ready else Color("#ffe7a5"))
-	ultimate_button.disabled = sim.state != "running" or ultimate_cooldown > 0.0 or not energy_ready or not deployed
+	ultimate_button.disabled = sim.state != "running"
 
 func skill_icon_for(element: String) -> Texture2D:
 	return {"anemo": SKILL_ICON_TORNADO, "electro": SKILL_ICON_LIGHTNING, "pyro": SKILL_ICON_FIRE, "hydro": SKILL_ICON_WATER, "geo": SKILL_ICON_ROCK, "cryo": SKILL_ICON_ICE}.get(element, SKILL_ICON_SLASH)
@@ -1191,6 +1252,8 @@ func portrait_texture(hero: Dictionary, sim_ref = null) -> Texture2D:
 	return fallback
 
 func _hero_card_input(event: InputEvent, hero_id: int) -> void:
+	if last_sim != null and not last_sim.deployment_slot_unlocked(hero_id):
+		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		deploy_drag_action.emit(hero_id, event.pressed, get_viewport().get_mouse_position())
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
@@ -1239,3 +1302,64 @@ func _battle_card_style(border: Color, focused: bool) -> StyleBoxFlat:
 	box.shadow_color = Color(border, 0.22 if focused else 0.0)
 	box.shadow_size = 6 if focused else 0
 	return box
+
+func request_restart_confirmation() -> void:
+	if restart_dialog == null:
+		return
+	restart_dialog.popup_centered(Vector2i(520, 210))
+
+
+
+func _support_label_input(event: InputEvent, index: int) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if index >= 0 and index < support_details.size() and not support_details[index].is_empty():
+			_show_info(str(support_details[index].get("title", "场外支援")), str(support_details[index].get("body", "")))
+			get_viewport().set_input_as_handled()
+
+func _buff_icon_input(event: InputEvent, index: int) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if index >= 0 and index < buff_details.size() and not buff_details[index].is_empty():
+			_show_info(str(buff_details[index].get("title", "强化")), str(buff_details[index].get("body", "")))
+		get_viewport().set_input_as_handled()
+
+func _show_ability_info(ultimate: bool) -> void:
+	if last_sim == null or last_selected_id < 0 or last_selected_id >= last_sim.heroes.size():
+		return
+	var hero: Dictionary = last_sim.heroes[last_selected_id]
+	var data: Dictionary = hero.get("ultimate" if ultimate else "active_skill", {})
+	var title_text := ("E · " if ultimate else "Q · ") + str(data.get("name", "终极技能" if ultimate else "元素战技"))
+	var kind := str(data.get("kind", ""))
+	var effect: String = {
+		"blade_wave":"贯穿剑气击退沿途敌人", "cryo_chord":"冰霜和弦冻结范围目标", "heal_gust":"治疗队友并赋予风盾与加速",
+		"salon_summon":"沙龙成员持续追击并附着水元素", "hydro_burst":"水浪造成范围伤害与水元素附着", "sonic_wave":"音浪造成火元素范围伤害并击退",
+		"arcane_lance":"穿透长枪压制直线目标", "frost_bloom":"冰花冻结区域并持续造成伤害", "echo_shot":"回响弹在目标间追加弹射",
+		"tribbie_gate":"量子门复制弹道并折跃攻击", "mon3tr":"Mon3tr 冲锋拦截并撕裂敌阵", "bangboo":"邦布协同射击并标记目标",
+		"starfall":"星落大范围轰击并强击退", "frozen_forest":"冻结领域持续冰封并造成多段伤害", "anemo_domain":"风域牵引敌人并强化队友",
+		"hydro_fanfare":"万众狂欢强化全队并引爆水元素", "storm_field":"雷暴领域连续落雷触发感电", "team_concert":"演唱会强化全队攻速与暴击",
+		"chimera":"奇美拉范围碾压并持续压制", "fate_symphony":"焰色交响领域强化全队暴击", "encore":"安可复制支援并提升弹道数量",
+		"trinity_field":"三重共鸣领域复制攻击与反应", "meltdown":"Mon3tr 熔毁造成巨额范围爆发", "network_overdrive":"邦布网络超频提升射速并齐射"
+	}.get(kind, "释放角色专属能力")
+	if kind in ["healing_surge", "wind_cut", "thread_shelter", "renewing_breeze", "needle_barrage"]:
+		effect = str(data.get("description", effect))
+	var body_text := "%s。威力 %d · 范围 %d · 冷却 %.1fs" % [effect, int(data.get("power", 0)), int(data.get("radius", 0)), float(data.get("cooldown", 0.0))]
+	if ultimate:
+		body_text += " · 能量 %d" % int(data.get("energy_cost", 0))
+	_show_info(title_text, body_text)
+
+func _show_info(title_text: String, body_text: String) -> void:
+	info_title.text = title_text
+	info_body.text = body_text
+	info_popover.show()
+	info_popover.move_to_front()
+
+func dismiss_info_popover() -> void:
+	if info_popover != null:
+		info_popover.hide()
+
+func _input(event: InputEvent) -> void:
+	if info_popover == null or not info_popover.visible:
+		return
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		var hovered := get_viewport().gui_get_hovered_control()
+		if hovered == null or (hovered != info_popover and not info_popover.is_ancestor_of(hovered)):
+			info_popover.hide()

@@ -1,6 +1,8 @@
 extends CanvasLayer
 signal finished
 signal choice_committed(choice: Dictionary)
+signal animation_confirmed
+signal fatal_choice_confirmed
 const Backdrop = preload("res://scripts/dialogue_backdrop.gd")
 const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 const UI_SKIN = preload("res://data/ui_skin_profile.tres")
@@ -34,6 +36,9 @@ const CHOICE_SELECTED_SCALE := 1.06
 const CHOICE_IDLE_SCALE := 0.94
 const CHOICE_SELECTED_FONT_SIZE := 20
 const CHOICE_IDLE_FONT_SIZE := 17
+const DEATH_FRAME_SECONDS := 0.17
+const SUCCESS_FRAME_SECONDS := 0.11
+const DEEP_BLUE := Color("#02021b")
 const DEATH_FRAMES: Array[Texture2D] = [
 	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0001.png"),
 	preload("res://assets/helltaker/dialogue_death/dialogueDeathExport0002.png"),
@@ -53,15 +58,20 @@ var cue_sound: AudioStreamPlayer
 var background_texture: TextureRect
 var transition_bar: ColorRect
 var transition_texture: TextureRect
+var success_texture: TextureRect
 var transition_time: float = 0.0
 var line_ended: bool = false
 var end_sound: AudioStreamPlayer
 var dialogue_highlight: AudioStreamPlayer
 var dialogue_confirm: AudioStreamPlayer
+var death_sound: AudioStreamPlayer
+var success_sound: AudioStreamPlayer
 var death_overlay: ColorRect
 var death_texture: TextureRect
 var death_reason_label: Label
 var death_playing := false
+var animation_waiting := false
+var animation_click_gate: Button
 var booper: TextureRect
 var booper_elapsed := 0.0
 func build(ui, story) -> void:
@@ -72,10 +82,15 @@ func build(ui, story) -> void:
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.theme = hud.get_child(0).theme
 	add_child(root)
+	var dark_to_blue_shader := Shader.new()
+	dark_to_blue_shader.code = "shader_type canvas_item;\nvoid fragment() { vec4 pixel = texture(TEXTURE, UV) * COLOR; if (pixel.a > 0.01 && max(max(pixel.r, pixel.g), pixel.b) < 0.10) { pixel.rgb = max(pixel.rgb, vec3(0.008, 0.008, 0.106)); } COLOR = pixel; }"
+	var dark_to_blue := ShaderMaterial.new()
+	dark_to_blue.shader = dark_to_blue_shader
 	var backdrop := Backdrop.new()
 	root.add_child(backdrop)
 	background_texture = TextureRect.new()
 	background_texture.texture = UI_SKIN.dialogue_background
+	background_texture.material = dark_to_blue
 	background_texture.position = UI_LAYOUT.dialogue_background_rect.position
 	background_texture.size = UI_LAYOUT.dialogue_background_rect.size
 	background_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -86,12 +101,12 @@ func build(ui, story) -> void:
 	hud.bind(background_texture, "dialog_background")
 	var shade := ColorRect.new()
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	shade.color = Color(0.025, 0.008, 0.018, 0.52)
+	shade.color = Color(0.015, 0.018, 0.065, 0.52)
 	root.add_child(shade)
 	var top_stage_scrim := ColorRect.new()
 	top_stage_scrim.position = UI_LAYOUT.dialogue_top_scrim_rect.position
 	top_stage_scrim.size = UI_LAYOUT.dialogue_top_scrim_rect.size
-	top_stage_scrim.color = Color(0.006, 0.004, 0.018, 0.94)
+	top_stage_scrim.color = DEEP_BLUE
 	top_stage_scrim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(top_stage_scrim)
 	partner = art(UI_LAYOUT.dialogue_partner_rect)
@@ -100,7 +115,7 @@ func build(ui, story) -> void:
 	var lower_stage_scrim := ColorRect.new()
 	lower_stage_scrim.position = UI_LAYOUT.dialogue_lower_scrim_rect.position
 	lower_stage_scrim.size = UI_LAYOUT.dialogue_lower_scrim_rect.size
-	lower_stage_scrim.color = Color(0.012, 0.006, 0.022, 0.94)
+	lower_stage_scrim.color = DEEP_BLUE
 	lower_stage_scrim.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(lower_stage_scrim)
 	var stage_rule := ColorRect.new()
@@ -111,6 +126,7 @@ func build(ui, story) -> void:
 	root.add_child(stage_rule)
 	dialogue_box = NinePatchRect.new()
 	dialogue_box.texture = UI_SKIN.dialogue_box
+	dialogue_box.material = dark_to_blue
 	dialogue_box.position = UI_LAYOUT.dialogue_box_rect.position
 	dialogue_box.size = UI_LAYOUT.dialogue_box_rect.size
 	dialogue_box.patch_margin_left = 115
@@ -139,7 +155,8 @@ func build(ui, story) -> void:
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	progress = hud.label(root, UI_LAYOUT.dialogue_progress_rect.position, UI_LAYOUT.dialogue_progress_rect.size, "", 11, Color("#b9a2a9"))
 	booper = TextureRect.new()
-	booper.position = Vector2(614, 568)
+	booper.position = Vector2(614, 592)
+	booper.modulate = Color("#dc344f")
 	booper.size = Vector2(52, 30)
 	booper.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	booper.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -157,6 +174,7 @@ func build(ui, story) -> void:
 			choice_button.add_theme_stylebox_override(state, empty_style)
 		var choice_frame := TextureRect.new()
 		choice_frame.texture = UI_SKIN.choice_frame_gray
+		choice_frame.material = dark_to_blue
 		choice_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		choice_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		choice_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -222,9 +240,17 @@ func build(ui, story) -> void:
 	transition_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	transition_texture.hide()
 	root.add_child(transition_texture)
+	success_texture = TextureRect.new()
+	success_texture.position = Vector2(390, 566)
+	success_texture.size = Vector2(500, 91)
+	success_texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	success_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	success_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	success_texture.hide()
+	root.add_child(success_texture)
 	death_overlay = ColorRect.new()
 	death_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	death_overlay.color = Color(0.006, 0.003, 0.010, 0.98)
+	death_overlay.color = DEEP_BLUE
 	death_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	root.add_child(death_overlay)
 	death_texture = TextureRect.new()
@@ -241,6 +267,17 @@ func build(ui, story) -> void:
 	death_reason_label.add_theme_color_override("font_shadow_color", Color("#8e1f37"))
 	death_reason_label.add_theme_constant_override("shadow_offset_y", 3)
 	death_overlay.hide()
+	animation_click_gate = Button.new()
+	animation_click_gate.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	animation_click_gate.focus_mode = Control.FOCUS_NONE
+	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+		animation_click_gate.add_theme_stylebox_override(state, StyleBoxEmpty.new())
+	animation_click_gate.pressed.connect(acknowledge_animation)
+	root.add_child(animation_click_gate)
+	var click_hint: Label = hud.label(animation_click_gate, Vector2(510, 672), Vector2(260, 28), "点击屏幕继续", 13, Color("#e5dfe9"))
+	click_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	click_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	animation_click_gate.hide()
 	root.hide()
 	cue_sound = AudioStreamPlayer.new()
 	cue_sound.stream = preload("res://assets/helltaker/audio/dialogue_start_01.wav")
@@ -263,6 +300,14 @@ func build(ui, story) -> void:
 	dialogue_confirm.bus = "SFX"
 	dialogue_confirm.volume_db = -10.0
 	add_child(dialogue_confirm)
+	death_sound = AudioStreamPlayer.new()
+	death_sound.stream = preload("res://assets/helltaker/audio/player_death_01.wav")
+	death_sound.bus = "SFX"
+	add_child(death_sound)
+	success_sound = AudioStreamPlayer.new()
+	success_sound.stream = preload("res://assets/helltaker/audio/dialogue_success_01.wav")
+	success_sound.bus = "SFX"
+	add_child(success_sound)
 
 func art(rect: Rect2) -> TextureRect:
 	var item := TextureRect.new()
@@ -529,18 +574,18 @@ func _play_choice_death(reason: String) -> void:
 	await fade_in.finished
 	for frame in DEATH_FRAMES:
 		death_texture.texture = frame
-		await get_tree().create_timer(0.085).timeout
+		await get_tree().create_timer(DEATH_FRAME_SECONDS).timeout
 	var reason_pop := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	reason_pop.tween_property(death_reason_label, "modulate:a", 1.0, 0.12)
 	reason_pop.tween_property(death_reason_label, "scale", Vector2.ONE, 0.20)
 	await reason_pop.finished
-	await get_tree().create_timer(1.15).timeout
+	await _await_animation_click()
 	var fade_out := create_tween()
 	fade_out.tween_property(death_overlay, "modulate:a", 0.0, 0.20)
 	await fade_out.finished
 	death_overlay.hide()
 	death_playing = false
-	_reveal_choices()
+	fatal_choice_confirmed.emit()
 
 func activate_choice_at(point: Vector2) -> bool:
 	if not root.visible or history_panel.visible or death_playing:
@@ -647,7 +692,7 @@ func handle_input(event: InputEvent) -> void:
 
 func set_picture(item: TextureRect, alias: String, at: Vector2, dimensions: Vector2, factor: float, flipped: bool) -> void:
 	item.visible = alias != ""
-	item.texture = config.texture(alias) if alias != "" else null
+	item.texture = load(alias) as Texture2D if alias.begins_with("res://assets/") and ResourceLoader.exists(alias) else (config.texture(alias) if alias != "" else null)
 	item.position = at
 	item.size = dimensions * factor
 	item.flip_h = flipped
@@ -659,3 +704,130 @@ func set_picture(item: TextureRect, alias: String, at: Vector2, dimensions: Vect
 
 
 
+
+func play_death_transition(reason: String = "") -> void:
+	if death_playing:
+		return
+	var root_was_visible := root.visible
+	death_playing = true
+	death_reason_label.text = reason
+	death_reason_label.visible = not reason.is_empty()
+	death_reason_label.modulate = Color(1, 1, 1, 0)
+	death_overlay.modulate = Color(1, 1, 1, 0)
+	root.show()
+	death_overlay.show()
+	if death_sound != null:
+		death_sound.stop()
+		death_sound.play()
+	var fade_in := create_tween()
+	fade_in.tween_property(death_overlay, "modulate:a", 1.0, 0.10)
+	await fade_in.finished
+	for frame in DEATH_FRAMES:
+		death_texture.texture = frame
+		await get_tree().create_timer(DEATH_FRAME_SECONDS).timeout
+	if not reason.is_empty():
+		var reveal := create_tween()
+		reveal.tween_property(death_reason_label, "modulate:a", 1.0, 0.12)
+		await reveal.finished
+	await _await_animation_click()
+	var fade_out := create_tween()
+	fade_out.tween_property(death_overlay, "modulate:a", 0.0, 0.18)
+	await fade_out.finished
+	death_overlay.hide()
+	death_reason_label.visible = true
+	death_playing = false
+	if not root_was_visible:
+		root.hide()
+
+func play_stage_transition() -> void:
+	var root_was_visible := root.visible
+	transition_time = 0.0
+	root.show()
+	transition_texture.show()
+	if cue_sound != null:
+		cue_sound.stop()
+		cue_sound.play()
+	for frame_index in range(2, 31):
+		transition_texture.texture = load("res://assets/helltaker/transitions/transition%04d.png" % frame_index)
+		await get_tree().create_timer(0.018).timeout
+	transition_texture.hide()
+	if not root_was_visible:
+		root.hide()
+
+func play_success_animation() -> void:
+	var root_was_visible := root.visible
+	var visible_choices: Array[bool] = []
+	for choice_button in choice_buttons:
+		visible_choices.append(choice_button.visible)
+		choice_button.hide()
+	root.show()
+	success_texture.show()
+	if success_sound != null:
+		success_sound.stop()
+		success_sound.play()
+	for frame_index in range(1, 10):
+		success_texture.texture = load("res://assets/helltaker/dialogue_success/success%04d.png" % frame_index)
+		await get_tree().create_timer(SUCCESS_FRAME_SECONDS).timeout
+	# 0009 是动作模糊帧，播放完后停在清晰的 0008 等待确认。
+	success_texture.texture = load("res://assets/helltaker/dialogue_success/success0008.png")
+	await _await_animation_click()
+	success_texture.hide()
+	for index in choice_buttons.size():
+		choice_buttons[index].visible = visible_choices[index]
+	if not root_was_visible:
+		root.hide()
+
+func acknowledge_animation() -> void:
+	if animation_waiting:
+		animation_confirmed.emit()
+
+func _await_animation_click() -> void:
+	animation_waiting = true
+	animation_click_gate.show()
+	await animation_confirmed
+	animation_click_gate.hide()
+	animation_waiting = false
+
+func play_angry_departure(character_id: String) -> void:
+	root.show()
+	root.modulate = Color.WHITE
+	portrait.hide()
+	dialogue_box.hide()
+	body.hide()
+	name_label.hide()
+	progress.hide()
+	booper.hide()
+	var sequences = preload("res://scripts/character_sequence_library.gd").new()
+	var atlas: Texture2D = sequences.texture(character_id, "run")
+	if atlas != null:
+		var runner := TextureRect.new()
+		var frames := AtlasTexture.new()
+		frames.atlas = atlas
+		runner.texture = frames
+		runner.position = Vector2(940, 320)
+		runner.size = Vector2(220, 220)
+		runner.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		runner.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		runner.flip_h = true
+		runner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		root.add_child(runner)
+		runner.move_to_front()
+		var departure := create_tween().set_trans(Tween.TRANS_LINEAR)
+		departure.tween_property(runner, "position:x", -runner.size.x - 20.0, 1.05)
+		for index in range(25):
+			frames.region = sequences.source_rect(character_id, "run", index % sequences.frame_count(character_id, "run"))
+			await get_tree().create_timer(0.042).timeout
+		if departure.is_running():
+			await departure.finished
+		runner.free()
+	else:
+		portrait.show()
+		var departure := create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		departure.tween_property(portrait, "position:x", -portrait.size.x - 80.0, 0.75)
+		await departure.finished
+	portrait.hide()
+	dialogue_box.show()
+	body.show()
+	name_label.show()
+	progress.show()
+	root.hide()

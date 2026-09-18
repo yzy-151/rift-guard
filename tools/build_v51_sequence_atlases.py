@@ -49,6 +49,8 @@ def build_profile(source: Path, output: Path, profile_id: str, definition: dict,
     death = files(source / definition["folder"] / "death")
     for state, (folder, _loop, _hold) in STATE_FOLDERS.items():
         found = files(source / definition["folder"] / folder)
+        if not found and state == "idle":
+            found = files(source / definition["folder"] / "run")[:1]
         if not found and death:
             found = [death[0]]
         if not found:

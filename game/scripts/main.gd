@@ -65,6 +65,10 @@ var ultimate_aiming := false
 var keyboard_moving := false
 var keyboard_move_timer := 0.0
 var dragging_hero_id: int = -1
+var recruited_heroes: Dictionary = {}
+var pending_recruitment: Dictionary = {}
+var recruitment_transition_active := false
+var loss_transition_shown := false
 
 func _ready() -> void:
 	# Every QA process writes progress into its own directory, never the player's save.
@@ -186,11 +190,37 @@ func _ready() -> void:
 	apply_setting("reduced_effects", bool(audio_director.values.reduced_effects))
 	dialogue.finished.connect(end_dialogue)
 	dialogue.choice_committed.connect(apply_dialogue_choice)
+	dialogue.fatal_choice_confirmed.connect(return_to_main_menu)
 	refresh()
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v65-visual-test" in OS.get_cmdline_user_args():
+	if "--v69-visual-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v69_visual_test")
+	elif "--v68-visual-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v68_visual_test")
+	elif "--v68-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v68_test")
+	elif "--v66-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v66_test")
+	elif "--v67-visual-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v67_visual_test")
+	elif "--v65-visual-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
 		set_physics_process(false)
@@ -446,7 +476,7 @@ func _ready() -> void:
 		call_deferred("open_mode_menu")
 
 func _physics_process(dt: float) -> void:
-	if story.active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()):
+	if story.active or recruitment_transition_active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()):
 		return
 	if sim.endless_mode:
 		sim.set_active_view_rect(battle.visible_world_rect())
@@ -454,6 +484,9 @@ func _physics_process(dt: float) -> void:
 	sim.tick(dt)
 	check_story()
 	process_events()
+	if sim.state == "lost" and not loss_transition_shown:
+		loss_transition_shown = true
+		call_deferred("_play_loss_transition")
 	compendium.observe(sim)
 	record_stage_result()
 	if not story.active:
@@ -549,6 +582,8 @@ func choose_mode(mode_id: String) -> void:
 		stage_select_panel.open()
 
 func return_to_main_menu() -> void:
+	pending_recruitment.clear()
+	recruitment_transition_active = false
 	story.reset()
 	dialogue.root.hide()
 	campaign_event_panel.root.hide()
@@ -585,6 +620,8 @@ func save_campaign_checkpoint(phase: String) -> bool:
 	return true
 
 func resume_campaign() -> bool:
+	pending_recruitment.clear()
+	recruitment_transition_active = false
 	var loaded: Dictionary = checkpoint_store.load_checkpoint(sim.database)
 	if not bool(loaded.ok):
 		mode_select_panel.update_checkpoint(loaded, sim.database)
@@ -651,8 +688,9 @@ func primary() -> void:
 		"paused":
 			sim.toggle_pause()
 		"won", "lost":
-			restart()
-			primary()
+			await restart()
+			if test_mode:
+				primary()
 	refresh()
 
 func choose_reward(index: int) -> void:
@@ -661,7 +699,9 @@ func choose_reward(index: int) -> void:
 	if sim.choose_reward(index):
 		refresh()
 
-func restart() -> void:
+func restart(skip_death_animation: bool = false) -> void:
+	if not test_mode and not skip_death_animation and dialogue != null:
+		await dialogue.play_death_transition()
 	story.reset()
 	story_resume = ""
 	hud.get_child(0).show()
@@ -670,6 +710,9 @@ func restart() -> void:
 		dialogue.auto_mode = false
 		dialogue.auto_button.text = "自动：关"
 	sim.restart_current_stage()
+	recruited_heroes.clear()
+	pending_recruitment.clear()
+	recruitment_transition_active = false
 	if checkpoint_active and not sim.endless_mode:
 		checkpoint_phase = "briefing"
 	campaign_map_panel.root.hide()
@@ -686,7 +729,13 @@ func restart() -> void:
 	sound.stop()
 	set_skill_aiming(false)
 	stage_result_recorded = false
+	loss_transition_shown = false
 	refresh()
+	if not test_mode:
+		await dialogue.play_stage_transition()
+		sim.start()
+		audio_director.set_scene("endless" if sim.endless_mode else "battle")
+		refresh()
 
 func toggle_pause() -> void:
 	if story.active:
@@ -845,7 +894,7 @@ func _input(event: InputEvent) -> void:
 					primary()
 					get_viewport().set_input_as_handled()
 			KEY_R:
-				restart()
+				hud.request_restart_confirmation()
 				get_viewport().set_input_as_handled()
 			KEY_1, KEY_2, KEY_3:
 				if sim.state == "reward":
@@ -926,12 +975,15 @@ func begin_dialogue(key: String, resume_action: String = "") -> bool:
 		return false
 	story_resume = resume_action
 	sound.stop()
-	audio_director.set_scene("dialogue")
+	if resume_action != "recruit":
+		audio_director.set_scene("dialogue")
 	hud.get_child(0).hide()
 	dialogue.display()
 	return true
 
 func apply_dialogue_choice(choice: Dictionary) -> void:
+	if choice.has("recruit_success") and not pending_recruitment.is_empty():
+		pending_recruitment.success = bool(choice.recruit_success)
 	var unlock_id := str(choice.get("unlock_character", ""))
 	if not unlock_id.is_empty() and sim.database.characters.has(unlock_id):
 		compendium.unlock_character(unlock_id)
@@ -962,7 +1014,10 @@ func end_dialogue() -> void:
 	hud.signature = ""
 	var action: String = story_resume
 	story_resume = ""
-	if action == "start":
+	if action == "recruit":
+		await _resolve_recruitment()
+	elif action == "start":
+		await dialogue.play_stage_transition()
 		sim.start()
 		save_campaign_checkpoint("battle")
 		audio_director.set_scene("endless" if sim.endless_mode else "battle")
@@ -980,18 +1035,18 @@ func end_dialogue() -> void:
 func check_story() -> void:
 	if story.active:
 		return
+	if sim.state == "lost":
+		return
 	if sim.v2_mode:
 		if sim.state == "won":
 			if has_next_stage():
 				begin_dialogue("mode1_won", "stage_exit")
 			else:
 				begin_dialogue("mode1_final_won")
-		elif sim.state == "lost":
-			begin_dialogue("mode1_lost")
 		return
 	if sim.state == "reward" and not sim.v2_mode:
 		begin_dialogue("node%d" % sim.wave)
-	elif sim.state in ["won", "lost"]:
+	elif sim.state == "won":
 		begin_dialogue(sim.state)
 
 func has_next_stage() -> bool:
@@ -1128,6 +1183,9 @@ func confirm_next_squad(squad: Array[String]) -> void:
 		stage_enter_sound.stop()
 		stage_enter_sound.play()
 	sim.reset_stage(pending_stage_id, squad, sim.run_seed + 1)
+	recruited_heroes.clear()
+	pending_recruitment.clear()
+	recruitment_transition_active = false
 	if not sim.endless_mode:
 		var campaign_nodes := CampaignCheckpoint.nodes(sim.database)
 		var current: Dictionary = campaign_nodes.get(sim.run_state.current_node, {})
@@ -1285,6 +1343,8 @@ func toggle_skill_aiming() -> void:
 	set_skill_aiming(not skill_aiming)
 
 func set_skill_aiming(enabled: bool) -> void:
+	if not enabled:
+		hud.dismiss_info_popover()
 	skill_aiming = enabled
 	if enabled:
 		ultimate_aiming = false
@@ -1303,6 +1363,8 @@ func activate_selected_ultimate() -> void:
 	set_ultimate_aiming(not ultimate_aiming)
 
 func set_ultimate_aiming(enabled: bool) -> void:
+	if not enabled:
+		hud.dismiss_info_popover()
 	ultimate_aiming = enabled
 	if enabled:
 		skill_aiming = false
@@ -1343,7 +1405,7 @@ func _update_selected_hero_keyboard(dt: float) -> void:
 
 
 func handle_deploy_drag(hero_id: int, pressed: bool, screen_pos: Vector2) -> void:
-	if not pressed or sim.state not in ["running", "between"] or hero_id < 0 or hero_id >= sim.heroes.size():
+	if not pressed or sim.state not in ["running", "between"] or hero_id < 0 or hero_id >= sim.heroes.size() or not sim.deployment_slot_unlocked(hero_id):
 		return
 	if sim.endless_mode:
 		select_hero(hero_id)
@@ -1381,6 +1443,9 @@ func _finish_deploy_drag(screen_pos: Vector2) -> void:
 	var local: Vector2 = battle.get_global_transform().affine_inverse() * screen_pos
 	var point: Vector2 = battle.screen_to_world(local)
 	var playable: Rect2 = Sim.ENDLESS_ARENA if sim.endless_mode else Sim.MOVE_AREA
+	if playable.has_point(point) and hero_id > 0 and not test_mode and not sim.endless_mode and not recruited_heroes.has(hero_id):
+		_begin_recruitment(hero_id, point)
+		return
 	if playable.has_point(point) and sim.deploy_hero(hero_id, point):
 		selected_id = hero_id
 		process_events()
@@ -1424,6 +1489,26 @@ func run_v64_test() -> void:
 
 func run_v65_visual_test() -> void:
 	var suite = preload("res://scripts/qa_v65_visual.gd").new()
+	await suite.run(self)
+
+func run_v67_visual_test() -> void:
+	var suite = preload("res://scripts/qa_v67_visual.gd").new()
+	await suite.run(self)
+
+func run_v69_visual_test() -> void:
+	var suite = preload("res://scripts/qa_v69_visual.gd").new()
+	await suite.run(self)
+
+func run_v68_visual_test() -> void:
+	var suite = preload("res://scripts/qa_v68_visual.gd").new()
+	await suite.run(self)
+
+func run_v68_test() -> void:
+	var suite = preload("res://scripts/qa_v68.gd").new()
+	await suite.run(self)
+
+func run_v66_test() -> void:
+	var suite = preload("res://scripts/qa_v66.gd").new()
 	await suite.run(self)
 
 func run_v65_test() -> void:
@@ -1567,3 +1652,56 @@ func run_v16_test() -> void:
 func run_v15_test() -> void:
 	var suite = preload("res://scripts/qa_v15.gd").new()
 	await suite.run(self)
+
+
+
+func _play_loss_transition() -> void:
+	if dialogue != null and not test_mode and sim.state == "lost":
+		await dialogue.play_death_transition()
+		if sim.state == "lost":
+			return_to_main_menu()
+
+
+
+
+
+func _begin_recruitment(hero_id: int, point: Vector2) -> void:
+	if hero_id < 0 or hero_id >= sim.heroes.size() or not sim.deployment_slot_unlocked(hero_id):
+		return
+	var hero: Dictionary = sim.heroes[hero_id]
+	# Recruit portraits share the dialogue art slot; keep it empty until matching Helltaker-style art arrives.
+	var portrait_path := "res://assets/helltaker/recruit_portraits/%s.png" % str(hero.character_id)
+	if not ResourceLoader.exists(portrait_path):
+		portrait_path = ""
+	var scene_key := "deploy_%s_%d" % [sim.current_stage_id, hero_id]
+	var correct := {"text":"先守住水晶，我掩护你的侧翼。", "response":"这次我会守好自己的位置。出发吧。", "response_speaker":str(hero.name), "recruit_success":true}
+	var wrong := {"text":"不用配合，你自己冲进敌阵。", "response":"你根本没有把我当作同伴。这场战斗，我不奉陪了！", "response_speaker":str(hero.name), "recruit_success":false}
+	story.stories[scene_key] = [{"portrait":portrait_path, "speaker":str(hero.name), "text":"水晶已经升至 Lv.%d。该我上场了，你希望我们如何配合？" % sim.run_state.crystal_level, "choices":[correct, wrong]}]
+	pending_recruitment = {"hero_id":hero_id, "point":point, "success":false}
+	recruitment_transition_active = true
+	if not begin_dialogue(scene_key, "recruit"):
+		pending_recruitment.clear()
+		recruitment_transition_active = false
+
+func _resolve_recruitment() -> void:
+	if pending_recruitment.is_empty():
+		recruitment_transition_active = false
+		return
+	var hero_id: int = int(pending_recruitment.get("hero_id", -1))
+	var point: Vector2 = pending_recruitment.get("point", Vector2.ZERO)
+	var accepted: bool = bool(pending_recruitment.get("success", false))
+	pending_recruitment.clear()
+	if accepted:
+		await dialogue.play_success_animation()
+		if sim.deploy_hero(hero_id, point):
+			recruited_heroes[hero_id] = true
+			selected_id = hero_id
+			process_events()
+		else:
+			push_error("Recruitment accepted but hero deployment failed: %d, state=%s" % [hero_id, sim.state])
+	else:
+		await battle.play_recruit_departure(str(sim.heroes[hero_id].character_id), point)
+		sim.rejected_recruits[hero_id] = true
+	recruitment_transition_active = false
+	hud.signature = ""
+	refresh()

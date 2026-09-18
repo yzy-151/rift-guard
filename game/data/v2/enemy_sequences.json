@@ -439,5 +439,335 @@
       }
     },
     "procedural": "spawner_stretch"
+  },
+  "troop_cannon": {
+    "name": "炮车",
+    "source_folder": "炮车",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      106.107,
+      197.552
+    ],
+    "display_size": 120.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      201,
+      652,
+      668
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/troop_cannon/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/troop_cannon/run.png",
+        "frames": 24,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/troop_cannon/attack.png",
+        "frames": 21,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/troop_cannon/down.png",
+        "frames": 41,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "troop_melee": {
+    "name": "近战兵",
+    "source_folder": "近战兵",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      88.023,
+      200.181
+    ],
+    "display_size": 75.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      20,
+      132,
+      728,
+      690
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/troop_melee/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/troop_melee/run.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/troop_melee/attack.png",
+        "frames": 24,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/troop_melee/down.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "troop_ranged": {
+    "name": "远程兵",
+    "source_folder": "远程兵",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      103.799,
+      203.133
+    ],
+    "display_size": 75.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      48,
+      736,
+      736
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/troop_ranged/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/troop_ranged/run.png",
+        "frames": 24,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/troop_ranged/attack.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/troop_ranged/down.png",
+        "frames": 41,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "hilichurl_brute": {
+    "name": "丘丘暴徒",
+    "source_folder": "丘丘暴徒",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      94.765,
+      195.386
+    ],
+    "display_size": 375.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      96,
+      736,
+      736
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/hilichurl_brute/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/hilichurl_brute/run.png",
+        "frames": 48,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/hilichurl_brute/attack.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/hilichurl_brute/down.png",
+        "frames": 37,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "rift_bat": {
+    "name": "小蝙蝠",
+    "source_folder": "小蝙蝠",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      92.859,
+      214.859
+    ],
+    "display_size": 75.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      0,
+      736,
+      736
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/rift_bat/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/rift_bat/run.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/rift_bat/attack.png",
+        "frames": 21,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/rift_bat/down.png",
+        "frames": 41,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
+  },
+  "originium_bug": {
+    "name": "源石虫",
+    "source_folder": "源石虫",
+    "cell": [
+      256,
+      256
+    ],
+    "pivot": [
+      133.545,
+      162.076
+    ],
+    "display_size": 75.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "crop": [
+      0,
+      348,
+      528,
+      722
+    ],
+    "states": {
+      "idle": {
+        "texture": "res://assets/enemies/sequences/originium_bug/idle.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "run": {
+        "texture": "res://assets/enemies/sequences/originium_bug/run.png",
+        "frames": 29,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/originium_bug/attack.png",
+        "frames": 29,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/originium_bug/down.png",
+        "frames": 25,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      }
+    }
   }
 }

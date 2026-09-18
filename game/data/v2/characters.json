@@ -253,13 +253,13 @@
     "block": 0,
     "can_hit_air": true,
     "asset_key": "character.hero_04",
-    "unlocked_by_default": false,
+    "unlocked_by_default": true,
     "active_skill": {
-      "name": "水龙卷",
-      "kind": "hydro_burst",
-      "cooldown": 10.0,
-      "power": 190,
-      "radius": 190,
+      "name": "水脉疗愈",
+      "kind": "healing_surge",
+      "cooldown": 12.0,
+      "power": 195,
+      "radius": 230,
       "hit_frame_ratio": 0.46,
       "targeting": "point",
       "timeline": {
@@ -270,7 +270,8 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "description": "治疗目标区域内友军195点生命。"
     },
     "ultimate": {
       "name": "豪雷积层云",
@@ -297,7 +298,7 @@
       "description": "能量越高，主动技能的伤害与范围越高。"
     },
     "animation_profile": "hero_04",
-    "content_ready": false
+    "content_ready": true
   },
   {
     "id": "hero_05",
@@ -617,13 +618,13 @@
     "block": 0,
     "can_hit_air": true,
     "asset_key": "character.hero_10",
-    "unlocked_by_default": false,
+    "unlocked_by_default": true,
     "active_skill": {
-      "name": "命途回响",
-      "kind": "tribbie_gate",
-      "cooldown": 9.0,
-      "power": 185,
-      "radius": 185,
+      "name": "风刃切流",
+      "kind": "wind_cut",
+      "cooldown": 10.5,
+      "power": 225,
+      "radius": 200,
       "hit_frame_ratio": 0.46,
       "targeting": "point",
       "timeline": {
@@ -634,14 +635,15 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "description": "对目标区域敌人造成225点风元素伤害。"
     },
     "ultimate": {
-      "name": "三相共鸣",
-      "kind": "trinity_field",
+      "name": "长风复苏",
+      "kind": "renewing_breeze",
       "energy_cost": 165,
-      "power": 325,
-      "radius": 325,
+      "power": 42,
+      "radius": 280,
       "hit_frame_ratio": 0.58,
       "targeting": "point",
       "timeline": {
@@ -653,7 +655,9 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 42.9
+      "cooldown": 44.0,
+      "duration": 12.0,
+      "description": "在目标区域持续12秒，每0.85秒为友军恢复42点生命。"
     },
     "passive": {
       "name": "三相同调",
@@ -661,7 +665,7 @@
       "description": "传送门周期复制友方弹道。"
     },
     "animation_profile": "hero_10",
-    "content_ready": false
+    "content_ready": true
   },
   {
     "id": "hero_11",
@@ -782,5 +786,69 @@
     },
     "animation_profile": "hero_12",
     "content_ready": false
+  },
+  {
+    "id": "hero_13",
+    "name": "格温",
+    "role": "无元素织针",
+    "element": "none",
+    "max_hp": 960,
+    "armor": 76,
+    "attack": 96,
+    "attack_rate": 1.42,
+    "attack_range": 345,
+    "move_speed": 122,
+    "block": 2,
+    "can_hit_air": true,
+    "asset_key": "character.hero_13",
+    "unlocked_by_default": true,
+    "active_skill": {
+      "name": "丝缕缠流",
+      "kind": "thread_shelter",
+      "cooldown": 34.0,
+      "power": 0,
+      "radius": 345,
+      "hit_frame_ratio": 0.46,
+      "targeting": "self",
+      "timeline": {
+        "duration": 0.72,
+        "anticipation": 0.216,
+        "vfx_frame": 0.288,
+        "hit_frame": 0.331,
+        "sfx_frame": 0.331,
+        "recovery": 0.389,
+        "shake": 0.34
+      },
+      "description": "攻击范围内所有友军5秒内免受伤害。",
+      "duration": 5.0
+    },
+    "ultimate": {
+      "name": "引针簇射",
+      "kind": "needle_barrage",
+      "energy_cost": 180,
+      "power": 76,
+      "radius": 255,
+      "hit_frame_ratio": 0.58,
+      "targeting": "point",
+      "timeline": {
+        "duration": 1.18,
+        "anticipation": 0.496,
+        "vfx_frame": 0.614,
+        "hit_frame": 0.684,
+        "sfx_frame": 0.684,
+        "recovery": 0.496,
+        "shake": 0.78
+      },
+      "cooldown": 49.0,
+      "needles": 12,
+      "description": "向目标区域射出12根追踪针；每根造成76点无元素伤害并波及附近敌人。"
+    },
+    "passive": {
+      "name": "剪影织卫",
+      "kind": "thread_guard",
+      "description": "高生命、高攻击的无元素近远程守卫。"
+    },
+    "animation_profile": "hero_13",
+    "content_ready": true
   }
 ]

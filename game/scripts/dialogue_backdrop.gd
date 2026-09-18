@@ -14,7 +14,7 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var size := get_viewport_rect().size
-	draw_rect(Rect2(Vector2.ZERO, size), Color("#09070b"))
+	draw_rect(Rect2(Vector2.ZERO, size), Color("#02021b"))
 	draw_texture_rect(background, Rect2(0, 0, size.x, size.y), false, Color.WHITE)
 	draw_rect(Rect2(0, 78, size.x, 360), Color(0.18, 0.03, 0.07, 0.28))
 	# Layered distant architecture keeps the portraits readable while giving the scene depth.
@@ -36,7 +36,7 @@ func _draw() -> void:
 	var glow := 0.025 + sin(clock * 1.7) * 0.008
 	draw_circle(Vector2(size.x * 0.5, 257), 390.0, Color(0.95, 0.20, 0.24, glow))
 	draw_rect(Rect2(0, 435, size.x, 3), Color("#a43a48"))
-	draw_rect(Rect2(0, 438, size.x, size.y - 438), Color("#0e0a10"))
+	draw_rect(Rect2(0, 438, size.x, size.y - 438), Color("#02021b"))
 	# Small deterministic embers keep the stage alive without competing with text.
 	for i in 18:
 		var seed := float(i * 73 % 101) / 101.0

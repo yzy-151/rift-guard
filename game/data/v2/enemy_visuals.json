@@ -8,7 +8,7 @@
       256,
       480
     ],
-    "display_size": 92
+    "display_size": 64.4
   },
   {
     "id": "ranged",
@@ -67,7 +67,7 @@
       256,
       480
     ],
-    "display_size": 94
+    "display_size": 65.8
   },
   {
     "id": "splitter",
@@ -90,7 +90,7 @@
       256,
       480
     ],
-    "display_size": 100
+    "display_size": 70.0
   },
   {
     "id": "boss_02",
@@ -101,7 +101,7 @@
       256,
       480
     ],
-    "display_size": 168
+    "display_size": 117.6
   },
   {
     "id": "grunt",
@@ -148,7 +148,7 @@
       256,
       480
     ],
-    "display_size": 96
+    "display_size": 67.2
   },
   {
     "id": "slime_electro",
@@ -159,7 +159,7 @@
       256,
       480
     ],
-    "display_size": 96
+    "display_size": 67.2
   },
   {
     "id": "slime_anemo",
@@ -170,7 +170,7 @@
       256,
       480
     ],
-    "display_size": 96
+    "display_size": 67.2
   },
   {
     "id": "slime_hydro",
@@ -181,7 +181,7 @@
       256,
       480
     ],
-    "display_size": 96
+    "display_size": 67.2
   },
   {
     "id": "slime_cryo",
@@ -192,6 +192,78 @@
       256,
       480
     ],
-    "display_size": 96
+    "display_size": 67.2
+  },
+  {
+    "id": "troop_cannon",
+    "sprite": "res://assets/enemies/sequences/troop_cannon/portrait.png",
+    "motion": "sequence",
+    "native_facing": 1,
+    "pivot": [
+      106.107,
+      197.552
+    ],
+    "display_size": 120.0,
+    "sequence_profile": "troop_cannon"
+  },
+  {
+    "id": "troop_melee",
+    "sprite": "res://assets/enemies/sequences/troop_melee/portrait.png",
+    "motion": "sequence",
+    "native_facing": 1,
+    "pivot": [
+      88.023,
+      200.181
+    ],
+    "display_size": 75.0,
+    "sequence_profile": "troop_melee"
+  },
+  {
+    "id": "troop_ranged",
+    "sprite": "res://assets/enemies/sequences/troop_ranged/portrait.png",
+    "motion": "sequence",
+    "native_facing": 1,
+    "pivot": [
+      103.799,
+      203.133
+    ],
+    "display_size": 75.0,
+    "sequence_profile": "troop_ranged"
+  },
+  {
+    "id": "hilichurl_brute",
+    "sprite": "res://assets/enemies/sequences/hilichurl_brute/portrait.png",
+    "motion": "sequence",
+    "native_facing": 1,
+    "pivot": [
+      94.765,
+      195.386
+    ],
+    "display_size": 375.0,
+    "sequence_profile": "hilichurl_brute"
+  },
+  {
+    "id": "rift_bat",
+    "sprite": "res://assets/enemies/sequences/rift_bat/portrait.png",
+    "motion": "sequence",
+    "native_facing": 1,
+    "pivot": [
+      92.859,
+      214.859
+    ],
+    "display_size": 75.0,
+    "sequence_profile": "rift_bat"
+  },
+  {
+    "id": "originium_bug",
+    "sprite": "res://assets/enemies/sequences/originium_bug/portrait.png",
+    "motion": "sequence",
+    "native_facing": 1,
+    "pivot": [
+      133.545,
+      162.076
+    ],
+    "display_size": 75.0,
+    "sequence_profile": "originium_bug"
   }
 ]

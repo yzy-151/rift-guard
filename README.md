@@ -16,7 +16,7 @@
 
 ## 角色界面
 
-当前具有正式立绘和动作素材的可用角色为：旅行者、少女、希露菲、芙宁娜、艾米莉亚、丰川祥子、阿米娅。缺少正式立绘或动作素材的角色保持未解锁，旧存档也不会绕过该限制。
+当前具有正式立绘和动作素材的可用角色为：旅行者、少女、希露菲、芙宁娜、艾米莉亚、丰川祥子、阿米娅，以及新加入的格温、洛琪希、风堇。缺少正式立绘或动作素材的角色保持未解锁，旧存档也不会绕过该限制。
 
 ![角色编队](docs/v61-validation/03-squad-scroll.png)
 
@@ -36,7 +36,7 @@
 
 ![V65 八关地形总览](docs/v65-validation/contact-sheet.png)
 
-![角色与怪物](docs/v51-validation/new-characters-and-monsters.png)
+![新角色与怪物](docs/v69-validation/01-slimedown-and-brute-stance.png)
 
 ![怪物图鉴](docs/v51-validation/monster-compendium.png)
 
@@ -45,7 +45,7 @@
 - Godot 工程：`game/project.godot`
 - 设计与验收分辨率：`1920×1080`
 - UI 实验台逻辑坐标：`1280×720`，运行时等比缩放
-- Windows 发布包：`builds/rift-guard-v65/RiftGuard-V65.exe`
+- Windows 发布包：[下载 V69 Windows 版](https://github.com/yzy-151/rift-guard/releases/tag/v69)
 
 使用 Godot 4.4.1 打开工程后运行主场景即可。UI 布局与素材替换方法见 [Godot UI 编辑手册](docs/UI-GODOT-EDITING-MANUAL.md)。
 
