@@ -555,6 +555,7 @@ func set_formation_mode(next_mode: String) -> bool:
 func _load_terrain(stage_definition: Dictionary) -> void:
 	terrain_features.clear()
 	var claimed_grid_cells := {}
+	var route_grid_cells := _route_grid_keys(stage_definition)
 	for value: Variant in stage_definition.get("terrain", []):
 		if not value is Dictionary:
 			continue
@@ -565,7 +566,8 @@ func _load_terrain(stage_definition: Dictionary) -> void:
 		feature.area = Rect2(float(raw_rect[0]), float(raw_rect[1]), float(raw_rect[2]), float(raw_rect[3]))
 		var feature_type := str(feature.get("type", ""))
 		if current_stage_id != "stage_01" and not endless_mode and feature_type in ["blocked", "trap", "high_ground", "low_ground", "attack_ground"]:
-			feature.grid_cells = _claim_grid_cells(_grid_cells_for_area(feature.area), claimed_grid_cells, feature.area.get_center())
+			var forbidden_cells: Dictionary = route_grid_cells if feature_type == "blocked" else {}
+			feature.grid_cells = _claim_grid_cells(_grid_cells_for_area(feature.area), claimed_grid_cells, feature.area.get_center(), forbidden_cells)
 			feature.area = _grid_cells_bounds(feature.grid_cells)
 		feature.base_area = feature.area
 		feature.clock = 0.0
@@ -590,11 +592,28 @@ func _grid_cell_key(cell: Rect2) -> String:
 	var row := roundi((cell.position.y - GRID_ORIGIN.y) / GRID_CELL_SIZE.y)
 	return "%d:%d" % [column, row]
 
-func _claim_grid_cells(candidates: Array[Rect2], claimed: Dictionary, center: Vector2) -> Array[Rect2]:
+func _route_grid_keys(stage_definition: Dictionary) -> Dictionary:
+	var protected := {}
+	var configured_routes: Dictionary = stage_definition.get("routes", {})
+	for raw_route: Variant in configured_routes.values():
+		var points: Array[Vector2] = []
+		for raw_point: Variant in raw_route:
+			if raw_point is Array and raw_point.size() >= 2:
+				points.append(Vector2(float(raw_point[0]), float(raw_point[1])))
+		points = _orthogonalize_route(points)
+		for index in range(maxi(0, points.size() - 1)):
+			for row in GRID_ROWS:
+				for column in GRID_COLUMNS:
+					var cell := Rect2(GRID_ORIGIN + Vector2(column * GRID_CELL_SIZE.x, row * GRID_CELL_SIZE.y), GRID_CELL_SIZE)
+					if _segment_hits_rect(points[index], points[index + 1], cell.grow(20.0)):
+						protected[_grid_cell_key(cell)] = true
+	return protected
+
+func _claim_grid_cells(candidates: Array[Rect2], claimed: Dictionary, center: Vector2, forbidden: Dictionary = {}) -> Array[Rect2]:
 	var cells: Array[Rect2] = []
 	for cell: Rect2 in candidates:
 		var key := _grid_cell_key(cell)
-		if claimed.has(key):
+		if claimed.has(key) or forbidden.has(key):
 			continue
 		claimed[key] = true
 		cells.append(cell)
@@ -607,7 +626,7 @@ func _claim_grid_cells(candidates: Array[Rect2], claimed: Dictionary, center: Ve
 	alternatives.sort_custom(func(a: Rect2, b: Rect2) -> bool: return a.get_center().distance_squared_to(center) < b.get_center().distance_squared_to(center))
 	for cell: Rect2 in alternatives:
 		var key := _grid_cell_key(cell)
-		if not claimed.has(key):
+		if not claimed.has(key) and not forbidden.has(key):
 			claimed[key] = true
 			return [cell]
 	return cells
@@ -1388,7 +1407,11 @@ func _enemy_tick(dt: float) -> void:
 		var route_index: int = int(e.get("route_index", 0))
 		var destination: Vector2 = heroes[0].pos if endless_mode and not heroes.is_empty() else Vector2(100, e.pos.y)
 		if not endless_mode and not route.is_empty() and route_index < route.size():
-			destination = route[route_index]
+			if bool(e.get("flying", false)):
+				destination = route[-1]
+				route_index = route.size() - 1
+			else:
+				destination = route[route_index]
 		var navigation_radius := maxf(12.0, float(e.get("size", 28.0)) * 0.34)
 		var route_destination := destination
 		if not bool(e.get("flying", false)) and float(e.get("speed", 0.0)) > 0.0:
@@ -1396,7 +1419,7 @@ func _enemy_tick(dt: float) -> void:
 		if absf(destination.x - e.pos.x) > 1.0:
 			e.facing = 1.0 if destination.x > e.pos.x else -1.0
 		var move_distance := float(e.speed) * speed_scale * movement_dt
-		var next_pos: Vector2 = _orthogonal_enemy_step(e.pos, destination, move_distance, navigation_radius, bool(e.get("flying", false)))
+		var next_pos: Vector2 = e.pos.move_toward(destination, move_distance) if bool(e.get("flying", false)) else _orthogonal_enemy_step(e.pos, destination, move_distance, navigation_radius)
 		var terrain_door: Dictionary = {} if bool(e.get("flying", false)) else _nearby_destructible_door(e.pos, navigation_radius)
 		if not terrain_door.is_empty():
 			next_pos = e.pos
@@ -2254,7 +2277,7 @@ func damage_hero(id: int, raw_damage: float) -> void:
 
 func _hero_tick() -> void:
 	for h: Dictionary in heroes:
-		if h.hp <= 0 or not bool(h.get("deployed", true)) or (h.moving and not endless_mode):
+		if h.hp <= 0 or not bool(h.get("deployed", true)):
 			continue
 		if normalize_element(str(h.element)) == "hydro" and h.heal_timer <= 0:
 			var ally: Dictionary = {}
@@ -2272,8 +2295,9 @@ func _hero_tick() -> void:
 		var target: Dictionary = {}
 		var available: Array[Dictionary] = []
 		for e: Dictionary in enemies:
-			var can_target_air: bool = bool(h.get("can_hit_air", false)) or (h.get("character_id", "") == "traveler" and h.get("element", "") != "")
-			if e.hp > 0 and (not bool(e.get("flying", false)) or can_target_air) and is_in_attack_range(h, e.pos) and not terrain_line_blocked(h.pos, e.pos):
+			var can_target_air: bool = bool(h.get("can_hit_air", false)) or int(h.get("block", 0)) <= 0 or (h.get("character_id", "") == "traveler" and h.get("element", "") != "")
+			var clear_attack_path: bool = h.pos.distance_to(e.pos) <= 72.0 or not terrain_line_blocked(h.pos, e.pos)
+			if e.hp > 0 and (not bool(e.get("flying", false)) or can_target_air) and is_in_attack_range(h, e.pos) and clear_attack_path:
 				available.append(e)
 				if target.is_empty() or e.pos.x < target.pos.x:
 					target = e
@@ -2764,7 +2788,7 @@ func _orthogonalize_route(points: Array[Vector2]) -> Array[Vector2]:
 		if not snapped.is_equal_approx(result[-1]): result.append(snapped)
 	return result
 
-func _orthogonal_enemy_step(current: Vector2, target: Vector2, distance: float, radius: float, ignore_terrain: bool = false) -> Vector2:
+func _orthogonal_enemy_step(current: Vector2, target: Vector2, distance: float, radius: float) -> Vector2:
 	var delta := target - current
 	if delta.length_squared() <= 0.01:
 		return current
@@ -2781,7 +2805,7 @@ func _orthogonal_enemy_step(current: Vector2, target: Vector2, distance: float, 
 		if axis_target.distance_squared_to(current) <= 0.01:
 			continue
 		var candidate := current.move_toward(axis_target, distance)
-		if ignore_terrain or _terrain_blocker_on_segment(current, candidate, radius).is_empty():
+		if _terrain_blocker_on_segment(current, candidate, radius).is_empty():
 			return candidate
 	return current
 

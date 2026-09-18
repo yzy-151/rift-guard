@@ -39,10 +39,10 @@
         "id": "watch_block",
         "type": "blocked",
         "rect": [
-          760,
-          265,
-          105,
-          72
+          340,
+          140,
+          120,
+          80
         ],
         "label": "灌木阻挡",
         "collision_shape": "ellipse",
@@ -73,10 +73,10 @@
         "id": "watch_shortcut",
         "type": "shortcut",
         "rect": [
-          585,
-          326,
-          76,
-          88
+          700,
+          140,
+          120,
+          80
         ],
         "label": "裂隙封门",
         "hp": 460,
@@ -93,10 +93,10 @@
         "id": "wind_breakable_gate",
         "type": "shortcut",
         "rect": [
-          405,
-          326,
-          76,
-          88
+          220,
+          500,
+          120,
+          80
         ],
         "label": "风蚀封门",
         "hp": 420,
@@ -451,81 +451,81 @@
         "id": "tide_high",
         "type": "high_ground",
         "rect": [
-          300,
+          160,
           180,
-          220,
-          100
+          180,
+          80
         ],
-        "label": "回廊高台",
+        "label": "赤潮瞭望台",
         "attack_bonus": 0.18
       },
       {
         "id": "tide_low",
         "type": "low_ground",
         "rect": [
-          735,
-          430,
-          260,
-          100
+          880,
+          460,
+          180,
+          80
         ],
-        "label": "赤潮洼地",
+        "label": "血潮滞流区",
         "speed_scale": 0.72
       },
       {
         "id": "tide_block",
         "type": "blocked",
         "rect": [
-          825,
-          260,
-          125,
-          78
+          1120,
+          340,
+          120,
+          80
         ],
-        "label": "崩塌柱阵"
+        "label": "东侧回廊墙"
       },
       {
         "id": "tide_device",
         "type": "attack_ground",
         "rect": [
-          540,
-          385,
-          78,
-          76
+          460,
+          460,
+          60,
+          40
         ],
-        "label": "攻击增幅地砖",
+        "label": "赤潮增幅地砖",
         "attack_bonus": 0.3
       },
       {
         "id": "one_way_gate",
         "type": "blocked",
         "rect": [
-          430,
-          250,
-          78,
-          72
+          220,
+          140,
+          180,
+          40
         ],
-        "label": "裂隙石墙"
+        "label": "北侧断墙"
       },
       {
         "id": "moving_platform",
         "type": "blocked",
         "rect": [
-          610,
-          185,
-          150,
-          62
+          1000,
+          140,
+          180,
+          40
         ],
-        "label": "裂隙石墙"
+        "label": "东侧断墙"
       },
       {
         "id": "element_trap",
         "type": "trap",
         "rect": [
-          850,
+          760,
           300,
-          100,
-          82
+          60,
+          40
         ],
-        "label": "持续伤害地砖",
+        "label": "血潮灼烧地砖",
         "element": "electro",
         "power": 32,
         "interval": 0.85,
@@ -848,81 +848,81 @@
         "id": "nest_high",
         "type": "high_ground",
         "rect": [
-          210,
-          170,
-          230,
-          105
+          400,
+          140,
+          180,
+          80
         ],
-        "label": "黑曜祭台",
+        "label": "孵化瞭望台",
         "attack_bonus": 0.18
       },
       {
         "id": "nest_low",
         "type": "low_ground",
         "rect": [
-          690,
-          420,
-          275,
-          110
+          940,
+          460,
+          180,
+          80
         ],
-        "label": "孵化泥沼",
+        "label": "母巢黏液池",
         "speed_scale": 0.72
       },
       {
         "id": "nest_block",
         "type": "blocked",
         "rect": [
-          790,
-          245,
-          135,
-          82
+          40,
+          140,
+          180,
+          40
         ],
-        "label": "母巢骨墙"
+        "label": "西北巢壁"
       },
       {
         "id": "nest_device",
         "type": "attack_ground",
         "rect": [
-          470,
-          300,
-          82,
-          82
+          580,
+          460,
+          60,
+          40
         ],
-        "label": "攻击增幅地砖",
+        "label": "母巢增幅地砖",
         "attack_bonus": 0.3
       },
       {
         "id": "one_way_gate",
         "type": "blocked",
         "rect": [
-          430,
-          250,
-          78,
-          72
+          1120,
+          140,
+          120,
+          80
         ],
-        "label": "裂隙石墙"
+        "label": "东北巢壁"
       },
       {
         "id": "moving_platform",
         "type": "blocked",
         "rect": [
-          610,
-          185,
-          150,
-          62
+          220,
+          540,
+          180,
+          40
         ],
-        "label": "裂隙石墙"
+        "label": "西南巢壁"
       },
       {
         "id": "element_trap",
         "type": "trap",
         "rect": [
-          850,
-          300,
-          100,
-          82
+          820,
+          340,
+          60,
+          40
         ],
-        "label": "持续伤害地砖",
+        "label": "腐化地砖",
         "element": "electro",
         "power": 32,
         "interval": 0.85,
@@ -1276,81 +1276,81 @@
         "id": "stage_04_high_ground_0",
         "type": "high_ground",
         "rect": [
-          210,
-          170,
-          230,
-          105
+          1000,
+          140,
+          180,
+          80
         ],
-        "label": "黑曜祭台",
+        "label": "风眼高台",
         "attack_bonus": 0.18
       },
       {
         "id": "stage_04_low_ground_1",
         "type": "low_ground",
         "rect": [
-          690,
-          420,
-          275,
-          110
+          160,
+          460,
+          180,
+          80
         ],
-        "label": "孵化泥沼",
+        "label": "逆风洼地",
         "speed_scale": 0.72
       },
       {
         "id": "stage_04_blocked_2",
         "type": "blocked",
         "rect": [
-          790,
-          245,
-          135,
-          82
+          100,
+          540,
+          180,
+          40
         ],
-        "label": "母巢骨墙"
+        "label": "南侧风墙"
       },
       {
         "id": "stage_04_mechanism_3",
         "type": "attack_ground",
         "rect": [
-          470,
-          300,
-          82,
-          82
+          580,
+          220,
+          60,
+          40
         ],
-        "label": "攻击增幅地砖",
+        "label": "风压增幅地砖",
         "attack_bonus": 0.3
       },
       {
         "id": "stage_04_one_way_5",
         "type": "blocked",
         "rect": [
-          430,
-          250,
-          78,
-          72
+          100,
+          140,
+          180,
+          40
         ],
-        "label": "裂隙石墙"
+        "label": "北侧风墙"
       },
       {
         "id": "stage_04_moving_platform_6",
         "type": "blocked",
         "rect": [
-          610,
-          185,
-          150,
-          62
+          1120,
+          420,
+          120,
+          80
         ],
-        "label": "裂隙石墙"
+        "label": "东侧风墙"
       },
       {
         "id": "stage_04_trap_8",
         "type": "trap",
         "rect": [
-          850,
-          300,
-          100,
-          82
+          760,
+          460,
+          60,
+          40
         ],
-        "label": "持续伤害地砖",
+        "label": "风切地砖",
         "element": "electro",
         "power": 38,
         "interval": 0.85,
@@ -1670,81 +1670,81 @@
         "id": "stage_05_high_ground_0",
         "type": "high_ground",
         "rect": [
-          210,
-          170,
-          230,
-          105
+          40,
+          140,
+          180,
+          80
         ],
-        "label": "黑曜祭台",
+        "label": "熔炉观测台",
         "attack_bonus": 0.18
       },
       {
         "id": "stage_05_low_ground_1",
         "type": "low_ground",
         "rect": [
-          690,
-          420,
-          275,
-          110
+          1000,
+          460,
+          180,
+          80
         ],
-        "label": "孵化泥沼",
+        "label": "冷却熔槽",
         "speed_scale": 0.72
       },
       {
         "id": "stage_05_blocked_2",
         "type": "blocked",
         "rect": [
-          790,
-          245,
-          135,
-          82
+          220,
+          140,
+          180,
+          40
         ],
-        "label": "母巢骨墙"
+        "label": "北侧炉墙"
       },
       {
         "id": "stage_05_mechanism_3",
         "type": "attack_ground",
         "rect": [
-          470,
-          300,
-          82,
-          82
+          640,
+          340,
+          60,
+          40
         ],
-        "label": "攻击增幅地砖",
+        "label": "炉心增幅地砖",
         "attack_bonus": 0.3
       },
       {
         "id": "stage_05_one_way_5",
         "type": "blocked",
         "rect": [
-          430,
-          250,
-          78,
-          72
+          220,
+          540,
+          180,
+          40
         ],
-        "label": "裂隙石墙"
+        "label": "南侧炉墙"
       },
       {
         "id": "stage_05_moving_platform_6",
         "type": "blocked",
         "rect": [
-          610,
-          185,
-          150,
-          62
+          1120,
+          220,
+          120,
+          80
         ],
-        "label": "裂隙石墙"
+        "label": "东侧炉墙"
       },
       {
         "id": "stage_05_trap_8",
         "type": "trap",
         "rect": [
-          850,
-          300,
-          100,
-          82
+          820,
+          500,
+          60,
+          40
         ],
-        "label": "持续伤害地砖",
+        "label": "熔火地砖",
         "element": "electro",
         "power": 45,
         "interval": 0.85,
@@ -2072,81 +2072,81 @@
         "id": "stage_06_high_ground_0",
         "type": "high_ground",
         "rect": [
-          210,
-          170,
-          230,
-          105
+          400,
+          140,
+          180,
+          80
         ],
-        "label": "黑曜祭台",
+        "label": "上层钟台",
         "attack_bonus": 0.18
       },
       {
         "id": "stage_06_low_ground_1",
         "type": "low_ground",
         "rect": [
-          690,
-          420,
-          275,
-          110
+          400,
+          460,
+          180,
+          80
         ],
-        "label": "孵化泥沼",
+        "label": "下层钟坑",
         "speed_scale": 0.72
       },
       {
         "id": "stage_06_blocked_2",
         "type": "blocked",
         "rect": [
-          790,
-          245,
-          135,
-          82
+          40,
+          140,
+          180,
+          40
         ],
-        "label": "母巢骨墙"
+        "label": "西侧钟墙"
       },
       {
         "id": "stage_06_mechanism_3",
         "type": "attack_ground",
         "rect": [
-          470,
-          300,
-          82,
-          82
+          700,
+          340,
+          60,
+          40
         ],
-        "label": "攻击增幅地砖",
+        "label": "时序增幅地砖",
         "attack_bonus": 0.3
       },
       {
         "id": "stage_06_one_way_5",
         "type": "blocked",
         "rect": [
-          430,
-          250,
-          78,
-          72
+          940,
+          260,
+          240,
+          40
         ],
-        "label": "裂隙石墙"
+        "label": "上层齿轮墙"
       },
       {
         "id": "stage_06_moving_platform_6",
         "type": "blocked",
         "rect": [
-          610,
-          185,
-          150,
-          62
+          940,
+          420,
+          240,
+          40
         ],
-        "label": "裂隙石墙"
+        "label": "下层齿轮墙"
       },
       {
         "id": "stage_06_trap_8",
         "type": "trap",
         "rect": [
-          850,
-          300,
-          100,
-          82
+          280,
+          340,
+          60,
+          40
         ],
-        "label": "持续伤害地砖",
+        "label": "迟滞地砖",
         "element": "electro",
         "power": 52,
         "interval": 0.85,
@@ -2470,81 +2470,81 @@
         "id": "stage_07_high_ground_0",
         "type": "high_ground",
         "rect": [
-          210,
-          170,
-          230,
-          105
+          40,
+          460,
+          180,
+          80
         ],
-        "label": "黑曜祭台",
+        "label": "冻原高台",
         "attack_bonus": 0.18
       },
       {
         "id": "stage_07_low_ground_1",
         "type": "low_ground",
         "rect": [
-          690,
-          420,
-          275,
-          110
+          1000,
+          140,
+          180,
+          80
         ],
-        "label": "孵化泥沼",
+        "label": "霜蚀洼地",
         "speed_scale": 0.72
       },
       {
         "id": "stage_07_blocked_2",
         "type": "blocked",
         "rect": [
-          790,
-          245,
-          135,
-          82
+          100,
+          540,
+          180,
+          40
         ],
-        "label": "母巢骨墙"
+        "label": "西南冰墙"
       },
       {
         "id": "stage_07_mechanism_3",
         "type": "attack_ground",
         "rect": [
-          470,
-          300,
-          82,
-          82
+          520,
+          140,
+          60,
+          40
         ],
-        "label": "攻击增幅地砖",
+        "label": "寒霜增幅地砖",
         "attack_bonus": 0.3
       },
       {
         "id": "stage_07_one_way_5",
         "type": "blocked",
         "rect": [
-          430,
-          250,
-          78,
-          72
+          1120,
+          220,
+          120,
+          80
         ],
-        "label": "裂隙石墙"
+        "label": "东北冰墙"
       },
       {
         "id": "stage_07_moving_platform_6",
         "type": "blocked",
         "rect": [
-          610,
-          185,
-          150,
-          62
+          1120,
+          460,
+          120,
+          80
         ],
-        "label": "裂隙石墙"
+        "label": "东南冰墙"
       },
       {
         "id": "stage_07_trap_8",
         "type": "trap",
         "rect": [
-          850,
-          300,
-          100,
-          82
+          760,
+          500,
+          60,
+          40
         ],
-        "label": "持续伤害地砖",
+        "label": "永冻地砖",
         "element": "electro",
         "power": 59,
         "interval": 0.85,
@@ -2868,81 +2868,81 @@
         "id": "stage_08_high_ground_0",
         "type": "high_ground",
         "rect": [
-          210,
-          170,
-          230,
-          105
+          40,
+          140,
+          180,
+          80
         ],
-        "label": "黑曜祭台",
+        "label": "黑曜北台",
         "attack_bonus": 0.18
       },
       {
         "id": "stage_08_low_ground_1",
         "type": "low_ground",
         "rect": [
-          690,
-          420,
-          275,
-          110
+          40,
+          460,
+          180,
+          80
         ],
-        "label": "孵化泥沼",
+        "label": "母巢南池",
         "speed_scale": 0.72
       },
       {
         "id": "stage_08_blocked_2",
         "type": "blocked",
         "rect": [
-          790,
-          245,
-          135,
-          82
+          220,
+          140,
+          240,
+          40
         ],
-        "label": "母巢骨墙"
+        "label": "北侧骨墙"
       },
       {
         "id": "stage_08_mechanism_3",
         "type": "attack_ground",
         "rect": [
-          470,
-          300,
-          82,
-          82
+          580,
+          340,
+          60,
+          40
         ],
-        "label": "攻击增幅地砖",
+        "label": "蚀日增幅地砖",
         "attack_bonus": 0.3
       },
       {
         "id": "stage_08_one_way_5",
         "type": "blocked",
         "rect": [
-          430,
-          250,
-          78,
-          72
+          1000,
+          220,
+          180,
+          40
         ],
-        "label": "裂隙石墙"
+        "label": "东北骨墙"
       },
       {
         "id": "stage_08_moving_platform_6",
         "type": "blocked",
         "rect": [
-          610,
-          185,
-          150,
-          62
+          1000,
+          500,
+          180,
+          40
         ],
-        "label": "裂隙石墙"
+        "label": "东南骨墙"
       },
       {
         "id": "stage_08_trap_8",
         "type": "trap",
         "rect": [
-          850,
-          300,
-          100,
-          82
+          820,
+          340,
+          60,
+          40
         ],
-        "label": "持续伤害地砖",
+        "label": "蚀日地砖",
         "element": "electro",
         "power": 66,
         "interval": 0.85,

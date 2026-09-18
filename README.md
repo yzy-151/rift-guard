@@ -34,7 +34,7 @@
 
 第一关使用蒙德草地、七天神像、高台、沼泽、自动机关和可破坏栅栏；后续关卡保持暗色格子主题。敌人包含史莱姆、丘丘人、弓箭手、萨满、哥布林、哥布林茅房、大型怪物与多阶段 Boss。
 
-![第一关蒙德地形](docs/v56-validation/stage01-mondstadt-terrain.png)
+![V65 八关地形总览](docs/v65-validation/contact-sheet.png)
 
 ![角色与怪物](docs/v51-validation/new-characters-and-monsters.png)
 
