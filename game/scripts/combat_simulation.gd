@@ -554,6 +554,7 @@ func set_formation_mode(next_mode: String) -> bool:
 
 func _load_terrain(stage_definition: Dictionary) -> void:
 	terrain_features.clear()
+	var claimed_grid_cells := {}
 	for value: Variant in stage_definition.get("terrain", []):
 		if not value is Dictionary:
 			continue
@@ -562,8 +563,9 @@ func _load_terrain(stage_definition: Dictionary) -> void:
 		if raw_rect.size() < 4:
 			continue
 		feature.area = Rect2(float(raw_rect[0]), float(raw_rect[1]), float(raw_rect[2]), float(raw_rect[3]))
-		if current_stage_id != "stage_01" and not endless_mode:
-			feature.grid_cells = _grid_cells_for_area(feature.area)
+		var feature_type := str(feature.get("type", ""))
+		if current_stage_id != "stage_01" and not endless_mode and feature_type in ["blocked", "trap", "high_ground", "low_ground", "attack_ground"]:
+			feature.grid_cells = _claim_grid_cells(_grid_cells_for_area(feature.area), claimed_grid_cells, feature.area.get_center())
 			feature.area = _grid_cells_bounds(feature.grid_cells)
 		feature.base_area = feature.area
 		feature.clock = 0.0
@@ -581,6 +583,33 @@ func _grid_cells_for_area(area: Rect2) -> Array[Rect2]:
 	for row in range(first_row, last_row + 1):
 		for column in range(first_col, last_col + 1):
 			cells.append(Rect2(GRID_ORIGIN + Vector2(column * GRID_CELL_SIZE.x, row * GRID_CELL_SIZE.y), GRID_CELL_SIZE))
+	return cells
+
+func _grid_cell_key(cell: Rect2) -> String:
+	var column := roundi((cell.position.x - GRID_ORIGIN.x) / GRID_CELL_SIZE.x)
+	var row := roundi((cell.position.y - GRID_ORIGIN.y) / GRID_CELL_SIZE.y)
+	return "%d:%d" % [column, row]
+
+func _claim_grid_cells(candidates: Array[Rect2], claimed: Dictionary, center: Vector2) -> Array[Rect2]:
+	var cells: Array[Rect2] = []
+	for cell: Rect2 in candidates:
+		var key := _grid_cell_key(cell)
+		if claimed.has(key):
+			continue
+		claimed[key] = true
+		cells.append(cell)
+	if not cells.is_empty():
+		return cells
+	var alternatives: Array[Rect2] = []
+	for row in GRID_ROWS:
+		for column in GRID_COLUMNS:
+			alternatives.append(Rect2(GRID_ORIGIN + Vector2(column * GRID_CELL_SIZE.x, row * GRID_CELL_SIZE.y), GRID_CELL_SIZE))
+	alternatives.sort_custom(func(a: Rect2, b: Rect2) -> bool: return a.get_center().distance_squared_to(center) < b.get_center().distance_squared_to(center))
+	for cell: Rect2 in alternatives:
+		var key := _grid_cell_key(cell)
+		if not claimed.has(key):
+			claimed[key] = true
+			return [cell]
 	return cells
 
 func _grid_cells_bounds(cells: Array) -> Rect2:
@@ -838,6 +867,8 @@ func spawn_enemy(point: Vector2, kind: String = "grunt") -> Dictionary:
 	if v2_mode and database != null and database.enemy_families.has(kind):
 		var family_definition: Dictionary = database.enemy_families[kind]
 		enemy.merge({"family":family_definition.get("family", "rift"), "variant":family_definition.get("variant", kind), "behavior":family_definition.get("behavior", "pressure_advance"), "motion":family_definition.get("motion", "elastic_hop"), "visual_family":family_definition.get("visual", kind)}, true)
+	if v2_mode and not bool(enemy.get("flying", false)):
+		point = _nearest_walkable_point(point, maxf(12.0, float(enemy.get("size", 28.0)) * 0.34))
 	enemy.hp *= 1.40
 	enemy.hp *= 1.0 + maxf(0.0, wave - 1) * 0.10
 	if v2_mode and stage_runtime != null:
@@ -1365,7 +1396,7 @@ func _enemy_tick(dt: float) -> void:
 		if absf(destination.x - e.pos.x) > 1.0:
 			e.facing = 1.0 if destination.x > e.pos.x else -1.0
 		var move_distance := float(e.speed) * speed_scale * movement_dt
-		var next_pos: Vector2 = _orthogonal_enemy_step(e.pos, destination, move_distance, navigation_radius)
+		var next_pos: Vector2 = _orthogonal_enemy_step(e.pos, destination, move_distance, navigation_radius, bool(e.get("flying", false)))
 		var terrain_door: Dictionary = {} if bool(e.get("flying", false)) else _nearby_destructible_door(e.pos, navigation_radius)
 		if not terrain_door.is_empty():
 			next_pos = e.pos
@@ -1982,7 +2013,9 @@ func _resolve_enemy_warning(enemy: Dictionary) -> void:
 				break
 	elif victim_id >= 0 and victim_id < heroes.size():
 		var victim: Dictionary = heroes[victim_id]
-		var clear_shot := bool(enemy.get("flying", false)) or float(enemy.get("attack_range", 0.0)) <= 0.0 or not terrain_line_blocked(enemy.pos, victim.pos)
+		var attack_range := float(enemy.get("attack_range", 0.0))
+		var within_attack_range: bool = attack_range <= 0.0 or enemy.pos.distance_to(victim.pos) <= attack_range
+		var clear_shot: bool = within_attack_range and (bool(enemy.get("flying", false)) or attack_range <= 0.0 or not terrain_line_blocked(enemy.pos, victim.pos))
 		if bool(victim.get("deployed", false)) and victim.hp > 0.0 and victim.pos.distance_to(enemy.warning_pos) <= float(enemy.warning_radius) and clear_shot:
 			damage_hero(victim_id, enemy.damage)
 			if "suppressor" in enemy.get("affixes",[]):
@@ -2731,16 +2764,25 @@ func _orthogonalize_route(points: Array[Vector2]) -> Array[Vector2]:
 		if not snapped.is_equal_approx(result[-1]): result.append(snapped)
 	return result
 
-func _orthogonal_enemy_step(current: Vector2, target: Vector2, distance: float, radius: float) -> Vector2:
+func _orthogonal_enemy_step(current: Vector2, target: Vector2, distance: float, radius: float, ignore_terrain: bool = false) -> Vector2:
 	var delta := target - current
-	if delta.length_squared() <= 0.01: return current
+	if delta.length_squared() <= 0.01:
+		return current
 	var horizontal := Vector2(target.x, current.y)
 	var vertical := Vector2(current.x, target.y)
-	var candidates: Array[Vector2] = [horizontal, vertical] if absf(delta.x) >= absf(delta.y) else [vertical, horizontal]
+	var candidates: Array[Vector2] = []
+	if absf(delta.x) >= absf(delta.y):
+		candidates.append(horizontal)
+		candidates.append(vertical)
+	else:
+		candidates.append(vertical)
+		candidates.append(horizontal)
 	for axis_target: Vector2 in candidates:
-		if axis_target.distance_squared_to(current) <= 0.01: continue
+		if axis_target.distance_squared_to(current) <= 0.01:
+			continue
 		var candidate := current.move_toward(axis_target, distance)
-		if _terrain_blocker_on_segment(current, candidate, radius).is_empty(): return candidate
+		if ignore_terrain or _terrain_blocker_on_segment(current, candidate, radius).is_empty():
+			return candidate
 	return current
 
 func stage_route(route_id: String) -> Array[Vector2]:
