@@ -1,5 +1,6 @@
 extends Control
 const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
+const CharacterBreathPreview = preload("res://scripts/character_breath_preview.gd")
 signal chosen(index: int, hero_id: int)
 
 const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
@@ -46,6 +47,9 @@ var offer_key := ""
 var target_overlay: ColorRect
 var target_heading: Label
 var target_buttons: Array[Button] = []
+var target_previews: Array[Control] = []
+var target_name_labels: Array[Label] = []
+var target_hp_labels: Array[Label] = []
 var target_card_index := -1
 
 func build(hud) -> void:
@@ -280,25 +284,44 @@ func _commit_choice(index: int) -> void:
 
 func _build_target_picker(hud) -> void:
 	target_overlay = ColorRect.new()
-	target_overlay.color = Color(0.02, 0.025, 0.055, 0.92)
+	target_overlay.color = Color("#0b1020")
+	target_overlay.z_index = 100
 	target_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	target_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(target_overlay)
 	var panel := Panel.new()
-	panel.position = Vector2(216, 238)
-	panel.size = Vector2(848, 244)
+	panel.position = Vector2(122, 112)
+	panel.size = Vector2(1036, 500)
 	var frame := StyleBoxFlat.new()
-	frame.bg_color = Color("#101321")
+	frame.bg_color = Color("#101522")
 	frame.border_color = Color("#e55569")
-	frame.set_border_width_all(3)
+	frame.set_border_width_all(2)
 	panel.add_theme_stylebox_override("panel", frame)
 	target_overlay.add_child(panel)
-	target_heading = hud.label(panel, Vector2(30, 23), Vector2(770, 36), "选择强化目标", 24, WHITE)
+	target_heading = hud.label(panel, Vector2(54, 28), Vector2(928, 40), "选择强化目标", 25, WHITE)
+	target_heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	for i in 3:
-		var button: Button = hud.button(panel, Rect2(30 + i * 265, 88, 245, 75), "", false)
+		var button: Button = hud.button(panel, Rect2(50 + i * 323, 94, 290, 330), "", false)
+		for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+			button.add_theme_stylebox_override(state, StyleBoxEmpty.new())
+		button.clip_contents = true
+		var preview: Control = CharacterBreathPreview.new()
+		preview.transparent_background = true
+		preview.position = Vector2(15, 3)
+		preview.size = Vector2(260, 258)
+		button.add_child(preview)
+		target_previews.append(preview)
+		var name_label: Label = hud.label(button, Vector2(12, 266), Vector2(266, 28), "", 18, WHITE)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		target_name_labels.append(name_label)
+		var hp_label: Label = hud.label(button, Vector2(12, 298), Vector2(266, 22), "", 12, MUTED)
+		hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		target_hp_labels.append(hp_label)
 		button.pressed.connect(_pick_target.bind(i))
+		button.mouse_entered.connect(func(): _play(hover_sound); button.modulate = Color(1.16, 1.16, 1.16))
+		button.mouse_exited.connect(func(): button.modulate = Color.WHITE)
 		target_buttons.append(button)
-	var back: Button = hud.button(panel, Rect2(324, 186, 200, 43), "返回卡牌", false)
+	var back: Button = hud.button(panel, Rect2(410, 445, 216, 42), "返回卡牌", false)
 	back.pressed.connect(close_target_picker)
 	target_overlay.hide()
 
@@ -310,8 +333,18 @@ func show_target_picker(index: int, sim) -> void:
 	for i in target_buttons.size():
 		var exists: bool = i < sim.heroes.size()
 		target_buttons[i].visible = exists
-		if exists:
-			target_buttons[i].text = "%d  %s  ·  HP %d/%d" % [i + 1, str(sim.heroes[i].get("name", "角色")), int(sim.heroes[i].hp), int(sim.heroes[i].max_hp)]
+		if not exists:
+			continue
+		var hero: Dictionary = sim.heroes[i]
+		var character_id := str(hero.get("character_id", ""))
+		var character: Dictionary = sim.database.characters.get(character_id, {})
+		var asset: Dictionary = sim.database.assets.get(str(character.get("asset_key", "")), {})
+		var element := str(character.get("element", "none"))
+		var color: Color = {"hydro":Color("#70bdff"),"pyro":Color("#ff785f"),"anemo":Color("#7bdec6"),"cryo":Color("#a4e4fa"),"electro":Color("#d49aff"),"geo":Color("#e3bd71")}.get(element, Color("#f4d9ad"))
+		target_previews[i].configure(character_id, asset, color, false)
+		target_name_labels[i].text = "%d  %s" % [i + 1, str(hero.get("name", "角色"))]
+		target_name_labels[i].add_theme_color_override("font_color", color)
+		target_hp_labels[i].text = "HP %d / %d" % [int(hero.get("hp", 0)), int(hero.get("max_hp", 0))]
 	target_overlay.show()
 	for button: Button in target_buttons:
 		if button.visible:

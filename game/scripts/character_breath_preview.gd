@@ -10,6 +10,7 @@ var atlas_cell := Vector2.ZERO
 var atlas_fps := 24.0
 var elapsed := 0.0
 var locked := false
+var transparent_background := false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -46,7 +47,8 @@ func _process(dt: float) -> void:
 
 func _draw() -> void:
 	var area := Rect2(Vector2.ZERO, size)
-	draw_rect(area, Color("#0c1016"))
+	if not transparent_background:
+		draw_rect(area, Color("#0c1016"))
 	draw_circle(Vector2(size.x * 0.50, size.y * 0.68), size.x * 0.42, Color(element_color, 0.10))
 	draw_arc(Vector2(size.x * 0.50, size.y * 0.76), size.x * 0.34, PI, TAU, 28, Color(element_color, 0.48), 2.0, true)
 	for spark in 3:
@@ -76,4 +78,5 @@ func _draw() -> void:
 		draw_circle(Vector2(size.x * 0.5, size.y * 0.53), 12.0, Color("#171119"))
 		draw_arc(Vector2(size.x * 0.5, size.y * 0.53), 8.0, PI, TAU, 16, Color("#8e747d"), 2.0, true)
 		draw_rect(Rect2(size.x * 0.5 - 8.0, size.y * 0.53 - 1.0, 16.0, 13.0), Color("#8e747d"))
-	draw_rect(area, Color(element_color, 0.56 if not locked else 0.18), false, 1.5)
+	if not transparent_background:
+		draw_rect(area, Color(element_color, 0.56 if not locked else 0.18), false, 1.5)

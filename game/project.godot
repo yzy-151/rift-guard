@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V70：技能与卡牌图标、技能数值和图鉴更新 / 1920×1080"
-config/version="70.0.0"
+config/description="V71：选卡目标界面、地砖加成与无尽难度曲线 / 1920×1080"
+config/version="71.0.0"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

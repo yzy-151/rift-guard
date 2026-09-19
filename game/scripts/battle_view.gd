@@ -1177,7 +1177,7 @@ func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector
 	if kind == "high_ground":
 		var high_rect := _grounded_feature_rect(screen_area, Vector2(0.90, 1.0), 4.0)
 		draw_texture_rect(STAGE_VISUAL.chapter1_high_platform, high_rect, false, Color("#eef7d7"))
-		caption(Vector2(high_rect.position.x + 10, high_rect.end.y + 12), "高台 · 伤害+22% · 射程+38%", Color("#f3f1c8"), 8)
+		caption(Vector2(high_rect.position.x + 10, high_rect.end.y + 12), "高台 · 射程×2", Color("#f3f1c8"), 8)
 		return true
 	if kind == "moving_platform":
 		var moving_rect := Rect2(Vector2.ZERO, screen_area.size * Vector2(0.92, 1.15))
@@ -1189,7 +1189,7 @@ func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector
 	if kind == "low_ground":
 		var low_rect := screen_area.grow(5.0)
 		draw_texture_rect(STAGE_VISUAL.chapter1_lowland, low_rect, false, Color.WHITE)
-		caption(Vector2(low_rect.position.x + 12, low_rect.get_center().y), "沼泽减速 28%", Color("#e4dfae"), 9)
+		caption(Vector2(low_rect.position.x + 12, low_rect.get_center().y), "沼泽减速 70%", Color("#e4dfae"), 9)
 		return true
 	if kind == "conveyor":
 		draw_colored_polygon(_terrain_polygon(area), Color(0.28, 0.62, 0.42, 0.11))
@@ -1245,17 +1245,20 @@ func _terrain_cells(feature: Dictionary) -> Array[Rect2]:
 func _terrain_tile_active(area: Rect2) -> bool:
 	return sim.heroes.any(func(hero: Dictionary) -> bool: return bool(hero.get("deployed", false)) and hero.hp > 0.0 and area.has_point(hero.pos))
 
-func _draw_effect_tiles(texture: Texture2D, feature: Dictionary, tint: Color = Color.WHITE) -> void:
+func _draw_effect_tiles(texture: Texture2D, feature: Dictionary, buff_tile: bool = false) -> void:
 	var source_size := Vector2(texture.get_size())
 	for cell: Rect2 in _terrain_cells(feature):
 		var screen_cell := _terrain_screen_rect(cell)
-		var active := _terrain_tile_active(cell)
+		var active := buff_tile and _terrain_tile_active(cell)
+		var pulse := 0.5 + 0.5 * sin(clock * 5.2)
 		var fit_scale := minf(screen_cell.size.x * 0.84 / maxf(1.0, source_size.x), screen_cell.size.y * 0.86 / maxf(1.0, source_size.y))
-		var draw_size := source_size * fit_scale * (1.10 if active else 1.0)
+		var draw_size := source_size * fit_scale * (1.08 + pulse * 0.12 if active else 1.0)
 		var draw_rect := Rect2(screen_cell.get_center() - draw_size * 0.5, draw_size)
 		if active:
-			draw_circle(screen_cell.get_center(), minf(draw_size.x, draw_size.y) * 0.52, Color(0.48, 0.03, 0.06, 0.20))
-		draw_texture_rect(texture, draw_rect, false, Color("#7e202b") if active else tint)
+			var glow_radius := minf(screen_cell.size.x, screen_cell.size.y) * (0.36 + pulse * 0.08)
+			draw_circle(screen_cell.get_center(), glow_radius, Color(0.92, 0.08, 0.15, 0.16 + pulse * 0.14))
+			draw_arc(screen_cell.get_center(), glow_radius * 0.88, 0.0, TAU, 32, Color(1.0, 0.23, 0.28, 0.35 + pulse * 0.36), 2.5, true)
+		draw_texture_rect(texture, draw_rect, false, Color("#ff5966") if active else Color.WHITE)
 
 func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_features:
 		var area: Rect2 = feature.get("area", Rect2())
@@ -1281,13 +1284,13 @@ func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_fe
 				draw_line(center - Vector2(arm, 18), center + Vector2(arm, 18), Color(0.94, 0.38, 0.46, 0.20), 7.0, true)
 			caption(center + Vector2(-38, -16), str(feature.get("label", "路口")), Color("#d98291"), 9)
 		elif kind == "high_ground":
-			_draw_effect_tiles(TILE_HIGH_GROUND, feature)
+			_draw_effect_tiles(TILE_HIGH_GROUND, feature, true)
 		elif kind == "low_ground":
 			_draw_effect_tiles(TILE_LOW_GROUND, feature)
 		elif kind == "trap":
 			_draw_effect_tiles(TILE_HAZARD, feature)
 		elif kind == "attack_ground":
-			_draw_effect_tiles(TILE_ATTACK_GROUND, feature)
+			_draw_effect_tiles(TILE_ATTACK_GROUND, feature, true)
 		elif kind == "blocked":
 			if sim.endless_mode: _draw_endless_wall(_terrain_screen_rect(area))
 			else: _draw_effect_tiles(TILE_BLOCKED, feature)
@@ -1600,6 +1603,8 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	var ratio: float = clampf(float(enemy.hp) / float(enemy.max_hp), 0, 1)
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44, 4)), Color("#302b32"))
 	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44 * ratio, 4)), RED)
+	if sim.endless_mode and int(enemy.get("level", 0)) > 0:
+		caption(enemy.pos + Vector2(-21, -side - 13), "Lv.%d" % int(enemy.level), Color("#f2c7ad"), 9)
 	if float(enemy.get("max_shield", 0.0)) > 0.0 and float(enemy.get("shield", 0.0)) > 0.0:
 		var shield_ratio: float = float(enemy.shield) / float(enemy.max_shield)
 		draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44, 3)), Color("#24394e"))

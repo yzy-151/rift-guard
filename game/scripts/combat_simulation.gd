@@ -582,7 +582,12 @@ func _load_terrain(stage_definition: Dictionary) -> void:
 			continue
 		feature.area = Rect2(float(raw_rect[0]), float(raw_rect[1]), float(raw_rect[2]), float(raw_rect[3]))
 		var feature_type := str(feature.get("type", ""))
-		if current_stage_id != "stage_01" and not endless_mode and feature_type in ["blocked", "trap", "high_ground", "low_ground", "attack_ground"]:
+		if not endless_mode and feature_type in ["high_ground", "attack_ground"] and (current_stage_id != "stage_01" or feature_type == "attack_ground"):
+			feature.grid_cells = _claim_buff_block(_grid_cells_for_area(feature.area), claimed_grid_cells, feature.area.get_center())
+			if feature.grid_cells.is_empty():
+				continue
+			feature.area = _grid_cells_bounds(feature.grid_cells)
+		elif current_stage_id != "stage_01" and not endless_mode and feature_type in ["blocked", "trap", "low_ground"]:
 			var forbidden_cells: Dictionary = route_grid_cells if feature_type == "blocked" else {}
 			feature.grid_cells = _claim_grid_cells(_grid_cells_for_area(feature.area), claimed_grid_cells, feature.area.get_center(), forbidden_cells)
 			feature.area = _grid_cells_bounds(feature.grid_cells)
@@ -648,6 +653,31 @@ func _claim_grid_cells(candidates: Array[Rect2], claimed: Dictionary, center: Ve
 			return [cell]
 	return cells
 
+func _claim_buff_block(candidates: Array[Rect2], claimed: Dictionary, center: Vector2) -> Array[Rect2]:
+	# A beneficial tile is one icon and one 2×2 playable footprint.
+	var anchors: Array[Rect2] = candidates.duplicate()
+	for row in GRID_ROWS - 1:
+		for column in GRID_COLUMNS - 1:
+			var cell := Rect2(GRID_ORIGIN + Vector2(column * GRID_CELL_SIZE.x, row * GRID_CELL_SIZE.y), GRID_CELL_SIZE)
+			if not anchors.has(cell):
+				anchors.append(cell)
+	anchors.sort_custom(func(a: Rect2, b: Rect2) -> bool: return (a.position + GRID_CELL_SIZE).distance_squared_to(center) < (b.position + GRID_CELL_SIZE).distance_squared_to(center))
+	for anchor: Rect2 in anchors:
+		var column := roundi((anchor.position.x - GRID_ORIGIN.x) / GRID_CELL_SIZE.x)
+		var row := roundi((anchor.position.y - GRID_ORIGIN.y) / GRID_CELL_SIZE.y)
+		if column < 0 or row < 0 or column >= GRID_COLUMNS - 1 or row >= GRID_ROWS - 1:
+			continue
+		var keys: Array[String] = []
+		for dy in 2:
+			for dx in 2:
+				keys.append("%d:%d" % [column + dx, row + dy])
+		if keys.any(func(key: String) -> bool: return claimed.has(key)):
+			continue
+		for key: String in keys:
+			claimed[key] = true
+		return [Rect2(anchor.position, GRID_CELL_SIZE * 2.0)]
+	return []
+
 func _grid_cells_bounds(cells: Array) -> Rect2:
 	if cells.is_empty():
 		return Rect2()
@@ -691,11 +721,11 @@ func terrain_feature_at(point: Vector2, kind: String = "") -> Dictionary:
 
 func terrain_attack_scale(point: Vector2) -> float:
 	var feature := terrain_feature_at(point, "attack_ground")
-	return 1.0 + float(feature.get("attack_bonus", 0.30)) if not feature.is_empty() else 1.0
+	return 1.0 + float(feature.get("attack_bonus", 1.0)) if not feature.is_empty() else 1.0
 
 func terrain_movement_scale(point: Vector2) -> float:
 	var feature := terrain_feature_at(point, "low_ground")
-	var scale := float(feature.get("speed_scale", 0.72)) if not feature.is_empty() else 1.0
+	var scale := float(feature.get("speed_scale", 0.30)) if not feature.is_empty() else 1.0
 	var weather := terrain_feature_at(point, "weather")
 	if not weather.is_empty() and str(weather.get("element", "")) == "cryo":
 		scale *= 0.88
@@ -1078,31 +1108,61 @@ func _endless_low_tier_cap() -> int:
 	var progression := clampf(elapsed / 420.0, 0.0, 1.0)
 	return roundi(lerpf(ENDLESS_LOW_TIER_CAP_EARLY, ENDLESS_LOW_TIER_CAP_LATE, progression))
 
+func _endless_phase() -> int:
+	# The phase advances only when a boss enters, so the enemy roster is predictable.
+	return endless_boss_index
+
+func _endless_enemy_level(tier: int) -> int:
+	return maxi(1, tier + _endless_phase() * 3 - 1)
+
+func _endless_enemy_pool(phase: int) -> Array[String]:
+	match phase:
+		0:
+			return ["grunt", "grunt", "runner", "runner", "originium_bug"]
+		1:
+			return ["grunt", "runner", "originium_bug", "slime_pyro", "slime_electro", "slime_hydro", "ranged", "rift_bat"]
+		2:
+			return ["slime_pyro", "slime_electro", "slime_anemo", "slime_hydro", "slime_cryo", "ranged", "rift_bat", "buffer", "charger", "armored", "healer"]
+		3:
+			return ["buffer", "charger", "armored", "healer", "warder", "ranged", "slime_cryo", "shielded", "hilichurl_brute"]
+		_:
+			return ["armored", "charger", "buffer", "warder", "healer", "shielded", "shielded", "hilichurl_brute", "hilichurl_brute", "ranged"]
+
 func _endless_enemy_scales(tier: int) -> Dictionary:
-	# Early enemies stay readable; late pressure comes from quality and stats
-	# instead of an unbounded count of cheap units.
+	var level := _endless_enemy_level(tier)
+	var late := maxf(0.0, float(level - 6))
 	return {
-		"health": 0.78 + elapsed / 185.0 + pow(float(tier), 1.24) * 0.12,
-		"damage": 0.76 + elapsed / 420.0 + float(tier) * 0.055,
-		"speed": minf(1.34, 0.93 + float(tier) * 0.024),
-		"xp": minf(2.25, 0.92 + float(tier) * 0.075),
+		"health": 1.0 + float(level - 1) * 0.22 + pow(late, 1.6) * 0.18,
+		"damage": 1.0 + float(level - 1) * 0.12 + maxf(0.0, float(level - 8)) * 0.38,
+		"speed": minf(1.42, 1.0 + float(level - 1) * 0.018),
+		"xp": minf(3.5, 1.0 + float(level - 1) * 0.10),
 	}
 
 func _apply_endless_scaling(enemy: Dictionary, tier: int, strength: float = 1.0) -> void:
 	var scales := _endless_enemy_scales(tier)
 	var health_scale := lerpf(1.0, float(scales.health), strength)
 	var damage_scale := lerpf(1.0, float(scales.damage), strength)
+	var kind := str(enemy.get("kind", ""))
+	if kind in ["shielded", "hilichurl_brute"] and _endless_phase() >= 3:
+		# The third boss announces these threats; they reach full late-game strength after the fourth.
+		health_scale *= 10.0 if _endless_phase() >= 4 else 4.0
+		damage_scale *= 50.0 if _endless_phase() >= 4 else 12.0
 	enemy.hp *= health_scale
 	enemy.max_hp = enemy.hp
 	enemy.damage *= damage_scale
+	enemy.shield *= health_scale
+	enemy.max_shield = enemy.shield
 	enemy.speed *= lerpf(1.0, float(scales.speed), strength)
 	enemy.xp = maxi(1, roundi(float(enemy.get("xp", 10)) * lerpf(1.0, float(scales.xp), strength)))
+	enemy.level = _endless_enemy_level(tier)
 	enemy.endless_rank = tier
+	if kind == "armored":
+		enemy.name = "铁桶僵尸"
 
 func _endless_spawn_tick(dt: float) -> void:
 	_spawn_endless_boss_if_due()
 	troop_convoy_timer -= dt
-	if _endless_tier() >= 4 and troop_convoy_timer <= 0.0 and enemies.size() + 7 <= _endless_active_cap():
+	if _endless_phase() <= 2 and troop_convoy_timer <= 0.0 and enemies.size() + 7 <= _endless_active_cap():
 		_spawn_endless_troop_group()
 		troop_convoy_timer = 72.0
 	endless_spawn_timer -= dt
@@ -1113,20 +1173,7 @@ func _endless_spawn_tick(dt: float) -> void:
 	var build_levels := 0
 	for level: Variant in run_state.buff_levels.values():
 		build_levels += int(level)
-	var pool := ["grunt", "grunt", "runner", "runner", "slime_pyro", "slime_electro"]
-	if tier >= 2:
-		pool.append_array(["flyer", "charger", "slime_anemo", "slime_hydro", "rift_bat", "originium_bug"])
-	if tier >= 3:
-		pool.append_array(["armored", "buffer", "charger", "slime_cryo", "splitter", "hilichurl_brute"])
-	if tier >= 3 and build_levels >= 5:
-		pool.append("ranged")
-	if tier >= 6 and build_levels >= 14:
-		pool.append_array(["ranged", "shielded", "healer", "splitter", "warder"])
-	elif tier >= 5:
-		pool.append_array(["shielded", "healer"])
-	if tier >= 8:
-		# Shift late waves toward fewer meaningful threats.
-		pool.append_array(["armored", "charger", "shielded", "warder", "healer"])
+	var pool := _endless_enemy_pool(_endless_phase())
 	var low_tier_cap := _endless_low_tier_cap()
 	var low_tier_count := _endless_kind_count(ENDLESS_LOW_TIER_IDS)
 	var hut_count := _endless_kind_count(["splitter"])
@@ -1165,11 +1212,11 @@ func _spawn_endless_troop_group() -> void:
 func _endless_kind_count(kinds: Array) -> int:
 	return enemies.filter(func(enemy: Dictionary) -> bool: return enemy.hp > 0.0 and str(enemy.get("kind", "")) in kinds).size()
 
-func _endless_quality_enemy(tier: int, index: int) -> String:
-	var quality_pool := ["armored", "charger", "buffer"]
-	if tier >= 5:
-		quality_pool.append_array(["shielded", "healer", "warder", "ranged"])
-	return quality_pool[posmod(next_id + index * 3 + tier, quality_pool.size())]
+func _endless_quality_enemy(_tier: int, index: int) -> String:
+	var pool := _endless_enemy_pool(_endless_phase()).filter(func(kind: String) -> bool: return kind not in ENDLESS_LOW_TIER_IDS and kind != "splitter")
+	if pool.is_empty():
+		return "grunt"
+	return pool[posmod(next_id + index * 3, pool.size())]
 
 func _endless_interior_spawn_point(side: int, ratio: float) -> Vector2:
 	var inner_area := ENDLESS_ARENA.grow(-150.0)
@@ -1212,6 +1259,14 @@ func _make_room_for_endless_boss() -> void:
 		enemies.remove_at(removal_index)
 		culled_spawns += 1
 
+func _endless_boss_multipliers(number: int) -> Vector2:
+	var health := [1.0, 3.0, 5.0, 20.0, 50.0]
+	var damage := [1.0, 10.0, 20.0, 30.0, 100.0]
+	if number <= health.size():
+		return Vector2(health[number - 1], damage[number - 1])
+	var later := float(number - health.size())
+	return Vector2(minf(100000.0, 50.0 * pow(1.5, later)), minf(100000.0, 100.0 * pow(1.35, later)))
+
 func _spawn_endless_boss_if_due() -> void:
 	while endless_mode and elapsed >= endless_next_boss_at:
 		var active_bosses := enemies.filter(func(enemy: Dictionary) -> bool: return enemy.hp > 0.0 and str(enemy.get("kind", "")).begins_with("boss_")).size()
@@ -1220,18 +1275,21 @@ func _spawn_endless_boss_if_due() -> void:
 			return
 		_make_room_for_endless_boss()
 		var boss_id: String = ENDLESS_BOSS_IDS[endless_boss_index % ENDLESS_BOSS_IDS.size()]
-		var cycle := floori(endless_boss_index / float(ENDLESS_BOSS_IDS.size()))
 		var side := endless_boss_index % 4
 		var boss := spawn_enemy(_endless_edge_point(side, 0.22 + fposmod(endless_boss_index * 0.31, 0.56)), boss_id)
-		var boss_scale := 1.0 + elapsed / 360.0 + cycle * 0.55
-		boss.hp *= boss_scale
+		var boss_number := endless_boss_index + 1
+		var multipliers := _endless_boss_multipliers(boss_number)
+		boss.hp *= multipliers.x
 		boss.max_hp = boss.hp
-		boss.shield *= 1.0 + elapsed / 520.0 + cycle * 0.35
+		boss.shield *= multipliers.x
 		boss.max_shield = boss.shield
-		boss.damage *= 1.0 + elapsed / 520.0 + cycle * 0.22
+		boss.damage *= multipliers.y
+		boss.level = _endless_enemy_level(_endless_tier()) + 4
+		boss.endless_boss_number = boss_number
 		events.append({"kind": "boss_arrival", "pos": boss.pos, "value": str(boss.name), "enemy_id": boss.id})
 		endless_boss_index += 1
 		endless_next_boss_at += 105.0
+
 func _spawn_tick(dt: float) -> void:
 	spawn_timer -= dt
 	if spawn_remaining > 0 and spawn_timer <= 0:
@@ -1312,7 +1370,7 @@ func _balanced_spawn_kind(requested: String) -> String:
 	var active_same := enemies.filter(func(enemy: Dictionary) -> bool: return enemy.hp > 0.0 and str(enemy.get("kind", "")) == requested).size()
 	var repeated := recent_spawn_kinds.size() >= 2 and recent_spawn_kinds[-1] == requested and recent_spawn_kinds[-2] == requested
 	if (caps.has(requested) and active_same >= int(caps[requested])) or repeated:
-		var fallback := ["grunt", "runner", "slime_pyro", "slime_electro", "armored", "slime_anemo"]
+		var fallback := _endless_enemy_pool(_endless_phase()) if endless_mode else ["grunt", "runner", "slime_pyro", "slime_electro", "armored", "slime_anemo"]
 		fallback = fallback.filter(func(kind: String) -> bool: return kind != requested and not (recent_spawn_kinds.size() > 0 and kind == recent_spawn_kinds[-1]))
 		chosen = fallback[posmod(next_id + enemies.size(), fallback.size())]
 	recent_spawn_kinds.append(chosen)
@@ -2472,8 +2530,8 @@ func _hero_tick() -> void:
 func attack_range_screen_radii(hero: Dictionary) -> Vector2:
 	var depth: float = StageProjection.depth_scale(hero.pos)
 	var range_feature := terrain_feature_at(hero.pos, "high_ground")
-	var terrain_range_scale := 1.0 + float(range_feature.get("range_bonus", 0.35)) if not range_feature.is_empty() else 1.0
-	var radius_x: float = minf(460.0, 42.0 + float(hero.range) * 0.62 * depth * terrain_range_scale)
+	var terrain_range_scale := 1.0 + float(range_feature.get("range_bonus", 1.0)) if not range_feature.is_empty() else 1.0
+	var radius_x: float = (42.0 + float(hero.range) * 0.62 * depth) * terrain_range_scale
 	return Vector2(radius_x, radius_x * 0.40)
 
 func is_in_attack_range(hero: Dictionary, point: Vector2) -> bool:
@@ -2559,6 +2617,8 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String, source_her
 			enemy.split_done = true
 			for i in int(enemy.get("split_count", 2)):
 				var child := spawn_enemy(enemy.pos + Vector2(24.0 + i * 18.0, -22.0 + i * 44.0), "runner")
+				if endless_mode:
+					_apply_endless_scaling(child, _endless_tier(), 0.72)
 				child.hp *= 0.58
 				child.max_hp = child.hp
 				child.xp = 4
@@ -2567,6 +2627,8 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String, source_her
 			enemy.split_done = true
 			for i in 2:
 				var copy_enemy := spawn_enemy(enemy.pos+Vector2(22.0,(i*2-1)*26.0),"runner")
+				if endless_mode:
+					_apply_endless_scaling(copy_enemy, _endless_tier(), 0.72)
 				copy_enemy.hp = enemy.max_hp*0.22
 				copy_enemy.max_hp = copy_enemy.hp
 				copy_enemy.affixes = []
@@ -2630,6 +2692,8 @@ func _update_boss_phase(enemy: Dictionary) -> void:
 		if endless_mode and kind == "splitter":
 			spawn_point = _endless_interior_spawn_point(i % 4, 0.28 + fposmod(i * 0.23, 0.44))
 		var minion := spawn_enemy(spawn_point, kind)
+		if endless_mode:
+			_apply_endless_scaling(minion, _endless_tier(), 0.78)
 		minion.hp *= 0.74
 		minion.max_hp = minion.hp
 	var phase_definition: Dictionary = {}
