@@ -1,4 +1,5 @@
 extends CanvasLayer
+const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
 
 signal confirmed(squad: Array[String])
 signal cancelled
@@ -37,6 +38,8 @@ var detail_preview
 var detail_name: Label
 var detail_role: Label
 var detail_stats: VBoxContainer
+var detail_skill_art: TextureRect
+var detail_ultimate_art: TextureRect
 var detail_skill_title: Label
 var detail_skill_body: Label
 var detail_ultimate_title: Label
@@ -60,7 +63,7 @@ func build(owner_hud, game_database, state) -> void:
 	count_label = hud.label(frame, Vector2(930,42), Vector2(220,28), "", 16, ACCENT); count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	var rule := ColorRect.new(); rule.position = Vector2(28,112); rule.size = Vector2(1156,2); rule.color = Color("#9d4657"); frame.add_child(rule)
 	grid_scroll = ScrollContainer.new(); grid_scroll.position = Vector2(28,130); grid_scroll.size = Vector2(1156,426); grid_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; grid_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO; grid_scroll.clip_contents = true; frame.add_child(grid_scroll)
-	grid_host = Control.new(); for id: String in database.characters: character_order.append(id)
+	grid_host = Control.new(); grid_host.mouse_filter = Control.MOUSE_FILTER_PASS; for id: String in database.characters: character_order.append(id)
 	character_order.sort_custom(func(a: String, b: String) -> bool:
 		var a_unlocked := _is_character_unlocked(a); var b_unlocked := _is_character_unlocked(b)
 		return a_unlocked if a_unlocked != b_unlocked else a.naturalnocasecmp_to(b) < 0)
@@ -76,7 +79,7 @@ func build(owner_hud, game_database, state) -> void:
 
 func _build_character_card(id: String, index: int) -> void:
 	var data: Dictionary = database.characters[id]; var col := index % 4; var row := int(index / 4)
-	var rect := Rect2(Vector2(col*282,row*172),Vector2(268,158)); var item: Button = hud.button(grid_host,rect,"",true); item.position=rect.position; item.size=rect.size; item.name="Squad_"+id
+	var rect := Rect2(Vector2(col*282,row*172),Vector2(268,158)); var item: Button = hud.button(grid_host,rect,"",true); item.position=rect.position; item.size=rect.size; item.name="Squad_"+id; item.mouse_filter=Control.MOUSE_FILTER_PASS
 	for s in ["normal","hover","pressed","focus","disabled"]: item.add_theme_stylebox_override(s,StyleBoxEmpty.new())
 	buttons[id]=item
 	var panel:=Panel.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); panel.mouse_filter=Control.MOUSE_FILTER_IGNORE; panel.add_theme_stylebox_override("panel",StyleBoxEmpty.new()); item.add_child(panel); card_panels[id]=panel
@@ -97,7 +100,7 @@ func _build_character_card(id: String, index: int) -> void:
 	hud.label(panel,Vector2(122,64),Vector2(121,18),str(data.get("role","战斗成员")),9,WHITE)
 	hud.label(panel,Vector2(122,87),Vector2(121,18),"HP %d · ATK %d"%[int(data.get("max_hp",0)),int(data.get("attack",0))],8,MUTED)
 	var state: Label = hud.label(panel,Vector2(122,116),Vector2(121,17),"",9,ACCENT); state.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT; state_labels[id]=state
-	item.pressed.connect(_open_detail.bind(id)); item.mouse_entered.connect(_card_hover.bind(id,true)); item.mouse_exited.connect(_card_hover.bind(id,false)); item.gui_input.connect(_card_scroll_input)
+	item.pressed.connect(_open_detail.bind(id)); item.mouse_entered.connect(_card_hover.bind(id,true)); item.mouse_exited.connect(_card_hover.bind(id,false))
 
 func _build_detail() -> void:
 	detail_panel=Panel.new(); detail_panel.position=Vector2(52,32); detail_panel.size=Vector2(1108,620); detail_panel.add_theme_stylebox_override("panel",_panel_style(Color("#ff5a6d"),3)); detail_panel.hide(); frame.add_child(detail_panel)
@@ -107,13 +110,16 @@ func _build_detail() -> void:
 	var preview_card:=Panel.new(); preview_card.position=Vector2(30,52); preview_card.size=Vector2(360,480); preview_card.add_theme_stylebox_override("panel",_panel_style(Color("#76515b"),2)); detail_panel.add_child(preview_card)
 	detail_preview=Preview.new(); detail_preview.position=Vector2(18,18); detail_preview.size=Vector2(324,444); preview_card.add_child(detail_preview)
 	detail_stats=VBoxContainer.new(); detail_stats.position=Vector2(430,125); detail_stats.size=Vector2(620,230); detail_stats.add_theme_constant_override("separation",8); detail_panel.add_child(detail_stats)
-	var q_icon:=_ability_icon(detail_panel,Vector2(430,372),"Q",Color("#ff6173")); detail_skill_title=hud.label(detail_panel,Vector2(486,370),Vector2(560,24),"",15,WHITE); detail_skill_body=hud.label(detail_panel,Vector2(486,397),Vector2(560,48),"",11,MUTED); detail_skill_body.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-	var e_icon:=_ability_icon(detail_panel,Vector2(430,458),"E",Color("#f2c86f")); detail_ultimate_title=hud.label(detail_panel,Vector2(486,456),Vector2(560,24),"",15,WHITE); detail_ultimate_body=hud.label(detail_panel,Vector2(486,483),Vector2(560,48),"",11,MUTED); detail_ultimate_body.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	detail_skill_art=_ability_icon(detail_panel,Vector2(430,372),"Q",Color("#ff6173")); detail_skill_title=hud.label(detail_panel,Vector2(486,370),Vector2(560,24),"",15,WHITE); detail_skill_body=hud.label(detail_panel,Vector2(486,397),Vector2(560,48),"",11,MUTED); detail_skill_body.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	detail_ultimate_art=_ability_icon(detail_panel,Vector2(430,458),"E",Color("#f2c86f")); detail_ultimate_title=hud.label(detail_panel,Vector2(486,456),Vector2(560,24),"",15,WHITE); detail_ultimate_body=hud.label(detail_panel,Vector2(486,483),Vector2(560,48),"",11,MUTED); detail_ultimate_body.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	detail_close=_button(detail_panel,Rect2(30,546,500,50),"←  返回角色列表",false); detail_close.pressed.connect(func(): detail_panel.hide())
 	detail_confirm=_button(detail_panel,Rect2(556,546,500,50),"确认选择  →",true); detail_confirm.pressed.connect(_confirm_detail)
 
-func _ability_icon(parent:Control,pos:Vector2,key:String,color:Color)->Panel:
-	var p:=Panel.new(); p.position=pos; p.size=Vector2(44,44); p.add_theme_stylebox_override("panel",_panel_style(color,2)); parent.add_child(p); var l: Label = hud.label(p,Vector2.ZERO,p.size,key,20,color); l.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; l.vertical_alignment=VERTICAL_ALIGNMENT_CENTER; return p
+func _ability_icon(parent:Control,pos:Vector2,key:String,color:Color)->TextureRect:
+	var p:=Panel.new(); p.position=pos; p.size=Vector2(44,44); p.add_theme_stylebox_override("panel",_panel_style(color,2)); parent.add_child(p)
+	var art:=TextureRect.new(); art.position=Vector2(3,3); art.size=Vector2(38,38); art.expand_mode=TextureRect.EXPAND_IGNORE_SIZE; art.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED; p.add_child(art)
+	var label_node: Label = hud.label(p,Vector2(28,29),Vector2(14,14),key,9,color); label_node.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER; label_node.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
+	return art
 
 func _is_character_ready(id:String)->bool:
 	var data: Dictionary = database.characters.get(id,{})
@@ -134,6 +140,8 @@ func _open_detail(id:String)->void:
 	var skill:Dictionary=data.get("active_skill",{}); var ultimate:Dictionary=data.get("ultimate",{})
 	detail_skill_title.text="Q · "+str(skill.get("name","主动战技")); detail_skill_body.text=_ability_description(skill,false)
 	detail_ultimate_title.text="E · "+str(ultimate.get("name","终结技")); detail_ultimate_body.text=_ability_description(ultimate,true)
+	detail_skill_art.texture=GeneratedIconCatalog.ability_texture(id,false)
+	detail_ultimate_art.texture=GeneratedIconCatalog.ability_texture(id,true)
 	detail_confirm.text="移出队伍" if id in selected and id!="traveler" else ("已固定出战" if id=="traveler" else "确认选择")
 	detail_confirm.disabled=id=="traveler"; detail_panel.show(); detail_close.grab_focus()
 
@@ -211,13 +219,18 @@ func _card_hover(id:String,entered:bool)->void:
 	else:
 		card_frames[id].modulate=Color.WHITE if id in selected else Color(0.82,0.82,0.84,0.78)
 
-func _card_scroll_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
+	if root == null or not root.visible or detail_panel.visible:
+		return
 	if not event is InputEventMouseButton or not event.pressed:
 		return
-	if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-		grid_scroll.scroll_vertical = maxi(0, grid_scroll.scroll_vertical - 96)
-	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-		grid_scroll.scroll_vertical += 96
+	if event.button_index not in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
+		return
+	if not grid_scroll.get_global_rect().has_point(event.position):
+		return
+	var direction := -1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1
+	grid_scroll.scroll_vertical += direction * 112
+	get_viewport().set_input_as_handled()
 
 func _ability_description(data:Dictionary,is_ultimate:bool)->String:
 	var kind:=str(data.get("kind",""))
@@ -248,9 +261,11 @@ func _ability_description(data:Dictionary,is_ultimate:bool)->String:
 		"network_overdrive":"全域超频邦布网络，提升射速并齐射"
 	}.get(kind,"释放角色专属能力并改变战场局势"))
 	var power:=int(data.get("power",0)); var radius:=int(data.get("radius",0))
+	var ratio:=float(data.get("attack_ratio",0.0))
+	var formula:= "伤害 %d + 攻击力 %.0f%%" % [power,ratio*100.0] if ratio>0.0 else ("保护友军 5 秒" if kind == "thread_shelter" else "治疗/增益强度 %d" % power)
 	if is_ultimate:
-		return "%s。威力 %d%% · 范围 %d · 能量 %d · 冷却 %.1fs"%[effect,power,radius,int(data.get("energy_cost",0)),float(data.get("cooldown",0.0))]
-	return "%s。威力 %d%% · 范围 %d · 冷却 %.1fs"%[effect,power,radius,float(data.get("cooldown",0.0))]
+		return "%s。%s · 范围 %d · 能量 %d · 冷却 %.0fs"%[effect,formula,radius,int(data.get("energy_cost",0)),float(data.get("cooldown",0.0))]
+	return "%s。%s · 范围 %d · 冷却 %.0fs"%[effect,formula,radius,float(data.get("cooldown",0.0))]
 
 func _play_select()->void:
 	if select_sound!=null:select_sound.stop();select_sound.play()

@@ -1,5 +1,6 @@
 extends Control
-signal chosen(index: int)
+const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
+signal chosen(index: int, hero_id: int)
 
 const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 const UI_SKIN = preload("res://data/ui_skin_profile.tres")
@@ -42,6 +43,10 @@ var component_shader: Shader
 var focus_tweens: Dictionary = {}
 var focused_index := -1
 var offer_key := ""
+var target_overlay: ColorRect
+var target_heading: Label
+var target_buttons: Array[Button] = []
+var target_card_index := -1
 
 func build(hud) -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -79,6 +84,7 @@ func build(hud) -> void:
 	history_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var footer: Label = hud.label(self, UI_LAYOUT.reward_footer_rect.position, UI_LAYOUT.reward_footer_rect.size, "鼠标悬停预览高亮  ·  点击卡牌或按 1 / 2 / 3 选择  ·  强化持续到本局结束", 11, Color("#887c89"))
 	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_build_target_picker(hud)
 
 	hover_sound = AudioStreamPlayer.new()
 	hover_sound.stream = preload("res://assets/helltaker/audio/button_dialogue_highlight_01.wav")
@@ -210,6 +216,11 @@ func _apply_offer(index: int, card: Dictionary, sim) -> void:
 	for component: Sprite2D in component_nodes[index]:
 		component.material = tint_material
 	icons[index].texture = _icon_for(card)
+	var icon_size := icons[index].texture.get_size()
+	var icon_bounds: Rect2 = UI_LAYOUT.reward_icon_rect
+	var icon_scale := minf(icon_bounds.size.x / icon_size.x, icon_bounds.size.y / icon_size.y)
+	icons[index].scale = Vector2.ONE * icon_scale
+	icons[index].position = icon_bounds.position + (icon_bounds.size - icon_size * icon_scale) * 0.5
 	tags[index].text = "%02d  /  %s" % [index + 1, _rarity_name(rarity)]
 	tags[index].add_theme_color_override("font_color", accent)
 	titles[index].text = str(card.get("name", card.get("id", "强化")))
@@ -219,12 +230,10 @@ func _apply_offer(index: int, card: Dictionary, sim) -> void:
 	if sim.v2_mode:
 		current = int(sim.run_state.buff_levels.get(card.get("id", ""), 0))
 		var target := "全队" if sim.endless_mode else "全队 / 水晶"
-		if card.get("target", "global") == "character":
-			target = str(card.get("character_id", "角色"))
-			for hero: Dictionary in sim.heroes:
-				if hero.get("character_id", "") == card.get("character_id", ""):
-					target = str(hero.get("name", target))
-					break
+		if str(card.get("effect", "")) == "assign_traveler_element":
+			target = "旅行者"
+		elif card.get("target", "global") == "character":
+			target = "选定角色"
 		tags[index].text = "%02d / %s · %s" % [index + 1, target, _rarity_name(rarity)]
 		summary_labels[index].text = sim.rewards.preview(card, sim)
 		var card_description := str(card.get("description", "获得强化"))
@@ -237,7 +246,7 @@ func _apply_offer(index: int, card: Dictionary, sim) -> void:
 		tags[index].text = "%02d / %s · %s" % [index + 1, target, str(card.get("tag", _rarity_name(rarity)))]
 		summary_labels[index].text = sim.rewards.preview(card, sim)
 		descriptions[index].text = str(card.get("desc", "获得强化")) + ("\n\n当前层数 %d / %d" % [current, int(card.get("max", 0))] if int(card.get("max", 0)) > 0 and int(card.get("max", 0)) < 99 else "")
-	action_labels[index].text = "选择并继续"
+	action_labels[index].text = "选择角色" if sim.v2_mode and card.get("target", "global") == "character" else "选择并继续"
 	action_labels[index].add_theme_color_override("font_color", WHITE)
 	action_index_labels[index].text = "[%d]" % (index + 1)
 	action_index_labels[index].add_theme_color_override("font_color", accent)
@@ -264,8 +273,65 @@ func _focus_card(index: int) -> void:
 		glow_panels[i].visible = false
 
 func _commit_choice(index: int) -> void:
+	if target_overlay.visible:
+		return
 	_play(confirm_sound)
-	chosen.emit(index)
+	chosen.emit(index, -1)
+
+func _build_target_picker(hud) -> void:
+	target_overlay = ColorRect.new()
+	target_overlay.color = Color(0.02, 0.025, 0.055, 0.92)
+	target_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	target_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(target_overlay)
+	var panel := Panel.new()
+	panel.position = Vector2(216, 238)
+	panel.size = Vector2(848, 244)
+	var frame := StyleBoxFlat.new()
+	frame.bg_color = Color("#101321")
+	frame.border_color = Color("#e55569")
+	frame.set_border_width_all(3)
+	panel.add_theme_stylebox_override("panel", frame)
+	target_overlay.add_child(panel)
+	target_heading = hud.label(panel, Vector2(30, 23), Vector2(770, 36), "选择强化目标", 24, WHITE)
+	for i in 3:
+		var button: Button = hud.button(panel, Rect2(30 + i * 265, 88, 245, 75), "", false)
+		button.pressed.connect(_pick_target.bind(i))
+		target_buttons.append(button)
+	var back: Button = hud.button(panel, Rect2(324, 186, 200, 43), "返回卡牌", false)
+	back.pressed.connect(close_target_picker)
+	target_overlay.hide()
+
+func show_target_picker(index: int, sim) -> void:
+	if index < 0 or index >= sim.rewards.offered.size():
+		return
+	target_card_index = index
+	target_heading.text = "选择「%s」的目标角色" % str(sim.rewards.offered[index].get("name", "强化"))
+	for i in target_buttons.size():
+		var exists: bool = i < sim.heroes.size()
+		target_buttons[i].visible = exists
+		if exists:
+			target_buttons[i].text = "%d  %s  ·  HP %d/%d" % [i + 1, str(sim.heroes[i].get("name", "角色")), int(sim.heroes[i].hp), int(sim.heroes[i].max_hp)]
+	target_overlay.show()
+	for button: Button in target_buttons:
+		if button.visible:
+			button.grab_focus()
+			break
+
+func close_target_picker() -> void:
+	target_overlay.hide()
+	target_card_index = -1
+	if visible and not buttons.is_empty():
+		buttons[0].grab_focus()
+
+func _pick_target(hero_id: int) -> void:
+	if not target_overlay.visible or hero_id < 0 or hero_id >= target_buttons.size() or not target_buttons[hero_id].visible:
+		return
+	_play(confirm_sound)
+	var picked_card := target_card_index
+	target_overlay.hide()
+	target_card_index = -1
+	chosen.emit(picked_card, hero_id)
 
 func _component_material(accent: Color, secondary: Color, use_gradient: bool) -> ShaderMaterial:
 	var material := ShaderMaterial.new()
@@ -314,6 +380,9 @@ func _rarity_frame(rarity: String) -> Texture2D:
 	}.get(rarity, UI_SKIN.reward_frame_common)
 
 func _icon_for(card: Dictionary) -> Texture2D:
+	var generated := GeneratedIconCatalog.card_texture(card)
+	if generated != null:
+		return generated
 	var effect := str(card.get("effect", ""))
 	if effect in ["assign_traveler_element", "element_technique"]:
 		var element := str(card.get("requires_element", card.get("value", "")))
@@ -324,6 +393,11 @@ func _icon_for(card: Dictionary) -> Texture2D:
 		"health_multiplier":UI_SKIN.reward_icon_healing_heart,
 		"squad_health_multiplier":UI_SKIN.reward_icon_healing_heart,
 		"attack_rate_multiplier":UI_SKIN.reward_icon_arrow_rain,
+		"lethal_tempo":UI_SKIN.reward_icon_arrow_rain,
+		"conqueror":UI_SKIN.reward_icon_sword_slash,
+		"heartsteel":UI_SKIN.reward_icon_healing_heart,
+		"warmogs_armor":UI_SKIN.reward_icon_healing_heart,
+		"solo_leveling":UI_SKIN.reward_icon_summon_crystal,
 		"squad_rate_multiplier":UI_SKIN.reward_icon_arrow_rain,
 		"range_flat":UI_SKIN.reward_icon_laser,
 		"squad_range_flat":UI_SKIN.reward_icon_laser,

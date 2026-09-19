@@ -132,7 +132,7 @@ func _validate() -> void:
 		if card_id.is_empty() or card_ids.has(card_id):
 			errors.append("invalid or duplicate card id: " + card_id)
 		card_ids[card_id] = true
-		if card.get("target", "global") == "character" and not characters.has(str(card.get("character_id", ""))):
+		if card.get("target", "global") == "character" and not str(card.get("character_id", "")).is_empty() and not characters.has(str(card.get("character_id", ""))):
 			errors.append("card target missing: " + card_id)
 		if card.get("rarity", "") not in ["common", "rare", "epic", "legendary", "mythic"]:
 			errors.append("invalid rarity: " + card_id)

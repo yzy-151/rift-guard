@@ -16,12 +16,14 @@ func reseed(seed_value: int) -> void:
 	rng.seed = seed_value
 
 func eligible(card: Dictionary, run) -> bool:
-	if run.mode_id == "endless_survival" and str(card.get("effect", "")) in ["crystal_health_flat", "crystal_heal", "last_stand"]:
+	if run.mode_id == "endless_survival" and str(card.get("effect", "")) in ["crystal_health_flat", "crystal_heal"]:
 		return false
-	if card.get("target", "global") == "character" and not _character_is_present(str(card.get("character_id", "")), run):
-		return false
+	if card.get("target", "global") == "character":
+		var character_id := str(card.get("character_id", ""))
+		if run.squad.is_empty() or (not character_id.is_empty() and not _character_is_present(character_id, run)):
+			return false
 	if card.get("effect", "") == "assign_traveler_element":
-		return run.traveler_element == "none"
+		return run.traveler_element == "none" and "traveler" in run.squad
 	if card.get("effect", "") == "dual_element_mythic":
 		return run.traveler_element != "none" and run.traveler_secondary_element == "none"
 	if card.get("effect", "") == "deploy_reinforcement":
@@ -127,8 +129,10 @@ func apply_element(run, element: String) -> bool:
 	run.traveler_element = element
 	return true
 
-func apply_card(card: Dictionary, run) -> bool:
+func apply_card(card: Dictionary, run, target_hero_id: int = -1) -> bool:
 	if not eligible(card, run):
+		return false
+	if card.get("target", "global") == "character" and str(card.get("character_id", "")).is_empty() and target_hero_id < 0:
 		return false
 	if card.get("effect", "") == "assign_traveler_element" and not apply_element(run, str(card.value)):
 		return false
@@ -148,15 +152,20 @@ func apply_card(card: Dictionary, run) -> bool:
 	offered.clear()
 	return true
 
-func take(index: int, sim) -> bool:
+func take(index: int, sim, target_hero_id: int = -1) -> bool:
 	if index < 0 or index >= offered.size():
 		return false
 	var card: Dictionary = offered[index]
-	if not apply_card(card, sim.run_state):
+	if card.get("target", "global") == "character" and str(card.get("character_id", "")).is_empty() and (target_hero_id < 0 or target_hero_id >= sim.heroes.size()):
+		return false
+	if not apply_card(card, sim.run_state, target_hero_id):
 		return false
 	levels = sim.run_state.buff_levels
-	history.append(str(card.get("name", card.id)))
-	sim.apply_v2_card_effect(card)
+	var picked_name := str(card.get("name", card.id))
+	if target_hero_id >= 0 and card.get("target", "global") == "character":
+		picked_name += " · " + str(sim.heroes[target_hero_id].get("name", "角色"))
+	history.append(picked_name)
+	sim.apply_v2_card_effect(card, target_hero_id)
 	return true
 
 func preview(card: Dictionary, sim) -> String:
@@ -166,6 +175,11 @@ func preview(card: Dictionary, sim) -> String:
 		"attack_multiplier": return "攻击力 +%d%%" % roundi(float(value) * 100.0)
 		"health_multiplier": return "最大生命 +%d%%" % roundi(float(value) * 100.0)
 		"attack_rate_multiplier": return "攻击速度 +%d%%" % roundi(float(value) * 100.0)
+		"lethal_tempo": return "每次攻击攻速 +20%，每层上限 +200%；停攻 3 秒清空"
+		"conqueror": return "攻击 6 次后伤害 ×2/层；每次攻击回复 10/层"
+		"heartsteel": return "对每名敌人首次攻击时，最大生命 +2/层"
+		"warmogs_armor": return "每 5 秒回复 30/层生命"
+		"solo_leveling": return "经验获取 ×2/层"
 		"range_flat": return "攻击范围 +%d" % int(value)
 		"armor_flat": return "防御 +%d" % int(value)
 		"move_speed_flat": return "移动速度 +%d" % int(value)

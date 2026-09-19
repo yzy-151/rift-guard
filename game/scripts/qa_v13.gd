@@ -69,7 +69,7 @@ func run(game) -> void:
 	expect(sim.endless_mode and sim.current_stage_id == "stage_endless", "mode can be switched to endless after returning from pause")
 	var endless_has_crystal_card := false
 	for card: Dictionary in sim.database.cards:
-		if str(card.get("effect", "")) in ["crystal_health_flat", "crystal_heal", "last_stand"] and sim.card_pool.eligible(card, sim.run_state):
+		if str(card.get("effect", "")) in ["crystal_health_flat", "crystal_heal"] and sim.card_pool.eligible(card, sim.run_state):
 			endless_has_crystal_card = true
 	expect(not endless_has_crystal_card, "endless card pool excludes every crystal health and repair card")
 	var common_card := {"rarity": "common", "weight": 10}

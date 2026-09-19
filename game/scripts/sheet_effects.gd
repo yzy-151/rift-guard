@@ -2,7 +2,6 @@ extends Node2D
 
 const Stage = preload("res://scripts/stage_projection.gd")
 const GOLD = preload("res://assets/effects/heal-sheet.png")
-const BLUE = preload("res://assets/effects/arcane-sheet.png")
 const FX_CIRCLE = preload("res://assets/vfx/third_party/kenney_particle/circle_05.png")
 const FX_FLARE = preload("res://assets/vfx/third_party/kenney_particle/flare_01.png")
 const FX_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_01.png")
@@ -28,7 +27,7 @@ func accept(batch: Array[Dictionary]) -> void:
 		return
 	for event: Dictionary in batch:
 		var kind := str(event.get("kind", ""))
-		if kind not in ["heal", "vaporize", "hit", "critical", "shield_break", "skill_cast", "skill_impact", "ultimate_impact", "element_burst"]:
+		if kind not in ["heal", "hit", "critical", "shield_break", "skill_cast", "skill_impact", "ultimate_impact", "element_burst"]:
 			continue
 		if kind == "hit" and active.size() >= 28:
 			continue
@@ -52,7 +51,7 @@ func advance(dt: float) -> void:
 
 func duration(kind: String) -> float:
 	return {
-		"heal":0.70, "vaporize":0.50, "hit":0.22, "critical":0.36,
+		"heal":0.70, "hit":0.22, "critical":0.36,
 		"shield_break":0.46, "skill_cast":0.34, "skill_impact":0.48,
 		"ultimate_impact":0.68, "ultimate_ring":0.78, "element_burst":0.56
 	}.get(kind, 0.42)
@@ -96,14 +95,14 @@ func _draw() -> void:
 	for effect: Dictionary in active:
 		var kind := str(effect.kind)
 		var point: Vector2 = project_position(effect.pos)
-		if kind in ["heal", "vaporize"]:
-			var total: int = 10 if kind == "heal" else 6
+		if kind == "heal":
+			var total: int = 10
 			var fraction: float = clampf(effect.age / duration(kind), 0, 0.999)
 			var frame: int = mini(total - 1, int(fraction * total))
-			var size := Vector2(108, 128) if kind == "heal" else Vector2(145, 113)
+			var size := Vector2(108, 128)
 			size *= Stage.depth_scale(effect.pos)
 			var opacity: float = 0.66 * minf(1.0, (1.0 - fraction) * 5.0)
-			draw_texture_rect_region(GOLD if kind == "heal" else BLUE, Rect2(point - Vector2(size.x * 0.5, size.y * 0.82), size), frame_region(kind, frame), Color(1, 1, 1, opacity))
+			draw_texture_rect_region(GOLD, Rect2(point - Vector2(size.x * 0.5, size.y * 0.82), size), frame_region(kind, frame), Color(1, 1, 1, opacity))
 			continue
 		var fraction: float = clampf(float(effect.age) / duration(kind), 0.0, 1.0)
 		var seed: float = float(effect.seed)

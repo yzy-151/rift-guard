@@ -17,9 +17,9 @@
     "active_skill": {
       "name": "无锋回旋",
       "kind": "blade_wave",
-      "cooldown": 8.0,
-      "power": 135,
-      "radius": 135,
+      "cooldown": 9.0,
+      "power": 125,
+      "radius": 145,
       "hit_frame_ratio": 0.46,
       "targeting": "point",
       "timeline": {
@@ -30,7 +30,8 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "attack_ratio": 0.85
     },
     "ultimate": {
       "name": "星落裁决",
@@ -49,7 +50,8 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 40.0
+      "cooldown": 44.0,
+      "attack_ratio": 2.0
     },
     "passive": {
       "name": "异界适应",
@@ -77,7 +79,7 @@
     "active_skill": {
       "name": "静谧圣歌",
       "kind": "cryo_chord",
-      "cooldown": 9.5,
+      "cooldown": 12.0,
       "power": 185,
       "radius": 185,
       "hit_frame_ratio": 0.46,
@@ -90,7 +92,8 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "attack_ratio": 1.25
     },
     "ultimate": {
       "name": "寂月安魂曲",
@@ -109,7 +112,8 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 42.9
+      "cooldown": 56.0,
+      "attack_ratio": 2.3
     },
     "passive": {
       "name": "终末低语",
@@ -137,7 +141,7 @@
     "active_skill": {
       "name": "静风疗愈",
       "kind": "heal_gust",
-      "cooldown": 11.0,
+      "cooldown": 18.0,
       "power": 170,
       "radius": 170,
       "hit_frame_ratio": 0.46,
@@ -169,7 +173,8 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 41.2
+      "cooldown": 58.0,
+      "attack_ratio": 2.1
     },
     "passive": {
       "name": "静风守护",
@@ -197,7 +202,7 @@
     "active_skill": {
       "name": "孤心沙龙",
       "kind": "salon_summon",
-      "cooldown": 12.0,
+      "cooldown": 21.0,
       "power": 190,
       "radius": 190,
       "hit_frame_ratio": 0.46,
@@ -210,7 +215,8 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "attack_ratio": 1.15
     },
     "ultimate": {
       "name": "万众狂欢",
@@ -229,7 +235,8 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 42.9
+      "cooldown": 64.0,
+      "attack_ratio": 1.8
     },
     "passive": {
       "name": "沙龙礼仪",
@@ -257,7 +264,7 @@
     "active_skill": {
       "name": "水脉疗愈",
       "kind": "healing_surge",
-      "cooldown": 12.0,
+      "cooldown": 17.0,
       "power": 195,
       "radius": 230,
       "hit_frame_ratio": 0.46,
@@ -290,7 +297,8 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 41.2
+      "cooldown": 61.0,
+      "attack_ratio": 2.2
     },
     "passive": {
       "name": "魔力潮涌",
@@ -318,7 +326,7 @@
     "active_skill": {
       "name": "振翅音阶",
       "kind": "sonic_wave",
-      "cooldown": 9.0,
+      "cooldown": 13.0,
       "power": 180,
       "radius": 180,
       "hit_frame_ratio": 0.46,
@@ -331,7 +339,8 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "attack_ratio": 1.1
     },
     "ultimate": {
       "name": "千音迭奏",
@@ -350,7 +359,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 44.5
+      "cooldown": 66.0
     },
     "passive": {
       "name": "安可节拍",
@@ -378,7 +387,7 @@
     "active_skill": {
       "name": "精神爆发",
       "kind": "arcane_lance",
-      "cooldown": 9.5,
+      "cooldown": 12.0,
       "power": 160,
       "radius": 160,
       "hit_frame_ratio": 0.46,
@@ -391,7 +400,8 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "attack_ratio": 1.4
     },
     "ultimate": {
       "name": "奇美拉",
@@ -410,7 +420,8 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 42.9
+      "cooldown": 52.0,
+      "attack_ratio": 2.5
     },
     "passive": {
       "name": "黑蛇意志",
@@ -438,7 +449,7 @@
     "active_skill": {
       "name": "灼热乐章",
       "kind": "sonic_wave",
-      "cooldown": 10.0,
+      "cooldown": 15.0,
       "power": 180,
       "radius": 180,
       "hit_frame_ratio": 0.46,
@@ -453,7 +464,8 @@
         "shake": 0.34
       },
       "element": "pyro",
-      "description": "奏出灼热音浪，造成火元素范围伤害并击退敌人。"
+      "description": "奏出灼热音浪，造成火元素范围伤害并击退敌人。",
+      "attack_ratio": 1.35
     },
     "ultimate": {
       "name": "焰色交响曲",
@@ -472,9 +484,10 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 42.9,
+      "cooldown": 65.0,
       "element": "pyro",
-      "description": "引燃交响领域，造成高额火元素范围伤害并强化全队暴击。"
+      "description": "引燃交响领域，造成高额火元素范围伤害并强化全队暴击。",
+      "attack_ratio": 2.6
     },
     "passive": {
       "name": "命运和弦",
@@ -502,7 +515,7 @@
     "active_skill": {
       "name": "冰晶花",
       "kind": "frost_bloom",
-      "cooldown": 11.0,
+      "cooldown": 16.0,
       "power": 200,
       "radius": 200,
       "hit_frame_ratio": 0.46,
@@ -515,7 +528,8 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "attack_ratio": 1.25
     },
     "ultimate": {
       "name": "冰结之森",
@@ -534,7 +548,8 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 42.9
+      "cooldown": 63.0,
+      "attack_ratio": 2.4
     },
     "passive": {
       "name": "精灵加护",
@@ -562,7 +577,7 @@
     "active_skill": {
       "name": "高音节拍",
       "kind": "echo_shot",
-      "cooldown": 8.5,
+      "cooldown": 11.0,
       "power": 170,
       "radius": 170,
       "hit_frame_ratio": 0.46,
@@ -575,7 +590,8 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "attack_ratio": 1.15
     },
     "ultimate": {
       "name": "炫音返场",
@@ -594,7 +610,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 41.2
+      "cooldown": 60.0
     },
     "passive": {
       "name": "回声大师",
@@ -622,7 +638,7 @@
     "active_skill": {
       "name": "风刃切流",
       "kind": "wind_cut",
-      "cooldown": 10.5,
+      "cooldown": 14.0,
       "power": 225,
       "radius": 200,
       "hit_frame_ratio": 0.46,
@@ -636,7 +652,8 @@
         "recovery": 0.389,
         "shake": 0.34
       },
-      "description": "对目标区域敌人造成225点风元素伤害。"
+      "description": "对目标区域敌人造成225点风元素伤害。",
+      "attack_ratio": 1.3
     },
     "ultimate": {
       "name": "长风复苏",
@@ -655,7 +672,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 44.0,
+      "cooldown": 62.0,
       "duration": 12.0,
       "description": "在目标区域持续12秒，每0.85秒为友军恢复42点生命。"
     },
@@ -685,7 +702,7 @@
     "active_skill": {
       "name": "Mon3tr部署",
       "kind": "mon3tr",
-      "cooldown": 12.0,
+      "cooldown": 23.0,
       "power": 160,
       "radius": 160,
       "hit_frame_ratio": 0.46,
@@ -698,7 +715,8 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "attack_ratio": 1.0
     },
     "ultimate": {
       "name": "指令：熔毁",
@@ -717,7 +735,8 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 42.9
+      "cooldown": 68.0,
+      "attack_ratio": 2.7
     },
     "passive": {
       "name": "战术链接",
@@ -745,7 +764,7 @@
     "active_skill": {
       "name": "邦布协同",
       "kind": "bangboo",
-      "cooldown": 9.0,
+      "cooldown": 18.0,
       "power": 175,
       "radius": 175,
       "hit_frame_ratio": 0.46,
@@ -758,7 +777,8 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "attack_ratio": 1.1
     },
     "ultimate": {
       "name": "绳网超频",
@@ -777,7 +797,7 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 41.2
+      "cooldown": 66.0
     },
     "passive": {
       "name": "代理网络",
@@ -839,9 +859,10 @@
         "recovery": 0.496,
         "shake": 0.78
       },
-      "cooldown": 49.0,
+      "cooldown": 70.0,
       "needles": 12,
-      "description": "向目标区域射出12根追踪针；每根造成76点无元素伤害并波及附近敌人。"
+      "description": "向目标区域射出12根追踪针；每根造成76点无元素伤害并波及附近敌人。",
+      "attack_ratio": 1.25
     },
     "passive": {
       "name": "剪影织卫",

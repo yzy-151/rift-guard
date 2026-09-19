@@ -195,7 +195,22 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v69-visual-test" in OS.get_cmdline_user_args():
+	if "--card-rework-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_card_rework_test")
+	elif "--squad-scroll-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_squad_scroll_test")
+	elif "--v70-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v70_test")
+	elif "--v69-visual-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
 		set_physics_process(false)
@@ -518,6 +533,10 @@ func _process(dt: float) -> void:
 	attack_sound_timer = maxf(0.0, attack_sound_timer - dt)
 	if not story.active and not picker.visible and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open() and not settings_panel.is_open() and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
 		battle.advance(dt)
+		var force_reduced_effects := bool(audio_director.values.reduced_effects)
+		if force_reduced_effects:
+			battle.reduced_effects = true
+		fx.reduced = force_reduced_effects or battle.reduced_effects
 		fx.advance(dt)
 
 func process_events() -> void:
@@ -693,10 +712,14 @@ func primary() -> void:
 				primary()
 	refresh()
 
-func choose_reward(index: int) -> void:
-	if story.active:
+func choose_reward(index: int, hero_id: int = -1) -> void:
+	if story.active or sim.state != "reward" or index < 0 or index >= sim.rewards.offered.size():
 		return
-	if sim.choose_reward(index):
+	var card: Dictionary = sim.rewards.offered[index]
+	if hero_id < 0 and sim.v2_mode and card.get("target", "global") == "character" and str(card.get("character_id", "")).is_empty():
+		hud.reward_panel.show_target_picker(index, sim)
+		return
+	if sim.choose_reward(index, hero_id):
 		refresh()
 
 func restart(skip_death_animation: bool = false) -> void:
@@ -784,6 +807,14 @@ func _input(event: InputEvent) -> void:
 		return
 	if settings_panel != null and settings_panel.is_open():
 		if settings_panel.handle_input(event):
+			get_viewport().set_input_as_handled()
+		return
+	if hud != null and hud.reward_panel != null and hud.reward_panel.target_overlay != null and hud.reward_panel.target_overlay.visible:
+		if event is InputEventKey and event.pressed and not event.echo:
+			if event.keycode == KEY_ESCAPE:
+				hud.reward_panel.close_target_picker()
+			elif event.keycode in [KEY_1, KEY_2, KEY_3]:
+				hud.reward_panel._pick_target(event.keycode - KEY_1)
 			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10 and (mode_select_panel.is_open() or sim.state == "paused"):
@@ -1288,7 +1319,7 @@ func preview_effects() -> void:
 	hud.overlay.hide()
 	fx.active.clear()
 	fx.active.append({"kind": "heal", "pos": Vector2(420, 370), "age": -0.15})
-	fx.active.append({"kind": "vaporize", "pos": Vector2(790, 370), "age": -0.15})
+	fx.active.append({"kind": "hit", "pos": Vector2(790, 370), "age": -0.15, "element": "hydro", "seed": 0.5})
 
 func run_m5_test() -> void:
 	var suite = preload("res://scripts/qa_m5.gd").new()
@@ -1495,6 +1526,18 @@ func run_v67_visual_test() -> void:
 	var suite = preload("res://scripts/qa_v67_visual.gd").new()
 	await suite.run(self)
 
+func run_card_rework_test() -> void:
+	var suite = preload("res://scripts/qa_card_rework.gd").new()
+	await suite.run(self)
+
+func run_squad_scroll_test() -> void:
+	var suite = preload("res://scripts/qa_squad_scroll.gd").new()
+	await suite.run(self)
+
+func run_v70_test() -> void:
+	var suite = preload("res://scripts/qa_v70.gd").new()
+	await suite.run(self)
+
 func run_v69_visual_test() -> void:
 	var suite = preload("res://scripts/qa_v69_visual.gd").new()
 	await suite.run(self)
@@ -1693,7 +1736,7 @@ func _resolve_recruitment() -> void:
 	pending_recruitment.clear()
 	if accepted:
 		await dialogue.play_success_animation()
-		if sim.deploy_hero(hero_id, point):
+		if sim.deploy_hero(hero_id, point, true):
 			recruited_heroes[hero_id] = true
 			selected_id = hero_id
 			process_events()

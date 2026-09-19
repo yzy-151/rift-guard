@@ -1,4 +1,5 @@
 extends CanvasLayer
+const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
 signal closed
 
 const Catalog = preload("res://scripts/combat_catalog.gd")
@@ -112,7 +113,7 @@ func _show_cards() -> void:
 		var tag_text := " / ".join(card.get("tags", []))
 		var evolution := " · 可进化" if not card.get("evolutions", []).is_empty() else ""
 		var card_body := "%s\n标签：%s%s" % [str(card.description), tag_text, evolution]
-		_add_row(str(card.name) if known else "？？？", card_body if known else "在升级三选一中首次获得后记录", _rarity_color(rarity) if known else MUTED, known, _rarity_name(rarity) if known else "未发现", _card_icon_path(str(card.get("effect", ""))) if known else "")
+		_add_row(str(card.name) if known else "？？？", card_body if known else "在升级三选一中首次获得后记录", _rarity_color(rarity) if known else MUTED, known, _rarity_name(rarity) if known else "未发现", GeneratedIconCatalog.card_path(card) if known else "")
 	counter.text = "发现 %d / %d" % [discovered, database.cards.size()]
 
 func _show_builds() -> void:
@@ -125,8 +126,13 @@ func _show_builds() -> void:
 		var lines: Array[String] = []
 		for hero: Dictionary in record.get("characters", []):
 			lines.append("%s 伤害%d · 普攻%d · 技能%d · 终结技%d · 最高能量%d" % [hero.get("name","角色"), int(hero.get("damage",0)), int(hero.get("attacks",0)), int(hero.get("skills",0)), int(hero.get("ultimates",0)), int(hero.get("max_energy",0))])
-		var title_text := "%s · 击杀%d · 闪避%d · 最高叠层Lv.%d" % [record.get("stage_id","未知关卡"), int(record.get("kills",0)), int(record.get("dodges",0)), int(record.get("highest_stack",0))]
-		_add_row(title_text, "\n".join(lines), ACCENT, true, "%d项强化" % record.get("buff_levels",{}).size())
+		var stage_id := str(record.get("stage_id", ""))
+		var stage_name := str(database.stages.get(stage_id, {}).get("name", "无尽荒原" if stage_id == "stage_endless" else "未知区域"))
+		var stage_icon := "res://assets/ui/stage_thumbnails_v60/%s.png" % stage_id
+		if not ResourceLoader.exists(stage_icon):
+			stage_icon = "res://assets/ui/icons/temporary/nieobie/level.svg"
+		var title_text := "%s · 击杀%d · 闪避%d · 最高叠层Lv.%d" % [stage_name, int(record.get("kills",0)), int(record.get("dodges",0)), int(record.get("highest_stack",0))]
+		_add_row(title_text, "\n".join(lines), ACCENT, true, "%d项强化" % record.get("buff_levels",{}).size(), stage_icon)
 	counter.text = "记录 %d / 20" % progress.build_history.size()
 
 func _show_enemies() -> void:

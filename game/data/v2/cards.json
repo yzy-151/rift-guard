@@ -1,12 +1,11 @@
 [
   {
-    "id": "traveler_attack_common",
+    "id": "single_attack_common",
     "name": "锋刃强化",
-    "description": "旅行者：攻击力提高12%",
+    "description": "选定角色：攻击力提高12%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
-    "character_id": "traveler",
     "effect": "attack_multiplier",
     "value": 0.12,
     "max_stacks": 5,
@@ -17,13 +16,12 @@
     ]
   },
   {
-    "id": "traveler_health_common",
+    "id": "single_health_common",
     "name": "生命训练",
-    "description": "旅行者：最大生命提高15%",
+    "description": "选定角色：最大生命提高15%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
-    "character_id": "traveler",
     "effect": "health_multiplier",
     "value": 0.15,
     "max_stacks": 5,
@@ -34,13 +32,12 @@
     ]
   },
   {
-    "id": "traveler_speed_common",
+    "id": "single_speed_common",
     "name": "节奏训练",
-    "description": "旅行者：攻击速度提高10%",
+    "description": "选定角色：攻击速度提高10%",
     "rarity": "common",
     "weight": 60,
     "target": "character",
-    "character_id": "traveler",
     "effect": "attack_rate_multiplier",
     "value": 0.1,
     "max_stacks": 5,
@@ -51,13 +48,12 @@
     ]
   },
   {
-    "id": "traveler_range_rare",
-    "name": "延伸战线",
-    "description": "旅行者：攻击范围提高40",
+    "id": "single_range_rare",
+    "name": "万用瞄准镜",
+    "description": "选定角色：攻击范围提高40",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
-    "character_id": "traveler",
     "effect": "range_flat",
     "value": 40,
     "max_stacks": 3,
@@ -68,13 +64,12 @@
     ]
   },
   {
-    "id": "traveler_armor_rare",
+    "id": "single_armor_rare",
     "name": "战术装甲",
-    "description": "旅行者：防御提高20",
+    "description": "选定角色：防御提高20",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
-    "character_id": "traveler",
     "effect": "armor_flat",
     "value": 20,
     "max_stacks": 3,
@@ -85,13 +80,12 @@
     ]
   },
   {
-    "id": "traveler_move_rare",
-    "name": "快速调位",
-    "description": "旅行者：移动速度提高25",
+    "id": "single_move_rare",
+    "name": "迅捷步伐",
+    "description": "选定角色：移动速度提高25",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
-    "character_id": "traveler",
     "effect": "move_speed_flat",
     "value": 25,
     "max_stacks": 3,
@@ -102,1135 +96,12 @@
     ]
   },
   {
-    "id": "traveler_special_epic",
-    "name": "剑术扩展",
-    "description": "旅行者：普攻获得大范围顺劈。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "traveler_signature_legendary",
-    "name": "命之座共鸣",
-    "description": "旅行者：攻击力提高35%，攻击速度提高20%。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_01_attack_common",
-    "name": "锋刃强化",
-    "description": "少女：攻击力提高12%",
+    "id": "element_resonance_anemo",
+    "name": "元素共鸣 风",
+    "description": "仅旅行者获得风元素；已有元素时不再出现元素共鸣。",
     "rarity": "common",
     "weight": 60,
-    "target": "character",
-    "character_id": "hero_01",
-    "effect": "attack_multiplier",
-    "value": 0.12,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_01_health_common",
-    "name": "生命训练",
-    "description": "少女：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_01",
-    "effect": "health_multiplier",
-    "value": 0.15,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_01_speed_common",
-    "name": "节奏训练",
-    "description": "少女：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_01",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_01_range_rare",
-    "name": "延伸战线",
-    "description": "少女：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_01",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_01_armor_rare",
-    "name": "战术装甲",
-    "description": "少女：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_01",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_01_move_rare",
-    "name": "快速调位",
-    "description": "少女：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_01",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_01_special_epic",
-    "name": "终末圣歌",
-    "description": "少女：普攻获得范围顺劈并强化冰元素附着。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_01",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_01_signature_legendary",
-    "name": "寂月降临",
-    "description": "少女：攻击力与攻击速度大幅提高，终结技覆盖范围扩大。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "character_id": "hero_01",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_02_attack_common",
-    "name": "锋刃强化",
-    "description": "宵宫：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_02",
-    "effect": "attack_multiplier",
-    "value": 0.12,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_02_health_common",
-    "name": "生命训练",
-    "description": "宵宫：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_02",
-    "effect": "health_multiplier",
-    "value": 0.15,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_02_speed_common",
-    "name": "节奏训练",
-    "description": "宵宫：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_02",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_02_range_rare",
-    "name": "延伸战线",
-    "description": "宵宫：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_02",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_02_armor_rare",
-    "name": "战术装甲",
-    "description": "宵宫：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_02",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_02_move_rare",
-    "name": "快速调位",
-    "description": "宵宫：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_02",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_02_special_epic",
-    "name": "烟火轮舞",
-    "description": "宵宫：每次攻击额外发射1枚火矢。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_02",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_02_signature_legendary",
-    "name": "琉金云间草",
-    "description": "宵宫：额外发射2枚火矢，命中产生范围爆炸。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "character_id": "hero_02",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_03_attack_common",
-    "name": "锋刃强化",
-    "description": "芙宁娜：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_03",
-    "effect": "attack_multiplier",
-    "value": 0.12,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_03_health_common",
-    "name": "生命训练",
-    "description": "芙宁娜：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_03",
-    "effect": "health_multiplier",
-    "value": 0.15,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_03_speed_common",
-    "name": "节奏训练",
-    "description": "芙宁娜：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_03",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_03_range_rare",
-    "name": "延伸战线",
-    "description": "芙宁娜：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_03",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_03_armor_rare",
-    "name": "战术装甲",
-    "description": "芙宁娜：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_03",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_03_move_rare",
-    "name": "快速调位",
-    "description": "芙宁娜：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_03",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_03_special_epic",
-    "name": "万众狂欢",
-    "description": "芙宁娜：每次治疗量提高18。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_03",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_03_signature_legendary",
-    "name": "众水的颂诗",
-    "description": "芙宁娜：攻击追加48%回响伤害，治疗量提高26。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "character_id": "hero_03",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_04_attack_common",
-    "name": "锋刃强化",
-    "description": "刻晴：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_04",
-    "effect": "attack_multiplier",
-    "value": 0.12,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_04_health_common",
-    "name": "生命训练",
-    "description": "刻晴：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_04",
-    "effect": "health_multiplier",
-    "value": 0.15,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_04_speed_common",
-    "name": "节奏训练",
-    "description": "刻晴：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_04",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_04_range_rare",
-    "name": "延伸战线",
-    "description": "刻晴：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_04",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_04_armor_rare",
-    "name": "战术装甲",
-    "description": "刻晴：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_04",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_04_move_rare",
-    "name": "快速调位",
-    "description": "刻晴：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_04",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_04_special_epic",
-    "name": "星斗归位",
-    "description": "刻晴：雷击额外弹射2名敌人。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_04",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_04_signature_legendary",
-    "name": "雷楔风暴",
-    "description": "刻晴：雷击额外弹射4名敌人，攻击速度提高28%。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "character_id": "hero_04",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_05_attack_common",
-    "name": "锋刃强化",
-    "description": "甘雨：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_05",
-    "effect": "attack_multiplier",
-    "value": 0.12,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_05_health_common",
-    "name": "生命训练",
-    "description": "甘雨：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_05",
-    "effect": "health_multiplier",
-    "value": 0.15,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_05_speed_common",
-    "name": "节奏训练",
-    "description": "甘雨：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_05",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_05_range_rare",
-    "name": "延伸战线",
-    "description": "甘雨：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_05",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_05_armor_rare",
-    "name": "战术装甲",
-    "description": "甘雨：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_05",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_05_move_rare",
-    "name": "快速调位",
-    "description": "甘雨：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_05",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_05_special_epic",
-    "name": "霜华矢",
-    "description": "甘雨：箭矢附带减速并产生72范围冰爆。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_05",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_05_signature_legendary",
-    "name": "麒麟巡游",
-    "description": "甘雨：冰爆范围扩大至125，攻击力提高42%。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "character_id": "hero_05",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_06_attack_common",
-    "name": "锋刃强化",
-    "description": "温迪：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_06",
-    "effect": "attack_multiplier",
-    "value": 0.12,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_06_health_common",
-    "name": "生命训练",
-    "description": "温迪：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_06",
-    "effect": "health_multiplier",
-    "value": 0.15,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_06_speed_common",
-    "name": "节奏训练",
-    "description": "温迪：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_06",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_06_range_rare",
-    "name": "延伸战线",
-    "description": "温迪：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_06",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_06_armor_rare",
-    "name": "战术装甲",
-    "description": "温迪：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_06",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_06_move_rare",
-    "name": "快速调位",
-    "description": "温迪：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_06",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_06_special_epic",
-    "name": "高天之歌",
-    "description": "温迪：箭矢额外穿透2名敌人。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_06",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_06_signature_legendary",
-    "name": "风神之诗",
-    "description": "温迪：额外发射1枚箭矢并穿透4名敌人。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "character_id": "hero_06",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_07_attack_common",
-    "name": "锋刃强化",
-    "description": "钟离：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_07",
-    "effect": "attack_multiplier",
-    "value": 0.12,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_07_health_common",
-    "name": "生命训练",
-    "description": "钟离：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_07",
-    "effect": "health_multiplier",
-    "value": 0.15,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_07_speed_common",
-    "name": "节奏训练",
-    "description": "钟离：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_07",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_07_range_rare",
-    "name": "延伸战线",
-    "description": "钟离：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_07",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_07_armor_rare",
-    "name": "战术装甲",
-    "description": "钟离：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_07",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_07_move_rare",
-    "name": "快速调位",
-    "description": "钟离：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_07",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_07_special_epic",
-    "name": "地心",
-    "description": "钟离：普攻获得顺劈，防御提高28。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_07",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_07_signature_legendary",
-    "name": "天星",
-    "description": "钟离：顺劈伤害提升至100%，最大生命提高55%。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "character_id": "hero_07",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_08_attack_common",
-    "name": "锋刃强化",
-    "description": "白露：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_08",
-    "effect": "attack_multiplier",
-    "value": 0.12,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_08_health_common",
-    "name": "生命训练",
-    "description": "白露：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_08",
-    "effect": "health_multiplier",
-    "value": 0.15,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_08_speed_common",
-    "name": "节奏训练",
-    "description": "白露：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_08",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_08_range_rare",
-    "name": "延伸战线",
-    "description": "白露：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_08",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_08_armor_rare",
-    "name": "战术装甲",
-    "description": "白露：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_08",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_08_move_rare",
-    "name": "快速调位",
-    "description": "白露：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_08",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_08_special_epic",
-    "name": "云吟乍涌",
-    "description": "白露：治疗间隔缩短28%。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_08",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_08_signature_legendary",
-    "name": "持明医术",
-    "description": "白露：治疗量提高48，治疗间隔再缩短38%。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "character_id": "hero_08",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "traveler_attune_anemo",
-    "name": "顺风而行",
-    "description": "旅行者在本关获得风元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "traveler",
+    "target": "global",
     "effect": "assign_traveler_element",
     "value": "anemo",
     "max_stacks": 1,
@@ -1241,49 +112,12 @@
     ]
   },
   {
-    "id": "traveler_anemo_mastery",
-    "name": "风元素精通",
-    "description": "旅行者的风元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_anemo_technique",
-    "name": "风元素战技",
-    "description": "旅行者的风元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_technique",
-    "value": "anemo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_attune_electro",
-    "name": "雷光初现",
-    "description": "旅行者在本关获得雷元素，随后不再出现其他元素赋予卡",
+    "id": "element_resonance_electro",
+    "name": "元素共鸣 雷",
+    "description": "仅旅行者获得雷元素；已有元素时不再出现元素共鸣。",
     "rarity": "common",
     "weight": 60,
-    "target": "character",
-    "character_id": "traveler",
+    "target": "global",
     "effect": "assign_traveler_element",
     "value": "electro",
     "max_stacks": 1,
@@ -1294,49 +128,12 @@
     ]
   },
   {
-    "id": "traveler_electro_mastery",
-    "name": "雷元素精通",
-    "description": "旅行者的雷元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_electro_technique",
-    "name": "雷元素战技",
-    "description": "旅行者的雷元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_technique",
-    "value": "electro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_attune_pyro",
-    "name": "烈焰初燃",
-    "description": "旅行者在本关获得火元素，随后不再出现其他元素赋予卡",
+    "id": "element_resonance_pyro",
+    "name": "元素共鸣 火",
+    "description": "仅旅行者获得火元素；已有元素时不再出现元素共鸣。",
     "rarity": "common",
     "weight": 60,
-    "target": "character",
-    "character_id": "traveler",
+    "target": "global",
     "effect": "assign_traveler_element",
     "value": "pyro",
     "max_stacks": 1,
@@ -1347,49 +144,12 @@
     ]
   },
   {
-    "id": "traveler_pyro_mastery",
-    "name": "火元素精通",
-    "description": "旅行者的火元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_pyro_technique",
-    "name": "火元素战技",
-    "description": "旅行者的火元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_technique",
-    "value": "pyro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_attune_hydro",
-    "name": "潮汐初生",
-    "description": "旅行者在本关获得水元素，随后不再出现其他元素赋予卡",
+    "id": "element_resonance_hydro",
+    "name": "元素共鸣 水",
+    "description": "仅旅行者获得水元素；已有元素时不再出现元素共鸣。",
     "rarity": "common",
     "weight": 60,
-    "target": "character",
-    "character_id": "traveler",
+    "target": "global",
     "effect": "assign_traveler_element",
     "value": "hydro",
     "max_stacks": 1,
@@ -1400,49 +160,12 @@
     ]
   },
   {
-    "id": "traveler_hydro_mastery",
-    "name": "水元素精通",
-    "description": "旅行者的水元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_hydro_technique",
-    "name": "水元素战技",
-    "description": "旅行者的水元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_technique",
-    "value": "hydro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_attune_geo",
-    "name": "磐岩共鸣",
-    "description": "旅行者在本关获得岩元素，随后不再出现其他元素赋予卡",
+    "id": "element_resonance_geo",
+    "name": "元素共鸣 岩",
+    "description": "仅旅行者获得岩元素；已有元素时不再出现元素共鸣。",
     "rarity": "common",
     "weight": 60,
-    "target": "character",
-    "character_id": "traveler",
+    "target": "global",
     "effect": "assign_traveler_element",
     "value": "geo",
     "max_stacks": 1,
@@ -1453,90 +176,17 @@
     ]
   },
   {
-    "id": "traveler_geo_mastery",
-    "name": "岩元素精通",
-    "description": "旅行者的岩元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_geo_technique",
-    "name": "岩元素战技",
-    "description": "旅行者的岩元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_technique",
-    "value": "geo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_attune_cryo",
-    "name": "霜华凝结",
-    "description": "旅行者在本关获得冰元素，随后不再出现其他元素赋予卡",
+    "id": "element_resonance_cryo",
+    "name": "元素共鸣 冰",
+    "description": "仅旅行者获得冰元素；已有元素时不再出现元素共鸣。",
     "rarity": "common",
     "weight": 60,
-    "target": "character",
-    "character_id": "traveler",
+    "target": "global",
     "effect": "assign_traveler_element",
     "value": "cryo",
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_cryo_mastery",
-    "name": "冰元素精通",
-    "description": "旅行者的冰元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "traveler_cryo_technique",
-    "name": "冰元素战技",
-    "description": "旅行者的冰元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "element_technique",
-    "value": "cryo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
     "tags": [
       "反应"
     ]
@@ -1559,7 +209,7 @@
   },
   {
     "id": "global_health_1",
-    "name": "生命网络",
+    "name": "极限剂量",
     "description": "全队最大生命提高10%",
     "rarity": "common",
     "weight": 60,
@@ -1654,22 +304,6 @@
     ]
   },
   {
-    "id": "global_mastery_1",
-    "name": "元素演练",
-    "description": "全队元素精通提高30",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "squad_mastery_flat",
-    "value": 30,
-    "max_stacks": 4,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "支援"
-    ]
-  },
-  {
     "id": "global_critical_1",
     "name": "弱点洞察",
     "description": "全队暴击率提高10%",
@@ -1688,7 +322,7 @@
   {
     "id": "global_chain_1",
     "name": "战术连携",
-    "description": "角色攻击有概率触发协同攻击",
+    "description": "全队攻击额外连锁1名敌人。",
     "rarity": "epic",
     "weight": 10,
     "target": "global",
@@ -1703,14 +337,14 @@
   },
   {
     "id": "global_laststand_1",
-    "name": "背水一战",
-    "description": "水晶生命低于30%时全队攻击大幅提高",
+    "name": "坚毅不倒",
+    "description": "角色生命低于30%时，该角色攻击伤害提高50%；重复选择继续叠加。",
     "rarity": "legendary",
     "weight": 2,
     "target": "global",
     "effect": "last_stand",
     "value": true,
-    "max_stacks": 1,
+    "max_stacks": 5,
     "requires": [],
     "excludes": [],
     "tags": [
@@ -1718,133 +352,14 @@
     ]
   },
   {
-    "id": "global_overdrive_1",
-    "name": "极限超载",
-    "description": "每次元素反应短暂提高全队攻速",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "global",
-    "effect": "reaction_overdrive",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "reaction_prep_anemo",
-    "name": "风元素预演",
-    "description": "全队触发与风元素有关的反应时效果提高15%",
+    "id": "single_attack_rare",
+    "name": "精钢锋芒",
+    "description": "选定角色：攻击力提高22%",
     "rarity": "rare",
     "weight": 28,
-    "target": "global",
-    "effect": "reaction_bonus",
-    "value": 0.15,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "reaction_prep_electro",
-    "name": "雷元素预演",
-    "description": "全队触发与雷元素有关的反应时效果提高15%",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "reaction_bonus",
-    "value": 0.15,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "reaction_prep_pyro",
-    "name": "火元素预演",
-    "description": "全队触发与火元素有关的反应时效果提高15%",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "reaction_bonus",
-    "value": 0.15,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "reaction_prep_hydro",
-    "name": "水元素预演",
-    "description": "全队触发与水元素有关的反应时效果提高15%",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "reaction_bonus",
-    "value": 0.15,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "reaction_prep_geo",
-    "name": "岩元素预演",
-    "description": "全队触发与岩元素有关的反应时效果提高15%",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "reaction_bonus",
-    "value": 0.15,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "reaction_prep_cryo",
-    "name": "冰元素预演",
-    "description": "全队触发与冰元素有关的反应时效果提高15%",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "reaction_bonus",
-    "value": 0.15,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_attack_common",
-    "name": "锋刃强化",
-    "description": "雷电将军：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
     "target": "character",
-    "character_id": "hero_09",
     "effect": "attack_multiplier",
-    "value": 0.12,
+    "value": 0.22,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -1853,452 +368,14 @@
     ]
   },
   {
-    "id": "hero_09_health_common",
-    "name": "生命训练",
-    "description": "雷电将军：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "health_multiplier",
-    "value": 0.15,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_09_speed_common",
-    "name": "节奏训练",
-    "description": "雷电将军：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_09_range_rare",
-    "name": "延伸战线",
-    "description": "雷电将军：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_09_armor_rare",
-    "name": "战术装甲",
-    "description": "雷电将军：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_09_move_rare",
-    "name": "快速调位",
-    "description": "雷电将军：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_09_special_epic",
-    "name": "梦想一心",
-    "description": "雷电将军：攻击获得弹射雷链。",
+    "id": "single_attack_epic",
+    "name": "破军锋刃",
+    "description": "选定角色：攻击力提高38%",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
-    "character_id": "hero_09",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_09_signature_legendary",
-    "name": "无想的一刀",
-    "description": "雷电将军：攻击与攻速大幅提高。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_09_attune_anemo",
-    "name": "顺风而行",
-    "description": "雷电将军在本关获得风元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "assign_traveler_element",
-    "value": "anemo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_anemo_mastery",
-    "name": "风元素精通",
-    "description": "雷电将军的风元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_anemo_technique",
-    "name": "风元素战技",
-    "description": "雷电将军的风元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_technique",
-    "value": "anemo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_attune_electro",
-    "name": "雷光初现",
-    "description": "雷电将军在本关获得雷元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "assign_traveler_element",
-    "value": "electro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_electro_mastery",
-    "name": "雷元素精通",
-    "description": "雷电将军的雷元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_electro_technique",
-    "name": "雷元素战技",
-    "description": "雷电将军的雷元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_technique",
-    "value": "electro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_attune_pyro",
-    "name": "烈焰初燃",
-    "description": "雷电将军在本关获得火元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "assign_traveler_element",
-    "value": "pyro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_pyro_mastery",
-    "name": "火元素精通",
-    "description": "雷电将军的火元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_pyro_technique",
-    "name": "火元素战技",
-    "description": "雷电将军的火元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_technique",
-    "value": "pyro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_attune_hydro",
-    "name": "潮汐初生",
-    "description": "雷电将军在本关获得水元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "assign_traveler_element",
-    "value": "hydro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_hydro_mastery",
-    "name": "水元素精通",
-    "description": "雷电将军的水元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_hydro_technique",
-    "name": "水元素战技",
-    "description": "雷电将军的水元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_technique",
-    "value": "hydro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_attune_geo",
-    "name": "磐岩共鸣",
-    "description": "雷电将军在本关获得岩元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "assign_traveler_element",
-    "value": "geo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_geo_mastery",
-    "name": "岩元素精通",
-    "description": "雷电将军的岩元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_geo_technique",
-    "name": "岩元素战技",
-    "description": "雷电将军的岩元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_technique",
-    "value": "geo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_attune_cryo",
-    "name": "霜华凝结",
-    "description": "雷电将军在本关获得冰元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "assign_traveler_element",
-    "value": "cryo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_cryo_mastery",
-    "name": "冰元素精通",
-    "description": "雷电将军的冰元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_09_cryo_technique",
-    "name": "冰元素战技",
-    "description": "雷电将军的冰元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_09",
-    "effect": "element_technique",
-    "value": "cryo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_attack_common",
-    "name": "锋刃强化",
-    "description": "神里绫华：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_10",
     "effect": "attack_multiplier",
-    "value": 0.12,
+    "value": 0.38,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -2307,452 +384,14 @@
     ]
   },
   {
-    "id": "hero_10_health_common",
-    "name": "生命训练",
-    "description": "神里绫华：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "health_multiplier",
-    "value": 0.15,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_10_speed_common",
-    "name": "节奏训练",
-    "description": "神里绫华：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_10_range_rare",
-    "name": "延伸战线",
-    "description": "神里绫华：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_10_armor_rare",
-    "name": "战术装甲",
-    "description": "神里绫华：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_10_move_rare",
-    "name": "快速调位",
-    "description": "神里绫华：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_10_special_epic",
-    "name": "霜华绽放",
-    "description": "神里绫华：近战获得高倍率顺劈。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_10_signature_legendary",
-    "name": "神里流·霜灭",
-    "description": "神里绫华：攻击与攻速大幅提高。",
+    "id": "single_attack_legendary",
+    "name": "灭界之刃",
+    "description": "选定角色：攻击力提高65%",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
-    "character_id": "hero_10",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_10_attune_anemo",
-    "name": "顺风而行",
-    "description": "神里绫华在本关获得风元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "assign_traveler_element",
-    "value": "anemo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_anemo_mastery",
-    "name": "风元素精通",
-    "description": "神里绫华的风元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_anemo_technique",
-    "name": "风元素战技",
-    "description": "神里绫华的风元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_technique",
-    "value": "anemo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_attune_electro",
-    "name": "雷光初现",
-    "description": "神里绫华在本关获得雷元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "assign_traveler_element",
-    "value": "electro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_electro_mastery",
-    "name": "雷元素精通",
-    "description": "神里绫华的雷元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_electro_technique",
-    "name": "雷元素战技",
-    "description": "神里绫华的雷元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_technique",
-    "value": "electro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_attune_pyro",
-    "name": "烈焰初燃",
-    "description": "神里绫华在本关获得火元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "assign_traveler_element",
-    "value": "pyro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_pyro_mastery",
-    "name": "火元素精通",
-    "description": "神里绫华的火元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_pyro_technique",
-    "name": "火元素战技",
-    "description": "神里绫华的火元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_technique",
-    "value": "pyro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_attune_hydro",
-    "name": "潮汐初生",
-    "description": "神里绫华在本关获得水元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "assign_traveler_element",
-    "value": "hydro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_hydro_mastery",
-    "name": "水元素精通",
-    "description": "神里绫华的水元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_hydro_technique",
-    "name": "水元素战技",
-    "description": "神里绫华的水元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_technique",
-    "value": "hydro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_attune_geo",
-    "name": "磐岩共鸣",
-    "description": "神里绫华在本关获得岩元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "assign_traveler_element",
-    "value": "geo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_geo_mastery",
-    "name": "岩元素精通",
-    "description": "神里绫华的岩元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_geo_technique",
-    "name": "岩元素战技",
-    "description": "神里绫华的岩元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_technique",
-    "value": "geo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_attune_cryo",
-    "name": "霜华凝结",
-    "description": "神里绫华在本关获得冰元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "assign_traveler_element",
-    "value": "cryo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_cryo_mastery",
-    "name": "冰元素精通",
-    "description": "神里绫华的冰元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_10_cryo_technique",
-    "name": "冰元素战技",
-    "description": "神里绫华的冰元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_10",
-    "effect": "element_technique",
-    "value": "cryo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_attack_common",
-    "name": "锋刃强化",
-    "description": "那维莱特：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_11",
     "effect": "attack_multiplier",
-    "value": 0.12,
+    "value": 0.65,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -2761,469 +400,222 @@
     ]
   },
   {
-    "id": "hero_11_health_common",
-    "name": "生命训练",
-    "description": "那维莱特：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
+    "id": "single_speed_rare",
+    "name": "疾风连击",
+    "description": "选定角色：攻击速度提高18%",
+    "rarity": "rare",
+    "weight": 28,
     "target": "character",
-    "character_id": "hero_11",
-    "effect": "health_multiplier",
+    "effect": "attack_rate_multiplier",
+    "value": 0.18,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_speed_epic",
+    "name": "迅雷疾攻",
+    "description": "选定角色：攻击速度提高30%",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "effect": "attack_rate_multiplier",
+    "value": 0.3,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_speed_legendary",
+    "name": "超频暴风",
+    "description": "选定角色：攻击速度提高50%",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "character",
+    "effect": "attack_rate_multiplier",
+    "value": 0.5,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_range_epic",
+    "name": "鹰眼领域",
+    "description": "选定角色：攻击范围提高80",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "effect": "range_flat",
+    "value": 80,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_range_legendary",
+    "name": "天穹瞄准",
+    "description": "选定角色：攻击范围提高130",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "character",
+    "effect": "range_flat",
+    "value": 130,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "global_attack_rare",
+    "name": "攻势协议",
+    "description": "全队攻击力提高15%",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "effect": "squad_attack_multiplier",
     "value": 0.15,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
     "tags": [
-      "护盾"
+      "支援"
     ]
   },
   {
-    "id": "hero_11_speed_common",
-    "name": "节奏训练",
-    "description": "那维莱特：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
+    "id": "global_attack_epic",
+    "name": "军势共振",
+    "description": "全队攻击力提高28%",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "global",
+    "effect": "squad_attack_multiplier",
+    "value": 0.28,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
+      "支援"
     ]
   },
   {
-    "id": "hero_11_range_rare",
-    "name": "延伸战线",
-    "description": "那维莱特：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_11_armor_rare",
-    "name": "战术装甲",
-    "description": "那维莱特：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_11_move_rare",
-    "name": "快速调位",
-    "description": "那维莱特：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_11_special_epic",
-    "name": "衡平浪潮",
-    "description": "那维莱特：水柱获得大范围贯穿。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_11_signature_legendary",
-    "name": "万水归一",
-    "description": "那维莱特：攻击与攻速大幅提高。",
+    "id": "global_attack_legendary",
+    "name": "终极武装",
+    "description": "全队攻击力提高45%",
     "rarity": "legendary",
     "weight": 2,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_11_attune_anemo",
-    "name": "顺风而行",
-    "description": "那维莱特在本关获得风元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "assign_traveler_element",
-    "value": "anemo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_anemo_mastery",
-    "name": "风元素精通",
-    "description": "那维莱特的风元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_anemo_technique",
-    "name": "风元素战技",
-    "description": "那维莱特的风元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_technique",
-    "value": "anemo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_attune_electro",
-    "name": "雷光初现",
-    "description": "那维莱特在本关获得雷元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "assign_traveler_element",
-    "value": "electro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_electro_mastery",
-    "name": "雷元素精通",
-    "description": "那维莱特的雷元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_electro_technique",
-    "name": "雷元素战技",
-    "description": "那维莱特的雷元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_technique",
-    "value": "electro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_attune_pyro",
-    "name": "烈焰初燃",
-    "description": "那维莱特在本关获得火元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "assign_traveler_element",
-    "value": "pyro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_pyro_mastery",
-    "name": "火元素精通",
-    "description": "那维莱特的火元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_pyro_technique",
-    "name": "火元素战技",
-    "description": "那维莱特的火元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_technique",
-    "value": "pyro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_attune_hydro",
-    "name": "潮汐初生",
-    "description": "那维莱特在本关获得水元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "assign_traveler_element",
-    "value": "hydro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_hydro_mastery",
-    "name": "水元素精通",
-    "description": "那维莱特的水元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_hydro_technique",
-    "name": "水元素战技",
-    "description": "那维莱特的水元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_technique",
-    "value": "hydro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_attune_geo",
-    "name": "磐岩共鸣",
-    "description": "那维莱特在本关获得岩元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "assign_traveler_element",
-    "value": "geo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_geo_mastery",
-    "name": "岩元素精通",
-    "description": "那维莱特的岩元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_geo_technique",
-    "name": "岩元素战技",
-    "description": "那维莱特的岩元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_technique",
-    "value": "geo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_attune_cryo",
-    "name": "霜华凝结",
-    "description": "那维莱特在本关获得冰元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "assign_traveler_element",
-    "value": "cryo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_cryo_mastery",
-    "name": "冰元素精通",
-    "description": "那维莱特的冰元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_11_cryo_technique",
-    "name": "冰元素战技",
-    "description": "那维莱特的冰元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_11",
-    "effect": "element_technique",
-    "value": "cryo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_attack_common",
-    "name": "锋刃强化",
-    "description": "阿米娅：攻击力提高12%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "attack_multiplier",
-    "value": 0.12,
+    "target": "global",
+    "effect": "squad_attack_multiplier",
+    "value": 0.45,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
+      "支援"
     ]
   },
   {
-    "id": "hero_12_health_common",
-    "name": "生命训练",
-    "description": "阿米娅：最大生命提高15%",
-    "rarity": "common",
-    "weight": 60,
+    "id": "global_speed_rare",
+    "name": "全军加速",
+    "description": "全队攻击速度提高13%",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "effect": "squad_rate_multiplier",
+    "value": 0.13,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "global_speed_epic",
+    "name": "风暴节拍",
+    "description": "全队攻击速度提高22%",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "global",
+    "effect": "squad_rate_multiplier",
+    "value": 0.22,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "global_speed_legendary",
+    "name": "时间洪流",
+    "description": "全队攻击速度提高36%",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "global",
+    "effect": "squad_rate_multiplier",
+    "value": 0.36,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "global_range_epic",
+    "name": "全域索敌",
+    "description": "全队攻击范围提高50",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "global",
+    "effect": "squad_range_flat",
+    "value": 50,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "global_range_legendary",
+    "name": "天眼矩阵",
+    "description": "全队攻击范围提高90",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "global",
+    "effect": "squad_range_flat",
+    "value": 90,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "single_health_rare",
+    "name": "强化体魄",
+    "description": "选定角色：最大生命提高25%，并恢复等量生命",
+    "rarity": "rare",
+    "weight": 28,
     "target": "character",
-    "character_id": "hero_12",
     "effect": "health_multiplier",
-    "value": 0.15,
+    "value": 0.25,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -3232,101 +624,63 @@
     ]
   },
   {
-    "id": "hero_12_speed_common",
-    "name": "节奏训练",
-    "description": "阿米娅：攻击速度提高10%",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "attack_rate_multiplier",
-    "value": 0.1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_12_range_rare",
-    "name": "延伸战线",
-    "description": "阿米娅：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_12_armor_rare",
-    "name": "战术装甲",
-    "description": "阿米娅：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "armor_flat",
-    "value": 20,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "hero_12_move_rare",
-    "name": "快速调位",
-    "description": "阿米娅：移动速度提高25",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "move_speed_flat",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "hero_12_special_epic",
-    "name": "奇美拉术式",
-    "description": "阿米娅：法术获得大范围顺劈。",
+    "id": "single_health_epic",
+    "name": "不灭之躯",
+    "description": "选定角色：最大生命提高40%，并恢复等量生命",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
-    "character_id": "hero_12",
-    "effect": "special_upgrade",
-    "value": true,
-    "max_stacks": 1,
+    "effect": "health_multiplier",
+    "value": 0.4,
+    "max_stacks": 5,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
+      "护盾"
     ]
   },
   {
-    "id": "hero_12_signature_legendary",
-    "name": "文明的存续",
-    "description": "阿米娅：攻击与攻速大幅提高。",
+    "id": "single_armor_epic",
+    "name": "重装壁垒",
+    "description": "选定角色：防御提高40",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "effect": "armor_flat",
+    "value": 40,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
+  },
+  {
+    "id": "single_armor_legendary",
+    "name": "绝对防线",
+    "description": "选定角色：防御提高75",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
-    "character_id": "hero_12",
-    "effect": "signature_upgrade",
-    "value": true,
-    "max_stacks": 1,
+    "effect": "armor_flat",
+    "value": 75,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
+  },
+  {
+    "id": "single_move_epic",
+    "name": "疾影穿梭",
+    "description": "选定角色：移动速度提高45",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "effect": "move_speed_flat",
+    "value": 45,
+    "max_stacks": 5,
     "requires": [],
     "excludes": [],
     "tags": [
@@ -3334,321 +688,35 @@
     ]
   },
   {
-    "id": "hero_12_attune_anemo",
-    "name": "顺风而行",
-    "description": "阿米娅在本关获得风元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
+    "id": "single_move_legendary",
+    "name": "光速奔袭",
+    "description": "选定角色：移动速度提高70",
+    "rarity": "legendary",
+    "weight": 2,
     "target": "character",
-    "character_id": "hero_12",
-    "effect": "assign_traveler_element",
-    "value": "anemo",
-    "max_stacks": 1,
+    "effect": "move_speed_flat",
+    "value": 70,
+    "max_stacks": 5,
     "requires": [],
     "excludes": [],
     "tags": [
-      "反应"
+      "弹道"
     ]
   },
   {
-    "id": "hero_12_anemo_mastery",
-    "name": "风元素精通",
-    "description": "阿米娅的风元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_anemo_technique",
-    "name": "风元素战技",
-    "description": "阿米娅的风元素攻击获得专属机制强化",
+    "id": "global_health_epic",
+    "name": "生命同调",
+    "description": "全队最大生命提高22%，并恢复等量生命",
     "rarity": "epic",
     "weight": 10,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_technique",
-    "value": "anemo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "anemo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_attune_electro",
-    "name": "雷光初现",
-    "description": "阿米娅在本关获得雷元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "assign_traveler_element",
-    "value": "electro",
-    "max_stacks": 1,
+    "target": "global",
+    "effect": "squad_health_multiplier",
+    "value": 0.22,
+    "max_stacks": 5,
     "requires": [],
     "excludes": [],
     "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_electro_mastery",
-    "name": "雷元素精通",
-    "description": "阿米娅的雷元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_electro_technique",
-    "name": "雷元素战技",
-    "description": "阿米娅的雷元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_technique",
-    "value": "electro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "electro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_attune_pyro",
-    "name": "烈焰初燃",
-    "description": "阿米娅在本关获得火元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "assign_traveler_element",
-    "value": "pyro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_pyro_mastery",
-    "name": "火元素精通",
-    "description": "阿米娅的火元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_pyro_technique",
-    "name": "火元素战技",
-    "description": "阿米娅的火元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_technique",
-    "value": "pyro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "pyro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_attune_hydro",
-    "name": "潮汐初生",
-    "description": "阿米娅在本关获得水元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "assign_traveler_element",
-    "value": "hydro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_hydro_mastery",
-    "name": "水元素精通",
-    "description": "阿米娅的水元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_hydro_technique",
-    "name": "水元素战技",
-    "description": "阿米娅的水元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_technique",
-    "value": "hydro",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "hydro",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_attune_geo",
-    "name": "磐岩共鸣",
-    "description": "阿米娅在本关获得岩元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "assign_traveler_element",
-    "value": "geo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_geo_mastery",
-    "name": "岩元素精通",
-    "description": "阿米娅的岩元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_geo_technique",
-    "name": "岩元素战技",
-    "description": "阿米娅的岩元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_technique",
-    "value": "geo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "geo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_attune_cryo",
-    "name": "霜华凝结",
-    "description": "阿米娅在本关获得冰元素，随后不再出现其他元素赋予卡",
-    "rarity": "common",
-    "weight": 60,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "assign_traveler_element",
-    "value": "cryo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_cryo_mastery",
-    "name": "冰元素精通",
-    "description": "阿米娅的冰元素伤害与反应效果提高",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_mastery_flat",
-    "value": 45,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hero_12_cryo_technique",
-    "name": "冰元素战技",
-    "description": "阿米娅的冰元素攻击获得专属机制强化",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "character_id": "hero_12",
-    "effect": "element_technique",
-    "value": "cryo",
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "requires_element": "cryo",
-    "tags": [
-      "反应"
+      "护盾"
     ]
   }
 ]

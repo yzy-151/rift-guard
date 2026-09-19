@@ -212,7 +212,8 @@ func advance(dt: float) -> void:
 	shake_trauma = maxf(0.0, shake_trauma - dt * 3.8)
 	position = Vector2(sin(clock * 91.0), cos(clock * 73.0)) * shake_trauma * 5.0
 	if sim != null and sim.performance_budget != null:
-		reduced_effects = sim.performance_budget.quality_scale < 0.75
+		var visual_quality: float = sim.performance_budget.quality_for_load(sim.enemies.size(), sim.projectiles.size() + sim.enemy_projectiles.size(), effects.size())
+		reduced_effects = minf(sim.performance_budget.quality_scale, visual_quality) < 0.75
 	var live_effects: Array[Dictionary] = []
 	for effect: Dictionary in effects:
 		effect.life -= dt
@@ -307,7 +308,7 @@ func _dense_vfx_group(kind: String) -> String:
 	return ""
 
 func _try_merge_dense_vfx(event: Dictionary) -> bool:
-	if sim == null or sim.enemies.size() < 60:
+	if sim == null or (sim.enemies.size() < 40 and effects.size() < 72):
 		return false
 	var group := _dense_vfx_group(str(event.get("kind", "")))
 	if group.is_empty():
@@ -377,6 +378,9 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				elif event.kind == "slash":
 					effect_duration = 0.42
 				effects.append(effect_pool.acquire(visual_event,effect_duration))
+				var effect_cap: int = sim.performance_budget.effect_cap() if sim != null and sim.performance_budget != null else 240
+				while effects.size() > effect_cap:
+					effect_pool.release(effects.pop_front())
 				if str(event.kind).begins_with("skill_"):
 					for hero: Dictionary in sim.heroes:
 						if hero.get("character_id", "") == "traveler" and hero.hp > 0.0:

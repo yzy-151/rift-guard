@@ -11,6 +11,42 @@
     "enemy_leak_multiplier": 0.36,
     "terrain": [
       {
+        "id": "stage_01_attack_route_2",
+        "type": "attack_ground",
+        "rect": [
+          850,
+          410,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_01_attack_route_3",
+        "type": "attack_ground",
+        "rect": [
+          760,
+          210,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_01_attack_route_4",
+        "type": "attack_ground",
+        "rect": [
+          790,
+          465,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
         "id": "stage_01_attack_extra_0",
         "type": "attack_ground",
         "rect": [
@@ -472,6 +508,42 @@
     "enemy_leak_multiplier": 0.18,
     "terrain": [
       {
+        "id": "stage_02_attack_route_2",
+        "type": "attack_ground",
+        "rect": [
+          820,
+          410,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_02_attack_route_3",
+        "type": "attack_ground",
+        "rect": [
+          760,
+          280,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_02_attack_route_4",
+        "type": "attack_ground",
+        "rect": [
+          870,
+          400,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
         "id": "stage_02_attack_extra_0",
         "type": "attack_ground",
         "rect": [
@@ -920,6 +992,42 @@
     "enemy_speed_multiplier": 0.92,
     "enemy_leak_multiplier": 0.16,
     "terrain": [
+      {
+        "id": "stage_03_attack_route_2",
+        "type": "attack_ground",
+        "rect": [
+          890,
+          435,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_03_attack_route_3",
+        "type": "attack_ground",
+        "rect": [
+          820,
+          225,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_03_attack_route_4",
+        "type": "attack_ground",
+        "rect": [
+          870,
+          310,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
       {
         "id": "stage_03_attack_extra_0",
         "type": "attack_ground",
@@ -1401,6 +1509,42 @@
     "enemy_leak_multiplier": 0.22,
     "terrain": [
       {
+        "id": "stage_04_attack_route_2",
+        "type": "attack_ground",
+        "rect": [
+          790,
+          190,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_04_attack_route_3",
+        "type": "attack_ground",
+        "rect": [
+          800,
+          310,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_04_attack_route_4",
+        "type": "attack_ground",
+        "rect": [
+          800,
+          370,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
         "id": "stage_04_attack_extra_0",
         "type": "attack_ground",
         "rect": [
@@ -1846,6 +1990,42 @@
     "enemy_speed_multiplier": 1.025,
     "enemy_leak_multiplier": 0.25,
     "terrain": [
+      {
+        "id": "stage_05_attack_route_2",
+        "type": "attack_ground",
+        "rect": [
+          870,
+          340,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_05_attack_route_3",
+        "type": "attack_ground",
+        "rect": [
+          870,
+          160,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_05_attack_route_4",
+        "type": "attack_ground",
+        "rect": [
+          840,
+          530,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
       {
         "id": "stage_05_attack_extra_0",
         "type": "attack_ground",
@@ -2301,6 +2481,42 @@
     "enemy_leak_multiplier": 0.28,
     "terrain": [
       {
+        "id": "stage_06_attack_route_2",
+        "type": "attack_ground",
+        "rect": [
+          820,
+          450,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_06_attack_route_3",
+        "type": "attack_ground",
+        "rect": [
+          850,
+          280,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_06_attack_route_4",
+        "type": "attack_ground",
+        "rect": [
+          850,
+          400,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
         "id": "stage_06_attack_extra_0",
         "type": "attack_ground",
         "rect": [
@@ -2751,6 +2967,42 @@
     "enemy_leak_multiplier": 0.31,
     "terrain": [
       {
+        "id": "stage_07_attack_route_2",
+        "type": "attack_ground",
+        "rect": [
+          810,
+          340,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_07_attack_route_3",
+        "type": "attack_ground",
+        "rect": [
+          790,
+          155,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_07_attack_route_4",
+        "type": "attack_ground",
+        "rect": [
+          790,
+          525,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
         "id": "stage_07_attack_extra_0",
         "type": "attack_ground",
         "rect": [
@@ -3200,6 +3452,42 @@
     "enemy_speed_multiplier": 1.1,
     "enemy_leak_multiplier": 0.33999999999999997,
     "terrain": [
+      {
+        "id": "stage_08_attack_route_2",
+        "type": "attack_ground",
+        "rect": [
+          820,
+          310,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_08_attack_route_3",
+        "type": "attack_ground",
+        "rect": [
+          850,
+          140,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
+      {
+        "id": "stage_08_attack_route_4",
+        "type": "attack_ground",
+        "rect": [
+          850,
+          540,
+          60,
+          40
+        ],
+        "label": "路线强化地砖",
+        "attack_bonus": 0.3
+      },
       {
         "id": "stage_08_attack_extra_0",
         "type": "attack_ground",

@@ -43,7 +43,7 @@
   },
   {
     "id": "mechanic_chain_arc",
-    "name": "跃迁电弧",
+    "name": "万雷天牢引",
     "description": "攻击额外连锁1名附近敌人，每层继续增加连锁目标。",
     "rarity": "epic",
     "weight": 15,
@@ -85,7 +85,7 @@
   },
   {
     "id": "support_red_moon",
-    "name": "场外支援·赤月炮击",
+    "name": "赤月炮击",
     "description": "每8秒轰击怪物最密集处；重复选择提高伤害并缩短间隔。",
     "rarity": "epic",
     "weight": 16,
@@ -101,7 +101,7 @@
   },
   {
     "id": "support_crossfire",
-    "name": "场外支援·交叉火力",
+    "name": "交叉火力",
     "description": "每6秒横扫一条路线；重复选择增加扫射次数。",
     "rarity": "rare",
     "weight": 27,
@@ -116,7 +116,7 @@
   },
   {
     "id": "support_tidal_aid",
-    "name": "场外支援·潮汐急救",
+    "name": "潮汐急救",
     "description": "每10秒治疗全队并修复水晶；重复选择强化治疗并加快触发。",
     "rarity": "rare",
     "weight": 25,
@@ -132,7 +132,7 @@
   },
   {
     "id": "support_finale",
-    "name": "场外支援·终幕齐射",
+    "name": "终幕齐射",
     "description": "每14秒发动全屏齐射；重复选择增加齐射波数。",
     "rarity": "legendary",
     "weight": 6,
@@ -175,7 +175,7 @@
   },
   {
     "id": "mechanic_execution",
-    "name": "处决标记",
+    "name": "收集者",
     "description": "首次获得20%处决线，重复选择每层提高3%，最高只受65%安全阈值约束。",
     "rarity": "rare",
     "weight": 26,
@@ -203,7 +203,7 @@
   },
   {
     "id": "mechanic_giant_slayer",
-    "name": "巨物猎杀",
+    "name": "巨人杀手",
     "description": "对首领与重甲敌人伤害提高20%，可无限叠加。",
     "rarity": "rare",
     "weight": 28,
@@ -227,546 +227,6 @@
     "mechanic": true,
     "tags": [
       "支援"
-    ]
-  },
-  {
-    "id": "anemo_skill_power_add",
-    "name": "苍风·战技增幅",
-    "description": "风元素限定：旅行者战技威力提高18%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 30,
-    "target": "global",
-    "effect": "skill_power_add",
-    "value": 0.18,
-    "requires_element": "anemo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "anemo_skill_cooldown_add",
-    "name": "苍风·高速回响",
-    "description": "风元素限定：旅行者战技冷却缩短6%，累计最多缩短65%。",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "skill_cooldown_add",
-    "value": 0.06,
-    "requires_element": "anemo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "anemo_skill_area_add",
-    "name": "苍风·领域扩张",
-    "description": "风元素限定：旅行者战技范围提高12%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 16,
-    "target": "global",
-    "effect": "skill_area_add",
-    "value": 0.12,
-    "requires_element": "anemo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "anemo_skill_duration_add",
-    "name": "苍风·元素驻留",
-    "description": "风元素限定：旅行者持续型战技延长15%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 25,
-    "target": "global",
-    "effect": "skill_duration_add",
-    "value": 0.15,
-    "requires_element": "anemo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "anemo_reaction_damage_add",
-    "name": "苍风·反应精通",
-    "description": "风元素限定：所有元素反应伤害提高14%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 15,
-    "target": "global",
-    "effect": "reaction_damage_add",
-    "value": 0.14,
-    "requires_element": "anemo",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "anemo_reaction_radius_add",
-    "name": "苍风·连锁震荡",
-    "description": "风元素限定：扩散与爆炸型反应范围增加18，可无限叠加。",
-    "rarity": "legendary",
-    "weight": 7,
-    "target": "global",
-    "effect": "reaction_radius_add",
-    "value": 18,
-    "requires_element": "anemo",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "electro_skill_power_add",
-    "name": "鸣雷·战技增幅",
-    "description": "雷元素限定：旅行者战技威力提高18%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 30,
-    "target": "global",
-    "effect": "skill_power_add",
-    "value": 0.18,
-    "requires_element": "electro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "electro_skill_cooldown_add",
-    "name": "鸣雷·高速回响",
-    "description": "雷元素限定：旅行者战技冷却缩短6%，累计最多缩短65%。",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "skill_cooldown_add",
-    "value": 0.06,
-    "requires_element": "electro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "electro_skill_area_add",
-    "name": "鸣雷·领域扩张",
-    "description": "雷元素限定：旅行者战技范围提高12%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 16,
-    "target": "global",
-    "effect": "skill_area_add",
-    "value": 0.12,
-    "requires_element": "electro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "electro_skill_duration_add",
-    "name": "鸣雷·元素驻留",
-    "description": "雷元素限定：旅行者持续型战技延长15%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 25,
-    "target": "global",
-    "effect": "skill_duration_add",
-    "value": 0.15,
-    "requires_element": "electro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "electro_reaction_damage_add",
-    "name": "鸣雷·反应精通",
-    "description": "雷元素限定：所有元素反应伤害提高14%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 15,
-    "target": "global",
-    "effect": "reaction_damage_add",
-    "value": 0.14,
-    "requires_element": "electro",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "electro_reaction_radius_add",
-    "name": "鸣雷·连锁震荡",
-    "description": "雷元素限定：扩散与爆炸型反应范围增加18，可无限叠加。",
-    "rarity": "legendary",
-    "weight": 7,
-    "target": "global",
-    "effect": "reaction_radius_add",
-    "value": 18,
-    "requires_element": "electro",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "pyro_skill_power_add",
-    "name": "炽焰·战技增幅",
-    "description": "火元素限定：旅行者战技威力提高18%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 30,
-    "target": "global",
-    "effect": "skill_power_add",
-    "value": 0.18,
-    "requires_element": "pyro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "pyro_skill_cooldown_add",
-    "name": "炽焰·高速回响",
-    "description": "火元素限定：旅行者战技冷却缩短6%，累计最多缩短65%。",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "skill_cooldown_add",
-    "value": 0.06,
-    "requires_element": "pyro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "pyro_skill_area_add",
-    "name": "炽焰·领域扩张",
-    "description": "火元素限定：旅行者战技范围提高12%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 16,
-    "target": "global",
-    "effect": "skill_area_add",
-    "value": 0.12,
-    "requires_element": "pyro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "pyro_skill_duration_add",
-    "name": "炽焰·元素驻留",
-    "description": "火元素限定：旅行者持续型战技延长15%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 25,
-    "target": "global",
-    "effect": "skill_duration_add",
-    "value": 0.15,
-    "requires_element": "pyro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "pyro_reaction_damage_add",
-    "name": "炽焰·反应精通",
-    "description": "火元素限定：所有元素反应伤害提高14%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 15,
-    "target": "global",
-    "effect": "reaction_damage_add",
-    "value": 0.14,
-    "requires_element": "pyro",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "pyro_reaction_radius_add",
-    "name": "炽焰·连锁震荡",
-    "description": "火元素限定：扩散与爆炸型反应范围增加18，可无限叠加。",
-    "rarity": "legendary",
-    "weight": 7,
-    "target": "global",
-    "effect": "reaction_radius_add",
-    "value": 18,
-    "requires_element": "pyro",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hydro_skill_power_add",
-    "name": "潮汐·战技增幅",
-    "description": "水元素限定：旅行者战技威力提高18%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 30,
-    "target": "global",
-    "effect": "skill_power_add",
-    "value": 0.18,
-    "requires_element": "hydro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "hydro_skill_cooldown_add",
-    "name": "潮汐·高速回响",
-    "description": "水元素限定：旅行者战技冷却缩短6%，累计最多缩短65%。",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "skill_cooldown_add",
-    "value": 0.06,
-    "requires_element": "hydro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "hydro_skill_area_add",
-    "name": "潮汐·领域扩张",
-    "description": "水元素限定：旅行者战技范围提高12%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 16,
-    "target": "global",
-    "effect": "skill_area_add",
-    "value": 0.12,
-    "requires_element": "hydro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "hydro_skill_duration_add",
-    "name": "潮汐·元素驻留",
-    "description": "水元素限定：旅行者持续型战技延长15%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 25,
-    "target": "global",
-    "effect": "skill_duration_add",
-    "value": 0.15,
-    "requires_element": "hydro",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "hydro_reaction_damage_add",
-    "name": "潮汐·反应精通",
-    "description": "水元素限定：所有元素反应伤害提高14%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 15,
-    "target": "global",
-    "effect": "reaction_damage_add",
-    "value": 0.14,
-    "requires_element": "hydro",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "hydro_reaction_radius_add",
-    "name": "潮汐·连锁震荡",
-    "description": "水元素限定：扩散与爆炸型反应范围增加18，可无限叠加。",
-    "rarity": "legendary",
-    "weight": 7,
-    "target": "global",
-    "effect": "reaction_radius_add",
-    "value": 18,
-    "requires_element": "hydro",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "geo_skill_power_add",
-    "name": "磐岩·战技增幅",
-    "description": "岩元素限定：旅行者战技威力提高18%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 30,
-    "target": "global",
-    "effect": "skill_power_add",
-    "value": 0.18,
-    "requires_element": "geo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "geo_skill_cooldown_add",
-    "name": "磐岩·高速回响",
-    "description": "岩元素限定：旅行者战技冷却缩短6%，累计最多缩短65%。",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "skill_cooldown_add",
-    "value": 0.06,
-    "requires_element": "geo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "geo_skill_area_add",
-    "name": "磐岩·领域扩张",
-    "description": "岩元素限定：旅行者战技范围提高12%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 16,
-    "target": "global",
-    "effect": "skill_area_add",
-    "value": 0.12,
-    "requires_element": "geo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "geo_skill_duration_add",
-    "name": "磐岩·元素驻留",
-    "description": "岩元素限定：旅行者持续型战技延长15%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 25,
-    "target": "global",
-    "effect": "skill_duration_add",
-    "value": 0.15,
-    "requires_element": "geo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "geo_reaction_damage_add",
-    "name": "磐岩·反应精通",
-    "description": "岩元素限定：所有元素反应伤害提高14%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 15,
-    "target": "global",
-    "effect": "reaction_damage_add",
-    "value": 0.14,
-    "requires_element": "geo",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "geo_reaction_radius_add",
-    "name": "磐岩·连锁震荡",
-    "description": "岩元素限定：扩散与爆炸型反应范围增加18，可无限叠加。",
-    "rarity": "legendary",
-    "weight": 7,
-    "target": "global",
-    "effect": "reaction_radius_add",
-    "value": 18,
-    "requires_element": "geo",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "cryo_skill_power_add",
-    "name": "霜华·战技增幅",
-    "description": "冰元素限定：旅行者战技威力提高18%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 30,
-    "target": "global",
-    "effect": "skill_power_add",
-    "value": 0.18,
-    "requires_element": "cryo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "cryo_skill_cooldown_add",
-    "name": "霜华·高速回响",
-    "description": "冰元素限定：旅行者战技冷却缩短6%，累计最多缩短65%。",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "skill_cooldown_add",
-    "value": 0.06,
-    "requires_element": "cryo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "cryo_skill_area_add",
-    "name": "霜华·领域扩张",
-    "description": "冰元素限定：旅行者战技范围提高12%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 16,
-    "target": "global",
-    "effect": "skill_area_add",
-    "value": 0.12,
-    "requires_element": "cryo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "cryo_skill_duration_add",
-    "name": "霜华·元素驻留",
-    "description": "冰元素限定：旅行者持续型战技延长15%，可无限叠加。",
-    "rarity": "rare",
-    "weight": 25,
-    "target": "global",
-    "effect": "skill_duration_add",
-    "value": 0.15,
-    "requires_element": "cryo",
-    "mechanic": true,
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "cryo_reaction_damage_add",
-    "name": "霜华·反应精通",
-    "description": "冰元素限定：所有元素反应伤害提高14%，可无限叠加。",
-    "rarity": "epic",
-    "weight": 15,
-    "target": "global",
-    "effect": "reaction_damage_add",
-    "value": 0.14,
-    "requires_element": "cryo",
-    "mechanic": true,
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "cryo_reaction_radius_add",
-    "name": "霜华·连锁震荡",
-    "description": "冰元素限定：扩散与爆炸型反应范围增加18，可无限叠加。",
-    "rarity": "legendary",
-    "weight": 7,
-    "target": "global",
-    "effect": "reaction_radius_add",
-    "value": 18,
-    "requires_element": "cryo",
-    "mechanic": true,
-    "tags": [
-      "反应"
     ]
   },
   {
@@ -809,21 +269,6 @@
     "mechanic": true,
     "tags": [
       "支援"
-    ]
-  },
-  {
-    "id": "mythic_dual_element",
-    "name": "神格·双界共鸣",
-    "description": "旅行者获得一种不同于当前属性的第二元素，普通攻击连续附着两种元素并直接制造反应。",
-    "rarity": "mythic",
-    "weight": 1,
-    "target": "character",
-    "character_id": "traveler",
-    "effect": "dual_element_mythic",
-    "value": 0,
-    "mechanic": true,
-    "tags": [
-      "反应"
     ]
   },
   {
@@ -872,10 +317,10 @@
   {
     "id": "orbit_arcane_blades",
     "name": "星轨剑阵",
-    "description": "2柄竖向飞剑以180度间隔环绕；3级变为3柄/120度，6级变为6柄/60度，9级触发剑雨。",
+    "description": "选定角色：2柄竖向飞剑以180度间隔环绕；3级变为3柄/120度，6级变为6柄/60度，9级触发剑雨。",
     "rarity": "rare",
     "weight": 24,
-    "target": "global",
+    "target": "character",
     "effect": "orbit_add",
     "value": 2,
     "mechanic": true,
@@ -904,10 +349,10 @@
   {
     "id": "orbit_spell_rings",
     "name": "术式环流",
-    "description": "生成持续脉冲的法术环；等级提高伤害、半径与脉冲次数。",
+    "description": "选定角色：生成持续脉冲的法术环；等级提高伤害、半径与脉冲次数。",
     "rarity": "epic",
     "weight": 13,
-    "target": "global",
+    "target": "character",
     "effect": "orbit_spell_add",
     "value": 2,
     "mechanic": true,
@@ -1036,46 +481,78 @@
     ]
   },
   {
-    "id": "relic_drop_overclock",
-    "name": "遗物·失控节拍器",
-    "description": "攻击速度提高25%，命中能量获取提高50%。",
+    "id": "lethal_tempo",
+    "name": "致命节奏",
+    "description": "选定角色每次攻击获得20%基础攻击速度，最多提升200%；停止攻击3秒后清空。重复选择可叠加增速和上限。",
     "rarity": "epic",
     "weight": 8,
-    "target": "global",
-    "effect": "grant_relic",
-    "value": "relic_overclock",
+    "target": "character",
+    "effect": "lethal_tempo",
+    "value": 0.2,
+    "max_bonus": 2.0,
+    "timeout": 3.0,
     "mechanic": true,
     "tags": [
       "弹道"
     ]
   },
   {
-    "id": "relic_drop_prism",
-    "name": "遗物·元素棱镜",
-    "description": "反应伤害提高30%，强化反应构筑。",
-    "rarity": "legendary",
-    "weight": 4,
-    "target": "global",
-    "effect": "grant_relic",
-    "value": "relic_elemental_prism",
+    "id": "conqueror",
+    "name": "征服者",
+    "description": "选定角色攻击6次后，攻击伤害翻倍；每次攻击回复10点生命。重复选择可叠加伤害倍数和治疗量。",
+    "rarity": "epic",
+    "weight": 14,
+    "target": "character",
+    "effect": "conqueror",
+    "value": 10,
+    "required_attacks": 6,
     "mechanic": true,
     "tags": [
-      "反应"
+      "弹道",
+      "护盾"
     ]
   },
   {
-    "id": "relic_drop_geo",
-    "name": "遗物·岩契残页",
-    "description": "岩造物生命翻倍并成为可靠掩体。",
-    "rarity": "epic",
-    "weight": 8,
-    "target": "global",
-    "effect": "grant_relic",
-    "value": "relic_geo_contract",
+    "id": "heartsteel",
+    "name": "心之钢",
+    "description": "选定角色首次攻击每名敌人时，自身最大生命提高2点。重复选择可叠加每次提升量。",
+    "rarity": "rare",
+    "weight": 23,
+    "target": "character",
+    "effect": "heartsteel",
+    "value": 2,
     "mechanic": true,
     "tags": [
-      "召唤",
       "护盾"
+    ]
+  },
+  {
+    "id": "warmogs_armor",
+    "name": "狂徒铠甲",
+    "description": "选定角色每5秒恢复30点生命。重复选择可叠加治疗量。",
+    "rarity": "rare",
+    "weight": 24,
+    "target": "character",
+    "effect": "warmogs_armor",
+    "value": 30,
+    "interval": 5,
+    "mechanic": true,
+    "tags": [
+      "护盾"
+    ]
+  },
+  {
+    "id": "solo_leveling",
+    "name": "我独自升级",
+    "description": "本局经验获取翻倍；每次重复选择都会再翻一倍。",
+    "rarity": "legendary",
+    "weight": 7,
+    "target": "global",
+    "effect": "solo_leveling",
+    "value": 2,
+    "mechanic": true,
+    "tags": [
+      "支援"
     ]
   }
 ]

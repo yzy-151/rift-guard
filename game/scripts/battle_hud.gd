@@ -1,5 +1,6 @@
 extends CanvasLayer
-signal reward_action(index: int)
+const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
+signal reward_action(index: int, hero_id: int)
 signal primary_action
 signal pause_action
 signal restart_action
@@ -604,7 +605,7 @@ func _ready() -> void:
 	reward_panel = preload("res://scripts/reward_panel.gd").new()
 	root.add_child(reward_panel)
 	reward_panel.build(self)
-	reward_panel.chosen.connect(func(index: int): reward_action.emit(index))
+	reward_panel.chosen.connect(func(index: int, hero_id: int): reward_action.emit(index, hero_id))
 
 func label(parent: Node, at: Vector2, dimensions: Vector2, text: String, size: int, color: Color) -> Label:
 	var item := Label.new()
@@ -1121,8 +1122,9 @@ func refresh_buffs(sim) -> void:
 	for i in mini(buff_labels.size(), ids.size()):
 		var id := str(ids[i]); var card: Dictionary = cards.get(id, {})
 		var rarity := str(card.get("rarity", "common")); var effect := str(card.get("effect", ""))
-		buff_icons[i].texture = _buff_icon_for(effect)
-		buff_icons[i].modulate = rarity_color.get(rarity, WHITE)
+		var card_icon := GeneratedIconCatalog.card_texture(card)
+		buff_icons[i].texture = card_icon if card_icon != null else _buff_icon_for(effect)
+		buff_icons[i].modulate = Color.WHITE
 		var level := int(sim.run_state.buff_levels[id])
 		buff_icons[i].tooltip_text = "%s · Lv.%d" % [str(card.get("name", id)), level]
 		buff_details[i] = {"title": "%s  ·  Lv.%d" % [str(card.get("name", id)), level], "body": str(card.get("description", "暂无说明"))}
@@ -1194,13 +1196,16 @@ func refresh_skill(sim, selected_id: int) -> void:
 		return
 	var element := str(hero.get("element", "none"))
 	var color := element_color(element)
-	skill_icon.texture = skill_icon_for(element)
-	ultimate_icon.texture = ultimate_icon_for(element)
+	var character_id := str(hero.get("character_id", ""))
+	var q_texture := GeneratedIconCatalog.ability_texture(character_id, false)
+	var e_texture := GeneratedIconCatalog.ability_texture(character_id, true)
+	skill_icon.texture = q_texture if q_texture != null else skill_icon_for(element)
+	ultimate_icon.texture = e_texture if e_texture != null else ultimate_icon_for(element)
 	skill_frame.texture = UI_SKIN.skill_frame_red if skill_aiming else UI_SKIN.skill_frame_gray
 	ultimate_frame.texture = UI_SKIN.ultimate_frame_red if ultimate_aiming else UI_SKIN.ultimate_frame_gray
 	var cooldown := float(hero.get("skill_cooldown", 0.0))
-	skill_icon.modulate = Color(color.r, color.g, color.b, 0.22 if cooldown > 0.0 else 0.72)
-	ultimate_icon.modulate = Color(color.lightened(0.18).r, color.lightened(0.18).g, color.lightened(0.18).b, 0.58)
+	skill_icon.modulate = Color(1.0, 1.0, 1.0, 0.22 if cooldown > 0.0 else 0.86)
+	ultimate_icon.modulate = Color(1.0, 1.0, 1.0, 0.86)
 	var deployed := bool(hero.get("deployed", false))
 	skill_button.text = ""
 	skill_button.tooltip_text = ""
