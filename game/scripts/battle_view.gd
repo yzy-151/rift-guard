@@ -4,6 +4,14 @@ signal stage_exit_finished
 const Stage = preload("res://scripts/stage_projection.gd")
 const STAGE_VISUAL = preload("res://data/stage_visual_profile.tres")
 const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
+const RED_MOON_WARNING_SECONDS := 1.35
+const RED_MOON_IMPACT_SECONDS := 1.55
+const CROSSFIRE_WARNING_SECONDS := 0.85
+const CROSSFIRE_IMPACT_SECONDS := 1.18
+const TIDAL_WARNING_SECONDS := 0.65
+const TIDAL_EFFECT_SECONDS := 1.80
+const TIDAL_TRAVEL_FRACTION := 0.43
+const SYLPHIE_GUST_SECONDS := 1.28
 const WORLD = Rect2(40, 140, 1200, 440)
 const ENDLESS_PLAYFIELD_SCREEN = Rect2(16, 88, 1248, 490)
 const Sim = preload("res://scripts/combat_simulation.gd")
@@ -19,6 +27,9 @@ const VFX_FLARE = preload("res://assets/vfx/third_party/kenney_particle/flare_01
 const VFX_SPARK = preload("res://assets/vfx/third_party/kenney_particle/spark_05.png")
 const VFX_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_01.png")
 const VFX_TRACE = preload("res://assets/vfx/third_party/kenney_particle/trace_05.png")
+const WIND_TORNADO_ATLAS = preload("res://assets/vfx/custom/wind_tornado.png")
+const FIREBALL_FLIGHT_ATLAS = preload("res://assets/vfx/custom/fireball_flight.png")
+const FIREBALL_IMPACT_ATLAS = preload("res://assets/vfx/custom/fireball_impact.png")
 const TILE_HAZARD = preload("res://assets/world/terrain_tiles_v64/target_EXPORT0001.png")
 const TILE_HIGH_GROUND = preload("res://assets/world/terrain_tiles_v64/pentaGraphic 1.png")
 const TILE_LOW_GROUND = preload("res://assets/world/terrain_tiles_v64/PORTAL0012.png")
@@ -58,6 +69,7 @@ const INK = Color("#0c1017")
 const TEAL = Color("#8fdbc8")
 const RED = Color("#d66769")
 var sim
+var sheet_effects
 var chapter1_blend_material: ShaderMaterial
 var selected_id: int = 0
 var reduced_effects: bool = false
@@ -326,9 +338,33 @@ func _try_merge_dense_vfx(event: Dictionary) -> bool:
 		effects[index] = existing
 		return true
 	return false
+func _signature_visual(hero_index: int, ability_kind: String) -> String:
+	if sim == null or hero_index < 0 or hero_index >= sim.heroes.size():
+		return ""
+	var character_id := str(sim.heroes[hero_index].get("character_id", ""))
+	if character_id == "hero_02" and ability_kind == "anemo_domain":
+		return "anemo_domain"
+	if character_id == "hero_07" and ability_kind in ["sonic_wave", "fate_symphony"]:
+		return ability_kind
+	if character_id == "hero_08" and ability_kind in ["frost_bloom", "frozen_forest"]:
+		return "emilia_" + ability_kind
+	if character_id == "hero_06" and ability_kind in ["arcane_lance", "chimera"]:
+		return "amiya_" + ability_kind
+	if character_id == "hero_04" and ability_kind in ["healing_surge", "storm_field"]:
+		return "roxy_" + ability_kind
+	if character_id == "hero_10" and ability_kind in ["wind_cut", "renewing_breeze"]:
+		return "fengjin_" + ability_kind
+	if character_id == "hero_13" and ability_kind in ["thread_shelter", "needle_barrage"]:
+		return "gwen_" + ability_kind
+	if character_id == "hero_01" and ability_kind in ["columbia_tide_ring", "columbia_tidal_benediction"]:
+		return ability_kind
+	if character_id == "hero_03" and ability_kind in ["salon_summon", "hydro_fanfare"]:
+		return "furina_" + ability_kind
+	return ""
+
 func accept_events(batch: Array[Dictionary]) -> void:
 	for event in batch:
-		if sim != null and sim.endless_mode and event.has("pos") and str(event.get("kind", "")) not in ["boss_arrival", "boss_phase", "arena_event", "lost", "won"] and not _render_point_visible(Vector2(event.pos), 260.0):
+		if sim != null and sim.endless_mode and event.has("pos") and str(event.get("kind", "")) not in ["boss_arrival", "boss_phase", "arena_event", "lost", "won", "crossfire", "support_heal"] and not _render_point_visible(Vector2(event.pos), 260.0):
 			continue
 		if event.kind == "death" and enemy_sequences.has_enemy(str(event.get("enemy_kind", ""))) and enemy_death_visuals.size() < (24 if sim != null and sim.enemies.size() >= 100 else 48):
 			var enemy_id := str(event.enemy_kind)
@@ -341,6 +377,73 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				"total": enemy_sequences.duration(enemy_id, "down") + 0.16,
 			})
 		var feedback: Dictionary = feedback_director.observe(event)
+		if event.kind == "skill_cast" and str(event.get("value", "")) == "静风疗愈":
+			var cast_hero: Dictionary = sim.heroes[int(event.hero_id)]
+			var cast_radius: float = float(cast_hero.get("active_skill", {}).get("radius", 170.0)) * (1.0 + sim.skill_area_bonus)
+			effects.append(effect_pool.acquire({"kind":"sylphie_gust_cast","pos":event.pos,"hero_id":event.hero_id,"radius":cast_radius}, maxf(0.24, float(event.get("hit_delay", 0.331)))))
+			continue
+		if event.kind == "skill_impact" and str(event.get("ability_kind", "")) == "heal_gust":
+			var gust_event: Dictionary = event.duplicate(true)
+			gust_event.kind = "sylphie_gust"
+			effects.append(effect_pool.acquire(gust_event, SYLPHIE_GUST_SECONDS))
+			continue
+		if event.kind in ["skill_cast", "ultimate_cast"] and sim != null:
+			var caster_index := int(event.get("hero_id", -1))
+			if caster_index >= 0 and caster_index < sim.heroes.size():
+				var caster: Dictionary = sim.heroes[caster_index]
+				var cast_ability: Dictionary = caster.get("ultimate", {}) if event.kind == "ultimate_cast" else caster.get("active_skill", {})
+				var cast_kind := str(cast_ability.get("kind", ""))
+				var visual_kind := _signature_visual(caster_index, cast_kind)
+				if not visual_kind.is_empty():
+					var cast_center: Vector2 = Vector2(event.pos) if Sim.SELF_CENTERED_ABILITY_KINDS.has(cast_kind) else Vector2(event.get("target", event.pos))
+					var cast_event := {"kind":visual_kind + "_cast", "pos":cast_center, "caster_pos":event.pos, "radius":float(cast_ability.get("radius", 180.0)) * (1.0 + sim.skill_area_bonus)}
+					effects.append(effect_pool.acquire(cast_event, maxf(0.24, float(event.get("hit_delay", 0.35)))))
+					continue
+		if event.kind in ["skill_impact", "ultimate_impact"]:
+			var impact_kind := str(event.get("ability_kind", ""))
+			var impact_visual := _signature_visual(int(event.get("hero_id", -1)), impact_kind)
+			if not impact_visual.is_empty():
+				var dedicated_event: Dictionary = event.duplicate(true)
+				dedicated_event.kind = impact_visual + "_impact"
+				dedicated_event.caster_pos = sim.heroes[int(event.hero_id)].pos
+				effects.append(effect_pool.acquire(dedicated_event, 1.50 if impact_visual in ["fate_symphony", "emilia_frozen_forest", "amiya_chimera", "roxy_storm_field", "fengjin_renewing_breeze", "gwen_needle_barrage", "columbia_tide_ring", "columbia_tidal_benediction", "furina_hydro_fanfare"] else 1.18))
+				if impact_visual == "furina_hydro_fanfare":
+					var fanfare_allies: Array[int] = []
+					for ally: Dictionary in sim.heroes:
+						if bool(ally.get("deployed", false)) and ally.hp > 0.0:
+							fanfare_allies.append(int(ally.id))
+					effects.append(effect_pool.acquire({"kind":"furina_fanfare_allies","pos":dedicated_event.caster_pos,"ally_ids":fanfare_allies}, 3.4))
+				if impact_visual == "columbia_tidal_benediction":
+					var blessing: Dictionary = sim.skill_effects.back() if not sim.skill_effects.is_empty() else {}
+					if str(blessing.get("kind", "")) == "columbia_attack_blessing":
+						effects.append(effect_pool.acquire({"kind":"columbia_blessing_links","pos":dedicated_event.caster_pos,"hero_id":event.hero_id,"ally_ids":blessing.get("ally_ids", [])}, 25.0))
+				if impact_visual == "gwen_thread_shelter":
+					var recipients: Array[int] = []
+					for ally: Dictionary in sim.heroes:
+						if bool(ally.get("deployed", false)) and ally.hp > 0.0 and sim.is_in_ability_area(Vector2(dedicated_event.caster_pos), Vector2(ally.pos), float(dedicated_event.radius)):
+							recipients.append(int(ally.id))
+					effects.append(effect_pool.acquire({"kind":"gwen_shelter_aura","pos":dedicated_event.caster_pos,"ally_ids":recipients}, 5.0))
+				continue
+		if event.kind == "vfx_cue" and (str(event.get("value", "")) == "heal_gust" or not _signature_visual(int(event.get("hero_id", -1)), str(event.get("value", ""))).is_empty()):
+			continue
+		if sim != null and event.kind in ["skill_cast", "skill_impact"] and event.has("traveler_element"):
+			var traveler_visual := event.duplicate(true)
+			traveler_visual.kind = "traveler_" + str(event.traveler_element) + ("_cast" if event.kind == "skill_cast" else "_impact")
+			traveler_visual.pos = event.get("target", event.pos) if event.kind == "skill_cast" else event.pos
+			traveler_visual.radius = sim.traveler_skill_radius() * (1.0 + sim.skill_area_bonus)
+			effects.append(effect_pool.acquire(traveler_visual, maxf(0.34, float(event.get("hit_delay", 0.34))) if event.kind == "skill_cast" else 1.25))
+			continue
+		if event.kind == "skill_electro" and event.has("target_positions"):
+			effects.append(effect_pool.acquire({"kind":"traveler_electro_chains","pos":event.pos,"target_positions":event.target_positions,"radius":sim.traveler_skill_radius() * (1.0 + sim.skill_area_bonus)}, 1.05))
+			continue
+		if event.kind in ["skill_none", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo"]:
+			continue
+		if event.kind == "fengjin_wind_row":
+			effects.append(effect_pool.acquire(event.duplicate(true), 0.42))
+			continue
+		if event.kind == "gwen_needle_hit":
+			effects.append(effect_pool.acquire(event.duplicate(true), 0.38))
+			continue
 		match event.kind:
 			"route_warning":
 				var route_id := str(event.get("route_id", "main"))
@@ -360,7 +463,19 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				if sim == null or sim.performance_budget.can_spawn_cosmetic("muzzle", effects.size()):
 					var facing := float(hero.get("facing", 1.0))
 					effects.append(effect_pool.acquire({"kind":"muzzle","pos":event.pos+Vector2(25.0*facing,-20),"value":1 if hero.get("element","")=="electro" else 0,"element":hero.get("element","") ,"style":str(event.get("style", hero.get("attack_style", "standard")))},0.16))
-			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "arena_event", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "support_heal", "crossfire", "finale", "barrage", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "goblin_spawn", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
+			"barrage", "crossfire":
+				# Support strikes remain legible even when optional particles are culled.
+				var lifetime := RED_MOON_IMPACT_SECONDS if event.kind == "barrage" else CROSSFIRE_IMPACT_SECONDS
+				effects.append(effect_pool.acquire(event.duplicate(true), lifetime))
+				shake_trauma = minf(1.0, shake_trauma + (0.42 if event.kind == "barrage" else 0.18))
+			"support_heal":
+				effects.append(effect_pool.acquire(event.duplicate(true), TIDAL_EFFECT_SECONDS))
+			"fireball_fall", "fireball_impact":
+				var active_fireballs := effects.filter(func(fx: Dictionary) -> bool: return str(fx.get("kind", "")).begins_with("fireball_"))
+				if active_fireballs.size() < 8 and (sim == null or sim.performance_budget.can_spawn_cosmetic(str(event.kind), effects.size())):
+					var lifetime := float(event.get("duration", 0.72)) if event.kind == "fireball_fall" else 33.0 / 24.0
+					effects.append(effect_pool.acquire(event.duplicate(true), lifetime))
+			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "arena_event", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "finale", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "goblin_spawn", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
 				if _try_merge_dense_vfx(event):
 					continue
 				if sim != null and not sim.performance_budget.can_spawn_cosmetic(str(event.kind), effects.size()):
@@ -410,7 +525,9 @@ func _draw() -> void:
 	if deploy_preview_active:
 		_draw_deploy_preview()
 	for zone: Dictionary in sim.skill_effects:
-		if _render_point_visible(Vector2(zone.get("pos", Vector2.ZERO)), 180.0):
+		if str(zone.get("kind", "")) in ["wind_cut_rows", "columbia_attack_blessing"]:
+			continue
+		if _render_point_visible(Vector2(zone.get("pos", Vector2.ZERO)), 180.0 + _skill_zone_radius(zone)):
 			_draw_skill_zone(zone)
 	for construct: Dictionary in sim.geo_constructs:
 		if _render_point_visible(Vector2(construct.get("pos", Vector2.ZERO)), 140.0):
@@ -420,11 +537,81 @@ func _draw() -> void:
 	if selected_id >= 0:
 		var hero: Dictionary = sim.heroes[selected_id]
 		if hero.hp > 0 and bool(hero.get("deployed", true)):
-			_draw_range_indicator(hero)
+			var showing_wind_rows: bool = str(hero.get("active_skill", {}).get("kind", "")) == "wind_cut" and ((skill_targeting and not skill_preview_ultimate) or sim.skill_effects.any(func(zone: Dictionary) -> bool: return str(zone.get("kind", "")) == "wind_cut_rows" and int(zone.get("hero_id", -1)) == selected_id))
+			if not showing_wind_rows:
+				_draw_range_indicator(hero)
 	for hero in sim.heroes:
 		if hero.hp > 0 and hero.pos.distance_to(hero.target) > 3.0:
 			draw_dashed_line(world_to_screen(hero.pos), world_to_screen(hero.target), Color(hero.color, 0.6), 1.0, 7.0)
 			_ground_circle(hero.target, 13.0, Color(hero.color))
+	_draw_red_moon_warning()
+	_draw_crossfire_warning()
+	_draw_tidal_warning()
+	# Combat effects and projectiles belong behind every unit silhouette.
+	if sheet_effects != null:
+		sheet_effects.draw_behind_units(self)
+	for projectile in sim.projectiles:
+		if _render_point_visible(Vector2(projectile.get("pos", Vector2.ZERO)), 120.0):
+			_draw_projectile(projectile)
+	for projectile: Dictionary in sim.enemy_projectiles:
+		if _render_point_visible(Vector2(projectile.pos), 120.0):
+			var point := world_to_screen(Vector2(projectile.pos)) + Vector2(0, -17)
+			var size := 8.0 * world_depth_scale(Vector2(projectile.pos))
+			draw_circle(point, size + 4.0, Color(0.26, 0.12, 0.42, 0.38))
+			draw_circle(point, size, Color(0.60, 0.38, 0.88, 0.95))
+			draw_circle(point + Vector2(-2, -2), size * 0.38, Color(0.94, 0.86, 1.0, 0.96))
+	for effect in effects:
+		if effect.kind not in ["crossfire", "support_heal", "columbia_blessing_links"] and not _render_point_visible(Vector2(effect.get("pos", Vector2.ZERO)), 180.0):
+			continue
+		if effect.kind == "fireball_fall":
+			_draw_falling_fireball(effect)
+			continue
+		if effect.kind == "crossfire":
+			_draw_crossfire_impact(effect)
+			continue
+		if effect.kind == "support_heal":
+			_draw_tidal_heal(effect)
+			continue
+		if effect.kind in ["sylphie_gust_cast", "sylphie_gust"]:
+			_draw_sylphie_gust(effect)
+			continue
+		if str(effect.kind) in ["anemo_domain_cast", "anemo_domain_impact", "sonic_wave_cast", "sonic_wave_impact", "fate_symphony_cast", "fate_symphony_impact", "emilia_frost_bloom_cast", "emilia_frost_bloom_impact", "emilia_frozen_forest_cast", "emilia_frozen_forest_impact", "amiya_arcane_lance_cast", "amiya_arcane_lance_impact", "amiya_chimera_cast", "amiya_chimera_impact", "roxy_healing_surge_cast", "roxy_healing_surge_impact", "roxy_storm_field_cast", "roxy_storm_field_impact", "fengjin_wind_cut_cast", "fengjin_wind_cut_impact", "fengjin_renewing_breeze_cast", "fengjin_renewing_breeze_impact", "gwen_thread_shelter_cast", "gwen_thread_shelter_impact", "gwen_needle_barrage_cast", "gwen_needle_barrage_impact", "columbia_tide_ring_cast", "columbia_tide_ring_impact", "columbia_tidal_benediction_cast", "columbia_tidal_benediction_impact", "furina_salon_summon_cast", "furina_salon_summon_impact", "furina_hydro_fanfare_cast", "furina_hydro_fanfare_impact"]:
+			_draw_dedicated_ability(effect)
+			continue
+		if effect.kind == "gwen_shelter_aura":
+			_draw_gwen_shelter_aura(effect)
+			continue
+		if effect.kind == "columbia_blessing_links":
+			_draw_columbia_blessing_links(effect)
+			continue
+		if effect.kind == "traveler_electro_chains":
+			_draw_traveler_electro_chains(effect)
+			continue
+		if str(effect.kind).begins_with("traveler_"):
+			_draw_traveler_ability(effect)
+			continue
+		if effect.kind == "fengjin_wind_row":
+			_draw_fengjin_wind_row(effect)
+			continue
+		if effect.kind == "furina_fanfare_allies":
+			_draw_furina_fanfare_allies(effect)
+			continue
+		if effect.kind == "gwen_needle_hit":
+			_draw_gwen_needle_hit(effect)
+			continue
+		if effect.kind in ["skill_impact", "ultimate_impact"] and effect.has("radius"):
+			_draw_ability_impact(effect)
+			continue
+		var point: Vector2 = world_to_screen(effect.pos)
+		var scale_factor: float = world_depth_scale(effect.pos)
+		draw_set_transform(point, 0, Vector2(scale_factor, scale_factor))
+		var visual: Dictionary = effect.duplicate()
+		if effect.kind == "barrage":
+			visual.red_moon_radii = sim.support_barrage_screen_radii(Vector2(effect.pos), float(effect.get("radius", 105.0))) / scale_factor
+			visual.red_moon_scale = scale_factor
+		visual.pos = Vector2.ZERO
+		_draw_effect(visual)
+		draw_set_transform(Vector2.ZERO)
 	var actors: Array[Dictionary] = []
 	var render_world := visible_world_rect().grow(180.0) if sim.endless_mode else WORLD
 	for enemy in sim.enemies:
@@ -459,26 +646,6 @@ func _draw() -> void:
 		draw_set_transform(Vector2.ZERO)
 	if not departing_recruit.is_empty():
 		_draw_departing_recruit()
-	for projectile in sim.projectiles:
-		if _render_point_visible(Vector2(projectile.get("pos", Vector2.ZERO)), 120.0):
-			_draw_projectile(projectile)
-	for projectile: Dictionary in sim.enemy_projectiles:
-		if _render_point_visible(Vector2(projectile.pos), 120.0):
-			var point := world_to_screen(Vector2(projectile.pos)) + Vector2(0, -17)
-			var size := 8.0 * world_depth_scale(Vector2(projectile.pos))
-			draw_circle(point, size + 4.0, Color(0.26, 0.12, 0.42, 0.38))
-			draw_circle(point, size, Color(0.60, 0.38, 0.88, 0.95))
-			draw_circle(point + Vector2(-2, -2), size * 0.38, Color(0.94, 0.86, 1.0, 0.96))
-	for effect in effects:
-		if not _render_point_visible(Vector2(effect.get("pos", Vector2.ZERO)), 180.0):
-			continue
-		var point: Vector2 = world_to_screen(effect.pos)
-		var scale_factor: float = world_depth_scale(effect.pos)
-		draw_set_transform(point, 0, Vector2(scale_factor, scale_factor))
-		var visual: Dictionary = effect.duplicate()
-		visual.pos = Vector2.ZERO
-		_draw_effect(visual)
-		draw_set_transform(Vector2.ZERO)
 	_draw_stage_foreground()
 	if sim.state == "between":
 		caption(Vector2(548, 127), "队伍休整  %.1fs" % sim.wave_timer, TEAL, 16)
@@ -643,28 +810,31 @@ func _draw_orbitals() -> void:
 		var radius := float(orbital.get("radius",150.0))*0.38
 		var count := maxi(1,int(orbital.get("count",1)))
 		var visual := str(orbital.get("visual","spell"))
+		var orbital_fade := smoothstep(0.0, 0.85, maxf(0.0, float(orbital.get("life", 0.0))))
 		for i in count:
 			var angle := clock*2.8+i*TAU/count
 			var point := center+Vector2(cos(angle)*radius,sin(angle)*radius*0.36)
 			var color := element_color(str(orbital.get("element","")))
 			if visual == "blade":
-				_draw_vertical_orbit_blade(point, color, angle)
+				_draw_vertical_orbit_blade(point, color, angle, orbital_fade)
+			elif visual == "salon":
+				_draw_furina_salon_companion(point, i, orbital_fade)
 			else:
 				var direction := Vector2.from_angle(angle+PI*0.5)
-				draw_line(point-direction*12.0,point+direction*12.0,color,4.0,true)
-				draw_circle(point,3.0,Color.WHITE)
+				draw_line(point-direction*12.0,point+direction*12.0,Color(color,orbital_fade),4.0,true)
+				draw_circle(point,3.0,Color(1.0,1.0,1.0,orbital_fade))
 
-func _draw_vertical_orbit_blade(point: Vector2, color: Color, orbit_angle: float) -> void:
+func _draw_vertical_orbit_blade(point: Vector2, color: Color, orbit_angle: float, fade: float = 1.0) -> void:
 	var pulse := 1.0 + sin(clock*5.0+orbit_angle)*0.06
 	var tip := point+Vector2(0,-18.0*pulse)
 	var shoulder_left := point+Vector2(-5.0,-7.0)
 	var shoulder_right := point+Vector2(5.0,-7.0)
 	var base := point+Vector2(0,9.0)
-	draw_colored_polygon(PackedVector2Array([tip,shoulder_right,base,shoulder_left]),Color(color,0.92))
-	draw_polyline(PackedVector2Array([tip,shoulder_right,base,shoulder_left,tip]),Color.WHITE,1.4,true)
-	draw_line(point+Vector2(-7,9),point+Vector2(7,9),Color("#ffe9bd"),3.0,true)
-	draw_line(point+Vector2(0,9),point+Vector2(0,16),Color("#7d593e"),3.2,true)
-	draw_circle(point,22.0,Color(color,0.055))
+	draw_colored_polygon(PackedVector2Array([tip,shoulder_right,base,shoulder_left]),Color(color,0.92*fade))
+	draw_polyline(PackedVector2Array([tip,shoulder_right,base,shoulder_left,tip]),Color(1.0,1.0,1.0,fade),1.4,true)
+	draw_line(point+Vector2(-7,9),point+Vector2(7,9),Color(Color("#ffe9bd"),fade),3.0,true)
+	draw_line(point+Vector2(0,9),point+Vector2(0,16),Color(Color("#7d593e"),fade),3.2,true)
+	draw_circle(point,22.0,Color(color,0.055*fade))
 
 func _draw_deploy_preview() -> void:
 	var point := world_to_screen(deploy_preview_point)
@@ -676,66 +846,122 @@ func _draw_deploy_preview() -> void:
 	draw_line(point-Vector2(0,18),point+Vector2(0,18),color,2.0,true)
 	caption(point+Vector2(-50,-54),"松开放置角色" if allowed else "不可部署",color,13)
 
+func _ability_ellipse_points(center: Vector2, radii: Vector2) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	for index in 49:
+		var angle := float(index) * TAU / 48.0
+		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
+	return points
+
+func _draw_skill_area_ellipse(center_world: Vector2, radius: float, color: Color, strength: float = 1.0, spread: float = 1.0) -> void:
+	var center := world_to_screen(center_world) + Vector2(0.0, 8.0)
+	var radii: Vector2 = sim.ability_area_screen_radii(center_world, radius) * spread
+	var points := _ability_ellipse_points(center, radii)
+	var fill := points.duplicate()
+	fill.resize(48)
+	draw_colored_polygon(fill, Color(color, 0.085 * strength))
+	draw_polyline(points, Color(color, 0.76 * strength), 2.3, true)
+	for segment in 12:
+		var start := float(segment) * TAU / 12.0 + 0.03
+		var band := PackedVector2Array()
+		for step in 5:
+			var angle := start + float(step) * 0.092
+			band.append(center + Vector2(cos(angle) * radii.x * 0.89, sin(angle) * radii.y * 0.89))
+		draw_polyline(band, Color(color.lightened(0.29), 0.37 * strength), 1.3, true)
+	for angle in [0.0, PI * 0.5, PI, PI * 1.5]:
+		var edge := center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		var tangent := Vector2(-sin(angle), cos(angle) * radii.y / maxf(1.0, radii.x)).normalized()
+		draw_line(edge - tangent * 4.0, edge + tangent * 4.0, Color(color.lightened(0.28), 0.74 * strength), 1.7, true)
+
 func _draw_skill_preview() -> void:
 	if selected_id < 0 or selected_id >= sim.heroes.size():
 		return
 	var hero: Dictionary = sim.heroes[selected_id]
-	var element: String = str(hero.get("element", "none"))
-	var color: Color = element_color(element)
+	var color: Color = element_color(str(hero.get("element", "none")))
 	var ability: Dictionary = hero.get("ultimate", {}) if skill_preview_ultimate else hero.get("active_skill", {})
 	var radius: float = float(ability.get("radius", 170.0)) * (1.0 + sim.skill_area_bonus)
-	var center := world_to_screen(skill_point)
-	var hero_center := world_to_screen(hero.pos)
-	var radius_x := radius * 0.62 * world_depth_scale(skill_point)
-	var radius_y := radius_x * 0.32
-	var points := PackedVector2Array()
-	for i in 64:
-		var angle := i * TAU / 64.0
-		points.append(center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y))
-	draw_colored_polygon(points, Color(color, 0.16 if skill_preview_ultimate else 0.11))
-	for ring in 3:
-		var ring_scale := 1.0 - float(ring) * 0.14
-		draw_set_transform(center, 0.0, Vector2(1.0, radius_y / maxf(1.0, radius_x)))
-		draw_arc(Vector2.ZERO, radius_x * ring_scale, 0.0, TAU, 64, Color(color, 0.82 - ring * 0.20), 2.8 if ring == 0 else 1.2, true)
-		draw_set_transform(Vector2.ZERO)
-	for segment in 12:
-		var angle := segment * TAU / 12.0 + clock * (0.46 if skill_preview_ultimate else 0.28)
-		var a := center + Vector2(cos(angle) * radius_x, sin(angle) * radius_y)
-		var b := center + Vector2(cos(angle + 0.18) * radius_x, sin(angle + 0.18) * radius_y)
-		draw_line(a, b, Color(color, 0.96), 3.0, true)
-	draw_dashed_line(hero_center, center, Color(color, 0.52), 1.5, 10.0, true)
-	draw_circle(center, 7.0 + sin(clock * 6.0) * 1.5, Color(color, 0.92))
-	draw_line(center - Vector2(15, 0), center + Vector2(15, 0), Color.WHITE, 1.4, true)
-	draw_line(center - Vector2(0, 10), center + Vector2(0, 10), Color.WHITE, 1.4, true)
+	if str(hero.get("character_id", "")) == "traveler" and not skill_preview_ultimate:
+		radius = sim.traveler_skill_radius() * (1.0 + sim.skill_area_bonus)
+	var ability_kind := str(ability.get("kind", ""))
+	if ability_kind == "wind_cut":
+		_draw_fengjin_row_lanes(Vector2(hero.pos), color, 0.76)
+		return
+	if Sim.GLOBAL_TEAM_ABILITY_KINDS.has(ability_kind):
+		caption(world_to_screen(Vector2(hero.pos)) + Vector2(-58.0, -72.0), "全队增益 · 无距离限制", color, 15)
+		return
+	var self_area: bool = Sim.SELF_CENTERED_ABILITY_KINDS.has(ability_kind)
+	var center_world: Vector2 = Vector2(hero.pos) if self_area else skill_point
+	var center := world_to_screen(center_world) + Vector2(0.0, 8.0)
+	var radii: Vector2 = sim.ability_area_screen_radii(center_world, radius)
+	_draw_skill_area_ellipse(center_world, radius, color, 1.18 if skill_preview_ultimate else 0.94)
+	if not self_area:
+		draw_dashed_line(world_to_screen(hero.pos), center, Color(color, 0.45), 1.3, 10.0, true)
 	var title: String = sim.hero_ultimate_name(selected_id) if skill_preview_ultimate else sim.hero_skill_name(selected_id)
-	var key_hint := "E · 终结技落点" if skill_preview_ultimate else "Q · 战技落点"
-	caption(center + Vector2(-72, -radius_y - 38), key_hint, Color.WHITE, 12)
-	caption(center + Vector2(-72, -radius_y - 20), title, color, 15)
+	var key_hint := "E · 终结技范围" if skill_preview_ultimate else "Q · 战技范围"
+	caption(center + Vector2(-70, -radii.y - 32), key_hint, Color.WHITE, 12)
+	caption(center + Vector2(-70, -radii.y - 14), title, color, 15)
+
+func _skill_zone_radius(zone: Dictionary) -> float:
+	if zone.kind in ["renewing_breeze", "needle_barrage", "columbia_tide_ring"]:
+		return float(zone.get("area", 170.0))
+	var base_radius := float({"anemo_tornado":135.0, "hydro_field":250.0, "cryo_field":225.0, "burning_ground":105.0, "anemo_domain":180.0, "gate_field":180.0, "storm_field":190.0, "frozen_forest":210.0}.get(str(zone.kind), 160.0))
+	return base_radius * float(zone.get("area", 1.0))
 
 func _draw_skill_zone(zone: Dictionary) -> void:
-	var center := world_to_screen(zone.pos)
-	var pulse := sin(clock * 7.0) * 5.0
+	var center_world := Vector2(zone.pos)
+	if str(zone.get("visual", "")) == "columbia_tide_ring":
+		var owner_id := int(zone.get("hero_id", -1))
+		if owner_id >= 0 and owner_id < sim.heroes.size():
+			center_world = Vector2(sim.heroes[owner_id].pos)
+	var center := world_to_screen(center_world) + Vector2(0.0, 8.0)
+	var radius := _skill_zone_radius(zone)
+	var radii: Vector2 = sim.ability_area_screen_radii(center_world, radius)
+	var pulse := sin(clock * 4.8) * 0.018
+	var zone_color: Color = {
+		"anemo_tornado": Color("#6fe5be"), "anemo_domain": Color("#6fe5be"), "renewing_breeze": Color("#8ce5b0"),
+		"hydro_field": Color("#69c5fa"), "storm_field": Color("#6aa8ef"), "cryo_field": Color("#b6eefa"),
+		"frozen_forest": Color("#d4efff"), "burning_ground": Color("#ef8d63"),
+		"gate_field": Color("#b6a8fa"), "needle_barrage": Color("#d9c0f0"), "columbia_tide_ring": Color("#4bcaf0")
+	}.get(str(zone.kind), Color("#9adace"))
+	var zone_fade := smoothstep(0.0, 1.0, maxf(0.0, float(zone.get("life", 0.0))))
+	if str(zone.get("visual", "")) in ["columbia_blessing", "traveler_hydro", "traveler_cryo"]:
+		_draw_dedicated_zone(zone, center, radii)
+		return
+	if str(zone.get("visual", "")) != "gwen_needles":
+		_draw_skill_area_ellipse(center_world, radius, zone_color, 0.70 * zone_fade, 1.0 + pulse)
+	if str(zone.get("visual", "")) in ["sylphie_domain", "saki_score_q", "saki_score_e", "emilia_forest", "roxy_storm", "fengjin_breeze", "gwen_needles", "maiden_forest", "furina_fanfare", "columbia_tide_ring"]:
+		_draw_dedicated_zone(zone, center, radii)
+		return
 	if zone.kind == "anemo_tornado":
-		for ring in 5:
-			draw_arc(center + Vector2(0, -20 - ring * 12), 24.0 + ring * 9.0 + pulse, -2.8 + clock * 2.0, 2.4 + clock * 2.0, 28, Color(0.42, 0.95, 0.78, 0.68 - ring * 0.08), 3.5, true)
-		for mote in 8:
-			var angle := clock * 3.0 + mote * TAU / 8.0
-			var point := center + Vector2(cos(angle) * (38 + mote * 3), sin(angle) * 16 - 42 - mote * 3)
-			draw_circle(point, 3.0, Color("#d5fff0"))
-	elif zone.kind == "hydro_field":
-		draw_circle(center, 65.0 + pulse, Color(0.25, 0.67, 1.0, 0.08))
-		for ring in 3:
-			draw_arc(center, 42.0 + ring * 22.0 + pulse, 0, TAU, 42, Color(0.35, 0.75, 1.0, 0.42 - ring * 0.08), 2.0, true)
-	elif zone.kind in ["cryo_field","frozen_forest"]:
-		for spoke in 12:
-			var direction := Vector2.from_angle(spoke * TAU / 12.0)
-			draw_line(center + direction * 12.0, center + direction * (78.0 + pulse), Color(0.68, 0.93, 1.0, 0.38), 2.0, true)
-		draw_arc(center, 82.0 + pulse, 0, TAU, 48, Color(0.72, 0.96, 1.0, 0.56), 2.4, true)
-	elif zone.kind in ["anemo_domain","gate_field","storm_field"]:
-		var zone_color := Color("#6ce8c2") if zone.kind != "storm_field" else Color("#65bfff")
-		draw_circle(center,72.0+pulse,Color(zone_color,0.08))
-		for arc_index in 3:
-			draw_arc(center,36.0+arc_index*22.0+pulse,clock*(1.2+arc_index*0.3),clock*(1.2+arc_index*0.3)+PI*1.45,40,Color(zone_color,0.58-arc_index*0.1),2.6,true)
+		var total_life := maxf(0.1, float(zone.get("total_life", 4.2)))
+		var remaining := maxf(0.0, float(zone.get("life", 0.0)))
+		var tail_time := 19.0 / 24.0
+		var frame := 0
+		if remaining <= tail_time:
+			frame = clampi(80 + floori((tail_time - remaining) * 24.0), 80, 98)
+		else:
+			frame = posmod(floori((total_life - remaining) * 24.0), 80)
+		var size := 248.0 * clampf(world_depth_scale(zone.pos), 0.8, 1.25)
+		_draw_video_atlas_frame(WIND_TORNADO_ATLAS, 10, 256, frame, Rect2(center + Vector2(-size * 0.5, -size * 0.91), Vector2.ONE * size), Color(1.0, 1.0, 1.0, zone_fade))
+	elif zone.kind in ["anemo_domain", "renewing_breeze", "storm_field", "hydro_field", "gate_field"]:
+		for ribbon in 3:
+			var trail := PackedVector2Array()
+			var offset_y := (float(ribbon) - 1.0) * radii.y * 0.36
+			for index in 15:
+				var phase := float(index) / 14.0
+				var x := lerpf(-radii.x * 0.76, radii.x * 0.76, phase)
+				var y := offset_y + sin(phase * TAU + clock * 1.8 + ribbon) * radii.y * 0.09
+				trail.append(center + Vector2(x, y))
+			draw_polyline(trail, Color(zone_color.lightened(0.28), 0.24 * zone_fade), 1.6, true)
+	elif zone.kind in ["cryo_field", "frozen_forest", "needle_barrage", "burning_ground"]:
+		for shard in 8:
+			var angle := float(shard) * TAU / 8.0 + clock * 0.16
+			var direction := Vector2(cos(angle) * radii.x * 0.60, sin(angle) * radii.y * 0.60)
+			draw_line(center + direction * 0.66, center + direction, Color(zone_color.lightened(0.2), 0.42 * zone_fade), 2.0, true)
+
+func _draw_video_atlas_frame(texture: Texture2D, columns: int, cell: int, frame: int, destination: Rect2, tint: Color = Color.WHITE) -> void:
+	var source := Rect2(Vector2(frame % columns, frame / columns) * cell, Vector2.ONE * cell)
+	draw_texture_rect_region(texture, destination, source, tint)
 
 func _draw_geo_construct(construct: Dictionary) -> void:
 	var center := world_to_screen(construct.pos)
@@ -1867,7 +2093,1060 @@ func _draw_anchored_texture_region(texture: Texture2D, anchor: Vector2, display_
 	draw_texture_rect_region(texture, placement_data.rect, source, tint)
 	draw_set_transform_matrix(current_actor_transform)
 
+func _draw_falling_fireball(effect: Dictionary) -> void:
+	var fall_total := maxf(0.1, float(effect.get("total", 0.72)))
+	var progress := clampf(1.0 - float(effect.life) / fall_total, 0.0, 1.0)
+	# The sprite itself points 45 degrees down-right; its flight path uses the same angle.
+	var offset := Vector2(-260.0, -300.0).lerp(Vector2(0.0, -40.0), progress * progress)
+	var depth := world_depth_scale(effect.pos)
+	var point := world_to_screen(effect.pos) + offset * depth
+	var size := lerpf(55.0, 92.0, progress)
+	var flight_direction := Vector2(1.0, 1.0).normalized()
+	draw_set_transform(point, 0.0, Vector2.ONE * depth)
+	draw_line(-flight_direction * (size * 0.7), -flight_direction * (size * 0.26), Color(1.0, 0.38, 0.08, 0.56), 9.0, true)
+	_draw_video_atlas_frame(FIREBALL_FLIGHT_ATLAS, 6, 128, posmod(floori(progress * fall_total * 24.0), 18), Rect2(Vector2.ONE * -size * 0.5, Vector2.ONE * size))
+	draw_set_transform(Vector2.ZERO)
+
+func _red_moon_ellipse_points(center: Vector2, radii: Vector2) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	for index in 64:
+		var angle := float(index) * TAU / 64.0
+		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
+	return points
+
+func _draw_red_moon_ellipse(center: Vector2, radii: Vector2, alpha: float, fill_alpha: float, width: float) -> void:
+	var points := _red_moon_ellipse_points(center, radii)
+	draw_colored_polygon(points, Color(0.42, 0.012, 0.055, fill_alpha))
+	points.append(points[0])
+	draw_polyline(points, Color(1.0, 0.17, 0.22, alpha), width, true)
+	for segment in 16:
+		var start_angle := float(segment) * TAU / 16.0 + 0.035
+		var arc_points := PackedVector2Array()
+		for step in 5:
+			var angle := start_angle + float(step) * TAU / 16.0 * 0.115
+			arc_points.append(center + Vector2(cos(angle) * radii.x * 0.91, sin(angle) * radii.y * 0.91))
+		draw_polyline(arc_points, Color(1.0, 0.55, 0.45, alpha * 0.46), maxf(1.0, width * 0.38), true)
+
+func _draw_red_moon_disc(center: Vector2, radius: float, alpha: float, phase: float) -> void:
+	if alpha <= 0.0:
+		return
+	draw_circle(center, radius * 1.55, Color(0.75, 0.015, 0.07, alpha * 0.20))
+	draw_circle(center, radius, Color(0.98, 0.07, 0.12, alpha * 0.94))
+	draw_circle(center + Vector2(radius * 0.36, -radius * 0.16), radius * 0.81, Color(0.08, 0.025, 0.08, alpha * 0.98))
+	draw_arc(center, radius, -PI * 0.76 + phase * 0.22, PI * 0.58 + phase * 0.22, 36, Color(1.0, 0.72, 0.60, alpha * 0.92), 3.0, true)
+	if not reduced_effects:
+		draw_arc(center, radius * 1.35, phase * 1.1, phase * 1.1 + PI * 0.62, 22, Color(1.0, 0.29, 0.30, alpha * 0.56), 1.5, true)
+
+func _draw_red_moon_warning() -> void:
+	if not sim.supports.has("support_barrage"):
+		return
+	var support: Dictionary = sim.supports["support_barrage"]
+	var time_left := float(support.get("timer", 99.0))
+	if time_left <= 0.0 or time_left > RED_MOON_WARNING_SECONDS:
+		return
+	var target: Dictionary = {}
+	for enemy: Dictionary in sim.enemies:
+		if enemy.hp <= 0.0:
+			continue
+		if target.is_empty() or enemy.hp > float(target.hp):
+			target = enemy
+	if target.is_empty() or not _render_point_visible(Vector2(target.pos), 150.0):
+		return
+	var world_point := Vector2(target.pos)
+	var point := world_to_screen(world_point) + Vector2(0, 8)
+	var radii: Vector2 = sim.support_barrage_screen_radii(world_point, float(support.get("radius", 105.0)))
+	var progress := 1.0 - time_left / RED_MOON_WARNING_SECONDS
+	var pulse := 0.80 + 0.20 * sin(clock * 17.0)
+	_draw_red_moon_ellipse(point, radii, 0.40 + progress * 0.50, 0.09 + progress * 0.11, 2.0 + progress * 0.7)
+	_draw_red_moon_ellipse(point, radii * (0.85 - progress * 0.40), 0.16 + progress * 0.28 * pulse, 0.0, 1.3)
+	for mark in 12:
+		var angle := float(mark) * TAU / 12.0
+		var edge := point + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		var direction := Vector2(cos(angle), sin(angle) * 0.40).normalized()
+		draw_line(edge + direction * 2.0, edge + direction * (13.0 if mark % 3 == 0 else 7.0), Color(1.0, 0.38, 0.40, 0.50 + progress * 0.38), 2.0, true)
+	var moon_alpha := smoothstep(0.05, 0.65, progress)
+	var moon_size := 27.0 * world_depth_scale(world_point) * lerpf(0.64, 1.0, progress)
+	var moon_point := point + Vector2(0, (-202.5 - progress * 58.5) * world_depth_scale(world_point))
+	_draw_red_moon_disc(moon_point, moon_size, moon_alpha, clock)
+	if progress > 0.65:
+		draw_line(moon_point + Vector2(0, moon_size), point, Color(1.0, 0.18, 0.23, (progress - 0.65) * 0.52), 2.0, true)
+
+func _draw_red_moon_impact(effect: Dictionary) -> void:
+	var total := maxf(0.01, float(effect.get("total", RED_MOON_IMPACT_SECONDS)))
+	var elapsed := total - float(effect.life)
+	var scale_factor := maxf(0.1, float(effect.get("red_moon_scale", 1.0)))
+	var radii := Vector2(effect.get("red_moon_radii", Vector2(float(effect.get("radius", 105.0)), float(effect.get("radius", 105.0)) * 0.40)))
+	var ground := Vector2(0.0, 8.0 / scale_factor)
+	var moon := Vector2(0.0, -261.0)
+	var moon_alpha := 1.0 - smoothstep(0.82, 1.35, elapsed)
+	_draw_red_moon_disc(moon + Vector2(0, -elapsed * 9.0), 27.0, moon_alpha, clock)
+	var beam_alpha := smoothstep(0.0, 0.16, elapsed) * (1.0 - smoothstep(0.78, 1.12, elapsed))
+	if beam_alpha > 0.0:
+		var reach := smoothstep(0.0, 0.17, elapsed)
+		var beam_bottom := lerpf(-244.0, ground.y, reach)
+		var flicker := 0.89 + 0.11 * sin(elapsed * 31.0)
+		draw_colored_polygon(PackedVector2Array([Vector2(-38, -252), Vector2(38, -252), Vector2(46, beam_bottom), Vector2(-46, beam_bottom)]), Color(0.82, 0.02, 0.08, beam_alpha * 0.60 * flicker))
+		draw_colored_polygon(PackedVector2Array([Vector2(-12, -252), Vector2(12, -252), Vector2(16, beam_bottom), Vector2(-16, beam_bottom)]), Color(1.0, 0.75, 0.63, beam_alpha * 0.85 * flicker))
+		_draw_red_moon_ellipse(ground, radii * 0.38, beam_alpha * 0.66, beam_alpha * 0.25, 4.0)
+	var expansion := clampf((elapsed - 0.10) / 1.05, 0.0, 1.0)
+	var shock_alpha := 1.0 - smoothstep(0.54, 1.47, elapsed)
+	_draw_red_moon_ellipse(ground, radii, shock_alpha * 0.42, (1.0 - elapsed / total) * 0.11, 1.7)
+	_draw_red_moon_ellipse(ground, radii * (0.17 + expansion * 0.83), shock_alpha * 0.95, shock_alpha * 0.08, 7.0 - expansion * 3.5)
+	if reduced_effects:
+		return
+	for shard in 8:
+		var angle := float(shard) * TAU / 8.0 + 0.23
+		var start := ground + Vector2(cos(angle) * radii.x, sin(angle) * radii.y) * (0.18 + expansion * 0.42)
+		var finish := ground + Vector2(cos(angle) * radii.x, sin(angle) * radii.y) * (0.30 + expansion * 0.64)
+		draw_line(start, finish, Color(1.0, 0.38, 0.27, shock_alpha * 0.65), 2.5, true)
+
+func _crossfire_field_edges(lane_y: float, half_width: float) -> Array[Vector2]:
+	var field := visible_world_rect()
+	var bounds := Rect2(field.position.x, lane_y - half_width, field.size.x, half_width * 2.0)
+	return [
+		world_to_screen(Vector2(bounds.position.x, lane_y - half_width)),
+		world_to_screen(Vector2(bounds.end.x, lane_y - half_width)),
+		world_to_screen(Vector2(bounds.end.x, lane_y + half_width)),
+		world_to_screen(Vector2(bounds.position.x, lane_y + half_width)),
+	]
+
+func _draw_crossfire_warning() -> void:
+	if not sim.supports.has("support_crossfire") or sim.enemies.is_empty():
+		return
+	var support: Dictionary = sim.supports["support_crossfire"]
+	var time_left := float(support.get("timer", 99.0))
+	if time_left <= 0.0 or time_left > CROSSFIRE_WARNING_SECONDS:
+		return
+	var lane_y := float(sim.enemies[0].pos.y)
+	var edges := _crossfire_field_edges(lane_y, 58.0)
+	var progress := 1.0 - time_left / CROSSFIRE_WARNING_SECONDS
+	draw_colored_polygon(PackedVector2Array(edges), Color(0.36, 0.16, 0.025, 0.07 + progress * 0.07))
+	for boundary in [0, 2]:
+		var first: Vector2 = edges[boundary]
+		var second: Vector2 = edges[(boundary + 1) % 4]
+		draw_dashed_line(first, second, Color(1.0, 0.64, 0.24, 0.45 + progress * 0.30), 2.0, 13.0, true)
+	var upper_left := edges[0].lerp(edges[3], 0.18)
+	var lower_right := edges[1].lerp(edges[2], 0.82)
+	var upper_right := edges[1].lerp(edges[2], 0.18)
+	var lower_left := edges[0].lerp(edges[3], 0.82)
+	draw_dashed_line(upper_left, lower_right, Color(1.0, 0.45, 0.18, 0.22 + progress * 0.28), 1.6, 16.0, true)
+	draw_dashed_line(upper_right, lower_left, Color(1.0, 0.45, 0.18, 0.22 + progress * 0.28), 1.6, 16.0, true)
+	var approach := progress * 0.20
+	for path in [Vector2(0.0, 1.0), Vector2(1.0, 0.0)]:
+		var start: Vector2 = upper_left if path.x == 0.0 else upper_right
+		var end: Vector2 = lower_right if path.x == 0.0 else lower_left
+		var arrow := start.lerp(end, approach)
+		draw_circle(arrow, 7.0 + progress * 2.0, Color(1.0, 0.65, 0.29, 0.52 + progress * 0.33))
+
+func _draw_crossfire_impact(effect: Dictionary) -> void:
+	var total := maxf(0.01, float(effect.get("total", CROSSFIRE_IMPACT_SECONDS)))
+	var elapsed := total - float(effect.life)
+	var lane_y := float(effect.get("lane_y", Vector2(effect.pos).y))
+	var edges := _crossfire_field_edges(lane_y, float(effect.get("lane_half_width", 58.0)))
+	var upper_left := edges[0].lerp(edges[3], 0.18)
+	var lower_right := edges[1].lerp(edges[2], 0.82)
+	var upper_right := edges[1].lerp(edges[2], 0.18)
+	var lower_left := edges[0].lerp(edges[3], 0.82)
+	var fade := 1.0 - smoothstep(0.68, total, elapsed)
+	draw_colored_polygon(PackedVector2Array(edges), Color(0.53, 0.18, 0.025, 0.13 * fade))
+	var travel := smoothstep(0.0, 0.66, elapsed)
+	for path in [0, 1]:
+		var start: Vector2 = upper_left if path == 0 else upper_right
+		var end: Vector2 = lower_right if path == 0 else lower_left
+		draw_line(start, end, Color(0.98, 0.31, 0.065, 0.24 * fade), 10.0, true)
+		draw_line(start, end, Color(1.0, 0.73, 0.30, 0.32 * fade), 2.3, true)
+		var head := start.lerp(end, travel)
+		var tail := start.lerp(end, maxf(0.0, travel - 0.24))
+		draw_line(tail, head, Color(1.0, 0.39, 0.08, 0.70 * fade), 14.0, true)
+		draw_line(tail, head, Color(1.0, 0.91, 0.58, 0.96 * fade), 4.0, true)
+		draw_circle(head, 9.0, Color(1.0, 0.63, 0.20, 0.80 * fade))
+		draw_circle(head, 4.0, Color(1.0, 0.96, 0.74, 0.95 * fade))
+	var crossing := upper_left.lerp(lower_right, 0.5)
+	var sparks := smoothstep(0.25, 0.38, elapsed) * (1.0 - smoothstep(0.64, 1.07, elapsed))
+	if sparks <= 0.0:
+		return
+	draw_circle(crossing, 17.0 + sparks * 9.0, Color(1.0, 0.55, 0.20, 0.28 * sparks))
+	if reduced_effects:
+		return
+	for ray in 8:
+		var direction := Vector2.from_angle(float(ray) * TAU / 8.0)
+		draw_line(crossing + direction * 10.0, crossing + direction * (26.0 + sparks * 17.0), Color(1.0, 0.79, 0.39, 0.75 * sparks), 2.0, true)
+
+func _draw_dedicated_arc(center: Vector2, radii: Vector2, start: float, sweep: float, color: Color, width: float = 2.0) -> void:
+	var points := PackedVector2Array()
+	for step in 25:
+		var angle := start + sweep * float(step) / 24.0
+		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
+	draw_polyline(points, color, width, true)
+
+func _draw_score_note(point: Vector2, color: Color, size: float = 1.0) -> void:
+	var oval := PackedVector2Array()
+	for step in 13:
+		var angle := float(step) * TAU / 12.0
+		oval.append(point + Vector2(cos(angle) * 5.0, sin(angle) * 3.2) * size)
+	draw_colored_polygon(oval, color)
+	draw_line(point + Vector2(4.0, 0.0) * size, point + Vector2(4.0, -19.0) * size, color, 2.2 * size, true)
+	draw_line(point + Vector2(4.0, -19.0) * size, point + Vector2(13.0, -14.0) * size, color, 2.0 * size, true)
+
+func _draw_inward_spiral(center: Vector2, radii: Vector2, motion: float, alpha: float, density: float = 1.0) -> void:
+	for arm in 3:
+		var strand := PackedVector2Array()
+		var phase := float(arm) * TAU / 3.0 - motion * 1.35
+		for step in 37:
+			var t := float(step) / 36.0
+			var angle := phase + t * TAU * 1.30
+			var inward := (0.86 - t * 0.74) * density
+			strand.append(center + Vector2(cos(angle) * radii.x * inward, sin(angle) * radii.y * inward))
+		draw_polyline(strand, Color(0.22, 0.82, 0.66, alpha * 0.16), 6.2, true)
+		draw_polyline(strand, Color(0.78, 1.0, 0.89, alpha * 0.63), 1.9, true)
+		var bead_t := fposmod(motion * 0.62 + float(arm) * 0.34, 1.0)
+		var bead_index := clampi(floori(bead_t * 36.0), 0, 36)
+		var bead: Vector2 = strand[bead_index]
+		draw_circle(bead, 3.2, Color(0.80, 1.0, 0.88, alpha * 0.82))
+	_draw_dedicated_arc(center, Vector2(15.0, 6.0) * density, 0.0, TAU, Color(0.70, 1.0, 0.86, alpha * 0.48), 1.5)
+
+func _draw_ice_branches(center: Vector2, radii: Vector2, motion: float, alpha: float, growth: float = 1.0) -> void:
+	for root in 10:
+		var angle := float(root) * TAU / 10.0 + 0.09
+		var direction := Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		var side := Vector2(-sin(angle) * radii.x, cos(angle) * radii.y)
+		var stem_start := center + direction * 0.14
+		var junction := center + direction * (0.43 * growth)
+		var tip := center + direction * (0.80 * growth)
+		draw_line(stem_start, tip, Color(0.46, 0.78, 0.98, alpha * 0.25), 5.0, true)
+		draw_line(stem_start, tip, Color(0.89, 0.98, 1.0, alpha * 0.74), 1.7, true)
+		for fork in [-1.0, 1.0]:
+			var branch_tip: Vector2 = junction + direction * (0.15 * growth) + side * (0.16 * growth * float(fork))
+			draw_line(junction, branch_tip, Color(0.75, 0.95, 1.0, alpha * 0.65), 1.45, true)
+		var glint := 0.35 + 0.3 * sin(motion * 3.4 + root * 1.5)
+		draw_circle(tip, 2.2, Color(0.88, 0.99, 1.0, alpha * glint))
+
+func _draw_emilia_ability(effect: Dictionary, center_world: Vector2, center: Vector2, radii: Vector2, progress: float, strength: float, casting: bool) -> void:
+	var forest := str(effect.kind).begins_with("emilia_frozen_forest")
+	var radius := float(effect.get("radius", 200.0))
+	var ice := Color("#b9ebff") if forest else Color("#81d9ff")
+	_draw_skill_area_ellipse(center_world, radius, ice, strength * (0.84 if forest else 0.70), 1.0)
+	if forest:
+		var growth := (0.22 + progress * 0.47) if casting else minf(1.0, 0.38 + progress * 1.15)
+		_draw_ice_branches(center, radii, clock, strength, growth)
+		for ring in 2:
+			var spread := clampf((0.26 + progress * 0.72) - ring * 0.19, 0.10, 0.96)
+			_draw_dedicated_arc(center, radii * spread, PI * 0.05, PI * 0.9, Color(0.80, 0.96, 1.0, strength * 0.42), 1.8)
+		return
+	var bloom := (0.12 + progress * 0.36) if casting else minf(0.77, 0.18 + progress * 1.05)
+	for petal in 6:
+		var angle := float(petal) * TAU / 6.0 + PI / 6.0
+		var direction := Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		var side := Vector2(-sin(angle) * radii.x, cos(angle) * radii.y)
+		var base := center + direction * (bloom * 0.13)
+		var tip := center + direction * bloom
+		var left := center + direction * (bloom * 0.50) + side * (bloom * 0.19)
+		var right := center + direction * (bloom * 0.50) - side * (bloom * 0.19)
+		var crystal := PackedVector2Array([base, left, tip, right])
+		draw_colored_polygon(crystal, Color(0.42, 0.81, 1.0, strength * 0.19))
+		draw_polyline(PackedVector2Array([base, left, tip, right, base]), Color(0.91, 0.99, 1.0, strength * 0.71), 1.7, true)
+		draw_line(base, tip, Color(0.71, 0.94, 1.0, strength * 0.53), 1.3, true)
+	if not casting:
+		_draw_dedicated_arc(center, radii * minf(0.96, 0.30 + progress * 0.95), 0.0, TAU, Color(0.83, 0.98, 1.0, strength * 0.57), 1.8)
+
+func _draw_amiya_ability(effect: Dictionary, center_world: Vector2, center: Vector2, radii: Vector2, progress: float, strength: float, casting: bool) -> void:
+	var chimera := str(effect.kind).begins_with("amiya_chimera")
+	var radius := float(effect.get("radius", 160.0))
+	var violet := Color("#a078ec") if chimera else Color("#ba9cff")
+	_draw_skill_area_ellipse(center_world, radius, violet, strength * (0.78 if chimera else 0.63), 1.0)
+	if chimera:
+		for seal in 1 if casting else 2:
+			var spread := 0.33 + float(seal) * 0.30 + (progress * 0.18 if not casting else progress * 0.22)
+			_draw_dedicated_arc(center, radii * spread, clock * (0.37 if seal == 0 else -0.29), PI * 1.74, Color(0.78, 0.46, 1.0, strength * 0.57), 2.1)
+		for blade in 10:
+			var angle := float(blade) * TAU / 10.0 + clock * 0.18
+			var ray := Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+			var side := Vector2(-sin(angle) * radii.x, cos(angle) * radii.y)
+			var base := center + ray * 0.48
+			var tip := center + ray * (0.72 if casting else 0.86)
+			draw_colored_polygon(PackedVector2Array([base + side * 0.05, tip, base - side * 0.05]), Color(0.55, 0.30, 0.78, strength * 0.40))
+			draw_line(base, tip, Color(0.89, 0.62, 1.0, strength * 0.47), 1.3, true)
+		var eye := PackedVector2Array([center + Vector2(-22.0, 0.0), center + Vector2(0.0, -9.0), center + Vector2(22.0, 0.0), center + Vector2(0.0, 9.0)])
+		draw_colored_polygon(eye, Color(0.26, 0.13, 0.41, strength * 0.55))
+		draw_polyline(PackedVector2Array([eye[0], eye[1], eye[2], eye[3], eye[0]]), Color(0.96, 0.64, 1.0, strength * 0.84), 1.8, true)
+		draw_circle(center, 4.0 + 2.0 * sin(clock * 5.0), Color(1.0, 0.39, 0.69, strength * 0.84))
+		if not casting:
+			var caster := world_to_screen(Vector2(effect.get("caster_pos", center_world))) + Vector2(0.0, 8.0)
+			_draw_dedicated_arc(caster, Vector2(30.0, 12.0), 0.0, TAU, Color(0.91, 0.37, 0.71, strength * 0.73), 1.8)
+		return
+	var caster := world_to_screen(Vector2(effect.get("caster_pos", center_world))) + Vector2(0.0, -13.0)
+	var front := progress if casting else minf(1.0, 0.39 + progress * 1.22)
+	for lance in 3:
+		var offset := (float(lance) - 1.0) * 18.0
+		var origin := caster + Vector2(0.0, offset)
+		var terminal := origin.lerp(center + Vector2(0.0, offset * 0.24), front)
+		var zig := PackedVector2Array([origin, origin.lerp(terminal, 0.28) + Vector2(3.0, -5.0 + offset * 0.2), origin.lerp(terminal, 0.58) + Vector2(-4.0, 6.0 - offset * 0.15), terminal])
+		draw_polyline(zig, Color(0.38, 0.13, 0.60, strength * 0.25), 6.0, true)
+		draw_polyline(zig, Color(0.91, 0.73, 1.0, strength * 0.75), 2.0, true)
+	if not casting:
+		for shard in 8:
+			var angle := float(shard) * TAU / 8.0
+			var ray := Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+			var spear := PackedVector2Array([center + ray * 0.30, center + ray * 0.61 + ray.orthogonal() * 0.07, center + ray * 0.83])
+			draw_polyline(spear, Color(0.88, 0.66, 1.0, strength * 0.60), 1.6, true)
+
+func _draw_roxy_storm(center: Vector2, radii: Vector2, motion: float, alpha: float) -> void:
+	for bank in 3:
+		var spread := 0.32 + float(bank) * 0.22
+		var start := motion * (0.24 if bank % 2 == 0 else -0.19) + float(bank) * 1.7
+		_draw_dedicated_arc(center, radii * spread, start, PI * 1.44, Color(0.42, 0.75, 1.0, alpha * (0.46 - bank * 0.08)), 2.1)
+	for bolt in 6:
+		var phase := float(bolt) * 1.21 + floorf(motion * 4.5) * 0.57
+		var x := sin(phase) * radii.x * 0.63
+		var y := cos(phase * 1.31) * radii.y * 0.46
+		var point := center + Vector2(x, y)
+		var flicker := 0.55 + 0.45 * sin(motion * 13.0 + float(bolt) * 2.3)
+		var zig := PackedVector2Array([point + Vector2(-10.0, -14.0), point + Vector2(0.0, -3.0), point + Vector2(-4.0, 2.0), point + Vector2(10.0, 15.0)])
+		draw_polyline(zig, Color(0.29, 0.55, 0.95, alpha * flicker * 0.18), 6.0, true)
+		draw_polyline(zig, Color(0.85, 0.95, 1.0, alpha * flicker * 0.72), 1.9, true)
+	for drop in 9:
+		var angle := float(drop) * TAU / 9.0 + motion * 0.22
+		var spot := center + Vector2(cos(angle) * radii.x * 0.67, sin(angle) * radii.y * 0.67)
+		draw_line(spot + Vector2(-3.0, -5.0), spot + Vector2(3.0, 5.0), Color(0.52, 0.84, 1.0, alpha * 0.29), 1.2, true)
+
+func _draw_roxy_ability(effect: Dictionary, center_world: Vector2, center: Vector2, radii: Vector2, progress: float, strength: float, casting: bool) -> void:
+	var storm := str(effect.kind).begins_with("roxy_storm_field")
+	var radius := float(effect.get("radius", 230.0))
+	var water := Color("#78cfff") if storm else Color("#6be5dd")
+	_draw_skill_area_ellipse(center_world, radius, water, strength * 0.73, 1.0)
+	if storm:
+		_draw_roxy_storm(center, radii * (0.46 + progress * 0.36 if casting else 1.0), clock, strength)
+		if not casting:
+			var front := minf(0.96, 0.22 + progress * 1.20)
+			_draw_dedicated_arc(center, radii * front, 0.0, TAU, Color(0.84, 0.97, 1.0, strength * 0.64), 2.0)
+		return
+	var spread := (0.22 + progress * 0.28) if casting else minf(0.90, 0.28 + progress * 1.10)
+	for ripple in 2:
+		var size := maxf(0.11, spread - float(ripple) * 0.21)
+		_draw_dedicated_arc(center, radii * size, 0.0, TAU, Color(0.69, 1.0, 0.96, strength * (0.67 - ripple * 0.22)), 1.9)
+	for branch in 6:
+		var angle := float(branch) * TAU / 6.0 + clock * 0.22
+		var ray := Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		var point := center + ray * spread * 0.74
+		var side := Vector2(-sin(angle), cos(angle))
+		draw_colored_polygon(PackedVector2Array([point + ray.normalized() * 10.0, point + side * 3.2, point - ray.normalized() * 7.0, point - side * 3.2]), Color(0.72, 1.0, 0.98, strength * 0.52))
+	if casting:
+		return
+	for ally: Dictionary in sim.heroes:
+		if not bool(ally.get("deployed", false)) or ally.hp <= 0.0 or not sim.is_in_ability_area(center_world, Vector2(ally.pos), radius):
+			continue
+		var foot := world_to_screen(Vector2(ally.pos)) + Vector2(0.0, 8.0)
+		var stream := PackedVector2Array()
+		for step in 13:
+			var t := float(step) / 12.0
+			stream.append(center.lerp(foot, t) + Vector2(0.0, -15.0 * sin(t * PI)))
+		draw_polyline(stream, Color(0.50, 0.91, 0.91, strength * 0.34), 1.7, true)
+		_draw_dedicated_arc(foot, Vector2(26.0, 10.0) * (0.67 + progress * 0.26), 0.0, TAU, Color(0.77, 1.0, 0.96, strength * 0.75), 1.6)
+
+func _draw_fengjin_leaf(point: Vector2, direction: Vector2, size: float, alpha: float) -> void:
+	var tangent := direction.orthogonal()
+	draw_colored_polygon(PackedVector2Array([point + direction * size, point + tangent * size * 0.36, point - direction * size * 0.67, point - tangent * size * 0.36]), Color(0.72, 1.0, 0.78, alpha * 0.66))
+	draw_line(point - direction * size * 0.57, point + direction * size * 0.80, Color(0.96, 1.0, 0.88, alpha * 0.84), 1.1, true)
+
+func _draw_fengjin_row_lanes(center_world: Vector2, color: Color, alpha: float) -> void:
+	var center_row := clampi(floori((center_world.y - Sim.GRID_ORIGIN.y) / Sim.GRID_CELL_SIZE.y), 1, Sim.GRID_ROWS - 2)
+	var left_x: float = sim.active_view_rect.position.x if sim.endless_mode else Sim.GRID_ORIGIN.x
+	var right_x: float = sim.active_view_rect.end.x if sim.endless_mode else Sim.GRID_ORIGIN.x + Sim.GRID_COLUMNS * Sim.GRID_CELL_SIZE.x
+	for offset in [-1, 0, 1]:
+		var y: float = Sim.GRID_ORIGIN.y + (center_row + offset + 0.5) * Sim.GRID_CELL_SIZE.y
+		var left := world_to_screen(Vector2(left_x, y)) + Vector2(0.0, 8.0)
+		var right := world_to_screen(Vector2(right_x, y)) + Vector2(0.0, 8.0)
+		draw_line(left, right, Color(color, alpha * 0.21), 9.0, true)
+		draw_line(left, right, Color(color.lightened(0.36), alpha * 0.64), 2.2, true)
+
+func _draw_fengjin_ability(effect: Dictionary, center_world: Vector2, center: Vector2, radii: Vector2, progress: float, strength: float, casting: bool) -> void:
+	var healing := str(effect.kind).begins_with("fengjin_renewing_breeze")
+	var radius := float(effect.get("radius", 200.0))
+	var breeze := Color("#8deac0") if healing else Color("#62e5b2")
+	if healing:
+		_draw_skill_area_ellipse(center_world, radius, breeze, strength * 0.66, 1.0)
+		var spread := (0.18 + progress * 0.38) if casting else minf(0.92, 0.21 + progress * 1.17)
+		for ring in 2:
+			var size := maxf(0.10, spread - float(ring) * 0.20)
+			_draw_dedicated_arc(center, radii * size, PI * 0.06, PI * 1.90, Color(0.73, 1.0, 0.84, strength * (0.66 - ring * 0.22)), 2.0)
+		for leaf in 8:
+			var angle := float(leaf) * TAU / 8.0 + clock * 0.45
+			var place := center + Vector2(cos(angle) * radii.x * spread * 0.78, sin(angle) * radii.y * spread * 0.78)
+			_draw_fengjin_leaf(place, Vector2.from_angle(angle + PI * 0.33), 6.8, strength)
+		if not casting:
+			for ally: Dictionary in sim.heroes:
+				if bool(ally.get("deployed", false)) and ally.hp > 0.0 and sim.is_in_ability_area(center_world, Vector2(ally.pos), radius):
+					var foot := world_to_screen(Vector2(ally.pos)) + Vector2(0.0, 8.0)
+					_draw_dedicated_arc(foot, Vector2(25.0, 9.0), 0.0, TAU, Color(0.77, 1.0, 0.83, strength * 0.52), 1.5)
+		return
+	_draw_fengjin_row_lanes(center_world, breeze, strength * (0.48 if casting else 0.72))
+
+func _draw_fengjin_wind_row(effect: Dictionary) -> void:
+	var total := maxf(0.01, float(effect.get("total", 0.42)))
+	var progress := clampf(1.0 - float(effect.life) / total, 0.0, 1.0)
+	var alpha := 1.0 - smoothstep(0.68, 1.0, progress)
+	var row := int(effect.get("row_index", int(effect.get("center_row", 5)) + int(effect.get("pulse_index", 1)) - 1))
+	var y: float = Sim.GRID_ORIGIN.y + (row + 0.5) * Sim.GRID_CELL_SIZE.y
+	var left := world_to_screen(Vector2(float(effect.get("left_x", Sim.GRID_ORIGIN.x)), y)) + Vector2(0.0, 8.0)
+	var right := world_to_screen(Vector2(float(effect.get("right_x", Sim.GRID_ORIGIN.x + Sim.GRID_COLUMNS * Sim.GRID_CELL_SIZE.x)), y)) + Vector2(0.0, 8.0)
+	var tip := left.lerp(right, minf(1.0, progress * 1.42))
+	var trail_start := maxf(left.x, tip.x - (right.x - left.x) * 0.30)
+	var ribbon := PackedVector2Array()
+	for segment in 13:
+		var fraction := float(segment) / 12.0
+		var x := lerpf(trail_start, tip.x, fraction)
+		var wobble := sin(fraction * TAU * 2.0 - progress * 11.0) * (1.0 - fraction) * 4.0
+		ribbon.append(Vector2(x, tip.y + wobble))
+	draw_line(left, right, Color(0.27, 0.80, 0.58, alpha * 0.13), 8.0, true)
+	draw_polyline(ribbon, Color(0.28, 0.88, 0.64, alpha * 0.42), 12.0, true)
+	draw_polyline(ribbon, Color(0.91, 1.0, 0.88, alpha * 0.91), 3.0, true)
+	draw_colored_polygon(PackedVector2Array([tip + Vector2(22.0, 0.0), tip + Vector2(-11.0, -10.0), tip + Vector2(-3.0, 0.0), tip + Vector2(-11.0, 10.0)]), Color(0.88, 1.0, 0.88, alpha * 0.95))
+	for feather in 5:
+		var fraction := 0.18 + float(feather) * 0.16
+		var x := lerpf(trail_start, tip.x, fraction)
+		var direction := -1.0 if feather % 2 == 0 else 1.0
+		draw_line(Vector2(x, tip.y + direction * 3.0), Vector2(x - 14.0, tip.y + direction * (8.0 + feather)), Color(0.72, 1.0, 0.84, alpha * 0.56), 2.0, true)
+	for value in effect.get("target_positions", []):
+		var foot := world_to_screen(Vector2(value)) + Vector2(0.0, 7.0)
+		_draw_dedicated_arc(foot, Vector2(23.0, 9.0) * (0.62 + progress * 0.60), 0.0, TAU, Color(0.75, 1.0, 0.83, alpha * 0.59), 1.6)
+
+func _draw_fengjin_breeze_zone(zone: Dictionary, center: Vector2, radii: Vector2, alpha: float) -> void:
+	for ring in 2:
+		var spread := fposmod(clock * 0.43 + float(ring) * 0.51, 1.0)
+		_draw_dedicated_arc(center, radii * (0.19 + spread * 0.72), 0.0, TAU, Color(0.76, 1.0, 0.82, alpha * (1.0 - spread) * 0.36), 1.6)
+	for leaf in 8:
+		var angle := float(leaf) * TAU / 8.0 + clock * 0.31
+		var place := center + Vector2(cos(angle) * radii.x * 0.65, sin(angle) * radii.y * 0.65)
+		_draw_fengjin_leaf(place, Vector2.from_angle(angle + PI * 0.35), 5.8, alpha * 0.77)
+	var center_world := Vector2(zone.pos)
+	for ally: Dictionary in sim.heroes:
+		if bool(ally.get("deployed", false)) and ally.hp > 0.0 and sim.is_in_ability_area(center_world, Vector2(ally.pos), float(zone.area)):
+			var foot := world_to_screen(Vector2(ally.pos)) + Vector2(0.0, 8.0)
+			_draw_dedicated_arc(foot, Vector2(25.0, 9.0) * (0.85 + 0.06 * sin(clock * 3.0)), 0.0, TAU, Color(0.82, 1.0, 0.83, alpha * 0.38), 1.3)
+
+func _draw_gwen_thread_mark(foot: Vector2, alpha: float, size: float = 1.0) -> void:
+	var radii := Vector2(28.0, 11.0) * size
+	_draw_dedicated_arc(foot, radii, 0.0, TAU, Color(0.97, 0.83, 0.96, alpha * 0.72), 1.7)
+	for stitch in [-1.0, 0.0, 1.0]:
+		var x: float = float(stitch) * radii.x * 0.46
+		draw_line(foot + Vector2(x - 7.0 * size, -radii.y * 0.62), foot + Vector2(x + 7.0 * size, radii.y * 0.62), Color(1.0, 0.92, 0.99, alpha * 0.53), 1.2, true)
+	draw_circle(foot + Vector2(0.0, -radii.y * 0.24), 2.8 * size, Color(1.0, 0.89, 0.96, alpha * 0.82))
+
+func _draw_gwen_ability(effect: Dictionary, center_world: Vector2, center: Vector2, radii: Vector2, progress: float, strength: float, casting: bool) -> void:
+	var shelter := str(effect.kind).begins_with("gwen_thread_shelter")
+	var radius := float(effect.get("radius", 255.0))
+	var silk := Color("#efd7ef") if shelter else Color("#eda6d7")
+	if shelter:
+		_draw_skill_area_ellipse(center_world, radius, silk, strength * 0.76, 1.0)
+	if shelter:
+		var weave := (0.25 + progress * 0.29) if casting else minf(0.92, 0.38 + progress * 0.85)
+		for stitch in 7:
+			var phase := float(stitch) / 6.0
+			var x := lerpf(-radii.x * weave, radii.x * weave, phase)
+			var height := sqrt(maxf(0.0, 1.0 - pow(x / maxf(1.0, radii.x), 2.0))) * radii.y * weave
+			draw_line(center + Vector2(x - 7.0, -height * 0.69), center + Vector2(x + 7.0, height * 0.69), Color(1.0, 0.92, 0.98, strength * 0.39), 1.2, true)
+		if not casting:
+			for ally: Dictionary in sim.heroes:
+				if bool(ally.get("deployed", false)) and ally.hp > 0.0 and sim.is_in_ability_area(center_world, Vector2(ally.pos), radius):
+					_draw_gwen_thread_mark(world_to_screen(Vector2(ally.pos)) + Vector2(0.0, 8.0), strength)
+		return
+	var pin_reveal := clampf(progress * 1.42, 0.0, 1.0) if casting else 1.0
+	_draw_gwen_boundary_pins(center, radii, pin_reveal, strength)
+	if not casting:
+		var spread := clampf(progress * 3.0, 0.06, 1.0)
+		_draw_dedicated_arc(center, radii * spread * 0.95, 0.0, TAU, Color(1.0, 0.82, 0.95, strength * 0.74), 3.0)
+		_draw_dedicated_arc(center, radii * spread * 0.76, 0.0, TAU, Color(0.91, 0.65, 0.85, strength * 0.31), 1.5)
+
+func _draw_gwen_boundary_pins(center: Vector2, radii: Vector2, reveal: float, alpha: float) -> void:
+	for pin in 8:
+		var born := clampf((reveal * 8.0 - float(pin)) * 1.5, 0.0, 1.0)
+		if born <= 0.0:
+			continue
+		var angle := float(pin) * TAU / 8.0 - PI * 0.5
+		var point := center + Vector2(cos(angle) * radii.x * 0.92, sin(angle) * radii.y * 0.92)
+		var height := 18.0 * born
+		var stem := point + Vector2(0.0, -height)
+		draw_circle(point, 6.0 * born, Color(0.93, 0.43, 0.72, alpha * born * 0.12))
+		draw_colored_polygon(PackedVector2Array([stem + Vector2(0.0, -4.0), stem + Vector2(3.0, 5.0), point, stem + Vector2(-3.0, 5.0)]), Color(0.99, 0.91, 0.98, alpha * born))
+		draw_line(stem + Vector2(0.0, 2.0), point, Color(0.73, 0.44, 0.71, alpha * born), 2.0, true)
+		_draw_dedicated_arc(point + Vector2(0.0, 3.0), Vector2(7.0, 3.0) * born, 0.0, TAU, Color(0.96, 0.70, 0.91, alpha * born * 0.54), 1.1)
+
+func _draw_gwen_shelter_aura(effect: Dictionary) -> void:
+	var life := maxf(0.0, float(effect.get("life", 0.0)))
+	var alpha := smoothstep(0.0, 1.0, life) * (0.73 + 0.08 * sin(clock * 4.0))
+	for recipient in effect.get("ally_ids", []):
+		var index := int(recipient)
+		if index < 0 or index >= sim.heroes.size():
+			continue
+		var ally: Dictionary = sim.heroes[index]
+		if not bool(ally.get("deployed", false)) or ally.hp <= 0.0:
+			continue
+		_draw_gwen_thread_mark(world_to_screen(Vector2(ally.pos)) + Vector2(0.0, 8.0), alpha)
+
+func _draw_gwen_needle_hit(effect: Dictionary) -> void:
+	var total := maxf(0.01, float(effect.get("total", 0.38)))
+	var progress := clampf(1.0 - float(effect.life) / total, 0.0, 1.0)
+	var alpha := 1.0 - smoothstep(0.61, 1.0, progress)
+	var source := world_to_screen(Vector2(effect.get("source", effect.pos))) + Vector2(0.0, -20.0)
+	var target := world_to_screen(Vector2(effect.pos)) + Vector2(0.0, -8.0)
+	var needle_id := int(effect.get("needle_index", 0))
+	var mid := source.lerp(target, 0.5) + Vector2(0.0, -24.0 - float(needle_id % 3) * 8.0)
+	var travel := minf(1.0, progress * 1.85)
+	var point := source.lerp(mid, travel * 2.0) if travel <= 0.5 else mid.lerp(target, (travel - 0.5) * 2.0)
+	var direction := (target - source).normalized()
+	var side := direction.orthogonal()
+	draw_line(point - direction * 25.0, point, Color(0.92, 0.64, 0.87, alpha * 0.30), 3.3, true)
+	draw_colored_polygon(PackedVector2Array([point + direction * 11.0, point - direction * 8.0 + side * 2.5, point - direction * 8.0 - side * 2.5]), Color(1.0, 0.92, 0.99, alpha * 0.93))
+	if travel >= 0.92:
+		_draw_dedicated_arc(target, Vector2(11.0, 4.0) * (0.65 + progress * 0.75), 0.0, TAU, Color(1.0, 0.78, 0.94, alpha * 0.46), 1.4)
+
+func _draw_gwen_needle_zone(zone: Dictionary, center: Vector2, radii: Vector2, alpha: float) -> void:
+	_draw_gwen_boundary_pins(center, radii, 1.0, alpha)
+	var elapsed := maxf(0.0, 2.0 - float(zone.get("life", 0.0)))
+	var spread := clampf(elapsed / 0.52, 0.04, 1.0)
+	var wave_alpha := alpha * (1.0 - smoothstep(0.78, 1.0, elapsed / 2.0))
+	_draw_dedicated_arc(center, radii * spread * 0.94, 0.0, TAU, Color(1.0, 0.83, 0.96, wave_alpha * 0.75), 3.0)
+	_draw_dedicated_arc(center, radii * spread * 0.73, 0.0, TAU, Color(0.91, 0.59, 0.85, wave_alpha * 0.33), 1.4)
+	for spoke in 8:
+		var angle := float(spoke) * TAU / 8.0 - PI * 0.5
+		var ray := Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+		draw_line(center + ray * maxf(0.0, spread - 0.25), center + ray * spread, Color(1.0, 0.83, 0.95, wave_alpha * 0.29), 1.1, true)
+
+func _draw_maiden_ability(effect: Dictionary, center_world: Vector2, center: Vector2, radii: Vector2, progress: float, strength: float, casting: bool) -> void:
+	var forest := str(effect.kind).begins_with("maiden_frozen_forest")
+	var radius := float(effect.get("radius", 185.0))
+	_draw_skill_area_ellipse(center_world, radius, Color("#a4eaff") if forest else Color("#c8f5ff"), strength * 0.66, 1.0)
+	if forest:
+		var growth := (0.23 + progress * 0.38) if casting else minf(1.0, 0.30 + progress * 1.15)
+		_draw_ice_branches(center, radii, clock * 0.38, strength * 0.63, growth)
+		var moon := center + Vector2(-radii.x * 0.13, -radii.y * 0.37)
+		draw_arc(moon, 20.0 * growth, PI * 0.18, PI * 1.82, 28, Color(0.88, 0.98, 1.0, strength * 0.80), 2.6, true)
+		draw_arc(moon + Vector2(7.0, -3.0), 17.0 * growth, PI * 0.08, PI * 1.66, 26, Color(0.58, 0.84, 1.0, strength * 0.42), 1.4, true)
+		for star in 7:
+			var angle := float(star) * TAU / 7.0 + clock * 0.12
+			var place := center + Vector2(cos(angle) * radii.x * growth * 0.68, sin(angle) * radii.y * growth * 0.68)
+			draw_line(place + Vector2(-4.0, 0.0), place + Vector2(4.0, 0.0), Color(0.87, 0.99, 1.0, strength * 0.49), 1.2, true)
+			draw_line(place + Vector2(0.0, -4.0), place + Vector2(0.0, 4.0), Color(0.87, 0.99, 1.0, strength * 0.49), 1.2, true)
+		return
+	var spread := (0.26 + progress * 0.48) if casting else minf(0.93, 0.34 + progress * 1.13)
+	for line in 5:
+		var row_y := (float(line) - 2.0) * radii.y * 0.14
+		var points := PackedVector2Array()
+		for step in 17:
+			var t := float(step) / 16.0
+			points.append(center + Vector2(lerpf(-radii.x * spread, radii.x * spread, t), row_y + sin(t * PI * 2.0 + progress * 3.2) * radii.y * 0.035))
+		draw_polyline(points, Color(0.72, 0.94, 1.0, strength * 0.34), 1.3, true)
+	for note in 5:
+		var step_progress := fposmod(progress * 0.65 + float(note) * 0.19, 1.0)
+		var position := center + Vector2(lerpf(-radii.x * spread, radii.x * spread, step_progress), (float(note % 5) - 2.0) * radii.y * 0.14 - sin(step_progress * PI) * 7.0)
+		_draw_score_note(position, Color(0.91, 1.0, 1.0, strength * 0.82), 0.48)
+	if not casting:
+		for snow in 6:
+			var angle := float(snow) * TAU / 6.0 + progress * 0.45
+			var point := center + Vector2(cos(angle) * radii.x * spread * 0.72, sin(angle) * radii.y * spread * 0.72)
+			draw_line(point + Vector2(-6.0, 0.0), point + Vector2(6.0, 0.0), Color(0.93, 1.0, 1.0, strength * 0.58), 1.5, true)
+			draw_line(point + Vector2(0.0, -6.0), point + Vector2(0.0, 6.0), Color(0.93, 1.0, 1.0, strength * 0.58), 1.5, true)
+
+func _draw_maiden_forest_zone(center: Vector2, radii: Vector2, alpha: float) -> void:
+	_draw_ice_branches(center, radii, clock * 0.35, alpha * 0.53)
+	for note in 6:
+		var angle := float(note) * TAU / 6.0 + clock * 0.22
+		var place := center + Vector2(cos(angle) * radii.x * 0.67, sin(angle) * radii.y * 0.67)
+		_draw_score_note(place + Vector2(0.0, sin(clock * 1.7 + note) * 4.0), Color(0.88, 0.98, 1.0, alpha * 0.40), 0.38)
+
+func _draw_columbia_ability(effect: Dictionary, center_world: Vector2, center: Vector2, radii: Vector2, progress: float, strength: float, casting: bool) -> void:
+	var blessing := str(effect.kind).begins_with("columbia_tidal_benediction")
+	if blessing:
+		if casting:
+			_draw_tidal_ellipse(center, Vector2(32.0, 12.0) * (0.55 + progress * 0.42), strength * 0.56)
+		return
+	_draw_skill_area_ellipse(center_world, float(effect.get("radius", 210.0)), Color("#48c9ef"), strength * 0.72, 0.24 + progress * 0.65)
+	for stream in 3:
+		var spread := clampf(progress * 0.77 - float(stream) * 0.18 + 0.26, 0.11, 0.92)
+		_draw_dedicated_arc(center, radii * spread, PI * 0.07, PI * 1.83, Color(0.72, 0.98, 1.0, strength * (0.70 - float(stream) * 0.14)), 2.3)
+
+func _draw_columbia_tide_zone(zone: Dictionary, center: Vector2, radii: Vector2, alpha: float) -> void:
+	var beat := fposmod(clock / 0.8, 1.0)
+	for ring in 3:
+		var spread := fposmod(beat + float(ring) / 3.0, 1.0)
+		_draw_dedicated_arc(center, radii * (0.18 + spread * 0.80), 0.0, TAU, Color(0.56, 0.91, 1.0, alpha * (1.0 - spread) * 0.70), 2.4 - spread)
+	for drop in 8:
+		var angle := float(drop) * TAU / 8.0 + clock * 0.46
+		var point := center + Vector2(cos(angle) * radii.x * 0.71, sin(angle) * radii.y * 0.71)
+		draw_circle(point, 2.7, Color(0.80, 1.0, 1.0, alpha * 0.52))
+
+func _draw_columbia_blessing_links(effect: Dictionary) -> void:
+	var total := maxf(0.01, float(effect.get("total", 25.0)))
+	var elapsed := total - float(effect.life)
+	var fade := clampf(float(effect.life) / 0.8, 0.0, 1.0)
+	var travel_seconds := 1.35
+	var source_id := int(effect.get("hero_id", -1))
+	if source_id < 0 or source_id >= sim.heroes.size():
+		return
+	var source := world_to_screen(Vector2(sim.heroes[source_id].pos)) + Vector2(0.0, 8.0)
+	if elapsed < travel_seconds:
+		_draw_tidal_ellipse(source, Vector2(27.0, 10.0) * (0.86 + sin(elapsed * 5.0) * 0.08), fade * 0.53)
+	for ally_id in effect.get("ally_ids", []):
+		var index := int(ally_id)
+		if index < 0 or index >= sim.heroes.size() or sim.heroes[index].hp <= 0.0:
+			continue
+		var foot := world_to_screen(Vector2(sim.heroes[index].pos)) + Vector2(0.0, 8.0)
+		var arrival_time := 0.0 if index == source_id else travel_seconds
+		if elapsed < travel_seconds and index != source_id:
+			var travel := clampf(elapsed / travel_seconds, 0.0, 1.0)
+			var route := PackedVector2Array()
+			for segment in 25:
+				var fraction := float(segment) / 24.0
+				route.append(source.lerp(foot, fraction) + Vector2(0.0, -30.0 * sin(fraction * PI)))
+			var link_fade := 1.0 - smoothstep(0.94, 1.0, travel)
+			draw_polyline(route, Color(0.29, 0.82, 0.91, fade * link_fade * 0.34), 2.2, true)
+			for bead in 3:
+				var bead_progress := travel - float(bead) * 0.085
+				if bead_progress < 0.0:
+					continue
+				var bead_pos: Vector2 = route[mini(24, floori(bead_progress * 24.0))]
+				var bead_alpha := fade * link_fade * (1.0 - float(bead) * 0.25)
+				draw_circle(bead_pos, 8.0 - float(bead) * 1.4, Color(0.23, 0.79, 0.88, bead_alpha * 0.24))
+				draw_circle(bead_pos, 4.5 - float(bead) * 0.8, Color(0.86, 1.0, 0.97, bead_alpha))
+		if elapsed >= arrival_time:
+			var arrived := elapsed - arrival_time
+			if arrived < 1.15:
+				var spread := clampf(arrived / 1.15, 0.0, 1.0)
+				_draw_tidal_ellipse(foot, Vector2(54.0, 19.0) * (0.18 + spread * 1.02), fade * (1.0 - spread * 0.53))
+			var ripple := fposmod(arrived * 0.55 + float(index) * 0.12, 1.0)
+			_draw_dedicated_arc(foot, Vector2(30.0, 11.0) * (0.55 + ripple * 0.48), 0.0, TAU, Color(0.60, 0.94, 1.0, fade * (1.0 - ripple) * 0.32), 1.6)
+
+func _draw_furina_ability(effect: Dictionary, center_world: Vector2, center: Vector2, radii: Vector2, progress: float, strength: float, casting: bool) -> void:
+	var fanfare := str(effect.kind).begins_with("furina_hydro_fanfare")
+	var color := Color("#83d9ff") if fanfare else Color("#a2e8fc")
+	_draw_skill_area_ellipse(center_world, float(effect.get("radius", 190.0)), color, strength * 0.63, 1.0)
+	var opening := (0.20 + progress * 0.38) if casting else minf(0.95, 0.28 + progress * 1.16)
+	for curtain in [-1.0, 1.0]:
+		var side := float(curtain)
+		var upper := center + Vector2(side * radii.x * opening * 0.62, -radii.y * opening * 0.70)
+		var lower := center + Vector2(side * radii.x * opening * 0.82, radii.y * opening * 0.30)
+		_draw_dedicated_arc(center + Vector2(side * radii.x * opening * 0.35, -radii.y * 0.16), Vector2(radii.x * opening * 0.29, radii.y * opening * 0.64), PI * (0.95 if side > 0.0 else -0.03), PI * 0.96, Color(0.79, 0.94, 1.0, strength * 0.50), 1.8)
+		draw_line(upper, lower, Color(0.56, 0.78, 1.0, strength * 0.35), 2.0, true)
+	if fanfare:
+		for ray in 7:
+			var phase := float(ray) * TAU / 7.0 - PI * 0.5
+			var point := center + Vector2(cos(phase) * radii.x * opening * 0.58, sin(phase) * radii.y * opening * 0.58)
+			draw_line(point, point + Vector2(cos(phase) * 11.0, sin(phase) * 8.0 - 9.0), Color(0.91, 0.98, 1.0, strength * 0.48), 1.2, true)
+		if not casting:
+			for ally: Dictionary in sim.heroes:
+				if bool(ally.get("deployed", false)) and ally.hp > 0.0:
+					_draw_furina_footlight(world_to_screen(Vector2(ally.pos)) + Vector2(0.0, 8.0), strength * 0.72, progress)
+	else:
+		for companion in 3:
+			var angle := float(companion) * TAU / 3.0 - PI * 0.5
+			var point := center + Vector2(cos(angle) * radii.x * opening * 0.64, sin(angle) * radii.y * opening * 0.64)
+			_draw_furina_salon_companion(point, companion, strength * clampf(progress * 3.0, 0.0, 1.0))
+
+func _draw_furina_salon_companion(point: Vector2, index: int, alpha: float) -> void:
+	var shell := Color(0.48, 0.79, 0.97, alpha * 0.72)
+	var glint := Color(0.92, 0.99, 1.0, alpha * 0.94)
+	_draw_dedicated_arc(point + Vector2(0.0, 5.0), Vector2(15.0, 5.0), 0.0, TAU, Color(0.54, 0.87, 1.0, alpha * 0.34), 1.2)
+	if index == 0:
+		draw_colored_polygon(PackedVector2Array([point + Vector2(-10.0, 2.0), point + Vector2(-4.0, -9.0), point + Vector2(6.0, -9.0), point + Vector2(11.0, 2.0)]), shell)
+		draw_line(point + Vector2(-7.0, -2.0), point + Vector2(-15.0, -9.0), glint, 2.0, true)
+		draw_line(point + Vector2(7.0, -2.0), point + Vector2(15.0, -9.0), glint, 2.0, true)
+	elif index == 1:
+		draw_circle(point + Vector2(0.0, -6.0), 8.0, shell)
+		for tentacle in [-1.0, 0.0, 1.0]:
+			var x: float = float(tentacle) * 6.0
+			draw_line(point + Vector2(x, -3.0), point + Vector2(x * 1.3, 8.0), glint, 1.5, true)
+	else:
+		draw_arc(point + Vector2(-1.0, -5.0), 9.0, PI * 0.23, PI * 1.72, 22, shell, 5.0, true)
+		draw_colored_polygon(PackedVector2Array([point + Vector2(3.0, -14.0), point + Vector2(13.0, -8.0), point + Vector2(3.0, -4.0)]), glint)
+	draw_circle(point + Vector2(-3.0, -7.0), 1.8, glint)
+
+func _draw_furina_footlight(foot: Vector2, alpha: float, progress: float) -> void:
+	_draw_dedicated_arc(foot, Vector2(28.0, 11.0) * (0.78 + progress * 0.25), 0.0, TAU, Color(0.69, 0.92, 1.0, alpha * 0.68), 1.8)
+	for ripple in 3:
+		var angle := float(ripple) * TAU / 3.0 + clock * 0.36
+		var point := foot + Vector2(cos(angle) * 20.0, sin(angle) * 6.0 - 11.0 - progress * 8.0)
+		draw_circle(point, 2.4, Color(0.89, 0.99, 1.0, alpha * 0.57))
+
+func _draw_furina_fanfare_allies(effect: Dictionary) -> void:
+	var total := maxf(0.1, float(effect.get("total", 3.4)))
+	var progress := clampf(1.0 - float(effect.life) / total, 0.0, 1.0)
+	var alpha := 1.0 - smoothstep(0.72, 1.0, progress)
+	for value in effect.get("ally_ids", []):
+		var index := int(value)
+		if index >= 0 and index < sim.heroes.size():
+			var ally: Dictionary = sim.heroes[index]
+			if bool(ally.get("deployed", false)) and ally.hp > 0.0:
+				_draw_furina_footlight(world_to_screen(Vector2(ally.pos)) + Vector2(0.0, 8.0), alpha, progress)
+
+func _draw_furina_fanfare_zone(center: Vector2, radii: Vector2, alpha: float) -> void:
+	for ripple in 3:
+		var spread := fposmod(clock * 0.46 + float(ripple) / 3.0, 1.0)
+		_draw_dedicated_arc(center, radii * (0.18 + spread * 0.78), 0.0, TAU, Color(0.75, 0.94, 1.0, alpha * (1.0 - spread) * 0.41), 1.4)
+	for light in 7:
+		var angle := float(light) * TAU / 7.0 + clock * 0.13
+		var point := center + Vector2(cos(angle) * radii.x * 0.74, sin(angle) * radii.y * 0.74)
+		draw_circle(point + Vector2(0.0, sin(clock * 2.0 + light) * 4.0), 2.6, Color(0.90, 0.99, 1.0, alpha * 0.42))
+
+func _draw_traveler_ability(effect: Dictionary) -> void:
+	var kind := str(effect.kind)
+	var casting := kind.ends_with("_cast")
+	var element := kind.trim_prefix("traveler_").trim_suffix("_cast").trim_suffix("_impact")
+	var total := maxf(0.01, float(effect.get("total", 1.25)))
+	var progress := clampf((total - float(effect.life)) / total, 0.0, 1.0)
+	var alpha := (0.27 + progress * 0.50) if casting else 1.0 - smoothstep(0.62, 1.0, progress)
+	var center_world := Vector2(effect.pos)
+	var center := world_to_screen(center_world) + Vector2(0.0, 8.0)
+	var radius := float(effect.get("radius", 170.0))
+	var radii: Vector2 = sim.ability_area_screen_radii(center_world, radius)
+	var color := element_color(element)
+	if element == "none":
+		color = Color("#ffe6ac")
+	_draw_skill_area_ellipse(center_world, radius, color, alpha * 0.55, (0.46 + progress * 0.44) if not casting else 0.74)
+	match element:
+		"none":
+			for blade in 3:
+				var offset := (float(blade) - 1.0) * radii.y * 0.31
+				var slash := PackedVector2Array()
+				for step in 17:
+					var t := float(step) / 16.0
+					var x := lerpf(-radii.x * 0.83, radii.x * 0.83, t)
+					slash.append(center + Vector2(x, offset - sin(t * PI) * radii.y * 0.30))
+				draw_polyline(slash, Color(1.0, 0.80, 0.35, alpha * 0.20), 8.0, true)
+				draw_polyline(slash, Color(1.0, 0.99, 0.80, alpha * 0.80), 2.5, true)
+		"electro":
+			for fork in 8:
+				var angle := float(fork) * TAU / 8.0 + clock * 0.38
+				var end := center + Vector2(cos(angle) * radii.x * 0.86, sin(angle) * radii.y * 0.86)
+				var middle := center.lerp(end, 0.56) + Vector2.from_angle(angle + PI * 0.5) * 8.0
+				draw_polyline(PackedVector2Array([center, middle, end]), Color(0.72, 0.59, 1.0, alpha * 0.55), 2.1, true)
+				if not casting:
+					draw_circle(end, 3.7, Color(0.94, 0.89, 1.0, alpha * 0.82))
+		"pyro":
+			var fall := clampf((progress - 0.05) * 2.1, 0.0, 1.0)
+			if not casting:
+				for ember in 9:
+					var angle := float(ember) * TAU / 9.0 + 0.28
+					var direction := Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+					var tip := center + direction * (0.20 + fall * 0.78)
+					var side := direction.orthogonal().normalized()
+					draw_colored_polygon(PackedVector2Array([tip + direction.normalized() * 11.0, tip - direction.normalized() * 16.0 + side * 5.0, tip - direction.normalized() * 16.0 - side * 5.0]), Color(1.0, 0.49, 0.18, alpha * 0.57))
+				_draw_dedicated_arc(center, radii * (0.20 + fall * 0.76), 0.0, TAU, Color(1.0, 0.83, 0.47, alpha * 0.73), 2.8)
+			else:
+				var falling := center + Vector2(-radii.x * 0.24, -105.0 * (1.0 - progress))
+				draw_circle(falling, 8.0 + progress * 7.0, Color(1.0, 0.64, 0.27, alpha * 0.78))
+		"hydro":
+			for wave in 3:
+				var spread := fposmod(progress * (0.38 if casting else 0.87) + float(wave) / 3.0, 1.0)
+				_draw_dedicated_arc(center, radii * (0.15 + spread * 0.84), 0.0, TAU, Color(0.64, 0.94, 1.0, alpha * (1.0 - spread) * 0.68), 2.1)
+			if not casting:
+				for ally: Dictionary in sim.heroes:
+					if bool(ally.get("deployed", false)) and ally.hp > 0.0:
+						var foot := world_to_screen(Vector2(ally.pos)) + Vector2(0.0, 8.0)
+						_draw_dedicated_arc(foot, Vector2(27.0, 10.0) * (0.55 + progress * 0.55), 0.0, TAU, Color(0.74, 1.0, 0.98, alpha * 0.66), 1.7)
+		"geo":
+			var growth := (0.34 + progress * 0.53) if casting else (0.72 + progress * 0.26)
+			for edge in 6:
+				var first := center + Vector2(cos(float(edge) * TAU / 6.0) * radii.x, sin(float(edge) * TAU / 6.0) * radii.y) * growth
+				var second := center + Vector2(cos(float(edge + 1) * TAU / 6.0) * radii.x, sin(float(edge + 1) * TAU / 6.0) * radii.y) * growth
+				draw_line(first, second, Color(1.0, 0.82, 0.47, alpha * 0.77), 2.6, true)
+			if not casting:
+				for shard in 5:
+					var x := (float(shard) - 2.0) * radii.x * 0.34
+					var top := center + Vector2(x, -radii.y * (0.76 - progress * 0.30))
+					draw_colored_polygon(PackedVector2Array([top, top + Vector2(-6.0, 15.0), top + Vector2(5.0, 11.0)]), Color(0.98, 0.78, 0.41, alpha * 0.59))
+		"cryo":
+			_draw_ice_branches(center, radii, clock * 0.44, alpha * 0.82, 0.35 + progress * 0.65)
+			for orbit in 2:
+				var spread := clampf(progress * 0.74 - float(orbit) * 0.25 + 0.31, 0.12, 0.92)
+				_draw_dedicated_arc(center, radii * spread, 0.0, TAU, Color(0.79, 0.96, 1.0, alpha * (0.68 - orbit * 0.21)), 2.0)
+
+func _draw_traveler_lingering_zone(zone: Dictionary, center: Vector2, radii: Vector2, alpha: float) -> void:
+	var hydro := str(zone.get("visual", "")) == "traveler_hydro"
+	if hydro:
+		for ring in 3:
+			var spread := fposmod(clock * 0.38 + float(ring) / 3.0, 1.0)
+			_draw_dedicated_arc(center, radii * (0.25 + spread * 0.70), 0.0, TAU, Color(0.60, 0.93, 1.0, alpha * (1.0 - spread) * 0.39), 1.5)
+	else:
+		_draw_ice_branches(center, radii, clock * 0.22, alpha * 0.35)
+
+func _draw_traveler_electro_chains(effect: Dictionary) -> void:
+	var total := maxf(0.01, float(effect.get("total", 1.05)))
+	var progress := clampf(1.0 - float(effect.life) / total, 0.0, 1.0)
+	var alpha := 1.0 - smoothstep(0.58, 1.0, progress)
+	var source := world_to_screen(Vector2(effect.pos)) + Vector2(0.0, 8.0)
+	for value in effect.get("target_positions", []):
+		var target := world_to_screen(Vector2(value)) + Vector2(0.0, 8.0)
+		var side := (target - source).orthogonal().normalized()
+		var path := PackedVector2Array([source, source.lerp(target, 0.31) + side * 11.0, source.lerp(target, 0.65) - side * 9.0, target])
+		draw_polyline(path, Color(0.47, 0.36, 1.0, alpha * 0.28), 8.0, true)
+		draw_polyline(path, Color(0.91, 0.82, 1.0, alpha * 0.84), 2.5, true)
+		draw_circle(target, 5.0, Color(0.94, 0.90, 1.0, alpha * 0.77))
+
+func _draw_dedicated_ability(effect: Dictionary) -> void:
+	var kind := str(effect.kind)
+	var casting := kind.ends_with("_cast")
+	var total := maxf(0.01, float(effect.get("total", 1.0)))
+	var progress := clampf((total - float(effect.life)) / total, 0.0, 1.0)
+	var strength := (0.30 + progress * 0.55) if casting else 1.0 - smoothstep(0.56, 1.0, progress)
+	var center_world := Vector2(effect.pos)
+	var center := world_to_screen(center_world) + Vector2(0.0, 8.0)
+	var radius := float(effect.get("radius", 180.0))
+	var radii: Vector2 = sim.ability_area_screen_radii(center_world, radius)
+	if kind.begins_with("anemo_domain"):
+		_draw_skill_area_ellipse(center_world, radius, Color("#69e6be"), strength * 0.64, 1.0)
+		_draw_inward_spiral(center, radii, clock, strength, 1.0 if casting else 1.35)
+		return
+	if kind.begins_with("emilia_"):
+		_draw_emilia_ability(effect, center_world, center, radii, progress, strength, casting)
+		return
+	if kind.begins_with("amiya_"):
+		_draw_amiya_ability(effect, center_world, center, radii, progress, strength, casting)
+		return
+	if kind.begins_with("roxy_"):
+		_draw_roxy_ability(effect, center_world, center, radii, progress, strength, casting)
+		return
+	if kind.begins_with("fengjin_"):
+		_draw_fengjin_ability(effect, center_world, center, radii, progress, strength, casting)
+		return
+	if kind.begins_with("gwen_"):
+		_draw_gwen_ability(effect, center_world, center, radii, progress, strength, casting)
+		return
+	if kind.begins_with("columbia_"):
+		_draw_columbia_ability(effect, center_world, center, radii, progress, strength, casting)
+		return
+	if kind.begins_with("furina_"):
+		_draw_furina_ability(effect, center_world, center, radii, progress, strength, casting)
+		return
+	var grand := kind.begins_with("fate_symphony")
+	var fire := Color("#ff7d57") if grand else Color("#ffae66")
+	_draw_skill_area_ellipse(center_world, radius, fire, strength * (0.72 if grand else 0.60), 1.0)
+	var front := (0.19 + progress * 0.77) if not casting else (0.13 + progress * 0.40)
+	for ring in 2 if grand else 1:
+		var spread := clampf(front - float(ring) * 0.16, 0.06, 0.97)
+		_draw_dedicated_arc(center, radii * spread, PI * 0.04, PI * 0.91, Color(fire.lightened(0.25), strength * 0.74), 3.0 if grand else 2.4)
+		_draw_dedicated_arc(center, radii * spread, PI * 1.04, PI * 0.91, Color(fire.lightened(0.20), strength * 0.53), 2.0)
+	for stave in 5:
+		var y := (float(stave) - 2.0) * radii.y * (0.16 if grand else 0.18)
+		var offset := sin(progress * 8.0 + stave * 0.52) * radii.y * 0.045
+		draw_line(center + Vector2(-radii.x * 0.74, y + offset), center + Vector2(radii.x * 0.74, y + offset), Color(fire, strength * (0.22 if grand else 0.34)), 1.2, true)
+	if not reduced_effects:
+		for note_index in 4 if grand else 2:
+			var x := radii.x * (-0.55 + float(note_index) * (0.34 if grand else 0.68))
+			var y := radii.y * sin(float(note_index) * 1.7 + progress * 3.0) * 0.42
+			_draw_score_note(center + Vector2(x, y), Color(1.0, 0.89 if grand else 0.67, 0.56, strength * 0.82), 0.77 if grand else 0.65)
+	if not casting and not reduced_effects:
+		for ember in 12 if grand else 6:
+			var angle := float(ember) * TAU / (12.0 if grand else 6.0) + progress * (0.24 if grand else -0.16)
+			var base := center + Vector2(cos(angle) * radii.x * 0.76, sin(angle) * radii.y * 0.76)
+			var drift := Vector2(cos(angle), sin(angle) * 0.4).normalized()
+			var side := drift.orthogonal()
+			var ember_size := (8.0 if grand else 5.0) * (0.70 + 0.30 * sin(progress * PI))
+			draw_colored_polygon(PackedVector2Array([base + drift * ember_size * 1.5, base + side * ember_size * 0.34, base - drift * ember_size * 0.78, base - side * ember_size * 0.34]), Color(1.0, 0.55 if grand else 0.72, 0.28, strength * 0.55))
+	if grand and not casting:
+		for ally: Dictionary in sim.heroes:
+			if not bool(ally.get("deployed", false)) or ally.hp <= 0.0:
+				continue
+			var foot := world_to_screen(Vector2(ally.pos)) + Vector2(0.0, 8.0)
+			_draw_dedicated_arc(foot, Vector2(28.0, 10.0), 0.0, TAU, Color(1.0, 0.69, 0.32, strength * 0.70), 1.7)
+			_draw_score_note(foot + Vector2(13.0, -24.0 - progress * 10.0), Color(1.0, 0.86, 0.47, strength * 0.90), 0.5)
+
+func _draw_dedicated_zone(zone: Dictionary, center: Vector2, radii: Vector2) -> void:
+	var visual := str(zone.get("visual", ""))
+	var remaining := float(zone.get("life", 0.0))
+	var total := 12.0 if visual in ["emilia_forest", "fengjin_breeze", "maiden_forest"] else (10.0 if visual == "furina_fanfare" else (2.0 if visual == "gwen_needles" else (9.0 if visual == "roxy_storm" else (7.0 if visual == "sylphie_domain" else (10.0 if visual == "saki_score_e" else 5.0)))))
+	var alpha := clampf(remaining / 0.75, 0.0, 1.0) * (0.45 + 0.55 * clampf((total - remaining) / 0.65, 0.0, 1.0))
+	if visual == "sylphie_domain":
+		_draw_inward_spiral(center, radii, clock, alpha * 0.76, 0.92)
+		return
+	if visual == "emilia_forest":
+		_draw_ice_branches(center, radii, clock, alpha * 0.70)
+		return
+	if visual == "roxy_storm":
+		_draw_roxy_storm(center, radii, clock, alpha * 0.72)
+		return
+	if visual == "fengjin_breeze":
+		_draw_fengjin_breeze_zone(zone, center, radii, alpha)
+		return
+	if visual == "gwen_needles":
+		_draw_gwen_needle_zone(zone, center, radii, alpha)
+		return
+	if visual == "columbia_tide_ring":
+		_draw_columbia_tide_zone(zone, center, radii, alpha)
+		return
+	if visual == "columbia_blessing":
+		return
+	if visual in ["traveler_hydro", "traveler_cryo"]:
+		_draw_traveler_lingering_zone(zone, center, radii, alpha)
+		return
+	if visual == "furina_fanfare":
+		_draw_furina_fanfare_zone(center, radii, alpha)
+		return
+	var fire := Color("#ff744d") if visual == "saki_score_e" else Color("#ffab61")
+	for stave in 5:
+		var y := (float(stave) - 2.0) * radii.y * 0.18
+		draw_line(center + Vector2(-radii.x * 0.70, y), center + Vector2(radii.x * 0.70, y), Color(fire, alpha * 0.25), 1.25, true)
+	for note_index in 4 if visual == "saki_score_e" else 2:
+		var x := radii.x * (-0.54 + float(note_index) * (0.35 if visual == "saki_score_e" else 0.72))
+		var y := radii.y * sin(clock * 1.6 + note_index * 1.6) * 0.38
+		_draw_score_note(center + Vector2(x, y), Color(fire.lightened(0.32), alpha * 0.65), 0.57)
+
+func _draw_tidal_ellipse(center: Vector2, radii: Vector2, alpha: float) -> void:
+	var outline := PackedVector2Array()
+	for index in 49:
+		var angle := float(index) * TAU / 48.0
+		outline.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
+	var fill := outline.duplicate()
+	fill.resize(48)
+	draw_colored_polygon(fill, Color(0.17, 0.66, 0.73, alpha * 0.17))
+	draw_polyline(outline, Color(0.45, 0.94, 0.95, alpha * 0.82), 2.0, true)
+	for segment in 8:
+		var phase := float(segment) * TAU / 8.0
+		var arc := PackedVector2Array()
+		for step in 5:
+			var angle := phase + 0.48 * float(step) / 4.0
+			arc.append(center + Vector2(cos(angle) * radii.x * 0.88, sin(angle) * radii.y * 0.88))
+		draw_polyline(arc, Color(0.81, 1.0, 0.98, alpha * 0.46), 1.2, true)
+
+func _draw_tidal_footprint(hero: Dictionary, progress: float, alpha: float) -> void:
+	var center := world_to_screen(Vector2(hero.pos)) + Vector2(0.0, 8.0)
+	var size := 0.16 + 0.065 * smoothstep(0.0, 0.85, progress)
+	var radii: Vector2 = sim.attack_range_screen_radii(hero) * size
+	radii.x = minf(radii.x, 68.0)
+	radii.y = minf(radii.y, 27.0)
+	_draw_tidal_ellipse(center, radii, alpha)
+
+func _draw_tidal_warning() -> void:
+	if not sim.supports.has("support_heal") or sim.endless_mode:
+		return
+	var remaining := float(sim.supports["support_heal"].get("timer", 99.0))
+	if remaining <= 0.0 or remaining > TIDAL_WARNING_SECONDS:
+		return
+	var progress := 1.0 - remaining / TIDAL_WARNING_SECONDS
+	var core := world_to_screen(Vector2(100.0, 365.0)) + Vector2(0.0, 8.0)
+	_draw_tidal_ellipse(core, Vector2(24.0, 9.0) * (0.75 + progress * 0.35), 0.24 + progress * 0.32)
+
+func _draw_tidal_heal(effect: Dictionary) -> void:
+	var total := maxf(0.01, float(effect.get("total", TIDAL_EFFECT_SECONDS)))
+	var elapsed := total - float(effect.life)
+	var progress := clampf(elapsed / total, 0.0, 1.0)
+	var fade := 1.0 - smoothstep(0.83, 1.0, progress)
+	var travel := clampf(progress / TIDAL_TRAVEL_FRACTION, 0.0, 1.0)
+	if not sim.endless_mode:
+		var core := world_to_screen(Vector2(100.0, 365.0))
+		_draw_tidal_ellipse(core + Vector2(0.0, 8.0), Vector2(38.0, 14.0) * (0.74 + travel * 0.26), fade * 0.56)
+	var hero_ids: Array = effect.get("hero_ids", [])
+	for hero_id in hero_ids:
+		var index := int(hero_id)
+		if index < 0 or index >= sim.heroes.size():
+			continue
+		var hero: Dictionary = sim.heroes[index]
+		if not bool(hero.get("deployed", false)) or hero.hp <= 0.0:
+			continue
+		if not sim.endless_mode:
+			var source := world_to_screen(Vector2(100.0, 365.0))
+			var destination := world_to_screen(Vector2(hero.pos)) + Vector2(0.0, 8.0)
+			var route := PackedVector2Array()
+			for segment in 25:
+				var fraction := float(segment) / 24.0
+				route.append(source.lerp(destination, fraction) + Vector2(0.0, -35.0 * sin(fraction * PI)))
+			draw_polyline(route, Color(0.29, 0.82, 0.91, fade * 0.34), 2.1, true)
+			if progress < TIDAL_TRAVEL_FRACTION:
+				var bead_pos: Vector2 = route[mini(24, floori(travel * 24.0))]
+				draw_circle(bead_pos, 8.0, Color(0.23, 0.79, 0.88, fade * 0.25))
+				draw_circle(bead_pos, 4.6, Color(0.86, 1.0, 0.97, fade))
+		if progress >= TIDAL_TRAVEL_FRACTION:
+			var arrival := (progress - TIDAL_TRAVEL_FRACTION) / (1.0 - TIDAL_TRAVEL_FRACTION)
+			_draw_tidal_footprint(hero, arrival, fade * (0.72 + 0.28 * sin(arrival * PI)))
+
+func _draw_sylphie_gust(effect: Dictionary) -> void:
+	var total := maxf(0.01, float(effect.get("total", SYLPHIE_GUST_SECONDS)))
+	var elapsed := total - float(effect.life)
+	var progress := clampf(elapsed / total, 0.0, 1.0)
+	var casting := str(effect.kind) == "sylphie_gust_cast"
+	var radius := float(effect.get("radius", 170.0))
+	var center_world := Vector2(effect.pos)
+	var center := world_to_screen(center_world) + Vector2(0.0, 8.0)
+	var radii: Vector2 = sim.ability_area_screen_radii(center_world, radius)
+	var fade := 0.34 + progress * 0.46 if casting else 1.0 - smoothstep(0.83, total, elapsed)
+	var spread := 0.29 + progress * 0.26 if casting else minf(1.0, 0.48 + progress * 1.38)
+	_draw_skill_area_ellipse(center_world, radius, Color("#6de7ab"), fade, spread)
+	var flower := 9.0 + (7.0 if casting else 14.0) * sin(progress * PI)
+	for petal in 6:
+		var angle := float(petal) * TAU / 6.0 + elapsed * 1.2
+		var forward := Vector2(cos(angle) * flower, sin(angle) * flower * 0.42)
+		var tangent := Vector2(-sin(angle), cos(angle) * 0.42).normalized()
+		var tip := center + forward * 1.65
+		var root := center + forward * 0.43
+		var leaf := PackedVector2Array([root - tangent * 3.0, tip, root + tangent * 3.0, center + forward * 0.8])
+		draw_colored_polygon(leaf, Color(0.66, 1.0, 0.81, fade * 0.60))
+	if casting or reduced_effects:
+		return
+	for band in 3:
+		var y_offset := (float(band) - 1.0) * radii.y * 0.32
+		var lane := PackedVector2Array()
+		for step in 25:
+			var t := float(step) / 24.0
+			var x := lerpf(-radii.x * 0.82, radii.x * 0.82, t)
+			var y := y_offset + sin(t * TAU * 1.25 - progress * 7.0 + band * 0.9) * radii.y * 0.19
+			lane.append(center + Vector2(x, y))
+		draw_polyline(lane, Color(0.35, 0.82, 0.62, fade * 0.16), 6.0, true)
+		draw_polyline(lane, Color(0.88, 1.0, 0.86, fade * 0.75), 2.1, true)
+		var head := mini(24, floori(progress * 24.0))
+		var direction := (lane[mini(24, head + 1)] - lane[maxi(0, head - 1)]).normalized()
+		var side := direction.orthogonal()
+		var point := lane[head]
+		draw_colored_polygon(PackedVector2Array([point + direction * 11.0, point - direction * 4.0 + side * 3.5, point - direction * 4.0 - side * 3.5]), Color(0.93, 1.0, 0.83, fade * 0.85))
+	for ally: Dictionary in sim.heroes:
+		if not bool(ally.get("deployed", false)) or ally.hp <= 0.0 or not sim.is_in_ability_area(center_world, Vector2(ally.pos), radius):
+			continue
+		var foot := world_to_screen(Vector2(ally.pos)) + Vector2(0.0, 8.0)
+		var scale_factor := world_depth_scale(Vector2(ally.pos))
+		var underfoot := Vector2(28.0, 10.0) * scale_factor * (0.8 + progress * 0.2)
+		draw_polyline(_ability_ellipse_points(foot, underfoot), Color(0.63, 1.0, 0.78, fade * 0.72), 1.8, true)
+		for leaf_index in 4:
+			var phase := float(leaf_index) * TAU / 4.0 + elapsed * 2.4
+			var rise := 18.0 + progress * 28.0 + float(leaf_index % 2) * 11.0
+			var leaf_center := foot + Vector2(cos(phase) * 17.0 * scale_factor, -rise * scale_factor)
+			var tip := leaf_center + Vector2(5.5, -7.5) * scale_factor
+			draw_colored_polygon(PackedVector2Array([leaf_center - Vector2(4.0, 0.0) * scale_factor, tip, leaf_center + Vector2(2.0, 4.0) * scale_factor]), Color(0.74, 1.0, 0.79, fade * 0.82))
+
+func _draw_ability_impact(effect: Dictionary) -> void:
+	var total := maxf(0.01, float(effect.get("total", 0.6)))
+	var elapsed := total - float(effect.life)
+	var progress := clampf(elapsed / total, 0.0, 1.0)
+	var fade := 1.0 - smoothstep(0.56, 1.0, progress)
+	var center_world := Vector2(effect.pos)
+	var radius := float(effect.get("radius", 170.0))
+	var color := element_color(str(effect.get("element", "none")))
+	if Sim.GLOBAL_TEAM_ABILITY_KINDS.has(str(effect.get("ability_kind", ""))):
+		for ally: Dictionary in sim.heroes:
+			if bool(ally.get("deployed", false)) and ally.hp > 0.0:
+				_draw_skill_area_ellipse(Vector2(ally.pos), 35.0, color, fade * 0.68, minf(1.0, 0.38 + progress * 1.4))
+		return
+	_draw_skill_area_ellipse(center_world, radius, color, fade, minf(1.0, 0.32 + progress * 1.38))
+	if reduced_effects:
+		return
+	var center := world_to_screen(center_world) + Vector2(0.0, 8.0)
+	var radii: Vector2 = sim.ability_area_screen_radii(center_world, radius)
+	for sweep in 3:
+		var track := PackedVector2Array()
+		var offset := (float(sweep) - 1.0) * radii.y * 0.30
+		for step in 17:
+			var t := float(step) / 16.0
+			track.append(center + Vector2(lerpf(-radii.x * 0.68, radii.x * 0.68, t), offset + sin(t * TAU + progress * 7.0 + sweep) * radii.y * 0.08))
+		draw_polyline(track, Color(color.lightened(0.30), fade * 0.40), 1.7, true)
+
 func _draw_effect(effect: Dictionary) -> void:
+	if effect.kind == "barrage":
+		_draw_red_moon_impact(effect)
+		return
+	if effect.kind == "fireball_impact":
+		var impact_frame := clampi(floori((float(effect.get("total", 33.0 / 24.0)) - float(effect.life)) * 24.0), 0, 32)
+		var radius := float(effect.get("radius", 190.0))
+		var size := radius * 2.25
+		var fade := 1.0 if impact_frame < 9 else clampf(float(32 - impact_frame) / 23.0, 0.0, 1.0)
+		_draw_video_atlas_frame(FIREBALL_IMPACT_ATLAS, 8, 256, impact_frame, Rect2(-size * 0.5, -size * 0.69, size, size), Color(1.0, 1.0, 1.0, fade))
+		return
 	var total := maxf(0.01, float(effect.get("total", 0.6)))
 	var t: float = clampf(1.0 - float(effect.life) / total, 0.0, 1.0)
 	var fade: float = clampf(float(effect.life) / minf(0.18, total), 0.0, 1.0)
@@ -1908,7 +3187,7 @@ func _draw_effect(effect: Dictionary) -> void:
 		for ray in 4:
 			var angle: float = -0.7 + ray * 0.45
 			draw_line(effect.pos + Vector2.from_angle(angle) * 8.0, effect.pos + Vector2.from_angle(angle) * (24.0 + t * 28.0), accent, 2.0, true)
-	elif effect.kind in ["barrage", "crossfire", "finale", "death_burst", "boss_summon", "enemy_volatile", "boss_move", "boss_phase", "ultimate_impact"]:
+	elif effect.kind in ["crossfire", "finale", "death_burst", "boss_summon", "enemy_volatile", "boss_move", "boss_phase"]:
 		var blast_color := Color(1.0, 0.30, 0.26, fade)
 		for ring in 3:
 			draw_arc(effect.pos, 18.0 + ring * 16.0 + t * 52.0, 0, TAU, 40, Color(blast_color, fade * (0.72 - ring * 0.16)), 4.0 - ring, true)
@@ -1921,7 +3200,7 @@ func _draw_effect(effect: Dictionary) -> void:
 			caption(effect.pos + Vector2(-80, -108 - t * 26), str(effect.get("name", effect.value)), Color(1.0, 0.62, 0.68, fade), 19)
 		elif effect.kind == "enemy_volatile":
 			caption(effect.pos + Vector2(-38, -86 - t * 22), "爆裂", Color(1.0, 0.48, 0.30, fade), 18)
-	elif effect.kind in ["support_heal", "reinforcement", "frenzy", "contract_complete"]:
+	elif effect.kind in ["reinforcement", "frenzy", "contract_complete"]:
 		var support_color := Color(0.48, 0.95, 0.79, fade)
 		draw_arc(effect.pos, 16 + t * 62, 0, TAU, 40, support_color, 3.0, true)
 		var support_text := "战术契约完成 · %s" % str(effect.get("reward", "")) if effect.kind == "contract_complete" else ("支援接入" if effect.kind != "frenzy" else "战意升级")

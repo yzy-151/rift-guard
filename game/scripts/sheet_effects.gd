@@ -29,6 +29,12 @@ func accept(batch: Array[Dictionary]) -> void:
 		var kind := str(event.get("kind", ""))
 		if kind not in ["heal", "hit", "critical", "shield_break", "skill_cast", "skill_impact", "ultimate_impact", "element_burst"]:
 			continue
+		if (kind == "skill_cast" and str(event.get("value", "")) == "静风疗愈") or (kind == "skill_impact" and str(event.get("ability_kind", "")) == "heal_gust"):
+			continue
+		if kind in ["skill_cast", "ultimate_cast"] and str(event.get("value", "")) in ["无咏风域", "灼热乐章", "焰色交响曲", "冰晶花", "冰结之森", "精神爆发", "奇美拉", "水脉疗愈", "豪雷积层云", "风刃切流", "长风复苏", "丝缕缠流", "引针簇射", "静谧圣歌", "寂月安魂曲", "孤心沙龙", "万众狂欢"]:
+			continue
+		if kind in ["skill_impact", "ultimate_impact"] and str(event.get("value", "")) in ["无咏风域", "灼热乐章", "焰色交响曲", "冰晶花", "冰结之森", "精神爆发", "奇美拉", "水脉疗愈", "豪雷积层云", "风刃切流", "长风复苏", "丝缕缠流", "引针簇射", "静谧圣歌", "寂月安魂曲", "孤心沙龙", "万众狂欢"]:
+			continue
 		if kind == "hit" and active.size() >= 28:
 			continue
 		if active.size() >= 48:
@@ -90,6 +96,9 @@ func visual_texture(kind: String, element: String) -> Texture2D:
 	return FX_MAGIC
 
 func _draw() -> void:
+	pass
+
+func draw_behind_units(target: CanvasItem) -> void:
 	if reduced:
 		return
 	for effect: Dictionary in active:
@@ -102,7 +111,7 @@ func _draw() -> void:
 			var size := Vector2(108, 128)
 			size *= Stage.depth_scale(effect.pos)
 			var opacity: float = 0.66 * minf(1.0, (1.0 - fraction) * 5.0)
-			draw_texture_rect_region(GOLD, Rect2(point - Vector2(size.x * 0.5, size.y * 0.82), size), frame_region(kind, frame), Color(1, 1, 1, opacity))
+			target.draw_texture_rect_region(GOLD, Rect2(point - Vector2(size.x * 0.5, size.y * 0.82), size), frame_region(kind, frame), Color(1, 1, 1, opacity))
 			continue
 		var fraction: float = clampf(float(effect.age) / duration(kind), 0.0, 1.0)
 		var seed: float = float(effect.seed)
@@ -116,11 +125,11 @@ func _draw() -> void:
 		var opacity: float = pow(1.0 - fraction, 0.66)
 		var tint: Color = element_tint(str(effect.element))
 		var rotation: float = (seed - 0.5) * 1.6 + fraction * (1.2 if kind in ["ultimate_ring", "skill_impact"] else 0.18)
-		draw_set_transform(point, rotation, Vector2.ONE * scale_value)
+		target.draw_set_transform(point, rotation, Vector2.ONE * scale_value)
 		var texture: Texture2D = visual_texture(kind, str(effect.element))
 		var rect: Rect2 = Rect2(Vector2.ONE * -base_size * 0.5, Vector2.ONE * base_size)
-		draw_texture_rect(texture, rect, false, Color(tint, opacity * (0.88 if kind == "ultimate_ring" else 1.0)))
+		target.draw_texture_rect(texture, rect, false, Color(tint, opacity * (0.88 if kind == "ultimate_ring" else 1.0)))
 		if kind in ["skill_impact", "ultimate_impact", "element_burst"]:
 			var trace_rect := Rect2(Vector2(-base_size * 0.62, -base_size * 0.18), Vector2(base_size * 1.24, base_size * 0.36))
-			draw_texture_rect(FX_TRACE, trace_rect, false, Color(tint.lightened(0.22), opacity * 0.70))
-		draw_set_transform(Vector2.ZERO)
+			target.draw_texture_rect(FX_TRACE, trace_rect, false, Color(tint.lightened(0.22), opacity * 0.70))
+		target.draw_set_transform(Vector2.ZERO)

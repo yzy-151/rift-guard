@@ -3,7 +3,7 @@ extends RefCounted
 const CARD_DIR := "res://assets/ui/card_icons_80/"
 const SKILL_DIR := "res://assets/ui/character_skills_26/"
 const SKILL_FILES := {
-	"hero_01": ["少女_Q_静谧圣歌.png", "少女_E_寂月安魂曲.png"],
+	"hero_01": ["哥伦比亚_Q_潮汐环歌.png", "哥伦比亚_E_碧海赐福.png"],
 	"hero_02": ["希露菲_Q_静风疗愈.png", "希露菲_E_无咏风域.png"],
 	"hero_03": ["芙宁娜_Q_孤心沙龙.png", "芙宁娜_E_万众狂欢.png"],
 	"hero_04": ["洛琪希_Q_水脉疗愈.png", "洛琪希_E_豪雷积层云.png"],
@@ -19,7 +19,8 @@ const SKILL_FILES := {
 }
 
 static func card_path(card: Dictionary) -> String:
-	var path := CARD_DIR + str(card.get("name", "")) + ".png"
+	var icon_name := "炽热火球" if str(card.get("id", "")) == "evolve_fireball" else str(card.get("name", ""))
+	var path := CARD_DIR + icon_name + ".png"
 	return path if ResourceLoader.exists(path) else ""
 
 static func card_texture(card: Dictionary) -> Texture2D:

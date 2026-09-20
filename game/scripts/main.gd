@@ -11,6 +11,7 @@ const CompendiumPanel = preload("res://scripts/compendium_panel.gd")
 const SquadPanel = preload("res://scripts/squad_panel.gd")
 const StageSelectPanel = preload("res://scripts/stage_select_panel.gd")
 const ModeSelectPanel = preload("res://scripts/mode_select_panel.gd")
+const HomePanel = preload("res://scripts/home_panel.gd")
 const AudioDirector = preload("res://scripts/audio_director.gd")
 const SettingsPanel = preload("res://scripts/settings_panel.gd")
 const CampaignMapPanel = preload("res://scripts/campaign_map_panel.gd")
@@ -57,6 +58,10 @@ var compendium_panel
 var squad_panel
 var stage_select_panel
 var mode_select_panel
+var home_panel
+var home_facility_source := ""
+var pending_home_outcome: Dictionary = {}
+var last_home_scene: Dictionary = {}
 var pending_stage_id := ""
 var pending_stage_number := 0
 var stage_result_recorded := false
@@ -100,6 +105,7 @@ func _ready() -> void:
 	battle.stage_exit_finished.connect(advance_stage)
 	fx = preload("res://scripts/sheet_effects.gd").new()
 	fx.battle_view = battle
+	battle.sheet_effects = fx
 	battle.add_child(fx)
 	hud = Hud.new()
 	hud.config = content
@@ -157,6 +163,7 @@ func _ready() -> void:
 	compendium_panel = CompendiumPanel.new()
 	add_child(compendium_panel)
 	compendium_panel.build(hud, sim.database, compendium)
+	compendium_panel.closed.connect(_home_archive_closed)
 	squad_panel = SquadPanel.new()
 	add_child(squad_panel)
 	squad_panel.build(hud, sim.database, compendium)
@@ -166,13 +173,23 @@ func _ready() -> void:
 	add_child(stage_select_panel)
 	stage_select_panel.build(hud, sim.database, compendium)
 	stage_select_panel.chosen.connect(choose_stage)
-	stage_select_panel.cancelled.connect(func(): mode_select_panel.open())
+	stage_select_panel.cancelled.connect(_stage_select_cancelled)
 	mode_select_panel = ModeSelectPanel.new()
 	add_child(mode_select_panel)
 	mode_select_panel.build(hud)
 	mode_select_panel.chosen.connect(choose_mode)
 	mode_select_panel.settings_requested.connect(open_settings)
 	mode_select_panel.continue_requested.connect(resume_campaign)
+	mode_select_panel.home_requested.connect(enter_home)
+	home_panel = HomePanel.new()
+	add_child(home_panel)
+	home_panel.build(hud, sim.database, compendium)
+	home_panel.interact_requested.connect(begin_home_interaction)
+	home_panel.facility_requested.connect(open_home_facility)
+	home_panel.exit_requested.connect(return_to_main_menu)
+	var home_data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/home_stories.json"))
+	if home_data is Dictionary:
+		story.stories.merge(home_data, true)
 	campaign_map_panel = CampaignMapPanel.new()
 	add_child(campaign_map_panel)
 	campaign_map_panel.build(hud, sim.database, sim.run_state)
@@ -491,7 +508,7 @@ func _ready() -> void:
 		call_deferred("open_mode_menu")
 
 func _physics_process(dt: float) -> void:
-	if story.active or recruitment_transition_active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()):
+	if story.active or recruitment_transition_active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (home_panel != null and home_panel.is_open()) or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()):
 		return
 	if sim.endless_mode:
 		sim.set_active_view_rect(battle.visible_world_rect())
@@ -531,7 +548,7 @@ func _process(dt: float) -> void:
 			refresh()
 	sound_timer = maxf(0.0, sound_timer - dt)
 	attack_sound_timer = maxf(0.0, attack_sound_timer - dt)
-	if not story.active and not picker.visible and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open() and not settings_panel.is_open() and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
+	if not story.active and not picker.visible and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open() and not (home_panel != null and home_panel.is_open()) and not settings_panel.is_open() and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
 		battle.advance(dt)
 		var force_reduced_effects := bool(audio_director.values.reduced_effects)
 		if force_reduced_effects:
@@ -589,6 +606,13 @@ func open_mode_menu() -> void:
 	mode_select_panel.update_checkpoint(checkpoint, sim.database)
 	mode_select_panel.open()
 
+func enter_home() -> void:
+	home_facility_source = ""
+	mode_select_panel.close()
+	hud.get_child(0).hide()
+	audio_director.set_scene("menu")
+	home_panel.open()
+
 func choose_mode(mode_id: String) -> void:
 	mode_select_panel.close()
 	sim.run_state.reset_run_meta()
@@ -601,6 +625,10 @@ func choose_mode(mode_id: String) -> void:
 		stage_select_panel.open()
 
 func return_to_main_menu() -> void:
+	home_facility_source = ""
+	if home_panel != null:
+		home_panel.close()
+	pending_home_outcome.clear()
 	pending_recruitment.clear()
 	recruitment_transition_active = false
 	story.reset()
@@ -838,6 +866,15 @@ func _input(event: InputEvent) -> void:
 			return
 	if mode_select_panel != null and mode_select_panel.is_open():
 		return
+	if home_panel != null and home_panel.is_open() and not story.active:
+		if home_panel.busy:
+			if dialogue.animation_waiting and ((event is InputEventKey and event.pressed and event.keycode in [KEY_ENTER, KEY_SPACE]) or (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT)):
+				dialogue.acknowledge_animation()
+			get_viewport().set_input_as_handled()
+			return
+		if home_panel.handle_input(event):
+			get_viewport().set_input_as_handled()
+		return
 	if campaign_map_panel != null and campaign_map_panel.is_open():
 		if event is InputEventKey and event.pressed and event.keycode in [KEY_ESCAPE, KEY_F5]:
 			campaign_map_panel.close()
@@ -1012,7 +1049,52 @@ func begin_dialogue(key: String, resume_action: String = "") -> bool:
 	dialogue.display()
 	return true
 
+func open_home_facility(facility_id: String) -> void:
+	if story.active:
+		return
+	home_facility_source = facility_id
+	home_panel.close()
+	match facility_id:
+		"stages":
+			stage_select_panel.open()
+		"archive":
+			compendium.observe(sim)
+			compendium_panel.open()
+		"settings":
+			open_settings()
+		_:
+			home_facility_source = ""
+			home_panel.open()
+
+func _stage_select_cancelled() -> void:
+	if home_facility_source == "stages":
+		home_facility_source = ""
+		home_panel.open()
+	else:
+		mode_select_panel.open()
+
+func _home_archive_closed() -> void:
+	if home_facility_source == "archive":
+		home_facility_source = ""
+		home_panel.open()
+
+func begin_home_interaction(character_id: String) -> void:
+	var scene_index := randi_range(0, 4)
+	if scene_index == int(last_home_scene.get(character_id, -1)):
+		scene_index = (scene_index + randi_range(1, 4)) % 5
+	last_home_scene[character_id] = scene_index
+	var scene_key := "home_%s_%d" % [character_id, scene_index]
+	if not story.stories.has(scene_key):
+		home_panel.busy = false
+		return
+	story.seen.erase(scene_key)
+	pending_home_outcome.clear()
+	if not begin_dialogue(scene_key, "home"):
+		home_panel.busy = false
+
 func apply_dialogue_choice(choice: Dictionary) -> void:
+	if choice.has("home_success"):
+		pending_home_outcome = {"success": bool(choice.home_success), "reason": str(choice.get("home_reason", ""))}
 	if choice.has("recruit_success") and not pending_recruitment.is_empty():
 		pending_recruitment.success = bool(choice.recruit_success)
 	var unlock_id := str(choice.get("unlock_character", ""))
@@ -1045,6 +1127,17 @@ func end_dialogue() -> void:
 	hud.signature = ""
 	var action: String = story_resume
 	story_resume = ""
+	if action == "home":
+		hud.get_child(0).hide()
+		if bool(pending_home_outcome.get("success", false)):
+			await dialogue.play_success_animation()
+		else:
+			await dialogue.play_death_transition(str(pending_home_outcome.get("reason", "这次的判断没有照顾到对方真正的需要。")))
+		await dialogue.play_stage_transition()
+		pending_home_outcome.clear()
+		home_panel.open()
+		audio_director.set_scene("menu")
+		return
 	if action == "recruit":
 		await _resolve_recruitment()
 	elif action == "start":
@@ -1071,7 +1164,10 @@ func check_story() -> void:
 	if sim.v2_mode:
 		if sim.state == "won":
 			if has_next_stage():
-				begin_dialogue("mode1_won", "stage_exit")
+				var stage_ids: Array = sim.database.modes.get(sim.run_state.mode_id, {}).get("stage_ids", [])
+				var stage_number := stage_ids.find(sim.current_stage_id) + 1
+				var victory_key := "mode1_won" if stage_number == 1 else "mode1_stage%d_won" % stage_number
+				begin_dialogue(victory_key, "stage_exit")
 			else:
 				begin_dialogue("mode1_final_won")
 		return
@@ -1209,6 +1305,7 @@ func choose_stage(stage_id: String) -> void:
 func confirm_next_squad(squad: Array[String]) -> void:
 	if pending_stage_id.is_empty():
 		return
+	home_facility_source = ""
 	story.reset()
 	if stage_enter_sound != null and not muted and not test_mode:
 		stage_enter_sound.stop()
@@ -1271,7 +1368,10 @@ func apply_setting(key: String, value: Variant) -> void:
 		muted = float(value) <= 0.001
 
 func settings_closed() -> void:
-	if settings_from_menu:
+	if home_facility_source == "settings":
+		home_facility_source = ""
+		home_panel.open()
+	elif settings_from_menu:
 		mode_select_panel.open()
 	settings_from_menu = false
 	refresh()
@@ -1371,6 +1471,11 @@ func toggle_skill_aiming() -> void:
 	var hero: Dictionary = sim.heroes[selected_id]
 	if not bool(hero.get("deployed", false)) or float(hero.get("skill_cooldown", 0.0)) > 0.0:
 		return
+	if str(hero.get("active_skill", {}).get("kind", "")) == "columbia_tide_ring":
+		if sim.activate_hero_skill(selected_id, Vector2(hero.pos)):
+			process_events()
+			refresh()
+		return
 	set_skill_aiming(not skill_aiming)
 
 func set_skill_aiming(enabled: bool) -> void:
@@ -1390,6 +1495,11 @@ func activate_selected_ultimate() -> void:
 		return
 	var hero: Dictionary = sim.heroes[selected_id]
 	if not bool(hero.get("deployed", false)) or float(hero.get("ultimate_cooldown", 0.0)) > 0.0 or float(hero.get("energy", 0.0)) < float(hero.get("max_energy", 100.0)):
+		return
+	if str(hero.get("ultimate", {}).get("kind", "")) == "columbia_tidal_benediction":
+		if sim.activate_hero_ultimate(selected_id, Vector2(hero.pos)):
+			process_events()
+			refresh()
 		return
 	set_ultimate_aiming(not ultimate_aiming)
 

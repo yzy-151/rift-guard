@@ -1043,9 +1043,9 @@ func refresh_supports(sim) -> void:
 		support_labels[row].text = "◆ %s ×%d %.1fs" % [info[0], int(support.stacks), maxf(0.0, float(support.timer))]
 		support_labels[row].add_theme_color_override("font_color", info[1])
 		var effect_text: String = {
-			"support_barrage": "赤月炮弹周期轰击敌群，造成范围伤害。",
+			"support_barrage": "周期锁定最高生命目标，炮击椭圆范围内的敌人。",
 			"support_crossfire": "交叉火力周期齐射场上的敌人。",
-			"support_heal": "潮汐急救周期恢复场上友军生命。",
+			"support_heal": "潮汐急救周期治疗队伍并修复基地。",
 			"support_finale": "终幕齐射周期集中攻击所有敌人。",
 		}.get(key, "持续提供场外支援。")
 		support_details[row] = {"title": "%s · ×%d" % [info[0], int(support.stacks)], "body": "%s 威力 %d · 间隔 %.1fs · 下次 %.1fs" % [effect_text, int(support.get("power", 0)), float(support.get("interval", 0.0)), maxf(0.0, float(support.timer))]}
@@ -1335,18 +1335,22 @@ func _show_ability_info(ultimate: bool) -> void:
 	var title_text := ("E · " if ultimate else "Q · ") + str(data.get("name", "终极技能" if ultimate else "元素战技"))
 	var kind := str(data.get("kind", ""))
 	var effect: String = {
-		"blade_wave":"贯穿剑气击退沿途敌人", "cryo_chord":"冰霜和弦冻结范围目标", "heal_gust":"治疗队友并赋予风盾与加速",
+		"blade_wave":"贯穿剑气击退沿途敌人", "columbia_tide_ring":"点按后水环环绕自身10秒，持续伤敌并治疗自身", "heal_gust":"治疗队友并赋予风盾与加速",
 		"salon_summon":"沙龙成员持续追击并附着水元素", "hydro_burst":"水浪造成范围伤害与水元素附着", "sonic_wave":"音浪造成火元素范围伤害并击退",
 		"arcane_lance":"穿透长枪压制直线目标", "frost_bloom":"冰花冻结区域并持续造成伤害", "echo_shot":"回响弹在目标间追加弹射",
 		"tribbie_gate":"量子门复制弹道并折跃攻击", "mon3tr":"Mon3tr 冲锋拦截并撕裂敌阵", "bangboo":"邦布协同射击并标记目标",
-		"starfall":"星落大范围轰击并强击退", "frozen_forest":"冻结领域持续冰封并造成多段伤害", "anemo_domain":"风域牵引敌人并强化队友",
+		"starfall":"星落大范围轰击并强击退", "frozen_forest":"冻结领域持续冰封并造成多段伤害", "columbia_tidal_benediction":"全队攻击力提高哥伦比亚攻击力的100%，持续25秒", "anemo_domain":"风域牵引敌人并强化队友",
 		"hydro_fanfare":"万众狂欢强化全队并引爆水元素", "storm_field":"雷暴领域连续落雷触发感电", "team_concert":"演唱会强化全队攻速与暴击",
 		"chimera":"奇美拉范围碾压并持续压制", "fate_symphony":"焰色交响领域强化全队暴击", "encore":"安可复制支援并提升弹道数量",
 		"trinity_field":"三重共鸣领域复制攻击与反应", "meltdown":"Mon3tr 熔毁造成巨额范围爆发", "network_overdrive":"邦布网络超频提升射速并齐射"
 	}.get(kind, "释放角色专属能力")
 	if kind in ["healing_surge", "wind_cut", "thread_shelter", "renewing_breeze", "needle_barrage"]:
 		effect = str(data.get("description", effect))
-	var body_text := "%s。威力 %d · 范围 %d · 冷却 %.1fs" % [effect, int(data.get("power", 0)), int(data.get("radius", 0)), float(data.get("cooldown", 0.0))]
+	var body_text := "%s · 威力 %d · 范围 %d · 冷却 %.1fs" % [effect, int(data.get("power", 0)), int(data.get("radius", 0)), float(data.get("cooldown", 0.0))]
+	if kind == "columbia_tide_ring":
+		body_text = "%s · 范围 %d · 冷却 %.1fs" % [str(data.get("description", effect)), int(data.get("radius", 0)), float(data.get("cooldown", 0.0))]
+	elif kind == "columbia_tidal_benediction":
+		body_text = "%s · 冷却 %.1fs" % [str(data.get("description", effect)), float(data.get("cooldown", 0.0))]
 	if ultimate:
 		body_text += " · 能量 %d" % int(data.get("energy_cost", 0))
 	_show_info(title_text, body_text)

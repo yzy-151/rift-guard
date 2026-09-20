@@ -491,7 +491,7 @@ func _configure_choices(line: Dictionary) -> void:
 	auto_button.disabled = has_choices
 	auto_button.visible = not has_choices
 	history_button.visible = not has_choices
-	skip_button.visible = not has_choices
+	skip_button.visible = not has_choices and not director.key.begins_with("home_")
 	booper.visible = not has_choices
 func _reveal_choices() -> void:
 	if not director.has_choices() or history_panel.visible:
@@ -631,6 +631,8 @@ func advance() -> void:
 		close()
 
 func skip() -> void:
+	if director.key.begins_with("home_"):
+		return
 	director.skip()
 	close()
 

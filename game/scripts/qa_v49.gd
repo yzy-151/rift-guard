@@ -64,7 +64,7 @@ func run(game) -> void:
 			expect(library.frame_count(character_id, state) == count, "%s %s keeps every source frame" % [character_id, state])
 			expect(library.texture(character_id, state) != null, "%s %s atlas loads" % [character_id, state])
 			expect(library.frame_at_time(character_id, state, 999.0) == (999 * 24) % count if state != "down" else count - 1, "%s %s loop/hold behavior is correct" % [character_id, state])
-	expect(game.sim.database.characters.has("hero_01") and str(game.sim.database.characters.hero_01.name) == "少女", "missing girl slot is restored as hero_01")
+	expect(game.sim.database.characters.has("hero_01") and str(game.sim.database.characters.hero_01.name) == "哥伦比亚", "missing girl slot is restored as hero_01")
 	expect(game.sim.database.animation_profiles.size() == game.sim.database.characters.size(), "animation profiles match the thirteen-character roster")
 	expect(game.compendium.unlocked_characters.has("hero_01"), "girl is visible to existing and new saves")
 	expect(game.squad_panel.buttons.size() == 13 and game.squad_panel.grid_scroll != null, "formation UI scrolls across all thirteen character cards")

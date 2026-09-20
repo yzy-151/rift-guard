@@ -18,22 +18,10 @@ func _init(config = null) -> void:
 		stories = builtin.duplicate(true)
 		if config != null and config.loaded:
 			stories.merge(config.stories, true)
-			_merge_choice_metadata(builtin)
-
-func _merge_choice_metadata(builtin: Variant) -> void:
-	if not builtin is Dictionary:
-		return
-	for scene_key: String in builtin:
-		if not stories.has(scene_key):
-			continue
-		var source_lines: Array = builtin[scene_key]
-		var target_lines: Array = stories[scene_key]
-		for line_index in mini(source_lines.size(), target_lines.size()):
-			if source_lines[line_index] is Dictionary and source_lines[line_index].has("choices") and target_lines[line_index] is Dictionary:
-				var target: Dictionary = target_lines[line_index].duplicate(true)
-				target["choices"] = source_lines[line_index]["choices"].duplicate(true)
-				target_lines[line_index] = target
-		stories[scene_key] = target_lines
+			# Campaign scenes are authored together; keep extra workbook scenes,
+			# but do not let stale rows replace the current cast and branching.
+			for scene_key: String in builtin:
+				stories[scene_key] = builtin[scene_key].duplicate(true)
 
 func begin(scene_key: String) -> bool:
 	if active or seen.has(scene_key) or not stories.has(scene_key):
@@ -79,6 +67,10 @@ func choose(choice_index: int) -> bool:
 	}
 	index += 1
 	lines.insert(index, response)
+	var follow_up: Array = option.get("follow_up", [])
+	for offset in follow_up.size():
+		if follow_up[offset] is Dictionary:
+			lines.insert(index + offset + 1, follow_up[offset].duplicate(true))
 	_record()
 	return true
 

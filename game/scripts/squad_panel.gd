@@ -236,7 +236,7 @@ func _ability_description(data:Dictionary,is_ultimate:bool)->String:
 	var kind:=str(data.get("kind",""))
 	var effect: String = str({
 		"blade_wave":"斩出贯穿剑气并击退沿途敌人",
-		"cryo_chord":"冰霜和弦冻结并削弱范围内目标",
+		"columbia_tide_ring":"点按召唤10秒水环，伤敌并治疗自身",
 		"heal_gust":"治疗队友并赋予短暂风盾与加速",
 		"salon_summon":"召唤沙龙成员持续追击并附着水元素",
 		"hydro_burst":"引爆水浪造成范围伤害与水元素附着",
@@ -248,7 +248,7 @@ func _ability_description(data:Dictionary,is_ultimate:bool)->String:
 		"mon3tr":"召唤 Mon3tr 冲锋拦截并撕裂敌阵",
 		"bangboo":"呼叫邦布协同射击并标记高威胁目标",
 		"starfall":"召唤星落轰击大范围并造成强击退",
-		"frozen_forest":"展开冻结领域，持续冰封并造成多段伤害",
+		"frozen_forest":"展开冻结领域，持续冰封并造成多段伤害", "columbia_tidal_benediction":"全队增加哥伦比亚100%攻击力，持续25秒",
 		"anemo_domain":"展开风域，持续牵引敌人并强化队友",
 		"hydro_fanfare":"进入万众狂欢，强化全队并引爆水元素",
 		"storm_field":"召唤雷暴领域，连续落雷触发感电",
@@ -260,6 +260,10 @@ func _ability_description(data:Dictionary,is_ultimate:bool)->String:
 		"meltdown":"命令 Mon3tr 熔毁，造成巨额范围爆发",
 		"network_overdrive":"全域超频邦布网络，提升射速并齐射"
 	}.get(kind,"释放角色专属能力并改变战场局势"))
+	if kind == "columbia_tide_ring":
+		return "%s · 范围 %d · 冷却 %.0fs" % [str(data.get("description", effect)), int(data.get("radius", 0)), float(data.get("cooldown", 0.0))]
+	if kind == "columbia_tidal_benediction":
+		return "%s · 能量 %d · 冷却 %.0fs" % [str(data.get("description", effect)), int(data.get("energy_cost", 0)), float(data.get("cooldown", 0.0))]
 	var power:=int(data.get("power",0)); var radius:=int(data.get("radius",0))
 	var ratio:=float(data.get("attack_ratio",0.0))
 	var formula:= "伤害 %d + 攻击力 %.0f%%" % [power,ratio*100.0] if ratio>0.0 else ("保护友军 5 秒" if kind == "thread_shelter" else "治疗/增益强度 %d" % power)

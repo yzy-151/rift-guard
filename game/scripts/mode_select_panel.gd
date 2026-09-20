@@ -3,6 +3,7 @@ extends CanvasLayer
 signal chosen(mode_id: String)
 signal settings_requested
 signal continue_requested
+signal home_requested
 
 const WHITE := Color("#f7eee7")
 const MUTED := Color("#a99199")
@@ -129,17 +130,17 @@ func _build_checkpoint() -> void:
 	panel.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	panel.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	root.add_child(panel)
-	checkpoint_title = hud.label(panel, Vector2(96, 32), Vector2(650, 28), "远征检查点", 19, WHITE)
-	checkpoint_detail = hud.label(panel, Vector2(96, 64), Vector2(650, 46), "", 11, MUTED)
+	checkpoint_title = hud.label(panel, Vector2(96, 32), Vector2(650, 28), "基地 / HOME", 19, WHITE)
+	checkpoint_detail = hud.label(panel, Vector2(96, 64), Vector2(650, 46), "漫步双屏基地，与已解锁的角色对话。", 11, MUTED)
 	checkpoint_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	continue_button = hud.button(panel, Rect2(790, 39, 265, 66), "载入检查点  →", false)
+	continue_button = hud.button(panel, Rect2(790, 39, 265, 66), "进入基地  →", false)
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 		continue_button.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	continue_button.add_theme_font_size_override("font_size", 16)
 	continue_button.mouse_entered.connect(func(): _play(select_sound); continue_button.modulate = Color.WHITE)
 	continue_button.mouse_exited.connect(func(): continue_button.modulate = Color(0.76, 0.72, 0.76, 0.92))
 	continue_button.modulate = Color(0.76, 0.72, 0.76, 0.92)
-	continue_button.pressed.connect(func(): _play(confirm_sound); continue_requested.emit())
+	continue_button.pressed.connect(func(): _play(confirm_sound); home_requested.emit())
 
 func _command_button(rect: Rect2, text_value: String) -> Button:
 	var item: Button = hud.button(root, rect, text_value, false)
@@ -230,24 +231,17 @@ func _play(player: AudioStreamPlayer) -> void:
 
 func activate_at(point: Vector2) -> bool:
 	if not is_open(): return false
-	if continue_button != null and not continue_button.disabled and continue_button.get_global_rect().has_point(point): _play(confirm_sound); continue_requested.emit(); return true
+	if continue_button != null and not continue_button.disabled and continue_button.get_global_rect().has_point(point): _play(confirm_sound); home_requested.emit(); return true
 	if settings_button != null and settings_button.get_global_rect().has_point(point): _play(confirm_sound); settings_requested.emit(); return true
 	for id: String in buttons:
 		var item: Button = buttons[id]
 		if not item.disabled and item.get_global_rect().has_point(point): item.pressed.emit(); return true
 	return false
 
-func update_checkpoint(result: Dictionary, database) -> void:
-	continue_button.disabled = not bool(result.get("ok", false))
-	checkpoint_title.text = "远征检查点"
-	checkpoint_detail.text = str(result.get("message", "尚无远征检查点。"))
-	if continue_button.disabled: return
-	var data: Dictionary = result.snapshot
-	var names: Array[String] = []
-	for id: String in data.run.squad: names.append(str(database.characters.get(id, {}).get("name", id)))
-	var location: String = {"briefing":"开战前剧情", "battle":"关卡起点", "route":"裂隙路线", "event":"待选事件", "cleared":"通关后整备"}.get(str(data.phase), "裂隙路线")
-	checkpoint_title.text = "%s · %s · ◇ %d" % [str(database.stages.get(str(data.stage_id), {}).get("name", data.stage_id)), location, int(data.run.rift_shards)]
-	checkpoint_detail.text = "%s  /  %s\n%s" % [" · ".join(names), str(data.saved_at).replace("T", " "), str(result.message)]
+func update_checkpoint(_result: Dictionary, _database) -> void:
+	continue_button.disabled = false
+	checkpoint_title.text = "基地 / HOME"
+	checkpoint_detail.text = "漫步双屏基地，与已解锁的角色对话。"
 
 func open() -> void:
 	root.show()

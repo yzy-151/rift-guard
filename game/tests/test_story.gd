@@ -35,14 +35,16 @@ func _initialize() -> void:
 				story.advance()
 	story.reset()
 	valid = story.begin("mode1_opening") and valid
-	story.advance()
-	story.advance()
+	while story.active and not story.has_choices():
+		story.advance()
 	valid = valid and story.has_choices() and story.current().choices.size() == 2
 	valid = valid and story.choose(1)
-	valid = valid and story.choice_history.size() == 1 and story.choice_history[0].result == "hidden_character"
-	valid = valid and "白露" in story.current().text
+	valid = valid and story.choice_history.size() == 1 and story.choice_history[0].result == "trusted_signal"
+	valid = valid and "丰川祥子" == story.current().speaker
 	story.reset()
 	valid = story.begin("mode1_won") and valid
+	while story.active and not story.has_choices():
+		story.advance()
 	valid = valid and story.has_choices() and story.current().choices.size() == 2
 	valid = valid and str(story.current().choices[1].get("effect", {}).get("type", "")) == "inherit_endless"
 	story.reset()

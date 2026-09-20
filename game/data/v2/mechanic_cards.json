@@ -86,7 +86,7 @@
   {
     "id": "support_red_moon",
     "name": "赤月炮击",
-    "description": "每8秒轰击怪物最密集处；重复选择提高伤害并缩短间隔。",
+    "description": "每8秒优先锁定生命值最高的怪物，赤月炮击对椭圆范围内敌人造成伤害；重复选择提高伤害并缩短间隔。",
     "rarity": "epic",
     "weight": 16,
     "target": "global",
@@ -102,13 +102,13 @@
   {
     "id": "support_crossfire",
     "name": "交叉火力",
-    "description": "每6秒横扫一条路线；重复选择增加扫射次数。",
+    "description": "每12秒从两侧交错扫射整条水平路线；重复选择提高伤害并缩短间隔。",
     "rarity": "rare",
     "weight": 27,
     "target": "global",
     "effect": "support_crossfire",
     "value": 42,
-    "interval": 6,
+    "interval": 12,
     "mechanic": true,
     "tags": [
       "支援"
@@ -377,8 +377,8 @@
   },
   {
     "id": "evolve_fireball",
-    "name": "炽热火球",
-    "description": "获得火球弹道；3级分裂、6级留下燃烧地面、9级周期召唤陨石。",
+    "name": "天动万象",
+    "description": "场外火球从左上方落下，对半径190内的敌人造成火元素范围伤害；3级分裂、6级留下燃烧地面、9级强化轰击。",
     "rarity": "common",
     "weight": 48,
     "target": "global",
@@ -386,8 +386,8 @@
     "value": 0.16,
     "mechanic": true,
     "tags": [
-      "弹道",
-      "反应"
+      "支援",
+      "范围"
     ],
     "evolutions": [
       {

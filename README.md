@@ -16,7 +16,7 @@
 
 ## 角色界面
 
-当前具有正式立绘和动作素材的可用角色为：旅行者、少女、希露菲、芙宁娜、艾米莉亚、丰川祥子、阿米娅，以及新加入的格温、洛琪希、风堇。缺少正式立绘或动作素材的角色保持未解锁，旧存档也不会绕过该限制。
+当前具有正式立绘和动作素材的可用角色为：旅行者、哥伦比亚、希露菲、芙宁娜、艾米莉亚、丰川祥子、阿米娅，以及新加入的格温、洛琪希、风堇。缺少正式立绘或动作素材的角色保持未解锁，旧存档也不会绕过该限制。
 
 ![角色编队](docs/v61-validation/03-squad-scroll.png)
 
@@ -27,6 +27,10 @@
 普通模式包含路线防守、可交互地形、Boss 阶段和关卡推进；无尽模式支持四屏地图、动态刷怪、角色独立移动与屏外单位降频模拟。Q/E 技能采用固定伤害加攻击力倍率，冷却按强度区分；80 张卡牌和 26 个角色技能使用独立图标。角色普通攻击、技能和元素反应使用独立反馈。
 
 ![战斗 HUD](docs/v64-validation/02-battle-hud.png)
+
+![风堇三排逐次风刃](docs/v72-validation/fengjin-middle.png)
+
+![哥伦比亚潮汐能量输送](docs/v72-validation/columbia-transit.png)
 
 ![无尽模式地图](docs/v61-validation/08-endless-map.png)
 
@@ -45,7 +49,7 @@
 - Godot 工程：`game/project.godot`
 - 设计与验收分辨率：`1920×1080`
 - UI 实验台逻辑坐标：`1280×720`，运行时等比缩放
-- Windows 发布包：[下载 V71 Windows 版](https://github.com/yzy-151/rift-guard/releases/tag/v71)
+- Windows 发布包：[下载 V72 Windows 版](https://github.com/yzy-151/rift-guard/releases/tag/v72)
 
 使用 Godot 4.4.1 打开工程后运行主场景即可。UI 布局与素材替换方法见 [Godot UI 编辑手册](docs/UI-GODOT-EDITING-MANUAL.md)。
 

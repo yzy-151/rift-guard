@@ -1,50 +1,56 @@
 {
   "mode1_opening": [
-    [
-      "saria",
-      "旅行者",
-      "裂隙已经越过警戒线。元素尚未回应我，但剑还在手里。"
-    ],
-    [
-      "jessica",
-      "通讯员",
-      "水晶会收集敌人的残响。每次升级都能改写攻击方式，弹道与支援也会随构筑增长。"
-    ],
     {
-      "portrait": "saria-soft",
-      "speaker": "旅行者",
-      "text": "那就从这里开始。不过在开战前，我还要决定先回应哪一道信号。",
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "一觉醒来，我躺在陌生基地的地砖上。眼前飘着“裂隙守望已开始”的字，按关闭还弹出“请先守住水晶”。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "我也醒在这里。大家都来自不同的地方，连回去的路都暂时找不到。别怕，至少你不是单人开荒。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "这不是排练。水晶一碎，所有人都会被困在这里。先集合，再讨论是谁写了这份荒唐的剧本。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "诸位，既然被迫登台，谢幕至少由我们自己决定。至于你，盯着我看可以，先把后台那群怪物请出去。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "系统说我可以选择开局路线。我看向她们：在这种世界里，最危险的或许不是怪物，而是有人替我们写好的选项。",
       "choices": [
         {
-          "text": "稳住水晶，先建立可靠的防线。",
+          "text": "先布防，确认所有人都有退路",
           "result": "lucky_start",
           "effect": {
             "type": "luck",
             "value": 0.08
           },
-          "response_portrait": "jessica",
-          "response_speaker": "通讯员",
-          "response": "判断稳健。本关幸运值提升，高品质强化会更容易回应。",
-          "response_highlight": "partner",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response_speaker": "希露菲",
+          "response": "她把风织成一张地图：好。你负责前面，我守着回来的人。",
           "relationship": {
-            "character_id": "traveler",
+            "character_id": "hero_02",
             "value": 1
           },
           "story_flag": "defense_route",
           "campaign_node": "c1_elite"
         },
         {
-          "text": "独自踏进裂隙，直接抓住求救者。",
-          "death_reason": "你把伪装成求救信号的裂隙猎手当成了同伴。",
-          "result": "hidden_character",
-          "unlock_character": "hero_08",
-          "response_portrait": "muelsyse",
-          "response_speaker": "白露",
-          "response": "总算接通啦！隐藏同行者白露已永久解锁，下一次编队就能带上我。",
-          "response_highlight": "partner",
+          "text": "先追那道求救信号，但把撤离坐标留给同伴",
+          "result": "trusted_signal",
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response_speaker": "丰川祥子",
+          "response": "她皱眉，却还是接过坐标：至少这次你冒险之前先告诉了我们。",
           "relationship": {
-            "character_id": "hero_12",
-            "value": 2
+            "character_id": "hero_07",
+            "value": 1
           },
           "story_flag": "trusted_signal",
           "campaign_node": "c1_hidden"
@@ -54,190 +60,238 @@
   ],
   "mode1_won": [
     {
-      "portrait": "saria-soft",
-      "speaker": "旅行者",
-      "text": "裂隙已经关闭。现在可以继续追击，也可以把这支队伍和本关构筑投送到猩红荒原。",
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "第一道裂隙终于安静。我差点把“通关”两个字当作回家按钮。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "别急着谢幕。后台还有门；另一边的荒原也在招手。若要邀请我单独加演，至少先把怪物清场。",
       "choices": [
         {
-          "text": "打开下一道门，继续剧情战役。",
+          "text": "继续推进，找出是谁把我们卷进来",
           "result": "continue_campaign",
-          "response_portrait": "jessica",
-          "response_speaker": "通讯员",
-          "response": "门锁已经解除。去迎接新同行者，然后进入下一关。",
-          "response_highlight": "partner",
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response_speaker": "丰川祥子",
+          "response": "那就继续。我会记下每道门的规律，你负责别在半路消失。",
           "story_flag": "campaign_continued",
           "campaign_node": "c1_story"
         },
         {
-          "text": "继承角色与全部属性，转入无尽模式。",
+          "text": "带着当前队伍和构筑进入无尽荒原",
           "result": "inherit_endless",
           "effect": {
             "type": "inherit_endless"
           },
-          "response_portrait": "muelsyse",
-          "response_speaker": "通讯员",
-          "response": "荒原坐标已锁定。本关队伍、元素、卡牌等级与战斗属性全部保留。",
-          "response_highlight": "partner",
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response_speaker": "芙宁娜",
+          "response": "既然要加演，就让荒原见识一下真正的返场。",
           "story_flag": "endless_transfer"
         }
       ]
     }
   ],
   "mode1_stage2_opening": [
-    [
-      "jessica",
-      "宵宫",
-      "通讯接通。第二道裂隙已经变成赤潮，我从高台提供火力。"
-    ],
-    [
-      "saria-soft",
-      "旅行者",
-      "上一关的强化已经消散，但元素选择和新的构筑会再次回应。两个人守住三条路线。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "赤潮回廊的门锁在身后了。这地形像一张被人故意改过的谱。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "我也不是自愿来到这里的。但眼前有人需要我们，先守住他们，再去找出口。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "我问祥子能不能把这关叫“双人副本”。她看我一眼，说若我再走错拍，直接把我踢出队伍。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "请集中精神。第二波从两侧同时来；这一次，由我们决定节奏。"
+    }
   ],
   "mode1_stage3_opening": [
-    [
-      "muelsyse",
-      "芙宁娜",
-      "第三道裂隙已经结晶化，路线正在上下错位。水域会替大家维持生命。"
-    ],
-    [
-      "jessica",
-      "宵宫",
-      "黑曜母巢会周期召来疾行兽，我负责清掉它的护卫。"
-    ],
-    [
-      "saria-soft",
-      "旅行者",
-      "三人到齐。重新选择元素与构筑，把母巢留在这里。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "黑曜母巢把路折成两层，连舞台机关也没它离谱。你站这么近，是想替我挡怪，还是想抢我的台词？"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+      "speaker": "洛琪希",
+      "text": "这些结晶不是自然形成的。有人在按关卡进度改写战场。请先记住出口坐标。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "我醒来时以为只要通关就能回家。现在看来，“家”是要我们自己一点点造出来的。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "那就别让它夺走我们已经有的。诸位，最后一幕开演。"
+    }
   ],
   "mode1_final_won": [
-    [
-      "muelsyse",
-      "芙宁娜",
-      "黑曜母巢停止活动，三道裂隙都已经安静下来。"
-    ],
-    [
-      "saria-soft",
-      "旅行者",
-      "模式一的防线全部守住，水晶已经记录新的角色与卡牌。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+      "speaker": "洛琪希",
+      "text": "母巢停止活动，裂隙依然存在，但它不再能强迫我们按原来的路线前进。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "至少证明了一件事：这里的规则能够被打破。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "而且我们都还在。这个结局虽然仓促，倒也值得一声掌声。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "我望向基地的灯。没有“退出游戏”的按钮，但那里有人等我回去。下一页，自己写。"
+    }
   ],
   "mode1_lost": [
-    [
-      "saria",
-      "旅行者",
-      "水晶破碎前保住了核心记录。重来一次，这次把弹道铺满整条路线。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "水晶碎裂时，我又听到那声“任务失败”。可这次我记得每个人的名字。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "记录还在，人也还在。回基地，我们一起重新选一条路。"
+    }
   ],
   "opening": [
-    [
-      "saria",
-      "塞雷娅",
-      "裂隙停在城门外了。守住这里，后面的撤离队伍才能安全通过。"
-    ],
-    [
-      "jessica",
-      "杰西卡",
-      "明白……我会看住右侧。能把火力交汇的位置，留给我吗？"
-    ],
-    [
-      "muelsyse",
-      "缪尔赛斯",
-      "当然。我的水流会跟上你们——也别忘了照顾一下自己。"
-    ],
-    [
-      "saria",
-      "塞雷娅",
-      "部署范围已标出。保持射程覆盖，必要时重新站位。现在，接敌。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "我醒来时头顶写着“新手引导”，脚下却是真实的灰。系统连枕头都不发，倒是发了一把剑。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "我也被卷进来了。先别急着问怎么回去，水晶那边有人在求救。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "这个世界喜欢替人分配角色。很遗憾，我不打算照剧本演。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "既然诸位都醒了，至少请先确认一件事：今天没人会被单独留在舞台上。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "那就先守住基地。等怪物退去，我们再查谁把所有人的命运塞进同一场游戏。"
+    }
   ],
   "node1": [
-    [
-      "jessica",
-      "杰西卡",
-      "第一批清理完毕！但是，裂隙的亮度还在增加。"
-    ],
-    [
-      "muelsyse",
-      "缪尔赛斯",
-      "留下的碎片可以强化装备。挑一项吧，够用的战术比贪心更可靠。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "第一波结束了。水晶掉出的卡牌能强化我们，但有些选项看起来像故意诱导人贪心。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "我差点点了“全都要”。希露菲提醒我：现实世界的队友可没有读档键。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "先选能让大家一起活下来的那张。下一次有机会，再贪一点点。"
+    }
   ],
   "node2": [
-    [
-      "saria",
-      "塞雷娅",
-      "装甲单位开始出现了。别让它们把所有人的火力拖在一处。"
-    ],
-    [
-      "jessica",
-      "杰西卡",
-      "我会调整射界。这一次，我不会后退。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "装甲单位会逼我们改变节奏。不要为了追击一个目标，把退路全让出去。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+      "speaker": "格温",
+      "text": "如果防线被扯出洞，就让我缝上。只要你们别把我也当成一次性补丁。"
+    }
   ],
   "node3": [
-    [
-      "muelsyse",
-      "缪尔赛斯",
-      "风向变了……下一轮会更密集。先调整站位，我来照看伤员。"
-    ],
-    [
-      "saria-soft",
-      "塞雷娅",
-      "做得不错。休整之后继续，我们离天亮已经很近了。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+      "speaker": "洛琪希",
+      "text": "裂隙会模仿我们使用过的战术。它不是在“学习玩家”，它是在试着预测人。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "那就给它一个意料之外的演出。比如，让最怕冷场的人先安静三秒。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "我闭上嘴。她们竟然同时松了口气。"
+    }
   ],
   "node4": [
-    [
-      "jessica",
-      "杰西卡",
-      "后方传来消息，最后一支撤离队已经通过！"
-    ],
-    [
-      "saria",
-      "塞雷娅",
-      "最后一轮。把剩下的力量用在眼前，我们一起守住城门。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "最后一轮，基地里每个人都在自己的位置。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "这一次，谁也不必扮演被系统指定的角色。把路守住，然后回家。"
+    }
   ],
   "won": [
-    [
-      "jessica",
-      "杰西卡",
-      "裂隙……关闭了。我们真的守住了。"
-    ],
-    [
-      "muelsyse",
-      "缪尔赛斯",
-      "嗯，水面都安静下来了。现在可以放心呼吸了。"
-    ],
-    [
-      "saria-soft",
-      "塞雷娅",
-      "全员归队。今天的防线，没有少任何一个人。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+      "speaker": "格温",
+      "text": "你看，破掉的地方真的能补好。虽然针脚歪了点，但这是我们一起留下的。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "所谓完美谢幕？不，我更喜欢散场后有人等我吃甜点。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "这里暂时还是异世界。不过门那头亮着基地的灯，我开始觉得“暂时”也没那么可怕。"
+    }
   ],
   "lost": [
-    [
-      "saria",
-      "塞雷娅",
-      "核心失守。立即撤离，不要把人留在这里。"
-    ],
-    [
-      "muelsyse",
-      "缪尔赛斯",
-      "我来掩护。下一次，我们换一种布阵。"
-    ]
+    {
+      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+      "speaker": "洛琪希",
+      "text": "失败记录已经保存。别拿它给自己判终身刑。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "回基地吧。有人受伤就治疗，有路被堵住就换路；我们仍然能选择。"
+    }
   ],
   "branch_sylphiette": [
     {
-      "portrait": "jessica",
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
       "speaker": "希露菲",
-      "text": "风正在把两条路分开。你希望我守住队伍，还是追踪隐藏信号？",
+      "text": "风把道路分成两条。一条通向休整室，一条传来不知真假的求救声。你想怎么走？",
       "choices": [
         {
-          "text": "留下来保护所有人。",
+          "text": "先留下守住队伍，再派人验证信号",
           "result": "bond_guard",
           "relationship": {
             "character_id": "hero_02",
@@ -245,12 +299,12 @@
           },
           "story_flag": "sylphiette_guard",
           "campaign_node": "c1_rest",
-          "response_portrait": "jessica",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
           "response_speaker": "希露菲",
-          "response": "我会让风停在大家身边。休整路线已经开启。"
+          "response": "好。我守着撤离线，等侦察回来再决定。"
         },
         {
-          "text": "相信你的判断，追踪信号。",
+          "text": "与她一起追踪信号，并约定撤回时间",
           "result": "bond_hidden",
           "relationship": {
             "character_id": "hero_02",
@@ -258,13 +312,305 @@
           },
           "story_flag": "trusted_signal",
           "campaign_node": "c1_hidden",
-          "unlock_character": "hero_12",
-          "response_portrait": "jessica",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
           "response_speaker": "希露菲",
-          "response": "找到了。铃的绳网信号已经接入，隐藏招募路线开启。"
+          "response": "你把回来的路也算进去了。那我陪你走这一程。"
+        }
+      ]
+    }
+  ],
+  "mode1_stage4_opening": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+      "speaker": "哥伦比亚",
+      "text": "苍穹交叉口没有正常的方向。每条岔路都像在问：你愿意把谁留在后面？"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "如果这里的选项只能二选一，那我就把路重新画成第三条。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "风会替我们标出回来的方向。先让所有人知道集合点，再向前走。"
+    }
+  ],
+  "mode1_stage5_opening": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+      "speaker": "格温",
+      "text": "熔炉把地面烧成一块块补丁。别担心，布料能补，阵线也能补。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+      "speaker": "洛琪希",
+      "text": "但请别踩进发亮的裂缝。热量会沿着地砖传导，离开前得确认每个人都能走。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "原来这关的隐藏成就是“鞋底完整”。格温说我的披风已经不计入完整范畴。"
+    }
+  ],
+  "mode1_stage6_opening": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "噬时钟楼在重复同一段声音。每次钟响，敌人的脚步都快了一拍。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "反复返场也要讲究呼吸。不如这回由我们先抢拍？"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "我本想问这里能否暂停时间。祥子指着我的表：先别暂停脑子。"
+    }
+  ],
+  "mode1_stage7_opening": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+      "speaker": "艾米莉亚",
+      "text": "永冻岔路的风很冷。大家先检查手和脚，别因为赶路忘了自己会受伤。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+      "speaker": "风堇",
+      "text": "我会留在后方接应。治疗能争取时间，但选择哪条路仍要你们自己决定。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "我想起刚醒来时连基地在哪都不知道。现在至少有人会在路口等我们。"
+    }
+  ],
+  "mode1_stage8_opening": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "蚀日围城把天空遮住了。基地的灯还在，说明大家守住了自己的位置。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "最后一关，不用演给系统看。让它看看我们选择之后的真正结果。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "诸位，别只顾着赢。谢幕之后，请一起回家吃点心。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "好。这个结局的确认键，我要亲手按下。"
+    }
+  ],
+  "mode1_stage2_won": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "赤潮退了。撤离名单上的每个人都已经回到基地。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "门又打开了。继续向里追，还是带着这次的成果去无尽荒原？",
+      "choices": [
+        {
+          "text": "继续推进，找出是谁把我们卷进来",
+          "result": "continue_campaign",
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "路线已记录。下一道门开启后，我们依旧一起行动。",
+          "story_flag": "campaign_continued",
+          "campaign_node": "c1_story"
+        },
+        {
+          "text": "带着当前队伍和构筑进入无尽荒原",
+          "result": "inherit_endless",
+          "effect": {
+            "type": "inherit_endless"
+          },
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "荒原坐标锁定。带着现在的队伍和构筑换一个战场。",
+          "story_flag": "endless_transfer"
+        }
+      ]
+    }
+  ],
+  "mode1_stage3_won": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "母巢被迫谢幕。它没资格替我们决定下一场演什么。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "门又打开了。继续向里追，还是带着这次的成果去无尽荒原？",
+      "choices": [
+        {
+          "text": "继续推进，找出是谁把我们卷进来",
+          "result": "continue_campaign",
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "路线已记录。下一道门开启后，我们依旧一起行动。",
+          "story_flag": "campaign_continued",
+          "campaign_node": "c1_story"
+        },
+        {
+          "text": "带着当前队伍和构筑进入无尽荒原",
+          "result": "inherit_endless",
+          "effect": {
+            "type": "inherit_endless"
+          },
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "荒原坐标锁定。带着现在的队伍和构筑换一个战场。",
+          "story_flag": "endless_transfer"
+        }
+      ]
+    }
+  ],
+  "mode1_stage4_won": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+      "speaker": "哥伦比亚",
+      "text": "交叉口恢复了方向。你画出的第三条路，真的能走。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "门又打开了。继续向里追，还是带着这次的成果去无尽荒原？",
+      "choices": [
+        {
+          "text": "继续推进，找出是谁把我们卷进来",
+          "result": "continue_campaign",
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "路线已记录。下一道门开启后，我们依旧一起行动。",
+          "story_flag": "campaign_continued",
+          "campaign_node": "c1_story"
+        },
+        {
+          "text": "带着当前队伍和构筑进入无尽荒原",
+          "result": "inherit_endless",
+          "effect": {
+            "type": "inherit_endless"
+          },
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "荒原坐标锁定。带着现在的队伍和构筑换一个战场。",
+          "story_flag": "endless_transfer"
+        }
+      ]
+    }
+  ],
+  "mode1_stage5_won": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+      "speaker": "格温",
+      "text": "熔炉停了。我给基地带回几块还能用的材料，还有一段不那么坏的故事。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "门又打开了。继续向里追，还是带着这次的成果去无尽荒原？",
+      "choices": [
+        {
+          "text": "继续推进，找出是谁把我们卷进来",
+          "result": "continue_campaign",
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "路线已记录。下一道门开启后，我们依旧一起行动。",
+          "story_flag": "campaign_continued",
+          "campaign_node": "c1_story"
+        },
+        {
+          "text": "带着当前队伍和构筑进入无尽荒原",
+          "result": "inherit_endless",
+          "effect": {
+            "type": "inherit_endless"
+          },
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "荒原坐标锁定。带着现在的队伍和构筑换一个战场。",
+          "story_flag": "endless_transfer"
+        }
+      ]
+    }
+  ],
+  "mode1_stage6_won": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "钟楼终于不再重复。接下来的节奏，请跟着自己的心跳。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "门又打开了。继续向里追，还是带着这次的成果去无尽荒原？",
+      "choices": [
+        {
+          "text": "继续推进，找出是谁把我们卷进来",
+          "result": "continue_campaign",
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "路线已记录。下一道门开启后，我们依旧一起行动。",
+          "story_flag": "campaign_continued",
+          "campaign_node": "c1_story"
+        },
+        {
+          "text": "带着当前队伍和构筑进入无尽荒原",
+          "result": "inherit_endless",
+          "effect": {
+            "type": "inherit_endless"
+          },
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "荒原坐标锁定。带着现在的队伍和构筑换一个战场。",
+          "story_flag": "endless_transfer"
+        }
+      ]
+    }
+  ],
+  "mode1_stage7_won": [
+    {
+      "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+      "speaker": "艾米莉亚",
+      "text": "冰路融开了。看，走到这里的人，一个也没有落下。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
+      "speaker": "你",
+      "text": "门又打开了。继续向里追，还是带着这次的成果去无尽荒原？",
+      "choices": [
+        {
+          "text": "继续推进，找出是谁把我们卷进来",
+          "result": "continue_campaign",
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "路线已记录。下一道门开启后，我们依旧一起行动。",
+          "story_flag": "campaign_continued",
+          "campaign_node": "c1_story"
+        },
+        {
+          "text": "带着当前队伍和构筑进入无尽荒原",
+          "result": "inherit_endless",
+          "effect": {
+            "type": "inherit_endless"
+          },
+          "response_portrait": "res://assets/characters/sequences/traveler/portrait.png",
+          "response_speaker": "你",
+          "response": "荒原坐标锁定。带着现在的队伍和构筑换一个战场。",
+          "story_flag": "endless_transfer"
         }
       ]
     }
   ]
 }
-

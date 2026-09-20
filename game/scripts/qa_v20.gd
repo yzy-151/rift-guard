@@ -37,7 +37,7 @@ func run(game) -> void:
 	var sim = game.sim
 	expect(sim.database.errors.is_empty(), "V20 data validates")
 	expect(sim.database.characters.size() == 13, "roster contains thirteen unique characters")
-	var expected_names := ["旅行者", "少女", "希露菲", "芙宁娜", "洛琪希", "知更鸟", "阿米娅", "丰川祥子", "艾米莉亚", "萨勒芬妮", "风堇", "凯尔希", "铃"]
+	var expected_names := ["旅行者", "哥伦比亚", "希露菲", "芙宁娜", "洛琪希", "知更鸟", "阿米娅", "丰川祥子", "艾米莉亚", "萨勒芬妮", "风堇", "凯尔希", "铃"]
 	var actual_names: Array[String] = []
 	for id: String in sim.database.characters:
 		var hero: Dictionary = sim.database.characters[id]
@@ -97,7 +97,7 @@ func run(game) -> void:
 	var fireball := find_card(sim.database, "evolve_fireball")
 	var blades := find_card(sim.database, "orbit_arcane_blades")
 	expect(fireball.get("evolutions", []).size() == 3 and fireball.get("evolutions", [])[2].get("branch", "") == "meteor", "fireball evolves into split, burning ground and meteor milestones")
-	expect("弹道" in fireball.tags and "召唤" in blades.tags, "cards expose projectile, summon, reaction, crit, shield and support tags")
+	expect("支援" in fireball.tags and "召唤" in blades.tags, "cards expose support, summon, reaction, crit and shield tags")
 	for i in 3:
 		sim.run_state.buff_levels[blades.id] = i + 1
 		sim.apply_v2_card_effect(blades)
