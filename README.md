@@ -32,11 +32,13 @@
 
 ![哥伦比亚潮汐能量输送](docs/v72-validation/columbia-transit.png)
 
+![永猎双子千珏四技能与羊灵生息](docs/v73-validation/kindred-boss-showcase.gif)
+
 ![无尽模式地图](docs/v61-validation/08-endless-map.png)
 
 ## 地图与怪物
 
-第一关使用蒙德草地、七天神像、高台、沼泽、自动机关和可破坏栅栏；后续关卡保持暗色格子主题。敌人包含史莱姆、丘丘人、弓箭手、萨满、哥布林、哥布林茅房、大型怪物与多阶段 Boss。
+第一关使用蒙德草地、七天神像、高台、沼泽、自动机关和可破坏栅栏；后续关卡保持暗色格子主题。第一关 Boss 为史莱姆王，第二关为裂隙统领，第三关为永猎双子·千珏。敌人包含史莱姆、丘丘人、弓箭手、萨满、哥布林、哥布林茅房、大型怪物与多阶段 Boss。
 
 ![V65 八关地形总览](docs/v65-validation/contact-sheet.png)
 
@@ -49,7 +51,7 @@
 - Godot 工程：`game/project.godot`
 - 设计与验收分辨率：`1920×1080`
 - UI 实验台逻辑坐标：`1280×720`，运行时等比缩放
-- Windows 发布包：[下载 V72 Windows 版](https://github.com/yzy-151/rift-guard/releases/tag/v72)
+- Windows 发布包：[下载 V73 Windows 版](https://github.com/yzy-151/rift-guard/releases/tag/v73)
 
 使用 Godot 4.4.1 打开工程后运行主场景即可。UI 布局与素材替换方法见 [Godot UI 编辑手册](docs/UI-GODOT-EDITING-MANUAL.md)。
 

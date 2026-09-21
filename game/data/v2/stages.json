@@ -693,10 +693,13 @@
     "waves": [
       {
         "at": 4,
-        "enemy_id": "slime_electro",
-        "count": 20,
-        "interval": 2.1,
-        "route_id": "upper"
+        "enemy_id": "troop_cannon",
+        "count": 2,
+        "interval": 0.35,
+        "route_ids": [
+          "upper",
+          "lower"
+        ]
       },
       {
         "at": 24,
@@ -749,6 +752,17 @@
       },
       {
         "at": 132,
+        "enemy_id": "troop_cannon",
+        "count": 6,
+        "interval": 1.55,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ]
+      },
+      {
+        "at": 144,
         "enemy_id": "originium_bug",
         "count": 4,
         "interval": 2.2,
@@ -986,7 +1000,7 @@
     "name": "黑曜母巢",
     "duration_seconds": 375,
     "boss_at_seconds": 318,
-    "boss_id": "boss_02",
+    "boss_id": "boss_03",
     "boss_route_id": "main",
     "enemy_health_multiplier": 0.6,
     "enemy_damage_multiplier": 0.22,

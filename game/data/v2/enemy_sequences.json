@@ -769,5 +769,86 @@
         "hold_last": true
       }
     }
+  },
+  "boss_01": {
+    "name": "裂隙统领",
+    "source_folder": "裂隙统领",
+    "cell": [
+      384,
+      384
+    ],
+    "pivot": [
+      135,
+      305
+    ],
+    "display_size": 285.0,
+    "native_facing": 1,
+    "fps": 24.0,
+    "states": {
+      "run": {
+        "texture": "res://assets/enemies/sequences/boss_01/run.png",
+        "frames": 124,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      },
+      "attack": {
+        "texture": "res://assets/enemies/sequences/boss_01/attack.png",
+        "frames": 47,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      },
+      "down": {
+        "texture": "res://assets/enemies/sequences/boss_01/down.png",
+        "frames": 48,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      },
+      "skill1": {
+        "texture": "res://assets/enemies/sequences/boss_01/skill1.png",
+        "frames": 48,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      },
+      "skill2": {
+        "texture": "res://assets/enemies/sequences/boss_01/skill2.png",
+        "frames": 45,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      },
+      "skill3": {
+        "texture": "res://assets/enemies/sequences/boss_01/skill3.png",
+        "frames": 48,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      },
+      "skill4": {
+        "texture": "res://assets/enemies/sequences/boss_01/skill4.png",
+        "frames": 27,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": false,
+        "hold_last": true
+      },
+      "idle": {
+        "texture": "res://assets/enemies/sequences/boss_01/run.png",
+        "frames": 1,
+        "columns": 8,
+        "fps": 24.0,
+        "loop": true,
+        "hold_last": false
+      }
+    }
   }
 }

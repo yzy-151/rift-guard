@@ -28,7 +28,7 @@ const HT_BUTTON_ACTIVE = preload("res://assets/helltaker/ui/button active.png")
 const HT_PANEL = preload("res://assets/helltaker/ui/button on.png")
 const HT_HIGHLIGHT = preload("res://assets/helltaker/audio/button_menu_highlight_01.wav")
 const HT_CONFIRM = preload("res://assets/helltaker/audio/button_menu_confirm_01.wav")
-const HT_BOSS_WARNING = preload("res://assets/helltaker/audio/dialogue_start_epilogue_01.wav")
+const HT_BOSS_WARNING = preload("res://assets/sfx/boss/boss_warning_eva.wav")
 const TRAVELER_PORTRAIT = preload("res://assets/characters/traveler_v18/idle.png")
 const UNIT_ATLAS = preload("res://assets/tiny-dungeon.png")
 const HUD_HERO_GRAY = preload("res://assets/ui/rift_v2/components/hud_hero_gray.png")
@@ -128,10 +128,19 @@ var ultimate_aiming: bool = false
 var boss_panel: Panel
 var boss_name_label: Label
 var boss_hp_bar: ProgressBar
+var boss_shield_bar: ProgressBar
 var boss_hp_label: Label
+var boss_phase_label: Label
 var boss_alert: Label
-var boss_alert_frame: TextureRect
+var boss_alert_frame: Panel
+var boss_alert_ticker: Label
 var boss_scene_tint: ColorRect
+var boss_skill_warning_panel: Panel
+var boss_skill_warning_icon: Label
+var boss_skill_warning_title: Label
+var boss_skill_warning_ticker: Label
+var boss_skill_warning_tween: Tween
+var boss_skill_flash_tween: Tween
 var boss_warning: AudioStreamPlayer
 var wave_timeline_panel: Panel
 var wave_timeline_labels: Array[Label] = []
@@ -279,45 +288,83 @@ func _ready() -> void:
 	info_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info_popover.hide()
 	var boss_panel_rect: Rect2 = UI_LAYOUT.battle_boss_panel_rect
-	boss_panel = panel(root, boss_panel_rect, Color(0.025, 0.010, 0.022, 0.96), Color("#d6415b"))
-	var boss_frame := NinePatchRect.new()
-	boss_frame.texture = UI_SKIN.hero_frame_red
-	boss_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	boss_frame.patch_margin_left = 42
-	boss_frame.patch_margin_right = 42
-	boss_frame.patch_margin_top = 24
-	boss_frame.patch_margin_bottom = 24
-	boss_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	boss_panel.add_child(boss_frame)
+	boss_panel = panel(root, boss_panel_rect, Color(0.018, 0.012, 0.025, 0.98), Color("#ff3559"))
+	var boss_style := StyleBoxFlat.new()
+	boss_style.bg_color = Color(0.035, 0.025, 0.05, 0.72)
+	boss_style.border_color = Color("#ff3559")
+	boss_style.border_width_left = 4
+	boss_style.border_width_top = 2
+	boss_style.border_width_right = 4
+	boss_style.border_width_bottom = 2
+	boss_style.corner_radius_top_left = 2
+	boss_style.corner_radius_top_right = 13
+	boss_style.corner_radius_bottom_left = 13
+	boss_style.corner_radius_bottom_right = 2
+	boss_style.shadow_color = Color(0.8, 0.02, 0.12, 0.32)
+	boss_style.shadow_size = 8
+	boss_panel.add_theme_stylebox_override("panel", boss_style)
+	var boss_badge := label(boss_panel, Vector2(10, 7), Vector2(54, 22), "BOSS", 11, Color("#ffcf42"))
+	boss_badge.add_theme_font_override("font", DISPLAY_FONT)
+	boss_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var boss_name_rect: Rect2 = UI_LAYOUT.battle_boss_name_rect
-	boss_name_label = label(boss_panel, boss_name_rect.position, boss_name_rect.size, "", 15, Color("#ffb1bc"))
-	boss_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	boss_name_label = label(boss_panel, boss_name_rect.position, boss_name_rect.size, "", 14, Color("#fff1ee"))
 	boss_name_label.add_theme_font_override("font", DISPLAY_FONT)
-	boss_name_label.add_theme_color_override("font_shadow_color", Color("#480714"))
+	boss_name_label.add_theme_color_override("font_shadow_color", Color("#8f102d"))
 	boss_name_label.add_theme_constant_override("shadow_offset_y", 2)
+	boss_phase_label = label(boss_panel, Vector2(418, 7), Vector2(112, 22), "", 10, Color("#ff8095"))
+	boss_phase_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	boss_phase_label.add_theme_font_override("font", DISPLAY_FONT)
 	boss_hp_bar = ProgressBar.new()
 	var boss_bar_rect: Rect2 = UI_LAYOUT.battle_boss_bar_rect
 	boss_hp_bar.position = boss_bar_rect.position
 	boss_hp_bar.size = boss_bar_rect.size
 	boss_hp_bar.show_percentage = false
-	boss_hp_bar.add_theme_font_size_override("font_size", 1)
 	boss_hp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var boss_bg := StyleBoxFlat.new()
-	boss_bg.bg_color = Color("#26131c")
-	boss_bg.border_color = Color("#64303d")
-	boss_bg.set_border_width_all(2)
+	boss_bg.bg_color = Color(0.14, 0.075, 0.12, 0.78)
+	boss_bg.border_color = Color("#7b2a42")
+	boss_bg.set_border_width_all(1)
 	var boss_fill := StyleBoxFlat.new()
-	boss_fill.bg_color = Color("#d94f66")
-	boss_fill.border_color = Color("#ff9aa7")
-	boss_fill.set_border_width_all(1)
+	boss_fill.bg_color = Color("#ee3153")
+	boss_fill.border_color = Color("#ff98a9")
+	boss_fill.border_width_top = 2
 	boss_hp_bar.add_theme_stylebox_override("background", boss_bg)
 	boss_hp_bar.add_theme_stylebox_override("fill", boss_fill)
 	boss_panel.add_child(boss_hp_bar)
-	boss_hp_bar.position = boss_bar_rect.position
-	boss_hp_bar.size = boss_bar_rect.size
+	boss_shield_bar = ProgressBar.new()
+	boss_shield_bar.position = Vector2(boss_bar_rect.position.x, boss_bar_rect.end.y + 3)
+	boss_shield_bar.size = Vector2(boss_bar_rect.size.x, 25)
+	boss_shield_bar.scale = Vector2(1.0, 0.20)
+	boss_shield_bar.show_percentage = false
+	boss_shield_bar.add_theme_font_size_override("font_size", 1)
+	boss_shield_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var shield_bg := StyleBoxFlat.new()
+	shield_bg.bg_color = Color("#0b1a26")
+	var shield_fill := StyleBoxFlat.new()
+	shield_fill.bg_color = Color("#5bd9ff")
+	shield_fill.border_color = Color("#c3f5ff")
+	shield_fill.border_width_top = 1
+	boss_shield_bar.add_theme_stylebox_override("background", shield_bg)
+	boss_shield_bar.add_theme_stylebox_override("fill", shield_fill)
+	boss_panel.add_child(boss_shield_bar)
+	for segment in range(1, 10):
+		var divider := ColorRect.new()
+		divider.position = boss_bar_rect.position + Vector2(boss_bar_rect.size.x * float(segment) / 10.0, 1)
+		divider.size = Vector2(1, boss_bar_rect.size.y - 2)
+		divider.color = Color(0.03, 0.01, 0.02, 0.72)
+		divider.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		boss_panel.add_child(divider)
 	var boss_value_rect: Rect2 = UI_LAYOUT.battle_boss_value_rect
-	boss_hp_label = label(boss_panel, boss_value_rect.position, boss_value_rect.size, "", 10, WHITE)
+	boss_hp_label = label(boss_panel, boss_value_rect.position, boss_value_rect.size, "", 13, Color("#ffcf42"))
 	boss_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	boss_hp_label.add_theme_font_override("font", DISPLAY_FONT)
+	for corner_data in [[Vector2(4, 4), Vector2(34, 2)], [Vector2(boss_panel_rect.size.x - 38, boss_panel_rect.size.y - 6), Vector2(34, 2)]]:
+		var corner := ColorRect.new()
+		corner.position = corner_data[0]
+		corner.size = corner_data[1]
+		corner.color = Color("#ffcf42")
+		corner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		boss_panel.add_child(corner)
 	boss_panel.hide()
 	wave_timeline_panel = panel(root, UI_LAYOUT.battle_timeline_rect, Color(0.025, 0.010, 0.024, 0.94), Color("#d13b55"))
 	wave_timeline_panel.add_theme_stylebox_override("panel", counter_badge_style())
@@ -332,16 +379,24 @@ func _ready() -> void:
 	boss_scene_tint.color = Color(0.48, 0.015, 0.045, 0.0)
 	boss_scene_tint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(boss_scene_tint)
-	boss_alert_frame = TextureRect.new()
-	boss_alert_frame.texture = UI_SKIN.choice_frame_red
-	boss_alert_frame.position = Vector2(180, 235)
-	boss_alert_frame.size = Vector2(920, 92)
-	boss_alert_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	boss_alert_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	boss_alert_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(boss_alert_frame)
+	boss_alert_frame = panel(root, Rect2(170, 224, 940, 116), Color(0.035, 0.025, 0.05, 0.68), Color("#ff3b36"))
+	var alert_style := StyleBoxFlat.new()
+	alert_style.bg_color = Color(0.035, 0.025, 0.05, 0.68)
+	alert_style.border_color = Color("#ff3b36")
+	alert_style.border_width_left = 12
+	alert_style.border_width_top = 3
+	alert_style.border_width_right = 12
+	alert_style.border_width_bottom = 3
+	alert_style.corner_radius_top_right = 18
+	alert_style.corner_radius_bottom_left = 18
+	alert_style.shadow_color = Color(1.0, 0.02, 0.04, 0.42)
+	alert_style.shadow_size = 12
+	boss_alert_frame.add_theme_stylebox_override("panel", alert_style)
+	boss_alert_frame.clip_contents = true
+	boss_alert_ticker = label(boss_alert_frame, Vector2(15, 88), Vector2(1320, 20), "CAUTION // HOSTILE LIFEFORM // IMPACT PREDICTION // CAUTION // HOSTILE LIFEFORM //", 9, Color("#ffcf42"))
+	boss_alert_ticker.add_theme_font_override("font", DISPLAY_FONT)
 	boss_alert_frame.hide()
-	boss_alert = label(root, Vector2(240, 234), Vector2(800, 108), "", 40, Color("#fff1ed"))
+	boss_alert = label(root, Vector2(212, 230), Vector2(856, 84), "", 34, Color("#fff1ed"))
 	boss_alert.add_theme_font_override("font", DISPLAY_FONT)
 	boss_alert.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	boss_alert.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -349,6 +404,25 @@ func _ready() -> void:
 	boss_alert.add_theme_constant_override("shadow_offset_x", 4)
 	boss_alert.add_theme_constant_override("shadow_offset_y", 4)
 	boss_alert.hide()
+	boss_skill_warning_panel = panel(root, Rect2(205, 150, 870, 86), Color(0.035, 0.02, 0.035, 0.66), Color("#ff493f"))
+	var skill_warning_style := StyleBoxFlat.new()
+	skill_warning_style.bg_color = Color(0.035, 0.02, 0.035, 0.66)
+	skill_warning_style.border_color = Color("#ff493f")
+	skill_warning_style.border_width_left = 9
+	skill_warning_style.border_width_top = 2
+	skill_warning_style.border_width_right = 2
+	skill_warning_style.border_width_bottom = 2
+	skill_warning_style.corner_radius_top_right = 12
+	skill_warning_style.corner_radius_bottom_right = 12
+	boss_skill_warning_panel.add_theme_stylebox_override("panel", skill_warning_style)
+	boss_skill_warning_panel.clip_contents = true
+	boss_skill_warning_icon = label(boss_skill_warning_panel, Vector2(14, 8), Vector2(70, 52), "⚠", 42, Color("#ffcf42"))
+	boss_skill_warning_icon.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	boss_skill_warning_title = label(boss_skill_warning_panel, Vector2(92, 7), Vector2(750, 43), "", 28, Color("#fff2ee"))
+	boss_skill_warning_title.add_theme_font_override("font", DISPLAY_FONT)
+	boss_skill_warning_ticker = label(boss_skill_warning_panel, Vector2(100, 58), Vector2(1240, 20), "EVA // DANGER // PATTERN LOCKED // EVA // DANGER // PATTERN LOCKED //", 9, Color("#ff665e"))
+	boss_skill_warning_ticker.add_theme_font_override("font", DISPLAY_FONT)
+	boss_skill_warning_panel.hide()
 	command_rail = panel(root, UI_LAYOUT.battle_party_rect, Color(0.035, 0.014, 0.028, 0.84), Color("#b95868"))
 	command_rail.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	bind(command_rail, "command_rail")
@@ -368,11 +442,11 @@ func _ready() -> void:
 	skill_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	skill_button.add_child(skill_frame)
 	skill_frame.hide()
-	skill_icon = icon(skill_button, "res://assets/ui/skill_icons_v64/10_sword_slash_rgba.png", Rect2(9, 10, 32, 32), WHITE)
+	skill_icon = icon(skill_button, "res://assets/ui/skill_icons_v64/10_sword_slash_rgba.png", Rect2(7, 7, 42, 42), WHITE)
 	skill_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	skill_cooldown_overlay = ColorRect.new()
-	skill_cooldown_overlay.position = Vector2(9, 10)
-	skill_cooldown_overlay.size = Vector2(32, 32)
+	skill_cooldown_overlay.position = Vector2(7, 7)
+	skill_cooldown_overlay.size = Vector2(42, 42)
 	skill_cooldown_overlay.color = Color(0.015, 0.006, 0.018, 0.72)
 	skill_cooldown_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	skill_button.add_child(skill_cooldown_overlay)
@@ -380,15 +454,15 @@ func _ready() -> void:
 	skill_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skill_name_label.clip_text = true
 	var skill_key_plate := ColorRect.new()
-	skill_key_plate.position = Vector2(47, 27)
+	skill_key_plate.position = Vector2(54, 31)
 	skill_key_plate.size = Vector2(34, 18)
 	skill_key_plate.color = Color(0, 0, 0, 0)
 	skill_key_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	skill_button.add_child(skill_key_plate)
-	skill_cd_label = label(skill_button, Vector2(47, 3), Vector2(60, 22), "READY", 11, Color("#fff4ec"))
+	skill_cd_label = label(skill_button, Vector2(54, 7), Vector2(52, 20), "READY", 11, Color("#fff4ec"))
 	skill_cd_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skill_cd_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	skill_key_label = label(skill_button, Vector2(47, 27), Vector2(60, 18), "Q战技", 9, Color("#ffd9de"))
+	skill_key_label = label(skill_button, Vector2(54, 31), Vector2(52, 18), "Q战技", 9, Color("#ffd9de"))
 	skill_key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skill_cd_label.add_theme_color_override("font_shadow_color", Color.BLACK)
 	skill_cd_label.add_theme_constant_override("shadow_offset_y", 2)
@@ -408,11 +482,11 @@ func _ready() -> void:
 	ultimate_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ultimate_button.add_child(ultimate_frame)
 	ultimate_frame.hide()
-	ultimate_icon = icon(ultimate_button, "res://assets/ui/skill_icons_v64/15_explosion_rgba.png", Rect2(9, 10, 32, 32), WHITE)
+	ultimate_icon = icon(ultimate_button, "res://assets/ui/skill_icons_v64/15_explosion_rgba.png", Rect2(7, 7, 42, 42), WHITE)
 	ultimate_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ultimate_cooldown_overlay = ColorRect.new()
-	ultimate_cooldown_overlay.position = Vector2(9, 10)
-	ultimate_cooldown_overlay.size = Vector2(32, 32)
+	ultimate_cooldown_overlay.position = Vector2(7, 7)
+	ultimate_cooldown_overlay.size = Vector2(42, 42)
 	ultimate_cooldown_overlay.color = Color(0.015, 0.006, 0.018, 0.72)
 	ultimate_cooldown_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ultimate_button.add_child(ultimate_cooldown_overlay)
@@ -420,15 +494,15 @@ func _ready() -> void:
 	ultimate_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ultimate_name_label.clip_text = true
 	var ultimate_key_plate := ColorRect.new()
-	ultimate_key_plate.position = Vector2(47, 27)
+	ultimate_key_plate.position = Vector2(54, 31)
 	ultimate_key_plate.size = Vector2(34, 18)
 	ultimate_key_plate.color = Color(0, 0, 0, 0)
 	ultimate_key_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ultimate_button.add_child(ultimate_key_plate)
-	ultimate_cd_label = label(ultimate_button, Vector2(47, 3), Vector2(60, 22), "READY", 11, Color("#ffe7a5"))
+	ultimate_cd_label = label(ultimate_button, Vector2(54, 7), Vector2(52, 20), "READY", 11, Color("#ffe7a5"))
 	ultimate_cd_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ultimate_cd_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	ultimate_key_label = label(ultimate_button, Vector2(47, 27), Vector2(60, 18), "E终极", 9, Color("#fff0ae"))
+	ultimate_key_label = label(ultimate_button, Vector2(54, 31), Vector2(52, 18), "E终极", 9, Color("#fff0ae"))
 	ultimate_key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ultimate_cd_label.add_theme_color_override("font_shadow_color", Color.BLACK)
 	ultimate_cd_label.add_theme_constant_override("shadow_offset_y", 2)
@@ -924,11 +998,15 @@ func refresh_boss(sim) -> void:
 		return
 	var shield: float = float(active.get("shield", 0.0))
 	var hp: float = maxf(0.0, float(active.hp))
-	boss_name_label.text = "◆  %s  ·  PHASE %s  ◆" % [str(active.get("name", "裂隙首领")), ["I", "II", "III"][clampi(int(active.get("boss_phase", 1)) - 1, 0, 2)]]
+	boss_name_label.text = "TARGET // %s" % str(active.get("name", "裂隙首领"))
+	boss_phase_label.text = "PHASE %s" % ["I", "II", "III"][clampi(int(active.get("boss_phase", 1)) - 1, 0, 2)]
 	boss_hp_bar.max_value = maxf(1.0, float(active.max_hp))
 	boss_hp_bar.value = hp
+	boss_shield_bar.max_value = maxf(1.0, float(active.get("max_shield", shield)))
+	boss_shield_bar.value = shield
+	boss_shield_bar.visible = shield > 0.0
 	var hp_percent := roundi(hp / maxf(1.0, float(active.max_hp)) * 100.0)
-	boss_hp_label.text = "HP %d%%   %d / %d%s" % [hp_percent, ceili(hp), ceili(float(active.max_hp)), "   ◇ %d" % ceili(shield) if shield > 0.0 else ""]
+	boss_hp_label.text = "%03d%%" % hp_percent
 
 func refresh_wave_timeline(sim) -> void:
 	var active_boss := boss_panel.visible
@@ -969,11 +1047,12 @@ func _show_boss_alert(copy: String, pitch: float = 0.82, hold: float = 1.20) -> 
 		boss_warning.volume_db = -8.0
 		boss_warning.play()
 	boss_alert.text = copy
-	boss_alert.position = Vector2(240, 234)
+	boss_alert.position = Vector2(212, 230)
 	boss_alert.modulate = Color(1, 1, 1, 0)
 	boss_alert.scale = Vector2(1.12, 1.12)
 	boss_alert.pivot_offset = boss_alert.size * 0.5
-	boss_alert_frame.position = Vector2(180, 235)
+	boss_alert_frame.position = Vector2(170, 224)
+	boss_alert_ticker.position.x = 18.0
 	boss_alert_frame.modulate = Color(1, 1, 1, 0)
 	boss_alert_frame.scale = Vector2(0.94, 0.94)
 	boss_alert_frame.pivot_offset = boss_alert_frame.size * 0.5
@@ -987,6 +1066,7 @@ func _show_boss_alert(copy: String, pitch: float = 0.82, hold: float = 1.20) -> 
 	entrance.tween_property(boss_alert_frame, "scale", Vector2.ONE, 0.24).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	entrance.tween_property(boss_alert, "modulate:a", 1.0, 0.12).set_delay(0.04)
 	entrance.tween_property(boss_alert, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	entrance.tween_property(boss_alert_ticker, "position:x", -330.0, maxf(0.9, hold + 0.45))
 	await entrance.finished
 	await get_tree().create_timer(hold).timeout
 	var out := create_tween().set_parallel(true)
@@ -997,6 +1077,38 @@ func _show_boss_alert(copy: String, pitch: float = 0.82, hold: float = 1.20) -> 
 	boss_alert.hide()
 	boss_alert_frame.hide()
 	boss_scene_tint.hide()
+
+func announce_boss_skill_warning(name: String, duration: float, phase: int) -> void:
+	if boss_skill_warning_tween != null and boss_skill_warning_tween.is_valid():
+		boss_skill_warning_tween.kill()
+	if boss_skill_flash_tween != null and boss_skill_flash_tween.is_valid():
+		boss_skill_flash_tween.kill()
+	if boss_warning != null and not muted:
+		boss_warning.stop()
+		boss_warning.pitch_scale = 0.88 if phase >= 2 else 1.0
+		boss_warning.volume_db = -5.5
+		boss_warning.play()
+	boss_skill_warning_title.text = "⚠  %s  //  PHASE %s" % [name, ["I", "II", "III"][clampi(phase - 1, 0, 2)]]
+	boss_skill_warning_title.modulate = Color.WHITE
+	boss_skill_warning_icon.modulate = Color.WHITE
+	boss_skill_warning_panel.modulate = Color(1, 1, 1, 0)
+	boss_skill_warning_panel.position = Vector2(225, 150)
+	boss_skill_warning_ticker.position.x = 100.0
+	boss_skill_warning_panel.show()
+	boss_skill_warning_tween = create_tween()
+	boss_skill_warning_tween.set_parallel(true)
+	boss_skill_warning_tween.tween_property(boss_skill_warning_panel, "modulate:a", 1.0, 0.10)
+	boss_skill_warning_tween.tween_property(boss_skill_warning_panel, "position:x", 205.0, 0.18).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+	boss_skill_warning_tween.tween_property(boss_skill_warning_ticker, "position:x", -410.0, maxf(0.65, duration))
+	boss_skill_warning_tween.chain().tween_property(boss_skill_warning_panel, "modulate:a", 0.0, 0.18).set_delay(maxf(0.20, duration - 0.32))
+	boss_skill_warning_tween.chain().tween_callback(func(): boss_skill_warning_panel.hide())
+	boss_skill_flash_tween = create_tween()
+	for flash_index in maxi(2, ceili(duration / 0.28)):
+		boss_skill_flash_tween.tween_property(boss_skill_warning_title, "modulate", Color(1.0, 0.28, 0.30, 0.36), 0.10)
+		boss_skill_flash_tween.parallel().tween_property(boss_skill_warning_icon, "modulate", Color(1.0, 0.20, 0.20, 0.30), 0.10)
+		boss_skill_flash_tween.tween_property(boss_skill_warning_title, "modulate", Color.WHITE, 0.10)
+		boss_skill_flash_tween.parallel().tween_property(boss_skill_warning_icon, "modulate", Color.WHITE, 0.10)
+
 
 func announce_contract(name: String, reward: String) -> void:
 	await _show_boss_alert("C O N T R A C T   C L E A R\n%s  ·  %s" % [name, reward], 1.22, 0.82)

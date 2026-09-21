@@ -22,8 +22,9 @@ static func validate(database) -> Array[String]:
 	if database.boss_patterns.size() < 6:
 		errors.append("six boss patterns are required")
 	for id: String in database.boss_patterns:
-		if database.boss_patterns[id].get("phases", []).size() != 3:
-			errors.append("boss requires three phases: " + id)
+		var expected_phases := 2 if id == "boss_02" else 3
+		if database.boss_patterns[id].get("phases", []).size() != expected_phases:
+			errors.append("boss requires %d phases: %s" % [expected_phases, id])
 		for phase: Dictionary in database.boss_patterns[id].get("phases", []):
 			if phase.get("arena_event", {}).is_empty():
 				errors.append("boss phase missing arena event: %s/%s" % [id, phase.get("phase", 0)])

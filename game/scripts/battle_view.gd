@@ -444,6 +444,18 @@ func accept_events(batch: Array[Dictionary]) -> void:
 		if event.kind == "gwen_needle_hit":
 			effects.append(effect_pool.acquire(event.duplicate(true), 0.38))
 			continue
+		if str(event.kind).begins_with("rift_"):
+			var lifetime := 1.12 if event.kind == "rift_storm" else (0.72 if event.kind in ["rift_laser", "rift_overhead"] else 0.48)
+			effects.append(effect_pool.acquire(event.duplicate(true), lifetime))
+			continue
+		if str(event.kind).begins_with("slime_"):
+			var lifetime := 1.38 if event.kind in ["slime_reflux", "slime_court", "slime_court_final"] else (0.92 if event.kind in ["slime_bounce", "slime_burst"] else 0.68)
+			effects.append(effect_pool.acquire(event.duplicate(true), lifetime))
+			continue
+		if str(event.kind).begins_with("kindred_"):
+			var lifetime := 5.15 if event.kind == "kindred_respite" else (1.45 if event.kind in ["kindred_hunt", "kindred_wolf"] else 0.85)
+			effects.append(effect_pool.acquire(event.duplicate(true), lifetime))
+			continue
 		match event.kind:
 			"route_warning":
 				var route_id := str(event.get("route_id", "main"))
@@ -550,18 +562,48 @@ func _draw() -> void:
 	# Combat effects and projectiles belong behind every unit silhouette.
 	if sheet_effects != null:
 		sheet_effects.draw_behind_units(self)
+	for hazard: Dictionary in sim.enemy_hazards:
+		if _render_point_visible(Vector2(hazard.get("pos", Vector2.ZERO)), 180.0):
+			if str(hazard.get("kind", "")).begins_with("kindred_"):
+				_draw_kindred_hazard(hazard)
+			else:
+				_draw_slime_hazard(hazard)
 	for projectile in sim.projectiles:
 		if _render_point_visible(Vector2(projectile.get("pos", Vector2.ZERO)), 120.0):
 			_draw_projectile(projectile)
 	for projectile: Dictionary in sim.enemy_projectiles:
+		if float(projectile.get("delay", 0.0)) > 0.0:
+			continue
 		if _render_point_visible(Vector2(projectile.pos), 120.0):
+			var projectile_kind := str(projectile.get("kind", ""))
+			if projectile_kind in ["slime_glob", "slime_image"]:
+				_draw_slime_projectile(projectile)
+				continue
+			if projectile_kind in ["kindred_arrow", "kindred_dread_arrow"]:
+				_draw_kindred_projectile(projectile)
+				continue
 			var point := world_to_screen(Vector2(projectile.pos)) + Vector2(0, -17)
-			var size := 8.0 * world_depth_scale(Vector2(projectile.pos))
-			draw_circle(point, size + 4.0, Color(0.26, 0.12, 0.42, 0.38))
-			draw_circle(point, size, Color(0.60, 0.38, 0.88, 0.95))
-			draw_circle(point + Vector2(-2, -2), size * 0.38, Color(0.94, 0.86, 1.0, 0.96))
+			var orb: bool = projectile_kind == "rift_orb"
+			var enraged_orb := orb and bool(projectile.get("enraged", false))
+			var size := (19.0 if enraged_orb else (13.0 if orb else 8.0)) * world_depth_scale(Vector2(projectile.pos))
+			var outer := Color(0.72, 0.02, 0.08, 0.30) if enraged_orb else Color(0.35, 0.08, 0.65, 0.24 if orb else 0.12)
+			var middle := Color(0.92, 0.05, 0.12, 0.62) if enraged_orb else Color(0.40, 0.15, 0.75, 0.45)
+			var core := Color(1.0, 0.14, 0.20, 0.98) if enraged_orb else Color(0.67, 0.35, 1.0, 0.98)
+			draw_circle(point, size + 8.0, outer)
+			draw_circle(point, size + 4.0, middle)
+			draw_circle(point, size, core)
+			draw_circle(point + Vector2(-2, -2), size * 0.38, Color(0.96, 0.88, 1.0, 0.98))
 	for effect in effects:
-		if effect.kind not in ["crossfire", "support_heal", "columbia_blessing_links"] and not _render_point_visible(Vector2(effect.get("pos", Vector2.ZERO)), 180.0):
+		if effect.kind not in ["crossfire", "support_heal", "columbia_blessing_links", "rift_laser", "rift_overhead"] and not _render_point_visible(Vector2(effect.get("pos", Vector2.ZERO)), 180.0):
+			continue
+		if str(effect.kind).begins_with("rift_"):
+			_draw_rift_boss_effect(effect)
+			continue
+		if str(effect.kind).begins_with("slime_"):
+			_draw_slime_boss_effect(effect)
+			continue
+		if str(effect.kind).begins_with("kindred_"):
+			_draw_kindred_boss_effect(effect)
 			continue
 		if effect.kind == "fireball_fall":
 			_draw_falling_fireball(effect)
@@ -734,8 +776,18 @@ func _draw_enemy_telegraphs() -> void:
 			draw_circle(center, radius, Color(0.95, 0.12, 0.18, 0.10 + (1.0-ratio)*0.16))
 			draw_arc(center, radius, -PI*0.5, -PI*0.5 + TAU*(1.0-ratio), 48, Color("#ff5267"), 4.0, true)
 			draw_line(world_to_screen(enemy.pos), center, Color(1.0,0.25,0.32,0.52), 2.0, true)
-			_draw_warning_reticle(center, radius, ratio, float(enemy.get("warning_timer", 0.0)), false)
+			var boss_attack := str(enemy.get("kind", "")).begins_with("boss_")
+			_draw_warning_reticle(center, radius, ratio, float(enemy.get("warning_timer", 0.0)), boss_attack, "⚠ 首领攻击" if boss_attack else "")
 		if bool(enemy.get("special_pending", false)):
+			if str(enemy.get("kind", "")) == "boss_01" and str(enemy.get("special_move", "")).begins_with("rift_"):
+				_draw_rift_boss_warning(enemy)
+				continue
+			if str(enemy.get("kind", "")) == "boss_02" and str(enemy.get("special_move", "")).begins_with("slime_"):
+				_draw_slime_boss_warning(enemy)
+				continue
+			if str(enemy.get("kind", "")) == "boss_03" and str(enemy.get("special_move", "")).begins_with("kindred_"):
+				_draw_kindred_boss_warning(enemy)
+				continue
 			for warning_point: Variant in enemy.get("special_warning_positions", [enemy.pos]):
 				if not _render_point_visible(Vector2(warning_point), 220.0):
 					continue
@@ -783,6 +835,401 @@ func _draw_enemy_telegraphs() -> void:
 				var special_ratio := clampf(float(enemy.get("special_warning", 0.0)) / special_total, 0.0, 1.0)
 				_draw_warning_reticle(center, radius, special_ratio, float(enemy.get("special_warning", 0.0)), true, str(enemy.get("special_move_name", "BOSS SKILL")))
 
+func _rift_ellipse(point: Vector2, radii: Vector2, alpha: float, fill: float) -> void:
+	var vertices := PackedVector2Array()
+	for step in 65:
+		var angle := TAU * float(step) / 64.0
+		vertices.append(point + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
+	draw_colored_polygon(vertices, Color(0.39, 0.10, 0.75, fill))
+	draw_polyline(vertices, Color(0.72, 0.42, 1.0, alpha), 3.0, true)
+
+
+func _rift_laser_ribbon(source: Vector2, target: Vector2, radius: float, alpha: float, strike: bool) -> void:
+	var direction := (target - source).normalized()
+	if direction.length_squared() < 0.01:
+		return
+	var side := direction.orthogonal() * radius
+	var corners := PackedVector2Array([world_to_screen(source + side), world_to_screen(source - side), world_to_screen(target - side), world_to_screen(target + side)])
+	draw_colored_polygon(corners, Color(0.49, 0.12, 0.83, alpha * (0.72 if strike else 0.18)))
+	draw_polyline(PackedVector2Array([corners[0], corners[3], corners[2], corners[1], corners[0]]), Color(0.78, 0.48, 1.0, alpha), 3.0, true)
+	if strike:
+		draw_line(world_to_screen(source), world_to_screen(target), Color(0.96, 0.86, 1.0, alpha), 11.0, true)
+
+
+func _draw_rift_boss_warning(enemy: Dictionary) -> void:
+	var move := str(enemy.get("special_move", ""))
+	var points: Array = enemy.get("special_warning_positions", [])
+	if points.is_empty():
+		return
+	var progress := 1.0 - clampf(float(enemy.get("special_warning", 0.0)) / maxf(0.01, float(enemy.get("special_warning_total", 1.0))), 0.0, 1.0)
+	var pulse := 0.70 + 0.30 * sin(clock * 14.0)
+	var radius := float(enemy.get("special_warning_radius", 100.0))
+	var enraged := int(enemy.get("boss_phase", 1)) >= 3
+	if move == "rift_laser":
+		for target_value: Variant in points:
+			_rift_laser_ribbon(Vector2(enemy.pos), Vector2(target_value), radius, (0.44 + progress * 0.5) * pulse, false)
+	elif move == "rift_orbs":
+		var point := world_to_screen(Vector2(enemy.pos))
+		var orb_count := 18 if enraged else 10
+		var orb_color := Color(1.0, 0.08, 0.15, 0.55 + progress * 0.40) if enraged else Color(0.70, 0.32, 1.0, 0.52 + progress * 0.38)
+		for orb in orb_count:
+			var angle := float(orb) * TAU / float(orb_count) + clock * 1.8
+			var orb_pos := point + Vector2.from_angle(angle) * ((48.0 if enraged else 34.0) + 8.0 * progress)
+			draw_circle(orb_pos, 8.0 if enraged else 5.5, orb_color)
+		for hero: Dictionary in sim.heroes:
+			if bool(hero.get("deployed", false)) and hero.hp > 0.0:
+				draw_dashed_line(point, world_to_screen(Vector2(hero.pos)), Color(0.72, 0.40, 1.0, 0.18 + progress * 0.28), 1.5, 12.0, true)
+	elif move == "rift_storm":
+		var point := Vector2(points[0])
+		var screen := world_to_screen(point) + Vector2(0, 8)
+		var radii: Vector2 = sim.ability_area_screen_radii(point, radius)
+		var ring_count := 5 if enraged else 4
+		for ring in ring_count:
+			var ring_scale := (float(ring + 1) / float(ring_count)) * (0.72 + progress * 0.28)
+			_rift_ellipse(screen, radii * ring_scale, (0.40 + progress * 0.5) * pulse, 0.025 + progress * 0.025)
+	else:
+		for value: Variant in points:
+			var point: Vector2 = value
+			var radii: Vector2 = sim.ability_area_screen_radii(point, radius)
+			_rift_ellipse(world_to_screen(point) + Vector2(0, 8), radii, (0.48 + progress * 0.45) * pulse, 0.07 + progress * 0.11)
+			if move == "rift_overhead":
+				draw_line(world_to_screen(point) + Vector2(0, -170), world_to_screen(point), Color(0.74, 0.46, 1.0, 0.22 + progress * 0.4), 2.0, true)
+
+
+func _draw_rift_boss_effect(effect: Dictionary) -> void:
+	var alpha := clampf(float(effect.get("life", 0.0)) / maxf(0.01, float(effect.get("total", 0.5))), 0.0, 1.0)
+	match str(effect.kind):
+		"rift_laser":
+			for target_value: Variant in effect.get("targets", [effect.get("target", effect.pos)]):
+				_rift_laser_ribbon(Vector2(effect.pos), Vector2(target_value), float(effect.get("radius", 64.0)), alpha, true)
+		"rift_overhead":
+			for value: Variant in effect.get("points", []):
+				var point: Vector2 = value
+				var screen := world_to_screen(point)
+				_rift_ellipse(screen + Vector2(0, 8), sim.ability_area_screen_radii(point, float(effect.get("radius", 92.0))), alpha, 0.20 * alpha)
+				var beam_scale := 1.65 if int(effect.get("phase", 1)) >= 3 else 1.0
+				draw_line(screen + Vector2(0, -280), screen, Color(0.85, 0.58, 1.0, alpha), (16.0 * alpha + 2.0) * beam_scale, true)
+				draw_line(screen + Vector2(0, -280), screen, Color(0.99, 0.93, 1.0, alpha), (5.0 * alpha + 1.0) * beam_scale, true)
+		"rift_storm":
+			var point: Vector2 = effect.pos
+			var screen := world_to_screen(point)
+			var radii: Vector2 = sim.ability_area_screen_radii(point, float(effect.get("radius", 240.0)))
+			var elapsed_ratio := 1.0 - alpha
+			var ring_count := int(effect.get("rings", 4))
+			for ring in ring_count:
+				var wave := clampf(elapsed_ratio * 1.35 - float(ring) * 0.16, 0.0, 1.0)
+				if wave <= 0.0:
+					continue
+				var wave_alpha := sin(wave * PI) * 0.95
+				_rift_ellipse(screen + Vector2(0, 8), radii * wave, wave_alpha, 0.045 * wave_alpha)
+			for bolt in 14:
+				var angle := float(bolt) * TAU / 14.0 + clock * 0.3
+				var wave_radius := radii * clampf(elapsed_ratio * 1.18, 0.12, 1.0)
+				var edge := screen + Vector2(cos(angle) * wave_radius.x, sin(angle) * wave_radius.y)
+				draw_line(screen, edge, Color(0.76, 0.45, 1.0, alpha * 0.46), 2.4, true)
+		"rift_arc":
+			var source := world_to_screen(Vector2(effect.pos)) + Vector2(0, -35)
+			var target := world_to_screen(Vector2(effect.target)) + Vector2(0, -24)
+			var mid := (source + target) * 0.5 + Vector2(0, -16)
+			draw_polyline(PackedVector2Array([source, mid, target]), Color(0.85, 0.64, 1.0, alpha), 6.0, true)
+		"rift_orbs":
+			var point := world_to_screen(Vector2(effect.pos))
+			var orb_count := int(effect.get("count", 10))
+			var enraged := bool(effect.get("enraged", false))
+			for orb in orb_count:
+				var angle := float(orb) * TAU / float(orb_count) + clock
+				draw_circle(point + Vector2.from_angle(angle) * (54.0 if enraged else 42.0), 10.0 if enraged else 7.0, Color(1.0, 0.08, 0.15, alpha) if enraged else Color(0.69, 0.31, 1.0, alpha))
+		"rift_orb_hit":
+			var point := world_to_screen(Vector2(effect.pos))
+			var radii: Vector2 = sim.ability_area_screen_radii(Vector2(effect.pos), float(effect.get("radius", 62.0)))
+			_rift_ellipse(point + Vector2(0, 8), radii * (1.1 - alpha * 0.1), alpha, alpha * 0.16)
+
+
+
+func _kindred_ellipse(center: Vector2, radii: Vector2, color: Color, alpha: float, width: float = 3.0, fill_alpha: float = 0.0) -> void:
+	var points := PackedVector2Array()
+	for index in 65:
+		var angle := float(index) * TAU / 64.0
+		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
+	if fill_alpha > 0.0:
+		var fill := points.duplicate()
+		fill.resize(64)
+		draw_colored_polygon(fill, Color(color, fill_alpha))
+	draw_polyline(points, Color(color, alpha), width, true)
+
+
+func _draw_kindred_boss_warning(enemy: Dictionary) -> void:
+	var move := str(enemy.get("special_move", ""))
+	var points: Array = enemy.get("special_warning_positions", [])
+	if points.is_empty():
+		return
+	var progress := 1.0 - clampf(float(enemy.get("special_warning", 0.0)) / maxf(0.01, float(enemy.get("special_warning_total", 1.0))), 0.0, 1.0)
+	var pulse := 0.72 + sin(clock * 13.0) * 0.28
+	var radius := float(enemy.get("special_warning_radius", 110.0))
+	var source := world_to_screen(Vector2(enemy.pos)) + Vector2(0, -28)
+	var spirit := Color("#dffcff")
+	var wolf := Color("#b289ff")
+	if move == "kindred_hunt":
+		for value: Variant in points:
+			var target := world_to_screen(Vector2(value)) + Vector2(0, -18)
+			var direction := (target - source).normalized()
+			var side := direction.orthogonal() * (20.0 + progress * 8.0)
+			draw_colored_polygon(PackedVector2Array([source, target + side, target - side]), Color(wolf, 0.055 + progress * 0.08))
+			draw_dashed_line(source, target, Color(spirit, (0.28 + progress * 0.54) * pulse), 2.0 + progress * 2.0, 13.0, true)
+		for fan_index in 5:
+			var angle := lerpf(-0.62, 0.62, float(fan_index) / 4.0)
+			var end := source + Vector2.LEFT.rotated(angle) * 620.0
+			draw_line(source, end, Color(spirit, 0.08 + progress * 0.16), 2.0, true)
+		return
+	for index in points.size():
+		var point: Vector2 = points[index]
+		var center := world_to_screen(point) + Vector2(0, 8)
+		var radii: Vector2 = sim.ability_area_screen_radii(point, radius)
+		var color := wolf if move in ["kindred_wolf", "kindred_dread"] else spirit
+		_kindred_ellipse(center, radii * (0.90 + progress * 0.10), color, (0.45 + progress * 0.50) * pulse, 3.5, 0.035 + progress * 0.055)
+		if move == "kindred_dance":
+			draw_dashed_line(source, center, Color(spirit, 0.32 + progress * 0.52), 2.2, 10.0, true)
+			for arrow in 3:
+				var offset := Vector2(-26.0 + arrow * 26.0, -radii.y * 0.72)
+				draw_line(center + offset, center + offset + Vector2(0, 22.0 + progress * 18.0), Color(spirit, 0.72), 2.6, true)
+		elif move == "kindred_wolf":
+			for claw in 4:
+				var angle := clock * 0.65 + claw * TAU / 4.0
+				var claw_pos := center + Vector2(cos(angle) * radii.x * 0.60, sin(angle) * radii.y * 0.58)
+				draw_arc(claw_pos, 13.0 + progress * 5.0, angle - 1.1, angle + 1.1, 14, Color(wolf, 0.62 + progress * 0.28), 3.0, true)
+		elif move == "kindred_dread":
+			for mark in 3:
+				var y := -44.0 + mark * 22.0
+				draw_colored_polygon(PackedVector2Array([center+Vector2(-13,y),center+Vector2(0,y+12),center+Vector2(13,y)]),Color(wolf,(0.34+progress*0.56) if mark <= floori(progress*3.0) else 0.18))
+
+
+func _draw_kindred_projectile(projectile: Dictionary) -> void:
+	var point := world_to_screen(Vector2(projectile.pos)) + Vector2(0, -20)
+	var direction := Vector2.LEFT
+	var target_id := int(projectile.get("target_id", -1))
+	if sim != null and target_id >= 0 and target_id < sim.heroes.size():
+		direction = (world_to_screen(Vector2(sim.heroes[target_id].pos)) - point).normalized()
+	if direction.length_squared() < 0.01:
+		direction = Vector2.LEFT
+	var dread := str(projectile.get("kind", "")) == "kindred_dread_arrow"
+	var color := Color("#b889ff") if dread else Color("#e8ffff")
+	var length := 38.0 if dread else 30.0
+	var tail := point - direction * length
+	var side := direction.orthogonal()
+	draw_line(tail, point + direction * 8.0, Color(color, 0.96), 4.5 if dread else 3.0, true)
+	draw_line(tail, tail + side * 8.0 + direction * 10.0, Color(color, 0.86), 2.8, true)
+	draw_line(tail, tail - side * 8.0 + direction * 10.0, Color(color, 0.86), 2.8, true)
+	draw_colored_polygon(PackedVector2Array([point+direction*12.0,point-direction*2.0+side*7.0,point-direction*2.0-side*7.0]),Color(color,0.94))
+	draw_circle(point, 13.0 if dread else 9.0, Color(color, 0.14))
+
+
+func _draw_kindred_hazard(hazard: Dictionary) -> void:
+	var center_world := Vector2(hazard.pos)
+	var center := world_to_screen(center_world) + Vector2(0, 8)
+	var radii: Vector2 = sim.ability_area_screen_radii(center_world, float(hazard.get("radius", 240.0)))
+	var total := maxf(0.1, float(hazard.get("total", 4.0)))
+	var life_ratio := clampf(float(hazard.get("life", 0.0)) / total, 0.0, 1.0)
+	var pulse := fposmod((1.0-life_ratio)*4.4, 1.0)
+	_kindred_ellipse(center, radii, Color("#a878ff"), 0.58*life_ratio, 3.0, 0.07*life_ratio)
+	_kindred_ellipse(center, radii*(0.24+0.70*pulse), Color("#d9c7ff"), sin(pulse*PI)*0.68*life_ratio, 2.4)
+	for paw in 6:
+		var angle := float(paw)*TAU/6.0-clock*0.30
+		var paw_pos := center+Vector2(cos(angle)*radii.x*0.62,sin(angle)*radii.y*0.62)
+		draw_circle(paw_pos,5.5,Color(0.77,0.61,1.0,0.46*life_ratio))
+		draw_circle(paw_pos+Vector2(-6,-5),2.3,Color(0.90,0.82,1.0,0.52*life_ratio))
+		draw_circle(paw_pos+Vector2(0,-7),2.3,Color(0.90,0.82,1.0,0.52*life_ratio))
+		draw_circle(paw_pos+Vector2(6,-5),2.3,Color(0.90,0.82,1.0,0.52*life_ratio))
+
+
+func _draw_kindred_boss_effect(effect: Dictionary) -> void:
+	var alpha := clampf(float(effect.get("life", 0.0)) / maxf(0.01, float(effect.get("total", 0.8))), 0.0, 1.0)
+	var elapsed := 1.0-alpha
+	var kind := str(effect.kind)
+	var center_world := Vector2(effect.pos)
+	var center := world_to_screen(center_world)+Vector2(0,8)
+	if kind == "kindred_respite":
+		var radius := float(effect.get("radius",285.0))
+		var radii: Vector2 = sim.ability_area_screen_radii(center_world,radius)
+		_kindred_ellipse(center,radii,Color("#f4fbff"),0.82,4.0,0.10)
+		for ring in 4:
+			var wave := fposmod(elapsed*3.0+float(ring)/4.0,1.0)
+			_kindred_ellipse(center,radii*(0.25+wave*0.75),Color("#bda6ff"),sin(wave*PI)*0.50,2.0)
+		draw_circle(center,22.0+sin(clock*3.0)*4.0,Color(0.90,1.0,1.0,0.20))
+	elif kind == "kindred_respite_end":
+		var radii: Vector2 = sim.ability_area_screen_radii(center_world,float(effect.get("radius",285.0)))
+		_kindred_ellipse(center,radii*(0.40+elapsed*0.80),Color("#ffffff"),sin(elapsed*PI)*0.95,6.0,0.05*alpha)
+	elif kind == "kindred_protect":
+		draw_arc(center-Vector2(0,18),34.0+elapsed*10.0,0,TAU,40,Color("#e9fbff",alpha),4.0,true)
+	elif kind == "kindred_dance":
+		for point_value: Variant in effect.get("points",[]):
+			var target := world_to_screen(Vector2(point_value))
+			draw_line(center,target,Color(0.86,1.0,1.0,alpha*0.42),2.0,true)
+		for ribbon in 3:
+			draw_arc(center,25.0+elapsed*54.0+ribbon*10.0,-2.8+ribbon*0.35,-0.2+ribbon*0.35,28,Color(0.86,1.0,1.0,alpha*(0.72-ribbon*0.13)),3.0,true)
+	elif kind == "kindred_wolf":
+		var radii: Vector2 = sim.ability_area_screen_radii(center_world,float(effect.get("radius",240.0)))
+		_kindred_ellipse(center,radii*(0.35+elapsed*0.75),Color("#aa79ff"),sin(elapsed*PI)*0.90,5.0,0.08*alpha)
+	elif kind == "kindred_dread":
+		var target := world_to_screen(Vector2(effect.get("target",effect.pos)))
+		draw_dashed_line(center,target,Color("#b889ff",alpha*0.78),3.0,10.0,true)
+		for mark in 3:
+			draw_arc(target,24.0+mark*12.0+elapsed*16.0,-2.6,-0.5,24,Color("#d8c3ff",alpha*(0.92-mark*0.18)),3.0,true)
+	elif kind == "kindred_hunt":
+		var count := int(effect.get("count",12))
+		for arrow in mini(count,18):
+			var angle := lerpf(-0.78,0.78,float(arrow%9)/8.0)+sin(elapsed*PI)*0.08
+			var start := center+Vector2.LEFT.rotated(angle)*(38.0+elapsed*80.0)
+			var finish := center+Vector2.LEFT.rotated(angle)*(170.0+elapsed*340.0)
+			draw_line(start,finish,Color("#ecffff",alpha*(0.50+float(arrow%3)*0.16)),2.0+float(arrow%2),true)
+	elif kind == "kindred_arrow_hit":
+		var color := Color("#b889ff") if bool(effect.get("dread",false)) else Color("#e9ffff")
+		for shard in 8:
+			var angle := float(shard)*TAU/8.0
+			draw_line(center+Vector2.from_angle(angle)*elapsed*8.0,center+Vector2.from_angle(angle)*(14.0+elapsed*36.0),Color(color,alpha),3.0,true)
+
+
+func _slime_element_color(element: String) -> Color:
+	return {"pyro":Color("#ff624c"),"hydro":Color("#42cfff"),"electro":Color("#b970ff"),"cryo":Color("#a9efff"),"anemo":Color("#67efc4")}.get(element, Color("#ff7dc8"))
+
+
+func _slime_ellipse(center: Vector2, radii: Vector2, color: Color, alpha: float, width: float = 3.0) -> void:
+	var points := PackedVector2Array()
+	for index in 48:
+		var angle := float(index) * TAU / 48.0
+		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
+	points.append(points[0])
+	draw_polyline(points, Color(color, alpha), width, true)
+
+
+func _draw_slime_boss_warning(enemy: Dictionary) -> void:
+	var move := str(enemy.get("special_move", ""))
+	var points: Array = enemy.get("special_warning_positions", [])
+	if points.is_empty():
+		return
+	var progress := 1.0 - clampf(float(enemy.get("special_warning", 0.0)) / maxf(0.01, float(enemy.get("special_warning_total", 1.0))), 0.0, 1.0)
+	var pulse := 0.72 + 0.28 * sin(clock * 12.0)
+	var radius := float(enemy.get("special_warning_radius", 100.0))
+	var source := world_to_screen(Vector2(enemy.pos)) + Vector2(0, -22)
+	var phase := int(enemy.get("boss_phase", 1))
+	if move == "slime_reflux":
+		var radii: Vector2 = sim.ability_area_screen_radii(Vector2(enemy.pos), radius)
+		for ring in 5:
+			var scale := fposmod(progress * 1.4 + float(ring) / 5.0, 1.0)
+			_slime_ellipse(world_to_screen(Vector2(enemy.pos)) + Vector2(0, 8), radii * (1.0 - scale * 0.72), Color("#ff77cf"), (0.22 + scale * 0.56) * pulse, 2.0 + progress * 2.0)
+		for spoke in 12:
+			var angle := float(spoke) * TAU / 12.0 + clock * 0.35
+			var edge := Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+			draw_line(world_to_screen(Vector2(enemy.pos)) + edge, world_to_screen(Vector2(enemy.pos)) + edge * 0.30, Color(0.35,0.95,0.90,0.18+progress*0.34), 2.0, true)
+		return
+	for index in points.size():
+		var point: Vector2 = points[index]
+		var screen := world_to_screen(point) + Vector2(0, 8)
+		var radii: Vector2 = sim.ability_area_screen_radii(point, radius)
+		var element_color := _slime_element_color(["pyro","hydro","electro","cryo","anemo"][index % 5])
+		_slime_ellipse(screen, radii * (0.88 + progress * 0.12), element_color, (0.42 + progress * 0.5) * pulse, 3.0)
+		if move == "slime_bounce":
+			var control := (source + screen) * 0.5 + Vector2(0, -115.0 - index * 7.0)
+			var arc := PackedVector2Array()
+			for step in 17:
+				var t := float(step) / 16.0
+				arc.append(source * (1.0-t)*(1.0-t) + control * 2.0*(1.0-t)*t + screen*t*t)
+			draw_polyline(arc, Color(element_color, 0.28 + progress * 0.48), 3.0, true)
+			for tooth in 3:
+				var x := -18.0 + tooth * 18.0
+				draw_colored_polygon(PackedVector2Array([screen+Vector2(x-7,2),screen+Vector2(x,-12-progress*10),screen+Vector2(x+7,2)]),Color(element_color,0.38+progress*0.44))
+		elif move == "slime_burst":
+			draw_circle(screen, 7.0 + 5.0 * pulse, Color(element_color, 0.66))
+			draw_dashed_line(source, screen, Color(element_color, 0.26 + progress * 0.36), 1.5, 10.0, true)
+		elif move == "slime_court":
+			var orbit_angle := clock * (2.2 if phase >= 2 else 1.6) + float(index) * TAU / float(points.size())
+			var court_pos := source + Vector2(cos(orbit_angle) * 72.0, sin(orbit_angle) * 30.0)
+			draw_circle(court_pos, 10.0, Color(element_color, 0.76))
+			draw_circle(court_pos+Vector2(-3,-2), 2.5, Color.WHITE)
+			draw_dashed_line(court_pos, screen, Color(element_color, 0.24 + progress * 0.42), 2.0, 12.0, true)
+
+
+func _draw_slime_projectile(projectile: Dictionary) -> void:
+	var point := world_to_screen(Vector2(projectile.pos)) + Vector2(0, -18)
+	var color := _slime_element_color(str(projectile.get("element", "hydro")))
+	var court := str(projectile.get("kind", "")) == "slime_image"
+	var size := (16.0 if court else 11.0) * world_depth_scale(Vector2(projectile.pos))
+	draw_circle(point, size + 8.0, Color(color, 0.16))
+	draw_circle(point, size, Color(color, 0.90))
+	draw_circle(point + Vector2(-size*0.30,-size*0.22), size*0.27, Color(1,1,1,0.86))
+	if court:
+		for tooth in 3:
+			var x := -size * 0.62 + float(tooth) * size * 0.62
+			draw_colored_polygon(PackedVector2Array([point+Vector2(x-4,-size*0.72),point+Vector2(x,-size*1.25),point+Vector2(x+4,-size*0.72)]),Color(color,0.92))
+
+
+func _draw_slime_hazard(hazard: Dictionary) -> void:
+	var kind := str(hazard.get("kind", ""))
+	var center := world_to_screen(Vector2(hazard.pos)) + Vector2(0, 8)
+	var radii: Vector2 = sim.ability_area_screen_radii(Vector2(hazard.pos), float(hazard.get("radius", 90.0)))
+	var phase := fposmod(clock * 0.52 + float(Vector2(hazard.pos).x) * 0.001, 1.0)
+	if kind == "slime_pool":
+		var color := _slime_element_color(str(hazard.get("element", "hydro")))
+		var life_alpha := clampf(float(hazard.get("life", 0.0)) / 0.45, 0.0, 1.0)
+		var polygon := PackedVector2Array()
+		for index in 40:
+			var angle := float(index) * TAU / 40.0
+			var wobble := 0.92 + sin(angle*5.0+clock*4.0)*0.06
+			polygon.append(center + Vector2(cos(angle)*radii.x*wobble,sin(angle)*radii.y*wobble))
+		draw_colored_polygon(polygon, Color(color, 0.12 * life_alpha))
+		polygon.append(polygon[0])
+		draw_polyline(polygon, Color(color, 0.58 * life_alpha), 2.4, true)
+		for bubble in 5:
+			var angle := float(bubble) * TAU / 5.0 + clock * 0.5
+			var bubble_pos := center + Vector2(cos(angle)*radii.x*0.55,sin(angle)*radii.y*0.48)
+			draw_circle(bubble_pos, 3.0 + sin(clock*4.0+bubble)*1.2, Color(color,0.52*life_alpha))
+	elif kind in ["slime_bounce_impact", "slime_court_final"] and float(hazard.get("delay", 0.0)) <= 0.0:
+		_slime_ellipse(center, radii * (0.65 + phase * 0.35), Color("#ff73c7"), 0.38, 3.0)
+
+
+func _draw_slime_boss_effect(effect: Dictionary) -> void:
+	var alpha := clampf(float(effect.get("life", 0.0)) / maxf(0.01, float(effect.get("total", 0.7))), 0.0, 1.0)
+	var elapsed := 1.0 - alpha
+	var kind := str(effect.kind)
+	var center := world_to_screen(Vector2(effect.pos)) + Vector2(0, 8)
+	var phase := int(effect.get("phase", 1))
+	if kind == "slime_attack":
+		var target := world_to_screen(Vector2(effect.get("target", effect.pos))) + Vector2(0, -18)
+		var control := (center + target) * 0.5 + Vector2(0, -55)
+		var arc := PackedVector2Array()
+		for step in 18:
+			var t := float(step) / 17.0
+			arc.append(center * (1.0-t)*(1.0-t) + control * 2.0*(1.0-t)*t + target*t*t)
+		draw_polyline(arc, Color(0.45, 1.0, 0.82, alpha), 9.0 * sin(elapsed * PI) + 2.0, true)
+		draw_circle(target, 10.0 + elapsed * 24.0, Color(1.0, 0.35, 0.72, alpha * 0.35))
+		_slime_ellipse(target, Vector2(42, 19) * (0.35 + elapsed), Color("#ff70c5"), sin(elapsed * PI) * 0.92, 4.0)
+	elif kind in ["slime_bounce", "slime_burst", "slime_court"]:
+		var launch_color := Color("#ff75c9") if phase >= 2 else Color("#5de3db")
+		for ring in 3:
+			draw_arc(center, 30.0 + elapsed*65.0 + ring*12.0, clock+ring*1.1, clock+ring*1.1+PI*1.35, 32, Color(launch_color,alpha*(0.52-ring*0.10)), 3.0, true)
+	if kind == "slime_reflux":
+		var radii: Vector2 = sim.ability_area_screen_radii(Vector2(effect.pos), float(effect.get("radius", 300.0)))
+		for ring in 7:
+			var wave := clampf(elapsed * 1.5 - float(ring)*0.10, 0.0, 1.0)
+			_slime_ellipse(center, radii*(1.0-wave*0.82), Color("#ff64c3"), sin(wave*PI)*0.82, 3.2)
+		draw_circle(center, 18.0 + elapsed*32.0, Color(0.35,0.95,0.86,alpha*0.34))
+	elif kind in ["slime_bounce_hit", "slime_court_final"]:
+		var radii: Vector2 = sim.ability_area_screen_radii(Vector2(effect.pos), float(effect.get("radius", 110.0)))
+		_slime_ellipse(center, radii*(0.35+elapsed*0.78), Color("#ff5dbf"), sin(elapsed*PI)*0.95, 5.0)
+		for shard in 12:
+			var angle := float(shard)*TAU/12.0
+			var start := center+Vector2(cos(angle)*radii.x*elapsed*0.35,sin(angle)*radii.y*elapsed*0.35)
+			var finish := center+Vector2(cos(angle)*radii.x*elapsed,sin(angle)*radii.y*elapsed)
+			draw_line(start,finish,Color(0.98,0.75,0.30,alpha),3.0,true)
+	elif kind in ["slime_glob_hit", "slime_court_hit"]:
+		var color := _slime_element_color(str(effect.get("element", "hydro")))
+		var radii: Vector2 = sim.ability_area_screen_radii(Vector2(effect.pos), float(effect.get("radius", 90.0)))
+		_slime_ellipse(center,radii*(0.32+elapsed*0.72),color,sin(elapsed*PI)*0.92,4.0)
+		for drop in 8:
+			var angle := float(drop)*TAU/8.0+clock*0.15
+			var drop_pos := center+Vector2(cos(angle)*radii.x*elapsed,sin(angle)*radii.y*elapsed)
+			draw_circle(drop_pos,4.0+3.0*alpha,Color(color,alpha*0.78))
+
+
 func _draw_warning_reticle(center: Vector2, radius: float, ratio: float, seconds: float, boss: bool, title: String = "") -> void:
 	var color := Color("#ff8b9a") if boss else Color("#ff5267")
 	var ring_radius := radius + (10.0 if boss else 6.0)
@@ -795,8 +1242,10 @@ func _draw_warning_reticle(center: Vector2, radius: float, ratio: float, seconds
 	draw_line(center + Vector2(-10, 0), center + Vector2(10, 0), Color(color, 0.72), 1.4, true)
 	draw_line(center + Vector2(0, -10), center + Vector2(0, 10), Color(color, 0.72), 1.4, true)
 	caption(center + Vector2(-13, 5), "%.1f" % maxf(0.0, seconds), Color("#fff4ee"), 15 if boss else 12)
-	if boss and not title.is_empty():
-		caption(center + Vector2(-minf(92.0, title.length() * 5.5), -ring_radius - 13.0), title, Color("#ffd2d8"), 13)
+	if boss:
+		caption(center + Vector2(-11, -ring_radius - 35.0), "⚠", Color("#ffcf42"), 22)
+		if not title.is_empty():
+			caption(center + Vector2(-minf(92.0, title.length() * 5.5), -ring_radius - 13.0), title, Color("#ffd2d8"), 13)
 
 func _draw_orbitals() -> void:
 	for orbital: Dictionary in sim.orbitals:
@@ -1826,16 +2275,17 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	else:
 		var facing := float(enemy.get("facing", -1.0))
 		_draw_anchored_texture_region(atlas, enemy.pos + Vector2(0, ENEMY_FOOT_OFFSET + bob), Vector2(side, side), Vector2(16, 16), Vector2(8, 16), facing, -1.0, Rect2(0, 144, 16, 16), tint)
-	var ratio: float = clampf(float(enemy.hp) / float(enemy.max_hp), 0, 1)
-	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44, 4)), Color("#302b32"))
-	draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44 * ratio, 4)), RED)
+	if not str(enemy.kind).begins_with("boss_"):
+		var ratio: float = clampf(float(enemy.hp) / float(enemy.max_hp), 0, 1)
+		draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44, 4)), Color("#302b32"))
+		draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44 * ratio, 4)), RED)
+		if float(enemy.get("max_shield", 0.0)) > 0.0 and float(enemy.get("shield", 0.0)) > 0.0:
+			var shield_ratio: float = float(enemy.shield) / float(enemy.max_shield)
+			draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44, 3)), Color("#24394e"))
+			draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44 * shield_ratio, 3)), Color("#66c8ff"))
+			draw_arc(enemy.pos + Vector2(0, -20 + bob), side * 0.48, -2.7, 0.35, 22, Color(0.45, 0.82, 1.0, 0.72), 2.5, true)
 	if sim.endless_mode and int(enemy.get("level", 0)) > 0:
 		caption(enemy.pos + Vector2(-21, -side - 13), "Lv.%d" % int(enemy.level), Color("#f2c7ad"), 9)
-	if float(enemy.get("max_shield", 0.0)) > 0.0 and float(enemy.get("shield", 0.0)) > 0.0:
-		var shield_ratio: float = float(enemy.shield) / float(enemy.max_shield)
-		draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44, 3)), Color("#24394e"))
-		draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44 * shield_ratio, 3)), Color("#66c8ff"))
-		draw_arc(enemy.pos + Vector2(0, -20 + bob), side * 0.48, -2.7, 0.35, 22, Color(0.45, 0.82, 1.0, 0.72), 2.5, true)
 	if enemy.kind == "buffer":
 		draw_arc(enemy.pos + Vector2(0, -20), 30.0 + sin(clock * 2.0) * 3.0, 0, TAU, 32, Color(0.85, 0.42, 0.95, 0.5), 2.0, true)
 		caption(enemy.pos + Vector2(-7, 27), "增", Color("#cf7fda"), 12)
@@ -1845,15 +2295,32 @@ func _draw_enemy(enemy: Dictionary) -> void:
 		var style := str(enemy.get("boss_style", "commander"))
 		var phase := int(enemy.get("boss_phase", 1))
 		var pulse := sin(clock * (2.2 + phase * 0.35))
-		var boss_color: Color = {"commander": Color("#ff6686"), "brood": Color("#df61bd"), "storm": Color("#66d9ff"), "bulwark": Color("#e3bd62"), "artillery": Color("#ff8456"), "chronophage": Color("#9b7cff")}.get(style, Color("#ff6686"))
-		draw_arc(body, 48.0 + pulse * 3.0 + phase * 2.0, 0, TAU, 36, Color(boss_color, 0.82), 3.0 + phase * 0.7, true)
-		for phase_mark in phase:
-			var mark_angle := -PI * 0.5 + phase_mark * TAU / maxf(1.0, phase)
-			draw_circle(body + Vector2.from_angle(mark_angle) * 55.0, 4.0, boss_color)
+		var boss_color: Color = {"rift": Color("#a36bff"), "commander": Color("#ff6686"), "brood": Color("#df61bd"), "kindred": Color("#dffcff"), "storm": Color("#66d9ff"), "bulwark": Color("#e3bd62"), "artillery": Color("#ff8456"), "chronophage": Color("#9b7cff")}.get(style, Color("#ff6686"))
+		if str(enemy.kind) not in ["boss_01", "boss_02", "boss_03"]:
+			draw_arc(body, 48.0 + pulse * 3.0 + phase * 2.0, 0, TAU, 36, Color(boss_color, 0.82), 3.0 + phase * 0.7, true)
+			for phase_mark in phase:
+				var mark_angle := -PI * 0.5 + phase_mark * TAU / maxf(1.0, phase)
+				draw_circle(body + Vector2.from_angle(mark_angle) * 55.0, 4.0, boss_color)
 		match style:
+			"rift":
+				pass
 			"brood":
-				for sac in 3:
-					draw_circle(body + Vector2(-25 + sac * 25, 20 + sin(clock * 3.0 + sac) * 4.0), 13.0, Color(boss_color, 0.58))
+				if str(enemy.kind) != "boss_02":
+					for sac in 3:
+						draw_circle(body + Vector2(-25 + sac * 25, 20 + sin(clock * 3.0 + sac) * 4.0), 13.0, Color(boss_color, 0.58))
+			"kindred":
+				var bow_center := body + Vector2(-8.0, -10.0)
+				draw_arc(bow_center, 47.0 + pulse * 2.0, -1.24, 1.24, 32, Color("#f0ffff"), 5.0, true)
+				draw_line(bow_center + Vector2(15,-44), bow_center + Vector2(15,44), Color("#adc8dc"), 2.0, true)
+				draw_line(bow_center + Vector2(-34,0), bow_center + Vector2(54,0), Color("#f5ffff"), 3.0, true)
+				var wolf_pos := body + Vector2(cos(clock*1.4)*52.0, -30.0 + sin(clock*1.4)*18.0)
+				draw_circle(wolf_pos, 18.0, Color(0.47,0.28,0.72,0.28))
+				draw_colored_polygon(PackedVector2Array([wolf_pos+Vector2(-18,8),wolf_pos+Vector2(-8,-18),wolf_pos,wolf_pos+Vector2(10,-16),wolf_pos+Vector2(20,8),wolf_pos+Vector2(0,16)]),Color(0.70,0.54,0.94,0.55))
+				draw_circle(wolf_pos+Vector2(-6,-2),2.5,Color("#f4ffff"))
+				draw_circle(wolf_pos+Vector2(6,-2),2.5,Color("#f4ffff"))
+				if bool(enemy.get("kindred_respite_active", false)):
+					var respite_center := Vector2(enemy.get("kindred_respite_center", enemy.pos))
+					_kindred_ellipse(world_to_screen(respite_center)+Vector2(0,8), sim.ability_area_screen_radii(respite_center,float(enemy.get("kindred_respite_radius",285.0))), Color("#f2ffff"),0.82,4.0,0.08)
 			"storm":
 				for bolt in 3:
 					var x := -34.0 + bolt * 34.0
@@ -1872,7 +2339,7 @@ func _draw_enemy(enemy: Dictionary) -> void:
 			_:
 				for crown in 3:
 					draw_colored_polygon(PackedVector2Array([body + Vector2(-34 + crown * 34, -38), body + Vector2(-22 + crown * 34, -63), body + Vector2(-10 + crown * 34, -38)]), boss_color)
-		var boss_name: String = {"commander": "统领", "brood": "母巢", "storm": "风暴", "bulwark": "壁垒", "artillery": "炮台", "chronophage": "噬时"}.get(style, "统领")
+		var boss_name: String = {"rift": "裂隙统领", "commander": "统领", "brood": "史莱姆王", "kindred": "永猎双子", "storm": "风暴", "bulwark": "壁垒", "artillery": "炮台", "chronophage": "噬时"}.get(style, "统领")
 		caption(enemy.pos + Vector2(-18, 36), boss_name + " · P%d" % phase, boss_color, 14)
 
 	if enemy.haste_timer > 0:
@@ -1999,8 +2466,14 @@ func _draw_projectile(projectile: Dictionary) -> void:
 func _draw_sequence_enemy(enemy: Dictionary, bob: float) -> void:
 	var enemy_id := str(enemy.kind)
 	var state := "attack" if bool(enemy.get("attack_pending", false)) or bool(enemy.get("special_pending", false)) or bool(enemy.get("attack_stance", false)) else "run"
+	if enemy_id == "boss_01" and bool(enemy.get("special_pending", false)):
+		state = _rift_boss_sequence_state(str(enemy.get("special_move", "")))
 	var frame := 0
-	if state == "attack" and not bool(enemy.get("attack_pending", false)) and not bool(enemy.get("special_pending", false)):
+	if enemy_id == "boss_01" and bool(enemy.get("special_pending", false)):
+		frame = enemy_sequences.frame_at_time(enemy_id, state, maxf(0.0, float(enemy.get("special_warning_total", 0.0)) - float(enemy.get("special_warning", 0.0))))
+	elif enemy_id == "boss_01" and bool(enemy.get("attack_pending", false)):
+		frame = enemy_sequences.frame_at_time(enemy_id, state, 47.0 / 24.0 - float(enemy.get("warning_timer", 0.0)))
+	elif state == "attack" and not bool(enemy.get("attack_pending", false)) and not bool(enemy.get("special_pending", false)):
 		frame = enemy_sequences.frame_at_time(enemy_id, state, clock + float(enemy.id) * 0.137)
 	elif state == "attack":
 		var lead := 1.05 if float(enemy.get("attack_range", 0.0)) > 0.0 else 0.72
@@ -2022,6 +2495,9 @@ func _draw_sequence_enemy(enemy: Dictionary, bob: float) -> void:
 	var foot := Vector2(enemy.pos) + Vector2(0.0, ENEMY_FOOT_OFFSET + bob * 0.22)
 	var tint := Color("#fff0e8") if float(enemy.get("flash", 0.0)) > 0.0 and not reduced_effects else Color.WHITE
 	_draw_anchored_texture_region(texture, foot, Vector2(base_size, base_size) * scale, enemy_sequences.cell(enemy_id), enemy_sequences.pivot(enemy_id), float(enemy.get("facing", -1.0)), float(enemy_sequences.definition(enemy_id).get("native_facing", 1.0)), enemy_sequences.source_rect(enemy_id, state, frame), tint)
+
+func _rift_boss_sequence_state(move: String) -> String:
+	return {"rift_laser":"skill1", "rift_orbs":"skill4", "rift_overhead":"skill3", "rift_storm":"skill2"}.get(move, "attack")
 
 func _draw_enemy_death_visual(enemy: Dictionary) -> void:
 	var enemy_id := str(enemy.get("kind", ""))
@@ -2150,9 +2626,11 @@ func _draw_red_moon_warning() -> void:
 			continue
 		if target.is_empty() or enemy.hp > float(target.hp):
 			target = enemy
-	if target.is_empty() or not _render_point_visible(Vector2(target.pos), 150.0):
+	if target.is_empty() and not support.has("target_point"):
 		return
-	var world_point := Vector2(target.pos)
+	var world_point := Vector2(support.get("target_point", target.get("pos", Vector2.ZERO)))
+	if not _render_point_visible(world_point, 150.0):
+		return
 	var point := world_to_screen(world_point) + Vector2(0, 8)
 	var radii: Vector2 = sim.support_barrage_screen_radii(world_point, float(support.get("radius", 105.0)))
 	var progress := 1.0 - time_left / RED_MOON_WARNING_SECONDS
@@ -2201,7 +2679,7 @@ func _draw_red_moon_impact(effect: Dictionary) -> void:
 		draw_line(start, finish, Color(1.0, 0.38, 0.27, shock_alpha * 0.65), 2.5, true)
 
 func _crossfire_field_edges(lane_y: float, half_width: float) -> Array[Vector2]:
-	var field := visible_world_rect()
+	var field := visible_world_rect() if sim != null and sim.endless_mode else Sim.MOVE_AREA
 	var bounds := Rect2(field.position.x, lane_y - half_width, field.size.x, half_width * 2.0)
 	return [
 		world_to_screen(Vector2(bounds.position.x, lane_y - half_width)),
@@ -2217,7 +2695,7 @@ func _draw_crossfire_warning() -> void:
 	var time_left := float(support.get("timer", 99.0))
 	if time_left <= 0.0 or time_left > CROSSFIRE_WARNING_SECONDS:
 		return
-	var lane_y := float(sim.enemies[0].pos.y)
+	var lane_y := float(support.get("lane_y", sim.enemies[0].pos.y))
 	var edges := _crossfire_field_edges(lane_y, 58.0)
 	var progress := 1.0 - time_left / CROSSFIRE_WARNING_SECONDS
 	draw_colored_polygon(PackedVector2Array(edges), Color(0.36, 0.16, 0.025, 0.07 + progress * 0.07))

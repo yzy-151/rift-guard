@@ -54,7 +54,7 @@ func run(game) -> void:
 	expect(db.boss_patterns.size()==6,"six boss pattern libraries are loaded")
 	for boss_id:String in db.boss_patterns:
 		var phases:Array=db.boss_patterns[boss_id].get("phases",[])
-		expect(phases.size()==3 and phases.all(func(row:Dictionary)->bool:return not str(row.get("shape","")).is_empty() and not row.get("moves",[]).is_empty()),"%s owns three telegraphed phases"%boss_id)
+		expect(phases.size()==(2 if boss_id=="boss_02" else 3) and phases.all(func(row:Dictionary)->bool:return not str(row.get("shape","")).is_empty() and not row.get("moves",[]).is_empty()),"%s owns its authored telegraphed phases"%boss_id)
 	expect(db.enemy_affixes.size()>=8,"late-game enemy affix pool includes eight behaviors")
 	expect(db.vfx_profiles.size()>=6 and db.vfx_profiles.values().all(func(profile:Dictionary)->bool:return VfxPipeline.validate_profile(profile)),"VFX profiles define valid pools and blend modes")
 	var migrated:=SaveMigrator.migrate({"build_history":[]})

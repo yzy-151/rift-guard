@@ -1,60 +1,69 @@
 [
   {
     "id": "boss_01",
-    "style": "commander",
+    "style": "rift",
     "phases": [
       {
         "phase": 1,
-        "name": "号令脉冲",
+        "name": "裂隙初潮",
         "shape": "circle",
-        "lead": 1.35,
-        "radius": 150,
+        "lead": 2.0,
+        "radius": 220,
         "moves": [
-          "pulse",
-          "summon"
+          "rift_laser",
+          "rift_orbs",
+          "rift_overhead",
+          "rift_storm"
         ],
+        "pulse": 6.2,
         "arena_event": {
-          "type": "seal_route",
-          "duration": 7.0,
-          "radius": 150,
+          "type": "rift_surge",
+          "duration": 5.0,
+          "radius": 190,
           "intensity": 1,
-          "color": "#e96c78"
+          "color": "#8551cc"
         }
       },
       {
         "phase": 2,
-        "name": "交叉军令",
-        "shape": "cross",
-        "lead": 1.15,
-        "radius": 175,
+        "name": "裂隙共振",
+        "shape": "circle",
+        "lead": 2.0,
+        "radius": 220,
         "moves": [
-          "crossfire",
-          "charge_summon"
+          "rift_orbs",
+          "rift_laser",
+          "rift_storm",
+          "rift_overhead"
         ],
+        "pulse": 5.3,
         "arena_event": {
-          "type": "safe_zone_shift",
-          "duration": 8.5,
-          "radius": 175,
+          "type": "rift_surge",
+          "duration": 6.0,
+          "radius": 220,
           "intensity": 2,
-          "color": "#f0a86e"
+          "color": "#8551cc"
         }
       },
       {
         "phase": 3,
-        "name": "猩红总攻",
-        "shape": "fan",
-        "lead": 0.95,
+        "name": "紫电狂潮",
+        "shape": "circle",
+        "lead": 2.0,
         "radius": 220,
         "moves": [
-          "fan_burst",
-          "elite_summon"
+          "rift_storm",
+          "rift_overhead",
+          "rift_laser",
+          "rift_orbs"
         ],
+        "pulse": 4.5,
         "arena_event": {
-          "type": "reinforcement_gate",
-          "duration": 10.0,
-          "radius": 220,
+          "type": "rift_surge",
+          "duration": 7.0,
+          "radius": 250,
           "intensity": 3,
-          "color": "#ffd36e"
+          "color": "#8551cc"
         }
       }
     ]
@@ -65,114 +74,108 @@
     "phases": [
       {
         "phase": 1,
-        "name": "孵化圈",
-        "shape": "circle",
-        "lead": 1.45,
-        "radius": 135,
+        "name": "史莱姆王庭",
+        "shape": "multi_circle",
+        "lead": 1.55,
+        "radius": 120,
         "moves": [
-          "runner_summon"
+          "slime_bounce",
+          "slime_burst",
+          "slime_reflux",
+          "slime_court"
         ],
         "arena_event": {
-          "type": "spawn_rifts",
+          "type": "slime_court",
           "duration": 7.0,
-          "radius": 135,
+          "radius": 180,
           "intensity": 1,
-          "color": "#e96c78"
+          "color": "#70d8e8"
         }
       },
       {
         "phase": 2,
-        "name": "分裂卵群",
+        "name": "五色暴君",
         "shape": "multi_circle",
-        "lead": 1.2,
+        "lead": 1.3,
         "radius": 150,
         "moves": [
-          "splitter_summon",
-          "slow_field"
+          "slime_bounce",
+          "slime_burst",
+          "slime_reflux",
+          "slime_court"
         ],
         "arena_event": {
-          "type": "moving_hazard",
-          "duration": 8.5,
-          "radius": 150,
+          "type": "slime_deluge",
+          "duration": 9.0,
+          "radius": 250,
           "intensity": 2,
-          "color": "#f0a86e"
-        }
-      },
-      {
-        "phase": 3,
-        "name": "母巢坍缩",
-        "shape": "donut",
-        "lead": 1.05,
-        "radius": 230,
-        "moves": [
-          "swarm",
-          "pull"
-        ],
-        "arena_event": {
-          "type": "brood_nest",
-          "duration": 10.0,
-          "radius": 230,
-          "intensity": 3,
-          "color": "#ffd36e"
+          "color": "#ff6fae"
         }
       }
     ]
   },
   {
     "id": "boss_03",
-    "style": "storm",
+    "style": "kindred",
     "phases": [
       {
         "phase": 1,
-        "name": "风眼",
-        "shape": "circle",
-        "lead": 1.25,
-        "radius": 155,
+        "name": "羊灵试猎",
+        "shape": "multi_circle",
+        "lead": 1.45,
+        "radius": 110,
         "moves": [
-          "knockback"
+          "kindred_dance",
+          "kindred_wolf",
+          "kindred_dread",
+          "kindred_hunt"
         ],
         "arena_event": {
-          "type": "wind_lane",
-          "duration": 7.0,
-          "radius": 155,
+          "type": "spirit_hunt",
+          "duration": 7.5,
+          "radius": 190,
           "intensity": 1,
-          "color": "#e96c78"
+          "color": "#8fe7dc"
         }
       },
       {
         "phase": 2,
-        "name": "双重龙卷",
-        "shape": "line",
-        "lead": 1.05,
-        "radius": 180,
+        "name": "狼灵追猎",
+        "shape": "fan",
+        "lead": 1.2,
+        "radius": 210,
         "moves": [
-          "sweep",
-          "flyer_summon"
+          "kindred_wolf",
+          "kindred_dance",
+          "kindred_hunt",
+          "kindred_dread"
         ],
         "arena_event": {
-          "type": "cyclone_ring",
+          "type": "wolf_frenzy",
           "duration": 8.5,
-          "radius": 180,
+          "radius": 240,
           "intensity": 2,
-          "color": "#f0a86e"
+          "color": "#b993ff"
         }
       },
       {
         "phase": 3,
-        "name": "天穹裂风",
-        "shape": "spiral",
-        "lead": 0.9,
-        "radius": 240,
+        "name": "永猎终幕",
+        "shape": "fan",
+        "lead": 0.95,
+        "radius": 280,
         "moves": [
-          "spiral",
-          "silence"
+          "kindred_hunt",
+          "kindred_dread",
+          "kindred_dance",
+          "kindred_wolf"
         ],
         "arena_event": {
-          "type": "storm_cross",
+          "type": "eternal_hunt",
           "duration": 10.0,
-          "radius": 240,
+          "radius": 300,
           "intensity": 3,
-          "color": "#ffd36e"
+          "color": "#ece6ff"
         }
       }
     ]

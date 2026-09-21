@@ -35,6 +35,7 @@ var muted: bool = false
 var sound: AudioStreamPlayer
 var attack_sound: AudioStreamPlayer
 var stage_enter_sound: AudioStreamPlayer
+var boss_skill_sounds: Dictionary = {}
 var audio_director
 var settings_panel
 var campaign_map_panel
@@ -153,6 +154,14 @@ func _ready() -> void:
 	stage_enter_sound.bus = "SFX"
 	stage_enter_sound.volume_db = -11
 	add_child(stage_enter_sound)
+	for skill_id: String in ["rift_laser", "rift_orbs", "rift_overhead", "rift_storm", "slime_attack", "slime_bounce", "slime_burst", "slime_reflux", "slime_court", "kindred_dance", "kindred_wolf", "kindred_dread", "kindred_hunt", "kindred_respite"]:
+		var boss_sound := AudioStreamPlayer.new()
+		boss_sound.stream = load("res://assets/sfx/boss/%s.wav" % skill_id)
+		boss_sound.bus = "SFX"
+		boss_sound.volume_db = -1.5
+		boss_sound.max_polyphony = 2
+		add_child(boss_sound)
+		boss_skill_sounds[skill_id] = boss_sound
 	dialogue = preload("res://scripts/dialogue_panel.gd").new()
 	add_child(dialogue)
 	dialogue.config = content
@@ -561,6 +570,12 @@ func process_events() -> void:
 	battle.accept_events(batch)
 	fx.accept(batch)
 	for event in batch:
+		var event_kind := str(event.get("kind", ""))
+		if boss_skill_sounds.has(event_kind) and not muted and not test_mode:
+			var boss_sound: AudioStreamPlayer = boss_skill_sounds[event_kind]
+			boss_sound.stop()
+			boss_sound.pitch_scale = 0.92 if str(event_kind).begins_with("slime_") and int(event.get("phase", 1)) >= 2 else (0.94 if int(event.get("phase", 1)) >= 3 else 1.0)
+			boss_sound.play()
 		if event.kind == "shot" and not muted and not test_mode and attack_sound_timer <= 0.0:
 			var attack_style := str(event.get("style", "standard"))
 			var style_pitch: float = float({"blade_wave":0.88,"frost_shard":1.12,"wind_seed":1.18,"hydro_salon":1.04,"tidal_orb":0.82,"music_note":1.26,"arcane_lance":0.94,"frost_bloom":0.90,"quantum_gate":1.16,"mon3tr":0.78,"ether_shot":1.22}.get(attack_style, 1.0))
@@ -576,6 +591,8 @@ func process_events() -> void:
 			hud.announce_boss(str(event.value))
 		if event.kind == "boss_phase":
 			hud.announce_boss_phase(str(event.name), int(event.value))
+		if event.kind == "boss_warning":
+			hud.announce_boss_skill_warning(str(event.get("name", "首领技能")), float(event.get("duration", 1.5)), int(event.get("phase", 1)))
 		if event.kind == "arena_event":
 			hud.announce_arena_event(str(event.get("arena_type", "hazard")), float(event.get("duration", 6.0)))
 		if event.kind == "contract_complete":

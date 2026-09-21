@@ -36,7 +36,8 @@ func definition(enemy_id: String) -> Dictionary:
 	return definitions.get(enemy_id, {})
 
 func state_definition(enemy_id: String, state: String) -> Dictionary:
-	return definition(enemy_id).get("states", {}).get(str(STATE_ALIASES.get(state, "run")), {})
+	var states: Dictionary = definition(enemy_id).get("states", {})
+	return states.get(state, states.get(str(STATE_ALIASES.get(state, "run")), {}))
 
 func frame_count(enemy_id: String, state: String) -> int:
 	return maxi(1, int(state_definition(enemy_id, state).get("frames", 1)))

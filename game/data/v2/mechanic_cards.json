@@ -86,12 +86,12 @@
   {
     "id": "support_red_moon",
     "name": "赤月炮击",
-    "description": "每8秒优先锁定生命值最高的怪物，赤月炮击对椭圆范围内敌人造成伤害；重复选择提高伤害并缩短间隔。",
+    "description": "每8秒锁定生命值最高的怪物，对显示的椭圆范围内所有敌人各造成175点火元素伤害；重复选择提高伤害并缩短间隔。",
     "rarity": "epic",
     "weight": 16,
     "target": "global",
     "effect": "support_barrage",
-    "value": 70,
+    "value": 175,
     "interval": 8,
     "radius": 105,
     "mechanic": true,
@@ -102,12 +102,12 @@
   {
     "id": "support_crossfire",
     "name": "交叉火力",
-    "description": "每12秒从两侧交错扫射整条水平路线；重复选择提高伤害并缩短间隔。",
+    "description": "每12秒扫射预警显示的整条水平攻击带，对带内每名敌人造成120点伤害；重复选择提高伤害并缩短间隔。",
     "rarity": "rare",
     "weight": 27,
     "target": "global",
     "effect": "support_crossfire",
-    "value": 42,
+    "value": 120,
     "interval": 12,
     "mechanic": true,
     "tags": [
@@ -117,7 +117,7 @@
   {
     "id": "support_tidal_aid",
     "name": "潮汐急救",
-    "description": "每10秒治疗全队并修复水晶；重复选择强化治疗并加快触发。",
+    "description": "每10秒治疗全队、扶起倒地角色并修复水晶；重复选择强化治疗并加快触发。",
     "rarity": "rare",
     "weight": 25,
     "target": "global",

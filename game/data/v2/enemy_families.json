@@ -105,10 +105,10 @@
   },
   {
     "id": "boss_03",
-    "family": "rift_lord",
-    "variant": "storm",
-    "behavior": "storm_sweep",
-    "motion": "storm_hover",
+    "family": "eternal_hunters",
+    "variant": "kindred",
+    "behavior": "eternal_hunt",
+    "motion": "archer_stride",
     "visual": "boss_03"
   },
   {
