@@ -18,6 +18,7 @@ signal main_menu_action
 signal formation_action(mode: String)
 signal settings_action
 signal map_action
+signal debug_reward_action
 
 const WHITE = Color("#f3e9df")
 const MUTED = Color("#ae969f")
@@ -128,7 +129,9 @@ var ultimate_aiming: bool = false
 var boss_panel: Panel
 var boss_name_label: Label
 var boss_hp_bar: ProgressBar
+var boss_secondary_hp_bar: ProgressBar
 var boss_shield_bar: ProgressBar
+var boss_secondary_shield_bar: ProgressBar
 var boss_hp_label: Label
 var boss_phase_label: Label
 var boss_alert: Label
@@ -154,6 +157,7 @@ var restart_dialog: ConfirmationDialog
 var pause_squad_button: Button
 var pause_stage_button: Button
 var pause_map_button: Button
+var pause_help_button: Button
 var pause_buff_labels: Array[Label] = []
 var pause_hero_labels: Array[Label] = []
 var hero_hp_bars: Array[ProgressBar] = []
@@ -331,6 +335,20 @@ func _ready() -> void:
 	boss_hp_bar.add_theme_stylebox_override("background", boss_bg)
 	boss_hp_bar.add_theme_stylebox_override("fill", boss_fill)
 	boss_panel.add_child(boss_hp_bar)
+	boss_secondary_hp_bar = ProgressBar.new()
+	boss_secondary_hp_bar.position = boss_bar_rect.position
+	boss_secondary_hp_bar.size = boss_bar_rect.size
+	boss_secondary_hp_bar.show_percentage = false
+	boss_secondary_hp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var secondary_boss_bg := boss_bg.duplicate()
+	secondary_boss_bg.border_color = Color("#765391")
+	var secondary_boss_fill := boss_fill.duplicate()
+	secondary_boss_fill.bg_color = Color("#a779e8")
+	secondary_boss_fill.border_color = Color("#f5d976")
+	boss_secondary_hp_bar.add_theme_stylebox_override("background", secondary_boss_bg)
+	boss_secondary_hp_bar.add_theme_stylebox_override("fill", secondary_boss_fill)
+	boss_secondary_hp_bar.hide()
+	boss_panel.add_child(boss_secondary_hp_bar)
 	boss_shield_bar = ProgressBar.new()
 	boss_shield_bar.position = Vector2(boss_bar_rect.position.x, boss_bar_rect.end.y + 3)
 	boss_shield_bar.size = Vector2(boss_bar_rect.size.x, 25)
@@ -347,6 +365,19 @@ func _ready() -> void:
 	boss_shield_bar.add_theme_stylebox_override("background", shield_bg)
 	boss_shield_bar.add_theme_stylebox_override("fill", shield_fill)
 	boss_panel.add_child(boss_shield_bar)
+	boss_secondary_shield_bar = ProgressBar.new()
+	boss_secondary_shield_bar.position = boss_shield_bar.position
+	boss_secondary_shield_bar.size = boss_shield_bar.size
+	boss_secondary_shield_bar.scale = boss_shield_bar.scale
+	boss_secondary_shield_bar.show_percentage = false
+	boss_secondary_shield_bar.add_theme_font_size_override("font_size", 1)
+	boss_secondary_shield_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	boss_secondary_shield_bar.add_theme_stylebox_override("background", shield_bg.duplicate())
+	var secondary_shield_fill := shield_fill.duplicate()
+	secondary_shield_fill.bg_color = Color("#c39cff")
+	boss_secondary_shield_bar.add_theme_stylebox_override("fill", secondary_shield_fill)
+	boss_secondary_shield_bar.hide()
+	boss_panel.add_child(boss_secondary_shield_bar)
 	for segment in range(1, 10):
 		var divider := ColorRect.new()
 		divider.position = boss_bar_rect.position + Vector2(boss_bar_rect.size.x * float(segment) / 10.0, 1)
@@ -666,6 +697,22 @@ func _ready() -> void:
 	pause_map_button.pressed.connect(func(): map_action.emit())
 	var pause_continue := button(pause_details, Rect2(746, 574, 362, 46), "▶  继续防守", true)
 	pause_continue.pressed.connect(func(): primary_action.emit())
+	pause_help_button = Button.new()
+	pause_help_button.position = Vector2(1082, 22)
+	pause_help_button.size = Vector2(54, 24)
+	pause_help_button.text = "help"
+	pause_help_button.flat = true
+	pause_help_button.focus_mode = Control.FOCUS_NONE
+	pause_help_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	pause_help_button.add_theme_font_override("font", DISPLAY_FONT)
+	pause_help_button.add_theme_font_size_override("font_size", 11)
+	pause_help_button.add_theme_color_override("font_color", Color("#705760"))
+	pause_help_button.add_theme_color_override("font_hover_color", Color("#d09aa5"))
+	pause_help_button.add_theme_color_override("font_pressed_color", Color("#ff6178"))
+	for state_name in ["normal", "hover", "pressed", "focus", "disabled"]:
+		pause_help_button.add_theme_stylebox_override(state_name, StyleBoxEmpty.new())
+	pause_help_button.pressed.connect(func(): debug_reward_action.emit())
+	pause_details.add_child(pause_help_button)
 	restart_dialog = ConfirmationDialog.new()
 	restart_dialog.title = "确认重开"
 	restart_dialog.dialog_text = "确定放弃当前战斗进度并重新开始本关吗？"
@@ -928,7 +975,7 @@ func refresh(sim, selected_id: int) -> void:
 		hero_energy_bars[i].value = maxf(0.0, float(hero.get("energy", 0.0)))
 		hero_portraits[i].texture = portrait_texture(hero, sim)
 		hero_name_labels[i].text = "%d  %s" % [i + 1, hero.name]
-		hero_element_labels[i].text = "Lv.%d" % [1, 3, 10][i] if hero_lock_labels[i].visible else sim.element_name(str(hero.get("element", "none")))
+		hero_element_labels[i].text = "Lv.%d" % [1, 3, 6][i] if hero_lock_labels[i].visible else sim.element_name(str(hero.get("element", "none")))
 		var hero_color: Color = element_color(str(hero.get("element", ""))) if hero.get("character_id", "") == "traveler" and hero.get("element", "") != "" else Color(hero.color)
 		hero_name_labels[i].add_theme_color_override("font_color", hero_color)
 		hero_element_labels[i].add_theme_color_override("font_color", hero_color)
@@ -988,25 +1035,54 @@ func refresh(sim, selected_id: int) -> void:
 			modal_action.grab_focus()
 
 func refresh_boss(sim) -> void:
-	var active: Dictionary = {}
+	var bosses: Array[Dictionary] = []
 	for enemy: Dictionary in sim.enemies:
-		if str(enemy.get("kind", "")).begins_with("boss_") and float(enemy.get("hp", 0.0)) > 0.0:
-			active = enemy
-			break
+		var hidden_reinforcement := str(enemy.get("kind", "")) == "boss_galio" and not bool(enemy.get("galio_revealed", true))
+		if str(enemy.get("kind", "")).begins_with("boss_") and float(enemy.get("hp", 0.0)) > 0.0 and not hidden_reinforcement:
+			bosses.append(enemy)
+	var active: Dictionary = bosses[0] if not bosses.is_empty() else {}
 	boss_panel.visible = not active.is_empty() and sim.state in ["running", "paused"]
 	if active.is_empty():
+		boss_secondary_hp_bar.hide()
+		boss_secondary_shield_bar.hide()
 		return
+	var secondary: Dictionary = bosses[1] if bosses.size() > 1 else {}
+	var original_position := UI_LAYOUT.battle_boss_bar_rect.position
+	var original_size := UI_LAYOUT.battle_boss_bar_rect.size
+	var split_width := (original_size.x - 8.0) * 0.5
+	boss_hp_bar.position = original_position
+	boss_hp_bar.size = Vector2(split_width, original_size.y) if not secondary.is_empty() else original_size
 	var shield: float = float(active.get("shield", 0.0))
 	var hp: float = maxf(0.0, float(active.hp))
-	boss_name_label.text = "TARGET // %s" % str(active.get("name", "裂隙首领"))
-	boss_phase_label.text = "PHASE %s" % ["I", "II", "III"][clampi(int(active.get("boss_phase", 1)) - 1, 0, 2)]
+	boss_name_label.text = "DUAL TARGET // %s  +  %s" % [str(active.get("name", "裂隙首领")), str(secondary.get("name", ""))] if not secondary.is_empty() else "TARGET // %s" % str(active.get("name", "裂隙首领"))
+	boss_phase_label.text = "P%s / P%s" % [int(active.get("boss_phase", 1)), int(secondary.get("boss_phase", 1))] if not secondary.is_empty() else "PHASE %s" % ["I", "II", "III"][clampi(int(active.get("boss_phase", 1)) - 1, 0, 2)]
 	boss_hp_bar.max_value = maxf(1.0, float(active.max_hp))
 	boss_hp_bar.value = hp
+	boss_shield_bar.position = Vector2(original_position.x, original_position.y + original_size.y + 3.0)
+	boss_shield_bar.size = Vector2(split_width if not secondary.is_empty() else original_size.x, 25.0)
 	boss_shield_bar.max_value = maxf(1.0, float(active.get("max_shield", shield)))
 	boss_shield_bar.value = shield
 	boss_shield_bar.visible = shield > 0.0
 	var hp_percent := roundi(hp / maxf(1.0, float(active.max_hp)) * 100.0)
-	boss_hp_label.text = "%03d%%" % hp_percent
+	if secondary.is_empty():
+		boss_secondary_hp_bar.hide()
+		boss_secondary_shield_bar.hide()
+		boss_hp_label.text = "%03d%%" % hp_percent
+		return
+	var secondary_hp := maxf(0.0, float(secondary.hp))
+	var secondary_shield := float(secondary.get("shield", 0.0))
+	boss_secondary_hp_bar.position = original_position + Vector2(split_width + 8.0, 0.0)
+	boss_secondary_hp_bar.size = Vector2(split_width, original_size.y)
+	boss_secondary_hp_bar.max_value = maxf(1.0, float(secondary.max_hp))
+	boss_secondary_hp_bar.value = secondary_hp
+	boss_secondary_hp_bar.show()
+	boss_secondary_shield_bar.position = Vector2(original_position.x + split_width + 8.0, original_position.y + original_size.y + 3.0)
+	boss_secondary_shield_bar.size = Vector2(split_width, 25.0)
+	boss_secondary_shield_bar.max_value = maxf(1.0, float(secondary.get("max_shield", secondary_shield)))
+	boss_secondary_shield_bar.value = secondary_shield
+	boss_secondary_shield_bar.visible = secondary_shield > 0.0
+	var secondary_percent := roundi(secondary_hp / maxf(1.0, float(secondary.max_hp)) * 100.0)
+	boss_hp_label.text = "K %03d%%  G %03d%%" % [hp_percent, secondary_percent]
 
 func refresh_wave_timeline(sim) -> void:
 	var active_boss := boss_panel.visible

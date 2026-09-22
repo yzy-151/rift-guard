@@ -38,7 +38,7 @@ func _run() -> void:
 	game.sim.drain_events()
 	game.sim._start_kindred_warning(boss,"kindred_dance")
 	game.sim._execute_kindred_special(boss,"kindred_dance")
-	check(game.sim.enemy_projectiles.size() == 3, "dance arrows")
+	check(game.sim.enemy_projectiles.size() == 12, "dance four-arrow volleys against three heroes")
 	game.sim.enemy_projectiles.clear()
 	game.sim._start_kindred_warning(boss,"kindred_wolf")
 	game.sim._execute_kindred_special(boss,"kindred_wolf")
@@ -50,7 +50,7 @@ func _run() -> void:
 	game.sim.enemy_projectiles.clear()
 	game.sim._start_kindred_warning(boss,"kindred_hunt")
 	game.sim._execute_kindred_special(boss,"kindred_hunt")
-	check(game.sim.enemy_projectiles.size() >= 12, "hunt volley")
+	check(game.sim.enemy_projectiles.size() >= 28, "hunt pressure volley")
 	game.sim.enemy_projectiles.clear()
 	game.sim.heroes[0].pos = Vector2(boss.pos) + Vector2(-80.0, 0.0)
 	game.sim.heroes[0].target = game.sim.heroes[0].pos

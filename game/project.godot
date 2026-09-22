@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V73：永猎双子千珏、羊灵生息、半透明Boss预警 / 1920×1080"
-config/version="73.0.0"
+config/description="V74：永猎双子技能压迫感强化、密集箭雨、狼灵领域与分层音效 / 1920×1080"
+config/version="74.0.0"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

@@ -63,11 +63,11 @@ func run(game) -> void:
 	second_damage = float(sim.heroes[1].damage)
 	traveler_damage = float(sim.heroes[0].damage)
 	sim.apply_v2_card_effect(advanced_single, 1)
-	check(is_equal_approx(float(sim.heroes[1].damage) - second_damage, float(sim.heroes[1].base_damage) * 0.65) and is_equal_approx(float(sim.heroes[0].damage), traveler_damage), "advanced single-target card applies its listed value")
+	check(is_equal_approx(float(sim.heroes[1].damage) - second_damage, float(sim.heroes[1].base_damage) * 1.0) and is_equal_approx(float(sim.heroes[0].damage), traveler_damage), "advanced single-target card applies its listed value")
 	var advanced_team := find_card(cards, "global_speed_legendary")
 	var traveler_rate := float(sim.heroes[0].rate)
 	sim.apply_v2_card_effect(advanced_team)
-	check(is_equal_approx(float(sim.heroes[0].rate) - traveler_rate, float(sim.heroes[0].base_rate) * 0.36), "advanced team card applies its listed value")
+	check(is_equal_approx(float(sim.heroes[0].rate) - traveler_rate, float(sim.heroes[0].base_rate) * 0.55), "advanced team card applies its listed value")
 	var original_range := float(sim.attack_range_screen_radii(sim.heroes[1]).x)
 	sim.apply_v2_card_effect(find_card(cards, "single_range_legendary"), 1)
 	check(float(sim.attack_range_screen_radii(sim.heroes[1]).x) > original_range, "advanced range card expands the shared visual and hit radius")
@@ -82,7 +82,7 @@ func run(game) -> void:
 	sim.rewards.apply_card(solo, sim.run_state)
 	var xp_before := int(sim.run_state.crystal_xp)
 	sim.grant_xp(5)
-	check(int(sim.run_state.crystal_xp) - xp_before == 20, "solo leveling doubles XP per stack")
+	check(int(sim.run_state.crystal_xp) - xp_before == 45, "solo leveling triples XP per stack")
 	var hero := {"id":0,"rate":1.0,"base_rate":1.0,"hp":50.0,"max_hp":100.0}
 	CardEffects.apply_to_hero(hero, "lethal_tempo")
 	for i in 10: CardEffects.on_attack(hero)
@@ -100,7 +100,7 @@ func run(game) -> void:
 	var enemy := {"id":100}
 	CardEffects.on_target(hero, enemy)
 	CardEffects.on_target(hero, enemy)
-	check(is_equal_approx(float(hero.max_hp), 104.0), "heartsteel grants HP once per enemy per hero")
+	check(is_equal_approx(float(hero.max_hp), 108.0), "heartsteel grants four HP per layer once per enemy per hero")
 	CardEffects.apply_to_hero(hero, "warmogs_armor")
 	CardEffects.apply_to_hero(hero, "warmogs_armor")
 	hero.hp = 20.0

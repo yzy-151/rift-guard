@@ -127,6 +127,7 @@ func _ready() -> void:
 	hud.main_menu_action.connect(return_to_main_menu)
 	hud.formation_action.connect(set_formation_command)
 	hud.map_action.connect(open_campaign_map)
+	hud.debug_reward_action.connect(open_debug_reward)
 	checkpoint_overlay = CanvasLayer.new()
 	checkpoint_overlay.layer = 100
 	add_child(checkpoint_overlay)
@@ -154,9 +155,10 @@ func _ready() -> void:
 	stage_enter_sound.bus = "SFX"
 	stage_enter_sound.volume_db = -11
 	add_child(stage_enter_sound)
-	for skill_id: String in ["rift_laser", "rift_orbs", "rift_overhead", "rift_storm", "slime_attack", "slime_bounce", "slime_burst", "slime_reflux", "slime_court", "kindred_dance", "kindred_wolf", "kindred_dread", "kindred_hunt", "kindred_respite"]:
+	var boss_sound_sources := {"rift_laser":"rift_laser","rift_orbs":"rift_orbs","rift_overhead":"rift_overhead","rift_storm":"rift_storm","slime_attack":"slime_attack","slime_bounce":"slime_bounce","slime_burst":"slime_burst","slime_reflux":"slime_reflux","slime_court":"slime_court","kindred_dance":"kindred_dance","kindred_wolf":"kindred_wolf","kindred_dread":"kindred_dread","kindred_hunt":"kindred_hunt","kindred_respite":"kindred_respite","galio_entrance":"rift_storm","galio_punch":"rift_overhead","galio_winds":"rift_orbs","galio_durand":"kindred_respite"}
+	for skill_id: String in boss_sound_sources:
 		var boss_sound := AudioStreamPlayer.new()
-		boss_sound.stream = load("res://assets/sfx/boss/%s.wav" % skill_id)
+		boss_sound.stream = load("res://assets/sfx/boss/%s.wav" % str(boss_sound_sources[skill_id]))
 		boss_sound.bus = "SFX"
 		boss_sound.volume_db = -1.5
 		boss_sound.max_polyphony = 2
@@ -226,6 +228,11 @@ func _ready() -> void:
 		checkpoint_testing = true
 		set_physics_process(false)
 		call_deferred("run_card_rework_test")
+	elif "--v74-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v74_test")
 	elif "--squad-scroll-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
@@ -767,6 +774,12 @@ func choose_reward(index: int, hero_id: int = -1) -> void:
 	if sim.choose_reward(index, hero_id):
 		refresh()
 
+func open_debug_reward() -> void:
+	if story.active:
+		return
+	if sim.begin_debug_reward():
+		refresh()
+
 func restart(skip_death_animation: bool = false) -> void:
 	if not test_mode and not skip_death_animation and dialogue != null:
 		await dialogue.play_death_transition()
@@ -821,6 +834,8 @@ func select_hero(id: int) -> void:
 	if id < 0 or id >= sim.heroes.size():
 		return
 	selected_id = id
+	if sim.formation_mode == "follow":
+		sim.set_follow_leader(id)
 	set_skill_aiming(false)
 
 func set_formation_command(mode: String) -> void:
@@ -831,11 +846,22 @@ func set_formation_command(mode: String) -> void:
 		sim.formation_mode = "squad"
 	else:
 		sim.set_formation_mode(mode)
-		selected_id = 0 if mode == "follow" and not sim.heroes.is_empty() else selected_id
+		if mode == "follow":
+			var leader_id := selected_id
+			if not sim.set_follow_leader(leader_id):
+				leader_id = sim._resolve_follow_leader_id()
+				sim.set_follow_leader(leader_id)
+			selected_id = leader_id
 	process_events()
 	refresh()
 
 func _input(event: InputEvent) -> void:
+	if dialogue != null and dialogue.animation_waiting:
+		var confirms_animation: bool = (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT) or (event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_ENTER, KEY_SPACE, KEY_ESCAPE])
+		if confirms_animation:
+			dialogue.acknowledge_animation()
+			get_viewport().set_input_as_handled()
+		return
 	if campaign_event_panel != null and campaign_event_panel.is_open():
 		if campaign_event_panel.handle_input(event):
 			get_viewport().set_input_as_handled()
@@ -1037,6 +1063,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				if distance < closest:
 					closest = distance
 					selected_id = h.id
+			if selected_id >= 0 and sim.formation_mode == "follow":
+				sim.set_follow_leader(selected_id)
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
 			if selected_id == -2:
 				sim.command_squad(point)
@@ -1655,6 +1683,10 @@ func run_v67_visual_test() -> void:
 
 func run_card_rework_test() -> void:
 	var suite = preload("res://scripts/qa_card_rework.gd").new()
+	await suite.run(self)
+
+func run_v74_test() -> void:
+	var suite = preload("res://scripts/qa_v74.gd").new()
 	await suite.run(self)
 
 func run_squad_scroll_test() -> void:

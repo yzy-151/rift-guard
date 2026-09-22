@@ -177,9 +177,9 @@ func preview(card: Dictionary, sim) -> String:
 		"attack_rate_multiplier": return "攻击速度 +%d%%" % roundi(float(value) * 100.0)
 		"lethal_tempo": return "每次攻击攻速 +20%，每层上限 +200%；停攻 3 秒清空"
 		"conqueror": return "攻击 6 次后伤害 ×2/层；每次攻击回复 10/层"
-		"heartsteel": return "对每名敌人首次攻击时，最大生命 +2/层"
+		"heartsteel": return "对每名敌人首次攻击时，最大生命 +4/层"
 		"warmogs_armor": return "每 5 秒回复 30/层生命"
-		"solo_leveling": return "经验获取 ×2/层"
+		"solo_leveling": return "经验获取 ×3/层"
 		"range_flat": return "攻击范围 +%d" % int(value)
 		"armor_flat": return "防御 +%d" % int(value)
 		"move_speed_flat": return "移动速度 +%d" % int(value)

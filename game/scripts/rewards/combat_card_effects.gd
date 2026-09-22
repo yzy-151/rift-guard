@@ -55,4 +55,4 @@ static func on_target(hero: Dictionary, enemy: Dictionary) -> void:
 		return
 	attackers[hero_id] = true
 	enemy.heartsteel_attackers = attackers
-	hero.max_hp = float(hero.max_hp) + 2.0 * heartsteel_levels
+	hero.max_hp = float(hero.max_hp) + 4.0 * heartsteel_levels

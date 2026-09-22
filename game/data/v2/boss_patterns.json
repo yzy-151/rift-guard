@@ -181,6 +181,39 @@
     ]
   },
   {
+    "id": "boss_galio",
+    "style": "galio",
+    "phases": [
+      {
+        "phase": 1,
+        "name": "巨像降临",
+        "shape": "circle",
+        "lead": 1.8,
+        "radius": 265,
+        "moves": ["galio_entrance", "galio_punch", "galio_winds", "galio_durand"],
+        "arena_event": {"type": "petricite_impact", "duration": 6.0, "radius": 245, "intensity": 1, "color": "#b990ff"}
+      },
+      {
+        "phase": 2,
+        "name": "禁魔重压",
+        "shape": "line",
+        "lead": 1.45,
+        "radius": 300,
+        "moves": ["galio_punch", "galio_winds", "galio_durand", "galio_entrance"],
+        "arena_event": {"type": "petricite_gale", "duration": 7.5, "radius": 290, "intensity": 2, "color": "#d3b5ff"}
+      },
+      {
+        "phase": 3,
+        "name": "正义巨像",
+        "shape": "circle",
+        "lead": 1.15,
+        "radius": 360,
+        "moves": ["galio_entrance", "galio_durand", "galio_punch", "galio_winds"],
+        "arena_event": {"type": "colossus_resonance", "duration": 9.0, "radius": 360, "intensity": 3, "color": "#f0d77a"}
+      }
+    ]
+  },
+  {
     "id": "boss_04",
     "style": "bulwark",
     "phases": [

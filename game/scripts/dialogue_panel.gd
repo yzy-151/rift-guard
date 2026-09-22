@@ -269,6 +269,7 @@ func build(ui, story) -> void:
 	death_overlay.hide()
 	animation_click_gate = Button.new()
 	animation_click_gate.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	animation_click_gate.z_index = 20
 	animation_click_gate.focus_mode = Control.FOCUS_NONE
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
 		animation_click_gate.add_theme_stylebox_override(state, StyleBoxEmpty.new())

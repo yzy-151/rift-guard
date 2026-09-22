@@ -22,9 +22,9 @@ func run(game) -> void:
     sim.run_state.crystal_level = 3
     game.refresh()
     expect(sim.deployment_slot_unlocked(1) and not sim.deployment_slot_unlocked(2), "second slot unlocks at level 3")
-    sim.run_state.crystal_level = 10
+    sim.run_state.crystal_level = 6
     game.refresh()
-    expect(sim.deployment_slot_unlocked(2), "third slot unlocks at level 10")
+    expect(sim.deployment_slot_unlocked(2), "third slot unlocks at level 6")
     var ground: Dictionary = sim.spawn_enemy(Vector2(800, 390), "grunt")
     var flyer: Dictionary = sim.spawn_enemy(Vector2(800, 390), "flyer")
     var heavy: Dictionary = sim.spawn_enemy(Vector2(800, 390), "shielded")

@@ -3,7 +3,7 @@ extends SceneTree
 const MainScene = preload("res://main.tscn")
 const SIM_FPS := 24.0
 const CAPTURE_EVERY := 2
-const OUTPUT_ROOT := "res://../outputs/kindred-boss-showcase/"
+const OUTPUT_ROOT := "res://../outputs/kindred-boss-pressure-showcase/"
 var capture_index := 0
 
 func _initialize() -> void:
@@ -122,7 +122,7 @@ func _run() -> void:
 	boss.attack_timer = 999.0
 	boss.special_timer = 999.0
 	game.sim.drain_events()
-	for spec in [["kindred_dance", 0.95], ["kindred_wolf", 1.65], ["kindred_dread", 1.45], ["kindred_hunt", 1.70]]:
+	for spec in [["kindred_dance", 1.55], ["kindred_wolf", 2.35], ["kindred_dread", 1.80], ["kindred_hunt", 2.40]]:
 		if not await _record_skill(game, boss, str(spec[0]), float(spec[1])):
 			quit(1)
 			return

@@ -515,12 +515,12 @@
   {
     "id": "heartsteel",
     "name": "心之钢",
-    "description": "选定角色首次攻击每名敌人时，自身最大生命提高2点。重复选择可叠加每次提升量。",
+    "description": "选定角色首次攻击每名敌人时，自身最大生命提高4点。重复选择可叠加每次提升量。",
     "rarity": "rare",
     "weight": 23,
     "target": "character",
     "effect": "heartsteel",
-    "value": 2,
+    "value": 4,
     "mechanic": true,
     "tags": [
       "护盾"
@@ -544,12 +544,12 @@
   {
     "id": "solo_leveling",
     "name": "我独自升级",
-    "description": "本局经验获取翻倍；每次重复选择都会再翻一倍。",
+    "description": "本局经验获取变为3倍；每次重复选择都会再乘3倍。",
     "rarity": "legendary",
     "weight": 7,
     "target": "global",
     "effect": "solo_leveling",
-    "value": 2,
+    "value": 3,
     "mechanic": true,
     "tags": [
       "支援"

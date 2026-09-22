@@ -452,9 +452,16 @@ func accept_events(batch: Array[Dictionary]) -> void:
 			var lifetime := 1.38 if event.kind in ["slime_reflux", "slime_court", "slime_court_final"] else (0.92 if event.kind in ["slime_bounce", "slime_burst"] else 0.68)
 			effects.append(effect_pool.acquire(event.duplicate(true), lifetime))
 			continue
-		if str(event.kind).begins_with("kindred_"):
-			var lifetime := 5.15 if event.kind == "kindred_respite" else (1.45 if event.kind in ["kindred_hunt", "kindred_wolf"] else 0.85)
+		if str(event.kind).begins_with("galio_"):
+			var lifetime := 1.65 if event.kind == "galio_entrance" else (1.35 if event.kind in ["galio_winds", "galio_durand"] else 0.95)
 			effects.append(effect_pool.acquire(event.duplicate(true), lifetime))
+			shake_trauma = minf(1.0, shake_trauma + float({"galio_entrance":0.78,"galio_punch":0.52,"galio_winds":0.28,"galio_winds_pulse":0.14,"galio_durand":0.42,"galio_guard":0.24}.get(str(event.kind),0.0)))
+			continue
+		if str(event.kind).begins_with("kindred_"):
+			var lifetime := 5.15 if event.kind == "kindred_respite" else (2.10 if event.kind == "kindred_hunt" else (1.80 if event.kind == "kindred_wolf" else (1.30 if event.kind in ["kindred_dance", "kindred_dread"] else 0.95)))
+			effects.append(effect_pool.acquire(event.duplicate(true), lifetime))
+			var kindred_trauma: float = float({"kindred_dance":0.24,"kindred_wolf":0.48,"kindred_wolf_strike":0.20,"kindred_dread":0.34,"kindred_hunt":0.72,"kindred_arrow_hit":0.12,"kindred_respite":0.58,"kindred_respite_end":0.46}.get(str(event.kind),0.0))
+			shake_trauma = minf(1.0, shake_trauma + kindred_trauma)
 			continue
 		match event.kind:
 			"route_warning":
@@ -564,7 +571,9 @@ func _draw() -> void:
 		sheet_effects.draw_behind_units(self)
 	for hazard: Dictionary in sim.enemy_hazards:
 		if _render_point_visible(Vector2(hazard.get("pos", Vector2.ZERO)), 180.0):
-			if str(hazard.get("kind", "")).begins_with("kindred_"):
+			if str(hazard.get("kind", "")).begins_with("galio_"):
+				_draw_galio_hazard(hazard)
+			elif str(hazard.get("kind", "")).begins_with("kindred_"):
 				_draw_kindred_hazard(hazard)
 			else:
 				_draw_slime_hazard(hazard)
@@ -601,6 +610,9 @@ func _draw() -> void:
 			continue
 		if str(effect.kind).begins_with("slime_"):
 			_draw_slime_boss_effect(effect)
+			continue
+		if str(effect.kind).begins_with("galio_"):
+			_draw_galio_boss_effect(effect)
 			continue
 		if str(effect.kind).begins_with("kindred_"):
 			_draw_kindred_boss_effect(effect)
@@ -657,6 +669,8 @@ func _draw() -> void:
 	var actors: Array[Dictionary] = []
 	var render_world := visible_world_rect().grow(180.0) if sim.endless_mode else WORLD
 	for enemy in sim.enemies:
+		if str(enemy.get("kind", "")) == "boss_galio" and not bool(enemy.get("galio_revealed", true)):
+			continue
 		if render_world.has_point(enemy.pos):
 			actors.append({"unit": enemy, "hero": false, "death": false})
 	for death_visual: Dictionary in enemy_death_visuals:
@@ -787,6 +801,9 @@ func _draw_enemy_telegraphs() -> void:
 				continue
 			if str(enemy.get("kind", "")) == "boss_03" and str(enemy.get("special_move", "")).begins_with("kindred_"):
 				_draw_kindred_boss_warning(enemy)
+				continue
+			if str(enemy.get("kind", "")) == "boss_galio" and str(enemy.get("special_move", "")).begins_with("galio_"):
+				_draw_galio_boss_warning(enemy)
 				continue
 			for warning_point: Variant in enemy.get("special_warning_positions", [enemy.pos]):
 				if not _render_point_visible(Vector2(warning_point), 220.0):
@@ -958,49 +975,249 @@ func _kindred_ellipse(center: Vector2, radii: Vector2, color: Color, alpha: floa
 	draw_polyline(points, Color(color, alpha), width, true)
 
 
+func _galio_curve_points(start: Vector2, control: Vector2, finish: Vector2, progress: float = 1.0) -> PackedVector2Array:
+	var points := PackedVector2Array()
+	var limit := maxi(1, floori(28.0 * clampf(progress, 0.0, 1.0)))
+	for step in range(limit + 1):
+		var t := float(step) / 28.0
+		var inverse := 1.0 - t
+		points.append(start * inverse * inverse + control * 2.0 * inverse * t + finish * t * t)
+	return points
+
+func _draw_galio_silhouette(center: Vector2, scale_factor: float, alpha: float, wing_lift: float = 0.0) -> void:
+	var violet := Color("#d6b1ff")
+	var gold := Color("#f5d976")
+	var wing_span := 86.0 * scale_factor
+	var wing_rise := (66.0 + wing_lift * 42.0) * scale_factor
+	draw_circle(center + Vector2(0, 28) * scale_factor, 34.0 * scale_factor, Color(0.06, 0.03, 0.12, 0.38 * alpha))
+	draw_colored_polygon(PackedVector2Array([
+		center + Vector2(-12,-42) * scale_factor,
+		center + Vector2(-wing_span,-wing_rise),
+		center + Vector2(-58,-6) * scale_factor,
+		center + Vector2(-94,24) * scale_factor,
+		center + Vector2(-20,30) * scale_factor
+	]), Color(violet, 0.78 * alpha))
+	draw_colored_polygon(PackedVector2Array([
+		center + Vector2(12,-42) * scale_factor,
+		center + Vector2(wing_span,-wing_rise),
+		center + Vector2(58,-6) * scale_factor,
+		center + Vector2(94,24) * scale_factor,
+		center + Vector2(20,30) * scale_factor
+	]), Color(violet, 0.78 * alpha))
+	draw_circle(center + Vector2(0,-22) * scale_factor, 31.0 * scale_factor, Color(0.20, 0.13, 0.30, alpha))
+	draw_arc(center + Vector2(0,-22) * scale_factor, 32.0 * scale_factor, -2.85, -0.29, 34, Color(gold, alpha), 6.0 * scale_factor, true)
+	draw_line(center + Vector2(-22,9) * scale_factor, center + Vector2(-42,45) * scale_factor, Color(gold, alpha), 10.0 * scale_factor, true)
+	draw_line(center + Vector2(22,9) * scale_factor, center + Vector2(42,45) * scale_factor, Color(gold, alpha), 10.0 * scale_factor, true)
+
+func _draw_galio_boss_warning(enemy: Dictionary) -> void:
+	var move := str(enemy.get("special_move", ""))
+	var points: Array = enemy.get("special_warning_positions", [])
+	if points.is_empty():
+		return
+	var progress := 1.0 - clampf(float(enemy.get("special_warning", 0.0)) / maxf(0.01, float(enemy.get("special_warning_total", 1.0))), 0.0, 1.0)
+	var center := world_to_screen(Vector2(points[0])) + Vector2(0, 8)
+	var source := world_to_screen(Vector2(enemy.pos)) + Vector2(0, -25)
+	var radius := float(enemy.get("special_warning_radius", 220.0))
+	var radii: Vector2 = sim.ability_area_screen_radii(Vector2(points[0]), radius)
+	var violet := Color("#b989ff")
+	var gold := Color("#f5d976")
+	var pulse := 0.68 + sin(clock * 16.0) * 0.32
+	if move == "galio_entrance":
+		var takeoff := world_to_screen(Vector2(enemy.get("galio_takeoff_pos", enemy.pos))) + Vector2(0, -25)
+		var flight_point := takeoff
+		var flight_scale := 1.0
+		var wing_lift := 0.0
+		if progress < 0.36:
+			var rise := smoothstep(0.0, 0.36, progress)
+			flight_point = takeoff.lerp(takeoff + Vector2(0, -300), rise)
+			flight_scale = lerpf(1.0, 0.72, rise)
+			wing_lift = rise
+		else:
+			var fall := smoothstep(0.36, 1.0, progress)
+			flight_point = (center + Vector2(0, -455)).lerp(center, fall)
+			flight_scale = lerpf(0.70, 1.18, fall)
+			wing_lift = 1.0 - fall
+		_draw_galio_silhouette(flight_point, flight_scale, 0.96, wing_lift)
+		_kindred_ellipse(center, radii, violet, (0.48 + progress * 0.44) * pulse, 5.0, 0.055 + progress * 0.10)
+		for ring in 4:
+			var ring_scale := clampf(1.28 - progress * 0.30 - ring * 0.13, 0.58, 1.25)
+			_kindred_ellipse(center, radii * ring_scale, gold, 0.20 + progress * 0.46, 2.5)
+		for ray in 16:
+			var angle := float(ray) * TAU / 16.0
+			var inner := center + Vector2(cos(angle) * radii.x * 0.18, sin(angle) * radii.y * 0.18)
+			var outer := center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
+			draw_line(inner, outer, Color(gold, 0.18 + progress * 0.66), 3.0, true)
+		draw_circle(center + Vector2(0, 18), 28.0 + progress * 82.0, Color(0.04, 0.02, 0.09, 0.20 * progress))
+		return
+	if move == "galio_punch":
+		var direction := (center - source).normalized()
+		if direction.length_squared() < 0.01:
+			direction = Vector2.LEFT
+		var finish := source + direction * 560.0
+		var side := direction.orthogonal() * (42.0 + progress * 34.0)
+		var danger := Color("#ff183f")
+		var hot := Color("#ffb06b")
+		draw_colored_polygon(PackedVector2Array([source+side,source-side,finish-side,finish+side]), Color(danger, 0.16 + progress * 0.22))
+		for stripe in 9:
+			var stripe_center := source.lerp(finish, 0.08 + stripe * 0.105)
+			var stripe_side := side * (0.74 + 0.18 * sin(clock * 9.0 + stripe))
+			draw_line(stripe_center - stripe_side, stripe_center + stripe_side, Color(danger, 0.17 + progress * 0.35), 7.0, true)
+		draw_polyline(PackedVector2Array([source+side,finish+side,finish-side,source-side,source+side]), Color(danger, 0.82 + pulse * 0.18), 7.0, true)
+		draw_line(source, finish, Color(hot, 0.24 + progress * 0.68), 4.0 + progress * 5.0, true)
+		for mark in 7:
+			var point := source.lerp(finish, 0.13 + mark * 0.12)
+			var chevron := direction.orthogonal() * (13.0 + progress * 8.0)
+			draw_polyline(PackedVector2Array([point-direction*20.0+chevron, point, point-direction*20.0-chevron]), Color(hot, 0.48 + progress * 0.48), 4.0, true)
+		draw_circle(finish, 22.0 + progress * 18.0, Color(danger, 0.22 + progress * 0.36))
+		return
+	if move == "galio_winds":
+		_kindred_ellipse(center, radii, violet, 0.52 + progress * 0.38, 4.0, 0.05 + progress * 0.06)
+		var travel := clampf(progress * 1.10, 0.0, 1.0)
+		var direction := (center - source).normalized()
+		var perpendicular := direction.orthogonal()
+		for side_sign in [-1.0, 1.0]:
+			var begin: Vector2 = source + perpendicular * 64.0 * float(side_sign)
+			var control: Vector2 = source.lerp(center, 0.50) + perpendicular * 155.0 * float(side_sign) - direction * 35.0
+			var curve := _galio_curve_points(begin, control, center, travel)
+			draw_polyline(curve, Color(violet, 0.24 + progress * 0.58), 11.0, true)
+			draw_polyline(curve, Color(gold, 0.38 + progress * 0.56), 3.0, true)
+			if curve.size() > 0:
+				draw_circle(curve[-1], 8.0 + progress * 5.0, Color("#efe7ff", 0.72))
+		return
+	if move == "galio_durand":
+		var expansion := 0.10 + smoothstep(0.0, 1.0, progress) * 0.90
+		for echo in 3:
+			var echo_scale := maxf(0.08, expansion - echo * 0.12)
+			_kindred_ellipse(center, radii * echo_scale, violet if echo % 2 == 0 else gold, (0.44 + progress * 0.42) * (1.0 - echo * 0.18), 6.0 - echo)
+		_kindred_ellipse(center, radii * expansion, gold, 0.72 + progress * 0.24, 8.0, 0.08 + progress * 0.08)
+		for wing in [-1.0, 1.0]:
+			var wing_size := expansion
+			draw_polyline(PackedVector2Array([center,center+Vector2(wing*radii.x*0.42,-radii.y*0.48)*wing_size,center+Vector2(wing*radii.x*0.78,0)*wing_size,center+Vector2(wing*radii.x*0.46,radii.y*0.42)*wing_size]),Color(gold,0.46+progress*0.46),7.0,true)
+		return
+	_kindred_ellipse(center, radii, violet, (0.58 + progress * 0.38) * pulse, 5.0, 0.08 + progress * 0.10)
+
+func _draw_galio_hazard(hazard: Dictionary) -> void:
+	var center := world_to_screen(Vector2(hazard.pos)) + Vector2(0, 8)
+	var radii: Vector2 = sim.ability_area_screen_radii(Vector2(hazard.pos), float(hazard.get("radius", 175.0)))
+	var delay := float(hazard.get("delay", 0.0))
+	if delay > 0.0:
+		var source := world_to_screen(Vector2(hazard.get("source", hazard.pos))) + Vector2(0, -24)
+		var travel_total := maxf(0.01, float(hazard.get("travel_total", 0.72)))
+		var travel := 1.0 - clampf(delay / travel_total, 0.0, 1.0)
+		var direction := (center - source).normalized()
+		var perpendicular := direction.orthogonal()
+		for side_sign in [-1.0, 1.0]:
+			var begin: Vector2 = source + perpendicular * 62.0 * float(side_sign)
+			var control: Vector2 = source.lerp(center, 0.48) + perpendicular * 150.0 * float(side_sign)
+			var curve := _galio_curve_points(begin, control, center, travel)
+			draw_polyline(curve, Color("#b989ff", 0.70), 13.0, true)
+			draw_polyline(curve, Color("#f5d976", 0.92), 3.4, true)
+			if curve.size() > 0:
+				draw_circle(curve[-1], 10.0, Color("#f4ecff", 0.92))
+		return
+	var life_ratio := clampf(float(hazard.get("life", 0.0)) / maxf(0.01,float(hazard.get("total", 1.0))),0.0,1.0)
+	_kindred_ellipse(center,radii,Color("#b989ff"),0.72*life_ratio,4.0,0.08*life_ratio)
+	for spiral in 6:
+		var phase := fposmod(clock*0.44+spiral/6.0,1.0)
+		_kindred_ellipse(center,radii*(0.18+phase*0.78),Color("#efd57a"),sin(phase*PI)*0.42*life_ratio,2.0)
+
+func _draw_galio_boss_effect(effect: Dictionary) -> void:
+	var kind := str(effect.get("kind", ""))
+	var center := world_to_screen(Vector2(effect.get("pos", Vector2.ZERO))) + Vector2(0, 8)
+	var radius := float(effect.get("radius", 190.0))
+	var radii: Vector2 = sim.ability_area_screen_radii(Vector2(effect.get("pos", Vector2.ZERO)), radius)
+	var alpha := clampf(float(effect.get("life", 0.0)) / maxf(0.01,float(effect.get("total", 1.0))),0.0,1.0)
+	var elapsed := 1.0 - alpha
+	var violet := Color("#b989ff")
+	var gold := Color("#f5d976")
+	if kind in ["galio_entrance","galio_guard"]:
+		for ring in 6:
+			var wave := fposmod(elapsed*1.65+ring*0.14,1.0)
+			_kindred_ellipse(center,radii*(0.12+wave*0.94),gold,sin(wave*PI)*0.86,8.0-ring*0.8,0.035*alpha)
+		for wing in [-1.0,1.0]:
+			draw_polyline(PackedVector2Array([center,center+Vector2(wing*82,-112),center+Vector2(wing*166,-28),center+Vector2(wing*106,66)]),Color(violet,0.86*alpha),15.0,true)
+	elif kind == "galio_punch":
+		var source := world_to_screen(Vector2(effect.get("source", effect.get("pos",Vector2.ZERO))))
+		draw_line(source,center,Color("#ff173f",0.44*alpha),44.0,true)
+		draw_line(source,center,Color("#ffb06b",0.96*alpha),12.0,true)
+	elif kind in ["galio_winds","galio_winds_pulse"]:
+		var source := world_to_screen(Vector2(effect.get("source", effect.get("pos", Vector2.ZERO)))) + Vector2(0, -24)
+		if elapsed < 0.52 and kind == "galio_winds":
+			var travel := elapsed / 0.52
+			var direction := (center - source).normalized()
+			var perpendicular := direction.orthogonal()
+			for side_sign in [-1.0, 1.0]:
+				var curve := _galio_curve_points(source + perpendicular * 62.0 * float(side_sign), source.lerp(center, 0.5) + perpendicular * 150.0 * float(side_sign), center, travel)
+				draw_polyline(curve, Color(violet, 0.78 * alpha), 12.0, true)
+				draw_polyline(curve, Color(gold, 0.94 * alpha), 3.0, true)
+		else:
+			for spiral in 6:
+				var phase := fposmod(elapsed+spiral/6.0,1.0)
+				draw_arc(center,radii.x*(0.22+phase*0.72),clock*2.0+spiral,clock*2.0+spiral+PI*1.5,42,Color(violet,sin(phase*PI)*0.76*alpha),5.0,true)
+	elif kind == "galio_durand":
+		var expansion := minf(1.0, 0.14 + elapsed * 1.15)
+		_kindred_ellipse(center,radii*expansion,gold,0.90*alpha,9.0,0.13*alpha)
+		_kindred_ellipse(center,radii*maxf(0.08,expansion-0.18),violet,0.76*alpha,5.0)
+
+
 func _draw_kindred_boss_warning(enemy: Dictionary) -> void:
 	var move := str(enemy.get("special_move", ""))
 	var points: Array = enemy.get("special_warning_positions", [])
 	if points.is_empty():
 		return
 	var progress := 1.0 - clampf(float(enemy.get("special_warning", 0.0)) / maxf(0.01, float(enemy.get("special_warning_total", 1.0))), 0.0, 1.0)
-	var pulse := 0.72 + sin(clock * 13.0) * 0.28
+	var pulse := 0.66 + sin(clock * 15.0) * 0.34
+	var snap := pow(progress, 2.2)
 	var radius := float(enemy.get("special_warning_radius", 110.0))
 	var source := world_to_screen(Vector2(enemy.pos)) + Vector2(0, -28)
-	var spirit := Color("#dffcff")
-	var wolf := Color("#b289ff")
+	var spirit := Color("#eaffff")
+	var wolf := Color("#b878ff")
 	if move == "kindred_hunt":
-		for value: Variant in points:
-			var target := world_to_screen(Vector2(value)) + Vector2(0, -18)
-			var direction := (target - source).normalized()
-			var side := direction.orthogonal() * (20.0 + progress * 8.0)
-			draw_colored_polygon(PackedVector2Array([source, target + side, target - side]), Color(wolf, 0.055 + progress * 0.08))
-			draw_dashed_line(source, target, Color(spirit, (0.28 + progress * 0.54) * pulse), 2.0 + progress * 2.0, 13.0, true)
-		for fan_index in 5:
-			var angle := lerpf(-0.62, 0.62, float(fan_index) / 4.0)
-			var end := source + Vector2.LEFT.rotated(angle) * 620.0
-			draw_line(source, end, Color(spirit, 0.08 + progress * 0.16), 2.0, true)
+		for fan_index in 9:
+			var angle := lerpf(-0.72, 0.72, float(fan_index) / 8.0)
+			var finish := source + Vector2.LEFT.rotated(angle) * (690.0 + snap * 90.0)
+			var side := Vector2.LEFT.rotated(angle).orthogonal() * (11.0 + progress * 10.0)
+			draw_colored_polygon(PackedVector2Array([source, finish + side, finish - side]), Color(wolf, 0.025 + progress * 0.065))
+			draw_dashed_line(source, finish, Color(spirit, (0.18 + progress * 0.62) * pulse), 2.0 + progress * 2.8, 12.0 - progress * 4.0, true)
+			for chevron in 3:
+				var chevron_pos := source.lerp(finish, 0.30 + float(chevron) * 0.20)
+				var direction := (finish - source).normalized()
+				var wing := direction.orthogonal() * 8.0
+				draw_polyline(PackedVector2Array([chevron_pos-direction*12.0+wing,chevron_pos,chevron_pos-direction*12.0-wing]),Color(spirit,0.28+progress*0.52),2.2,true)
+		for ring in 3:
+			draw_arc(source, 38.0 + ring * 15.0 + snap * 18.0, -2.78, 2.78, 48, Color(wolf, (0.34 - ring * 0.07) * pulse), 3.0, true)
 		return
 	for index in points.size():
 		var point: Vector2 = points[index]
 		var center := world_to_screen(point) + Vector2(0, 8)
 		var radii: Vector2 = sim.ability_area_screen_radii(point, radius)
 		var color := wolf if move in ["kindred_wolf", "kindred_dread"] else spirit
-		_kindred_ellipse(center, radii * (0.90 + progress * 0.10), color, (0.45 + progress * 0.50) * pulse, 3.5, 0.035 + progress * 0.055)
+		_kindred_ellipse(center, radii, color, (0.55 + progress * 0.42) * pulse, 4.0 + progress * 2.0, 0.055 + progress * 0.105)
+		for ring in 3:
+			var ring_scale := 1.34 - progress * 0.34 - float(ring) * 0.10
+			_kindred_ellipse(center, radii * ring_scale, color, (0.16 + progress * 0.38) * (1.0-float(ring)*0.18), 2.0)
+		for spoke in 8:
+			var angle := float(spoke) * TAU / 8.0 + clock * (0.18 if spoke % 2 == 0 else -0.13)
+			var inner := center + Vector2(cos(angle) * radii.x * 0.76, sin(angle) * radii.y * 0.76)
+			var outer := center + Vector2(cos(angle) * radii.x * 1.02, sin(angle) * radii.y * 1.02)
+			draw_line(inner, outer, Color(color, 0.34 + progress * 0.48), 3.0, true)
 		if move == "kindred_dance":
-			draw_dashed_line(source, center, Color(spirit, 0.32 + progress * 0.52), 2.2, 10.0, true)
-			for arrow in 3:
-				var offset := Vector2(-26.0 + arrow * 26.0, -radii.y * 0.72)
-				draw_line(center + offset, center + offset + Vector2(0, 22.0 + progress * 18.0), Color(spirit, 0.72), 2.6, true)
+			draw_dashed_line(source, center, Color(spirit, 0.42 + progress * 0.50), 3.2, 9.0, true)
+			for arrow in 5:
+				var offset := Vector2(-42.0 + arrow * 21.0, -radii.y * (0.88 - progress * 0.42))
+				draw_line(center + offset, center + offset + Vector2(0, 34.0 + progress * 24.0), Color(spirit, 0.86), 3.2, true)
 		elif move == "kindred_wolf":
-			for claw in 4:
-				var angle := clock * 0.65 + claw * TAU / 4.0
-				var claw_pos := center + Vector2(cos(angle) * radii.x * 0.60, sin(angle) * radii.y * 0.58)
-				draw_arc(claw_pos, 13.0 + progress * 5.0, angle - 1.1, angle + 1.1, 14, Color(wolf, 0.62 + progress * 0.28), 3.0, true)
+			for claw in 6:
+				var angle := clock * 0.90 + claw * TAU / 6.0
+				var claw_pos := center + Vector2(cos(angle) * radii.x * 0.64, sin(angle) * radii.y * 0.62)
+				for slash in 3:
+					draw_arc(claw_pos+Vector2((slash-1)*6.0,0),16.0+progress*8.0,angle-1.2,angle+1.2,16,Color(wolf,0.68+progress*0.26),3.2,true)
 		elif move == "kindred_dread":
 			for mark in 3:
-				var y := -44.0 + mark * 22.0
-				draw_colored_polygon(PackedVector2Array([center+Vector2(-13,y),center+Vector2(0,y+12),center+Vector2(13,y)]),Color(wolf,(0.34+progress*0.56) if mark <= floori(progress*3.0) else 0.18))
+				var y := -58.0 + mark * 29.0
+				var active := mark <= floori(progress * 3.0)
+				draw_colored_polygon(PackedVector2Array([center+Vector2(-18,y),center+Vector2(0,y+17),center+Vector2(18,y)]),Color(wolf,(0.88 if active else 0.20)*pulse))
+			draw_arc(center, radii.x*0.43, -2.75, -0.39, 32, Color(spirit,0.40+progress*0.48),4.0,true)
 
 
 func _draw_kindred_projectile(projectile: Dictionary) -> void:
@@ -1012,15 +1229,23 @@ func _draw_kindred_projectile(projectile: Dictionary) -> void:
 	if direction.length_squared() < 0.01:
 		direction = Vector2.LEFT
 	var dread := str(projectile.get("kind", "")) == "kindred_dread_arrow"
-	var color := Color("#b889ff") if dread else Color("#e8ffff")
-	var length := 38.0 if dread else 30.0
+	var phase := int(projectile.get("phase", 1))
+	var color := Color("#c06cff") if dread else Color("#ecffff")
+	var length := 54.0 if dread else (42.0 if phase >= 3 else 36.0)
 	var tail := point - direction * length
 	var side := direction.orthogonal()
-	draw_line(tail, point + direction * 8.0, Color(color, 0.96), 4.5 if dread else 3.0, true)
-	draw_line(tail, tail + side * 8.0 + direction * 10.0, Color(color, 0.86), 2.8, true)
-	draw_line(tail, tail - side * 8.0 + direction * 10.0, Color(color, 0.86), 2.8, true)
-	draw_colored_polygon(PackedVector2Array([point+direction*12.0,point-direction*2.0+side*7.0,point-direction*2.0-side*7.0]),Color(color,0.94))
-	draw_circle(point, 13.0 if dread else 9.0, Color(color, 0.14))
+	for trail in 3:
+		var trail_offset := side * (float(trail)-1.0) * (5.0 if dread else 3.5)
+		draw_line(tail-direction*float(trail)*9.0+trail_offset, point+direction*10.0, Color(color,0.30+float(2-trail)*0.20), 7.0-float(trail)*1.7, true)
+	draw_line(tail, tail + side * 11.0 + direction * 13.0, Color(color, 0.96), 3.2, true)
+	draw_line(tail, tail - side * 11.0 + direction * 13.0, Color(color, 0.96), 3.2, true)
+	draw_colored_polygon(PackedVector2Array([point+direction*16.0,point-direction*4.0+side*9.0,point-direction*4.0-side*9.0]),Color(color,0.98))
+	draw_circle(point, 20.0 if dread else 14.0, Color(color, 0.13))
+	draw_arc(point, 16.0 if dread else 11.0, clock*4.0, clock*4.0+4.4, 20, Color(color,0.78),2.0,true)
+	if dread:
+		var stack := int(projectile.get("dread_stack",1))
+		for mark in stack:
+			draw_circle(tail-direction*(8.0+mark*9.0),3.5+mark,Color(color,0.72))
 
 
 func _draw_kindred_hazard(hazard: Dictionary) -> void:
@@ -1029,16 +1254,25 @@ func _draw_kindred_hazard(hazard: Dictionary) -> void:
 	var radii: Vector2 = sim.ability_area_screen_radii(center_world, float(hazard.get("radius", 240.0)))
 	var total := maxf(0.1, float(hazard.get("total", 4.0)))
 	var life_ratio := clampf(float(hazard.get("life", 0.0)) / total, 0.0, 1.0)
-	var pulse := fposmod((1.0-life_ratio)*4.4, 1.0)
-	_kindred_ellipse(center, radii, Color("#a878ff"), 0.58*life_ratio, 3.0, 0.07*life_ratio)
-	_kindred_ellipse(center, radii*(0.24+0.70*pulse), Color("#d9c7ff"), sin(pulse*PI)*0.68*life_ratio, 2.4)
-	for paw in 6:
-		var angle := float(paw)*TAU/6.0-clock*0.30
-		var paw_pos := center+Vector2(cos(angle)*radii.x*0.62,sin(angle)*radii.y*0.62)
-		draw_circle(paw_pos,5.5,Color(0.77,0.61,1.0,0.46*life_ratio))
-		draw_circle(paw_pos+Vector2(-6,-5),2.3,Color(0.90,0.82,1.0,0.52*life_ratio))
-		draw_circle(paw_pos+Vector2(0,-7),2.3,Color(0.90,0.82,1.0,0.52*life_ratio))
-		draw_circle(paw_pos+Vector2(6,-5),2.3,Color(0.90,0.82,1.0,0.52*life_ratio))
+	var pulse := fposmod((1.0-life_ratio)*5.2, 1.0)
+	_kindred_ellipse(center, radii, Color("#9f52ff"), 0.78*life_ratio, 5.0, 0.14*life_ratio)
+	for ring in 4:
+		var wave := fposmod(pulse+float(ring)*0.22,1.0)
+		_kindred_ellipse(center,radii*(0.18+0.82*wave),Color("#e8d7ff"),sin(wave*PI)*0.72*life_ratio,2.8+float(ring)*0.4)
+	for paw in 8:
+		var angle := float(paw)*TAU/8.0-clock*0.52
+		var paw_pos := center+Vector2(cos(angle)*radii.x*0.70,sin(angle)*radii.y*0.70)
+		draw_circle(paw_pos,7.0,Color(0.74,0.34,1.0,0.62*life_ratio))
+		for toe in 3:
+			draw_circle(paw_pos+Vector2(-7.0+toe*7.0,-7.0),2.8,Color(0.94,0.86,1.0,0.76*life_ratio))
+	var wolf_scale := 1.0+sin(clock*4.6)*0.08
+	var wolf_head := PackedVector2Array([center+Vector2(-52,-20)*wolf_scale,center+Vector2(-34,-58)*wolf_scale,center+Vector2(-8,-38)*wolf_scale,center+Vector2(0,-50)*wolf_scale,center+Vector2(8,-38)*wolf_scale,center+Vector2(34,-58)*wolf_scale,center+Vector2(52,-20)*wolf_scale,center+Vector2(30,34)*wolf_scale,center+Vector2(0,55)*wolf_scale,center+Vector2(-30,34)*wolf_scale])
+	draw_colored_polygon(wolf_head,Color(0.18,0.03,0.28,0.42*life_ratio))
+	var wolf_outline := wolf_head.duplicate()
+	wolf_outline.append(wolf_head[0])
+	draw_polyline(wolf_outline,Color(0.76,0.47,1.0,0.70*life_ratio),3.0,true)
+	draw_circle(center+Vector2(-17,-10),5.5,Color(0.92,0.84,1.0,0.92*life_ratio))
+	draw_circle(center+Vector2(17,-10),5.5,Color(0.92,0.84,1.0,0.92*life_ratio))
 
 
 func _draw_kindred_boss_effect(effect: Dictionary) -> void:
@@ -1050,42 +1284,78 @@ func _draw_kindred_boss_effect(effect: Dictionary) -> void:
 	if kind == "kindred_respite":
 		var radius := float(effect.get("radius",285.0))
 		var radii: Vector2 = sim.ability_area_screen_radii(center_world,radius)
-		_kindred_ellipse(center,radii,Color("#f4fbff"),0.82,4.0,0.10)
-		for ring in 4:
-			var wave := fposmod(elapsed*3.0+float(ring)/4.0,1.0)
-			_kindred_ellipse(center,radii*(0.25+wave*0.75),Color("#bda6ff"),sin(wave*PI)*0.50,2.0)
-		draw_circle(center,22.0+sin(clock*3.0)*4.0,Color(0.90,1.0,1.0,0.20))
+		_kindred_ellipse(center,radii,Color("#f4ffff"),0.94,6.0,0.16)
+		for ring in 6:
+			var wave := fposmod(elapsed*3.6+float(ring)/6.0,1.0)
+			_kindred_ellipse(center,radii*(0.18+wave*0.82),Color("#c59aff"),sin(wave*PI)*0.66,2.0+float(ring%2))
+		for rune in 12:
+			var angle := float(rune)*TAU/12.0+clock*0.12
+			var rune_pos := center+Vector2(cos(angle)*radii.x*0.88,sin(angle)*radii.y*0.88)
+			draw_circle(rune_pos,7.0+sin(clock*4.0+rune)*2.0,Color(0.92,1.0,1.0,0.72))
+			draw_line(rune_pos,rune_pos+Vector2(0,-24.0),Color(0.82,0.64,1.0,0.46),3.0,true)
+		draw_circle(center,34.0+sin(clock*3.6)*7.0,Color(0.90,1.0,1.0,0.30))
+		draw_arc(center,52.0,-2.8,2.8,44,Color("#ffffff",0.9),5.0,true)
 	elif kind == "kindred_respite_end":
 		var radii: Vector2 = sim.ability_area_screen_radii(center_world,float(effect.get("radius",285.0)))
-		_kindred_ellipse(center,radii*(0.40+elapsed*0.80),Color("#ffffff"),sin(elapsed*PI)*0.95,6.0,0.05*alpha)
+		for ring in 3:
+			_kindred_ellipse(center,radii*(0.24+elapsed*(0.88+ring*0.12)),Color("#ffffff"),sin(elapsed*PI)*alpha*(1.0-ring*0.18),7.0-ring*1.5,0.055*alpha)
+		for ray in 18:
+			var angle := float(ray)*TAU/18.0
+			draw_line(center+Vector2.from_angle(angle)*35.0,center+Vector2(cos(angle)*radii.x,sin(angle)*radii.y)*(0.55+elapsed*0.55),Color(0.90,0.78,1.0,alpha*0.70),3.0,true)
 	elif kind == "kindred_protect":
-		draw_arc(center-Vector2(0,18),34.0+elapsed*10.0,0,TAU,40,Color("#e9fbff",alpha),4.0,true)
+		for ring in 3:
+			draw_arc(center-Vector2(0,18),32.0+elapsed*(18.0+ring*8.0),0,TAU,40,Color("#efffff",alpha*(0.95-ring*0.20)),5.0-ring,true)
 	elif kind == "kindred_dance":
+		var volleys := int(effect.get("volleys",3))
 		for point_value: Variant in effect.get("points",[]):
-			var target := world_to_screen(Vector2(point_value))
-			draw_line(center,target,Color(0.86,1.0,1.0,alpha*0.42),2.0,true)
-		for ribbon in 3:
-			draw_arc(center,25.0+elapsed*54.0+ribbon*10.0,-2.8+ribbon*0.35,-0.2+ribbon*0.35,28,Color(0.86,1.0,1.0,alpha*(0.72-ribbon*0.13)),3.0,true)
+			var target := world_to_screen(Vector2(point_value))+Vector2(0,8)
+			for trail in volleys:
+				var offset := Vector2(0,(float(trail)-float(volleys-1)*0.5)*12.0)
+				draw_line(center+offset,target+offset,Color(0.88,1.0,1.0,alpha*(0.32+trail*0.10)),3.0+float(trail%2),true)
+				draw_circle(target+offset,8.0+elapsed*18.0,Color(0.88,1.0,1.0,alpha*0.12))
+		for ribbon in 6:
+			draw_arc(center,22.0+elapsed*78.0+ribbon*9.0,-3.0+ribbon*0.20,-0.1+ribbon*0.20,32,Color(0.86,1.0,1.0,alpha*(0.88-ribbon*0.10)),4.0-float(ribbon%2),true)
 	elif kind == "kindred_wolf":
-		var radii: Vector2 = sim.ability_area_screen_radii(center_world,float(effect.get("radius",240.0)))
-		_kindred_ellipse(center,radii*(0.35+elapsed*0.75),Color("#aa79ff"),sin(elapsed*PI)*0.90,5.0,0.08*alpha)
+		var radii: Vector2 = sim.ability_area_screen_radii(center_world,float(effect.get("radius",275.0)))
+		for ring in 4:
+			_kindred_ellipse(center,radii*(0.18+elapsed*(0.82+ring*0.08)),Color("#ad62ff"),sin(elapsed*PI)*alpha*(0.96-ring*0.14),7.0-ring,0.12*alpha)
+		for claw in 12:
+			var angle := float(claw)*TAU/12.0
+			var claw_pos := center+Vector2(cos(angle)*radii.x*elapsed,sin(angle)*radii.y*elapsed)
+			draw_line(claw_pos-Vector2.from_angle(angle)*18.0,claw_pos+Vector2.from_angle(angle)*20.0,Color(0.88,0.74,1.0,alpha),4.0,true)
+	elif kind == "kindred_wolf_strike":
+		var radii: Vector2 = sim.ability_area_screen_radii(center_world,float(effect.get("radius",275.0)))
+		_kindred_ellipse(center,radii*(0.42+elapsed*0.62),Color("#d9b7ff"),alpha*0.94,8.0,0.12*alpha)
+		for slash in 9:
+			var angle := float(slash)*TAU/9.0+clock*0.4
+			var slash_center := center+Vector2(cos(angle)*radii.x*0.58,sin(angle)*radii.y*0.58)
+			draw_line(slash_center-Vector2(16,24),slash_center+Vector2(16,24),Color(0.90,0.74,1.0,alpha),5.0,true)
 	elif kind == "kindred_dread":
-		var target := world_to_screen(Vector2(effect.get("target",effect.pos)))
-		draw_dashed_line(center,target,Color("#b889ff",alpha*0.78),3.0,10.0,true)
+		var target := world_to_screen(Vector2(effect.get("target",effect.pos)))+Vector2(0,8)
+		draw_colored_polygon(PackedVector2Array([center,target+Vector2(28,-18),target+Vector2(-28,18)]),Color(0.36,0.04,0.52,alpha*0.12))
+		draw_dashed_line(center,target,Color("#c77cff",alpha*0.96),5.0,8.0,true)
 		for mark in 3:
-			draw_arc(target,24.0+mark*12.0+elapsed*16.0,-2.6,-0.5,24,Color("#d8c3ff",alpha*(0.92-mark*0.18)),3.0,true)
+			draw_arc(target,30.0+mark*17.0+elapsed*22.0,-2.7,-0.45,32,Color("#ead7ff",alpha*(0.98-mark*0.15)),5.0-mark*0.7,true)
+			var mark_y := -48.0+mark*30.0
+			draw_colored_polygon(PackedVector2Array([target+Vector2(-17,mark_y),target+Vector2(0,mark_y+18),target+Vector2(17,mark_y)]),Color(0.78,0.40,1.0,alpha))
 	elif kind == "kindred_hunt":
-		var count := int(effect.get("count",12))
-		for arrow in mini(count,18):
-			var angle := lerpf(-0.78,0.78,float(arrow%9)/8.0)+sin(elapsed*PI)*0.08
-			var start := center+Vector2.LEFT.rotated(angle)*(38.0+elapsed*80.0)
-			var finish := center+Vector2.LEFT.rotated(angle)*(170.0+elapsed*340.0)
-			draw_line(start,finish,Color("#ecffff",alpha*(0.50+float(arrow%3)*0.16)),2.0+float(arrow%2),true)
+		var count := int(effect.get("count",18))
+		for ring in 3:
+			draw_arc(center,40.0+elapsed*(95.0+ring*38.0),-2.9,2.9,56,Color(0.84,0.59,1.0,alpha*(0.72-ring*0.16)),6.0-ring,true)
+		for arrow in mini(count,32):
+			var angle := lerpf(-0.90,0.90,float(arrow%11)/10.0)+sin(elapsed*PI+arrow)*0.035
+			var start := center+Vector2.LEFT.rotated(angle)*(34.0+elapsed*110.0+float(arrow%3)*10.0)
+			var finish := center+Vector2.LEFT.rotated(angle)*(220.0+elapsed*460.0)
+			draw_line(start,finish,Color("#efffff",alpha*(0.52+float(arrow%3)*0.18)),3.0+float(arrow%2)*1.5,true)
+			draw_line(finish,finish-Vector2.LEFT.rotated(angle)*22.0+Vector2.LEFT.rotated(angle).orthogonal()*9.0,Color("#c883ff",alpha),3.0,true)
+			draw_line(finish,finish-Vector2.LEFT.rotated(angle)*22.0-Vector2.LEFT.rotated(angle).orthogonal()*9.0,Color("#c883ff",alpha),3.0,true)
 	elif kind == "kindred_arrow_hit":
-		var color := Color("#b889ff") if bool(effect.get("dread",false)) else Color("#e9ffff")
-		for shard in 8:
-			var angle := float(shard)*TAU/8.0
-			draw_line(center+Vector2.from_angle(angle)*elapsed*8.0,center+Vector2.from_angle(angle)*(14.0+elapsed*36.0),Color(color,alpha),3.0,true)
+		var color := Color("#c16cff") if bool(effect.get("dread",false)) else Color("#efffff")
+		for ring in 2:
+			draw_arc(center,12.0+elapsed*(42.0+ring*20.0),0,TAU,32,Color(color,alpha*(0.92-ring*0.24)),5.0-ring,true)
+		for shard in 14:
+			var angle := float(shard)*TAU/14.0
+			draw_line(center+Vector2.from_angle(angle)*elapsed*10.0,center+Vector2.from_angle(angle)*(20.0+elapsed*54.0),Color(color,alpha),4.0 if shard%2==0 else 2.5,true)
 
 
 func _slime_element_color(element: String) -> Color:
@@ -2295,7 +2565,7 @@ func _draw_enemy(enemy: Dictionary) -> void:
 		var style := str(enemy.get("boss_style", "commander"))
 		var phase := int(enemy.get("boss_phase", 1))
 		var pulse := sin(clock * (2.2 + phase * 0.35))
-		var boss_color: Color = {"rift": Color("#a36bff"), "commander": Color("#ff6686"), "brood": Color("#df61bd"), "kindred": Color("#dffcff"), "storm": Color("#66d9ff"), "bulwark": Color("#e3bd62"), "artillery": Color("#ff8456"), "chronophage": Color("#9b7cff")}.get(style, Color("#ff6686"))
+		var boss_color: Color = {"rift": Color("#a36bff"), "commander": Color("#ff6686"), "brood": Color("#df61bd"), "kindred": Color("#dffcff"), "storm": Color("#66d9ff"), "bulwark": Color("#e3bd62"), "artillery": Color("#ff8456"), "chronophage": Color("#9b7cff"), "galio": Color("#d6b1ff")}.get(style, Color("#ff6686"))
 		if str(enemy.kind) not in ["boss_01", "boss_02", "boss_03"]:
 			draw_arc(body, 48.0 + pulse * 3.0 + phase * 2.0, 0, TAU, 36, Color(boss_color, 0.82), 3.0 + phase * 0.7, true)
 			for phase_mark in phase:
@@ -2308,6 +2578,14 @@ func _draw_enemy(enemy: Dictionary) -> void:
 				if str(enemy.kind) != "boss_02":
 					for sac in 3:
 						draw_circle(body + Vector2(-25 + sac * 25, 20 + sin(clock * 3.0 + sac) * 4.0), 13.0, Color(boss_color, 0.58))
+			"galio":
+				var wing_span := 74.0 + pulse * 4.0
+				draw_colored_polygon(PackedVector2Array([body+Vector2(-12,-42),body+Vector2(-wing_span,-68),body+Vector2(-54,-8),body+Vector2(-86,22),body+Vector2(-20,28)]),Color(boss_color,0.72))
+				draw_colored_polygon(PackedVector2Array([body+Vector2(12,-42),body+Vector2(wing_span,-68),body+Vector2(54,-8),body+Vector2(86,22),body+Vector2(20,28)]),Color(boss_color,0.72))
+				draw_circle(body+Vector2(0,-22),30.0,Color("#32214d"))
+				draw_arc(body+Vector2(0,-22),31.0,-2.85,-0.29,34,Color("#f5d976"),6.0,true)
+				draw_line(body+Vector2(-22,9),body+Vector2(-42,43),Color("#e6c36d"),10.0,true)
+				draw_line(body+Vector2(22,9),body+Vector2(42,43),Color("#e6c36d"),10.0,true)
 			"kindred":
 				var bow_center := body + Vector2(-8.0, -10.0)
 				draw_arc(bow_center, 47.0 + pulse * 2.0, -1.24, 1.24, 32, Color("#f0ffff"), 5.0, true)
@@ -2339,7 +2617,7 @@ func _draw_enemy(enemy: Dictionary) -> void:
 			_:
 				for crown in 3:
 					draw_colored_polygon(PackedVector2Array([body + Vector2(-34 + crown * 34, -38), body + Vector2(-22 + crown * 34, -63), body + Vector2(-10 + crown * 34, -38)]), boss_color)
-		var boss_name: String = {"rift": "裂隙统领", "commander": "统领", "brood": "史莱姆王", "kindred": "永猎双子", "storm": "风暴", "bulwark": "壁垒", "artillery": "炮台", "chronophage": "噬时"}.get(style, "统领")
+		var boss_name: String = {"rift": "裂隙统领", "commander": "统领", "brood": "史莱姆王", "kindred": "永猎双子", "storm": "风暴", "bulwark": "壁垒", "artillery": "炮台", "chronophage": "噬时", "galio": "正义巨像"}.get(style, "统领")
 		caption(enemy.pos + Vector2(-18, 36), boss_name + " · P%d" % phase, boss_color, 14)
 
 	if enemy.haste_timer > 0:
