@@ -1,6 +1,7 @@
 extends RefCounted
 
 const SaveMigrator = preload("res://scripts/save_migrator.gd")
+const AchievementCatalog = preload("res://scripts/achievement_catalog.gd")
 
 var save_path: String
 var unlocked_characters: Dictionary = {"traveler": true}
@@ -9,6 +10,16 @@ var encountered_enemies: Dictionary = {}
 var cleared_stages: Dictionary = {}
 var stage_records: Dictionary = {}
 var build_history: Array[Dictionary] = []
+var unlocked_achievements: Dictionary = {}
+var achievement_stats: Dictionary = {
+	"runs": 0,
+	"wins": 0,
+	"total_kills": 0,
+	"total_damage": 0.0,
+	"endless_damage": 0.0,
+	"boss_kills": 0,
+	"best_endless_time": 0.0,
+}
 
 func _init(path: String = "user://compendium.json") -> void:
 	save_path = path
@@ -49,6 +60,126 @@ func record_build(sim) -> void:
 		build_history.resize(20)
 	save_progress()
 
+func evaluate_achievements(sim, database) -> Array[String]:
+	var record: Dictionary = sim.export_build_record()
+	var heroes: Array = record.get("characters", [])
+	var total_damage := 0.0
+	var skill_uses := 0
+	var ultimate_uses := 0
+	var active_damage: Array[float] = []
+	var max_energy := 0.0
+	for hero: Dictionary in heroes:
+		var damage := float(hero.get("damage", 0.0))
+		total_damage += damage
+		skill_uses += int(hero.get("skills", 0))
+		ultimate_uses += int(hero.get("ultimates", 0))
+		max_energy = maxf(max_energy, float(hero.get("max_energy", 0.0)))
+		if damage > 0.0:
+			active_damage.append(damage)
+	achievement_stats["runs"] = int(achievement_stats.get("runs", 0)) + 1
+	achievement_stats["total_kills"] = int(achievement_stats.get("total_kills", 0)) + int(record.get("kills", 0))
+	achievement_stats["total_damage"] = float(achievement_stats.get("total_damage", 0.0)) + total_damage
+	achievement_stats["boss_kills"] = int(achievement_stats.get("boss_kills", 0)) + int(record.get("boss_kills", 0))
+	if sim.state == "won":
+		achievement_stats["wins"] = int(achievement_stats.get("wins", 0)) + 1
+	if sim.endless_mode:
+		achievement_stats["endless_damage"] = float(achievement_stats.get("endless_damage", 0.0)) + total_damage
+		achievement_stats["best_endless_time"] = maxf(float(achievement_stats.get("best_endless_time", 0.0)), float(record.get("elapsed", 0.0)))
+
+	var current_cards: Dictionary = record.get("buff_levels", {})
+	var current_rarities: Dictionary = {}
+	var current_legendary := 0
+	var discovered_legendary := 0
+	for card: Dictionary in database.cards:
+		var card_id := str(card.get("id", ""))
+		var rarity := str(card.get("rarity", "common"))
+		if current_cards.has(card_id):
+			current_rarities[rarity] = true
+			current_legendary += int(rarity == "legendary")
+		if discovered_cards.has(card_id) and rarity == "legendary":
+			discovered_legendary += 1
+	var ready_characters := 0
+	var unlocked_ready := 0
+	for character_id: String in database.characters:
+		if bool(database.characters[character_id].get("content_ready", false)):
+			ready_characters += 1
+			unlocked_ready += int(unlocked_characters.has(character_id))
+	var boss_total := 0
+	var boss_seen := 0
+	for boss_id: Variant in database.boss_patterns.keys():
+		boss_total += 1
+		boss_seen += int(encountered_enemies.has(str(boss_id)))
+	var max_hero_damage := 0.0
+	for damage: float in active_damage:
+		max_hero_damage = maxf(max_hero_damage, damage)
+	var balanced_team := active_damage.size() >= 3 and total_damage > 0.0
+	if balanced_team:
+		for damage: float in active_damage:
+			if damage / total_damage < 0.20:
+				balanced_team = false
+				break
+
+	var won_normal: bool = sim.state == "won" and not sim.endless_mode
+	var conditions := {
+		"first_watch": won_normal,
+		"damage_king": float(achievement_stats.endless_damage) >= 9999999.0,
+		"card_master": discovered_cards.size() >= database.cards.size(),
+		"perfect_guard": won_normal and int(sim.base_hp) >= 12,
+		"last_crystal": won_normal and int(sim.base_hp) == 1,
+		"hundred_slayer": int(record.get("kills", 0)) >= 100,
+		"thousand_army": sim.endless_mode and int(record.get("kills", 0)) >= 1000,
+		"night_watch": sim.endless_mode and float(record.get("elapsed", 0.0)) >= 900.0,
+		"five_crowns": int(achievement_stats.boss_kills) >= 5,
+		"full_squad": active_damage.size() >= 3,
+		"skill_storm": skill_uses >= 50,
+		"ultimate_finale": ultimate_uses >= 20,
+		"crystal_overclock": int(record.get("crystal_level", 1)) >= 20,
+		"stack_ten": int(record.get("highest_stack", 0)) >= 10,
+		"four_rarities": current_rarities.size() >= 4,
+		"legend_collector": discovered_legendary >= 15,
+		"roster_complete": ready_characters > 0 and unlocked_ready >= ready_characters,
+		"eight_fronts": cleared_stages.size() >= 8,
+		"boss_archive": boss_total > 0 and boss_seen >= boss_total,
+		"war_archive": build_history.size() >= 20,
+		"speed_clear": won_normal and float(record.get("elapsed", 99999.0)) <= 240.0,
+		"endless_marathon": sim.endless_mode and float(record.get("elapsed", 0.0)) >= 1800.0,
+		"million_firepower": total_damage >= 1000000.0,
+		"cold_start": won_normal and float(record.get("luck", 1.0)) <= 0.05,
+		"energy_overflow": max_energy >= 300.0,
+		"solo_army": total_damage >= 500000.0 and max_hero_damage / maxf(1.0, total_damage) >= 0.80,
+		"balanced_team": balanced_team,
+		"thirty_buffs": current_cards.size() >= 30,
+		"five_legends": current_legendary >= 5,
+		"true_guardian": won_normal and str(record.get("stage_id", "")) == "stage_08",
+	}
+	var unlocked_now: Array[String] = []
+	for item: Dictionary in AchievementCatalog.ITEMS:
+		var id := str(item.id)
+		if bool(conditions.get(id, false)) and not unlocked_achievements.has(id):
+			unlocked_achievements[id] = {"unlocked_at": Time.get_datetime_string_from_system()}
+			unlocked_now.append(id)
+	save_progress()
+	return unlocked_now
+
+func achievement_progress(id: String, database) -> String:
+	if unlocked_achievements.has(id):
+		return "已完成"
+	match id:
+		"damage_king": return "%s / 9,999,999" % _number_text(int(achievement_stats.get("endless_damage", 0.0)))
+		"card_master": return "%d / %d" % [discovered_cards.size(), database.cards.size()]
+		"five_crowns": return "%d / 5" % int(achievement_stats.get("boss_kills", 0))
+		"roster_complete":
+			var ready := 0
+			var known := 0
+			for character_id: String in database.characters:
+				if bool(database.characters[character_id].get("content_ready", false)):
+					ready += 1
+					known += int(unlocked_characters.has(character_id))
+			return "%d / %d" % [known, ready]
+		"eight_fronts": return "%d / 8" % mini(8, cleared_stages.size())
+		"war_archive": return "%d / 20" % build_history.size()
+		_: return "未完成"
+
 func unlock_character(character_id: String) -> bool:
 	var changed := _mark(unlocked_characters, character_id)
 	if changed:
@@ -60,6 +191,15 @@ func _mark(collection: Dictionary, id: String) -> bool:
 		return false
 	collection[id] = true
 	return true
+
+func _number_text(value: int) -> String:
+	var raw := str(value)
+	var output := ""
+	for index in raw.length():
+		if index > 0 and (raw.length() - index) % 3 == 0:
+			output += ","
+		output += raw[index]
+	return output
 
 func save_progress() -> void:
 	var file := FileAccess.open(save_path, FileAccess.WRITE)
@@ -73,6 +213,8 @@ func save_progress() -> void:
 		"cleared_stages": cleared_stages.keys(),
 		"stage_records": stage_records,
 		"build_history": build_history,
+		"unlocked_achievements": unlocked_achievements,
+		"achievement_stats": achievement_stats,
 	}, "\t"))
 
 func load_progress() -> void:
@@ -90,6 +232,10 @@ func load_progress() -> void:
 		stage_records = data.get("stage_records", {}).duplicate(true)
 	if data.get("build_history", []) is Array:
 		build_history.assign(data.get("build_history", []))
+	if data.get("unlocked_achievements", {}) is Dictionary:
+		unlocked_achievements = data.get("unlocked_achievements", {}).duplicate(true)
+	if data.get("achievement_stats", {}) is Dictionary:
+		achievement_stats.merge(data.get("achievement_stats", {}), true)
 	unlocked_characters["traveler"] = true
 
 func _load_set(target: Dictionary, values: Array) -> void:

@@ -27,6 +27,8 @@ func _initialize() -> void:
 		valid = story.begin(scene_key) and valid
 		for line: Variant in story.lines:
 			valid = valid and line_valid(line)
+			valid = valid and str(line.get("speaker", "")) not in ["你", "旅行者", "旁白", "主角", "荧", "玩家", "Traveler", "Narrator"]
+			valid = valid and not str(line.get("portrait", "")).contains("/traveler/")
 			count += 1
 		while story.active:
 			if story.has_choices():
@@ -39,8 +41,8 @@ func _initialize() -> void:
 		story.advance()
 	valid = valid and story.has_choices() and story.current().choices.size() == 2
 	valid = valid and story.choose(1)
-	valid = valid and story.choice_history.size() == 1 and story.choice_history[0].result == "trusted_signal"
-	valid = valid and "丰川祥子" == story.current().speaker
+	valid = valid and story.choice_history.size() == 1 and story.choice_history[0].result == "roxy_departure"
+	valid = valid and "洛琪希" == story.current().speaker
 	story.reset()
 	valid = story.begin("mode1_won") and valid
 	while story.active and not story.has_choices():

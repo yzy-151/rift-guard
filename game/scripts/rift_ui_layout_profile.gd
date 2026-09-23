@@ -53,6 +53,9 @@ class_name RiftUILayoutProfile
 @export var dialogue_auto_rect := Rect2(930, 698, 142, 22)
 @export var dialogue_advance_rect := Rect2(1085, 698, 150, 22)
 @export var dialogue_history_panel_rect := Rect2(190, 112, 900, 470)
+@export var dialogue_comic_rect := Rect2(202, 64, 876, 438)
+@export var dialogue_comic_caption_rect := Rect2(170, 524, 940, 72)
+@export var dialogue_comic_continue_rect := Rect2(616, 610, 48, 28)
 
 @export_group("Reward Select")
 @export var reward_background_rect := Rect2(0, 0, 1280, 720)

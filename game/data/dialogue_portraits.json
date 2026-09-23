@@ -1,0 +1,514 @@
+{
+  "portraits": {
+    "丰川祥子": {
+      "冷淡": "res://assets/helltaker/dialogue_portraits/丰川祥子_冷淡_统一画风重绘.png",
+      "委屈": "res://assets/helltaker/dialogue_portraits/丰川祥子_委屈_统一画风重绘.png",
+      "得意": "res://assets/helltaker/dialogue_portraits/丰川祥子_得意_统一画风重绘.png",
+      "生气": "res://assets/helltaker/dialogue_portraits/丰川祥子_生气_统一画风重绘.png"
+    },
+    "哥伦比亚": {
+      "害羞": "res://assets/helltaker/dialogue_portraits/少女_害羞_委屈动作重绘.png",
+      "微笑": "res://assets/helltaker/dialogue_portraits/少女_微笑_自信动作重绘.png"
+    },
+    "格温": {
+      "害羞": "res://assets/helltaker/dialogue_portraits/格温_害羞_原画风重绘.png",
+      "惊讶": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+      "羞恼": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png"
+    },
+    "洛琪希": {
+      "不悦": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
+      "傲娇": "res://assets/helltaker/dialogue_portraits/洛琪希_傲娇_重绘统一服装.png",
+      "害羞": "res://assets/helltaker/dialogue_portraits/洛琪希_害羞_重绘统一服装.png"
+    },
+    "艾米莉亚": {
+      "不安": "res://assets/helltaker/dialogue_portraits/艾米莉亚_不安_原画风重绘.png",
+      "微笑": "res://assets/helltaker/dialogue_portraits/艾米莉亚_微笑.png",
+      "惊讶": "res://assets/helltaker/dialogue_portraits/艾米莉亚_惊讶.png",
+      "生气": "res://assets/helltaker/dialogue_portraits/艾米莉亚_生气_紧身衣原画风重绘.png"
+    },
+    "芙宁娜": {
+      "傲娇": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
+      "委屈": "res://assets/helltaker/dialogue_portraits/芙宁娜_委屈_原画风重绘.png",
+      "害羞": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
+      "思考": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
+      "惊讶": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png"
+    },
+    "阿米娅": {
+      "不安": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_不安_统一眼睛画风.png",
+      "傲娇": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_傲娇_统一眼睛画风.png",
+      "微笑": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png",
+      "羞恼": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_羞恼_小胸版.png"
+    },
+    "风堇": {
+      "委屈": "res://assets/helltaker/dialogue_portraits/风堇_委屈_统一画风重绘.png",
+      "自信": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+      "警惕": "res://assets/helltaker/dialogue_portraits/风堇_警惕_统一画风重绘.png"
+    }
+  },
+  "files": [
+    {
+      "source": "丰川祥子_冷淡_统一画风重绘.png",
+      "speaker": "丰川祥子",
+      "expression": "冷淡",
+      "resource": "res://assets/helltaker/dialogue_portraits/丰川祥子_冷淡_统一画风重绘.png",
+      "crop": [
+        92,
+        80,
+        1169,
+        1408
+      ],
+      "size": [
+        1077,
+        1328
+      ]
+    },
+    {
+      "source": "丰川祥子_委屈_统一画风重绘.png",
+      "speaker": "丰川祥子",
+      "expression": "委屈",
+      "resource": "res://assets/helltaker/dialogue_portraits/丰川祥子_委屈_统一画风重绘.png",
+      "crop": [
+        80,
+        97,
+        992,
+        1714
+      ],
+      "size": [
+        912,
+        1617
+      ]
+    },
+    {
+      "source": "丰川祥子_得意_统一画风重绘.png",
+      "speaker": "丰川祥子",
+      "expression": "得意",
+      "resource": "res://assets/helltaker/dialogue_portraits/丰川祥子_得意_统一画风重绘.png",
+      "crop": [
+        94,
+        76,
+        1196,
+        1345
+      ],
+      "size": [
+        1102,
+        1269
+      ]
+    },
+    {
+      "source": "丰川祥子_生气_统一画风重绘.png",
+      "speaker": "丰川祥子",
+      "expression": "生气",
+      "resource": "res://assets/helltaker/dialogue_portraits/丰川祥子_生气_统一画风重绘.png",
+      "crop": [
+        84,
+        89,
+        1077,
+        1571
+      ],
+      "size": [
+        993,
+        1482
+      ]
+    },
+    {
+      "source": "少女_害羞_委屈动作重绘.png",
+      "speaker": "哥伦比亚",
+      "expression": "害羞",
+      "resource": "res://assets/helltaker/dialogue_portraits/少女_害羞_委屈动作重绘.png",
+      "crop": [
+        95,
+        102,
+        1098,
+        1670
+      ],
+      "size": [
+        1003,
+        1568
+      ]
+    },
+    {
+      "source": "少女_微笑_自信动作重绘.png",
+      "speaker": "哥伦比亚",
+      "expression": "微笑",
+      "resource": "res://assets/helltaker/dialogue_portraits/少女_微笑_自信动作重绘.png",
+      "crop": [
+        107,
+        91,
+        1231,
+        1489
+      ],
+      "size": [
+        1124,
+        1398
+      ]
+    },
+    {
+      "source": "格温_害羞.png",
+      "speaker": "格温",
+      "expression": "害羞",
+      "resource": "res://assets/helltaker/dialogue_portraits/格温_害羞.png",
+      "crop": [
+        98,
+        108,
+        1736,
+        2513
+      ],
+      "size": [
+        1638,
+        2405
+      ]
+    },
+    {
+      "source": "格温_害羞_原画风重绘.png",
+      "speaker": "格温",
+      "expression": "害羞",
+      "resource": "res://assets/helltaker/dialogue_portraits/格温_害羞_原画风重绘.png",
+      "crop": [
+        92,
+        95,
+        1119,
+        1558
+      ],
+      "size": [
+        1027,
+        1463
+      ]
+    },
+    {
+      "source": "格温_惊讶_统一服装.png",
+      "speaker": "格温",
+      "expression": "惊讶",
+      "resource": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+      "crop": [
+        64,
+        72,
+        1042,
+        1505
+      ],
+      "size": [
+        978,
+        1433
+      ]
+    },
+    {
+      "source": "格温_羞恼_统一服装.png",
+      "speaker": "格温",
+      "expression": "羞恼",
+      "resource": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
+      "crop": [
+        69,
+        73,
+        1125,
+        1535
+      ],
+      "size": [
+        1056,
+        1462
+      ]
+    },
+    {
+      "source": "洛琪希_不悦_重绘统一服装.png",
+      "speaker": "洛琪希",
+      "expression": "不悦",
+      "resource": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
+      "crop": [
+        72,
+        79,
+        1133,
+        1520
+      ],
+      "size": [
+        1061,
+        1441
+      ]
+    },
+    {
+      "source": "洛琪希_傲娇_重绘统一服装.png",
+      "speaker": "洛琪希",
+      "expression": "傲娇",
+      "resource": "res://assets/helltaker/dialogue_portraits/洛琪希_傲娇_重绘统一服装.png",
+      "crop": [
+        72,
+        77,
+        1082,
+        1484
+      ],
+      "size": [
+        1010,
+        1407
+      ]
+    },
+    {
+      "source": "洛琪希_害羞_重绘统一服装.png",
+      "speaker": "洛琪希",
+      "expression": "害羞",
+      "resource": "res://assets/helltaker/dialogue_portraits/洛琪希_害羞_重绘统一服装.png",
+      "crop": [
+        72,
+        77,
+        1129,
+        1476
+      ],
+      "size": [
+        1057,
+        1399
+      ]
+    },
+    {
+      "source": "艾米莉亚_不安_原画风重绘.png",
+      "speaker": "艾米莉亚",
+      "expression": "不安",
+      "resource": "res://assets/helltaker/dialogue_portraits/艾米莉亚_不安_原画风重绘.png",
+      "crop": [
+        93,
+        93,
+        1122,
+        1528
+      ],
+      "size": [
+        1029,
+        1435
+      ]
+    },
+    {
+      "source": "艾米莉亚_微笑.png",
+      "speaker": "艾米莉亚",
+      "expression": "微笑",
+      "resource": "res://assets/helltaker/dialogue_portraits/艾米莉亚_微笑.png",
+      "crop": [
+        98,
+        100,
+        1737,
+        2321
+      ],
+      "size": [
+        1639,
+        2221
+      ]
+    },
+    {
+      "source": "艾米莉亚_惊讶.png",
+      "speaker": "艾米莉亚",
+      "expression": "惊讶",
+      "resource": "res://assets/helltaker/dialogue_portraits/艾米莉亚_惊讶.png",
+      "crop": [
+        86,
+        95,
+        1512,
+        2198
+      ],
+      "size": [
+        1426,
+        2103
+      ]
+    },
+    {
+      "source": "艾米莉亚_生气_紧身衣原画风重绘.png",
+      "speaker": "艾米莉亚",
+      "expression": "生气",
+      "resource": "res://assets/helltaker/dialogue_portraits/艾米莉亚_生气_紧身衣原画风重绘.png",
+      "crop": [
+        92,
+        81,
+        1119,
+        1328
+      ],
+      "size": [
+        1027,
+        1247
+      ]
+    },
+    {
+      "source": "芙宁娜_傲娇_重绘_大腿根以上.png",
+      "speaker": "芙宁娜",
+      "expression": "傲娇",
+      "resource": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
+      "crop": [
+        80,
+        92,
+        931,
+        1501
+      ],
+      "size": [
+        851,
+        1409
+      ]
+    },
+    {
+      "source": "芙宁娜_委屈_原画风重绘.png",
+      "speaker": "芙宁娜",
+      "expression": "委屈",
+      "resource": "res://assets/helltaker/dialogue_portraits/芙宁娜_委屈_原画风重绘.png",
+      "crop": [
+        92,
+        97,
+        1111,
+        1588
+      ],
+      "size": [
+        1019,
+        1491
+      ]
+    },
+    {
+      "source": "芙宁娜_害羞_重绘_大腿根以上.png",
+      "speaker": "芙宁娜",
+      "expression": "害羞",
+      "resource": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
+      "crop": [
+        88,
+        95,
+        1061,
+        1561
+      ],
+      "size": [
+        973,
+        1466
+      ]
+    },
+    {
+      "source": "芙宁娜_思考_重绘_大腿根以上.png",
+      "speaker": "芙宁娜",
+      "expression": "思考",
+      "resource": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
+      "crop": [
+        84,
+        98,
+        1022,
+        1607
+      ],
+      "size": [
+        938,
+        1509
+      ]
+    },
+    {
+      "source": "芙宁娜_惊讶_水滴瞳.png",
+      "speaker": "芙宁娜",
+      "expression": "惊讶",
+      "resource": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png",
+      "crop": [
+        64,
+        74,
+        1038,
+        1563
+      ],
+      "size": [
+        974,
+        1489
+      ]
+    },
+    {
+      "source": "阿米娅_JK_不安_统一眼睛画风.png",
+      "speaker": "阿米娅",
+      "expression": "不安",
+      "resource": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_不安_统一眼睛画风.png",
+      "crop": [
+        66,
+        78,
+        1086,
+        1505
+      ],
+      "size": [
+        1020,
+        1427
+      ]
+    },
+    {
+      "source": "阿米娅_JK_傲娇_统一眼睛画风.png",
+      "speaker": "阿米娅",
+      "expression": "傲娇",
+      "resource": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_傲娇_统一眼睛画风.png",
+      "crop": [
+        64,
+        83,
+        999,
+        1585
+      ],
+      "size": [
+        935,
+        1502
+      ]
+    },
+    {
+      "source": "阿米娅_JK_微笑_大腿根以上.png",
+      "speaker": "阿米娅",
+      "expression": "微笑",
+      "resource": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png",
+      "crop": [
+        66,
+        78,
+        1086,
+        1503
+      ],
+      "size": [
+        1020,
+        1425
+      ]
+    },
+    {
+      "source": "阿米娅_JK_羞恼_小胸版.png",
+      "speaker": "阿米娅",
+      "expression": "羞恼",
+      "resource": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_羞恼_小胸版.png",
+      "crop": [
+        72,
+        78,
+        1142,
+        1505
+      ],
+      "size": [
+        1070,
+        1427
+      ]
+    },
+    {
+      "source": "风堇_委屈_统一画风重绘.png",
+      "speaker": "风堇",
+      "expression": "委屈",
+      "resource": "res://assets/helltaker/dialogue_portraits/风堇_委屈_统一画风重绘.png",
+      "crop": [
+        88,
+        102,
+        1063,
+        1666
+      ],
+      "size": [
+        975,
+        1564
+      ]
+    },
+    {
+      "source": "风堇_自信.png",
+      "speaker": "风堇",
+      "expression": "自信",
+      "resource": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+      "crop": [
+        75,
+        74,
+        1318,
+        1716
+      ],
+      "size": [
+        1243,
+        1642
+      ]
+    },
+    {
+      "source": "风堇_警惕_统一画风重绘.png",
+      "speaker": "风堇",
+      "expression": "警惕",
+      "resource": "res://assets/helltaker/dialogue_portraits/风堇_警惕_统一画风重绘.png",
+      "crop": [
+        102,
+        88,
+        1234,
+        1438
+      ],
+      "size": [
+        1132,
+        1350
+      ]
+    }
+  ]
+}

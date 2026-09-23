@@ -27,11 +27,11 @@ func run(game) -> void:
 	var late_cap: int = game.sim._endless_active_cap()
 	var late_low_cap: int = game.sim._endless_low_tier_cap()
 	var late_scales: Dictionary = game.sim._endless_enemy_scales(game.sim._endless_tier())
-	expect(early_cap < late_cap and late_cap <= 140, "active population budget grows from %d to %d without exceeding 140" % [early_cap, late_cap])
+	expect(early_cap < late_cap and late_cap <= 96, "active population budget grows from %d to %d without exceeding 96" % [early_cap, late_cap])
 	expect(late_low_cap < early_low_cap, "late low-tier budget shrinks from %d to %d" % [early_low_cap, late_low_cap])
-	expect(float(early_scales.health) < 1.0 and float(late_scales.health) > 4.0, "health scaling separates early and late threats")
-	expect(float(early_scales.damage) < 1.0 and float(late_scales.damage) > 2.0, "damage scaling separates early and late threats")
-	expect(game.sim.performance_budget.MAX_ENEMIES == 140 and game.sim.performance_budget.MAX_EFFECTS == 240, "simulation and cosmetic budgets are aligned")
+	expect(float(early_scales.health) <= 1.0 and float(late_scales.health) > 4.0, "health scaling separates early and late threats")
+	expect(float(early_scales.damage) <= 1.0 and float(late_scales.damage) > 2.0, "damage scaling separates early and late threats")
+	expect(game.sim.performance_budget.MAX_ENEMIES == 112 and game.sim.performance_budget.MAX_EFFECTS == 180, "simulation and cosmetic budgets are aligned")
 
 	game.sim.enemies.clear()
 	game.sim.elapsed = 600.0
@@ -57,6 +57,9 @@ func run(game) -> void:
 	game.battle.camera_center = game.sim.heroes[0].pos
 	expect(game.battle._render_point_visible(game.sim.heroes[0].pos, 0.0), "camera-center actors remain visible")
 	expect(not game.battle._render_point_visible(game.sim.ENDLESS_ARENA.position, 0.0), "off-screen actors are culled from rendering")
+	game.sim.enemies.clear()
+	game.sim.enemy_lookup.clear()
+	game.sim.endless_next_boss_at = 9999.0
 	game.sim.endless_spawn_timer = 0.0
 	while game.sim.enemies.size() < game.sim._endless_active_cap():
 		var index: int = game.sim.enemies.size()

@@ -1,232 +1,48 @@
 {
-  "home_traveler_0": [
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "旅行者",
-      "text": "旅行者在给旧剑擦拭细小的缺口。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我以为一觉醒来自动领主角光环，结果先领到了旧剑保养任务。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "旅行者",
-      "text": "明天要用这把剑训练，新剑也已送到。",
-      "choices": [
-        {
-          "text": "问她缺口记着哪一次同行，再决定是否换剑",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
-          "response_speaker": "旅行者",
-          "follow_up": [
-            {
-              "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-              "speaker": "旅行者",
-              "text": "如果这把缺了口的剑会说话，你觉得它先说什么？",
-              "choices": [
-                {
-                  "text": "先问她那次战斗有没有人回来",
-                  "response": "她把剑翻过来，缺口指向基地：回来的路，比漂亮的战报重要。",
-                  "response_speaker": "旅行者",
-                  "home_success": true
-                },
-                {
-                  "text": "让系统直接读取剑的装备履历",
-                  "response": "她按住我的手：装备履历记录伤害，不记录谁在等谁。",
-                  "response_speaker": "旅行者",
-                  "home_success": false,
-                  "home_reason": "用数据替代了她想被理解的记忆。"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "text": "直接换上没有瑕疵的新剑",
-          "response": "她收起新剑：好意我明白，可你先替我决定了该忘记什么。",
-          "response_speaker": "旅行者",
-          "home_success": false,
-          "home_reason": "把瑕疵当作无用之物，忽略了它承载的记忆。"
-        }
-      ]
-    }
-  ],
-  "home_traveler_1": [
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "旅行者",
-      "text": "旅行者在地图上刻意空出一条绕远的路。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我盯着地图的红线：这游戏连寻路都没有“跳过剧情”按钮？"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "旅行者",
-      "text": "这条路看起来效率很低。",
-      "choices": [
-        {
-          "text": "建议立刻改走最短路线",
-          "response": "她划掉标记：你只算了路程，没有算还在路上的人。",
-          "response_speaker": "旅行者",
-          "home_success": false,
-          "home_reason": "仅优化路程，漏掉了等待接应的同伴。"
-        },
-        {
-          "text": "先问那条路上有谁需要接应",
-          "response": "她点头：那边还有晚归的哨兵。快一点不总等于所有人都能回家。",
-          "response_speaker": "旅行者",
-          "home_success": true
-        }
-      ]
-    }
-  ],
-  "home_traveler_2": [
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "旅行者",
-      "text": "旅行者独自练习，却在每次胜利后停下。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我提议给胜利画面加个撒花特效，她把复盘表推到了我面前。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "旅行者",
-      "text": "她似乎不愿庆祝。",
-      "choices": [
-        {
-          "text": "陪她复盘没能保护到的角落",
-          "response": "她重画了防线：谢谢。下一次我能更早看见那里。",
-          "response_speaker": "旅行者",
-          "home_success": true
-        },
-        {
-          "text": "夸她已经赢了，别想太多",
-          "response": "她摇头：胜负很好算，遗憾不能靠一句赢了抹掉。",
-          "response_speaker": "旅行者",
-          "home_success": false,
-          "home_reason": "用胜利否定了她对细节的警觉。"
-        }
-      ]
-    }
-  ],
-  "home_traveler_3": [
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "旅行者",
-      "text": "旅行者捡到一封没有署名的求援信。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我刚想把求援信当隐藏任务，她已经把位置坐标盖住了。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "旅行者",
-      "text": "她问你是否公开寻人。",
-      "choices": [
-        {
-          "text": "把信贴在公告栏让大家找",
-          "response": "她取下公告：你也把求援者的位置告诉了追逐他的人。",
-          "response_speaker": "旅行者",
-          "home_success": false,
-          "home_reason": "公开求援信息暴露了写信人的位置。"
-        },
-        {
-          "text": "先保护信中的地点，再私下核实",
-          "response": "她合上信：求援的人现在还有选择自己现身的余地。",
-          "response_speaker": "旅行者",
-          "home_success": true
-        }
-      ]
-    }
-  ],
-  "home_traveler_4": [
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "旅行者",
-      "text": "旅行者发现有人总在替她承担夜巡。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我说可以替她站岗，她问我是真的想帮忙还是想偷懒坐在她旁边。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "旅行者",
-      "text": "那人说这样她就能休息。",
-      "choices": [
-        {
-          "text": "请她自己说出想轮值的夜晚",
-          "response": "她笑了：被照顾很好，但我更想保有选择。",
-          "response_speaker": "旅行者",
-          "home_success": true
-        },
-        {
-          "text": "替她答应以后都不用夜巡",
-          "response": "她说：保护我不该等于替我决定。",
-          "response_speaker": "旅行者",
-          "home_success": false,
-          "home_reason": "替本人作决定，剥夺了她想承担责任的选择。"
-        }
-      ]
-    }
-  ],
   "home_hero_01_0": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "哥伦比亚把一枚水晶放在桌上，轻声说它今天没有唱歌。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我问她这间屋子算不算安全区。她说，得先看我会不会乱碰她的东西。"
+      "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+      "speaker": "哥伦比亚",
+      "text": "这块水晶今天不唱了。它是不是也想请一天假？"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
       "speaker": "哥伦比亚",
-      "text": "她问你要不要把它敲碎寻找声音。",
+      "text": "如果我敲碎它，能听见最后一个音吗？",
       "choices": [
         {
-          "text": "把水晶带到安静的窗边等一等",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "别敲。安静也可以是一首歌，我陪你等。",
           "response_speaker": "哥伦比亚",
+          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+          "response": "那你会在安静的时候，继续听我说话吗？",
           "follow_up": [
             {
               "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
               "speaker": "哥伦比亚",
-              "text": "那你靠近一步时，准备先做什么？",
+              "text": "如果我今天一句也不说，你会留下吗？",
               "choices": [
                 {
-                  "text": "停下，等她自己伸出手",
-                  "response": "她稍稍放松：这次不用系统提示，我也知道你在。",
+                  "text": "会。沉默也算我们一起过的时间。",
                   "response_speaker": "哥伦比亚",
+                  "response": "那就先不敲它。你听，风替我们补上了空拍。",
                   "home_success": true
                 },
                 {
-                  "text": "宣布信任值已经刷满",
-                  "response": "她退后半步：信任不是刷出来的进度条。",
+                  "text": "那我替你把所有话说完。",
                   "response_speaker": "哥伦比亚",
+                  "response": "不必。我的沉默不需要别人代言。",
                   "home_success": false,
-                  "home_reason": "把关系当成可刷的数值。"
+                  "home_reason": "把沉默误当成需要替人填满的空白。"
                 }
               ]
             }
           ]
         },
         {
-          "text": "敲开看看里面有什么",
-          "response": "哥伦比亚望着碎片：声音一旦散了，就无法问它为何沉默。",
+          "text": "敲吧，静音键哪有拆机快。",
           "response_speaker": "哥伦比亚",
+          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+          "response": "声音一旦散了，就无法问它为何沉默。",
           "home_success": false,
           "home_reason": "急于拆解，毁掉了需要耐心观察的线索。"
         }
@@ -235,62 +51,56 @@
   ],
   "home_hero_01_1": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "哥伦比亚在雾里画出一扇并不存在的门。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我试着说“你可以依赖我”，她把那句台词划成了待审核。"
+      "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+      "speaker": "哥伦比亚",
+      "text": "雾里这扇门，是我刚刚画出来的。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
       "speaker": "哥伦比亚",
-      "text": "旁人正催她说明门后是什么。",
+      "text": "你也想知道门后是什么？我还没决定。",
       "choices": [
         {
-          "text": "替她编出门后的景象",
-          "response": "她收起画笔：你说得很美，却不是我看见的。",
+          "text": "不知道也没关系，我在门前陪你。",
           "response_speaker": "哥伦比亚",
-          "home_success": false,
-          "home_reason": "为了填补未知而虚构答案。"
+          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+          "response": "不知道也能一起站在这里。",
+          "home_success": true
         },
         {
-          "text": "承认现在还看不见，再陪她等雾散",
-          "response": "她轻轻点头：不知道也能一起站在这里。",
+          "text": "既然你画的，你总该把门后攻略背出来吧？",
           "response_speaker": "哥伦比亚",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+          "response": "你说得很美，却不是我看见的。",
+          "home_success": false,
+          "home_reason": "为了填补未知而虚构答案。"
         }
       ]
     }
   ],
   "home_hero_01_2": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "哥伦比亚的歌让小鸟停在屋檐，却让守卫分心。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我发现她把夜灯调得很低，像在给另一个人留退路。"
+      "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+      "speaker": "哥伦比亚",
+      "text": "小鸟听我的歌，哨兵却快听不见警报了。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
       "speaker": "哥伦比亚",
-      "text": "她问是否该再唱响一些。",
+      "text": "你说，副歌该往哪儿放？",
       "choices": [
         {
-          "text": "请她唱给小鸟听，同时提醒守卫换岗",
-          "response": "她放轻声音：能留下听众，也能留住守望的人。",
+          "text": "把歌声压低一点，给警报留个主唱位。",
           "response_speaker": "哥伦比亚",
+          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+          "response": "能留下听众，也能留住守望的人。",
           "home_success": true
         },
         {
-          "text": "让全基地都停下听完整首歌",
-          "response": "哨声被盖过去了。哥伦比亚说：歌不该夺走别人听见危险的能力。",
+          "text": "警报只会哔哔，继续唱到它闭嘴。",
           "response_speaker": "哥伦比亚",
+          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+          "response": "歌不该夺走别人听见危险的能力。",
           "home_success": false,
           "home_reason": "只顾表达，忽略了守卫必须听见警报。"
         }
@@ -299,62 +109,56 @@
   ],
   "home_hero_01_3": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "哥伦比亚把一张空白请柬交给你。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我把“信任度+1”的提示藏到身后，装作什么也没看见。"
+      "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+      "speaker": "哥伦比亚",
+      "text": "今晚没有宴会，我却写了一张请柬。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
       "speaker": "哥伦比亚",
-      "text": "今晚没有宴会，她说请柬也许有用。",
+      "text": "这张空白请柬要寄给谁？",
       "choices": [
         {
-          "text": "把请柬扔掉等正式宴会",
-          "response": "她望着空位：正式的场合总会有，今晚的人却可能等不到。",
+          "text": "寄给今晚一个人吃饭的人，座位现在就有。",
           "response_speaker": "哥伦比亚",
-          "home_success": false,
-          "home_reason": "把陪伴推迟到所谓合适的场合。"
+          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+          "response": "有时邀请本身就是一场小小的宴会。",
+          "home_success": true
         },
         {
-          "text": "在背面写给一个孤独的人：欢迎来坐坐",
-          "response": "她笑了：有时邀请本身就是一场小小的宴会。",
+          "text": "先收着吧，等场面大一点再邀请。",
           "response_speaker": "哥伦比亚",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+          "response": "正式的场合总会有，今晚的人却可能等不到。",
+          "home_success": false,
+          "home_reason": "把陪伴推迟到所谓合适的场合。"
         }
       ]
     }
   ],
   "home_hero_01_4": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "哥伦比亚问你一颗星是否会因为没人仰望而熄灭。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我问她是否需要热饮，她说先别替她决定温度。"
+      "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+      "speaker": "哥伦比亚",
+      "text": "有颗星很久没人抬头看了。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
       "speaker": "哥伦比亚",
-      "text": "屋外正有人不敢抬头。",
+      "text": "它会不会以为自己已经熄灭？",
       "choices": [
         {
-          "text": "先坐到那人身边，不逼他看星",
-          "response": "她说：星不用我们证明，陪伴也不用催促。",
+          "text": "别催人看星星，我先陪他坐一会儿。",
           "response_speaker": "哥伦比亚",
+          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+          "response": "星不用我们证明，陪伴也不用催促。",
           "home_success": true
         },
         {
-          "text": "拉着那人出去证明星仍在",
-          "response": "那人低下头。哥伦比亚说：你替他看见了星，却没看见他的难过。",
+          "text": "我替他看见了，你把星星开亮一点。",
           "response_speaker": "哥伦比亚",
+          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+          "response": "你替他看见了星，却没看见他的难过。",
           "home_success": false,
           "home_reason": "用证明代替倾听对方的心情。"
         }
@@ -363,51 +167,27 @@
   ],
   "home_hero_02_0": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "希露菲把防护术反复练到手指发抖。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我以为她会无咏唱把屋顶修好；她却先问是谁站在漏水处。"
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "护盾术还差一遍。我的手指倒是已经申请下班。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
       "speaker": "希露菲",
-      "text": "她说再练一次才安心。",
+      "text": "如果我现在停下，谁来挡下一次攻击？",
       "choices": [
         {
-          "text": "请她停下吃饭，再一起检查结界",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "你先喝口茶，我陪你守这一班。",
           "response_speaker": "希露菲",
-          "follow_up": [
-            {
-              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
-              "speaker": "希露菲",
-              "text": "如果今晚只能照顾一个人，你会选谁？",
-              "choices": [
-                {
-                  "text": "问她愿不愿意先坐下来被照顾",
-                  "response": "她终于接过热茶：原来我也能是被惦记的那个人。",
-                  "response_speaker": "希露菲",
-                  "home_success": true
-                },
-                {
-                  "text": "让她继续替所有人值夜班",
-                  "response": "她笑容淡了：你给我的是一张更长的任务清单。",
-                  "response_speaker": "希露菲",
-                  "home_success": false,
-                  "home_reason": "只把她的温柔当作无限资源。"
-                }
-              ]
-            }
-          ]
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response": "原来我也能是被惦记的那个人。",
+          "home_success": true
         },
         {
-          "text": "鼓励她趁还能站着继续练",
-          "response": "她的术式突然失稳：把疲惫当作努力，反而会留下空隙。",
+          "text": "手指还能动就继续练，熟练度最重要。",
           "response_speaker": "希露菲",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response": "把疲惫当作努力，反而会留下空隙。",
           "home_success": false,
           "home_reason": "鼓励过度训练，损害了守护所需的稳定性。"
         }
@@ -416,62 +196,56 @@
   ],
   "home_hero_02_1": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "希露菲为同伴缝了一件不太合身的披风。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我说我也能照顾她，她笑了笑，让我先学会认真听完。"
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "这件披风是我缝的，好像肩膀太紧了。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
       "speaker": "希露菲",
-      "text": "她有些不好意思拿给对方。",
+      "text": "现在送出去，会不会被嫌弃？",
       "choices": [
         {
-          "text": "替她偷偷改到你觉得合身",
-          "response": "她发现改好的披风勒住了肩：你没问过穿它的人。",
+          "text": "先问穿它的人舒不舒服，改起来也来得及。",
           "response_speaker": "希露菲",
-          "home_success": false,
-          "home_reason": "凭自己的判断修改，没问使用者的感受。"
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response": "谢谢你没替我猜。",
+          "home_success": true
         },
         {
-          "text": "陪她去问对方穿着是否舒服",
-          "response": "她听完反馈重新缝好：谢谢你没替我猜。",
+          "text": "别问，直接给他穿上，惊喜比较重要。",
           "response_speaker": "希露菲",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response": "你没问过穿它的人。",
+          "home_success": false,
+          "home_reason": "凭自己的判断修改，没问使用者的感受。"
         }
       ]
     }
   ],
   "home_hero_02_2": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "希露菲听见有人说她不必站到最前面。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "这系统把“温柔”标成被动技能，我觉得它漏算了她的倔强。"
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "他们说我不用去前面，站在后面就好。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
       "speaker": "希露菲",
-      "text": "她沉默着没有回应。",
+      "text": "你也觉得我只能被保护吗？",
       "choices": [
         {
-          "text": "问她是想休息，还是想并肩站着",
-          "response": "她抬起头：我想和大家并肩。你真的问了我。",
+          "text": "我想和你并肩，前后由你自己选。",
           "response_speaker": "希露菲",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response": "我想和大家并肩。你真的问了我。",
           "home_success": true
         },
         {
-          "text": "替她感谢对方的保护",
-          "response": "她低声说：被保护不代表我不想保护别人。",
+          "text": "你别上前线，我替你把位置安排好了。",
           "response_speaker": "希露菲",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response": "被保护不代表我不想保护别人。",
           "home_success": false,
           "home_reason": "把善意的保护变成对她能力的否定。"
         }
@@ -480,62 +254,56 @@
   ],
   "home_hero_02_3": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "希露菲做了太多份晚餐，桌上还有空位。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我端来一杯热茶，才发现她替所有人泡了茶，自己那杯还空着。"
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "饭做多了，那个空位还没人回来。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
       "speaker": "希露菲",
-      "text": "有人迟迟没有回来。",
+      "text": "要不要等到整锅都凉了？",
       "choices": [
         {
-          "text": "一直等到所有菜都凉了",
-          "response": "她望着凉饭：我想等他，可不想大家跟着挨饿。",
+          "text": "给他留一份热的，我们先吃，你也别饿着。",
           "response_speaker": "希露菲",
-          "home_success": false,
-          "home_reason": "让所有人受累，并没有让迟归的人更快回来。"
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response": "等候和照顾眼前的人可以同时做到。",
+          "home_success": true
         },
         {
-          "text": "留一份温着，其余人先吃",
-          "response": "她把锅盖盖好：等候和照顾眼前的人可以同时做到。",
+          "text": "就这样等着吧，大家陪你一起饿。",
           "response_speaker": "希露菲",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response": "我想等他，可不想大家跟着挨饿。",
+          "home_success": false,
+          "home_reason": "让所有人受累，并没有让迟归的人更快回来。"
         }
       ]
     }
   ],
   "home_hero_02_4": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "希露菲发现新来的同伴不敢说自己的名字。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我听见风在门边打转，猜她又在等一个迟归的人。"
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "新同伴不想说名字，我不想逼他。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
       "speaker": "希露菲",
-      "text": "她问你该如何介绍对方。",
+      "text": "介绍他时，应该怎么说？",
       "choices": [
         {
-          "text": "先介绍他的职责，等他愿意说名字",
-          "response": "她点头：认识一个人，可以先从尊重开始。",
+          "text": "先说这是我们的同伴，名字等他想说再说。",
           "response_speaker": "希露菲",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response": "认识一个人，可以先从尊重开始。",
           "home_success": true
         },
         {
-          "text": "当众追问姓名来消除尴尬",
-          "response": "同伴更紧张了：不是每个人都能立刻把自己交出来。",
+          "text": "名字都不报，我怎么把他录进队伍？",
           "response_speaker": "希露菲",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "response": "不是每个人都能立刻把自己交出来。",
           "home_success": false,
           "home_reason": "用公开追问加重了对方的紧张。"
         }
@@ -544,72 +312,27 @@
   ],
   "home_hero_03_0": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "芙宁娜把小舞台搭好，却突然说不想站到灯下。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "芙宁娜宣布要举办开服首演，观众却只有我和一把椅子。"
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "舞台搭好了，灯也亮了。偏偏我现在想坐在台下。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
       "speaker": "芙宁娜",
-      "text": "观众已经来了。",
+      "text": "你会不会觉得主演临阵脱逃很丢脸？",
       "choices": [
         {
-          "text": "帮她把灯调暗，问她想怎样开始",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "今晚我陪你坐观众席，票钱算我的。",
           "response_speaker": "芙宁娜",
-          "follow_up": [
-            {
-              "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
-              "speaker": "芙宁娜",
-              "text": "真正的谢幕之后，观众还会看见谁？",
-              "choices": [
-                {
-                  "text": "把灯调低，问她今晚想不想做普通观众",
-                  "response": "她听完没有急着夸我，反而又抛来一个更难的问题。",
-                  "response_speaker": "芙宁娜",
-                  "follow_up": [
-                    {
-                      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
-                      "speaker": "芙宁娜",
-                      "text": "她把观众席上的第二把椅子留给我，问：“坐下以后呢？”",
-                      "choices": [
-                        {
-                          "text": "陪她吃甜点，绝口不提返场",
-                          "response": "她轻轻碰杯：今晚唯一的加演，是你把盘子洗了。",
-                          "response_speaker": "芙宁娜",
-                          "home_success": true
-                        },
-                        {
-                          "text": "问她什么时候再登台",
-                          "response": "她把甜点推开：你刚才答应了看见台下的我。",
-                          "response_speaker": "芙宁娜",
-                          "home_success": false,
-                          "home_reason": "嘴上说陪伴，却仍把她当永不谢幕的演员。"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "text": "大声要求她再加演一场",
-                  "response": "她礼貌谢幕：掌声很好，可我刚才想坐一会儿。",
-                  "response_speaker": "芙宁娜",
-                  "home_success": false,
-                  "home_reason": "只喜欢她的演出，没有听见她想休息。"
-                }
-              ]
-            }
-          ]
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response": "今晚唯一的加演，是你把盘子洗了。",
+          "home_success": true
         },
         {
-          "text": "告诉她主角不能怯场",
-          "response": "她苦笑：你给我的，是另一张必须戴上的面具。",
+          "text": "你必须上台，主角怎么可以休息？",
           "response_speaker": "芙宁娜",
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response": "你给我的，是另一张必须戴上的面具。",
           "home_success": false,
           "home_reason": "用舞台身份逼迫她继续扮演。"
         }
@@ -618,62 +341,56 @@
   ],
   "home_hero_03_1": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "芙宁娜端出一盘看似精致的甜点。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我说这场景光效比游戏开场还夸张。她凑近半步：夸奖可以更具体，别只夸灯。"
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "新甜点出炉。外形像冠军奖杯，味道我还不敢保证。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
       "speaker": "芙宁娜",
-      "text": "她强调这是新食谱，但尝味的人不多。",
+      "text": "你敢给我真实的评价吗？",
       "choices": [
         {
-          "text": "当众称它完美，谁也不用尝",
-          "response": "她放下盘子：我想听真实意见，不想听礼貌的剧评。",
+          "text": "我尝一口就说实话，你也不许记仇。",
           "response_speaker": "芙宁娜",
-          "home_success": false,
-          "home_reason": "空泛称赞替代了真实反馈。"
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response": "被认真对待的作品，比空洞掌声好。",
+          "home_success": true
         },
         {
-          "text": "先问她自己是否尝过，再一起试一口",
-          "response": "她眨眨眼：被认真对待的作品，比空洞掌声好。",
+          "text": "很完美，我连吃都不用吃就知道。",
           "response_speaker": "芙宁娜",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response": "我想听真实意见，不想听礼貌的剧评。",
+          "home_success": false,
+          "home_reason": "空泛称赞替代了真实反馈。"
         }
       ]
     }
   ],
   "home_hero_03_2": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "芙宁娜发现剧本里每个人都在替她决定结尾。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她端起甜点问我要不要“共享隐藏剧情”，我差点以为要付费解锁。"
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "剧本把我的结局写好了，还替我签了名。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
       "speaker": "芙宁娜",
-      "text": "她把笔递给你。",
+      "text": "你要替我写一个更漂亮的吗？",
       "choices": [
         {
-          "text": "把笔还给她，说可以一起讨论而不代写",
-          "response": "她把最后一行留白：这一次，结尾是我自己的。",
+          "text": "笔还给你，结尾由你自己说。",
           "response_speaker": "芙宁娜",
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response": "这一次，结尾是我自己的。",
           "home_success": true
         },
         {
-          "text": "替她写一个众人满意的大团圆",
-          "response": "她合上剧本：结尾越圆满，我越像被写好的角色。",
+          "text": "我给你写个万人鼓掌的大团圆，别改了。",
           "response_speaker": "芙宁娜",
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response": "结尾越圆满，我越像被写好的角色。",
           "home_success": false,
           "home_reason": "再次夺走了她亲自选择结局的权利。"
         }
@@ -682,62 +399,56 @@
   ],
   "home_hero_03_3": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "芙宁娜想把没人买票的演出取消。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "谢幕灯亮着，她站在幕布后等我。我问这算不算隐藏邀约，她说先看我会不会安静地陪她坐一会儿。"
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "票只卖出去一张。第一排那个小孩坐得比评委还直。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
       "speaker": "芙宁娜",
-      "text": "只有一个小孩坐在第一排。",
+      "text": "一人的演出，也算首演吗？",
       "choices": [
         {
-          "text": "告诉她没有满座就不值得演",
-          "response": "她看向空座：你数了缺席的人，没看见到场的人。",
+          "text": "算。我就是第二位观众，开演吧。",
           "response_speaker": "芙宁娜",
-          "home_success": false,
-          "home_reason": "只按人数衡量演出的价值。"
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response": "原来一个观众也能认真看完整场。",
+          "home_success": true
         },
         {
-          "text": "问她愿不愿意只为这一人演一小段",
-          "response": "她小声谢幕：原来一个观众也能认真看完整场。",
+          "text": "先取消，等观众人数凑够再说。",
           "response_speaker": "芙宁娜",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response": "你数了缺席的人，没看见到场的人。",
+          "home_success": false,
+          "home_reason": "只按人数衡量演出的价值。"
         }
       ]
     }
   ],
   "home_hero_03_4": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "芙宁娜把排练中的失误剪掉，留下一段完美录像。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我打算喊“再来一次”，却看见她先数了数空着的座位。"
+      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+      "speaker": "芙宁娜",
+      "text": "这段录像把我笑场的地方都剪掉了。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
       "speaker": "芙宁娜",
-      "text": "她问你该公开哪一版。",
+      "text": "你想看完美版，还是那个真的我？",
       "choices": [
         {
-          "text": "让她自己挑，并说那次笑场也很鲜活",
-          "response": "她笑着保留了笑场：舞台外的我也可以被看见。",
+          "text": "我想看你笑场的那一版。",
           "response_speaker": "芙宁娜",
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response": "舞台外的我也可以被看见。",
           "home_success": true
         },
         {
-          "text": "坚持只发没有瑕疵的版本",
-          "response": "她叹气：连练习都必须完美，我要去哪里喘口气？",
+          "text": "把失误全删掉，观众只配看完美。",
           "response_speaker": "芙宁娜",
+          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+          "response": "连练习都必须完美，我要去哪里喘口气？",
           "home_success": false,
           "home_reason": "把完美表演当成唯一可见的自我。"
         }
@@ -746,51 +457,48 @@
   ],
   "home_hero_04_0": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "洛琪希在教室里画了一个故意不完整的术式。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我把洛琪希的讲义叫作“异世界生存攻略”，她先改正了三个错别字。"
+      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+      "speaker": "洛琪希",
+      "text": "我在术式里故意留了一处缺口，学生们都等着我补。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
       "speaker": "洛琪希",
-      "text": "她问你该如何纠正学生。",
+      "text": "你也打算替他们把答案写完吗？",
       "choices": [
         {
-          "text": "让学生先说这道缺口会造成什么",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "先让他们说缺口会造成什么，再一起补。",
           "response_speaker": "洛琪希",
+          "response_portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+          "response": "嗯。可要是连我也答不上来呢？",
           "follow_up": [
             {
               "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
               "speaker": "洛琪希",
-              "text": "当老师也被难题卡住，我该怎么做？",
+              "text": "前辈，你会允许老师在学生面前说‘我不知道’吗？",
               "choices": [
                 {
-                  "text": "和她一起拆解问题，容许试错",
-                  "response": "她把粉笔递给我：很遗憾，下一题轮到你。",
+                  "text": "当然。一起求证比装懂更像老师。",
                   "response_speaker": "洛琪希",
+                  "response": "那下节课请你坐第一排。不会的题，我们一起解。",
                   "home_success": true
                 },
                 {
-                  "text": "说老师不该有不会的题",
-                  "response": "她收起讲义：我不是一份永远正确的答案。",
+                  "text": "老师怎么能不会？你先编个答案。",
                   "response_speaker": "洛琪希",
+                  "response": "不行。编出来的答案会害学生把错误当真。",
                   "home_success": false,
-                  "home_reason": "用完美导师的标签压住了她的求助。"
+                  "home_reason": "把老师的面子放在学生的理解之上。"
                 }
               ]
             }
           ]
         },
         {
-          "text": "立即补上缺口并公布答案",
-          "response": "她说：你替他们补上了线，却没教他们看见缺口。",
+          "text": "我直接把标准答案抄上去，效率第一。",
           "response_speaker": "洛琪希",
+          "response_portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+          "response": "你替他们补上了线，却没教他们看见缺口。",
           "home_success": false,
           "home_reason": "过早给出标准答案，跳过了判断训练。"
         }
@@ -799,62 +507,56 @@
   ],
   "home_hero_04_1": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "洛琪希准备外出，却把一页笔记留在桌上。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她说求助不是作弊，我立刻想把这条写进新手指南。"
+      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+      "speaker": "洛琪希",
+      "text": "这页公式我还没验证。老师也有不会的题，真不体面。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
       "speaker": "洛琪希",
-      "text": "上面写着她也不确定的公式。",
+      "text": "你会把它当成标准答案讲出去吗？",
       "choices": [
         {
-          "text": "替她整理成确定无误的教材",
-          "response": "她皱眉：未经验证的内容写成定论，会误导每个学生。",
+          "text": "你我一起验证，问号留着也不丢人。",
           "response_speaker": "洛琪希",
-          "home_success": false,
-          "home_reason": "把不确定的知识伪装成确定结论。"
+          "response_portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+          "response": "老师也会有不知道的时候；一起求证就好。",
+          "home_success": true
         },
         {
-          "text": "请她回来一起验证，而非替她誊成定论",
-          "response": "她说：老师也会有不知道的时候；一起求证就好。",
+          "text": "放心，我会写成定论，替你撑场面。",
           "response_speaker": "洛琪希",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+          "response": "未经验证的内容写成定论，会误导每个学生。",
+          "home_success": false,
+          "home_reason": "把不确定的知识伪装成确定结论。"
         }
       ]
     }
   ],
   "home_hero_04_2": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "洛琪希发现学生能施法却不会解释原理。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她的魔法阵精准得像尺子量过。我稍稍靠近，她把粉笔递来：想坐第一排，就先解出这道题。"
+      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+      "speaker": "洛琪希",
+      "text": "学生会施法，却说不清为什么。考核明天就到。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
       "speaker": "洛琪希",
-      "text": "离考核只剩一天。",
+      "text": "要补一夜术语，还是换种办法？",
       "choices": [
         {
-          "text": "让学生用最简单的例子讲给你听",
-          "response": "她合上书：讲得清楚，说明真的理解。",
+          "text": "让他用最简单的话讲给我听。",
           "response_speaker": "洛琪希",
+          "response_portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+          "response": "讲得清楚，说明真的理解。",
           "home_success": true
         },
         {
-          "text": "让他背更复杂的术语显得专业",
-          "response": "她说：术语念得流利，法阵依然可能画错。",
+          "text": "术语越复杂越像高手，让他连夜背。",
           "response_speaker": "洛琪希",
+          "response_portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+          "response": "术语念得流利，法阵依然可能画错。",
           "home_success": false,
           "home_reason": "用复杂术语掩盖了理解不足。"
         }
@@ -863,62 +565,56 @@
   ],
   "home_hero_04_3": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "洛琪希提到自己年轻时第一次独自旅行。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我向她请教治愈术，她却提醒我先别把人当成练习目标。"
+      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+      "speaker": "洛琪希",
+      "text": "第一次独自旅行时，我也怕得睡不着。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
       "speaker": "洛琪希",
-      "text": "她承认那时也害怕。",
+      "text": "你是不是也以为老师从来不害怕？",
       "choices": [
         {
-          "text": "立刻说老师怎么会害怕",
-          "response": "她笑得勉强：把我放得太高，我就没法告诉你真实经历。",
+          "text": "我想听听你后来怎么迈出第一步。",
           "response_speaker": "洛琪希",
-          "home_success": false,
-          "home_reason": "神化老师使她无法分享真实的脆弱。"
+          "response_portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+          "response": "承认害怕之后，准备才真正开始。",
+          "home_success": true
         },
         {
-          "text": "问她后来如何让自己迈出门",
-          "response": "她说：承认害怕之后，准备才真正开始。",
+          "text": "老师也会怕？这个人设不该崩啊。",
           "response_speaker": "洛琪希",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+          "response": "把我放得太高，我就没法告诉你真实经历。",
+          "home_success": false,
+          "home_reason": "神化老师使她无法分享真实的脆弱。"
         }
       ]
     }
   ],
   "home_hero_04_4": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "洛琪希的药剂已经见效，却有人催她加大剂量。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我拿着不合格作业站在门口，老师没有让我罚站。"
+      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+      "speaker": "洛琪希",
+      "text": "药已经起效，病人刚睡着。旁边却催我加量。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
       "speaker": "洛琪希",
-      "text": "病人刚刚睡着。",
+      "text": "你会再灌一瓶吗？",
       "choices": [
         {
-          "text": "先观察反应并记录呼吸",
-          "response": "她记下数据：施治不能比病人的身体跑得更快。",
+          "text": "先看他的呼吸和反应，药又不是冲排行榜。",
           "response_speaker": "洛琪希",
+          "response_portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+          "response": "施治不能比病人的身体跑得更快。",
           "home_success": true
         },
         {
-          "text": "立刻加倍以求更快康复",
-          "response": "她拦住你：剂量不是愿望，过量会造成新的伤害。",
+          "text": "剂量翻倍，康复速度也该翻倍吧。",
           "response_speaker": "洛琪希",
+          "response_portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+          "response": "剂量不是愿望，过量会造成新的伤害。",
           "home_success": false,
           "home_reason": "急于求成，忽略了病人的实际反应。"
         }
@@ -927,51 +623,27 @@
   ],
   "home_hero_06_0": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "阿米娅看到值夜同伴把求助写在纸角。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "阿米娅又抱着一摞计划书，系统提示“领导者耐久：未知”。"
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "值夜的同伴把求助写得比脚注还小。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
       "speaker": "阿米娅",
-      "text": "字很小，像是怕被人看见。",
+      "text": "我该当众替他说出来吗？",
       "choices": [
         {
-          "text": "私下问他需要什么，再调整轮班",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "先私下问他愿不愿意让我帮忙。",
           "response_speaker": "阿米娅",
-          "follow_up": [
-            {
-              "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
-              "speaker": "阿米娅",
-              "text": "一张值班表只剩最后一格，写谁的名字？",
-              "choices": [
-                {
-                  "text": "把自己的名字填上，让她休息",
-                  "response": "她终于坐下：谢谢。今天这五分钟，不算我偷懒吧？",
-                  "response_speaker": "阿米娅",
-                  "home_success": true
-                },
-                {
-                  "text": "继续写阿米娅，毕竟她最可靠",
-                  "response": "她接过笔：可靠不等于不需要睡觉。",
-                  "response_speaker": "阿米娅",
-                  "home_success": false,
-                  "home_reason": "用可靠作为继续压榨的理由。"
-                }
-              ]
-            }
-          ]
+          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+          "response": "谢谢。今天这五分钟，不算我偷懒吧？",
+          "home_success": true
         },
         {
-          "text": "把纸条读给所有人听以便帮忙",
-          "response": "她收起纸条：你宣布了他的困难，却没征求他的同意。",
+          "text": "我替他在全基地广播，省得他开口。",
           "response_speaker": "阿米娅",
+          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+          "response": "你宣布了他的困难，却没征求他的同意。",
           "home_success": false,
           "home_reason": "公开了同伴不愿示人的求助。"
         }
@@ -980,62 +652,56 @@
   ],
   "home_hero_06_1": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "阿米娅要签一份把风险全揽到自己身上的计划。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我说今天的任务可以先存档，她说还有人没有回家。"
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "计划书把全部风险签在我一个人名下。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
       "speaker": "阿米娅",
-      "text": "她说负责人应该这样做。",
+      "text": "负责人是不是就该这样？",
       "choices": [
         {
-          "text": "赞同她独自承担所有后果",
-          "response": "她疲惫地说：一个人签名，救不了所有人。",
+          "text": "你可以负责，也可以请大家一起看风险。",
           "response_speaker": "阿米娅",
-          "home_success": false,
-          "home_reason": "把负责误解为独自背负全部风险。"
+          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+          "response": "一起承担不是推卸，而是相信彼此。",
+          "home_success": true
         },
         {
-          "text": "请她把具体风险分配给自愿且有能力的人",
-          "response": "她放下笔：一起承担不是推卸，而是相信彼此。",
+          "text": "你是负责人，全签了就算解决了。",
           "response_speaker": "阿米娅",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+          "response": "一个人签名，救不了所有人。",
+          "home_success": false,
+          "home_reason": "把负责误解为独自背负全部风险。"
         }
       ]
     }
   ],
   "home_hero_06_2": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "阿米娅听见敌方伤员在门外呻吟。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她为每个人留了位置，唯独自己的椅子被文件占了。"
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "门外有伤员，药只够紧急处理。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
       "speaker": "阿米娅",
-      "text": "基地药品只够紧急处理。",
+      "text": "敌方的人也要分到这份药吗？",
       "choices": [
         {
-          "text": "先止血并安排隔离观察",
-          "response": "她说：谨慎和救治可以同时存在。",
+          "text": "先止血救命，身份等人活下来再问。",
           "response_speaker": "阿米娅",
+          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+          "response": "谨慎和救治可以同时存在。",
           "home_success": true
         },
         {
-          "text": "因为是敌人就一概不管",
-          "response": "她看向门外：如果连伤口都不愿看，我们会忘记自己守护什么。",
+          "text": "他站错队了，让他等我们的药用完。",
           "response_speaker": "阿米娅",
+          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+          "response": "如果连伤口都不愿看，我们会忘记自己守护什么。",
           "home_success": false,
           "home_reason": "把立场凌驾于最基本的紧急救治之上。"
         }
@@ -1044,62 +710,56 @@
   ],
   "home_hero_06_3": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "阿米娅的安排被老队员当众质疑。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我试着用“大家都需要你”鼓励她，话到一半觉得有点不对。"
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "老队员当众质疑我的安排，大家都在看我。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
       "speaker": "阿米娅",
-      "text": "她看向你，似乎等你替她说话。",
+      "text": "你会替我把争论压下去吗？",
       "choices": [
         {
-          "text": "替她斥责老队员不服从",
-          "response": "她说：压下质疑只会让真正的问题留到战场上。",
+          "text": "让他把担心讲完，你也有权解释。",
           "response_speaker": "阿米娅",
-          "home_success": false,
-          "home_reason": "用权威压制了可能有价值的风险提醒。"
+          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+          "response": "谢谢你把争论留在事情上。",
+          "home_success": true
         },
         {
-          "text": "请老队员提出具体漏洞，再让阿米娅回应",
-          "response": "她修正了一处路径：谢谢你把争论留在事情上。",
+          "text": "我替你吼回去，谁敢质疑你就是反派。",
           "response_speaker": "阿米娅",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+          "response": "压下质疑只会让真正的问题留到战场上。",
+          "home_success": false,
+          "home_reason": "用权威压制了可能有价值的风险提醒。"
         }
       ]
     }
   ],
   "home_hero_06_4": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "阿米娅准备给一位牺牲者立纪念牌。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我问她要不要一起摸鱼五分钟。她认真记下了“休息”这个任务。"
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "纪念牌上只留了称号那一栏。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
       "speaker": "阿米娅",
-      "text": "她不知道该写什么称号。",
+      "text": "一个人的名字，能不能比功绩更重要？",
       "choices": [
         {
-          "text": "先询问他的朋友平时如何称呼他",
-          "response": "她写下了那个朴素的名字：他不只是一个称号。",
+          "text": "先写他的名字，再问家人想留下些什么。",
           "response_speaker": "阿米娅",
+          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+          "response": "他不只是一个称号。",
           "home_success": true
         },
         {
-          "text": "写上最华丽的英雄头衔",
-          "response": "她说：宏大的头衔盖住了他原本的样子。",
+          "text": "写最高荣誉吧，名字反而不够响亮。",
           "response_speaker": "阿米娅",
+          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+          "response": "宏大的头衔盖住了他原本的样子。",
           "home_success": false,
           "home_reason": "用宏大叙事替代了对个人的真实记忆。"
         }
@@ -1108,72 +768,27 @@
   ],
   "home_hero_07_0": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "丰川祥子在无人舞台上检查每盏灯。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "祥子把排练表写得像作战命令；我以为点了“跳过”会被她当场处决。"
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "舞台灯还差一盏没校准。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
       "speaker": "丰川祥子",
-      "text": "她说这场演出不能有一处偏差。",
+      "text": "你要说我强迫症，还是帮我看一眼？",
       "choices": [
         {
-          "text": "问哪一处必须准确，并让其他人各守一处",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "我帮你看，但你也得吃晚饭。",
           "response_speaker": "丰川祥子",
-          "follow_up": [
-            {
-              "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-              "speaker": "丰川祥子",
-              "text": "若我听出曲子里有错拍，该怎么提醒？",
-              "choices": [
-                {
-                  "text": "私下问她是否愿意一起重听那一段",
-                  "response": "她听完没有急着夸我，反而又抛来一个更难的问题。",
-                  "response_speaker": "丰川祥子",
-                  "follow_up": [
-                    {
-                      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-                      "speaker": "丰川祥子",
-                      "text": "她允许我重听一遍，却把指挥棒放在桌上：“然后？”",
-                      "choices": [
-                        {
-                          "text": "提出一个修改建议，最后让她定夺",
-                          "response": "她哼了一小节：这次你是合作者，不是接管者。",
-                          "response_speaker": "丰川祥子",
-                          "home_success": true
-                        },
-                        {
-                          "text": "拿起指挥棒宣布新版本",
-                          "response": "她把谱子抽走：合作的第一条是不夺走别人的手。",
-                          "response_speaker": "丰川祥子",
-                          "home_success": false,
-                          "home_reason": "将协作误解为接管。"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "text": "当众替她改掉所有谱子",
-                  "response": "她合上乐谱：你听到一个错拍，就想接管整支乐队？",
-                  "response_speaker": "丰川祥子",
-                  "home_success": false,
-                  "home_reason": "越界代替她做决定。"
-                }
-              ]
-            }
-          ]
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response": "这次你是合作者，不是接管者。",
+          "home_success": true
         },
         {
-          "text": "让她一个人把所有灯都检查完",
-          "response": "她停下脚步：把全部人排除在外，只会漏掉更多细节。",
+          "text": "有一点误差就全部重来，饭先取消。",
           "response_speaker": "丰川祥子",
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response": "把全部人排除在外，只会漏掉更多细节。",
           "home_success": false,
           "home_reason": "把控制一切误当作保证舞台质量。"
         }
@@ -1182,62 +797,56 @@
   ],
   "home_hero_07_1": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "祥子发现旧曲谱被人改了一个和弦。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我夸她的火焰很适合舞台灯光，她问我能否先把音准听清。"
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "旧曲谱被人改了一个和弦，改的人说是帮我。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
       "speaker": "丰川祥子",
-      "text": "改动者说是想帮她。",
+      "text": "你听见的，是错误还是另一个可能？",
       "choices": [
         {
-          "text": "替她把和弦立即改回原样",
-          "response": "她冷声说：你替我反对别人，与替我决定有什么区别？",
+          "text": "先让我听原版，再听你真正想弹的。",
           "response_speaker": "丰川祥子",
-          "home_success": false,
-          "home_reason": "未经她聆听与判断就替她否决。"
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response": "至少，这次有人先让我听见改变。",
+          "home_success": true
         },
         {
-          "text": "先让她听完整段，再决定是否保留",
-          "response": "她合上琴盖：至少，这次有人先让我听见改变。",
+          "text": "既然是好意，你就该直接接受。",
           "response_speaker": "丰川祥子",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response": "你替我反对别人，与替我决定有什么区别？",
+          "home_success": false,
+          "home_reason": "未经她聆听与判断就替她否决。"
         }
       ]
     }
   ],
   "home_hero_07_2": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "祥子把精心写好的邀请函撕掉。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我想替她接管这次演出，她把指挥棒握得更紧了。"
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "邀请函写好了，我又撕掉。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
       "speaker": "丰川祥子",
-      "text": "她说还没想好该不该邀请旧友。",
+      "text": "旧友若真的来，我该先说什么？",
       "choices": [
         {
-          "text": "把纸留在桌上，告诉她不必今晚决定",
-          "response": "她没有抬头：谢谢你允许我自己选择时间。",
+          "text": "不用准备完美开场，先说你想见她。",
           "response_speaker": "丰川祥子",
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response": "谢谢你允许我自己选择时间。",
           "home_success": true
         },
         {
-          "text": "替她把邀请发出去免得她后悔",
-          "response": "她说：不是每段关系都能被一次替我做主的邀请修好。",
+          "text": "别寄，免得旧账又来抢主舞台。",
           "response_speaker": "丰川祥子",
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response": "不是每段关系都能被一次替我做主的邀请修好。",
           "home_success": false,
           "home_reason": "以避免后悔为由侵入她的私人决定。"
         }
@@ -1246,62 +855,56 @@
   ],
   "home_hero_07_3": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "祥子排练到最后一段，忽然让所有人停下。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她递来一张空白曲谱，说“想写就写，别先替我命名”。"
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "最后一段我让所有人停下。没有错音。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
       "speaker": "丰川祥子",
-      "text": "听起来并没有错音。",
+      "text": "你听见少了什么吗？",
       "choices": [
         {
-          "text": "说没错音就不必停",
-          "response": "她答：音符无误，不代表这首曲子已经说完。",
+          "text": "没有错音，却少了你的呼吸。我们再来。",
           "response_speaker": "丰川祥子",
-          "home_success": false,
-          "home_reason": "只检查技术正确，忽略了表达意图。"
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response": "准确不等于表达完整。",
+          "home_success": true
         },
         {
-          "text": "问她想让观众在此刻听见什么",
-          "response": "她重新弹出更轻的一句：准确不等于表达完整。",
+          "text": "没错就过，你的感觉不算证据。",
           "response_speaker": "丰川祥子",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response": "音符无误，不代表这首曲子已经说完。",
+          "home_success": false,
+          "home_reason": "只检查技术正确，忽略了表达意图。"
         }
       ]
     }
   ],
   "home_hero_07_4": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "祥子把演出费用和个人饭钱记在同一本账上。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我听见她在空屋里把同一个小节弹了三遍，没敢说“完美”。"
+      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+      "speaker": "丰川祥子",
+      "text": "演出费用和我自己的饭钱写在同一页。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
       "speaker": "丰川祥子",
-      "text": "她说自己会想办法。",
+      "text": "你想帮忙，也会先问我吗？",
       "choices": [
         {
-          "text": "主动核清团队费用，留下她的私人账不碰",
-          "response": "她把团队账单递来：这部分，我们可以一起承担。",
+          "text": "我先问你愿意怎么分担，再一起算。",
           "response_speaker": "丰川祥子",
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response": "这部分，我们可以一起承担。",
           "home_success": true
         },
         {
-          "text": "直接替她付清所有私人开销",
-          "response": "她合上本子：施舍替代不了尊重，也不是我请求的帮助。",
+          "text": "我直接替你付了，你别再逞强。",
           "response_speaker": "丰川祥子",
+          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+          "response": "施舍替代不了尊重，也不是我请求的帮助。",
           "home_success": false,
           "home_reason": "越过边界，替她处理未请求的私人问题。"
         }
@@ -1310,51 +913,27 @@
   ],
   "home_hero_08_0": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "艾米莉亚看到陌生孩子在门口躲她。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "艾米莉亚先给别人分了毯子。我问她是不是把自己的那份藏起来了。"
+      "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+      "speaker": "艾米莉亚",
+      "text": "那个孩子躲在门边，我手里的礼物像一份通缉令。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
       "speaker": "艾米莉亚",
-      "text": "她握着礼物，不知该不该靠近。",
+      "text": "我现在靠近，会不会吓到他？",
       "choices": [
         {
-          "text": "把礼物放在孩子能看到的地方，留出距离",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "我把礼物放这儿，等他愿意再拿。",
           "response_speaker": "艾米莉亚",
-          "follow_up": [
-            {
-              "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
-              "speaker": "艾米莉亚",
-              "text": "她把最后一条毯子递来，我该怎么办？",
-              "choices": [
-                {
-                  "text": "问她冷不冷，再一起找第二条",
-                  "response": "她脸红了一点：原来你也会看我有没有冻着。",
-                  "response_speaker": "艾米莉亚",
-                  "home_success": true
-                },
-                {
-                  "text": "马上收下并夸她真贴心",
-                  "response": "她笑着说没事，可指尖已经发凉。",
-                  "response_speaker": "艾米莉亚",
-                  "home_success": false,
-                  "home_reason": "接受照顾时忽略了她自己也有需求。"
-                }
-              ]
-            }
-          ]
+          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+          "response": "原来你也会看我有没有冻着。",
+          "home_success": true
         },
         {
-          "text": "拉着孩子解释她其实很温柔",
-          "response": "孩子挣开手跑远。她说：害怕不是一句解释就能消失。",
+          "text": "我把他拉过来，解释清楚就好了。",
           "response_speaker": "艾米莉亚",
+          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+          "response": "别把礼物塞到别人怀里，也别假装我不会冷。",
           "home_success": false,
           "home_reason": "强迫对方接受接近，忽略了恐惧需要时间。"
         }
@@ -1363,62 +942,56 @@
   ],
   "home_hero_08_1": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "艾米莉亚准备为一场误会道歉。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我说她太会照顾人，这句夸奖让她反而有点不自在。"
+      "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+      "speaker": "艾米莉亚",
+      "text": "有人误会我，我已经准备好道歉。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
       "speaker": "艾米莉亚",
-      "text": "她其实没有做错那件事。",
+      "text": "明明不是我做的，道歉会不会更快？",
       "choices": [
         {
-          "text": "鼓励她把所有责任都认下来",
-          "response": "她垂下眼：错不在我，全部认下只会让误解继续。",
+          "text": "你可以先听他怕什么，不必认下没做的事。",
           "response_speaker": "艾米莉亚",
-          "home_success": false,
-          "home_reason": "用全盘认错换取和气，使误会得不到澄清。"
+          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+          "response": "诚实道歉，才能让彼此都往前走。",
+          "home_success": true
         },
         {
-          "text": "陪她澄清事实，再为真正造成的困扰道歉",
-          "response": "她认真解释后鞠躬：诚实道歉，才能让彼此都往前走。",
+          "text": "先道歉吧，谁让你看起来像坏人。",
           "response_speaker": "艾米莉亚",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+          "response": "错不在我，全部认下只会让误解继续。",
+          "home_success": false,
+          "home_reason": "用全盘认错换取和气，使误会得不到澄清。"
         }
       ]
     }
   ],
   "home_hero_08_2": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "艾米莉亚说冬夜里的花快冻坏了。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她听见有人在角落打喷嚏，比系统提示出现得还快。"
+      "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+      "speaker": "艾米莉亚",
+      "text": "冬夜的花快冻坏了，我想立刻升温。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
       "speaker": "艾米莉亚",
-      "text": "她想立刻用魔法把温度升高。",
+      "text": "一口气暖到夏天，会不会比较好？",
       "choices": [
         {
-          "text": "先挡风，保留花适应的寒意",
-          "response": "花挺过了夜。她笑说：照顾不是把世界改成同一种温度。",
+          "text": "慢慢升温吧，花也需要适应。",
           "response_speaker": "艾米莉亚",
+          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+          "response": "照顾不是把世界改成同一种温度。",
           "home_success": true
         },
         {
-          "text": "把花放到最热的火炉边",
-          "response": "花很快枯萎。她说：太急的温暖也会伤到它。",
+          "text": "直接开最大火力，花都该谢谢你。",
           "response_speaker": "艾米莉亚",
+          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+          "response": "太急的温暖也会伤到它。",
           "home_success": false,
           "home_reason": "以为越暖越好，忽略了花的适应范围。"
         }
@@ -1427,62 +1000,56 @@
   ],
   "home_hero_08_3": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "艾米莉亚读到有人把她与可怕传说相比。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我想替她答应所有求助，忽然意识到她也会累。"
+      "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+      "speaker": "艾米莉亚",
+      "text": "那封信又把我和可怕的传说写在一起。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
       "speaker": "艾米莉亚",
-      "text": "她想去解释，却迟迟没动身。",
+      "text": "我该把每一句都解释清楚吗？",
       "choices": [
         {
-          "text": "替她去向所有人争论",
-          "response": "她叹气：你替我争论，可我还是没学会怎样面对他们。",
+          "text": "你可以说自己的话，不必替传说答辩。",
           "response_speaker": "艾米莉亚",
-          "home_success": false,
-          "home_reason": "替她出面，没照顾到她当下真正需要的支持。"
+          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+          "response": "先有一位肯听的人，我就敢自己开口了。",
+          "home_success": true
         },
         {
-          "text": "问她现在更需要陪伴还是解释的机会",
-          "response": "她说：先有一位肯听的人，我就敢自己开口了。",
+          "text": "逐字反驳吧，不然他们永远不信。",
           "response_speaker": "艾米莉亚",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+          "response": "你替我争论，可我还是没学会怎样面对他们。",
+          "home_success": false,
+          "home_reason": "替她出面，没照顾到她当下真正需要的支持。"
         }
       ]
     }
   ],
   "home_hero_08_4": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "艾米莉亚烤的点心略微焦了。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我问她有没有想做的事，她先反问我是不是有事需要帮忙。"
+      "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+      "speaker": "艾米莉亚",
+      "text": "点心烤焦一点点。我想把整盘藏起来。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
       "speaker": "艾米莉亚",
-      "text": "她想把整盘藏起来。",
+      "text": "你确定不会笑我吗？",
       "choices": [
         {
-          "text": "尝一块并诚实说焦香里仍有甜味",
-          "response": "她把点心分给大家：原来不完美也能分享。",
+          "text": "我想尝一块，焦边也能配茶。",
           "response_speaker": "艾米莉亚",
+          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+          "response": "原来不完美也能分享。",
           "home_success": true
         },
         {
-          "text": "说完全不焦，保证大家都会喜欢",
-          "response": "她闻到焦味：你明明尝出来了，却不愿对我说真话。",
+          "text": "藏吧，不完美的东西别端出来。",
           "response_speaker": "艾米莉亚",
+          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+          "response": "你明明尝出来了，却不愿对我说真话。",
           "home_success": false,
           "home_reason": "以善意谎言取代了诚实而温和的反馈。"
         }
@@ -1491,51 +1058,27 @@
   ],
   "home_hero_10_0": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "风堇正在照顾一位说自己不疼的伤员。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "风堇替每个人记录伤情，我想给她的工作表补上一栏“本人”。"
+      "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+      "speaker": "风堇",
+      "text": "伤员说不疼，却把袖口攥得发白。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
       "speaker": "风堇",
-      "text": "伤员却一直攥着袖口。",
+      "text": "我该相信他的嘴，还是先看他的手？",
       "choices": [
         {
-          "text": "先给他一杯水，等他自己说哪里不舒服",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "先问他最怕哪里疼，别急着替他答。",
           "response_speaker": "风堇",
-          "follow_up": [
-            {
-              "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
-              "speaker": "风堇",
-              "text": "医疗箱里只剩一份补给，该给谁？",
-              "choices": [
-                {
-                  "text": "先确认患者情况，也问她是否已经透支",
-                  "response": "她轻轻靠住桌沿：你终于把我也算进了名单。",
-                  "response_speaker": "风堇",
-                  "home_success": true
-                },
-                {
-                  "text": "命令她继续治疗所有人",
-                  "response": "她皱眉：治疗者倒下，就没人能接班。",
-                  "response_speaker": "风堇",
-                  "home_success": false,
-                  "home_reason": "忽视了治疗者的界限。"
-                }
-              ]
-            }
-          ]
+          "response_portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+          "response": "你终于把我也算进了名单。",
+          "home_success": true
         },
         {
-          "text": "相信他没事就转去照顾别人",
-          "response": "风堇发现伤口：他说没事，动作却已经在求救。",
+          "text": "既然他说不疼，病历写没事就好。",
           "response_speaker": "风堇",
+          "response_portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+          "response": "他说没事，动作却已经在求救。",
           "home_success": false,
           "home_reason": "只听字面回答，忽略了求助的身体信号。"
         }
@@ -1544,62 +1087,56 @@
   ],
   "home_hero_10_1": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "风堇把药箱分成了两份。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我说慢慢恢复也算恢复，她点头，却没有把自己写进观察名单。"
+      "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+      "speaker": "风堇",
+      "text": "药箱里有强效药，也有普通热敷。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
       "speaker": "风堇",
-      "text": "一份药效强，另一份是普通热敷。",
+      "text": "每个人都用强效的，听起来很公平吧？",
       "choices": [
         {
-          "text": "一律先用药效强的那份",
-          "response": "伤员被刺激得皱眉。她说：药效越强，不代表越适合。",
+          "text": "先看症状再给药，公平不是每人一大勺。",
           "response_speaker": "风堇",
-          "home_success": false,
-          "home_reason": "按强度而不是症状选择治疗。"
+          "response_portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+          "response": "恰当比强力更重要。",
+          "home_success": true
         },
         {
-          "text": "先问伤员症状，再决定用哪一份",
-          "response": "她合好药箱：恰当比强力更重要。",
+          "text": "强效药都倒上，省得被说偏心。",
           "response_speaker": "风堇",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+          "response": "药效越强，不代表越适合。",
+          "home_success": false,
+          "home_reason": "按强度而不是症状选择治疗。"
         }
       ]
     }
   ],
   "home_hero_10_2": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "风堇在每张床边留下空白名牌。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "治疗台上摆了两杯水，其中一杯还热着。"
+      "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+      "speaker": "风堇",
+      "text": "病床旁的名牌还是空的。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
       "speaker": "风堇",
-      "text": "有人建议只写病号。",
+      "text": "有人提议只写编号，这样省事。",
       "choices": [
         {
-          "text": "请伤员自己决定愿意被怎样称呼",
-          "response": "她写下一个名字：被记住的人，更愿意相信自己会好。",
+          "text": "写他们愿意被叫的名字，编号留给药箱。",
           "response_speaker": "风堇",
+          "response_portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+          "response": "被记住的人，更愿意相信自己会好。",
           "home_success": true
         },
         {
-          "text": "全部编成编号方便管理",
-          "response": "她低声说：编号方便记录，却不该代替一个人。",
+          "text": "病号统一编号，叫错名字也没关系。",
           "response_speaker": "风堇",
+          "response_portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+          "response": "编号方便记录，却不该代替一个人。",
           "home_success": false,
           "home_reason": "把管理便利放在病人的人格感受之前。"
         }
@@ -1608,62 +1145,56 @@
   ],
   "home_hero_10_3": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "风堇连续值了两个夜班。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我提议把她列为永久支援，她笑着说医生也需要休息。"
+      "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+      "speaker": "风堇",
+      "text": "我值了两个夜班，第三个也能撑。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
       "speaker": "风堇",
-      "text": "她说还有人需要她。",
+      "text": "你是不是来劝我继续当英雄？",
       "choices": [
         {
-          "text": "称赞她能继续坚持",
-          "response": "她手中的药瓶险些滑落：疲惫不是美德。",
+          "text": "我替你守这一班，你先睡一会儿。",
           "response_speaker": "风堇",
-          "home_success": false,
-          "home_reason": "纵容过劳，会危及她和病人的安全。"
+          "response_portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+          "response": "照顾别人也需要有人照顾我。",
+          "home_success": true
         },
         {
-          "text": "替她叫一位同事接班，自己陪她交接",
-          "response": "交接完成后她终于坐下：照顾别人也需要有人照顾我。",
+          "text": "还有人需要你，睡觉等通关再说。",
           "response_speaker": "风堇",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+          "response": "疲惫不是美德。",
+          "home_success": false,
+          "home_reason": "纵容过劳，会危及她和病人的安全。"
         }
       ]
     }
   ],
   "home_hero_10_4": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "风堇为一位病人准备了康复庆祝。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她看着窗外的风，像在判断谁该先被照顾。"
+      "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+      "speaker": "风堇",
+      "text": "病人快康复了，我把庆祝的小花藏在袖子里。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
       "speaker": "风堇",
-      "text": "病人说自己还不敢高兴。",
+      "text": "他却说现在还不敢高兴。",
       "choices": [
         {
-          "text": "把庆祝改成安静的一杯茶，让他决定何时开始",
-          "response": "病人端起茶。风堇说：好起来的速度，也该由他自己掌握。",
+          "text": "那就慢慢等，庆祝可以晚一点。",
           "response_speaker": "风堇",
+          "response_portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+          "response": "好起来的速度，也该由他自己掌握。",
           "home_success": true
         },
         {
-          "text": "坚持热闹才能让病人振作",
-          "response": "病人退回床边。她说：好意太响，也会盖过害怕。",
+          "text": "都快好了，你别扫兴，马上庆祝。",
           "response_speaker": "风堇",
+          "response_portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+          "response": "好意太响，也会盖过害怕。",
           "home_success": false,
           "home_reason": "用热闹强迫病人立刻表现开心。"
         }
@@ -1672,72 +1203,69 @@
   ],
   "home_hero_13_0": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "格温捧着一件旧外套，线脚歪得像初学者的练习。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "格温把我的破披风摊开，笑着说它的线头比我的借口还多。"
+      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+      "speaker": "格温",
+      "text": "这件旧外套的线脚歪得像醉酒的小蛇。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
       "speaker": "格温",
-      "text": "她问要不要拆掉重做。",
+      "text": "你会把它们全拆掉吗？",
       "choices": [
         {
-          "text": "先问谁缝了它，再决定保留哪一针",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "先告诉我是谁缝的，再决定留哪一针。",
           "response_speaker": "格温",
+          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+          "response": "是旧友缝的。线很歪，可我舍不得拆。",
           "follow_up": [
             {
               "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
               "speaker": "格温",
-              "text": "披风里缝着一行看不清的字，先做什么？",
+              "text": "内衬里还有一行字，线快磨没了。你会怎么补？",
               "choices": [
                 {
-                  "text": "请她读完，再决定如何修补",
-                  "response": "她听完没有急着夸我，反而又抛来一个更难的问题。",
+                  "text": "先把字读完，再决定从哪一针开始。",
                   "response_speaker": "格温",
+                  "response": "好。上面写着‘记得回来’。你会留下自己的线吗？",
                   "follow_up": [
                     {
                       "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
                       "speaker": "格温",
-                      "text": "她读完那行字，问我愿不愿意留一针自己的痕迹。",
+                      "text": "这一次，你想把新线缝在哪儿？",
                       "choices": [
                         {
-                          "text": "先问她愿不愿意把新线缝在旧字旁",
-                          "response": "她笑着把针递来：这次是一起补，不是谁覆盖谁。",
+                          "text": "缝在旧字旁边，别盖住它。",
                           "response_speaker": "格温",
+                          "response": "嗯。是一起补，不是谁把谁覆盖掉。",
                           "home_success": true
                         },
                         {
-                          "text": "直接绣上我的名字",
-                          "response": "她叹气：你又想用自己的名字盖掉别人的故事。",
+                          "text": "盖上我的名字，这件衣服才像新的。",
                           "response_speaker": "格温",
+                          "response": "不行。你那一针把想回来的人擦掉了。",
                           "home_success": false,
-                          "home_reason": "擅自在承载记忆的物件上留下署名。"
+                          "home_reason": "用自己的署名盖掉了旧友留下的记忆。"
                         }
                       ]
                     }
                   ]
                 },
                 {
-                  "text": "把旧布直接剪掉换新",
-                  "response": "剪刀停在半空：有些线头不能用效率来衡量。",
+                  "text": "字磨没了就算了，整片内衬换新。",
                   "response_speaker": "格温",
+                  "response": "不行。你连那句话是什么都没问。",
                   "home_success": false,
-                  "home_reason": "在了解记忆之前擅自抹掉痕迹。"
+                  "home_reason": "在理解旧物记忆前擅自抹掉痕迹。"
                 }
               ]
             }
           ]
         },
         {
-          "text": "替她把歪线全部拆掉",
-          "response": "她握着被拆的线：整齐了，可那个人留下的痕迹也没了。",
+          "text": "我全部拆了，整齐才叫修好。",
           "response_speaker": "格温",
+          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+          "response": "整齐了，可那个人留下的痕迹也没了。",
           "home_success": false,
           "home_reason": "为追求整齐抹掉了衣物承载的情感。"
         }
@@ -1746,62 +1274,56 @@
   ],
   "home_hero_13_1": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "格温剪出一只不对称的小布偶。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我问她剪刀能否裁掉坏结局，她说先把人从故事里找回来。"
+      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+      "speaker": "格温",
+      "text": "小布偶两边不对称，左眼还比右眼凶。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
       "speaker": "格温",
-      "text": "有人觉得它不够漂亮。",
+      "text": "你觉得它必须改成一样吗？",
       "choices": [
         {
-          "text": "按标准样板把两边剪齐",
-          "response": "她看着样板：现在它很标准，也再没有自己的故事。",
+          "text": "别改，它看着像会替人守夜。",
           "response_speaker": "格温",
-          "home_success": false,
-          "home_reason": "套用标准外观抹去了赠礼的个性。"
+          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+          "response": "它像收礼的人一样独一无二。",
+          "home_success": true
         },
         {
-          "text": "问布偶想送给谁，保留独特的一边",
-          "response": "她把布偶抱起来：它像收礼的人一样独一无二。",
+          "text": "对称才叫可爱，先返工再送人。",
           "response_speaker": "格温",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+          "response": "现在它很标准，也再没有自己的故事。",
+          "home_success": false,
+          "home_reason": "套用标准外观抹去了赠礼的个性。"
         }
       ]
     }
   ],
   "home_hero_13_2": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "格温想用圣霭遮住窗外的阴影。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她说这针脚是某个人留下的，我立刻收回了“换件新的”建议。"
+      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+      "speaker": "格温",
+      "text": "我用圣霭挡住窗外阴影，结果队友连路都看不见了。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
       "speaker": "格温",
-      "text": "同伴说看不见路了。",
+      "text": "雾是不是开得太认真？",
       "choices": [
         {
-          "text": "请她把雾留成能透光的一层",
-          "response": "她收细丝线：保护也要让被保护的人看清方向。",
+          "text": "给大家留条能看清脚下的路。",
           "response_speaker": "格温",
+          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+          "response": "保护也要让被保护的人看清方向。",
           "home_success": true
         },
         {
-          "text": "让雾更厚，彻底隔绝危险",
-          "response": "同伴差点撞上墙：把危险遮住，不等于危险消失。",
+          "text": "越看不见越安全，把雾铺满整层。",
           "response_speaker": "格温",
+          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+          "response": "把危险遮住，不等于危险消失。",
           "home_success": false,
           "home_reason": "防护过度遮挡了同伴的视野与行动。"
         }
@@ -1810,62 +1332,56 @@
   ],
   "home_hero_13_3": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "格温为远行者缝了一枚能发亮的纽扣。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我想替她整理工具，差点把纪念用的线团当垃圾扔掉。"
+      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+      "speaker": "格温",
+      "text": "这颗纽扣会发光，远行时可以认路。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
       "speaker": "格温",
-      "text": "远行者怕在暗处暴露位置。",
+      "text": "可暗处的敌人也会看见光。",
       "choices": [
         {
-          "text": "把纽扣缝得更亮便于寻找",
-          "response": "远行者把纽扣摘下：光不受他控制，就会变成危险。",
+          "text": "让它只在需要时亮，别替主人暴露位置。",
           "response_speaker": "格温",
-          "home_success": false,
-          "home_reason": "忽略了使用者需要控制暴露时机。"
+          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+          "response": "愿意被找到时，它才会亮。",
+          "home_success": true
         },
         {
-          "text": "让纽扣只在被轻按时发光",
-          "response": "她笑着藏好线头：愿意被找到时，它才会亮。",
+          "text": "一直亮着吧，危险来了也能被看见。",
           "response_speaker": "格温",
-          "home_success": true
+          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+          "response": "光不受他控制，就会变成危险。",
+          "home_success": false,
+          "home_reason": "忽略了使用者需要控制暴露时机。"
         }
       ]
     }
   ],
   "home_hero_13_4": [
     {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "格温看到一条破损的披肩还可以修补。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她把针递给我，说亲手补过的洞比新布更会讲故事。"
+      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+      "speaker": "格温",
+      "text": "披肩还能修，主人却说想把它收起来。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
       "speaker": "格温",
-      "text": "主人却说想把它收起来。",
+      "text": "你觉得我应该劝他继续穿吗？",
       "choices": [
         {
-          "text": "问她是想修好继续穿，还是想保存原样",
-          "response": "她把披肩轻轻叠好：有些东西留着，不是为了再次使用。",
+          "text": "我先问他想留住什么，再决定怎么缝。",
           "response_speaker": "格温",
+          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+          "response": "有些东西留着，不是为了再次使用。",
           "home_success": true
         },
         {
-          "text": "主动补好后送回，给她惊喜",
-          "response": "主人摸着补好的缺口：你缝好了布，却改变了我要保存的记忆。",
+          "text": "能修就必须修，他舍不得就替他决定。",
           "response_speaker": "格温",
+          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+          "response": "你缝好了布，却改变了我要保存的记忆。",
           "home_success": false,
           "home_reason": "未经同意修复了对方想保留原状的纪念物。"
         }
@@ -1874,50 +1390,27 @@
   ],
   "home_hero_05_0": [
     {
-      "speaker": "你",
-      "text": "知更鸟把演出谢幕词删了又写。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我问知更鸟这间基地有没有点歌功能，她问我能否先听见没唱的人。"
-    },
-    {
+      "portrait": "",
       "speaker": "知更鸟",
-      "text": "最后一句，听众可能会以为我在答应永远陪着他们。",
+      "text": "谢幕词最后一句听着像一辈子的承诺。"
+    },
+    {
+      "portrait": "",
+      "speaker": "知更鸟",
+      "text": "我不想让听众误会，也不想让他们失望。",
       "choices": [
         {
-          "text": "改成邀请他们彼此陪伴",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "把今晚的真心唱出来，不必许下永远。",
           "response_speaker": "知更鸟",
-          "follow_up": [
-            {
-              "portrait": "",
-              "speaker": "知更鸟",
-              "text": "麦克风前的人迟迟没开口，你会怎么安排？",
-              "choices": [
-                {
-                  "text": "关掉扩音，陪她在后台先听",
-                  "response": "她轻声合了一段和声：今天的主旋律是给别人留空间。",
-                  "response_speaker": "知更鸟",
-                  "home_success": true
-                },
-                {
-                  "text": "把聚光灯直接推过去",
-                  "response": "她移开麦克风：有人不想被全场听见。",
-                  "response_speaker": "知更鸟",
-                  "home_success": false,
-                  "home_reason": "把表达自由误当成必须公开表演。"
-                }
-              ]
-            }
-          ]
+          "response_portrait": "",
+          "response": "今天的主旋律是给别人留空间。",
+          "home_success": true
         },
         {
-          "text": "保留永远陪伴的承诺",
-          "response": "她放下笔：舞台的承诺不能代替真实的人际关系。",
+          "text": "直接说永远陪伴，大家最爱听这个。",
           "response_speaker": "知更鸟",
+          "response_portrait": "",
+          "response": "舞台的承诺不能代替真实的人际关系。",
           "home_success": false,
           "home_reason": "把歌手的鼓励误写成她无法兑现的私人承诺。"
         }
@@ -1926,60 +1419,56 @@
   ],
   "home_hero_05_1": [
     {
-      "speaker": "你",
-      "text": "她听见门外有人跟不上合唱。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她调试麦克风，我差点把心跳声当成了伴奏。"
-    },
-    {
+      "portrait": "",
       "speaker": "知更鸟",
-      "text": "那个人没有进来，也不愿被点名。",
+      "text": "门外有人跟不上合唱，还躲着话筒。"
+    },
+    {
+      "portrait": "",
+      "speaker": "知更鸟",
+      "text": "我能听见他的声音，却不该替他开口。",
       "choices": [
         {
-          "text": "举灯照出他的位置",
-          "response": "她立刻放下灯：被看见未必等于被尊重。",
+          "text": "给他留一个能加入的空拍。",
           "response_speaker": "知更鸟",
-          "home_success": false,
-          "home_reason": "把羞怯的听众公开推到聚光灯下。"
+          "response_portrait": "",
+          "response": "给人留位置，不等于把人推到灯下。",
+          "home_success": true
         },
         {
-          "text": "留一段安静的伴奏让他自由加入",
-          "response": "她轻声说：给人留位置，不等于把人推到灯下。",
+          "text": "直接点名吧，害羞的人都需要推一把。",
           "response_speaker": "知更鸟",
-          "home_success": true
+          "response_portrait": "",
+          "response": "被看见未必等于被尊重。",
+          "home_success": false,
+          "home_reason": "把羞怯的听众公开推到聚光灯下。"
         }
       ]
     }
   ],
   "home_hero_05_2": [
     {
-      "speaker": "你",
-      "text": "知更鸟收到一束枯掉的花。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我以为掌声能解决一切，她却听见后台有人哭。"
-    },
-    {
+      "portrait": "",
       "speaker": "知更鸟",
-      "text": "信里说这是粉丝攒了很久才寄出的。",
+      "text": "花已经枯了，寄花的人却攒了很久。"
+    },
+    {
+      "portrait": "",
+      "speaker": "知更鸟",
+      "text": "我该感谢这束花，还是假装它还新鲜？",
       "choices": [
         {
-          "text": "先回信说收到心意，再处理花",
-          "response": "她收起信：花期短，牵挂并不短。",
+          "text": "告诉他这份心意我收到了。",
           "response_speaker": "知更鸟",
+          "response_portrait": "",
+          "response": "花期短，牵挂并不短。",
           "home_success": true
         },
         {
-          "text": "悄悄换成新花再拍照",
-          "response": "她摇头：照片漂亮了，送花的人却不在照片里。",
+          "text": "枯花拍照不好看，换一束再回信。",
           "response_speaker": "知更鸟",
+          "response_portrait": "",
+          "response": "照片漂亮了，送花的人却不在照片里。",
           "home_success": false,
           "home_reason": "用体面的摆设替换了粉丝真实的赠礼。"
         }
@@ -1988,60 +1477,56 @@
   ],
   "home_hero_05_3": [
     {
-      "speaker": "你",
-      "text": "彩排时有人唱错一段。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我说她的声音能让大家停下战斗，她问我愿不愿意陪她先停一会儿。"
-    },
-    {
+      "portrait": "",
       "speaker": "知更鸟",
-      "text": "知更鸟没有停下整首歌。",
+      "text": "彩排唱错一段，我没有停下整首歌。"
+    },
+    {
+      "portrait": "",
+      "speaker": "知更鸟",
+      "text": "你会把那一秒剪得干干净净吗？",
       "choices": [
         {
-          "text": "马上停歌当众纠正",
-          "response": "她叹气：纠正的声音比走音更伤人。",
+          "text": "把它留着吧，那是大家一起接住的。",
           "response_speaker": "知更鸟",
-          "home_success": false,
-          "home_reason": "当众纠错破坏了同伴继续演唱的安全感。"
+          "response_portrait": "",
+          "response": "他先要安全地唱完，然后才有余地改正。",
+          "home_success": true
         },
         {
-          "text": "结束后私下询问他是否需要帮助",
-          "response": "她说：他先要安全地唱完，然后才有余地改正。",
+          "text": "错音必须隐藏，不然谁还信你会唱。",
           "response_speaker": "知更鸟",
-          "home_success": true
+          "response_portrait": "",
+          "response": "纠正的声音比走音更伤人。",
+          "home_success": false,
+          "home_reason": "当众纠错破坏了同伴继续演唱的安全感。"
         }
       ]
     }
   ],
   "home_hero_05_4": [
     {
-      "speaker": "你",
-      "text": "她准备给基地唱一首很轻的歌。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我想把副歌设为基地铃声，她说好歌也要给人留安静。"
-    },
-    {
+      "portrait": "",
       "speaker": "知更鸟",
-      "text": "队员们有的疲惫，有的仍在值守。",
+      "text": "这首歌很轻，有人值守，有人刚能睡下。"
+    },
+    {
+      "portrait": "",
+      "speaker": "知更鸟",
+      "text": "我该让每个人都听见吗？",
       "choices": [
         {
-          "text": "把音量留给愿意靠近的人",
-          "response": "她点头：安慰不必覆盖整座基地。",
+          "text": "唱给想听的人，别把睡着的人叫醒。",
           "response_speaker": "知更鸟",
+          "response_portrait": "",
+          "response": "安慰不必覆盖整座基地。",
           "home_success": true
         },
         {
-          "text": "打开扩音器让所有人听到",
-          "response": "她关掉扩音器：守夜的人也需要听见警报。",
+          "text": "全基地广播，不听就算不给你面子。",
           "response_speaker": "知更鸟",
+          "response_portrait": "",
+          "response": "守夜的人也需要听见警报。",
           "home_success": false,
           "home_reason": "把普遍的好意强加给正在执行任务的人。"
         }
@@ -2050,50 +1535,27 @@
   ],
   "home_hero_09_0": [
     {
-      "speaker": "你",
-      "text": "她停下调音，问你是否听见人群的吵闹。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "萨勒芬妮说每个人的心音都不同，我问她能否给我心跳开个降噪。"
-    },
-    {
+      "portrait": "",
       "speaker": "萨勒芬妮",
-      "text": "两种旋律一直在争抢开头。",
+      "text": "两段旋律在我耳边抢开头，像两个群聊同时艾特我。"
+    },
+    {
+      "portrait": "",
+      "speaker": "萨勒芬妮",
+      "text": "你能听出谁该先说吗？",
       "choices": [
         {
-          "text": "请双方各唱一句再找共同节拍",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "先让最小声的那段说完。",
           "response_speaker": "萨勒芬妮",
-          "follow_up": [
-            {
-              "portrait": "",
-              "speaker": "萨勒芬妮",
-              "text": "两段心音不合拍，能怎么办？",
-              "choices": [
-                {
-                  "text": "先听最轻的那一段",
-                  "response": "她笑了：合唱不是让小声的人消失。",
-                  "response_speaker": "萨勒芬妮",
-                  "home_success": true
-                },
-                {
-                  "text": "把音量大的那一段调得更响",
-                  "response": "她按下静音：压过去不叫和谐。",
-                  "response_speaker": "萨勒芬妮",
-                  "home_success": false,
-                  "home_reason": "用强音覆盖了弱音。"
-                }
-              ]
-            }
-          ]
+          "response_portrait": "",
+          "response": "合唱不是让小声的人消失。",
+          "home_success": true
         },
         {
-          "text": "调高较响的那一边",
-          "response": "她皱眉：响亮不等于值得被留下。",
+          "text": "谁响谁赢，直接把音量推满。",
           "response_speaker": "萨勒芬妮",
+          "response_portrait": "",
+          "response": "响亮不等于值得被留下。",
           "home_success": false,
           "home_reason": "让更大的声音压过了另一群人的表达。"
         }
@@ -2102,60 +1564,56 @@
   ],
   "home_hero_09_1": [
     {
-      "speaker": "你",
-      "text": "一位听众说自己的声音难听。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我听见她在调和两段不合拍的旋律，感觉自己像走调的第三声部。"
-    },
-    {
+      "portrait": "",
       "speaker": "萨勒芬妮",
-      "text": "萨勒芬妮把话筒递到一半又收回。",
+      "text": "她说自己的声音难听，我拿着话筒犹豫了。"
+    },
+    {
+      "portrait": "",
+      "speaker": "萨勒芬妮",
+      "text": "递过去会不会像强迫她表演？",
       "choices": [
         {
-          "text": "立刻请他上台证明自己",
-          "response": "她小声说：勇气不该是别人临时布置的作业。",
+          "text": "问她想不想试，我可以陪着唱。",
           "response_speaker": "萨勒芬妮",
-          "home_success": false,
-          "home_reason": "把公开展示当成唯一的自信来源。"
+          "response_portrait": "",
+          "response": "有人先需要一块不被注视的地方。",
+          "home_success": true
         },
         {
-          "text": "让他先在幕后选自己喜欢的节奏",
-          "response": "她说：有人先需要一块不被注视的地方。",
+          "text": "话筒塞给她，习惯就不怕了。",
           "response_speaker": "萨勒芬妮",
-          "home_success": true
+          "response_portrait": "",
+          "response": "勇气不该是别人临时布置的作业。",
+          "home_success": false,
+          "home_reason": "把公开展示当成唯一的自信来源。"
         }
       ]
     }
   ],
   "home_hero_09_2": [
     {
-      "speaker": "你",
-      "text": "她的谱纸被雨淋湿。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她邀请新人唱一小段，我的第一反应是找“静音”按钮。"
-    },
-    {
+      "portrait": "",
       "speaker": "萨勒芬妮",
-      "text": "上面混着很多人给她写的旋律。",
+      "text": "雨把谱纸淋成了水彩，里面有大家写给我的音。"
+    },
+    {
+      "portrait": "",
+      "speaker": "萨勒芬妮",
+      "text": "你会只誊清我自己的那一行吗？",
       "choices": [
         {
-          "text": "先晾干原稿，再一起誊写",
-          "response": "她展平纸页：乱七八糟的痕迹也是他们留下的。",
+          "text": "先把每个人的旋律都留住。",
           "response_speaker": "萨勒芬妮",
+          "response_portrait": "",
+          "response": "乱七八糟的痕迹也是他们留下的。",
           "home_success": true
         },
         {
-          "text": "重新独自写一首更完美的歌",
-          "response": "她收起新稿：写得再好，也不是他们共同写下的。",
+          "text": "别人的音太乱，只保留你的主旋律。",
           "response_speaker": "萨勒芬妮",
+          "response_portrait": "",
+          "response": "写得再好，也不是他们共同写下的。",
           "home_success": false,
           "home_reason": "用个人完美取代了众人的共同创作。"
         }
@@ -2164,60 +1622,56 @@
   ],
   "home_hero_09_3": [
     {
-      "speaker": "你",
-      "text": "基地庆典只剩一支旧麦克风。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我夸她像聚光灯，她说更想知道灯照不到的人在想什么。"
-    },
-    {
+      "portrait": "",
       "speaker": "萨勒芬妮",
-      "text": "萨勒芬妮坚持不换一支崭新的。",
+      "text": "庆典只剩一支旧麦克风，杂音比我还会抢戏。"
+    },
+    {
+      "portrait": "",
+      "speaker": "萨勒芬妮",
+      "text": "可我不想换掉它，你猜为什么？",
       "choices": [
         {
-          "text": "按设备性能换新麦克风",
-          "response": "她摇头：性能不是这一晚唯一的标准。",
+          "text": "它陪你唱过第一首吧，先听听它还能不能用。",
           "response_speaker": "萨勒芬妮",
-          "home_success": false,
-          "home_reason": "只看器材性能，忽略了庆典的共同记忆。"
+          "response_portrait": "",
+          "response": "它曾帮许多人第一次说出心里话。",
+          "home_success": true
         },
         {
-          "text": "问旧麦克风记录过谁的声音",
-          "response": "她笑了：它曾帮许多人第一次说出心里话。",
+          "text": "旧的就该淘汰，我给你换最新款。",
           "response_speaker": "萨勒芬妮",
-          "home_success": true
+          "response_portrait": "",
+          "response": "性能不是这一晚唯一的标准。",
+          "home_success": false,
+          "home_reason": "只看器材性能，忽略了庆典的共同记忆。"
         }
       ]
     }
   ],
   "home_hero_09_4": [
     {
-      "speaker": "你",
-      "text": "她听见两位队员在练习不同的歌。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我问她有没有属于自己的独奏，她说先听听大家的意见。"
-    },
-    {
+      "portrait": "",
       "speaker": "萨勒芬妮",
-      "text": "他们都担心自己的声音会干扰对方。",
+      "text": "他们练的是不同的歌，却都怕打扰对方。"
+    },
+    {
+      "portrait": "",
+      "speaker": "萨勒芬妮",
+      "text": "能让两首歌都有自己的位置吗？",
       "choices": [
         {
-          "text": "邀请他们先互听一小段",
-          "response": "她写下和声：不必同意，也能彼此留出空间。",
+          "text": "给两边留段轮唱，不用争同一拍。",
           "response_speaker": "萨勒芬妮",
+          "response_portrait": "",
+          "response": "不必同意，也能彼此留出空间。",
           "home_success": true
         },
         {
-          "text": "让其中一人改唱另一人的调",
-          "response": "她放下笔：统一音高不是和解。",
+          "text": "选一个主唱吧，另一边先闭麦。",
           "response_speaker": "萨勒芬妮",
+          "response_portrait": "",
+          "response": "统一音高不是和解。",
           "home_success": false,
           "home_reason": "把消除差异误当成了相互理解。"
         }
@@ -2226,50 +1680,27 @@
   ],
   "home_hero_11_0": [
     {
-      "speaker": "你",
-      "text": "凯尔希在一份伤员报告上停笔。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "凯尔希看了我一眼，我觉得自己的新手教程被她读成了事故报告。"
-    },
-    {
+      "portrait": "",
       "speaker": "凯尔希",
-      "text": "记录清楚，但治疗者一栏空着。",
+      "text": "报告写得很全，治疗者一栏却空着。"
+    },
+    {
+      "portrait": "",
+      "speaker": "凯尔希",
+      "text": "谁来承认自己也需要休息？",
       "choices": [
         {
-          "text": "先查谁连续值守，再补排班",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "先把你的名字写上，治疗者也是人。",
           "response_speaker": "凯尔希",
-          "follow_up": [
-            {
-              "portrait": "",
-              "speaker": "凯尔希",
-              "text": "日志里出现完美通关记录，你会怎么做？",
-              "choices": [
-                {
-                  "text": "先保存原始数据，再核对异常",
-                  "response": "她点头：至少你学会了怀疑过分漂亮的答案。",
-                  "response_speaker": "凯尔希",
-                  "home_success": true
-                },
-                {
-                  "text": "立即发布“零风险”公告",
-                  "response": "她把公告退回：我不替未经核实的乐观签字。",
-                  "response_speaker": "凯尔希",
-                  "home_success": false,
-                  "home_reason": "把未经验证的信息当作结论。"
-                }
-              ]
-            }
-          ]
+          "response_portrait": "",
+          "response": "至少你学会了怀疑过分漂亮的答案。",
+          "home_success": true
         },
         {
-          "text": "先把伤员数据做成图表",
-          "response": "她说：图表不会替值守者休息。",
+          "text": "那栏空着挺好，医生本来就不准倒下。",
           "response_speaker": "凯尔希",
+          "response_portrait": "",
+          "response": "图表不会替值守者休息。",
           "home_success": false,
           "home_reason": "只整理伤员指标，遗漏了治疗者的负担。"
         }
@@ -2278,60 +1709,56 @@
   ],
   "home_hero_11_1": [
     {
-      "speaker": "你",
-      "text": "Mon3tr守在门口不肯退开。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我拿着一份可疑日志问她能不能一键清除。她反问原始记录在哪。"
-    },
-    {
+      "portrait": "",
       "speaker": "凯尔希",
-      "text": "凯尔希说门里其实没有危险。",
+      "text": "Mon3tr挡着门，里面其实没有敌人。"
+    },
+    {
+      "portrait": "",
+      "speaker": "凯尔希",
+      "text": "你要叫我命令它退开吗？",
       "choices": [
         {
-          "text": "命令Mon3tr立刻撤开",
-          "response": "她冷声说：别把未观测到的事当作不存在。",
+          "text": "先问它在担心什么，我和你一起看。",
           "response_speaker": "凯尔希",
-          "home_success": false,
-          "home_reason": "仅凭表面安全就否定了异常警戒。"
+          "response_portrait": "",
+          "response": "它听见了我没写进报告的事。",
+          "home_success": true
         },
         {
-          "text": "问门里谁刚经历过惊吓",
-          "response": "她看向门内：它听见了我没写进报告的事。",
+          "text": "它又不是人，直接让它让开。",
           "response_speaker": "凯尔希",
-          "home_success": true
+          "response_portrait": "",
+          "response": "别把未观测到的事当作不存在。",
+          "home_success": false,
+          "home_reason": "仅凭表面安全就否定了异常警戒。"
         }
       ]
     }
   ],
   "home_hero_11_2": [
     {
-      "speaker": "你",
-      "text": "她把一份错误结论放在桌上。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她说结论不能比证据先抵达；我赶紧收起了“肯定没事”。"
-    },
-    {
+      "portrait": "",
       "speaker": "凯尔希",
-      "text": "批注里没有替任何人推卸责任。",
+      "text": "这份结论是错的，我把批注留在桌上。"
+    },
+    {
+      "portrait": "",
+      "speaker": "凯尔希",
+      "text": "你希望我替谁把错误藏起来？",
       "choices": [
         {
-          "text": "先追溯证据链，再商议修正",
-          "response": "她说：责备只能让下一次错误藏得更深。",
+          "text": "别藏，先把后果说清楚，再一起改。",
           "response_speaker": "凯尔希",
+          "response_portrait": "",
+          "response": "责备只能让下一次错误藏得更深。",
           "home_success": true
         },
         {
-          "text": "先找出应负责的人",
-          "response": "她收起文件：你甚至还不知道哪一步出错。",
+          "text": "谁写错就把名字擦掉，问题也就没了。",
           "response_speaker": "凯尔希",
+          "response_portrait": "",
+          "response": "你甚至还不知道哪一步出错。",
           "home_success": false,
           "home_reason": "在查清事实前就用追责代替调查。"
         }
@@ -2340,60 +1767,56 @@
   ],
   "home_hero_11_3": [
     {
-      "speaker": "你",
-      "text": "夜里诊室仍亮着灯。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我以为她会给所有人开药，她先让大家把症状说完整。"
-    },
-    {
+      "portrait": "",
       "speaker": "凯尔希",
-      "text": "凯尔希说她还有三份病例要看。",
+      "text": "诊室灯还亮着，病例还有三份。"
+    },
+    {
+      "portrait": "",
+      "speaker": "凯尔希",
+      "text": "你如果劝我睡觉，最好拿出比口号更好的理由。",
       "choices": [
         {
-          "text": "劝她马上放下全部工作",
-          "response": "她摇头：一句休息不能让病人得到照护。",
+          "text": "我来整理一份，你先休息十分钟。",
           "response_speaker": "凯尔希",
-          "home_success": false,
-          "home_reason": "只劝休息却没有承接迫切的工作。"
+          "response_portrait": "",
+          "response": "责任可以交接，判断不能省略。",
+          "home_success": true
         },
         {
-          "text": "替她整理优先级并接走低风险项",
-          "response": "她略一颔首：责任可以交接，判断不能省略。",
+          "text": "通宵很酷，等把自己熬倒再算加班。",
           "response_speaker": "凯尔希",
-          "home_success": true
+          "response_portrait": "",
+          "response": "一句休息不能让病人得到照护。",
+          "home_success": false,
+          "home_reason": "只劝休息却没有承接迫切的工作。"
         }
       ]
     }
   ],
   "home_hero_11_4": [
     {
-      "speaker": "你",
-      "text": "凯尔希拒绝在未验证的方案上签字。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我问她信不信奇迹。她说先建立能复现的方案。"
-    },
-    {
+      "portrait": "",
       "speaker": "凯尔希",
-      "text": "队伍认为争取时间最重要。",
+      "text": "方案未经验证，队伍催我签字。"
+    },
+    {
+      "portrait": "",
+      "speaker": "凯尔希",
+      "text": "时间确实紧，可错误也不会因着急变正确。",
       "choices": [
         {
-          "text": "准备小范围验证和停止条件",
-          "response": "她签下试行：速度不应取消可回退的边界。",
+          "text": "先做最小范围验证，再决定是否推进。",
           "response_speaker": "凯尔希",
+          "response_portrait": "",
+          "response": "速度不应取消可回退的边界。",
           "home_success": true
         },
         {
-          "text": "强调所有人都支持所以先执行",
-          "response": "她说：多数意见不能替代风险证据。",
+          "text": "先签了再说，出事以后再补报告。",
           "response_speaker": "凯尔希",
+          "response_portrait": "",
+          "response": "多数意见不能替代风险证据。",
           "home_success": false,
           "home_reason": "用集体压力取代验证与安全边界。"
         }
@@ -2402,50 +1825,27 @@
   ],
   "home_hero_12_0": [
     {
-      "speaker": "你",
-      "text": "铃把一条出行路线标成了绕远路。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "铃把绳网地图投到墙上，问我是不是又把快捷键按成了求救信号。"
-    },
-    {
+      "portrait": "",
       "speaker": "铃",
-      "text": "她说直线信号很好，但沿途店铺都关了。",
+      "text": "地图显示直线最近，可沿途店铺全关了。"
+    },
+    {
+      "portrait": "",
+      "speaker": "铃",
+      "text": "你是想最快到，还是能活着回来？",
       "choices": [
         {
-          "text": "问是否有人需要补给再定路线",
-          "response": "她没有立刻回答，像是这才愿意把真正的问题交给我。",
+          "text": "绕一下，补给与回程都算路程。",
           "response_speaker": "铃",
-          "follow_up": [
-            {
-              "portrait": "",
-              "speaker": "铃",
-              "text": "邦布在门口绕圈，究竟哪里出错？",
-              "choices": [
-                {
-                  "text": "先看指令和地图是不是相互矛盾",
-                  "response": "她调整路由：谢谢你没把锅甩给最努力的那个。",
-                  "response_speaker": "铃",
-                  "home_success": true
-                },
-                {
-                  "text": "把邦布拆了换一台",
-                  "response": "她拦住我：执行者没错，错误藏在命令里。",
-                  "response_speaker": "铃",
-                  "home_success": false,
-                  "home_reason": "把规则错误归咎于执行者。"
-                }
-              ]
-            }
-          ]
+          "response_portrait": "",
+          "response": "谢谢你没把锅甩给最努力的那个。",
+          "home_success": true
         },
         {
-          "text": "改回信号最强的直线",
-          "response": "她叹气：信号不能帮口渴的人买水。",
+          "text": "走直线，饿了让导航给我充电。",
           "response_speaker": "铃",
+          "response_portrait": "",
+          "response": "信号不能帮口渴的人买水。",
           "home_success": false,
           "home_reason": "只优化通讯质量，没考虑同行者的补给。"
         }
@@ -2454,60 +1854,56 @@
   ],
   "home_hero_12_1": [
     {
-      "speaker": "你",
-      "text": "邦布递来一段损坏的语音。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她说邦布不是万能客服，我立刻撤回了第七条工单。"
-    },
-    {
+      "portrait": "",
       "speaker": "铃",
-      "text": "铃辨出里头可能藏着求救的背景声。",
+      "text": "邦布送来一段坏掉的语音，背景里像有求救。"
+    },
+    {
+      "portrait": "",
+      "speaker": "铃",
+      "text": "你会直接定位，还是先确认声音来源？",
       "choices": [
         {
-          "text": "一键降噪后覆盖原片",
-          "response": "她急忙拦住你：线索跟噪声一起被删了。",
+          "text": "先核对背景声，别把救援送进陷阱。",
           "response_speaker": "铃",
-          "home_success": false,
-          "home_reason": "覆盖原始记录导致无法恢复关键背景声。"
+          "response_portrait": "",
+          "response": "这点杂音也许就是我们要找的线索。",
+          "home_success": true
         },
         {
-          "text": "先备份原片再清理噪声",
-          "response": "她说：这点杂音也许就是我们要找的线索。",
+          "text": "信号响了就是求救，先冲再想。",
           "response_speaker": "铃",
-          "home_success": true
+          "response_portrait": "",
+          "response": "线索跟噪声一起被删了。",
+          "home_success": false,
+          "home_reason": "覆盖原始记录导致无法恢复关键背景声。"
         }
       ]
     }
   ],
   "home_hero_12_2": [
     {
-      "speaker": "你",
-      "text": "铃和哥哥为排班争执。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我以为最短路线就是正确路线，她展示了三份失联记录。"
-    },
-    {
+      "portrait": "",
       "speaker": "铃",
-      "text": "他们都说自己能接下夜班。",
+      "text": "我和哥哥都说能接夜班，排班表快被我们吵穿了。"
+    },
+    {
+      "portrait": "",
+      "speaker": "铃",
+      "text": "你是不是要选个赢家？",
       "choices": [
         {
-          "text": "先找两人都没说出的疲劳迹象",
-          "response": "她放下排班表：谢谢，没有谁非得撑到倒下。",
+          "text": "你们轮流守，谁累了就喊我。",
           "response_speaker": "铃",
+          "response_portrait": "",
+          "response": "谢谢，没有谁非得撑到倒下。",
           "home_success": true
         },
         {
-          "text": "把夜班平均分给两人",
-          "response": "她苦笑：平均不等于每个人现在都扛得住。",
+          "text": "你们再争一会儿，反正我不用值班。",
           "response_speaker": "铃",
+          "response_portrait": "",
+          "response": "平均不等于每个人现在都扛得住。",
           "home_success": false,
           "home_reason": "机械平均忽略了两人的实际疲劳程度。"
         }
@@ -2516,60 +1912,56 @@
   ],
   "home_hero_12_3": [
     {
-      "speaker": "你",
-      "text": "一台邦布总在错误时间送来热饮。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "她递来两杯咖啡，说其中一杯是给熬夜的哥哥的。"
-    },
-    {
+      "portrait": "",
       "speaker": "铃",
-      "text": "铃说它认真记下了上次的命令。",
+      "text": "邦布总在错误时间送来热饮，它却认真记着上次的指令。"
+    },
+    {
+      "portrait": "",
+      "speaker": "铃",
+      "text": "你觉得它是笨，还是我的指令过期？",
       "choices": [
         {
-          "text": "关掉邦布的送饮功能",
-          "response": "她说：坏规则要修，不必抹掉它会做的事。",
+          "text": "先改指令，别让它替旧时间背锅。",
           "response_speaker": "铃",
-          "home_success": false,
-          "home_reason": "把规则问题错归给执行规则的邦布。"
+          "response_portrait": "",
+          "response": "问题在我的规则，不在它的努力。",
+          "home_success": true
         },
         {
-          "text": "先改触发条件，再夸它记性好",
-          "response": "她摸摸邦布：问题在我的规则，不在它的努力。",
+          "text": "叫它再跑十遍，总会跑对的。",
           "response_speaker": "铃",
-          "home_success": true
+          "response_portrait": "",
+          "response": "坏规则要修，不必抹掉它会做的事。",
+          "home_success": false,
+          "home_reason": "把规则问题错归给执行规则的邦布。"
         }
       ]
     }
   ],
   "home_hero_12_4": [
     {
-      "speaker": "你",
-      "text": "她发现地图上有一条无人报告的小路。",
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/traveler/portrait.png",
-      "speaker": "你",
-      "text": "我问她有没有“从此安全”的选项，她说先学会设置撤退点。"
-    },
-    {
+      "portrait": "",
       "speaker": "铃",
-      "text": "路好走，却没有任何返回记录。",
+      "text": "地图上有条从没人报告回程的小路。"
+    },
+    {
+      "portrait": "",
+      "speaker": "铃",
+      "text": "好走得像免费的游戏礼包，你敢接吗？",
       "choices": [
         {
-          "text": "先派侦察并约定撤回时间",
-          "response": "她点开计时器：未知路线上，退路比捷径重要。",
+          "text": "先找返回记录，再让探路的人带信标。",
           "response_speaker": "铃",
+          "response_portrait": "",
+          "response": "未知路线上，退路比捷径重要。",
           "home_success": true
         },
         {
-          "text": "立刻带队抄近路",
-          "response": "她皱眉：没消息，不等于没风险。",
+          "text": "这么省时的路，不走才亏。",
           "response_speaker": "铃",
+          "response_portrait": "",
+          "response": "没消息，不等于没风险。",
           "home_success": false,
           "home_reason": "在缺乏返回记录时拿整队冒险。"
         }

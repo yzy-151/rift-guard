@@ -4,6 +4,7 @@ signal choice_committed(choice: Dictionary)
 signal animation_confirmed
 signal fatal_choice_confirmed
 const Backdrop = preload("res://scripts/dialogue_backdrop.gd")
+const PortraitCatalog = preload("res://scripts/dialogue_portrait_catalog.gd")
 const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 const UI_SKIN = preload("res://data/ui_skin_profile.tres")
 const PORTRAITS = {
@@ -13,6 +14,7 @@ const PORTRAITS = {
 	"muelsyse": preload("res://assets/portraits/muelsyse.png")
 }
 var config
+var portrait_catalog = PortraitCatalog.new()
 var director
 var hud
 var root: Control
@@ -72,6 +74,7 @@ var death_reason_label: Label
 var death_playing := false
 var animation_waiting := false
 var animation_click_gate: Button
+var animation_click_hint: Label
 var booper: TextureRect
 var booper_elapsed := 0.0
 func build(ui, story) -> void:
@@ -275,9 +278,9 @@ func build(ui, story) -> void:
 		animation_click_gate.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	animation_click_gate.pressed.connect(acknowledge_animation)
 	root.add_child(animation_click_gate)
-	var click_hint: Label = hud.label(animation_click_gate, Vector2(510, 672), Vector2(260, 28), "点击屏幕继续", 13, Color("#e5dfe9"))
-	click_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	click_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	animation_click_hint = hud.label(animation_click_gate, Vector2(510, 672), Vector2(260, 28), "点击屏幕继续", 13, Color("#e5dfe9"))
+	animation_click_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	animation_click_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	animation_click_gate.hide()
 	root.hide()
 	cue_sound = AudioStreamPlayer.new()
@@ -361,8 +364,9 @@ func show_line() -> void:
 	var line: Dictionary = director.current()
 	if line.is_empty():
 		return
-	if config != null and config.loaded:
-		set_picture(portrait, line.get("portrait", ""), Vector2(line.get("x", 115), line.get("y", 75)), Vector2(520, 665), line.get("scale", 1.0), line.get("flip", false))
+	var resolved_portrait: String = portrait_catalog.resolve_line(line)
+	if (config != null and config.loaded) or portrait_catalog.has_speaker(str(line.get("speaker", ""))):
+		set_picture(portrait, resolved_portrait, Vector2(line.get("x", 115), line.get("y", 75)), Vector2(520, 665), line.get("scale", 1.0), line.get("flip", false))
 		set_picture(partner, line.get("partner", ""), Vector2(line.get("partner_x", 685), line.get("partner_y", 80)), Vector2(490, 650), line.get("partner_scale", 1.0), line.get("partner_flip", false))
 		var highlight: String = line.get("highlight", "main")
 		portrait.modulate = Color(0.36, 0.28, 0.34, 0.8) if highlight == "partner" else Color.WHITE
@@ -695,7 +699,7 @@ func handle_input(event: InputEvent) -> void:
 
 func set_picture(item: TextureRect, alias: String, at: Vector2, dimensions: Vector2, factor: float, flipped: bool) -> void:
 	item.visible = alias != ""
-	item.texture = load(alias) as Texture2D if alias.begins_with("res://assets/") and ResourceLoader.exists(alias) else (config.texture(alias) if alias != "" else null)
+	item.texture = load(alias) as Texture2D if alias.begins_with("res://assets/") and ResourceLoader.exists(alias) else (config.texture(alias) if alias != "" and config != null else null)
 	item.position = at
 	item.size = dimensions * factor
 	item.flip_h = flipped
@@ -739,6 +743,86 @@ func play_death_transition(reason: String = "") -> void:
 	death_overlay.hide()
 	death_reason_label.visible = true
 	death_playing = false
+	if not root_was_visible:
+		root.hide()
+
+func play_comic_panel(resource_path: String, caption_text: String = "") -> void:
+	if not ResourceLoader.exists(resource_path):
+		return
+	var texture: Texture2D = load(resource_path) as Texture2D
+	if texture == null:
+		return
+	var root_was_visible := root.visible
+	root.show()
+	var comic_overlay := ColorRect.new()
+	comic_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	comic_overlay.color = Color("#0b0b20")
+	comic_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(comic_overlay)
+	var rect: Rect2 = UI_LAYOUT.dialogue_comic_rect
+	var backing := ColorRect.new()
+	backing.color = Color("#80363d")
+	backing.position = rect.position + Vector2(-10, 7)
+	backing.size = rect.size + Vector2(18, 10)
+	backing.pivot_offset = backing.size * 0.5
+	backing.rotation = deg_to_rad(-1.5)
+	backing.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	comic_overlay.add_child(backing)
+	var comic := TextureRect.new()
+	comic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	comic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	comic.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	comic_overlay.add_child(comic)
+	comic.texture = texture
+	comic.custom_minimum_size = Vector2.ZERO
+	comic.size = rect.size
+	comic.position = rect.position + Vector2(1280, 0)
+	var caption := Label.new()
+	caption.position = UI_LAYOUT.dialogue_comic_caption_rect.position
+	caption.size = UI_LAYOUT.dialogue_comic_caption_rect.size
+	caption.text = caption_text
+	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	caption.add_theme_font_size_override("font_size", 22)
+	caption.add_theme_color_override("font_color", Color("#f5f1f2"))
+	caption.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.85))
+	caption.add_theme_constant_override("shadow_offset_y", 2)
+	caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caption.modulate.a = 0.0
+	comic_overlay.add_child(caption)
+	var continue_icon := TextureRect.new()
+	continue_icon.texture = load("res://assets/helltaker/dialogue_booper/booper0001.png")
+	continue_icon.position = UI_LAYOUT.dialogue_comic_continue_rect.position
+	continue_icon.size = UI_LAYOUT.dialogue_comic_continue_rect.size
+	continue_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	continue_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	continue_icon.modulate = Color(1, 0.52, 0.60, 0)
+	continue_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	comic_overlay.add_child(continue_icon)
+	backing.modulate.a = 0.0
+	var arrival := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	arrival.tween_property(comic, "position", rect.position, 0.40)
+	arrival.tween_property(backing, "modulate:a", 1.0, 0.25)
+	await arrival.finished
+	var text_reveal := create_tween().set_parallel(true)
+	text_reveal.tween_property(caption, "modulate:a", 1.0, 0.25)
+	text_reveal.tween_property(continue_icon, "modulate:a", 1.0, 0.25)
+	await text_reveal.finished
+	animation_click_hint.hide()
+	var icon_pulse := create_tween().set_loops().set_trans(Tween.TRANS_SINE)
+	icon_pulse.tween_property(continue_icon, "modulate:a", 0.42, 0.55)
+	icon_pulse.tween_property(continue_icon, "modulate:a", 1.0, 0.55)
+	await _await_animation_click()
+	icon_pulse.kill()
+	animation_click_hint.show()
+	var exit_tween := create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	exit_tween.tween_property(comic, "position:x", -rect.size.x, 0.26)
+	exit_tween.tween_property(backing, "modulate:a", 0.0, 0.20)
+	exit_tween.tween_property(caption, "modulate:a", 0.0, 0.18)
+	exit_tween.tween_property(continue_icon, "modulate:a", 0.0, 0.18)
+	await exit_tween.finished
+	comic_overlay.queue_free()
 	if not root_was_visible:
 		root.hide()
 

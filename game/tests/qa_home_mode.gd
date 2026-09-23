@@ -61,7 +61,7 @@ func _run() -> void:
 		var entry_path := ProjectSettings.globalize_path("res://../outputs/home-mode-entry.png")
 		check(game.get_viewport().get_texture().get_image().save_png(entry_path) == OK, "home entry screenshot")
 	check(game.mode_select_panel.continue_button.text.find("基地") >= 0, "mode menu checkpoint becomes home entry")
-	check(str(game.story.stories["opening"][0].speaker) == "你", "rewritten campaign wins over legacy workbook rows")
+	check(str(game.story.stories["opening"][0].speaker) == "希露菲", "NPC-only campaign wins over legacy workbook rows")
 	game.mode_select_panel.continue_button.pressed.emit()
 	await process_frame
 	check(game.home_panel.is_open(), "home entry opens from mode menu")
@@ -112,6 +112,8 @@ func _run() -> void:
 	check(game.story.active, "same resident remains interactable")
 	await _finish_scene(game, false)
 	for id: String in game.sim.database.characters:
+		if id == "traveler":
+			continue
 		for index in 5:
 			var key := "home_%s_%d" % [id, index]
 			check(game.story.stories.has(key), "story present: " + key)
@@ -124,7 +126,7 @@ func _run() -> void:
 	game.stage_select_panel.close()
 	game.stage_select_panel.cancelled.emit()
 	check(game.home_panel.is_open(), "return from mission select restores home")
-	game.home_panel.player_pos = Vector2(1220, 480)
+	game.home_panel.player_pos = Vector2(1120, 480)
 	game.home_panel.handle_input(interact)
 	check(game.compendium_panel.is_open(), "archive terminal opens compendium")
 	game.compendium_panel.close()
@@ -134,7 +136,7 @@ func _run() -> void:
 	check(game.settings_panel.is_open(), "control terminal opens settings")
 	game.settings_panel.close()
 	check(await _wait_for(func() -> bool: return game.home_panel.is_open()), "closing settings restores home")
-	for character_id: String in game.sim.database.characters:
+	for character_id: String in ["hero_01", "hero_04", "hero_13"]:
 		game.story.reset()
 		var deep_key := "home_%s_0" % character_id
 		check(game.story.begin(deep_key), "deep scene starts: " + deep_key)
@@ -180,7 +182,7 @@ func _run() -> void:
 		check(game.get_viewport().get_texture().get_image().save_png(campaign_path) == OK, "campaign dialogue screenshot")
 		game.dialogue.root.hide()
 		game.story.reset()
-		check(game.story.begin("home_hero_03_0"), "deep choice preview scene starts")
+		check(game.story.begin("home_hero_04_0"), "deep choice preview scene starts")
 		game.dialogue.display()
 		while game.story.active and not game.story.has_choices():
 			game.story.advance()

@@ -43,6 +43,7 @@ func _initialize() -> void:
 	sim.enemies.clear()
 	sim.events.clear()
 	sim.heroes[0].block = 0
+	sim.heroes[0].deployed = true
 	sim.heroes[0].range = 900.0
 	sim.heroes[0].element = "pyro"
 	var enemy: Dictionary = sim.spawn_enemy(sim.heroes[0].pos + Vector2(95, 0), "grunt")

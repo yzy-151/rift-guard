@@ -168,7 +168,13 @@ func open(stage_id:String,current_squad:Array[String],newly_unlocked:Array=[])->
 	progress.save_progress(); selected=["traveler"]
 	for id in current_squad:
 		if id!="traveler" and _is_character_unlocked(id) and selected.size()<3: selected.append(id)
-	var stage:Dictionary=database.stages.get(stage_id,{}); title.text="下一关：%s"%stage.get("name",stage_id); subtitle.text="旅行者固定出战 · 最多选择三名角色 · 点击卡片查看详情"
+	var stage:Dictionary=database.stages.get(stage_id,{})
+	if stage_id=="stage_endless":
+		title.text="无尽生存：选择出战角色"
+		subtitle.text="旅行者固定出战 · 开局三名角色全部可登场 · 点击卡片查看详情"
+	else:
+		title.text="下一关：%s"%stage.get("name",stage_id)
+		subtitle.text="旅行者固定出战 · 最多选择三名角色 · 点击卡片查看详情"
 	grid_scroll.scroll_vertical=0; detail_panel.hide(); _refresh(); root.show(); confirm_button.grab_focus()
 func confirm()->void:
 	if selected.is_empty() or selected.size()>3 or "traveler" not in selected:return

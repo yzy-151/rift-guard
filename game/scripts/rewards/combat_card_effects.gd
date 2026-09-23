@@ -26,15 +26,15 @@ static func tick(hero: Dictionary, dt: float) -> float:
 	if hero.warmog_timer > 0.0:
 		return 0.0
 	hero.warmog_timer += 5.0
-	var healed := minf(float(hero.max_hp) - float(hero.hp), 30.0 * warmog_levels)
-	hero.hp = minf(float(hero.max_hp), float(hero.hp) + 30.0 * warmog_levels)
+	var healed := minf(float(hero.max_hp) - float(hero.hp), 100.0 * warmog_levels)
+	hero.hp = minf(float(hero.max_hp), float(hero.hp) + 100.0 * warmog_levels)
 	return maxf(0.0, healed)
 
 static func on_attack(hero: Dictionary) -> float:
 	var tempo_levels := level(hero, "lethal_tempo")
 	if tempo_levels > 0:
 		var previous := float(hero.get("tempo_bonus", 0.0))
-		var next_bonus := minf(2.0 * tempo_levels, previous + 0.20 * tempo_levels)
+		var next_bonus := minf(1.20 * tempo_levels, previous + 0.12 * tempo_levels)
 		hero.rate = float(hero.rate) + float(hero.base_rate) * (next_bonus - previous)
 		hero.tempo_bonus = next_bonus
 		hero.tempo_idle = 0.0
@@ -55,4 +55,4 @@ static func on_target(hero: Dictionary, enemy: Dictionary) -> void:
 		return
 	attackers[hero_id] = true
 	enemy.heartsteel_attackers = attackers
-	hero.max_hp = float(hero.max_hp) + 4.0 * heartsteel_levels
+	hero.max_hp = float(hero.max_hp) + 10.0 * heartsteel_levels

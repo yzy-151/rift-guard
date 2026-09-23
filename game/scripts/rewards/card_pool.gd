@@ -175,13 +175,14 @@ func preview(card: Dictionary, sim) -> String:
 		"attack_multiplier": return "攻击力 +%d%%" % roundi(float(value) * 100.0)
 		"health_multiplier": return "最大生命 +%d%%" % roundi(float(value) * 100.0)
 		"attack_rate_multiplier": return "攻击速度 +%d%%" % roundi(float(value) * 100.0)
-		"lethal_tempo": return "每次攻击攻速 +20%，每层上限 +200%；停攻 3 秒清空"
+		"lethal_tempo": return "每次攻击攻速 +12%，每层上限 +120%；停攻 3 秒清空"
 		"conqueror": return "攻击 6 次后伤害 ×2/层；每次攻击回复 10/层"
 		"heartsteel": return "对每名敌人首次攻击时，最大生命 +4/层"
 		"warmogs_armor": return "每 5 秒回复 30/层生命"
 		"solo_leveling": return "经验获取 ×3/层"
 		"range_flat": return "攻击范围 +%d" % int(value)
 		"armor_flat": return "防御 +%d" % int(value)
+		"crit_flat": return "暴击率 +%d%%" % roundi(float(value) * 100.0)
 		"move_speed_flat": return "移动速度 +%d" % int(value)
 		"squad_attack_multiplier": return "全队攻击 +%d%%" % roundi(float(value) * 100.0)
 		"squad_health_multiplier": return "全队最大生命 +%d%%" % roundi(float(value) * 100.0)
@@ -195,10 +196,10 @@ func preview(card: Dictionary, sim) -> String:
 		"chain_add": return "连锁目标 +%d" % int(value)
 		"blast_add": return "爆炸半径 +%d" % int(value)
 		"echo_add": return "追击伤害 +%d%%" % roundi(float(value) * 100.0)
-		"skill_power_add": return "旅行者战技威力 +%d%%" % roundi(float(value) * 100.0)
-		"skill_cooldown_add": return "旅行者战技冷却 -%d%%" % roundi(float(value) * 100.0)
-		"skill_area_add": return "旅行者战技范围 +%d%%" % roundi(float(value) * 100.0)
-		"skill_duration_add": return "旅行者持续战技时间 +%d%%" % roundi(float(value) * 100.0)
+		"skill_power_add": return "全队Q技能与E终结技伤害 +%d%%" % roundi(float(value) * 100.0)
+		"skill_cooldown_add": return "全队Q技能与E终结技冷却 -%d%%" % roundi(float(value) * 100.0)
+		"skill_area_add": return "全队范围技能作用范围 +%d%%" % roundi(float(value) * 100.0)
+		"skill_duration_add": return "全队持续技能时间 +%d%%" % roundi(float(value) * 100.0)
 		"reaction_damage_add": return "元素反应伤害 +%d%%" % roundi(float(value) * 100.0)
 		"reaction_radius_add": return "元素反应范围 +%d" % int(value)
 		"support_barrage", "support_crossfire", "support_heal", "support_finale": return "自动支援已接入，可重复强化"
@@ -209,7 +210,7 @@ func preview(card: Dictionary, sim) -> String:
 		"kill_frenzy_add": return "每10击杀攻速成长 +%d%%" % roundi(float(value) * 100.0)
 		"luck_add": return "幸运 +%.2f，高阶卡权重显著提升" % float(value)
 		"dual_element_mythic": return "旅行者永久获得第二元素，并让普攻触发双元素反应"
-		"mythic_projectile_storm": return "全队弹道 +4、攻速 +60%、贯穿 +3"
+		"mythic_projectile_storm": return "全队弹道 +1、攻速 +24%、贯穿 +1"
 		"mythic_world_breaker": return "全队攻击 +150%、爆炸范围 +180、连锁 +6"
 		"mythic_eternal_support": return "每1.8秒发动一次高威力全屏场外支援"
 	return str(card.get("description", "获得强化"))

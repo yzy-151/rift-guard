@@ -2,12 +2,12 @@
   {
     "id": "single_attack_common",
     "name": "锋刃强化",
-    "description": "选定角色：攻击力提高18%",
+    "description": "选定角色：攻击力提高50%。",
     "rarity": "common",
     "weight": 60,
     "target": "character",
     "effect": "attack_multiplier",
-    "value": 0.18,
+    "value": 0.5,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -18,12 +18,12 @@
   {
     "id": "single_health_common",
     "name": "生命训练",
-    "description": "选定角色：最大生命提高25%",
+    "description": "选定角色：最大生命提高75%，并恢复等量生命。",
     "rarity": "common",
     "weight": 60,
     "target": "character",
     "effect": "health_multiplier",
-    "value": 0.25,
+    "value": 0.75,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -34,12 +34,12 @@
   {
     "id": "single_speed_common",
     "name": "节奏训练",
-    "description": "选定角色：攻击速度提高16%",
+    "description": "选定角色：攻击速度提高20%。",
     "rarity": "common",
     "weight": 60,
     "target": "character",
     "effect": "attack_rate_multiplier",
-    "value": 0.16,
+    "value": 0.2,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -50,12 +50,12 @@
   {
     "id": "single_range_rare",
     "name": "万用瞄准镜",
-    "description": "选定角色：攻击范围提高60",
+    "description": "选定角色：攻击范围提高250。",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
     "effect": "range_flat",
-    "value": 60,
+    "value": 250,
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
@@ -66,12 +66,12 @@
   {
     "id": "single_armor_rare",
     "name": "战术装甲",
-    "description": "选定角色：防御提高30",
+    "description": "选定角色：防御提高120。",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
     "effect": "armor_flat",
-    "value": 30,
+    "value": 120,
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
@@ -82,12 +82,12 @@
   {
     "id": "single_move_rare",
     "name": "迅捷步伐",
-    "description": "选定角色：移动速度提高38",
+    "description": "选定角色：移动速度提高120。",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
     "effect": "move_speed_flat",
-    "value": 38,
+    "value": 120,
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
@@ -194,12 +194,12 @@
   {
     "id": "global_attack_1",
     "name": "协同进攻",
-    "description": "全队：攻击力提高12%",
+    "description": "全队：攻击力提高50%。",
     "rarity": "common",
     "weight": 60,
     "target": "global",
     "effect": "squad_attack_multiplier",
-    "value": 0.12,
+    "value": 0.5,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -210,12 +210,12 @@
   {
     "id": "global_health_1",
     "name": "极限剂量",
-    "description": "全队：最大生命提高16%",
+    "description": "全队：最大生命提高75%，并恢复等量生命。",
     "rarity": "common",
     "weight": 60,
     "target": "global",
     "effect": "squad_health_multiplier",
-    "value": 0.16,
+    "value": 0.75,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -226,313 +226,9 @@
   {
     "id": "global_speed_1",
     "name": "统一节奏",
-    "description": "全队：攻击速度提高11%",
+    "description": "全队：攻击速度提高20%。",
     "rarity": "common",
     "weight": 60,
-    "target": "global",
-    "effect": "squad_rate_multiplier",
-    "value": 0.11,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "crystal_guard_1",
-    "name": "水晶加固",
-    "description": "水晶最大生命提高15",
-    "rarity": "common",
-    "weight": 60,
-    "target": "global",
-    "effect": "crystal_health_flat",
-    "value": 15,
-    "max_stacks": 4,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "global_armor_1",
-    "name": "协同防御",
-    "description": "全队：防御提高20",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "squad_armor_flat",
-    "value": 20,
-    "max_stacks": 4,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "global_range_1",
-    "name": "共享视野",
-    "description": "全队：攻击范围提高40",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "squad_range_flat",
-    "value": 40,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "crystal_repair_1",
-    "name": "紧急修复",
-    "description": "立即恢复水晶25点生命",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "crystal_heal",
-    "value": 25,
-    "max_stacks": 3,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "护盾"
-    ]
-  },
-  {
-    "id": "global_critical_1",
-    "name": "弱点洞察",
-    "description": "全队暴击率提高10%",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "global",
-    "effect": "squad_crit_flat",
-    "value": 0.1,
-    "max_stacks": 2,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "暴击"
-    ]
-  },
-  {
-    "id": "global_chain_1",
-    "name": "战术连携",
-    "description": "全队攻击额外连锁1名敌人。",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "global",
-    "effect": "squad_chain",
-    "value": true,
-    "max_stacks": 1,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "反应"
-    ]
-  },
-  {
-    "id": "global_laststand_1",
-    "name": "坚毅不倒",
-    "description": "角色生命低于30%时，该角色攻击伤害提高50%；重复选择继续叠加。",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "global",
-    "effect": "last_stand",
-    "value": true,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "single_attack_rare",
-    "name": "精钢锋芒",
-    "description": "选定角色：攻击力提高34%",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "effect": "attack_multiplier",
-    "value": 0.34,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "single_attack_epic",
-    "name": "破军锋刃",
-    "description": "选定角色：攻击力提高58%",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "effect": "attack_multiplier",
-    "value": 0.58,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "single_attack_legendary",
-    "name": "灭界之刃",
-    "description": "选定角色：攻击力提高100%",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "effect": "attack_multiplier",
-    "value": 1,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "single_speed_rare",
-    "name": "疾风连击",
-    "description": "选定角色：攻击速度提高28%",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "effect": "attack_rate_multiplier",
-    "value": 0.28,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "single_speed_epic",
-    "name": "迅雷疾攻",
-    "description": "选定角色：攻击速度提高48%",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "effect": "attack_rate_multiplier",
-    "value": 0.48,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "single_speed_legendary",
-    "name": "超频暴风",
-    "description": "选定角色：攻击速度提高80%",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "effect": "attack_rate_multiplier",
-    "value": 0.8,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "single_range_epic",
-    "name": "鹰眼领域",
-    "description": "选定角色：攻击范围提高120",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "character",
-    "effect": "range_flat",
-    "value": 120,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "single_range_legendary",
-    "name": "天穹瞄准",
-    "description": "选定角色：攻击范围提高200",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "character",
-    "effect": "range_flat",
-    "value": 200,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "global_attack_rare",
-    "name": "攻势协议",
-    "description": "全队：攻击力提高23%",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "global",
-    "effect": "squad_attack_multiplier",
-    "value": 0.23,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "global_attack_epic",
-    "name": "军势共振",
-    "description": "全队：攻击力提高42%",
-    "rarity": "epic",
-    "weight": 10,
-    "target": "global",
-    "effect": "squad_attack_multiplier",
-    "value": 0.42,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "global_attack_legendary",
-    "name": "终极武装",
-    "description": "全队：攻击力提高68%",
-    "rarity": "legendary",
-    "weight": 2,
-    "target": "global",
-    "effect": "squad_attack_multiplier",
-    "value": 0.68,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "支援"
-    ]
-  },
-  {
-    "id": "global_speed_rare",
-    "name": "全军加速",
-    "description": "全队：攻击速度提高20%",
-    "rarity": "rare",
-    "weight": 28,
     "target": "global",
     "effect": "squad_rate_multiplier",
     "value": 0.2,
@@ -544,14 +240,318 @@
     ]
   },
   {
+    "id": "crystal_guard_1",
+    "name": "水晶加固",
+    "description": "水晶最大生命提高60，并立即恢复60点生命。",
+    "rarity": "common",
+    "weight": 60,
+    "target": "global",
+    "effect": "crystal_health_flat",
+    "value": 60,
+    "max_stacks": 4,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
+  },
+  {
+    "id": "global_armor_1",
+    "name": "协同防御",
+    "description": "全队：防御提高160。",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "effect": "squad_armor_flat",
+    "value": 160,
+    "max_stacks": 4,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
+  },
+  {
+    "id": "global_range_1",
+    "name": "共享视野",
+    "description": "全队：攻击范围提高300。",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "effect": "squad_range_flat",
+    "value": 300,
+    "max_stacks": 3,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "crystal_repair_1",
+    "name": "紧急修复",
+    "description": "立即恢复水晶120点生命。",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "effect": "crystal_heal",
+    "value": 120,
+    "max_stacks": 3,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "护盾"
+    ]
+  },
+  {
+    "id": "global_critical_1",
+    "name": "弱点洞察",
+    "description": "全队：暴击率提高50%。",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "global",
+    "effect": "squad_crit_flat",
+    "value": 0.5,
+    "max_stacks": 2,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "暴击"
+    ]
+  },
+  {
+    "id": "global_chain_1",
+    "name": "战术连携",
+    "description": "全队攻击额外连锁5名附近敌人。",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "global",
+    "effect": "squad_chain",
+    "value": 5,
+    "max_stacks": 1,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "反应"
+    ]
+  },
+  {
+    "id": "global_laststand_1",
+    "name": "坚毅不倒",
+    "description": "角色生命低于30%时，该角色每层造成的伤害提高100%。",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "global",
+    "effect": "last_stand",
+    "value": 1.0,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "single_attack_rare",
+    "name": "精钢锋芒",
+    "description": "选定角色：攻击力提高100%。",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "character",
+    "effect": "attack_multiplier",
+    "value": 1.0,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_attack_epic",
+    "name": "破军锋刃",
+    "description": "选定角色：攻击力提高200%。",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "effect": "attack_multiplier",
+    "value": 2.0,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_attack_legendary",
+    "name": "灭界之刃",
+    "description": "选定角色：攻击力提高300%。",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "character",
+    "effect": "attack_multiplier",
+    "value": 3.0,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_speed_rare",
+    "name": "疾风连击",
+    "description": "选定角色：攻击速度提高40%。",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "character",
+    "effect": "attack_rate_multiplier",
+    "value": 0.4,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_speed_epic",
+    "name": "迅雷疾攻",
+    "description": "选定角色：攻击速度提高80%。",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "effect": "attack_rate_multiplier",
+    "value": 0.8,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_speed_legendary",
+    "name": "超频暴风",
+    "description": "选定角色：攻击速度提高120%。",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "character",
+    "effect": "attack_rate_multiplier",
+    "value": 1.2,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_range_epic",
+    "name": "鹰眼领域",
+    "description": "选定角色：攻击范围提高500。",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "effect": "range_flat",
+    "value": 500,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "single_range_legendary",
+    "name": "天穹瞄准",
+    "description": "选定角色：攻击范围提高800。",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "character",
+    "effect": "range_flat",
+    "value": 800,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "弹道"
+    ]
+  },
+  {
+    "id": "global_attack_rare",
+    "name": "攻势协议",
+    "description": "全队：攻击力提高100%。",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "effect": "squad_attack_multiplier",
+    "value": 1.0,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "global_attack_epic",
+    "name": "军势共振",
+    "description": "全队：攻击力提高200%。",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "global",
+    "effect": "squad_attack_multiplier",
+    "value": 2.0,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "global_attack_legendary",
+    "name": "终极武装",
+    "description": "全队：攻击力提高300%。",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "global",
+    "effect": "squad_attack_multiplier",
+    "value": 3.0,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
+    "id": "global_speed_rare",
+    "name": "全军加速",
+    "description": "全队：攻击速度提高40%。",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "effect": "squad_rate_multiplier",
+    "value": 0.4,
+    "max_stacks": 5,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "支援"
+    ]
+  },
+  {
     "id": "global_speed_epic",
     "name": "风暴节拍",
-    "description": "全队：攻击速度提高34%",
+    "description": "全队：攻击速度提高80%。",
     "rarity": "epic",
     "weight": 10,
     "target": "global",
     "effect": "squad_rate_multiplier",
-    "value": 0.34,
+    "value": 0.8,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -562,12 +562,12 @@
   {
     "id": "global_speed_legendary",
     "name": "时间洪流",
-    "description": "全队：攻击速度提高55%",
+    "description": "全队：攻击速度提高120%。",
     "rarity": "legendary",
     "weight": 2,
     "target": "global",
     "effect": "squad_rate_multiplier",
-    "value": 0.55,
+    "value": 1.2,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -578,12 +578,12 @@
   {
     "id": "global_range_epic",
     "name": "全域索敌",
-    "description": "全队：攻击范围提高80",
+    "description": "全队：攻击范围提高600。",
     "rarity": "epic",
     "weight": 10,
     "target": "global",
     "effect": "squad_range_flat",
-    "value": 80,
+    "value": 600,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -594,12 +594,12 @@
   {
     "id": "global_range_legendary",
     "name": "天眼矩阵",
-    "description": "全队：攻击范围提高140",
+    "description": "全队：攻击范围提高900。",
     "rarity": "legendary",
     "weight": 2,
     "target": "global",
     "effect": "squad_range_flat",
-    "value": 140,
+    "value": 900,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -610,12 +610,12 @@
   {
     "id": "single_health_rare",
     "name": "强化体魄",
-    "description": "选定角色：最大生命提高40%",
+    "description": "选定角色：最大生命提高150%，并恢复等量生命。",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
     "effect": "health_multiplier",
-    "value": 0.4,
+    "value": 1.5,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -626,12 +626,12 @@
   {
     "id": "single_health_epic",
     "name": "不灭之躯",
-    "description": "选定角色：最大生命提高65%",
+    "description": "选定角色：最大生命提高300%，并恢复等量生命。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
     "effect": "health_multiplier",
-    "value": 0.65,
+    "value": 3.0,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -642,12 +642,12 @@
   {
     "id": "single_armor_epic",
     "name": "重装壁垒",
-    "description": "选定角色：防御提高60",
+    "description": "选定角色：防御提高240。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
     "effect": "armor_flat",
-    "value": 60,
+    "value": 240,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -658,12 +658,12 @@
   {
     "id": "single_armor_legendary",
     "name": "绝对防线",
-    "description": "选定角色：防御提高110",
+    "description": "选定角色：防御提高400。",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
     "effect": "armor_flat",
-    "value": 110,
+    "value": 400,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -674,12 +674,12 @@
   {
     "id": "single_move_epic",
     "name": "疾影穿梭",
-    "description": "选定角色：移动速度提高68",
+    "description": "选定角色：移动速度提高240。",
     "rarity": "epic",
     "weight": 10,
     "target": "character",
     "effect": "move_speed_flat",
-    "value": 68,
+    "value": 240,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -690,12 +690,12 @@
   {
     "id": "single_move_legendary",
     "name": "光速奔袭",
-    "description": "选定角色：移动速度提高105",
+    "description": "选定角色：移动速度提高360。",
     "rarity": "legendary",
     "weight": 2,
     "target": "character",
     "effect": "move_speed_flat",
-    "value": 105,
+    "value": 360,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
@@ -706,17 +706,514 @@
   {
     "id": "global_health_epic",
     "name": "生命同调",
-    "description": "全队：最大生命提高35%",
+    "description": "全队：最大生命提高300%，并恢复等量生命。",
     "rarity": "epic",
     "weight": 10,
     "target": "global",
     "effect": "squad_health_multiplier",
-    "value": 0.35,
+    "value": 3.0,
     "max_stacks": 5,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
     ]
+  },
+  {
+    "id": "v75_tempered_edge",
+    "name": "铁剑磨砺",
+    "description": "选定角色：攻击力提高50%。",
+    "rarity": "common",
+    "weight": 52,
+    "target": "character",
+    "effect": "attack_multiplier",
+    "value": 0.5,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_warhammer_calibration",
+    "name": "战锤校准",
+    "description": "选定角色：攻击力提高100%。",
+    "rarity": "rare",
+    "weight": 27,
+    "target": "character",
+    "effect": "attack_multiplier",
+    "value": 1.0,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_masterwork_greatblade",
+    "name": "精工巨刃",
+    "description": "选定角色：攻击力提高200%。",
+    "rarity": "epic",
+    "weight": 12,
+    "target": "character",
+    "effect": "attack_multiplier",
+    "value": 2.0,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_godslayer_armament",
+    "name": "弑神武装",
+    "description": "选定角色：攻击力提高300%。",
+    "rarity": "legendary",
+    "weight": 4,
+    "target": "character",
+    "effect": "attack_multiplier",
+    "value": 3.0,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_vitality_drill",
+    "name": "血性训练",
+    "description": "选定角色：最大生命提高75%，并恢复等量生命。",
+    "rarity": "common",
+    "weight": 50,
+    "target": "character",
+    "effect": "health_multiplier",
+    "value": 0.75,
+    "tags": [
+      "护盾"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_dragon_bloodline",
+    "name": "巨龙血统",
+    "description": "选定角色：最大生命提高150%，并恢复等量生命。",
+    "rarity": "rare",
+    "weight": 25,
+    "target": "character",
+    "effect": "health_multiplier",
+    "value": 1.5,
+    "tags": [
+      "护盾"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_titan_vigor",
+    "name": "泰坦活力",
+    "description": "选定角色：最大生命提高300%，并恢复等量生命。",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "effect": "health_multiplier",
+    "value": 3.0,
+    "tags": [
+      "护盾"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_immortal_fortress",
+    "name": "不朽要塞",
+    "description": "选定角色：最大生命提高450%，并恢复等量生命。",
+    "rarity": "legendary",
+    "weight": 3,
+    "target": "character",
+    "effect": "health_multiplier",
+    "value": 4.5,
+    "tags": [
+      "护盾"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_trigger_prewarm",
+    "name": "预热扳机",
+    "description": "选定角色：攻击速度提高20%。",
+    "rarity": "common",
+    "weight": 52,
+    "target": "character",
+    "effect": "attack_rate_multiplier",
+    "value": 0.2,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_phantom_cadence",
+    "name": "幻影之舞",
+    "description": "选定角色：攻击速度提高40%。",
+    "rarity": "rare",
+    "weight": 27,
+    "target": "character",
+    "effect": "attack_rate_multiplier",
+    "value": 0.4,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_nashor_cadence",
+    "name": "纳什之牙",
+    "description": "选定角色：攻击速度提高80%。",
+    "rarity": "epic",
+    "weight": 11,
+    "target": "character",
+    "effect": "attack_rate_multiplier",
+    "value": 0.8,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_kraken_tempo",
+    "name": "海妖杀手",
+    "description": "选定角色：攻击速度提高120%。",
+    "rarity": "legendary",
+    "weight": 4,
+    "target": "character",
+    "effect": "attack_rate_multiplier",
+    "value": 1.2,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_close_focus_lens",
+    "name": "近焦镜片",
+    "description": "选定角色：攻击范围提高120。",
+    "rarity": "common",
+    "weight": 48,
+    "target": "character",
+    "effect": "range_flat",
+    "value": 120,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_cannon_calibration",
+    "name": "火炮校准",
+    "description": "选定角色：攻击范围提高250。",
+    "rarity": "rare",
+    "weight": 24,
+    "target": "character",
+    "effect": "range_flat",
+    "value": 250,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_horizon_focus",
+    "name": "视界专注",
+    "description": "选定角色：攻击范围提高500。",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "effect": "range_flat",
+    "value": 500,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_celestial_rangefinder",
+    "name": "天界测距",
+    "description": "选定角色：攻击范围提高800。",
+    "rarity": "legendary",
+    "weight": 3,
+    "target": "character",
+    "effect": "range_flat",
+    "value": 800,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_leather_padding",
+    "name": "皮革衬甲",
+    "description": "选定角色：防御提高50。",
+    "rarity": "common",
+    "weight": 48,
+    "target": "character",
+    "effect": "armor_flat",
+    "value": 50,
+    "tags": [
+      "护盾"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_bramble_vest",
+    "name": "棘刺背心",
+    "description": "选定角色：防御提高120。",
+    "rarity": "rare",
+    "weight": 24,
+    "target": "character",
+    "effect": "armor_flat",
+    "value": 120,
+    "tags": [
+      "护盾"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_randuin_barrier",
+    "name": "兰顿之兆",
+    "description": "选定角色：防御提高240。",
+    "rarity": "epic",
+    "weight": 10,
+    "target": "character",
+    "effect": "armor_flat",
+    "value": 240,
+    "tags": [
+      "护盾"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_gargoyle_plate",
+    "name": "石像鬼石板甲",
+    "description": "选定角色：防御提高400。",
+    "rarity": "legendary",
+    "weight": 3,
+    "target": "character",
+    "effect": "armor_flat",
+    "value": 400,
+    "tags": [
+      "护盾"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_light_march",
+    "name": "轻装行军",
+    "description": "选定角色：移动速度提高60。",
+    "rarity": "common",
+    "weight": 46,
+    "target": "character",
+    "effect": "move_speed_flat",
+    "value": 60,
+    "tags": [
+      "支援"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_nimble_hunter",
+    "name": "灵巧猎手",
+    "description": "选定角色：移动速度提高120。",
+    "rarity": "rare",
+    "weight": 23,
+    "target": "character",
+    "effect": "move_speed_flat",
+    "value": 120,
+    "tags": [
+      "支援"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_phase_rush",
+    "name": "相位猛冲",
+    "description": "选定角色：移动速度提高240。",
+    "rarity": "epic",
+    "weight": 9,
+    "target": "character",
+    "effect": "move_speed_flat",
+    "value": 240,
+    "tags": [
+      "支援"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_ghost_stride",
+    "name": "幽灵疾步",
+    "description": "选定角色：移动速度提高360。",
+    "rarity": "legendary",
+    "weight": 3,
+    "target": "character",
+    "effect": "move_speed_flat",
+    "value": 360,
+    "tags": [
+      "支援"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_lethal_insight",
+    "name": "致命洞察",
+    "description": "选定角色：暴击率提高15%。",
+    "rarity": "common",
+    "weight": 43,
+    "target": "character",
+    "effect": "crit_flat",
+    "value": 0.15,
+    "tags": [
+      "暴击"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_crimson_precision",
+    "name": "赤红精准",
+    "description": "选定角色：暴击率提高30%。",
+    "rarity": "rare",
+    "weight": 21,
+    "target": "character",
+    "effect": "crit_flat",
+    "value": 0.3,
+    "tags": [
+      "暴击"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_infinity_edge",
+    "name": "无尽之刃",
+    "description": "选定角色：暴击率提高50%。",
+    "rarity": "epic",
+    "weight": 8,
+    "target": "character",
+    "effect": "crit_flat",
+    "value": 0.5,
+    "tags": [
+      "暴击"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_final_judgment",
+    "name": "终末裁决",
+    "description": "选定角色：暴击率提高75%。",
+    "rarity": "legendary",
+    "weight": 2,
+    "target": "character",
+    "effect": "crit_flat",
+    "value": 0.75,
+    "tags": [
+      "暴击"
+    ],
+    "placeholder_icon": true
+  },
+  {
+    "id": "v75_multishot_training",
+    "name": "多重射击",
+    "description": "选定角色：每次攻击额外增加1条弹道。",
+    "rarity": "rare",
+    "weight": 20,
+    "target": "character",
+    "effect": "projectile_count_add",
+    "value": 1,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true,
+    "mechanic": true
+  },
+  {
+    "id": "v75_armor_piercing_round",
+    "name": "穿甲弹头",
+    "description": "选定角色：弹道贯穿数量增加1，近战斩击范围同步提升。",
+    "rarity": "rare",
+    "weight": 20,
+    "target": "character",
+    "effect": "pierce_add",
+    "value": 1,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true,
+    "mechanic": true
+  },
+  {
+    "id": "v75_arc_enchantment",
+    "name": "电弧附魔",
+    "description": "选定角色：攻击额外连锁3名附近敌人。",
+    "rarity": "epic",
+    "weight": 9,
+    "target": "character",
+    "effect": "chain_add",
+    "value": 3,
+    "tags": [
+      "反应"
+    ],
+    "placeholder_icon": true,
+    "mechanic": true
+  },
+  {
+    "id": "v75_shock_payload",
+    "name": "震爆弹药",
+    "description": "选定角色：攻击爆炸半径提高120。",
+    "rarity": "epic",
+    "weight": 9,
+    "target": "character",
+    "effect": "blast_add",
+    "value": 120,
+    "tags": [
+      "反应"
+    ],
+    "placeholder_icon": true,
+    "mechanic": true
+  },
+  {
+    "id": "v75_duet_echo",
+    "name": "二重奏鸣",
+    "description": "选定角色：攻击后追加一次100%伤害的追击。",
+    "rarity": "epic",
+    "weight": 9,
+    "target": "character",
+    "effect": "echo_add",
+    "value": 1.0,
+    "tags": [
+      "支援"
+    ],
+    "placeholder_icon": true,
+    "mechanic": true
+  },
+  {
+    "id": "v75_expanded_magazine",
+    "name": "扩容弹仓",
+    "description": "选定角色：每次攻击额外增加2条弹道。",
+    "rarity": "legendary",
+    "weight": 3,
+    "target": "character",
+    "effect": "projectile_count_add",
+    "value": 2,
+    "tags": [
+      "弹道"
+    ],
+    "placeholder_icon": true,
+    "mechanic": true
+  },
+  {
+    "id": "v75_aftershock_volley",
+    "name": "余震弹幕",
+    "description": "选定角色：攻击后追加一次150%伤害的追击。",
+    "rarity": "legendary",
+    "weight": 3,
+    "target": "character",
+    "effect": "echo_add",
+    "value": 1.5,
+    "tags": [
+      "支援"
+    ],
+    "placeholder_icon": true,
+    "mechanic": true
   }
 ]

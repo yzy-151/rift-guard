@@ -1,6 +1,7 @@
 extends RefCounted
 
 const CardEffects = preload("res://scripts/rewards/combat_card_effects.gd")
+const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
 var checks := 0
 var failures := 0
 
@@ -21,7 +22,10 @@ func find_card(cards: Array[Dictionary], card_id: String) -> Dictionary:
 func run(game) -> void:
 	var sim = game.sim
 	var cards: Array[Dictionary] = sim.database.cards
-	check(cards.size() == 80, "expanded 80-card pool loads")
+	check(cards.size() == 150, "expanded 150-card pool loads")
+	var placeholder_cards := cards.filter(func(card: Dictionary) -> bool: return str(card.get("id", "")).begins_with("v75_") and bool(card.get("placeholder_icon", false)))
+	check(placeholder_cards.size() == 70, "all seventy new cards use replaceable question-mark icons")
+	check(GeneratedIconCatalog.card_path(placeholder_cards[0]) != GeneratedIconCatalog.PLACEHOLDER_CARD_ICON, "new cards resolve to their finished icons instead of the question-mark placeholder")
 	var bound_cards := 0
 	var element_gated := 0
 	var resonances := 0
@@ -30,6 +34,8 @@ func run(game) -> void:
 		if not str(card.get("requires_element", "")).is_empty(): element_gated += 1
 		if str(card.get("effect", "")) == "assign_traveler_element": resonances += 1
 	check(bound_cards == 0 and element_gated == 0 and resonances == 6, "no character or element gated duplicates remain")
+	var rare_attack_cards := cards.filter(func(card: Dictionary) -> bool: return str(card.get("rarity", "")) == "rare" and str(card.get("effect", "")) in ["attack_multiplier", "squad_attack_multiplier"])
+	check(not rare_attack_cards.is_empty() and rare_attack_cards.all(func(card: Dictionary) -> bool: return float(card.get("value", 0.0)) >= 1.0), "every rare attack card grants at least one hundred percent attack")
 	check(find_card(cards, "orbit_arcane_blades").get("target", "") == "character" and find_card(cards, "orbit_spell_rings").get("target", "") == "character", "orbit cards now require a selected owner")
 	check(find_card(cards, "global_laststand_1").get("name", "") == "坚毅不倒" and find_card(cards, "mechanic_execution").get("name", "") == "收集者", "requested card names are current")
 	check(float(find_card(cards, "single_attack_common").get("value", 0.0)) < float(find_card(cards, "single_attack_rare").get("value", 0.0)) and float(find_card(cards, "single_attack_rare").get("value", 0.0)) < float(find_card(cards, "single_attack_epic").get("value", 0.0)) and float(find_card(cards, "single_attack_epic").get("value", 0.0)) < float(find_card(cards, "single_attack_legendary").get("value", 0.0)), "advanced attack tiers increase power")
@@ -63,14 +69,28 @@ func run(game) -> void:
 	second_damage = float(sim.heroes[1].damage)
 	traveler_damage = float(sim.heroes[0].damage)
 	sim.apply_v2_card_effect(advanced_single, 1)
-	check(is_equal_approx(float(sim.heroes[1].damage) - second_damage, float(sim.heroes[1].base_damage) * 1.0) and is_equal_approx(float(sim.heroes[0].damage), traveler_damage), "advanced single-target card applies its listed value")
+	check(is_equal_approx(float(sim.heroes[1].damage) - second_damage, float(sim.heroes[1].base_damage) * 3.0) and is_equal_approx(float(sim.heroes[0].damage), traveler_damage), "advanced single-target card applies its listed value")
 	var advanced_team := find_card(cards, "global_speed_legendary")
 	var traveler_rate := float(sim.heroes[0].rate)
 	sim.apply_v2_card_effect(advanced_team)
-	check(is_equal_approx(float(sim.heroes[0].rate) - traveler_rate, float(sim.heroes[0].base_rate) * 0.55), "advanced team card applies its listed value")
+	check(is_equal_approx(float(sim.heroes[0].rate) - traveler_rate, float(sim.heroes[0].base_rate) * 1.2), "advanced team speed card applies its reduced listed value")
 	var original_range := float(sim.attack_range_screen_radii(sim.heroes[1]).x)
 	sim.apply_v2_card_effect(find_card(cards, "single_range_legendary"), 1)
 	check(float(sim.attack_range_screen_radii(sim.heroes[1]).x) > original_range, "advanced range card expands the shared visual and hit radius")
+	var traveler_crit := float(sim.heroes[0].get("crit_chance", 0.0))
+	var second_crit := float(sim.heroes[1].get("crit_chance", 0.0))
+	sim.apply_v2_card_effect(find_card(cards, "v75_lethal_insight"), 1)
+	check(is_equal_approx(float(sim.heroes[0].get("crit_chance", 0.0)), traveler_crit) and is_equal_approx(float(sim.heroes[1].get("crit_chance", 0.0)), second_crit + 0.15), "new single-target critical card applies only to its chosen hero")
+	var damage_before_new_tier := float(sim.heroes[1].damage)
+	sim.apply_v2_card_effect(find_card(cards, "v75_godslayer_armament"), 1)
+	check(is_equal_approx(float(sim.heroes[1].damage) - damage_before_new_tier, float(sim.heroes[1].base_damage) * 3.00), "new legendary attack tier applies its listed value")
+	var skill_power_before := float(sim.skill_power_bonus)
+	sim.apply_v2_card_effect(find_card(cards, "v75_skill_overload"))
+	check(is_equal_approx(float(sim.skill_power_bonus), skill_power_before + 1.20), "new skill-power card updates combat scaling")
+	sim.supports.erase("support_barrage")
+	sim.apply_v2_card_effect(find_card(cards, "v75_orbital_bombardment"))
+	var orbital_support: Dictionary = sim.supports.get("support_barrage", {})
+	check(is_equal_approx(float(orbital_support.get("power", 0.0)), 600.0) and is_equal_approx(float(orbital_support.get("radius", 0.0)), 240.0), "new orbital support card creates its real timed support effect")
 	var pyro := find_card(cards, "element_resonance_pyro")
 	check(sim.rewards.eligible(pyro, sim.run_state), "traveler can draw one element resonance")
 	sim.rewards.apply_card(pyro, sim.run_state)
@@ -86,7 +106,7 @@ func run(game) -> void:
 	var hero := {"id":0,"rate":1.0,"base_rate":1.0,"hp":50.0,"max_hp":100.0}
 	CardEffects.apply_to_hero(hero, "lethal_tempo")
 	for i in 10: CardEffects.on_attack(hero)
-	check(is_equal_approx(float(hero.rate), 3.0), "lethal tempo caps at +200 percent")
+	check(is_equal_approx(float(hero.rate), 2.2), "lethal tempo caps at +120 percent per layer")
 	CardEffects.tick(hero, 3.01)
 	check(is_equal_approx(float(hero.rate), 1.0), "lethal tempo resets after three idle seconds")
 	CardEffects.apply_to_hero(hero, "conqueror")
@@ -100,17 +120,18 @@ func run(game) -> void:
 	var enemy := {"id":100}
 	CardEffects.on_target(hero, enemy)
 	CardEffects.on_target(hero, enemy)
-	check(is_equal_approx(float(hero.max_hp), 108.0), "heartsteel grants four HP per layer once per enemy per hero")
+	check(is_equal_approx(float(hero.max_hp), 120.0), "heartsteel grants ten HP per layer once per enemy per hero")
 	CardEffects.apply_to_hero(hero, "warmogs_armor")
 	CardEffects.apply_to_hero(hero, "warmogs_armor")
 	hero.hp = 20.0
 	var healing: float = CardEffects.tick(hero, 5.0)
-	check(is_equal_approx(healing, 60.0) and is_equal_approx(float(hero.hp), 80.0), "warmog healing stacks every five seconds")
+	check(is_equal_approx(healing, 100.0) and is_equal_approx(float(hero.hp), 120.0), "warmog healing stacks every five seconds")
 	sim.apply_v2_card_effect(find_card(cards, "lethal_tempo"), 1)
 	var orbit_card := find_card(cards, "orbit_arcane_blades")
 	sim.apply_v2_card_effect(orbit_card, 1)
 	sim.apply_v2_card_effect(orbit_card, 2)
 	check(sim.orbitals.size() == 2 and int(sim.orbitals[0].hero_id) == 1 and int(sim.orbitals[1].hero_id) == 2 and int(sim.orbitals[1].level) == 1, "orbit card tracks levels per selected hero")
+	check(is_equal_approx(float(sim.orbitals[0].radius), 248.0) and is_equal_approx(float(sim.orbitals[1].radius), 248.0), "orbit cards use the enlarged shared gameplay and drawing radius")
 	sim.state = "running"
 	sim.terrain_features.clear()
 	sim.enemies.clear()
@@ -140,7 +161,7 @@ func run(game) -> void:
 	combat_hero.hp = float(combat_hero.max_hp) * 0.31
 	combat_hero.attack_timer = 0.0
 	sim._hero_tick()
-	check(is_equal_approx(low_health_damage, baseline_damage * 1.5) and is_equal_approx(float(sim.projectiles.back().damage), baseline_damage), "last stand follows hero HP rather than crystal HP")
+	check(is_equal_approx(low_health_damage, baseline_damage * 2.0) and is_equal_approx(float(sim.projectiles.back().damage), baseline_damage), "last stand follows hero HP rather than crystal HP")
 	var snapshot: Dictionary = sim.export_run_snapshot()
 	check(snapshot.heroes[1].has("card_levels") and snapshot.orbitals.size() == 2, "character cards and orbitals are exported for continuation")
 	print("CARD QA COMPLETE: %d checks, %d failures" % [checks, failures])

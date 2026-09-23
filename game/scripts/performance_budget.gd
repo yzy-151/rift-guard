@@ -1,17 +1,24 @@
 extends RefCounted
 
-const MAX_ENEMIES := 140
-const MAX_PROJECTILES := 560
-const MAX_EFFECTS := 240
+const MAX_ENEMIES := 112
+const MAX_PROJECTILES := 360
+const MAX_EFFECTS := 180
 const MAX_DAMAGE_NUMBERS := 90
 
 var quality_scale := 1.0
 var last_frame_ms := 0.0
+var render_frame_ms := 0.0
 var overload_frames := 0
 
+func observe_render_frame(frame_ms: float) -> void:
+	if frame_ms <= 0.0:
+		return
+	var bounded_ms := minf(frame_ms, 100.0)
+	render_frame_ms = bounded_ms if render_frame_ms <= 0.0 else lerpf(render_frame_ms, bounded_ms, 0.35)
+
 func sample(frame_ms: float, enemy_count: int, projectile_count: int) -> void:
-	last_frame_ms = frame_ms
-	var overloaded := frame_ms > 22.0 or enemy_count > MAX_ENEMIES * 0.82 or projectile_count > MAX_PROJECTILES * 0.82
+	last_frame_ms = maxf(frame_ms, render_frame_ms)
+	var overloaded := last_frame_ms > 22.0 or enemy_count > MAX_ENEMIES * 0.82 or projectile_count > MAX_PROJECTILES * 0.82
 	overload_frames = mini(120, overload_frames + 1) if overloaded else maxi(0, overload_frames - 2)
 	quality_scale = 0.58 if overload_frames > 45 else (0.78 if overload_frames > 15 else 1.0)
 

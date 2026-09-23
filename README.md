@@ -24,7 +24,7 @@
 
 ## 战斗
 
-普通模式包含路线防守、可交互地形、Boss 阶段和关卡推进；无尽模式支持四屏地图、动态刷怪、角色独立移动与屏外单位降频模拟。Q/E 技能采用固定伤害加攻击力倍率，冷却按强度区分；80 张卡牌和 26 个角色技能使用独立图标。角色普通攻击、技能和元素反应使用独立反馈。
+普通模式包含路线防守、可交互地形、Boss 阶段和关卡推进；无尽模式支持四屏地图、动态刷怪、角色独立移动与屏外单位降频模拟。Q/E 技能采用固定伤害加攻击力倍率，冷却按强度区分；150 张卡牌（新增图标未交付前使用问号占位）和 26 个角色技能使用独立图标。角色普通攻击、技能和元素反应使用独立反馈。
 
 ![战斗 HUD](docs/v64-validation/02-battle-hud.png)
 
@@ -51,7 +51,7 @@
 - Godot 工程：`game/project.godot`
 - 设计与验收分辨率：`1920×1080`
 - UI 实验台逻辑坐标：`1280×720`，运行时等比缩放
-- Windows 发布包：[下载 V74 Windows 版](https://github.com/yzy-151/rift-guard/releases/tag/v74)
+- Windows 发布包：[下载 V78 Windows 版](https://github.com/yzy-151/rift-guard/releases/tag/v78)
 
 使用 Godot 4.4.1 打开工程后运行主场景即可。UI 布局与素材替换方法见 [Godot UI 编辑手册](docs/UI-GODOT-EDITING-MANUAL.md)。
 

@@ -1,5 +1,8 @@
 extends CanvasLayer
 const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
+const AchievementCatalog = preload("res://scripts/achievement_catalog.gd")
+const ACHIEVEMENT_CARD_RED = preload("res://assets/ui/rift_v2/components/mode_card_red.png")
+const ACHIEVEMENT_CARD_GRAY = preload("res://assets/ui/rift_v2/components/mode_card_gray.png")
 signal closed
 
 const Catalog = preload("res://scripts/combat_catalog.gd")
@@ -47,9 +50,9 @@ func build(owner_hud, game_database, state) -> void:
 	counter.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	var close_btn: Button = owner_hud.button(frame, Rect2(1064, 25, 78, 42), "关闭", false)
 	close_btn.pressed.connect(close)
-	var tab_data := [["characters", "角色图鉴"], ["cards", "卡牌图鉴"], ["enemies", "敌人档案"], ["builds", "构筑战报"]]
+	var tab_data := [["characters", "角色图鉴"], ["cards", "卡牌图鉴"], ["enemies", "敌人档案"], ["achievements", "成就墙"], ["builds", "构筑战报"]]
 	for i in tab_data.size():
-		var tab: Button = owner_hud.button(frame, Rect2(34 + i * 165, 101, 152, 42), tab_data[i][1], false)
+		var tab: Button = owner_hud.button(frame, Rect2(34 + i * 147, 101, 136, 42), tab_data[i][1], false)
 		tab.pressed.connect(show_tab.bind(str(tab_data[i][0])))
 		tabs.append(tab)
 	var scroll := ScrollContainer.new()
@@ -81,10 +84,11 @@ func show_tab(tab: String) -> void:
 	for child in list.get_children():
 		child.queue_free()
 	for i in tabs.size():
-		tabs[i].modulate = Color.WHITE if i == ["characters", "cards", "enemies", "builds"].find(tab) else Color("#806e75")
+		tabs[i].modulate = Color.WHITE if i == ["characters", "cards", "enemies", "achievements", "builds"].find(tab) else Color("#806e75")
 	match tab:
 		"cards": _show_cards()
 		"enemies": _show_enemies()
+		"achievements": _show_achievements()
 		"builds": _show_builds()
 		_: _show_characters()
 
@@ -115,6 +119,59 @@ func _show_cards() -> void:
 		var card_body := "%s\n标签：%s%s" % [str(card.description), tag_text, evolution]
 		_add_row(str(card.name) if known else "？？？", card_body if known else "在升级三选一中首次获得后记录", _rarity_color(rarity) if known else MUTED, known, _rarity_name(rarity) if known else "未发现", GeneratedIconCatalog.card_path(card) if known else "")
 	counter.text = "发现 %d / %d" % [discovered, database.cards.size()]
+
+func _show_achievements() -> void:
+	title.text = "\u88c2\u9699\u6210\u5c31\u5899"
+	var unlocked: int = progress.unlocked_achievements.size()
+	var row: HBoxContainer
+	for index in AchievementCatalog.ITEMS.size():
+		if index % 4 == 0:
+			row = HBoxContainer.new()
+			row.custom_minimum_size = Vector2(1082, 166)
+			row.add_theme_constant_override("separation", 8)
+			list.add_child(row)
+		_add_achievement_tile(row, AchievementCatalog.ITEMS[index])
+	counter.text = "\u5b8c\u6210 %d / %d" % [unlocked, AchievementCatalog.ITEMS.size()]
+
+func _add_achievement_tile(parent: HBoxContainer, item: Dictionary) -> void:
+	var id := str(item.id)
+	var known: bool = progress.unlocked_achievements.has(id)
+	var tier := str(item.get("tier", "silver"))
+	var color := AchievementCatalog.tier_color(tier) if known else Color("#655b64")
+	var tile := Panel.new()
+	tile.custom_minimum_size = Vector2(264, 158)
+	tile.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	parent.add_child(tile)
+	var frame_skin := TextureRect.new()
+	frame_skin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	frame_skin.texture = ACHIEVEMENT_CARD_RED if known else ACHIEVEMENT_CARD_GRAY
+	frame_skin.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	frame_skin.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	frame_skin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame_skin.modulate = Color(1, 1, 1, 0.45 if known else 0.32)
+	tile.add_child(frame_skin)
+	var icon_back := ColorRect.new()
+	icon_back.position = Vector2(22, 25)
+	icon_back.size = Vector2(88, 108)
+	icon_back.color = Color("#100d13")
+	icon_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	tile.add_child(icon_back)
+	var icon_path := AchievementCatalog.icon_path(id)
+	if ResourceLoader.exists(icon_path):
+		hud.icon(tile, icon_path, Rect2(25, 28, 82, 102), Color.WHITE if known else Color(0.28, 0.26, 0.29, 0.72))
+	var name_label: Label = hud.label(tile, Vector2(120, 25), Vector2(122, 24), str(item.name), 14, color)
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var divider := ColorRect.new()
+	divider.position = Vector2(120, 54)
+	divider.size = Vector2(122, 1)
+	divider.color = Color(color, 0.36)
+	tile.add_child(divider)
+	hud.label(tile, Vector2(120, 61), Vector2(122, 18), "%s \u00b7 %s" % [str(item.group), AchievementCatalog.tier_name(tier)], 9, color.darkened(0.08))
+	var body: Label = hud.label(tile, Vector2(120, 82), Vector2(122, 42), str(item.description), 8, WHITE if known else MUTED)
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	body.add_theme_constant_override("line_spacing", -3)
+	var status: Label = hud.label(tile, Vector2(120, 125), Vector2(122, 16), progress.achievement_progress(id, database), 8, color)
+	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 
 func _show_builds() -> void:
 	title.text = "最终构筑战报"
@@ -223,7 +280,7 @@ func _card_icon_path(effect: String) -> String:
 		"armor_flat":"11_shield_rgba.png", "squad_armor_flat":"11_shield_rgba.png", "crystal_health_flat":"14_summon_crystal_rgba.png",
 		"assign_traveler_element":"14_summon_crystal_rgba.png", "element_mastery_flat":"03_lightning_rgba.png", "squad_mastery_flat":"03_lightning_rgba.png",
 		"element_technique":"06_laser_rgba.png", "special_upgrade":"15_explosion_rgba.png", "signature_upgrade":"15_explosion_rgba.png",
-		"squad_crit_flat":"10_sword_slash_rgba.png", "squad_chain":"03_lightning_rgba.png", "last_stand":"11_shield_rgba.png",
+		"crit_flat":"10_sword_slash_rgba.png", "squad_crit_flat":"10_sword_slash_rgba.png", "squad_chain":"03_lightning_rgba.png", "last_stand":"11_shield_rgba.png",
 		"reaction_overdrive":"15_explosion_rgba.png", "reaction_bonus":"01_fireball_rgba.png"
 	}.get(effect, "14_summon_crystal_rgba.png")
 	return "res://assets/ui/skill_icons_v64/" + file_name

@@ -1,6 +1,10 @@
 extends RefCounted
 
-const CARD_DIR := "res://assets/ui/card_icons_80/"
+const CARD_DIRS := [
+	"res://assets/ui/card_icons_80/",
+	"res://assets/ui/card_icons_70_new/",
+]
+const PLACEHOLDER_CARD_ICON := "res://assets/ui/icons/temporary/card_question.svg"
 const SKILL_DIR := "res://assets/ui/character_skills_26/"
 const SKILL_FILES := {
 	"hero_01": ["哥伦比亚_Q_潮汐环歌.png", "哥伦比亚_E_碧海赐福.png"],
@@ -20,8 +24,13 @@ const SKILL_FILES := {
 
 static func card_path(card: Dictionary) -> String:
 	var icon_name := "炽热火球" if str(card.get("id", "")) == "evolve_fireball" else str(card.get("name", ""))
-	var path := CARD_DIR + icon_name + ".png"
-	return path if ResourceLoader.exists(path) else ""
+	for directory: String in CARD_DIRS:
+		var path := directory + icon_name + ".png"
+		if ResourceLoader.exists(path):
+			return path
+	if bool(card.get("placeholder_icon", false)) and ResourceLoader.exists(PLACEHOLDER_CARD_ICON):
+		return PLACEHOLDER_CARD_ICON
+	return ""
 
 static func card_texture(card: Dictionary) -> Texture2D:
 	var path := card_path(card)

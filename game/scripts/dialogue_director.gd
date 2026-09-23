@@ -27,7 +27,7 @@ func begin(scene_key: String) -> bool:
 	if active or seen.has(scene_key) or not stories.has(scene_key):
 		return false
 	key = scene_key
-	lines = stories[key].duplicate(true)
+	lines = _npc_only_lines(stories[key])
 	if lines.is_empty():
 		return false
 	index = 0
@@ -60,17 +60,20 @@ func choose(choice_index: int) -> bool:
 	var source: Dictionary = current()
 	var response := {
 		"portrait": str(option.get("response_portrait", source.get("portrait", ""))),
-		"partner": str(source.get("partner", "")),
+		"partner": "",
 		"speaker": str(option.get("response_speaker", source.get("speaker", ""))),
-		"text": str(option.get("response", "选择已经记录。")),
-		"highlight": str(option.get("response_highlight", source.get("highlight", "main")))
+		"text": str(option.get("response", "嗯，我听见了。")),
+		"highlight": "main"
 	}
+	if _is_player_line(response):
+		response["speaker"] = str(source.get("speaker", ""))
+		response["portrait"] = str(source.get("portrait", ""))
 	index += 1
 	lines.insert(index, response)
 	var follow_up: Array = option.get("follow_up", [])
-	for offset in follow_up.size():
-		if follow_up[offset] is Dictionary:
-			lines.insert(index + offset + 1, follow_up[offset].duplicate(true))
+	var follow_up_lines: Array = _npc_only_lines(follow_up)
+	for offset in follow_up_lines.size():
+		lines.insert(index + offset + 1, follow_up_lines[offset])
 	_record()
 	return true
 
@@ -105,3 +108,34 @@ func reset() -> void:
 	key = ""
 	index = 0
 	active = false
+
+func _is_player_line(line: Dictionary) -> bool:
+	return str(line.get("speaker", "")) in ["你", "旅行者", "旁白", "主角", "荧", "玩家", "Traveler", "Narrator"] or str(line.get("portrait", "")).contains("/traveler/")
+
+func _npc_only_lines(source_lines: Array) -> Array:
+	var cleaned: Array = []
+	var deferred_choices: Array = []
+	for entry in source_lines:
+		var line: Dictionary = {}
+		if entry is Dictionary:
+			line = entry.duplicate(true)
+		elif entry is Array and entry.size() >= 3:
+			line = {"portrait": entry[0], "speaker": entry[1], "text": entry[2]}
+		else:
+			continue
+		if _is_player_line(line):
+			if not line.get("choices", []).is_empty():
+				if cleaned.is_empty():
+					deferred_choices = line["choices"]
+				else:
+					var previous: Dictionary = cleaned[-1]
+					previous["choices"] = line["choices"]
+					cleaned[-1] = previous
+			continue
+		line["partner"] = ""
+		line["highlight"] = "main"
+		if not deferred_choices.is_empty():
+			line["choices"] = deferred_choices
+			deferred_choices = []
+		cleaned.append(line)
+	return cleaned

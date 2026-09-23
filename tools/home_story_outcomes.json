@@ -1,0 +1,457 @@
+{
+  "home_hero_01_0": {
+    "speaker": "哥伦比亚",
+    "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+    "good_response": "这次不用系统提示，我也知道你在。",
+    "bad_response": "声音一旦散了，就无法问它为何沉默。",
+    "bad_reason": "急于拆解，毁掉了需要耐心观察的线索。"
+  },
+  "home_hero_01_1": {
+    "speaker": "哥伦比亚",
+    "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+    "good_response": "不知道也能一起站在这里。",
+    "bad_response": "你说得很美，却不是我看见的。",
+    "bad_reason": "为了填补未知而虚构答案。"
+  },
+  "home_hero_01_2": {
+    "speaker": "哥伦比亚",
+    "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+    "good_response": "能留下听众，也能留住守望的人。",
+    "bad_response": "歌不该夺走别人听见危险的能力。",
+    "bad_reason": "只顾表达，忽略了守卫必须听见警报。"
+  },
+  "home_hero_01_3": {
+    "speaker": "哥伦比亚",
+    "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+    "good_response": "有时邀请本身就是一场小小的宴会。",
+    "bad_response": "正式的场合总会有，今晚的人却可能等不到。",
+    "bad_reason": "把陪伴推迟到所谓合适的场合。"
+  },
+  "home_hero_01_4": {
+    "speaker": "哥伦比亚",
+    "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
+    "good_response": "星不用我们证明，陪伴也不用催促。",
+    "bad_response": "你替他看见了星，却没看见他的难过。",
+    "bad_reason": "用证明代替倾听对方的心情。"
+  },
+  "home_hero_02_0": {
+    "speaker": "希露菲",
+    "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+    "good_response": "原来我也能是被惦记的那个人。",
+    "bad_response": "把疲惫当作努力，反而会留下空隙。",
+    "bad_reason": "鼓励过度训练，损害了守护所需的稳定性。"
+  },
+  "home_hero_02_1": {
+    "speaker": "希露菲",
+    "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+    "good_response": "谢谢你没替我猜。",
+    "bad_response": "你没问过穿它的人。",
+    "bad_reason": "凭自己的判断修改，没问使用者的感受。"
+  },
+  "home_hero_02_2": {
+    "speaker": "希露菲",
+    "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+    "good_response": "我想和大家并肩。你真的问了我。",
+    "bad_response": "被保护不代表我不想保护别人。",
+    "bad_reason": "把善意的保护变成对她能力的否定。"
+  },
+  "home_hero_02_3": {
+    "speaker": "希露菲",
+    "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+    "good_response": "等候和照顾眼前的人可以同时做到。",
+    "bad_response": "我想等他，可不想大家跟着挨饿。",
+    "bad_reason": "让所有人受累，并没有让迟归的人更快回来。"
+  },
+  "home_hero_02_4": {
+    "speaker": "希露菲",
+    "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+    "good_response": "认识一个人，可以先从尊重开始。",
+    "bad_response": "不是每个人都能立刻把自己交出来。",
+    "bad_reason": "用公开追问加重了对方的紧张。"
+  },
+  "home_hero_03_0": {
+    "speaker": "芙宁娜",
+    "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+    "good_response": "今晚唯一的加演，是你把盘子洗了。",
+    "bad_response": "你给我的，是另一张必须戴上的面具。",
+    "bad_reason": "用舞台身份逼迫她继续扮演。"
+  },
+  "home_hero_03_1": {
+    "speaker": "芙宁娜",
+    "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+    "good_response": "被认真对待的作品，比空洞掌声好。",
+    "bad_response": "我想听真实意见，不想听礼貌的剧评。",
+    "bad_reason": "空泛称赞替代了真实反馈。"
+  },
+  "home_hero_03_2": {
+    "speaker": "芙宁娜",
+    "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+    "good_response": "这一次，结尾是我自己的。",
+    "bad_response": "结尾越圆满，我越像被写好的角色。",
+    "bad_reason": "再次夺走了她亲自选择结局的权利。"
+  },
+  "home_hero_03_3": {
+    "speaker": "芙宁娜",
+    "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+    "good_response": "原来一个观众也能认真看完整场。",
+    "bad_response": "你数了缺席的人，没看见到场的人。",
+    "bad_reason": "只按人数衡量演出的价值。"
+  },
+  "home_hero_03_4": {
+    "speaker": "芙宁娜",
+    "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
+    "good_response": "舞台外的我也可以被看见。",
+    "bad_response": "连练习都必须完美，我要去哪里喘口气？",
+    "bad_reason": "把完美表演当成唯一可见的自我。"
+  },
+  "home_hero_04_0": {
+    "speaker": "洛琪希",
+    "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+    "good_response": "很遗憾，下一题轮到你。",
+    "bad_response": "你替他们补上了线，却没教他们看见缺口。",
+    "bad_reason": "过早给出标准答案，跳过了判断训练。"
+  },
+  "home_hero_04_1": {
+    "speaker": "洛琪希",
+    "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+    "good_response": "老师也会有不知道的时候；一起求证就好。",
+    "bad_response": "未经验证的内容写成定论，会误导每个学生。",
+    "bad_reason": "把不确定的知识伪装成确定结论。"
+  },
+  "home_hero_04_2": {
+    "speaker": "洛琪希",
+    "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+    "good_response": "讲得清楚，说明真的理解。",
+    "bad_response": "术语念得流利，法阵依然可能画错。",
+    "bad_reason": "用复杂术语掩盖了理解不足。"
+  },
+  "home_hero_04_3": {
+    "speaker": "洛琪希",
+    "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+    "good_response": "承认害怕之后，准备才真正开始。",
+    "bad_response": "把我放得太高，我就没法告诉你真实经历。",
+    "bad_reason": "神化老师使她无法分享真实的脆弱。"
+  },
+  "home_hero_04_4": {
+    "speaker": "洛琪希",
+    "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
+    "good_response": "施治不能比病人的身体跑得更快。",
+    "bad_response": "剂量不是愿望，过量会造成新的伤害。",
+    "bad_reason": "急于求成，忽略了病人的实际反应。"
+  },
+  "home_hero_06_0": {
+    "speaker": "阿米娅",
+    "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+    "good_response": "谢谢。今天这五分钟，不算我偷懒吧？",
+    "bad_response": "你宣布了他的困难，却没征求他的同意。",
+    "bad_reason": "公开了同伴不愿示人的求助。"
+  },
+  "home_hero_06_1": {
+    "speaker": "阿米娅",
+    "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+    "good_response": "一起承担不是推卸，而是相信彼此。",
+    "bad_response": "一个人签名，救不了所有人。",
+    "bad_reason": "把负责误解为独自背负全部风险。"
+  },
+  "home_hero_06_2": {
+    "speaker": "阿米娅",
+    "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+    "good_response": "谨慎和救治可以同时存在。",
+    "bad_response": "如果连伤口都不愿看，我们会忘记自己守护什么。",
+    "bad_reason": "把立场凌驾于最基本的紧急救治之上。"
+  },
+  "home_hero_06_3": {
+    "speaker": "阿米娅",
+    "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+    "good_response": "谢谢你把争论留在事情上。",
+    "bad_response": "压下质疑只会让真正的问题留到战场上。",
+    "bad_reason": "用权威压制了可能有价值的风险提醒。"
+  },
+  "home_hero_06_4": {
+    "speaker": "阿米娅",
+    "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+    "good_response": "他不只是一个称号。",
+    "bad_response": "宏大的头衔盖住了他原本的样子。",
+    "bad_reason": "用宏大叙事替代了对个人的真实记忆。"
+  },
+  "home_hero_07_0": {
+    "speaker": "丰川祥子",
+    "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+    "good_response": "这次你是合作者，不是接管者。",
+    "bad_response": "把全部人排除在外，只会漏掉更多细节。",
+    "bad_reason": "把控制一切误当作保证舞台质量。"
+  },
+  "home_hero_07_1": {
+    "speaker": "丰川祥子",
+    "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+    "good_response": "至少，这次有人先让我听见改变。",
+    "bad_response": "你替我反对别人，与替我决定有什么区别？",
+    "bad_reason": "未经她聆听与判断就替她否决。"
+  },
+  "home_hero_07_2": {
+    "speaker": "丰川祥子",
+    "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+    "good_response": "谢谢你允许我自己选择时间。",
+    "bad_response": "不是每段关系都能被一次替我做主的邀请修好。",
+    "bad_reason": "以避免后悔为由侵入她的私人决定。"
+  },
+  "home_hero_07_3": {
+    "speaker": "丰川祥子",
+    "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+    "good_response": "准确不等于表达完整。",
+    "bad_response": "音符无误，不代表这首曲子已经说完。",
+    "bad_reason": "只检查技术正确，忽略了表达意图。"
+  },
+  "home_hero_07_4": {
+    "speaker": "丰川祥子",
+    "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
+    "good_response": "这部分，我们可以一起承担。",
+    "bad_response": "施舍替代不了尊重，也不是我请求的帮助。",
+    "bad_reason": "越过边界，替她处理未请求的私人问题。"
+  },
+  "home_hero_08_0": {
+    "speaker": "艾米莉亚",
+    "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+    "good_response": "原来你也会看我有没有冻着。",
+    "bad_response": "别把礼物塞到别人怀里，也别假装我不会冷。",
+    "bad_reason": "强迫对方接受接近，忽略了恐惧需要时间。"
+  },
+  "home_hero_08_1": {
+    "speaker": "艾米莉亚",
+    "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+    "good_response": "诚实道歉，才能让彼此都往前走。",
+    "bad_response": "错不在我，全部认下只会让误解继续。",
+    "bad_reason": "用全盘认错换取和气，使误会得不到澄清。"
+  },
+  "home_hero_08_2": {
+    "speaker": "艾米莉亚",
+    "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+    "good_response": "照顾不是把世界改成同一种温度。",
+    "bad_response": "太急的温暖也会伤到它。",
+    "bad_reason": "以为越暖越好，忽略了花的适应范围。"
+  },
+  "home_hero_08_3": {
+    "speaker": "艾米莉亚",
+    "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+    "good_response": "先有一位肯听的人，我就敢自己开口了。",
+    "bad_response": "你替我争论，可我还是没学会怎样面对他们。",
+    "bad_reason": "替她出面，没照顾到她当下真正需要的支持。"
+  },
+  "home_hero_08_4": {
+    "speaker": "艾米莉亚",
+    "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
+    "good_response": "原来不完美也能分享。",
+    "bad_response": "你明明尝出来了，却不愿对我说真话。",
+    "bad_reason": "以善意谎言取代了诚实而温和的反馈。"
+  },
+  "home_hero_10_0": {
+    "speaker": "风堇",
+    "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+    "good_response": "你终于把我也算进了名单。",
+    "bad_response": "他说没事，动作却已经在求救。",
+    "bad_reason": "只听字面回答，忽略了求助的身体信号。"
+  },
+  "home_hero_10_1": {
+    "speaker": "风堇",
+    "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+    "good_response": "恰当比强力更重要。",
+    "bad_response": "药效越强，不代表越适合。",
+    "bad_reason": "按强度而不是症状选择治疗。"
+  },
+  "home_hero_10_2": {
+    "speaker": "风堇",
+    "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+    "good_response": "被记住的人，更愿意相信自己会好。",
+    "bad_response": "编号方便记录，却不该代替一个人。",
+    "bad_reason": "把管理便利放在病人的人格感受之前。"
+  },
+  "home_hero_10_3": {
+    "speaker": "风堇",
+    "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+    "good_response": "照顾别人也需要有人照顾我。",
+    "bad_response": "疲惫不是美德。",
+    "bad_reason": "纵容过劳，会危及她和病人的安全。"
+  },
+  "home_hero_10_4": {
+    "speaker": "风堇",
+    "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
+    "good_response": "好起来的速度，也该由他自己掌握。",
+    "bad_response": "好意太响，也会盖过害怕。",
+    "bad_reason": "用热闹强迫病人立刻表现开心。"
+  },
+  "home_hero_13_0": {
+    "speaker": "格温",
+    "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+    "good_response": "这次是一起补，不是谁覆盖谁。",
+    "bad_response": "整齐了，可那个人留下的痕迹也没了。",
+    "bad_reason": "为追求整齐抹掉了衣物承载的情感。"
+  },
+  "home_hero_13_1": {
+    "speaker": "格温",
+    "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+    "good_response": "它像收礼的人一样独一无二。",
+    "bad_response": "现在它很标准，也再没有自己的故事。",
+    "bad_reason": "套用标准外观抹去了赠礼的个性。"
+  },
+  "home_hero_13_2": {
+    "speaker": "格温",
+    "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+    "good_response": "保护也要让被保护的人看清方向。",
+    "bad_response": "把危险遮住，不等于危险消失。",
+    "bad_reason": "防护过度遮挡了同伴的视野与行动。"
+  },
+  "home_hero_13_3": {
+    "speaker": "格温",
+    "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+    "good_response": "愿意被找到时，它才会亮。",
+    "bad_response": "光不受他控制，就会变成危险。",
+    "bad_reason": "忽略了使用者需要控制暴露时机。"
+  },
+  "home_hero_13_4": {
+    "speaker": "格温",
+    "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
+    "good_response": "有些东西留着，不是为了再次使用。",
+    "bad_response": "你缝好了布，却改变了我要保存的记忆。",
+    "bad_reason": "未经同意修复了对方想保留原状的纪念物。"
+  },
+  "home_hero_05_0": {
+    "speaker": "知更鸟",
+    "portrait": "",
+    "good_response": "今天的主旋律是给别人留空间。",
+    "bad_response": "舞台的承诺不能代替真实的人际关系。",
+    "bad_reason": "把歌手的鼓励误写成她无法兑现的私人承诺。"
+  },
+  "home_hero_05_1": {
+    "speaker": "知更鸟",
+    "portrait": "",
+    "good_response": "给人留位置，不等于把人推到灯下。",
+    "bad_response": "被看见未必等于被尊重。",
+    "bad_reason": "把羞怯的听众公开推到聚光灯下。"
+  },
+  "home_hero_05_2": {
+    "speaker": "知更鸟",
+    "portrait": "",
+    "good_response": "花期短，牵挂并不短。",
+    "bad_response": "照片漂亮了，送花的人却不在照片里。",
+    "bad_reason": "用体面的摆设替换了粉丝真实的赠礼。"
+  },
+  "home_hero_05_3": {
+    "speaker": "知更鸟",
+    "portrait": "",
+    "good_response": "他先要安全地唱完，然后才有余地改正。",
+    "bad_response": "纠正的声音比走音更伤人。",
+    "bad_reason": "当众纠错破坏了同伴继续演唱的安全感。"
+  },
+  "home_hero_05_4": {
+    "speaker": "知更鸟",
+    "portrait": "",
+    "good_response": "安慰不必覆盖整座基地。",
+    "bad_response": "守夜的人也需要听见警报。",
+    "bad_reason": "把普遍的好意强加给正在执行任务的人。"
+  },
+  "home_hero_09_0": {
+    "speaker": "萨勒芬妮",
+    "portrait": "",
+    "good_response": "合唱不是让小声的人消失。",
+    "bad_response": "响亮不等于值得被留下。",
+    "bad_reason": "让更大的声音压过了另一群人的表达。"
+  },
+  "home_hero_09_1": {
+    "speaker": "萨勒芬妮",
+    "portrait": "",
+    "good_response": "有人先需要一块不被注视的地方。",
+    "bad_response": "勇气不该是别人临时布置的作业。",
+    "bad_reason": "把公开展示当成唯一的自信来源。"
+  },
+  "home_hero_09_2": {
+    "speaker": "萨勒芬妮",
+    "portrait": "",
+    "good_response": "乱七八糟的痕迹也是他们留下的。",
+    "bad_response": "写得再好，也不是他们共同写下的。",
+    "bad_reason": "用个人完美取代了众人的共同创作。"
+  },
+  "home_hero_09_3": {
+    "speaker": "萨勒芬妮",
+    "portrait": "",
+    "good_response": "它曾帮许多人第一次说出心里话。",
+    "bad_response": "性能不是这一晚唯一的标准。",
+    "bad_reason": "只看器材性能，忽略了庆典的共同记忆。"
+  },
+  "home_hero_09_4": {
+    "speaker": "萨勒芬妮",
+    "portrait": "",
+    "good_response": "不必同意，也能彼此留出空间。",
+    "bad_response": "统一音高不是和解。",
+    "bad_reason": "把消除差异误当成了相互理解。"
+  },
+  "home_hero_11_0": {
+    "speaker": "凯尔希",
+    "portrait": "",
+    "good_response": "至少你学会了怀疑过分漂亮的答案。",
+    "bad_response": "图表不会替值守者休息。",
+    "bad_reason": "只整理伤员指标，遗漏了治疗者的负担。"
+  },
+  "home_hero_11_1": {
+    "speaker": "凯尔希",
+    "portrait": "",
+    "good_response": "它听见了我没写进报告的事。",
+    "bad_response": "别把未观测到的事当作不存在。",
+    "bad_reason": "仅凭表面安全就否定了异常警戒。"
+  },
+  "home_hero_11_2": {
+    "speaker": "凯尔希",
+    "portrait": "",
+    "good_response": "责备只能让下一次错误藏得更深。",
+    "bad_response": "你甚至还不知道哪一步出错。",
+    "bad_reason": "在查清事实前就用追责代替调查。"
+  },
+  "home_hero_11_3": {
+    "speaker": "凯尔希",
+    "portrait": "",
+    "good_response": "责任可以交接，判断不能省略。",
+    "bad_response": "一句休息不能让病人得到照护。",
+    "bad_reason": "只劝休息却没有承接迫切的工作。"
+  },
+  "home_hero_11_4": {
+    "speaker": "凯尔希",
+    "portrait": "",
+    "good_response": "速度不应取消可回退的边界。",
+    "bad_response": "多数意见不能替代风险证据。",
+    "bad_reason": "用集体压力取代验证与安全边界。"
+  },
+  "home_hero_12_0": {
+    "speaker": "铃",
+    "portrait": "",
+    "good_response": "谢谢你没把锅甩给最努力的那个。",
+    "bad_response": "信号不能帮口渴的人买水。",
+    "bad_reason": "只优化通讯质量，没考虑同行者的补给。"
+  },
+  "home_hero_12_1": {
+    "speaker": "铃",
+    "portrait": "",
+    "good_response": "这点杂音也许就是我们要找的线索。",
+    "bad_response": "线索跟噪声一起被删了。",
+    "bad_reason": "覆盖原始记录导致无法恢复关键背景声。"
+  },
+  "home_hero_12_2": {
+    "speaker": "铃",
+    "portrait": "",
+    "good_response": "谢谢，没有谁非得撑到倒下。",
+    "bad_response": "平均不等于每个人现在都扛得住。",
+    "bad_reason": "机械平均忽略了两人的实际疲劳程度。"
+  },
+  "home_hero_12_3": {
+    "speaker": "铃",
+    "portrait": "",
+    "good_response": "问题在我的规则，不在它的努力。",
+    "bad_response": "坏规则要修，不必抹掉它会做的事。",
+    "bad_reason": "把规则问题错归给执行规则的邦布。"
+  },
+  "home_hero_12_4": {
+    "speaker": "铃",
+    "portrait": "",
+    "good_response": "未知路线上，退路比捷径重要。",
+    "bad_response": "没消息，不等于没风险。",
+    "bad_reason": "在缺乏返回记录时拿整队冒险。"
+  }
+}

@@ -51,16 +51,8 @@ const GATE_CHEST_TEXTURE = preload("res://assets/world/endless/gate_chest_h.png"
 const GATE_CHEST_FULL := Rect2(3, 3, 93, 92)
 const GATE_CRATE_TEXTURE = preload("res://assets/world/endless/gate_crate_v.png")
 const GATE_CRATE_FULL := Rect2(1, 1, 78, 83)
-const ENDLESS_FLOOR_TILES: Array[Texture2D] = [
-	preload("res://assets/world/endless/helltaker/labFloor0001.png"),
-	preload("res://assets/world/endless/helltaker/labFloor0002.png"),
-	preload("res://assets/world/endless/helltaker/labFloor0003.png"),
-	preload("res://assets/world/endless/helltaker/labFloor0004.png"),
-	preload("res://assets/world/endless/helltaker/labFloor0005.png"),
-	preload("res://assets/world/endless/helltaker/labFloor0006.png"),
-	preload("res://assets/world/endless/helltaker/labFloor0007.png"),
-	preload("res://assets/world/endless/helltaker/labFloor0008.png"),
-]
+const ENDLESS_FLOOR_ATLAS = preload("res://assets/world/endless/helltaker/labFloorAtlas.png")
+const ENDLESS_FLOOR_TILE_COUNT := 8
 const ENDLESS_BOSS_FLOOR = preload("res://assets/world/endless/helltaker/bossFloor.png")
 const CHAPTER1_STAGE_IDS := ["stage_01"]
 const CHAPTER1_BLEND_SHADER = preload("res://shaders/chapter1_scene_blend.gdshader")
@@ -224,7 +216,8 @@ func advance(dt: float) -> void:
 	shake_trauma = maxf(0.0, shake_trauma - dt * 3.8)
 	position = Vector2(sin(clock * 91.0), cos(clock * 73.0)) * shake_trauma * 5.0
 	if sim != null and sim.performance_budget != null:
-		var visual_quality: float = sim.performance_budget.quality_for_load(sim.enemies.size(), sim.projectiles.size() + sim.enemy_projectiles.size(), effects.size())
+		var visual_effect_load: int = effects.size() + sim.enemy_hazards.size() + sim.skill_effects.size()
+		var visual_quality: float = sim.performance_budget.quality_for_load(sim.enemies.size(), sim.projectiles.size() + sim.enemy_projectiles.size(), visual_effect_load)
 		reduced_effects = minf(sim.performance_budget.quality_scale, visual_quality) < 0.75
 	var live_effects: Array[Dictionary] = []
 	for effect: Dictionary in effects:
@@ -1525,14 +1518,15 @@ func _draw_orbitals() -> void:
 		var hero: Dictionary = sim.heroes[hero_id]
 		if not bool(hero.get("deployed",false)):
 			continue
-		var center := world_to_screen(hero.pos)+Vector2(0,-22)
-		var radius := float(orbital.get("radius",150.0))*0.38
+		var center := world_to_screen(hero.pos) + Vector2(0, 8)
+		var world_radius := float(orbital.get("radius", 230.0))
+		var screen_radii: Vector2 = sim.ability_area_screen_radii(Vector2(hero.pos), world_radius)
 		var count := maxi(1,int(orbital.get("count",1)))
 		var visual := str(orbital.get("visual","spell"))
 		var orbital_fade := smoothstep(0.0, 0.85, maxf(0.0, float(orbital.get("life", 0.0))))
 		for i in count:
 			var angle := clock*2.8+i*TAU/count
-			var point := center+Vector2(cos(angle)*radius,sin(angle)*radius*0.36)
+			var point := center + Vector2(cos(angle) * screen_radii.x, sin(angle) * screen_radii.y)
 			var color := element_color(str(orbital.get("element","")))
 			if visual == "blade":
 				_draw_vertical_orbit_blade(point, color, angle, orbital_fade)
@@ -2253,10 +2247,13 @@ func _draw_endless_stage() -> void:
 	var first_y := floorf(top_left.y / cell) * cell
 	for x in range(int(first_x), int(bottom_right.x + cell), int(cell)):
 		for y in range(int(first_y), int(bottom_right.y + cell), int(cell)):
-			var tile_index := posmod(floori(x / cell) * 3 + floori(y / cell) * 5, ENDLESS_FLOOR_TILES.size())
+			var tile_index := posmod(floori(x / cell) * 3 + floori(y / cell) * 5, ENDLESS_FLOOR_TILE_COUNT)
 			var tile_rect := Rect2(world_to_screen(Vector2(x, y)), Vector2(cell, cell))
-			draw_texture_rect(ENDLESS_FLOOR_TILES[tile_index], tile_rect, false, Color(0.63, 0.48, 0.55, 0.92))
-			draw_rect(tile_rect, Color(0.16, 0.025, 0.06, 0.13))
+			var source_rect := Rect2(tile_index * 104 + 2, 2, 100, 100)
+			draw_texture_rect_region(ENDLESS_FLOOR_ATLAS, tile_rect, source_rect, Color(0.63, 0.48, 0.55, 0.92))
+	# One overlay covers exactly the same contiguous cells without a draw command per tile.
+	var floor_size := Vector2(ceili((int(bottom_right.x + cell) - first_x) / cell) * cell, ceili((int(bottom_right.y + cell) - first_y) / cell) * cell)
+	draw_rect(Rect2(world_to_screen(Vector2(first_x, first_y)), floor_size), Color(0.16, 0.025, 0.06, 0.13))
 	# The central contract dais uses the matching square boss-floor module.
 	var dais_center := world_to_screen(Sim.ENDLESS_ARENA.get_center())
 	for dx in range(-1, 2):
@@ -2554,7 +2551,7 @@ func _draw_enemy(enemy: Dictionary) -> void:
 			draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44, 3)), Color("#24394e"))
 			draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 8), Vector2(44 * shield_ratio, 3)), Color("#66c8ff"))
 			draw_arc(enemy.pos + Vector2(0, -20 + bob), side * 0.48, -2.7, 0.35, 22, Color(0.45, 0.82, 1.0, 0.72), 2.5, true)
-	if sim.endless_mode and int(enemy.get("level", 0)) > 0:
+	if int(enemy.get("level", 0)) > 0:
 		caption(enemy.pos + Vector2(-21, -side - 13), "Lv.%d" % int(enemy.level), Color("#f2c7ad"), 9)
 	if enemy.kind == "buffer":
 		draw_arc(enemy.pos + Vector2(0, -20), 30.0 + sin(clock * 2.0) * 3.0, 0, TAU, 32, Color(0.85, 0.42, 0.95, 0.5), 2.0, true)

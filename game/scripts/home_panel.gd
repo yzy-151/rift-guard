@@ -14,7 +14,8 @@ const TALK_RADIUS := 96.0
 const FACILITY_RADIUS := 86.0
 const FACILITIES := [
 	{"id": "stages", "name": "作战终端", "x": 100.0, "action": "选择关卡"},
-	{"id": "archive", "name": "档案台", "x": 1220.0, "action": "查看图鉴"},
+	{"id": "archive", "name": "档案台", "x": 1120.0, "action": "查看图鉴"},
+	{"id": "achievements", "name": "成就墙", "x": 1540.0, "action": "查看成就"},
 	{"id": "settings", "name": "控制台", "x": 2240.0, "action": "调整设置"},
 ]
 const FLOOR_TILES: Array[Texture2D] = [
@@ -196,7 +197,7 @@ func refresh_residents() -> void:
 			unlocked.append(id)
 	unlocked.sort()
 	# Leave sight lines and F interaction space around the three terminals.
-	var resident_slots := [300.0, 520.0, 740.0, 960.0, 1440.0, 1660.0, 1880.0, 2070.0, 2450.0]
+	var resident_slots := [300.0, 500.0, 700.0, 900.0, 1320.0, 1760.0, 1950.0, 2070.0, 2450.0]
 	for index in unlocked.size():
 		var id := unlocked[index]
 		var x: float = resident_slots[index] if index < resident_slots.size() else 300.0 + float(index) * 210.0

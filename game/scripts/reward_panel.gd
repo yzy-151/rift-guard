@@ -445,6 +445,7 @@ func _icon_for(card: Dictionary) -> Texture2D:
 		"reaction_overdrive":UI_SKIN.reward_icon_explosion,
 		"crystal_health_flat":UI_SKIN.reward_icon_summon_crystal,
 		"crystal_heal":UI_SKIN.reward_icon_healing_heart,
+		"crit_flat":UI_SKIN.reward_icon_sword_slash,
 		"squad_crit_flat":UI_SKIN.reward_icon_sword_slash,
 		"squad_chain":UI_SKIN.reward_icon_lightning,
 		"last_stand":UI_SKIN.reward_icon_shield

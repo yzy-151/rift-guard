@@ -8,6 +8,7 @@ const Story = preload("res://scripts/dialogue_director.gd")
 const Content = preload("res://scripts/content_config.gd")
 const CompendiumState = preload("res://scripts/compendium_state.gd")
 const CompendiumPanel = preload("res://scripts/compendium_panel.gd")
+const AchievementPopup = preload("res://scripts/achievement_popup.gd")
 const SquadPanel = preload("res://scripts/squad_panel.gd")
 const StageSelectPanel = preload("res://scripts/stage_select_panel.gd")
 const ModeSelectPanel = preload("res://scripts/mode_select_panel.gd")
@@ -56,12 +57,15 @@ var attack_sound_timer: float = 0.0
 var test_mode: bool = false
 var compendium = CompendiumState.new()
 var compendium_panel
+var achievement_popup
+var pending_achievement_ids: Array[String] = []
 var squad_panel
 var stage_select_panel
 var mode_select_panel
 var home_panel
 var home_facility_source := ""
 var pending_home_outcome: Dictionary = {}
+var pending_intro_outcome := ""
 var last_home_scene: Dictionary = {}
 var pending_stage_id := ""
 var pending_stage_number := 0
@@ -175,11 +179,14 @@ func _ready() -> void:
 	add_child(compendium_panel)
 	compendium_panel.build(hud, sim.database, compendium)
 	compendium_panel.closed.connect(_home_archive_closed)
+	achievement_popup = AchievementPopup.new()
+	add_child(achievement_popup)
+	achievement_popup.build(hud)
 	squad_panel = SquadPanel.new()
 	add_child(squad_panel)
 	squad_panel.build(hud, sim.database, compendium)
 	squad_panel.confirmed.connect(confirm_next_squad)
-	squad_panel.cancelled.connect(func(): stage_select_panel.open())
+	squad_panel.cancelled.connect(_squad_selection_cancelled)
 	stage_select_panel = StageSelectPanel.new()
 	add_child(stage_select_panel)
 	stage_select_panel.build(hud, sim.database, compendium)
@@ -223,11 +230,21 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--card-rework-test" in OS.get_cmdline_user_args():
+	if "--v77-endless-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v77_endless_test")
+	elif "--card-rework-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
 		set_physics_process(false)
 		call_deferred("run_card_rework_test")
+	elif "--achievement-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_achievement_test")
 	elif "--v74-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
@@ -524,7 +541,7 @@ func _ready() -> void:
 		call_deferred("open_mode_menu")
 
 func _physics_process(dt: float) -> void:
-	if story.active or recruitment_transition_active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (home_panel != null and home_panel.is_open()) or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()):
+	if story.active or recruitment_transition_active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (home_panel != null and home_panel.is_open()) or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()) or (achievement_popup != null and achievement_popup.is_open()):
 		return
 	if sim.endless_mode:
 		sim.set_active_view_rect(battle.visible_world_rect())
@@ -553,6 +570,8 @@ func record_stage_result() -> void:
 			save_campaign_checkpoint("cleared")
 	compendium.record_result(sim.current_stage_id, sim.kills, sim.base_hp, sim.best_streak)
 	compendium.record_build(sim)
+	var unlocked_now: Array[String] = compendium.evaluate_achievements(sim, sim.database)
+	pending_achievement_ids.append_array(unlocked_now)
 	stage_result_recorded = true
 
 func _process(dt: float) -> void:
@@ -564,7 +583,8 @@ func _process(dt: float) -> void:
 			refresh()
 	sound_timer = maxf(0.0, sound_timer - dt)
 	attack_sound_timer = maxf(0.0, attack_sound_timer - dt)
-	if not story.active and not picker.visible and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open() and not (home_panel != null and home_panel.is_open()) and not settings_panel.is_open() and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
+	if not story.active and not picker.visible and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open() and not (home_panel != null and home_panel.is_open()) and not settings_panel.is_open() and not (achievement_popup != null and achievement_popup.is_open()) and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
+		sim.performance_budget.observe_render_frame(dt * 1000.0)
 		battle.advance(dt)
 		var force_reduced_effects := bool(audio_director.values.reduced_effects)
 		if force_reduced_effects:
@@ -654,6 +674,7 @@ func return_to_main_menu() -> void:
 		home_panel.close()
 	pending_home_outcome.clear()
 	pending_recruitment.clear()
+	pending_intro_outcome = ""
 	recruitment_transition_active = false
 	story.reset()
 	dialogue.root.hide()
@@ -783,6 +804,7 @@ func open_debug_reward() -> void:
 func restart(skip_death_animation: bool = false) -> void:
 	if not test_mode and not skip_death_animation and dialogue != null:
 		await dialogue.play_death_transition()
+	pending_intro_outcome = ""
 	story.reset()
 	story_resume = ""
 	hud.get_child(0).show()
@@ -1086,6 +1108,8 @@ func run_ui_test() -> void:
 func begin_dialogue(key: String, resume_action: String = "") -> bool:
 	if not story.begin(key):
 		return false
+	if resume_action == "start":
+		pending_intro_outcome = ""
 	story_resume = resume_action
 	sound.stop()
 	if resume_action != "recruit":
@@ -1105,6 +1129,9 @@ func open_home_facility(facility_id: String) -> void:
 		"archive":
 			compendium.observe(sim)
 			compendium_panel.open()
+		"achievements":
+			compendium.observe(sim)
+			compendium_panel.open("achievements")
 		"settings":
 			open_settings()
 		_:
@@ -1119,7 +1146,7 @@ func _stage_select_cancelled() -> void:
 		mode_select_panel.open()
 
 func _home_archive_closed() -> void:
-	if home_facility_source == "archive":
+	if home_facility_source in ["archive", "achievements"]:
 		home_facility_source = ""
 		home_panel.open()
 
@@ -1138,6 +1165,8 @@ func begin_home_interaction(character_id: String) -> void:
 		home_panel.busy = false
 
 func apply_dialogue_choice(choice: Dictionary) -> void:
+	if choice.has("intro_outcome"):
+		pending_intro_outcome = str(choice.intro_outcome)
 	if choice.has("home_success"):
 		pending_home_outcome = {"success": bool(choice.home_success), "reason": str(choice.get("home_reason", ""))}
 	if choice.has("recruit_success") and not pending_recruitment.is_empty():
@@ -1172,12 +1201,14 @@ func end_dialogue() -> void:
 	hud.signature = ""
 	var action: String = story_resume
 	story_resume = ""
+	if action != "home" and not pending_achievement_ids.is_empty():
+		await _show_pending_achievements()
 	if action == "home":
 		hud.get_child(0).hide()
 		if bool(pending_home_outcome.get("success", false)):
 			await dialogue.play_success_animation()
 		else:
-			await dialogue.play_death_transition(str(pending_home_outcome.get("reason", "这次的判断没有照顾到对方真正的需要。")))
+			await dialogue.play_death_transition() # The NPC already explained the failed choice in dialogue.
 		await dialogue.play_stage_transition()
 		pending_home_outcome.clear()
 		home_panel.open()
@@ -1186,6 +1217,11 @@ func end_dialogue() -> void:
 	if action == "recruit":
 		await _resolve_recruitment()
 	elif action == "start":
+		if pending_intro_outcome == "success":
+			await dialogue.play_success_animation()
+		elif pending_intro_outcome == "roxy_departure":
+			await dialogue.play_comic_panel("res://assets/story_comics/roxy_departure.png", "你刚把‘魔族’喊出口，就意识到自己说错了话。\n你追到门边，只听见渐远的脚步声。")
+		pending_intro_outcome = ""
 		await dialogue.play_stage_transition()
 		sim.start()
 		save_campaign_checkpoint("battle")
@@ -1341,11 +1377,15 @@ func choose_stage(stage_id: String) -> void:
 	sim.run_state.mode_id = selected_mode
 	pending_stage_id = stage_id
 	pending_stage_number = index + 1
-	if selected_mode == "endless_survival":
-		var solo: Array[String] = ["traveler"]
-		confirm_next_squad(solo)
+	squad_panel.open(stage_id, sim.run_state.squad)
+
+func _squad_selection_cancelled() -> void:
+	if pending_stage_id == "stage_endless":
+		pending_stage_id = ""
+		pending_stage_number = 0
+		mode_select_panel.open()
 	else:
-		squad_panel.open(stage_id, sim.run_state.squad)
+		stage_select_panel.open()
 
 func confirm_next_squad(squad: Array[String]) -> void:
 	if pending_stage_id.is_empty():
@@ -1685,6 +1725,10 @@ func run_card_rework_test() -> void:
 	var suite = preload("res://scripts/qa_card_rework.gd").new()
 	await suite.run(self)
 
+func run_achievement_test() -> void:
+	var suite = preload("res://scripts/qa_achievements.gd").new()
+	await suite.run(self)
+
 func run_v74_test() -> void:
 	var suite = preload("res://scripts/qa_v74.gd").new()
 	await suite.run(self)
@@ -1719,6 +1763,10 @@ func run_v65_test() -> void:
 
 func run_v63_test() -> void:
 	var suite = preload("res://scripts/qa_v63.gd").new()
+	await suite.run(self)
+
+func run_v77_endless_test() -> void:
+	var suite = preload("res://scripts/qa_v77_endless.gd").new()
 	await suite.run(self)
 
 func run_v61_visual_test() -> void:
@@ -1860,8 +1908,18 @@ func run_v15_test() -> void:
 func _play_loss_transition() -> void:
 	if dialogue != null and not test_mode and sim.state == "lost":
 		await dialogue.play_death_transition()
+		if not pending_achievement_ids.is_empty():
+			await _show_pending_achievements()
 		if sim.state == "lost":
 			return_to_main_menu()
+
+func _show_pending_achievements() -> void:
+	if pending_achievement_ids.is_empty() or achievement_popup == null:
+		return
+	var ids: Array[String] = pending_achievement_ids.duplicate()
+	pending_achievement_ids.clear()
+	achievement_popup.open(ids)
+	await achievement_popup.dismissed
 
 
 
@@ -1871,8 +1929,8 @@ func _begin_recruitment(hero_id: int, point: Vector2) -> void:
 	if hero_id < 0 or hero_id >= sim.heroes.size() or not sim.deployment_slot_unlocked(hero_id):
 		return
 	var hero: Dictionary = sim.heroes[hero_id]
-	# Recruit portraits share the dialogue art slot; keep it empty until matching Helltaker-style art arrives.
-	var portrait_path := "res://assets/helltaker/recruit_portraits/%s.png" % str(hero.character_id)
+	# Reuse the expression portrait catalog; dialogue only shows the NPC.
+	var portrait_path: String = dialogue.portrait_catalog.resolve_line({"speaker": str(hero.name), "text": "该我上场了。"})
 	if not ResourceLoader.exists(portrait_path):
 		portrait_path = ""
 	var scene_key := "deploy_%s_%d" % [sim.current_stage_id, hero_id]
