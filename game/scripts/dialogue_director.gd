@@ -61,6 +61,7 @@ func choose(choice_index: int) -> bool:
 	var response := {
 		"portrait": str(option.get("response_portrait", source.get("portrait", ""))),
 		"partner": "",
+		"expression": str(option.get("response_expression", "")),
 		"speaker": str(option.get("response_speaker", source.get("speaker", ""))),
 		"text": str(option.get("response", "嗯，我听见了。")),
 		"highlight": "main"

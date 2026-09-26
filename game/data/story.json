@@ -1,123 +1,420 @@
 {
   "mode1_opening": [
     {
-      "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
       "speaker": "洛琪希",
-      "text": "嗯？这是什么地方？"
+      "text": "嗯？这是什么地方？",
+      "expression": "不悦",
+      "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
+      "highlight": "main"
     },
     {
-      "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
       "speaker": "洛琪希",
-      "text": "唔，又传送到奇怪的地方了吗？"
+      "text": "唔，又传送到奇怪的地方了吗？",
+      "expression": "不悦",
+      "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
+      "highlight": "main"
     },
     {
-      "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
       "speaker": "洛琪希",
       "text": "前辈，你知道格雷拉特家怎么走吗？我来应聘家庭教师。",
+      "expression": "不悦",
+      "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
+      "highlight": "main",
       "choices": [
         {
           "text": "什么……雷……拉拉？管不了这么多了，跟我走吧！",
+          "response": "诶？？格雷拉特家是这个方向吧？",
           "response_speaker": "洛琪希",
-          "response_portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
-          "response": "诶？？格雷拉特家是这个方向吧？算了，我先跟你走。",
+          "response_expression": "害羞",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_害羞_重绘统一服装.png",
           "intro_outcome": "success",
           "result": "lucky_start",
-          "effect": {
-            "type": "luck",
-            "value": 0.08
-          },
-          "story_flag": "defense_route",
-          "campaign_node": "c1_elite"
+          "unlock_character": "hero_04",
+          "follow_up": [
+            {
+              "speaker": "洛琪希",
+              "text": "你连名字都念不出来，倒是没有假装认识。我先跟你走，问路费算在第一节课里。",
+              "expression": "傲娇",
+              "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_傲娇_重绘统一服装.png",
+              "highlight": "main"
+            }
+          ]
         },
         {
           "text": "洛琪希小姐，我们被魔族包围了！",
+          "response": "我姑且也是魔族哦。",
           "response_speaker": "洛琪希",
+          "response_expression": "不悦",
           "response_portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
-          "response": "我姑且也是魔族哦。连这都不知道，带路就免了。",
           "intro_outcome": "roxy_departure",
-          "result": "roxy_departure"
+          "result": "roxy_departure",
+          "follow_up": [
+            {
+              "speaker": "洛琪希",
+              "text": "你看，包围圈现在少了一位家庭教师。下次求救之前，先把人认对。",
+              "expression": "不悦",
+              "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
+              "highlight": "main"
+            }
+          ]
         }
       ]
     }
   ],
   "mode1_won": [
     {
-      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
-      "speaker": "芙宁娜",
-      "text": "别急着谢幕。后台还有门；另一边的荒原也在招手。若要邀请我单独加演，至少先把怪物清场。",
+      "speaker": "希露菲",
+      "text": "风把求救声吹过来了。我以为有人受伤，原来是你在给水晶做人工呼吸。",
+      "expression": "微笑",
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "希露菲",
+      "text": "治疗魔法我会。让石头承认你是家属，这个不在我的学习范围里。",
+      "expression": "微笑",
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "希露菲",
+      "text": "你想让我留下来做什么？",
+      "expression": "微笑",
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "highlight": "main",
       "choices": [
         {
-          "text": "继续追进去，我想知道谁把我们卷进来了。",
-          "result": "continue_campaign",
-          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-          "response_speaker": "丰川祥子",
-          "response": "那就继续。我会记下每道门的规律，你负责别在半路消失。",
-          "story_flag": "campaign_continued",
-          "campaign_node": "c1_story"
+          "text": "先给我一杯水，我的英雄发言卡嗓子了。",
+          "response": "好，先喝水。敢说自己需要照顾，比硬撑着当英雄省心。",
+          "response_speaker": "希露菲",
+          "response_expression": "微笑",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_02",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "希露菲",
+              "text": "我会留下来帮忙。不过，下次渴了直接说，不用向水晶宣誓。",
+              "expression": "微笑",
+              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+              "highlight": "main"
+            }
+          ],
+          "unlock_character": "hero_02"
         },
         {
-          "text": "带着现在的队伍去荒原加演，怎么样？",
-          "result": "inherit_endless",
-          "effect": {
-            "type": "inherit_endless"
-          },
-          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
-          "response_speaker": "芙宁娜",
-          "response": "既然要加演，就让荒原见识一下真正的返场。",
-          "story_flag": "endless_transfer"
+          "text": "请永远站在我身后，我会保护你。",
+          "response": "我能治疗，也能战斗。你把我安排到身后，是打算一直替我决定吗？",
+          "response_speaker": "希露菲",
+          "response_expression": "不安",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood",
+          "follow_up": [
+            {
+              "speaker": "希露菲",
+              "text": "你还有一句话的机会。别背标准答案，说你自己想说的。",
+              "expression": "不安",
+              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+              "highlight": "main",
+              "choices": [
+                {
+                  "text": "我刚才在装懂，其实我想请你一起想办法。",
+                  "response": "这次倒像真话。那就先同行，别急着给我们的关系起名字。",
+                  "response_speaker": "希露菲",
+                  "response_expression": "微笑",
+                  "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+                  "campaign_outcome": "success",
+                  "result": "reconciled",
+                  "relationship": {
+                    "character_id": "hero_02",
+                    "value": 2
+                  },
+                  "follow_up": [
+                    {
+                      "speaker": "希露菲",
+                      "text": "我会留下来帮忙。不过，下次渴了直接说，不用向水晶宣誓。",
+                      "expression": "微笑",
+                      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+                      "highlight": "main"
+                    }
+                  ],
+                  "unlock_character": "hero_02"
+                },
+                {
+                  "text": "我需要先学会好好说话，再来邀请你。",
+                  "response": "好。我会守住回去的路，等你打完这一场再谈。",
+                  "response_speaker": "希露菲",
+                  "response_expression": "微笑",
+                  "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+                  "campaign_outcome": "failure",
+                  "result": "declined"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
   ],
   "mode1_stage2_opening": [
     {
-      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-      "speaker": "丰川祥子",
-      "text": "门从里面锁上了。很周到，怕我们临阵退票。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
       "speaker": "阿米娅",
-      "text": "左右两路同时来。我有个冒昧的建议：先活着，再评价门锁的品味。"
+      "text": "你好，请问你见过一位戴兜帽、很擅长装睡的人吗？",
+      "expression": "不安",
+      "portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_不安_统一眼睛画风.png",
+      "highlight": "main"
     },
     {
-      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-      "speaker": "丰川祥子",
-      "text": "好。从这一拍开始，怪物负责跑错节奏，我们负责让它们停下来。"
+      "speaker": "阿米娅",
+      "text": "这里的水晶一碰就要求我签字。我怀疑它也缺一个博士。",
+      "expression": "不安",
+      "portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_不安_统一眼睛画风.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "阿米娅",
+      "text": "如果我请你负责今天的行动，你的第一条命令是什么？",
+      "expression": "不安",
+      "portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_不安_统一眼睛画风.png",
+      "highlight": "main",
+      "choices": [
+        {
+          "text": "先下班，怪物的考勤我来打。",
+          "response": "请不要真的去给怪物打卡……不过，你至少记得大家需要休息。",
+          "response_speaker": "阿米娅",
+          "response_expression": "微笑",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_06",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "阿米娅",
+              "text": "我加入你的行动小队。作战计划一起写，熬夜申请我会驳回。",
+              "expression": "微笑",
+              "portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png",
+              "highlight": "main"
+            }
+          ],
+          "unlock_character": "hero_06"
+        },
+        {
+          "text": "为了大家，我愿意永远不休息。",
+          "response": "这句话听起来很负责，但每个说完它的人，最后都会把工作留给我。",
+          "response_speaker": "阿米娅",
+          "response_expression": "羞恼",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_羞恼_小胸版.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood",
+          "follow_up": [
+            {
+              "speaker": "阿米娅",
+              "text": "你还有一句话的机会。别背标准答案，说你自己想说的。",
+              "expression": "羞恼",
+              "portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_羞恼_小胸版.png",
+              "highlight": "main",
+              "choices": [
+                {
+                  "text": "我刚才在装懂，其实我想请你一起想办法。",
+                  "response": "这次倒像真话。那就先同行，别急着给我们的关系起名字。",
+                  "response_speaker": "阿米娅",
+                  "response_expression": "微笑",
+                  "response_portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png",
+                  "campaign_outcome": "success",
+                  "result": "reconciled",
+                  "relationship": {
+                    "character_id": "hero_06",
+                    "value": 2
+                  },
+                  "follow_up": [
+                    {
+                      "speaker": "阿米娅",
+                      "text": "我加入你的行动小队。作战计划一起写，熬夜申请我会驳回。",
+                      "expression": "微笑",
+                      "portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png",
+                      "highlight": "main"
+                    }
+                  ],
+                  "unlock_character": "hero_06"
+                },
+                {
+                  "text": "我需要先学会好好说话，再来邀请你。",
+                  "response": "好。我会守住回去的路，等你打完这一场再谈。",
+                  "response_speaker": "阿米娅",
+                  "response_expression": "不安",
+                  "response_portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_不安_统一眼睛画风.png",
+                  "campaign_outcome": "failure",
+                  "result": "declined"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "mode1_stage3_opening": [
     {
-      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
-      "speaker": "芙宁娜",
-      "text": "这母巢的走廊连后台都绕晕了。你站这么近，是想替我挡怪，还是想抢我的台词？"
+      "speaker": "丰川祥子",
+      "text": "这里是谁的排练室？怪物一直抢拍，天花板还在漏风。",
+      "expression": "冷淡",
+      "portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_冷淡_统一画风重绘.png",
+      "highlight": "main"
     },
     {
-      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
-      "speaker": "洛琪希",
-      "text": "结晶的位置每过一关就变一次。我教学生算过概率，可没教过概率本人作弊。"
+      "speaker": "丰川祥子",
+      "text": "我刚写完一张预算表，裂隙就把金额后面加了三个零。",
+      "expression": "冷淡",
+      "portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_冷淡_统一画风重绘.png",
+      "highlight": "main"
     },
     {
-      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
-      "speaker": "芙宁娜",
-      "text": "那就给它一场没排练过的演出。诸位，记得给自己留谢幕的路。"
+      "speaker": "丰川祥子",
+      "text": "你凭什么觉得我会加入你的队伍？",
+      "expression": "冷淡",
+      "portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_冷淡_统一画风重绘.png",
+      "highlight": "main",
+      "choices": [
+        {
+          "text": "因为我们穷得很稳定，预算绝不会突然消失。",
+          "response": "至少你的账是明的。把那张纸给我，我来把稳定的贫穷改成有计划的贫穷。",
+          "response_speaker": "丰川祥子",
+          "response_expression": "得意",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_得意_统一画风重绘.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_07",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "丰川祥子",
+              "text": "我负责安排，你负责照做。别误会，这是合作，不是给你当私人秘书。",
+              "expression": "得意",
+              "portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_得意_统一画风重绘.png",
+              "highlight": "main"
+            }
+          ],
+          "unlock_character": "hero_07"
+        },
+        {
+          "text": "我保证你从今以后不会遇到任何困难。",
+          "response": "连下一波从哪儿来都不知道，你拿什么保证以后？",
+          "response_speaker": "丰川祥子",
+          "response_expression": "生气",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_生气_统一画风重绘.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood",
+          "follow_up": [
+            {
+              "speaker": "丰川祥子",
+              "text": "你还有一句话的机会。别背标准答案，说你自己想说的。",
+              "expression": "生气",
+              "portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_生气_统一画风重绘.png",
+              "highlight": "main",
+              "choices": [
+                {
+                  "text": "我刚才在装懂，其实我想请你一起想办法。",
+                  "response": "这次倒像真话。那就先同行，别急着给我们的关系起名字。",
+                  "response_speaker": "丰川祥子",
+                  "response_expression": "得意",
+                  "response_portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_得意_统一画风重绘.png",
+                  "campaign_outcome": "success",
+                  "result": "reconciled",
+                  "relationship": {
+                    "character_id": "hero_07",
+                    "value": 2
+                  },
+                  "follow_up": [
+                    {
+                      "speaker": "丰川祥子",
+                      "text": "我负责安排，你负责照做。别误会，这是合作，不是给你当私人秘书。",
+                      "expression": "得意",
+                      "portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_得意_统一画风重绘.png",
+                      "highlight": "main"
+                    }
+                  ],
+                  "unlock_character": "hero_07"
+                },
+                {
+                  "text": "我需要先学会好好说话，再来邀请你。",
+                  "response": "好。我会守住回去的路，等你打完这一场再谈。",
+                  "response_speaker": "丰川祥子",
+                  "response_expression": "冷淡",
+                  "response_portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_冷淡_统一画风重绘.png",
+                  "campaign_outcome": "failure",
+                  "result": "declined"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "mode1_final_won": [
     {
-      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
-      "speaker": "洛琪希",
-      "text": "母巢停止活动，裂隙依然存在，但它不再能强迫我们按原来的路线前进。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-      "speaker": "丰川祥子",
-      "text": "至少证明了一件事：这里的规则能够被打破。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
       "speaker": "芙宁娜",
-      "text": "而且我们都还在。这个结局虽然仓促，倒也值得一声掌声。"
+      "text": "门开了。不是舞台机关，是真的开了。",
+      "expression": "惊讶",
+      "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "芙宁娜",
+      "text": "如果现在谢幕，应该不会又弹出一个隐藏首领吧？",
+      "expression": "惊讶",
+      "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "芙宁娜",
+      "text": "那么，最后一句台词交给你。",
+      "expression": "惊讶",
+      "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png",
+      "highlight": "main",
+      "choices": [
+        {
+          "text": "各位辛苦了，谁把回家的路忘了？",
+          "response": "你把这句说得像笑话，我却差点想哭。别急，我们一个一个送回去。",
+          "response_speaker": "芙宁娜",
+          "response_expression": "害羞",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_03",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "芙宁娜",
+              "text": "走吧。下次再见，不必非得有世界等着我们救。",
+              "expression": "害羞",
+              "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
+              "highlight": "main"
+            }
+          ]
+        },
+        {
+          "text": "从今以后，你们都必须听我的。",
+          "response": "幕都落下了，你还想给大家戴上新的枷锁？这句台词，不通过。",
+          "response_speaker": "芙宁娜",
+          "response_expression": "委屈",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_委屈_原画风重绘.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood"
+        }
+      ]
     }
   ],
   "mode1_lost": [
@@ -248,239 +545,720 @@
   ],
   "mode1_stage4_opening": [
     {
-      "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
-      "speaker": "哥伦比亚",
-      "text": "这里每条路都问我想留下谁。真奇怪，我明明没买过单程票。"
+      "speaker": "风堇",
+      "text": "别跑！我正在给这阵风量体温。",
+      "expression": "警惕",
+      "portrait": "res://assets/helltaker/dialogue_portraits/风堇_警惕_统一画风重绘.png",
+      "highlight": "main"
     },
     {
-      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
-      "speaker": "希露菲",
-      "text": "风已经把回程标好了。要是你迷路，我就把你的名字喊成导航语音。"
+      "speaker": "风堇",
+      "text": "它忽冷忽热，还把我的诊断书吹成了纸飞机。",
+      "expression": "警惕",
+      "portrait": "res://assets/helltaker/dialogue_portraits/风堇_警惕_统一画风重绘.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "风堇",
+      "text": "如果我说你需要治疗，你愿意先做什么？",
+      "expression": "警惕",
+      "portrait": "res://assets/helltaker/dialogue_portraits/风堇_警惕_统一画风重绘.png",
+      "highlight": "main",
+      "choices": [
+        {
+          "text": "先给椅子治疗，它刚承受了我的全部压力。",
+          "response": "椅子不会忍着不说。好吧，你至少承认自己有压力了，坐下让我看看。",
+          "response_speaker": "风堇",
+          "response_expression": "自信",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_10",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "风堇",
+              "text": "我跟着你。今天的医嘱只有一条：需要帮忙就说，别把嘴也交给风保管。",
+              "expression": "自信",
+              "portrait": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+              "highlight": "main"
+            }
+          ],
+          "unlock_character": "hero_10"
+        },
+        {
+          "text": "我没事，疼也没关系，先救所有别人。",
+          "response": "不说哪里疼，我怎么帮你？把自己划出病人名单，不叫体贴。",
+          "response_speaker": "风堇",
+          "response_expression": "委屈",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/风堇_委屈_统一画风重绘.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood",
+          "follow_up": [
+            {
+              "speaker": "风堇",
+              "text": "你还有一句话的机会。别背标准答案，说你自己想说的。",
+              "expression": "委屈",
+              "portrait": "res://assets/helltaker/dialogue_portraits/风堇_委屈_统一画风重绘.png",
+              "highlight": "main",
+              "choices": [
+                {
+                  "text": "我刚才在装懂，其实我想请你一起想办法。",
+                  "response": "这次倒像真话。那就先同行，别急着给我们的关系起名字。",
+                  "response_speaker": "风堇",
+                  "response_expression": "自信",
+                  "response_portrait": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+                  "campaign_outcome": "success",
+                  "result": "reconciled",
+                  "relationship": {
+                    "character_id": "hero_10",
+                    "value": 2
+                  },
+                  "follow_up": [
+                    {
+                      "speaker": "风堇",
+                      "text": "我跟着你。今天的医嘱只有一条：需要帮忙就说，别把嘴也交给风保管。",
+                      "expression": "自信",
+                      "portrait": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+                      "highlight": "main"
+                    }
+                  ],
+                  "unlock_character": "hero_10"
+                },
+                {
+                  "text": "我需要先学会好好说话，再来邀请你。",
+                  "response": "好。我会守住回去的路，等你打完这一场再谈。",
+                  "response_speaker": "风堇",
+                  "response_expression": "警惕",
+                  "response_portrait": "res://assets/helltaker/dialogue_portraits/风堇_警惕_统一画风重绘.png",
+                  "campaign_outcome": "failure",
+                  "result": "declined"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "mode1_stage5_opening": [
     {
-      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
       "speaker": "格温",
-      "text": "地砖快被烤成补丁了。我带了针，谁带灭火器？"
+      "text": "前面的熔炉把我的针烤热了。",
+      "expression": "惊讶",
+      "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+      "highlight": "main"
     },
     {
-      "portrait": "res://assets/characters/sequences/hero_04/portrait.png",
-      "speaker": "洛琪希",
-      "text": "没有灭火器。先别踩发亮的裂缝；我不想给你的靴子上补习班。"
+      "speaker": "格温",
+      "text": "如果你想说趁热打铁，请先记住我是裁缝。",
+      "expression": "惊讶",
+      "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "格温",
+      "text": "我们怎么穿过那片火？",
+      "expression": "惊讶",
+      "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+      "highlight": "main",
+      "choices": [
+        {
+          "text": "给火留条退路，别逼它往我们这边跑。",
+          "response": "对，先关侧面的风口。风不替它撑腰，火就没那么大脾气。",
+          "response_speaker": "格温",
+          "response_expression": "害羞",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/格温_害羞_原画风重绘.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_13",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "格温",
+              "text": "我牵好安全绳了。你往前走，我会看着线，不会让你掉队。",
+              "expression": "害羞",
+              "portrait": "res://assets/helltaker/dialogue_portraits/格温_害羞_原画风重绘.png",
+              "highlight": "main"
+            }
+          ]
+        },
+        {
+          "text": "直接冲过去，气势上不能输。",
+          "response": "气势不隔热。你的披风上次补的地方还没凉呢。",
+          "response_speaker": "格温",
+          "response_expression": "羞恼",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood"
+        }
+      ]
     }
   ],
   "mode1_stage6_opening": [
     {
-      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-      "speaker": "丰川祥子",
-      "text": "钟楼把昨天的报时又放了一遍。连时间都在申请返场费。"
+      "speaker": "芙宁娜",
+      "text": "这座钟楼一直重复开场白。",
+      "expression": "思考",
+      "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
+      "highlight": "main"
     },
     {
-      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
       "speaker": "芙宁娜",
-      "text": "返场是我的工作！它再抢拍，我就给它一张差评票。"
+      "text": "我已经登场三次了，掌声一次都没有。",
+      "expression": "思考",
+      "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "芙宁娜",
+      "text": "你想怎么打破这场循环？",
+      "expression": "思考",
+      "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
+      "highlight": "main",
+      "choices": [
+        {
+          "text": "先谢幕，让它找不到开场的人。",
+          "response": "妙啊！我宣布本场演出结束。趁它还在找彩蛋，我们去拆钟摆。",
+          "response_speaker": "芙宁娜",
+          "response_expression": "害羞",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_03",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "芙宁娜",
+              "text": "这次我们一起谢幕。要是我又开始念开场白，记得用蛋糕打断我。",
+              "expression": "害羞",
+              "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
+              "highlight": "main"
+            }
+          ]
+        },
+        {
+          "text": "再演一次，这次一定完美。",
+          "response": "你知道上一次的你也是这么说的吗？我连吐槽都快背熟了。",
+          "response_speaker": "芙宁娜",
+          "response_expression": "委屈",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_委屈_原画风重绘.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood"
+        }
+      ]
     }
   ],
   "mode1_stage7_opening": [
     {
-      "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
-      "speaker": "艾米莉亚",
-      "text": "我的手指冻得像能弹钢琴了。问题是我根本不会弹。大家先检查有没有冻伤。"
+      "speaker": "希露菲",
+      "text": "前面的路结冰了。风说它只是路过，不肯负责。",
+      "expression": "微笑",
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "highlight": "main"
     },
     {
-      "portrait": "res://assets/characters/sequences/hero_10/portrait.png",
-      "speaker": "风堇",
-      "text": "我能治冻伤，治不了冲动。你要冲之前，先让我知道去哪儿接你。"
+      "speaker": "希露菲",
+      "text": "我看见了两串脚印，一串往前，一串原地犹豫。",
+      "expression": "微笑",
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "希露菲",
+      "text": "现在该怎么走？",
+      "expression": "微笑",
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "highlight": "main",
+      "choices": [
+        {
+          "text": "先承认我们都怕摔，再互相借一只手。",
+          "response": "这样就好。我也会怕，但两个人能及时拉住彼此。",
+          "response_speaker": "希露菲",
+          "response_expression": "微笑",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_02",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "希露菲",
+              "text": "我在你旁边。慢一点也没关系，能一起到才算走对。",
+              "expression": "微笑",
+              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+              "highlight": "main"
+            }
+          ]
+        },
+        {
+          "text": "你放心，我绝不会失足。",
+          "response": "你刚刚已经滑了两次。可以逞强，但别让我连扶你都要偷偷来。",
+          "response_speaker": "希露菲",
+          "response_expression": "不安",
+          "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood"
+        }
+      ]
     }
   ],
   "mode1_stage8_opening": [
     {
-      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
-      "speaker": "阿米娅",
-      "text": "天黑得像有人把亮度调到零。水晶还亮着，说明不是我们欠了电费。"
+      "speaker": "哥伦比亚",
+      "text": "外面的声音很吵。它们说，只要打赢最后一场，就能得到所有答案。",
+      "expression": "微笑",
+      "portrait": "res://assets/helltaker/dialogue_portraits/少女_微笑_自信动作重绘.png",
+      "highlight": "main"
     },
     {
-      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-      "speaker": "丰川祥子",
-      "text": "最后一关。请别对系统表演英勇牺牲，它买不起我们的演出。"
-    },
-    {
-      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
-      "speaker": "芙宁娜",
-      "text": "谢幕以后一起回家吃点心。谁缺席，我就把他的那份吃掉。"
+      "speaker": "哥伦比亚",
+      "text": "你相信吗？",
+      "expression": "微笑",
+      "portrait": "res://assets/helltaker/dialogue_portraits/少女_微笑_自信动作重绘.png",
+      "highlight": "main",
+      "choices": [
+        {
+          "text": "不信，先问它包不包回程车费。",
+          "response": "至少你还记得回去。没有回程的答案，只是换个地方把人困住。",
+          "response_speaker": "哥伦比亚",
+          "response_expression": "害羞",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/少女_害羞_委屈动作重绘.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_01",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "哥伦比亚",
+              "text": "我会唱到门打开。你记着大家的名字，别让谁落在最后一句里。",
+              "expression": "害羞",
+              "portrait": "res://assets/helltaker/dialogue_portraits/少女_害羞_委屈动作重绘.png",
+              "highlight": "main"
+            }
+          ]
+        },
+        {
+          "text": "相信，我会为答案付出任何代价。",
+          "response": "任何代价？把朋友也算进去的时候，你还认得那份答案吗？",
+          "response_speaker": "哥伦比亚",
+          "response_expression": "微笑",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/少女_微笑_自信动作重绘.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood"
+        }
+      ]
     }
   ],
   "mode1_stage2_won": [
     {
-      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
-      "speaker": "阿米娅",
-      "text": "门又开了。要追进去，还是去荒原练习如何跟门讲道理？",
+      "speaker": "芙宁娜",
+      "text": "咳，刚才的战斗，我从头到尾都在进行艺术指导。",
+      "expression": "傲娇",
+      "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "芙宁娜",
+      "text": "躲在箱子后面是为了寻找观众视角，不是害怕。",
+      "expression": "傲娇",
+      "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "芙宁娜",
+      "text": "既然你诚心邀请，就说说你准备给我什么待遇？",
+      "expression": "傲娇",
+      "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
+      "highlight": "main",
       "choices": [
         {
-          "text": "继续往里追，我要找那个给我们写剧本的人。",
-          "result": "continue_campaign",
-          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
-          "response_speaker": "阿米娅",
-          "response": "好。下一道门我陪你进，别把回来的路忘了。",
-          "story_flag": "campaign_continued",
-          "campaign_node": "c1_story"
+          "text": "椅子和蛋糕，谢幕的时候不用假笑。",
+          "response": "……蛋糕要有两层。椅子放近一点，我怕听不清你夸我。",
+          "response_speaker": "芙宁娜",
+          "response_expression": "害羞",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_03",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "芙宁娜",
+              "text": "我跟你走。先说好，没观众的时候，我也可以只当芙宁娜。",
+              "expression": "害羞",
+              "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
+              "highlight": "main"
+            }
+          ],
+          "unlock_character": "hero_03"
         },
         {
-          "text": "去无尽荒原吧，换个地方打破它的剧本。",
-          "result": "inherit_endless",
-          "effect": {
-            "type": "inherit_endless"
-          },
-          "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
-          "response_speaker": "阿米娅",
-          "response": "荒原？那就换个舞台，别忘了把队伍带齐。",
-          "story_flag": "endless_transfer"
+          "text": "全世界都需要你，你必须永远站在台上。",
+          "response": "又是全世界？我连今天的下午茶都还没救回来。",
+          "response_speaker": "芙宁娜",
+          "response_expression": "委屈",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_委屈_原画风重绘.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood",
+          "follow_up": [
+            {
+              "speaker": "芙宁娜",
+              "text": "你还有一句话的机会。别背标准答案，说你自己想说的。",
+              "expression": "委屈",
+              "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_委屈_原画风重绘.png",
+              "highlight": "main",
+              "choices": [
+                {
+                  "text": "我刚才在装懂，其实我想请你一起想办法。",
+                  "response": "这次倒像真话。那就先同行，别急着给我们的关系起名字。",
+                  "response_speaker": "芙宁娜",
+                  "response_expression": "害羞",
+                  "response_portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
+                  "campaign_outcome": "success",
+                  "result": "reconciled",
+                  "relationship": {
+                    "character_id": "hero_03",
+                    "value": 2
+                  },
+                  "follow_up": [
+                    {
+                      "speaker": "芙宁娜",
+                      "text": "我跟你走。先说好，没观众的时候，我也可以只当芙宁娜。",
+                      "expression": "害羞",
+                      "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
+                      "highlight": "main"
+                    }
+                  ],
+                  "unlock_character": "hero_03"
+                },
+                {
+                  "text": "我需要先学会好好说话，再来邀请你。",
+                  "response": "好。我会守住回去的路，等你打完这一场再谈。",
+                  "response_speaker": "芙宁娜",
+                  "response_expression": "傲娇",
+                  "response_portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
+                  "campaign_outcome": "failure",
+                  "result": "declined"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
   ],
   "mode1_stage3_won": [
     {
-      "portrait": "res://assets/characters/sequences/hero_03/portrait.png",
-      "speaker": "芙宁娜",
-      "text": "母巢终于谢幕。下一幕在门里，荒原也在招手；你想先去哪儿？",
+      "speaker": "格温",
+      "text": "先别动，你的披风开线了。",
+      "expression": "惊讶",
+      "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "格温",
+      "text": "我本来只想缝衣服，结果这里连空间都开线。店铺业务扩张得太突然了。",
+      "expression": "惊讶",
+      "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "格温",
+      "text": "你希望我先替你缝好什么？",
+      "expression": "惊讶",
+      "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+      "highlight": "main",
       "choices": [
         {
-          "text": "继续往里追，我要找那个给我们写剧本的人。",
-          "result": "continue_campaign",
-          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
-          "response_speaker": "芙宁娜",
-          "response": "好。下一道门我陪你进，别把回来的路忘了。",
-          "story_flag": "campaign_continued",
-          "campaign_node": "c1_story"
+          "text": "先给我的坏运气缝个口袋，省得它到处掉。",
+          "response": "口袋可以缝，坏运气不包退。不过我可以陪你找找有没有好东西掉出来。",
+          "response_speaker": "格温",
+          "response_expression": "害羞",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/格温_害羞_原画风重绘.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_13",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "格温",
+              "text": "我加入。衣服坏了找我，心情坏了也可以找我，后者不收布料钱。",
+              "expression": "害羞",
+              "portrait": "res://assets/helltaker/dialogue_portraits/格温_害羞_原画风重绘.png",
+              "highlight": "main"
+            }
+          ],
+          "unlock_character": "hero_13"
         },
         {
-          "text": "去无尽荒原吧，换个地方打破它的剧本。",
-          "result": "inherit_endless",
-          "effect": {
-            "type": "inherit_endless"
-          },
-          "response_portrait": "res://assets/characters/sequences/hero_03/portrait.png",
-          "response_speaker": "芙宁娜",
-          "response": "荒原？那就换个舞台，别忘了把队伍带齐。",
-          "story_flag": "endless_transfer"
+          "text": "把所有裂隙都缝死，永远不许再打开。",
+          "response": "那被困在另一边的人怎么回来？不能因为线头难看，就把所有出口缝上。",
+          "response_speaker": "格温",
+          "response_expression": "羞恼",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood",
+          "follow_up": [
+            {
+              "speaker": "格温",
+              "text": "你还有一句话的机会。别背标准答案，说你自己想说的。",
+              "expression": "羞恼",
+              "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
+              "highlight": "main",
+              "choices": [
+                {
+                  "text": "我刚才在装懂，其实我想请你一起想办法。",
+                  "response": "这次倒像真话。那就先同行，别急着给我们的关系起名字。",
+                  "response_speaker": "格温",
+                  "response_expression": "害羞",
+                  "response_portrait": "res://assets/helltaker/dialogue_portraits/格温_害羞_原画风重绘.png",
+                  "campaign_outcome": "success",
+                  "result": "reconciled",
+                  "relationship": {
+                    "character_id": "hero_13",
+                    "value": 2
+                  },
+                  "follow_up": [
+                    {
+                      "speaker": "格温",
+                      "text": "我加入。衣服坏了找我，心情坏了也可以找我，后者不收布料钱。",
+                      "expression": "害羞",
+                      "portrait": "res://assets/helltaker/dialogue_portraits/格温_害羞_原画风重绘.png",
+                      "highlight": "main"
+                    }
+                  ],
+                  "unlock_character": "hero_13"
+                },
+                {
+                  "text": "我需要先学会好好说话，再来邀请你。",
+                  "response": "好。我会守住回去的路，等你打完这一场再谈。",
+                  "response_speaker": "格温",
+                  "response_expression": "惊讶",
+                  "response_portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+                  "campaign_outcome": "failure",
+                  "result": "declined"
+                }
+              ]
+            }
+          ]
         }
       ]
     }
   ],
   "mode1_stage4_won": [
     {
-      "portrait": "res://assets/characters/sequences/hero_01/portrait.png",
-      "speaker": "哥伦比亚",
-      "text": "这次真的有第三条路。下一扇门和荒原，你想先听谁唱？",
+      "speaker": "风堇",
+      "text": "风停了，你终于能听见我说话了。",
+      "expression": "自信",
+      "portrait": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "风堇",
+      "text": "刚才我说的是慢慢走，不是让你给风打节拍。",
+      "expression": "自信",
+      "portrait": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "风堇",
+      "text": "下一段路，你准备怎么安排？",
+      "expression": "自信",
+      "portrait": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+      "highlight": "main",
       "choices": [
         {
-          "text": "继续往里追，我要找那个给我们写剧本的人。",
-          "result": "continue_campaign",
-          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
-          "response_speaker": "哥伦比亚",
-          "response": "好。下一道门我陪你进，别把回来的路忘了。",
-          "story_flag": "campaign_continued",
-          "campaign_node": "c1_story"
+          "text": "先宣布休息，连风也别加班。",
+          "response": "同意。我去检查大家的伤口，你负责把坐下的人数清楚。",
+          "response_speaker": "风堇",
+          "response_expression": "自信",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_10",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "风堇",
+              "text": "休息好了再出发。我会把下一段风声听清楚。",
+              "expression": "自信",
+              "portrait": "res://assets/helltaker/dialogue_portraits/风堇_自信.png",
+              "highlight": "main"
+            }
+          ]
         },
         {
-          "text": "去无尽荒原吧，换个地方打破它的剧本。",
-          "result": "inherit_endless",
-          "effect": {
-            "type": "inherit_endless"
-          },
-          "response_portrait": "res://assets/characters/sequences/hero_01/portrait.png",
-          "response_speaker": "哥伦比亚",
-          "response": "荒原？那就换个舞台，别忘了把队伍带齐。",
-          "story_flag": "endless_transfer"
+          "text": "趁大家还能站起来，马上继续冲。",
+          "response": "还能站起来不是体检合格。你这个标准，路牌都能通过。",
+          "response_speaker": "风堇",
+          "response_expression": "警惕",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/风堇_警惕_统一画风重绘.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood"
         }
       ]
     }
   ],
   "mode1_stage5_won": [
     {
-      "portrait": "res://assets/characters/sequences/hero_13/portrait.png",
-      "speaker": "格温",
-      "text": "熔炉停了，我的针还没用完。下一扇门还是荒原，哪边更需要补？",
+      "speaker": "洛琪希",
+      "text": "熔炉熄了。你刚才问能不能顺便烤面包，我当作没听见。",
+      "expression": "傲娇",
+      "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_傲娇_重绘统一服装.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "洛琪希",
+      "text": "你觉得这节课最该记住什么？",
+      "expression": "傲娇",
+      "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_傲娇_重绘统一服装.png",
+      "highlight": "main",
       "choices": [
         {
-          "text": "继续往里追，我要找那个给我们写剧本的人。",
-          "result": "continue_campaign",
-          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
-          "response_speaker": "格温",
-          "response": "好。下一道门我陪你进，别把回来的路忘了。",
-          "story_flag": "campaign_continued",
-          "campaign_node": "c1_story"
+          "text": "不要向火焰申请加班费。",
+          "response": "勉强算你听懂了。不给火添燃料，就是最便宜的灭火魔法。",
+          "response_speaker": "洛琪希",
+          "response_expression": "害羞",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_害羞_重绘统一服装.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_04",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "洛琪希",
+              "text": "下节课讲时间魔法。你别先高兴，我不会教你把作业交给昨天的自己。",
+              "expression": "害羞",
+              "portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_害羞_重绘统一服装.png",
+              "highlight": "main"
+            }
+          ]
         },
         {
-          "text": "去无尽荒原吧，换个地方打破它的剧本。",
-          "result": "inherit_endless",
-          "effect": {
-            "type": "inherit_endless"
-          },
-          "response_portrait": "res://assets/characters/sequences/hero_13/portrait.png",
-          "response_speaker": "格温",
-          "response": "荒原？那就换个舞台，别忘了把队伍带齐。",
-          "story_flag": "endless_transfer"
+          "text": "只要魔力够多，就不用考虑后果。",
+          "response": "那叫把下一场灾难提前预付了。法师也需要脑子。",
+          "response_speaker": "洛琪希",
+          "response_expression": "不悦",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/洛琪希_不悦_重绘统一服装.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood"
         }
       ]
     }
   ],
   "mode1_stage6_won": [
     {
-      "portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-      "speaker": "丰川祥子",
-      "text": "钟声终于肯闭嘴了。门与荒原都在等下一拍，你来起头。",
+      "speaker": "阿米娅",
+      "text": "时间恢复正常了。我的待办清单没有恢复，它变厚了。",
+      "expression": "微笑",
+      "portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "阿米娅",
+      "text": "这摞重复的报表怎么办？",
+      "expression": "微笑",
+      "portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png",
+      "highlight": "main",
       "choices": [
         {
-          "text": "继续往里追，我要找那个给我们写剧本的人。",
-          "result": "continue_campaign",
-          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-          "response_speaker": "丰川祥子",
-          "response": "好。下一道门我陪你进，别把回来的路忘了。",
-          "story_flag": "campaign_continued",
-          "campaign_node": "c1_story"
+          "text": "留一份，其余折成纸飞机放假。",
+          "response": "只保留有效记录，没错。纸飞机记得回收，别又变成我的清洁任务。",
+          "response_speaker": "阿米娅",
+          "response_expression": "微笑",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_06",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "阿米娅",
+              "text": "我把正确的那份带上。剩下的路，我们只走一次。",
+              "expression": "微笑",
+              "portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png",
+              "highlight": "main"
+            }
+          ]
         },
         {
-          "text": "去无尽荒原吧，换个地方打破它的剧本。",
-          "result": "inherit_endless",
-          "effect": {
-            "type": "inherit_endless"
-          },
-          "response_portrait": "res://assets/characters/sequences/hero_07/portrait.png",
-          "response_speaker": "丰川祥子",
-          "response": "荒原？那就换个舞台，别忘了把队伍带齐。",
-          "story_flag": "endless_transfer"
+          "text": "全都重写，显得我们特别认真。",
+          "response": "认真不是把同一件事做八遍。请不要向我证明你很忙。",
+          "response_speaker": "阿米娅",
+          "response_expression": "羞恼",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/阿米娅_JK_羞恼_小胸版.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood"
         }
       ]
     }
   ],
   "mode1_stage7_won": [
     {
-      "portrait": "res://assets/characters/sequences/hero_08/portrait.png",
-      "speaker": "艾米莉亚",
-      "text": "冰路融开了。门已经开着，荒原也不远；你想先去哪儿？",
+      "speaker": "丰川祥子",
+      "text": "冰面过去了。刚才的尖叫，就当是你为下一场练的高音。",
+      "expression": "冷淡",
+      "portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_冷淡_统一画风重绘.png",
+      "highlight": "main"
+    },
+    {
+      "speaker": "丰川祥子",
+      "text": "最终战之前，你还有什么意见？",
+      "expression": "冷淡",
+      "portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_冷淡_统一画风重绘.png",
+      "highlight": "main",
       "choices": [
         {
-          "text": "继续往里追，我要找那个给我们写剧本的人。",
-          "result": "continue_campaign",
-          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
-          "response_speaker": "艾米莉亚",
-          "response": "好。下一道门我陪你进，别把回来的路忘了。",
-          "story_flag": "campaign_continued",
-          "campaign_node": "c1_story"
+          "text": "给计划留一行空白，写谁需要帮忙。",
+          "response": "这行留得好。谁出问题就一起补上，不准拿来签自我感动的名字。",
+          "response_speaker": "丰川祥子",
+          "response_expression": "得意",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_得意_统一画风重绘.png",
+          "campaign_outcome": "success",
+          "result": "accepted",
+          "relationship": {
+            "character_id": "hero_07",
+            "value": 2
+          },
+          "follow_up": [
+            {
+              "speaker": "丰川祥子",
+              "text": "名单我来写，你检查物资。这次，不许把自己漏掉。",
+              "expression": "得意",
+              "portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_得意_统一画风重绘.png",
+              "highlight": "main"
+            }
+          ]
         },
         {
-          "text": "去无尽荒原吧，换个地方打破它的剧本。",
-          "result": "inherit_endless",
-          "effect": {
-            "type": "inherit_endless"
-          },
-          "response_portrait": "res://assets/characters/sequences/hero_08/portrait.png",
-          "response_speaker": "艾米莉亚",
-          "response": "荒原？那就换个舞台，别忘了把队伍带齐。",
-          "story_flag": "endless_transfer"
+          "text": "把所有失误都归我，大家不用管。",
+          "response": "一个人背完责任，其他人就不必改了吗？别把合作写成独角戏。",
+          "response_speaker": "丰川祥子",
+          "response_expression": "生气",
+          "response_portrait": "res://assets/helltaker/dialogue_portraits/丰川祥子_生气_统一画风重绘.png",
+          "campaign_outcome": "failure",
+          "result": "misunderstood"
         }
       ]
     }

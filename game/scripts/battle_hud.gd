@@ -1,6 +1,7 @@
 extends CanvasLayer
 const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
 signal reward_action(index: int, hero_id: int)
+signal reroll_action
 signal primary_action
 signal pause_action
 signal restart_action
@@ -101,6 +102,9 @@ var buff_panel: Panel
 var buff_labels: Array[Label] = []
 var buff_icons: Array[TextureRect] = []
 var buff_details: Array[Dictionary] = []
+var deployment_notice: Label
+var deployment_queue: Array[String] = []
+var deployment_notice_active := false
 var info_popover: Panel
 var info_title: Label
 var info_body: Label
@@ -285,6 +289,11 @@ func _ready() -> void:
 		buff_details.append({})
 		buff_labels.append(label(buff_panel, Vector2(29 + column * 61, 7 + row * 29), Vector2(30, 20), "", 8, WHITE))
 	buff_panel.hide()
+	deployment_notice = label(root, UI_LAYOUT.battle_deployment_notice_rect.position, UI_LAYOUT.battle_deployment_notice_rect.size, "", 16, Color("#a7ffdd"))
+	deployment_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	deployment_notice.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	deployment_notice.z_index = 30
+	deployment_notice.hide()
 	info_popover = panel(root, Rect2(884, 430, 340, 142), Color(0.018, 0.022, 0.065, 0.68), Color("#d94f66"))
 	info_popover.mouse_filter = Control.MOUSE_FILTER_STOP
 	info_title = label(info_popover, Vector2(18, 14), Vector2(304, 28), "", 16, Color("#ffb3bd"))
@@ -726,6 +735,7 @@ func _ready() -> void:
 	reward_panel = preload("res://scripts/reward_panel.gd").new()
 	root.add_child(reward_panel)
 	reward_panel.build(self)
+	reward_panel.reroll_requested.connect(func(): reroll_action.emit())
 	reward_panel.chosen.connect(func(index: int, hero_id: int): reward_action.emit(index, hero_id))
 
 func label(parent: Node, at: Vector2, dimensions: Vector2, text: String, size: int, color: Color) -> Label:
@@ -902,6 +912,11 @@ func icon(parent: Node, path: String, rect: Rect2, color: Color = Color.WHITE) -
 	return item
 
 func refresh(sim, selected_id: int) -> void:
+	if sim.state == "running" and not deployment_notice_active and not deployment_queue.is_empty():
+		_show_deployment_notice(deployment_queue.pop_front())
+	if sim.state in ["ready", "lost", "won"]:
+		deployment_queue.clear()
+		deployment_notice.hide()
 	last_sim = sim
 	last_selected_id = selected_id
 	var next_signature: String = str([sim.state, sim.base_hp, sim.base_max_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming, ultimate_aiming, sim.formation_mode])
@@ -931,7 +946,8 @@ func refresh(sim, selected_id: int) -> void:
 			wave_label.text = "威胁等级   %02d" % maxi(1, floori(sim.elapsed / 45.0) + 1)
 		else:
 			progression_label.text = "水晶 Lv.%d  •  EXP %s%s  •  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, seconds / 60, seconds % 60]
-			wave_label.text = "波次   %02d / %02d" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size()]
+			wave_label.text = "%02d/%02d · %s" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size(),sim.stage_runtime.pacing_text().left(2)]
+			wave_label.tooltip_text = sim.stage_runtime.pacing_text()
 		map_name_label.text = str(sim.database.stages.get(sim.current_stage_id, {}).get("name", sim.current_stage_id))
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
@@ -975,7 +991,7 @@ func refresh(sim, selected_id: int) -> void:
 		hero_energy_bars[i].value = maxf(0.0, float(hero.get("energy", 0.0)))
 		hero_portraits[i].texture = portrait_texture(hero, sim)
 		hero_name_labels[i].text = "%d  %s" % [i + 1, hero.name]
-		hero_element_labels[i].text = "Lv.%d" % [1, 3, 6][i] if hero_lock_labels[i].visible else sim.element_name(str(hero.get("element", "none")))
+		hero_element_labels[i].text = "Lv.%d" % sim.deployment_required_level(i) if hero_lock_labels[i].visible else sim.element_name(str(hero.get("element", "none")))
 		var hero_color: Color = element_color(str(hero.get("element", ""))) if hero.get("character_id", "") == "traveler" and hero.get("element", "") != "" else Color(hero.color)
 		hero_name_labels[i].add_theme_color_override("font_color", hero_color)
 		hero_element_labels[i].add_theme_color_override("font_color", hero_color)
@@ -988,10 +1004,11 @@ func refresh(sim, selected_id: int) -> void:
 		hero_details[i].text = "ATK %.0f  ·  %.1f/s" % [hero.damage, hero.rate]
 		hero_statuses[i].text = "HP %d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
 	var was_visible: bool = overlay.visible
-	overlay.visible = sim.state in ["ready", "paused", "won", "lost"]
+	overlay.visible = sim.state in ["ready", "paused", "won"]
 	for control in background_buttons:
 		control.focus_mode = Control.FOCUS_NONE if overlay.visible or sim.state == "reward" else Control.FOCUS_ALL
 	if sim.state == "reward":
+		dismiss_info_popover()
 		reward_panel.display(sim)
 	else:
 		reward_panel.hide()
@@ -1109,6 +1126,9 @@ func refresh_formations(sim, selected_id: int) -> void:
 		item.modulate = Color("#ffd3d7") if active else Color("#a38f98")
 
 func announce_route_warning(event: Dictionary) -> void:
+	if bool(event.get("boss", false)):
+		_show_boss_alert("⚠  BOSS APPROACHING\n首领即将登场", 0.82, 1.6)
+		return
 	if boss_warning != null and not muted:
 		boss_warning.stop()
 		boss_warning.pitch_scale = 0.82 if bool(event.get("boss", false)) else 1.18
@@ -1236,7 +1256,7 @@ func refresh_supports(sim) -> void:
 			"support_heal": "潮汐急救周期治疗队伍并修复基地。",
 			"support_finale": "终幕齐射周期集中攻击所有敌人。",
 		}.get(key, "持续提供场外支援。")
-		support_details[row] = {"title": "%s · ×%d" % [info[0], int(support.stacks)], "body": "%s 威力 %d · 间隔 %.1fs · 下次 %.1fs" % [effect_text, int(support.get("power", 0)), float(support.get("interval", 0.0)), maxf(0.0, float(support.timer))]}
+		support_details[row] = {"title": "%s · ×%d" % [info[0], int(support.stacks)], "body": "%s 威力 %d · 间隔 %.1fs · 下次 %.1fs" % [effect_text, int(float(support.get("power", 0))*(1.0 if key=="support_heal" else sim.SUPPORT_DAMAGE_SCALE)), float(support.get("interval", 0.0)), maxf(0.0, float(support.timer))]}
 		row += 1
 
 func resonance_summary(sim) -> String:
@@ -1519,7 +1539,7 @@ func _show_ability_info(ultimate: bool) -> void:
 	if last_sim == null or last_selected_id < 0 or last_selected_id >= last_sim.heroes.size():
 		return
 	var hero: Dictionary = last_sim.heroes[last_selected_id]
-	var data: Dictionary = hero.get("ultimate" if ultimate else "active_skill", {})
+	var data: Dictionary = last_sim.hero_ability(last_selected_id,ultimate)
 	var title_text := ("E · " if ultimate else "Q · ") + str(data.get("name", "终极技能" if ultimate else "元素战技"))
 	var kind := str(data.get("kind", ""))
 	var effect: String = {
@@ -1532,13 +1552,15 @@ func _show_ability_info(ultimate: bool) -> void:
 		"chimera":"奇美拉范围碾压并持续压制", "fate_symphony":"焰色交响领域强化全队暴击", "encore":"安可复制支援并提升弹道数量",
 		"trinity_field":"三重共鸣领域复制攻击与反应", "meltdown":"Mon3tr 熔毁造成巨额范围爆发", "network_overdrive":"邦布网络超频提升射速并齐射"
 	}.get(kind, "释放角色专属能力")
-	if kind in ["healing_surge", "wind_cut", "thread_shelter", "renewing_breeze", "needle_barrage"]:
+	if kind in ["heal_gust", "healing_surge", "wind_cut", "thread_shelter", "renewing_breeze", "needle_barrage", "arcane_lance", "chimera", "salon_summon", "hydro_fanfare"]:
 		effect = str(data.get("description", effect))
 	var body_text := "%s · 威力 %d · 范围 %d · 冷却 %.1fs" % [effect, int(data.get("power", 0)), int(data.get("radius", 0)), float(data.get("cooldown", 0.0))]
 	if kind == "columbia_tide_ring":
 		body_text = "%s · 范围 %d · 冷却 %.1fs" % [str(data.get("description", effect)), int(data.get("radius", 0)), float(data.get("cooldown", 0.0))]
 	elif kind == "columbia_tidal_benediction":
 		body_text = "%s · 冷却 %.1fs" % [str(data.get("description", effect)), float(data.get("cooldown", 0.0))]
+	if kind.begins_with("traveler_"):
+		body_text = "%s\n单段威力：%d + %.0f%%攻击力（当前 %.0f）\n范围 %d · 冷却 %.1fs" % [str(data.description),int(data.power),float(data.attack_ratio)*100,(float(data.power)+float(hero.damage)*float(data.attack_ratio))*(1.0+last_sim.skill_power_bonus),int(data.radius),float(data.cooldown)]
 	if ultimate:
 		body_text += " · 能量 %d" % int(data.get("energy_cost", 0))
 	_show_info(title_text, body_text)
@@ -1560,3 +1582,19 @@ func _input(event: InputEvent) -> void:
 		var hovered := get_viewport().gui_get_hovered_control()
 		if hovered == null or (hovered != info_popover and not info_popover.is_ancestor_of(hovered)):
 			info_popover.hide()
+
+func announce_deployment(character_name: String) -> void:
+	deployment_queue.append(character_name)
+
+func _show_deployment_notice(character_name: String) -> void:
+	deployment_notice_active = true
+	deployment_notice.text = "增援就绪 · %s\n点击或拖动角色卡，将其部署到战场" % character_name
+	deployment_notice.modulate.a = 0.0
+	deployment_notice.show()
+	var notice_tween := create_tween()
+	notice_tween.tween_property(deployment_notice, "modulate:a", 1.0, 0.18)
+	notice_tween.tween_interval(3.5)
+	notice_tween.tween_property(deployment_notice, "modulate:a", 0.0, 0.35)
+	await notice_tween.finished
+	deployment_notice.hide()
+	deployment_notice_active = false

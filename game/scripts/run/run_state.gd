@@ -16,6 +16,7 @@ var mythic_count := 0
 var luck: float = 0.0
 var equipped_relics: Dictionary = {}
 var tag_counts: Dictionary = {}
+var card_synergies: Dictionary = {}
 var relationships: Dictionary = {}
 var story_flags: Dictionary = {}
 var current_node := "c1_combat_1"
@@ -56,6 +57,7 @@ func reset_for_stage(next_stage_id: String) -> void:
 	traveler_element = "none"
 	traveler_secondary_element = "none"
 	buff_levels.clear()
+	card_synergies.clear()
 	tag_counts.clear()
 	crystal_level = 1
 	crystal_xp = 0
@@ -115,7 +117,7 @@ func export_build() -> Dictionary:
 	return {
 		"stage_id": stage_id, "mode_id": mode_id, "squad": squad.duplicate(),
 		"buff_levels": buff_levels.duplicate(true), "relics": equipped_relics.keys(),
-		"tag_counts": tag_counts.duplicate(true), "relationships": relationships.duplicate(true),
+		"tag_counts": tag_counts.duplicate(true), "card_synergies": card_synergies.duplicate(true), "relationships": relationships.duplicate(true),
 		"story_flags": story_flags.duplicate(true), "node": current_node,
 		"rift_shards": rift_shards, "campaign_perks": campaign_perks.duplicate(true),
 		"resolved_nodes": resolved_nodes.duplicate(true), "active_resonances": active_resonances.duplicate(),

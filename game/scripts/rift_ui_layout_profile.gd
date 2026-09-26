@@ -114,3 +114,16 @@ class_name RiftUILayoutProfile
 @export var stage_backdrop_rect := Rect2(0, 0, 1280, 720)
 @export var stage_playfield_rect := Rect2(16, 88, 1248, 490)
 @export var stage_foreground_rect := Rect2(16, 548, 1248, 30)
+
+@export_group("Battle Feedback")
+@export var battle_reward_target_portrait_rect := Rect2(15, 3, 260, 218)
+@export var battle_reward_target_name_rect := Rect2(12, 226, 266, 28)
+@export var battle_reward_target_stats_rect := Rect2(8, 258, 274, 65)
+
+@export var battle_deployment_notice_rect: Rect2 = Rect2(430, 92, 420, 54)
+
+@export_group("Reward Refresh and Synergies")
+@export var battle_reward_reroll_rect := Rect2(1000, 130, 180, 34)
+@export var battle_reward_synergy_button_rect := Rect2(1000, 86, 180, 34)
+@export var battle_reward_synergy_preview_rect := Rect2(140, 632, 1000, 34)
+@export var battle_reward_synergy_overlay_rect := Rect2(100, 40, 1080, 640)

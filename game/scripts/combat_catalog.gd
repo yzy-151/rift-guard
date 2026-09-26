@@ -8,7 +8,7 @@ const HEROES = [
 const ENEMIES = {
 	"grunt": {"name": "木棍丘丘人", "hp": 120.0, "armor": 4.0, "speed": 52.0, "damage": 31.0, "rate": 1.0, "leak": 8, "color": "#bd8e94", "size": 48.0},
 	"runner": {"name": "哥布林", "hp": 72.0, "armor": 0.0, "speed": 92.0, "damage": 22.0, "rate": 1.35, "leak": 6, "color": "#e6c77b", "size": 39.0},
-	"armored": {"name": "丘丘大斧王", "hp": 230.0, "armor": 92.0, "speed": 31.0, "damage": 56.0, "rate": 0.82, "leak": 15, "color": "#b19fc9", "size": 62.0},
+	"armored": {"name": "铁桶僵尸", "hp": 230.0, "armor": 92.0, "speed": 31.0, "damage": 56.0, "rate": 0.82, "leak": 15, "color": "#b19fc9", "size": 62.0},
 	"flyer": {"name": "浮空猎手", "hp": 88.0, "armor": 8.0, "speed": 78.0, "damage": 22.0, "rate": 1.15, "leak": 9, "color": "#80d7d7", "size": 43.0, "flying": true},
 	"ranged": {"name": "丘丘弓箭手", "hp": 128.0, "armor": 12.0, "speed": 43.0, "damage": 21.0, "rate": 0.72, "leak": 12, "color": "#e58b73", "size": 48.0, "attack_range": 235.0, "projectile_style": "arrow"},
 	"buffer": {"name": "丘丘萨满", "hp": 155.0, "armor": 18.0, "speed": 36.0, "damage": 18.0, "rate": 0.68, "leak": 14, "color": "#67d8b0", "size": 54.0, "attack_range": 300.0, "aura_radius": 155.0, "projectile_style": "anemo_orb"},

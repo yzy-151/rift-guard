@@ -3,8 +3,31 @@ extends SceneTree
 const MainScene = preload("res://main.tscn")
 const SIM_FPS := 24.0
 const CAPTURE_EVERY := 2
-const OUTPUT_ROOT := "res://../outputs/kindred-boss-pressure-showcase/"
+const OUTPUT_ROOT := "res://../outputs/kindred-boss-showcase-v2/"
 var capture_index := 0
+const BossAudio = preload("res://scripts/boss_audio_profile.gd")
+var audio_events: Array[Dictionary] = []
+var skill_ranges: Array[Dictionary] = []
+var record_time := 0.0
+
+func _accept_events(game: Node) -> void:
+	var batch: Array[Dictionary] = game.sim.drain_events()
+	for event: Dictionary in batch:
+		var profile := BossAudio.describe(event)
+		if not profile.is_empty():
+			profile["time"] = record_time
+			audio_events.append(profile)
+	game.battle.accept_events(batch)
+
+func _save_manifest() -> void:
+	var file := FileAccess.open(OUTPUT_ROOT + "audio-events.json", FileAccess.WRITE)
+	file.store_string(JSON.stringify(audio_events))
+	file.close()
+	file = FileAccess.open(OUTPUT_ROOT + "manifest.json", FileAccess.WRITE)
+	file.store_string(JSON.stringify(skill_ranges))
+	file.close()
+
+
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -15,13 +38,14 @@ func _assert_true(value: bool, message: String) -> void:
 		quit(1)
 
 func _capture(game: Node) -> bool:
+	game.hud.boss_skill_warning_panel.hide()
 	game.battle.queue_redraw()
 	RenderingServer.force_draw()
 	await process_frame
 	var image: Image = game.get_viewport().get_texture().get_image()
 	if image == null:
 		return false
-	image.resize(960, 540, Image.INTERPOLATE_LANCZOS)
+	image.resize(1024, 576, Image.INTERPOLATE_LANCZOS)
 	var directory := ProjectSettings.globalize_path(OUTPUT_ROOT + "frames")
 	DirAccess.make_dir_recursive_absolute(directory)
 	var result := image.save_png(directory.path_join("frame-%04d.png" % capture_index)) == OK
@@ -29,6 +53,7 @@ func _capture(game: Node) -> bool:
 	return result
 
 func _record_skill(game: Node, boss: Dictionary, move: String, tail: float) -> bool:
+	var start_index := capture_index
 	game.battle.effects.clear()
 	game.sim.enemy_projectiles.clear()
 	game.sim.enemy_hazards.clear()
@@ -39,6 +64,7 @@ func _record_skill(game: Node, boss: Dictionary, move: String, tail: float) -> b
 	game.hud.announce_boss_skill_warning(str(boss.special_move_name), float(boss.special_warning_total), int(boss.boss_phase))
 	var frames := ceili((float(boss.special_warning_total) + tail) * SIM_FPS)
 	for frame in frames:
+		record_time = start_index / 12.0 + frame / SIM_FPS
 		var dt := 1.0 / SIM_FPS
 		if bool(boss.special_pending):
 			boss.special_warning = float(boss.special_warning) - dt
@@ -48,14 +74,22 @@ func _record_skill(game: Node, boss: Dictionary, move: String, tail: float) -> b
 		else:
 			game.sim._enemy_projectile_tick(dt)
 			game.sim._enemy_hazard_tick(dt)
-		game.battle.accept_events(game.sim.drain_events())
+		_accept_events(game)
 		game.battle.advance(dt)
 		game.refresh()
 		if frame % CAPTURE_EVERY == 0 and not await _capture(game):
 			return false
+	skill_ranges.append({"id":move,"start":start_index,"end":capture_index})
 	return true
 
 func _record_respite(game: Node, boss: Dictionary) -> bool:
+	var start_index := capture_index
+	record_time = start_index / 12.0
+	# Isolate the passive for review; reinforcement gameplay is covered separately.
+	boss.galio_summoned = true
+	boss.pos = Vector2(810, 355)
+	game.sim.enemy_projectiles.clear()
+	game.sim.enemy_hazards.clear()
 	game.battle.effects.clear()
 	game.sim.drain_events()
 	game.sim.heroes[0].pos = Vector2(boss.pos) + Vector2(-80.0, 0.0)
@@ -72,13 +106,14 @@ func _record_respite(game: Node, boss: Dictionary) -> bool:
 	_assert_true(is_equal_approx(float(boss.hp), 1.0), "boss was not clamped to 1 HP")
 	game.sim.damage_hero(0, 999999.0)
 	_assert_true(is_equal_approx(float(game.sim.heroes[0].hp), 1.0), "hero inside respite was not protected")
-	game.battle.accept_events(game.sim.drain_events())
+	_accept_events(game)
 	game.hud.announce_boss_skill_warning("羊灵生息", 5.0, 3)
-	var frames := ceili(5.35 * SIM_FPS)
+	var frames := ceili(6.15 * SIM_FPS)
 	for frame in frames:
+		record_time = start_index / 12.0 + frame / SIM_FPS
 		var dt := 1.0 / SIM_FPS
 		game.sim._tick_kindred_respite(boss, dt)
-		game.battle.accept_events(game.sim.drain_events())
+		_accept_events(game)
 		game.battle.advance(dt)
 		game.refresh()
 		if frame % CAPTURE_EVERY == 0 and not await _capture(game):
@@ -86,6 +121,7 @@ func _record_respite(game: Node, boss: Dictionary) -> bool:
 	_assert_true(not bool(boss.kindred_respite_active), "passive did not finish")
 	_assert_true(float(boss.hp) >= float(boss.max_hp) * 0.49, "boss did not heal 50 percent")
 	_assert_true(float(game.sim.heroes[0].hp) >= 500.0, "protected hero did not heal 50 percent")
+	skill_ranges.append({"id":"kindred_respite","start":start_index,"end":capture_index})
 	return true
 
 func _run() -> void:
@@ -122,12 +158,13 @@ func _run() -> void:
 	boss.attack_timer = 999.0
 	boss.special_timer = 999.0
 	game.sim.drain_events()
-	for spec in [["kindred_dance", 1.55], ["kindred_wolf", 2.35], ["kindred_dread", 1.80], ["kindred_hunt", 2.40]]:
+	for spec in [["kindred_dance", 1.55], ["kindred_wolf", 6.1], ["kindred_dread", 1.80], ["kindred_hunt", 2.40]]:
 		if not await _record_skill(game, boss, str(spec[0]), float(spec[1])):
 			quit(1)
 			return
 	if not await _record_respite(game, boss):
 		quit(1)
 		return
+	_save_manifest()
 	print("KINDRED FOCUS PASS frames=%d" % capture_index)
 	quit(0)

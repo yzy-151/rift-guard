@@ -23,6 +23,9 @@ func tick(dt: float) -> Array[Dictionary]:
 	for event: Dictionary in arena_events:
 		event.life = maxf(0.0, float(event.get("life", 0.0)) - maxf(dt, 0.0))
 	arena_events = arena_events.filter(func(event: Dictionary) -> bool: return float(event.get("life", 0.0)) > 0.0)
+	var resting := false
+	for window in definition.get("breather_windows", []):
+		resting = resting or (elapsed >= float(window[0]) and elapsed < float(window[1]))
 	var waves: Array = definition.get("waves", [])
 	for i in waves.size():
 		var wave: Dictionary = waves[i]
@@ -36,7 +39,7 @@ func tick(dt: float) -> Array[Dictionary]:
 			var warning_count := ceili(float(count) / maxf(1.0, float(warning_routes.size())))
 			for route_value: Variant in warning_routes:
 				events.append({"kind": "route_warning", "route_id": str(route_value), "enemy_id": str(wave.get("enemy_id", "grunt")), "count": warning_count, "flying": str(wave.get("enemy_id", "")) == "flyer", "lead_time": maxf(0.25, wave_at - elapsed)})
-		while wave_cursors[i] < count and elapsed >= float(wave.get("at", 0.0)) + wave_cursors[i] * interval:
+		while not resting and wave_cursors[i] < count and elapsed >= float(wave.get("at", 0.0)) + wave_cursors[i] * interval:
 			var spawn_route := str(route_ids[wave_cursors[i] % route_ids.size()]) if not route_ids.is_empty() else str(wave.get("route_id", "main"))
 			events.append({
 				"kind": "spawn",
@@ -74,3 +77,13 @@ func apply_arena_event(event_definition: Dictionary, source: Vector2 = Vector2(6
 
 func remaining_seconds() -> float:
 	return maxf(0.0, float(definition.get("duration_seconds", 300.0)) - elapsed)
+
+func pacing_text() -> String:
+	for window in definition.get("breather_windows",[]):
+		if elapsed>=float(window[0]) and elapsed<float(window[1]):
+			return "整备窗口 %.0fs" % ceil(float(window[1])-elapsed)
+	var boss_at=float(definition.get("boss_at_seconds",300))
+	if elapsed>=boss_at:return "首领决战"
+	if elapsed<boss_at*0.22:return "前哨接敌"
+	if elapsed>=boss_at*0.70:return "高压攻势"
+	return "协同攻势"

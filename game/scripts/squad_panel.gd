@@ -239,6 +239,8 @@ func _input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 
 func _ability_description(data:Dictionary,is_ultimate:bool)->String:
+	if str(data.get("kind", "")) in ["needle_barrage", "arcane_lance", "chimera", "salon_summon", "hydro_fanfare"]:
+		return str(data.get("description", "")) + " · 冷却 %.0fs" % float(data.get("cooldown", 0.0))
 	var kind:=str(data.get("kind",""))
 	var effect: String = str({
 		"blade_wave":"斩出贯穿剑气并击退沿途敌人",

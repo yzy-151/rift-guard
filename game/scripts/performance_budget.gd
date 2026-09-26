@@ -37,7 +37,7 @@ func quality_for_load(enemy_count: int, projectile_count: int, effect_count: int
 	return 0.58 if pressure >= 0.92 else (0.78 if pressure >= 0.72 else 1.0)
 
 func can_spawn_cosmetic(kind: String, current: int) -> bool:
-	if kind in ["boss_phase", "boss_move", "enemy_warning", "ultimate_impact", "skill_impact", "synced_impact", "shield_break", "terrain_break"]:
+	if critical_visual(kind) or kind in ["boss_phase", "boss_move", "enemy_warning", "ultimate_impact", "skill_impact", "synced_impact", "shield_break", "terrain_break"]:
 		return true
 	if quality_scale < 1.0 and kind in ["hit", "move", "muzzle", "slash", "chain", "splash", "goblin_spawn"]:
 		return current < (56 if quality_scale <= 0.58 else 88)
@@ -45,3 +45,6 @@ func can_spawn_cosmetic(kind: String, current: int) -> bool:
 
 func snapshot() -> Dictionary:
 	return {"frame_ms":last_frame_ms,"quality":quality_scale,"overload_frames":overload_frames,"limits":{"enemies":MAX_ENEMIES,"projectiles":MAX_PROJECTILES,"effects":MAX_EFFECTS}}
+
+static func critical_visual(kind: String) -> bool:
+	return kind.begins_with("rift_") or kind.begins_with("slime_") or kind.begins_with("galio_") or kind.begins_with("kindred_") or kind in ["enemy_warning","enemy_shot","enemy_volatile","support_heal","barrage","crossfire","down","revive","shield_break","skill_impact","ultimate_impact","synced_impact"]

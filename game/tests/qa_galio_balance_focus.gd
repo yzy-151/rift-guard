@@ -51,8 +51,14 @@ func _run() -> void:
 			sim.enemy_hazards.clear()
 			sim.drain_events()
 			sim._start_galio_warning(galio, move)
+			var cast_source := Vector2(galio.pos)
 			sim._execute_galio_special(galio, move)
-			check(sim.drain_events().any(func(event: Dictionary) -> bool: return str(event.get("kind", "")) == move), "Galio resolves " + move)
+			var move_events: Array = sim.drain_events().filter(func(event: Dictionary) -> bool: return str(event.get("kind", "")) == move)
+			check(not move_events.is_empty(), "Galio resolves " + move)
+			if move == "galio_punch" and not move_events.is_empty():
+				check(Vector2(move_events[0].source).is_equal_approx(cast_source), "punch effect preserves the pre-dash origin")
+			if move == "galio_entrance" and not move_events.is_empty():
+				check(Vector2(move_events[0].pos).distance_to(Vector2(galio.pos)) < 1.0, "landing body and shockwave share the same center")
 			if move == "galio_entrance":
 				check(bool(galio.get("galio_revealed", false)), "Galio becomes visible only after landing")
 			if move == "galio_winds":
@@ -72,7 +78,7 @@ func _run() -> void:
 	var hero := {"id":0,"hp":100.0,"max_hp":100.0,"rate":1.0,"base_rate":1.0}
 	CardEffects.apply_to_hero(hero, "heartsteel")
 	CardEffects.on_target(hero, {"id":9922})
-	check(is_equal_approx(float(hero.max_hp), 104.0), "Heartsteel grants four max health")
+	check(is_equal_approx(float(hero.max_hp), 110.0), "Heartsteel grants current ten max health")
 	check(is_equal_approx(float(Catalog.ENEMIES.boss_01.damage), 375.0), "Rift Lord base damage is tripled")
 	print("GALIO QA COMPLETE: %d checks, %d failures" % [checks, failures])
 	quit(0 if failures == 0 else 1)

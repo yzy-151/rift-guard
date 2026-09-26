@@ -1,7 +1,6 @@
 extends Node2D
 
 const Stage = preload("res://scripts/stage_projection.gd")
-const GOLD = preload("res://assets/effects/heal-sheet.png")
 const FX_CIRCLE = preload("res://assets/vfx/third_party/kenney_particle/circle_05.png")
 const FX_FLARE = preload("res://assets/vfx/third_party/kenney_particle/flare_01.png")
 const FX_MAGIC = preload("res://assets/vfx/third_party/kenney_particle/magic_01.png")
@@ -105,14 +104,9 @@ func draw_behind_units(target: CanvasItem) -> void:
 		var kind := str(effect.kind)
 		var point: Vector2 = project_position(effect.pos)
 		if kind == "heal":
-			var total: int = 10
-			var fraction: float = clampf(effect.age / duration(kind), 0, 0.999)
-			var frame: int = mini(total - 1, int(fraction * total))
-			var size := Vector2(108, 128)
-			size *= Stage.depth_scale(effect.pos)
-			var opacity: float = 0.66 * minf(1.0, (1.0 - fraction) * 5.0)
-			target.draw_texture_rect_region(GOLD, Rect2(point - Vector2(size.x * 0.5, size.y * 0.82), size), frame_region(kind, frame), Color(1, 1, 1, opacity))
+			_draw_heal(target, effect, point)
 			continue
+
 		var fraction: float = clampf(float(effect.age) / duration(kind), 0.0, 1.0)
 		var seed: float = float(effect.seed)
 		var base_size: float = float({
@@ -133,3 +127,22 @@ func draw_behind_units(target: CanvasItem) -> void:
 			var trace_rect := Rect2(Vector2(-base_size * 0.62, -base_size * 0.18), Vector2(base_size * 1.24, base_size * 0.36))
 			target.draw_texture_rect(FX_TRACE, trace_rect, false, Color(tint.lightened(0.22), opacity * 0.70))
 		target.draw_set_transform(Vector2.ZERO)
+
+
+func _draw_heal(target: CanvasItem, effect: Dictionary, point: Vector2) -> void:
+	var progress := clampf(float(effect.age) / duration("heal"), 0.0, 1.0)
+	var fade := sin(progress * PI)
+	var depth: float = battle_view.world_depth_scale(effect.pos) if battle_view != null else Stage.depth_scale(effect.pos)
+	for ring in 2:
+		var radius := (21.0 + progress * 25.0 + ring * 8.0) * depth
+		var points := PackedVector2Array()
+		for index in 41:
+			var angle := TAU * float(index) / 40.0
+			points.append(point + Vector2(cos(angle)*radius, sin(angle)*radius*0.40))
+		target.draw_polyline(points, Color(0.42, 0.96, 0.75, fade*(0.65-ring*0.2)), 2.0, true)
+	for index in 5:
+		var phase := float(index) * TAU / 5.0 + float(effect.seed)
+		var mote := point + Vector2(cos(phase)*26.0, sin(phase)*8.0-12.0-progress*48.0)*depth
+		var half := (2.0 + sin(progress*PI))*depth
+		target.draw_line(mote-Vector2(half,0),mote+Vector2(half,0),Color(0.68,1.0,0.85,fade),1.6,true)
+		target.draw_line(mote-Vector2(0,half),mote+Vector2(0,half),Color(0.68,1.0,0.85,fade),1.6,true)

@@ -5,8 +5,8 @@
     "duration_seconds": 345,
     "boss_at_seconds": 290,
     "boss_id": "boss_02",
-    "enemy_health_multiplier": 1.12,
-    "enemy_damage_multiplier": 0.38,
+    "enemy_health_multiplier": 1.3216,
+    "enemy_damage_multiplier": 0.4256,
     "enemy_speed_multiplier": 1.03,
     "enemy_leak_multiplier": 0.36,
     "terrain": [
@@ -217,11 +217,11 @@
       "traveler"
     ],
     "xp_thresholds": [
-      65,
-      140,
-      235,
-      350,
-      500,
+      40,
+      100,
+      190,
+      310,
+      470,
       690,
       930,
       1300,
@@ -238,109 +238,124 @@
     ],
     "waves": [
       {
-        "at": 4,
+        "at": 4.0,
         "enemy_id": "slime_pyro",
-        "count": 18,
-        "interval": 2.7,
-        "route_id": "main"
-      },
-      {
-        "at": 45,
-        "enemy_id": "grunt",
-        "count": 14,
-        "interval": 2.3,
-        "route_id": "upper"
-      },
-      {
-        "at": 65,
-        "enemy_id": "grunt",
-        "count": 14,
-        "interval": 2.3,
-        "route_id": "lower"
-      },
-      {
-        "at": 90,
-        "enemy_id": "slime_anemo",
-        "count": 12,
-        "interval": 2.5,
-        "route_id": "upper"
-      },
-      {
-        "at": 115,
-        "enemy_id": "ranged",
         "count": 10,
-        "interval": 3.2,
-        "route_id": "main"
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
       },
       {
-        "at": 145,
-        "enemy_id": "armored",
-        "count": 12,
-        "interval": 3.2,
-        "route_id": "lower"
-      },
-      {
-        "at": 175,
-        "enemy_id": "buffer",
-        "count": 7,
-        "interval": 6,
-        "route_id": "main"
-      },
-      {
-        "at": 180,
-        "enemy_id": "slime_pyro",
-        "count": 35,
-        "interval": 1.4,
-        "route_id": "upper"
-      },
-      {
-        "at": 190,
-        "enemy_id": "slime_hydro",
-        "count": 5,
-        "interval": 7,
-        "route_id": "main"
-      },
-      {
-        "at": 215,
-        "enemy_id": "shielded",
-        "count": 12,
-        "interval": 3,
-        "route_id": "main"
-      },
-      {
-        "at": 225,
-        "enemy_id": "armored",
-        "count": 16,
-        "interval": 1.65,
-        "route_id": "upper"
-      },
-      {
-        "at": 240,
+        "at": 45.0,
         "enemy_id": "grunt",
-        "count": 40,
-        "interval": 1.3,
-        "route_id": "lower"
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
       },
       {
-        "at": 270,
+        "at": 65.0,
+        "enemy_id": "grunt",
+        "count": 18,
+        "interval": 1.288235294117647,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 99,
         "enemy_id": "slime_anemo",
-        "count": 24,
-        "interval": 1.5,
-        "route_id": "upper"
+        "count": 7,
+        "interval": 2.5,
+        "route_id": "upper",
+        "pacing_phase": "combination"
       },
       {
-        "at": 255,
-        "enemy_id": "slime_pyro",
-        "count": 6,
-        "interval": 5.2,
-        "route_id": "lower"
+        "at": 115.0,
+        "enemy_id": "ranged",
+        "count": 7,
+        "interval": 3.2,
+        "route_id": "main",
+        "pacing_phase": "combination"
       },
       {
-        "at": 278,
+        "at": 145.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 3.2,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 175.0,
         "enemy_id": "buffer",
-        "count": 5,
-        "interval": 5.8,
-        "route_id": "main"
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 180.0,
+        "enemy_id": "slime_pyro",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 196,
+        "enemy_id": "grunt",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 215.0,
+        "enemy_id": "runner",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 225.0,
+        "enemy_id": "slime_pyro",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 240.0,
+        "enemy_id": "grunt",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 255.0,
+        "enemy_id": "slime_pyro",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 270.0,
+        "enemy_id": "slime_anemo",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 290.0,
+        "enemy_id": "buffer",
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "main",
+        "pacing_phase": "boss"
       }
     ],
     "routes": {
@@ -493,7 +508,35 @@
       "upper": "copper",
       "main": "crimson",
       "lower": "violet"
-    }
+    },
+    "breather_windows": [
+      [
+        87,
+        99
+      ],
+      [
+        186,
+        196
+      ],
+      [
+        278.0,
+        290.0
+      ]
+    ],
+    "pacing_xp_multiplier": 1.264,
+    "pacing_health_multiplier": 1.0,
+    "fodder_pool": [
+      "grunt",
+      "runner",
+      "slime_pyro",
+      "slime_anemo"
+    ],
+    "opening_health_scale": 1.0,
+    "deployment_levels": [
+      1,
+      3,
+      6
+    ]
   },
   {
     "id": "stage_02",
@@ -502,8 +545,8 @@
     "boss_at_seconds": 305,
     "boss_id": "boss_01",
     "boss_route_id": "upper",
-    "enemy_health_multiplier": 0.78,
-    "enemy_damage_multiplier": 0.22,
+    "enemy_health_multiplier": 0.9204,
+    "enemy_damage_multiplier": 0.2464,
     "enemy_speed_multiplier": 0.99,
     "enemy_leak_multiplier": 0.18,
     "terrain": [
@@ -671,11 +714,11 @@
       "hero_02"
     ],
     "xp_thresholds": [
-      65,
-      140,
-      235,
-      350,
-      500,
+      40,
+      100,
+      190,
+      310,
+      470,
       690,
       930,
       1300,
@@ -699,144 +742,164 @@
         "route_ids": [
           "upper",
           "lower"
-        ]
+        ],
+        "pacing_phase": "opening"
       },
       {
-        "at": 24,
+        "at": 24.0,
         "enemy_id": "grunt",
-        "count": 24,
-        "interval": 2,
-        "route_id": "lower"
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "lower",
+        "pacing_phase": "opening"
       },
       {
-        "at": 56,
-        "enemy_id": "hilichurl_brute",
-        "count": 2,
-        "interval": 3.2,
-        "route_id": "upper"
+        "at": 56.0,
+        "enemy_id": "grunt",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
       },
       {
-        "at": 65,
-        "enemy_id": "flyer",
-        "count": 18,
+        "at": 65.0,
+        "enemy_id": "grunt",
+        "count": 4,
         "interval": 2.1,
-        "route_id": "main"
+        "route_id": "main",
+        "pacing_phase": "opening"
       },
       {
-        "at": 92,
+        "at": 104,
         "enemy_id": "ranged",
-        "count": 14,
+        "count": 7,
         "interval": 2.7,
-        "route_id": "upper"
+        "route_id": "upper",
+        "pacing_phase": "combination"
       },
       {
-        "at": 98,
-        "enemy_id": "rift_bat",
-        "count": 3,
+        "at": 104,
+        "enemy_id": "grunt",
+        "count": 5,
         "interval": 2.5,
-        "route_id": "upper"
+        "route_id": "upper",
+        "pacing_phase": "combination"
       },
       {
-        "at": 125,
-        "enemy_id": "buffer",
-        "count": 8,
+        "at": 125.0,
+        "enemy_id": "grunt",
+        "count": 7,
         "interval": 5.2,
-        "route_id": "lower"
+        "route_id": "lower",
+        "pacing_phase": "combination"
       },
       {
-        "at": 130,
-        "enemy_id": "armored",
-        "count": 15,
+        "at": 130.0,
+        "enemy_id": "grunt",
+        "count": 7,
         "interval": 2.8,
-        "route_id": "main"
+        "route_id": "main",
+        "pacing_phase": "combination"
       },
       {
         "at": 132,
         "enemy_id": "troop_cannon",
         "count": 6,
-        "interval": 1.55,
+        "interval": 3.5,
         "route_ids": [
           "upper",
           "main",
           "lower"
-        ]
+        ],
+        "pacing_phase": "combination"
       },
       {
-        "at": 144,
-        "enemy_id": "originium_bug",
-        "count": 4,
+        "at": 144.0,
+        "enemy_id": "grunt",
+        "count": 7,
         "interval": 2.2,
-        "route_id": "upper"
+        "route_id": "upper",
+        "pacing_phase": "combination"
       },
       {
-        "at": 156,
+        "at": 156.0,
         "enemy_id": "troop_cannon",
         "count": 1,
-        "interval": 1.0,
-        "route_id": "upper"
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
       },
       {
-        "at": 175,
-        "enemy_id": "shielded",
-        "count": 14,
-        "interval": 2.8,
-        "route_id": "upper"
+        "at": 175.0,
+        "enemy_id": "hilichurl_brute",
+        "count": 2,
+        "interval": 8.0,
+        "route_id": "upper",
+        "pacing_phase": "combination"
       },
       {
-        "at": 205,
-        "enemy_id": "slime_electro",
-        "count": 48,
-        "interval": 1.05,
-        "route_id": "lower"
-      },
-      {
-        "at": 214,
-        "enemy_id": "charger",
-        "count": 20,
-        "interval": 1.4,
-        "route_id": "upper"
-      },
-      {
-        "at": 240,
-        "enemy_id": "flyer",
-        "count": 30,
-        "interval": 1.35,
-        "route_id": "main"
-      },
-      {
-        "at": 248,
-        "enemy_id": "healer",
-        "count": 7,
-        "interval": 5,
-        "route_id": "lower"
-      },
-      {
-        "at": 268,
-        "enemy_id": "ranged",
-        "count": 18,
-        "interval": 1.9,
-        "route_id": "upper"
-      },
-      {
-        "at": 276,
-        "enemy_id": "splitter",
-        "count": 8,
-        "interval": 3.6,
-        "route_id": "main"
-      },
-      {
-        "at": 285,
+        "at": 205.0,
         "enemy_id": "grunt",
-        "count": 44,
-        "interval": 1.05,
-        "route_id": "lower"
+        "count": 24,
+        "interval": 0.7,
+        "route_id": "lower",
+        "pacing_phase": "combination"
       },
       {
-        "at": 292,
-        "enemy_id": "warder",
-        "count": 7,
-        "interval": 4.3,
-        "route_id": "upper"
+        "at": 214.0,
+        "enemy_id": "grunt",
+        "count": 24,
+        "interval": 0.7,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 240.0,
+        "enemy_id": "grunt",
+        "count": 48,
+        "interval": 0.7,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 248.0,
+        "enemy_id": "grunt",
+        "count": 24,
+        "interval": 0.7,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 268.0,
+        "enemy_id": "ranged",
+        "count": 48,
+        "interval": 0.7,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 276.0,
+        "enemy_id": "grunt",
+        "count": 24,
+        "interval": 0.7,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 285.0,
+        "enemy_id": "grunt",
+        "count": 24,
+        "interval": 0.7,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 292.0,
+        "enemy_id": "grunt",
+        "count": 24,
+        "interval": 0.7,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
       }
     ],
     "routes": {
@@ -993,7 +1056,32 @@
       "upper": "copper",
       "main": "crimson",
       "lower": "violet"
-    }
+    },
+    "breather_windows": [
+      [
+        92,
+        104
+      ],
+      [
+        195,
+        205
+      ],
+      [
+        293.0,
+        305.0
+      ]
+    ],
+    "pacing_xp_multiplier": 1.724,
+    "pacing_health_multiplier": 1.0,
+    "fodder_pool": [
+      "grunt"
+    ],
+    "opening_health_scale": 1.0,
+    "deployment_levels": [
+      1,
+      2,
+      5
+    ]
   },
   {
     "id": "stage_03",
@@ -1002,8 +1090,8 @@
     "boss_at_seconds": 318,
     "boss_id": "boss_03",
     "boss_route_id": "main",
-    "enemy_health_multiplier": 0.6,
-    "enemy_damage_multiplier": 0.22,
+    "enemy_health_multiplier": 0.708,
+    "enemy_damage_multiplier": 0.2464,
     "enemy_speed_multiplier": 0.92,
     "enemy_leak_multiplier": 0.16,
     "terrain": [
@@ -1177,11 +1265,11 @@
       "hero_03"
     ],
     "xp_thresholds": [
-      65,
-      140,
-      235,
-      350,
-      500,
+      40,
+      100,
+      190,
+      310,
+      470,
       690,
       930,
       1300,
@@ -1194,6 +1282,7 @@
       20000
     ],
     "unlocks": [
+      "hero_13",
       "hero_04",
       "hero_05",
       "hero_06",
@@ -1206,150 +1295,171 @@
     "waves": [
       {
         "at": 4,
-        "enemy_id": "charger",
-        "count": 18,
-        "interval": 1.8,
-        "route_id": "main"
-      },
-      {
-        "at": 28,
         "enemy_id": "grunt",
-        "count": 26,
-        "interval": 1.7,
-        "route_id": "upper"
+        "count": 12,
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
       },
       {
-        "at": 52,
-        "enemy_id": "splitter",
-        "count": 7,
-        "interval": 4.6,
-        "route_id": "lower"
+        "at": 18,
+        "enemy_id": "originium_bug",
+        "count": 12,
+        "interval": 2.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
       },
       {
-        "at": 56,
-        "enemy_id": "hilichurl_brute",
-        "count": 2,
-        "interval": 3.2,
-        "route_id": "main"
-      },
-      {
-        "at": 78,
+        "at": 40,
         "enemy_id": "slime_anemo",
-        "count": 22,
-        "interval": 1.75,
-        "route_id": "upper"
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "lower",
+        "pacing_phase": "opening"
       },
       {
-        "at": 98,
+        "at": 78.0,
+        "enemy_id": "slime_anemo",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 107,
         "enemy_id": "rift_bat",
-        "count": 3,
+        "count": 5,
         "interval": 2.5,
-        "route_id": "main"
+        "route_id": "main",
+        "pacing_phase": "combination"
       },
       {
-        "at": 102,
-        "enemy_id": "healer",
+        "at": 107,
+        "enemy_id": "grunt",
         "count": 7,
         "interval": 5.4,
-        "route_id": "main"
+        "route_id": "main",
+        "pacing_phase": "combination"
       },
       {
-        "at": 108,
-        "enemy_id": "armored",
-        "count": 18,
-        "interval": 2.5,
-        "route_id": "lower"
-      },
-      {
-        "at": 132,
+        "at": 108.0,
         "enemy_id": "originium_bug",
-        "count": 4,
+        "count": 7,
+        "interval": 2.5,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 132.0,
+        "enemy_id": "originium_bug",
+        "count": 7,
         "interval": 2.2,
-        "route_id": "main"
+        "route_id": "main",
+        "pacing_phase": "combination"
       },
       {
-        "at": 148,
-        "enemy_id": "warder",
-        "count": 8,
+        "at": 148.0,
+        "enemy_id": "grunt",
+        "count": 7,
         "interval": 4.8,
-        "route_id": "upper"
+        "route_id": "upper",
+        "pacing_phase": "combination"
       },
       {
-        "at": 154,
+        "at": 150,
+        "enemy_id": "hilichurl_brute",
+        "count": 2,
+        "interval": 7.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 154.0,
         "enemy_id": "ranged",
-        "count": 20,
-        "interval": 2,
-        "route_id": "main"
+        "count": 7,
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "combination"
       },
       {
-        "at": 156,
-        "enemy_id": "troop_cannon",
-        "count": 1,
-        "interval": 1.0,
-        "route_id": "main"
-      },
-      {
-        "at": 190,
-        "enemy_id": "runner",
-        "count": 58,
-        "interval": 0.92,
-        "route_id": "lower"
-      },
-      {
-        "at": 218,
-        "enemy_id": "buffer",
-        "count": 10,
-        "interval": 4.2,
-        "route_id": "main"
-      },
-      {
-        "at": 226,
-        "enemy_id": "charger",
-        "count": 30,
-        "interval": 1.05,
-        "route_id": "upper"
-      },
-      {
-        "at": 252,
-        "enemy_id": "shielded",
-        "count": 18,
-        "interval": 2.3,
-        "route_id": "lower"
-      },
-      {
-        "at": 276,
-        "enemy_id": "splitter",
-        "count": 12,
-        "interval": 2.8,
-        "route_id": "main"
-      },
-      {
-        "at": 292,
-        "enemy_id": "healer",
-        "count": 9,
-        "interval": 3.8,
-        "route_id": "lower"
-      },
-      {
-        "at": 300,
-        "enemy_id": "warder",
-        "count": 9,
-        "interval": 3.7,
-        "route_id": "upper"
-      },
-      {
-        "at": 326,
+        "at": 156.0,
         "enemy_id": "slime_anemo",
-        "count": 38,
-        "interval": 0.95,
-        "route_id": "upper"
+        "count": 1,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "combination"
       },
       {
-        "at": 334,
-        "enemy_id": "runner",
-        "count": 64,
-        "interval": 0.78,
-        "route_id": "lower"
+        "at": 190.0,
+        "enemy_id": "grunt",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 218.0,
+        "enemy_id": "originium_bug",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 226.0,
+        "enemy_id": "slime_anemo",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 252.0,
+        "enemy_id": "grunt",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 276.0,
+        "enemy_id": "originium_bug",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 292.0,
+        "enemy_id": "slime_anemo",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 300.0,
+        "enemy_id": "grunt",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 326.0,
+        "enemy_id": "slime_anemo",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "boss"
+      },
+      {
+        "at": 334.0,
+        "enemy_id": "slime_anemo",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "lower",
+        "pacing_phase": "boss"
       }
     ],
     "routes": {
@@ -1510,7 +1620,34 @@
       "upper": "copper",
       "main": "crimson",
       "lower": "violet"
-    }
+    },
+    "breather_windows": [
+      [
+        95,
+        107
+      ],
+      [
+        204,
+        214
+      ],
+      [
+        306.0,
+        318.0
+      ]
+    ],
+    "pacing_xp_multiplier": 1.593,
+    "pacing_health_multiplier": 1.0,
+    "deployment_levels": [
+      1,
+      2,
+      5
+    ],
+    "opening_health_scale": 1.0,
+    "fodder_pool": [
+      "grunt",
+      "originium_bug",
+      "slime_anemo"
+    ]
   },
   {
     "id": "stage_04",
@@ -1519,8 +1656,8 @@
     "boss_at_seconds": 330,
     "boss_id": "boss_03",
     "boss_route_id": "upper",
-    "enemy_health_multiplier": 1.0,
-    "enemy_damage_multiplier": 0.3,
+    "enemy_health_multiplier": 1.18,
+    "enemy_damage_multiplier": 0.336,
     "enemy_speed_multiplier": 1.0,
     "enemy_leak_multiplier": 0.22,
     "terrain": [
@@ -1694,11 +1831,11 @@
       "hero_03"
     ],
     "xp_thresholds": [
-      65,
-      140,
-      235,
-      350,
-      500,
+      40,
+      100,
+      190,
+      310,
+      470,
       690,
       930,
       1300,
@@ -1711,148 +1848,217 @@
       20000
     ],
     "unlocks": [
+      "hero_10",
       "hero_08"
     ],
     "waves": [
       {
-        "at": 4,
+        "at": 4.0,
         "enemy_id": "grunt",
-        "count": 16,
-        "interval": 2.2,
-        "route_id": "upper"
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
       },
       {
-        "at": 24,
-        "enemy_id": "runner",
-        "count": 18,
-        "interval": 2.1300000000000003,
-        "route_id": "main"
-      },
-      {
-        "at": 44,
-        "enemy_id": "flyer",
-        "count": 20,
-        "interval": 2.06,
-        "route_id": "lower"
-      },
-      {
-        "at": 56,
-        "enemy_id": "hilichurl_brute",
-        "count": 2,
-        "interval": 3.2,
-        "route_id": "upper"
-      },
-      {
-        "at": 64,
-        "enemy_id": "ranged",
-        "count": 22,
-        "interval": 1.9900000000000002,
-        "route_id": "upper"
-      },
-      {
-        "at": 84,
-        "enemy_id": "armored",
-        "count": 24,
-        "interval": 1.9200000000000002,
-        "route_id": "main"
-      },
-      {
-        "at": 98,
-        "enemy_id": "rift_bat",
-        "count": 3,
-        "interval": 2.5,
-        "route_id": "upper"
-      },
-      {
-        "at": 104,
-        "enemy_id": "buffer",
-        "count": 26,
-        "interval": 1.85,
-        "route_id": "lower"
-      },
-      {
-        "at": 124,
+        "at": 24.0,
         "enemy_id": "slime_hydro",
-        "count": 28,
-        "interval": 1.7800000000000002,
-        "route_id": "upper"
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
       },
       {
-        "at": 132,
-        "enemy_id": "originium_bug",
-        "count": 4,
-        "interval": 2.2,
-        "route_id": "upper"
-      },
-      {
-        "at": 144,
-        "enemy_id": "shielded",
-        "count": 30,
-        "interval": 1.7100000000000002,
-        "route_id": "main"
-      },
-      {
-        "at": 156,
-        "enemy_id": "troop_cannon",
-        "count": 1,
-        "interval": 1.0,
-        "route_id": "upper"
-      },
-      {
-        "at": 164,
-        "enemy_id": "charger",
-        "count": 32,
-        "interval": 1.6400000000000001,
-        "route_id": "lower"
-      },
-      {
-        "at": 184,
-        "enemy_id": "splitter",
-        "count": 34,
-        "interval": 1.57,
-        "route_id": "upper"
-      },
-      {
-        "at": 204,
-        "enemy_id": "warder",
-        "count": 36,
-        "interval": 1.5,
-        "route_id": "main"
-      },
-      {
-        "at": 224,
-        "enemy_id": "grunt",
-        "count": 38,
-        "interval": 1.4300000000000002,
-        "route_id": "lower"
-      },
-      {
-        "at": 244,
-        "enemy_id": "runner",
-        "count": 40,
-        "interval": 1.36,
-        "route_id": "upper"
-      },
-      {
-        "at": 264,
+        "at": 44.0,
         "enemy_id": "flyer",
-        "count": 42,
-        "interval": 1.29,
-        "route_id": "main"
+        "count": 4,
+        "interval": 2.06,
+        "route_id": "lower",
+        "pacing_phase": "opening"
       },
       {
-        "at": 284,
+        "at": 56.0,
+        "enemy_id": "slime_hydro",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 64.0,
         "enemy_id": "ranged",
-        "count": 44,
-        "interval": 1.2200000000000002,
-        "route_id": "lower"
+        "count": 4,
+        "interval": 1.9900000000000002,
+        "route_id": "upper",
+        "pacing_phase": "opening"
       },
       {
-        "at": 304,
-        "enemy_id": "armored",
-        "count": 46,
-        "interval": 1.1500000000000001,
-        "route_id": "upper"
+        "at": 84.0,
+        "enemy_id": "slime_hydro",
+        "count": 7,
+        "interval": 1.9200000000000002,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 98.0,
+        "enemy_id": "rift_bat",
+        "count": 2,
+        "interval": 0.9,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 111,
+        "enemy_id": "slime_hydro",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 124.0,
+        "enemy_id": "slime_hydro",
+        "count": 18,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 132.0,
+        "enemy_id": "slime_hydro",
+        "count": 7,
+        "interval": 2.2,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 144.0,
+        "enemy_id": "grunt",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 156.0,
+        "enemy_id": "slime_hydro",
+        "count": 1,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 164.0,
+        "enemy_id": "grunt",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 184.0,
+        "enemy_id": "slime_hydro",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 198,
+        "enemy_id": "grunt",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 204.0,
+        "enemy_id": "warder",
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 222,
+        "enemy_id": "slime_hydro",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 224.0,
+        "enemy_id": "grunt",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 244.0,
+        "enemy_id": "grunt",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 246,
+        "enemy_id": "grunt",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 264.0,
+        "enemy_id": "flyer",
+        "count": 48,
+        "interval": 0.7,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 270,
+        "enemy_id": "slime_hydro",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 284.0,
+        "enemy_id": "ranged",
+        "count": 48,
+        "interval": 0.7,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 304.0,
+        "enemy_id": "slime_hydro",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
       }
     ],
     "routes": {
@@ -1993,7 +2199,33 @@
       "upper": "copper",
       "main": "crimson",
       "lower": "violet"
-    }
+    },
+    "breather_windows": [
+      [
+        99,
+        111
+      ],
+      [
+        211,
+        221
+      ],
+      [
+        318.0,
+        330.0
+      ]
+    ],
+    "pacing_xp_multiplier": 1.833,
+    "pacing_health_multiplier": 1.0,
+    "fodder_pool": [
+      "grunt",
+      "slime_hydro"
+    ],
+    "opening_health_scale": 1.0,
+    "deployment_levels": [
+      1,
+      1,
+      3
+    ]
   },
   {
     "id": "stage_05",
@@ -2002,8 +2234,8 @@
     "boss_at_seconds": 345,
     "boss_id": "boss_05",
     "boss_route_id": "main",
-    "enemy_health_multiplier": 1.08,
-    "enemy_damage_multiplier": 0.34,
+    "enemy_health_multiplier": 1.2744,
+    "enemy_damage_multiplier": 0.3808,
     "enemy_speed_multiplier": 1.025,
     "enemy_leak_multiplier": 0.25,
     "terrain": [
@@ -2177,11 +2409,11 @@
       "hero_03"
     ],
     "xp_thresholds": [
-      65,
-      140,
-      235,
-      350,
-      500,
+      40,
+      100,
+      190,
+      310,
+      470,
       690,
       930,
       1300,
@@ -2198,144 +2430,212 @@
     ],
     "waves": [
       {
-        "at": 4,
-        "enemy_id": "flyer",
-        "count": 19,
-        "interval": 2.1500000000000004,
-        "route_id": "main"
-      },
-      {
-        "at": 24,
-        "enemy_id": "ranged",
-        "count": 21,
-        "interval": 2.0800000000000005,
-        "route_id": "lower"
-      },
-      {
-        "at": 44,
-        "enemy_id": "armored",
-        "count": 23,
-        "interval": 2.0100000000000002,
-        "route_id": "upper"
-      },
-      {
-        "at": 56,
-        "enemy_id": "hilichurl_brute",
-        "count": 2,
-        "interval": 3.2,
-        "route_id": "main"
-      },
-      {
-        "at": 64,
-        "enemy_id": "buffer",
-        "count": 25,
-        "interval": 1.9400000000000002,
-        "route_id": "main"
-      },
-      {
-        "at": 84,
-        "enemy_id": "healer",
-        "count": 27,
-        "interval": 1.87,
-        "route_id": "lower"
-      },
-      {
-        "at": 98,
-        "enemy_id": "rift_bat",
-        "count": 3,
-        "interval": 2.5,
-        "route_id": "main"
-      },
-      {
-        "at": 104,
-        "enemy_id": "shielded",
-        "count": 29,
-        "interval": 1.8,
-        "route_id": "upper"
-      },
-      {
-        "at": 124,
-        "enemy_id": "charger",
-        "count": 31,
-        "interval": 1.7300000000000002,
-        "route_id": "main"
-      },
-      {
-        "at": 132,
-        "enemy_id": "originium_bug",
-        "count": 4,
-        "interval": 2.2,
-        "route_id": "main"
-      },
-      {
-        "at": 144,
-        "enemy_id": "splitter",
-        "count": 33,
-        "interval": 1.6600000000000001,
-        "route_id": "lower"
-      },
-      {
-        "at": 156,
-        "enemy_id": "troop_cannon",
-        "count": 1,
-        "interval": 1.0,
-        "route_id": "main"
-      },
-      {
-        "at": 164,
-        "enemy_id": "slime_cryo",
-        "count": 35,
-        "interval": 1.59,
-        "route_id": "upper"
-      },
-      {
-        "at": 184,
+        "at": 4.0,
         "enemy_id": "grunt",
-        "count": 37,
-        "interval": 1.52,
-        "route_id": "main"
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
       },
       {
-        "at": 204,
-        "enemy_id": "runner",
-        "count": 39,
-        "interval": 1.45,
-        "route_id": "lower"
-      },
-      {
-        "at": 224,
-        "enemy_id": "flyer",
-        "count": 41,
-        "interval": 1.3800000000000001,
-        "route_id": "upper"
-      },
-      {
-        "at": 244,
+        "at": 24.0,
         "enemy_id": "ranged",
-        "count": 43,
-        "interval": 1.31,
-        "route_id": "main"
+        "count": 4,
+        "interval": 2.0800000000000005,
+        "route_id": "lower",
+        "pacing_phase": "opening"
       },
       {
-        "at": 264,
+        "at": 44.0,
+        "enemy_id": "slime_cryo",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 56.0,
+        "enemy_id": "originium_bug",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 64.0,
+        "enemy_id": "grunt",
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 84.0,
+        "enemy_id": "slime_pyro",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 98.0,
+        "enemy_id": "slime_cryo",
+        "count": 5,
+        "interval": 1.475,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 116,
+        "enemy_id": "originium_bug",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 124.0,
+        "enemy_id": "charger",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 132.0,
+        "enemy_id": "originium_bug",
+        "count": 7,
+        "interval": 2.2,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 144.0,
+        "enemy_id": "slime_cryo",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 156.0,
+        "enemy_id": "originium_bug",
+        "count": 1,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 164.0,
+        "enemy_id": "slime_cryo",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 184.0,
+        "enemy_id": "grunt",
+        "count": 18,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 204.0,
+        "enemy_id": "slime_cryo",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 207,
+        "enemy_id": "grunt",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 231,
+        "enemy_id": "originium_bug",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 231,
+        "enemy_id": "slime_pyro",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 244.0,
+        "enemy_id": "ranged",
+        "count": 48,
+        "interval": 0.7,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 255,
+        "enemy_id": "slime_cryo",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 264.0,
         "enemy_id": "armored",
-        "count": 45,
-        "interval": 1.24,
-        "route_id": "lower"
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
       },
       {
-        "at": 284,
-        "enemy_id": "buffer",
-        "count": 47,
-        "interval": 1.1700000000000002,
-        "route_id": "upper"
+        "at": 279,
+        "enemy_id": "originium_bug",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
       },
       {
-        "at": 304,
-        "enemy_id": "healer",
-        "count": 49,
-        "interval": 1.1,
-        "route_id": "main"
+        "at": 284.0,
+        "enemy_id": "slime_cryo",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 304.0,
+        "enemy_id": "originium_bug",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "main",
+        "pacing_phase": "pressure"
       }
     ],
     "routes": {
@@ -2484,7 +2784,35 @@
       "upper": "copper",
       "main": "crimson",
       "lower": "violet"
-    }
+    },
+    "breather_windows": [
+      [
+        104,
+        116
+      ],
+      [
+        221,
+        231
+      ],
+      [
+        333.0,
+        345.0
+      ]
+    ],
+    "pacing_xp_multiplier": 2.0,
+    "pacing_health_multiplier": 1.0,
+    "fodder_pool": [
+      "grunt",
+      "slime_pyro",
+      "slime_cryo",
+      "originium_bug"
+    ],
+    "opening_health_scale": 1.0,
+    "deployment_levels": [
+      1,
+      1,
+      3
+    ]
   },
   {
     "id": "stage_06",
@@ -2493,8 +2821,8 @@
     "boss_at_seconds": 360,
     "boss_id": "boss_06",
     "boss_route_id": "lower",
-    "enemy_health_multiplier": 1.15,
-    "enemy_damage_multiplier": 0.38,
+    "enemy_health_multiplier": 1.357,
+    "enemy_damage_multiplier": 0.4256,
     "enemy_speed_multiplier": 1.05,
     "enemy_leak_multiplier": 0.28,
     "terrain": [
@@ -2668,11 +2996,11 @@
       "hero_03"
     ],
     "xp_thresholds": [
-      65,
-      140,
-      235,
-      350,
-      500,
+      40,
+      100,
+      190,
+      310,
+      470,
       690,
       930,
       1300,
@@ -2689,144 +3017,212 @@
     ],
     "waves": [
       {
-        "at": 4,
-        "enemy_id": "armored",
-        "count": 22,
-        "interval": 2.1,
-        "route_id": "lower"
-      },
-      {
-        "at": 24,
-        "enemy_id": "buffer",
-        "count": 24,
-        "interval": 2.0300000000000002,
-        "route_id": "upper"
-      },
-      {
-        "at": 44,
-        "enemy_id": "healer",
-        "count": 26,
-        "interval": 1.96,
-        "route_id": "main"
-      },
-      {
-        "at": 56,
-        "enemy_id": "hilichurl_brute",
-        "count": 2,
-        "interval": 3.2,
-        "route_id": "lower"
-      },
-      {
-        "at": 64,
-        "enemy_id": "shielded",
-        "count": 28,
-        "interval": 1.8900000000000001,
-        "route_id": "lower"
-      },
-      {
-        "at": 84,
-        "enemy_id": "charger",
-        "count": 30,
-        "interval": 1.82,
-        "route_id": "upper"
-      },
-      {
-        "at": 98,
-        "enemy_id": "rift_bat",
-        "count": 3,
-        "interval": 2.5,
-        "route_id": "lower"
-      },
-      {
-        "at": 104,
-        "enemy_id": "splitter",
-        "count": 32,
-        "interval": 1.75,
-        "route_id": "main"
-      },
-      {
-        "at": 124,
-        "enemy_id": "warder",
-        "count": 34,
-        "interval": 1.6800000000000002,
-        "route_id": "lower"
-      },
-      {
-        "at": 132,
-        "enemy_id": "originium_bug",
-        "count": 4,
-        "interval": 2.2,
-        "route_id": "lower"
-      },
-      {
-        "at": 144,
+        "at": 4.0,
         "enemy_id": "grunt",
-        "count": 36,
-        "interval": 1.61,
-        "route_id": "upper"
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "lower",
+        "pacing_phase": "opening"
       },
       {
-        "at": 156,
-        "enemy_id": "troop_cannon",
-        "count": 1,
-        "interval": 1.0,
-        "route_id": "lower"
-      },
-      {
-        "at": 164,
-        "enemy_id": "runner",
-        "count": 38,
-        "interval": 1.54,
-        "route_id": "main"
-      },
-      {
-        "at": 184,
-        "enemy_id": "flyer",
-        "count": 40,
-        "interval": 1.47,
-        "route_id": "lower"
-      },
-      {
-        "at": 204,
-        "enemy_id": "ranged",
-        "count": 42,
-        "interval": 1.4,
-        "route_id": "upper"
-      },
-      {
-        "at": 224,
-        "enemy_id": "armored",
-        "count": 44,
-        "interval": 1.33,
-        "route_id": "main"
-      },
-      {
-        "at": 244,
+        "at": 24.0,
         "enemy_id": "buffer",
-        "count": 46,
-        "interval": 1.26,
-        "route_id": "lower"
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 44.0,
+        "enemy_id": "grunt",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 56.0,
+        "enemy_id": "runner",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "lower",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 64.0,
+        "enemy_id": "grunt",
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "lower",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 84.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 1.82,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 98.0,
+        "enemy_id": "grunt",
+        "count": 5,
+        "interval": 2.475,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 104.0,
+        "enemy_id": "runner",
+        "count": 5,
+        "interval": 0.975,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 124.0,
+        "enemy_id": "grunt",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 132.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 2.2,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 144.0,
+        "enemy_id": "grunt",
+        "count": 18,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 156.0,
+        "enemy_id": "runner",
+        "count": 1,
+        "interval": 1.8,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 164.0,
+        "enemy_id": "runner",
+        "count": 18,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 184.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 204.0,
+        "enemy_id": "grunt",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 216,
+        "enemy_id": "grunt",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 224.0,
+        "enemy_id": "armored",
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 240,
+        "enemy_id": "runner",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 244.0,
+        "enemy_id": "buffer",
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 264.0,
+        "enemy_id": "healer",
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
       },
       {
         "at": 264,
-        "enemy_id": "healer",
-        "count": 48,
-        "interval": 1.19,
-        "route_id": "upper"
+        "enemy_id": "grunt",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
       },
       {
-        "at": 284,
+        "at": 284.0,
         "enemy_id": "shielded",
-        "count": 50,
-        "interval": 1.12,
-        "route_id": "main"
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "main",
+        "pacing_phase": "pressure"
       },
       {
-        "at": 304,
-        "enemy_id": "charger",
-        "count": 52,
-        "interval": 1.05,
-        "route_id": "lower"
+        "at": 288,
+        "enemy_id": "runner",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 304.0,
+        "enemy_id": "runner",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
       }
     ],
     "routes": {
@@ -2971,7 +3367,33 @@
       "upper": "copper",
       "main": "crimson",
       "lower": "violet"
-    }
+    },
+    "breather_windows": [
+      [
+        108,
+        120
+      ],
+      [
+        230,
+        240
+      ],
+      [
+        348.0,
+        360.0
+      ]
+    ],
+    "pacing_xp_multiplier": 2.0,
+    "pacing_health_multiplier": 1.0,
+    "fodder_pool": [
+      "grunt",
+      "runner"
+    ],
+    "opening_health_scale": 1.0,
+    "deployment_levels": [
+      1,
+      1,
+      1
+    ]
   },
   {
     "id": "stage_07",
@@ -2980,8 +3402,8 @@
     "boss_at_seconds": 375,
     "boss_id": "boss_04",
     "boss_route_id": "upper",
-    "enemy_health_multiplier": 1.24,
-    "enemy_damage_multiplier": 0.42,
+    "enemy_health_multiplier": 1.4632,
+    "enemy_damage_multiplier": 0.4704,
     "enemy_speed_multiplier": 1.075,
     "enemy_leak_multiplier": 0.31,
     "terrain": [
@@ -3155,11 +3577,11 @@
       "hero_03"
     ],
     "xp_thresholds": [
-      65,
-      140,
-      235,
-      350,
-      500,
+      40,
+      100,
+      190,
+      310,
+      470,
       690,
       930,
       1300,
@@ -3176,144 +3598,212 @@
     ],
     "waves": [
       {
-        "at": 4,
-        "enemy_id": "healer",
-        "count": 25,
-        "interval": 2.0500000000000003,
-        "route_id": "upper"
-      },
-      {
-        "at": 24,
-        "enemy_id": "shielded",
-        "count": 27,
-        "interval": 1.9800000000000004,
-        "route_id": "main"
-      },
-      {
-        "at": 44,
-        "enemy_id": "charger",
-        "count": 29,
-        "interval": 1.9100000000000001,
-        "route_id": "lower"
-      },
-      {
-        "at": 56,
-        "enemy_id": "hilichurl_brute",
-        "count": 2,
-        "interval": 3.2,
-        "route_id": "upper"
-      },
-      {
-        "at": 64,
-        "enemy_id": "splitter",
-        "count": 31,
-        "interval": 1.8400000000000003,
-        "route_id": "upper"
-      },
-      {
-        "at": 84,
-        "enemy_id": "warder",
-        "count": 33,
-        "interval": 1.77,
-        "route_id": "main"
-      },
-      {
-        "at": 98,
-        "enemy_id": "rift_bat",
-        "count": 3,
-        "interval": 2.5,
-        "route_id": "upper"
-      },
-      {
-        "at": 104,
+        "at": 4.0,
         "enemy_id": "grunt",
-        "count": 35,
-        "interval": 1.7000000000000002,
-        "route_id": "lower"
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
       },
       {
-        "at": 124,
+        "at": 24.0,
         "enemy_id": "runner",
-        "count": 37,
-        "interval": 1.6300000000000003,
-        "route_id": "upper"
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
       },
       {
-        "at": 132,
-        "enemy_id": "originium_bug",
-        "count": 4,
-        "interval": 2.2,
-        "route_id": "upper"
-      },
-      {
-        "at": 144,
-        "enemy_id": "flyer",
-        "count": 39,
-        "interval": 1.56,
-        "route_id": "main"
-      },
-      {
-        "at": 156,
-        "enemy_id": "troop_cannon",
-        "count": 1,
-        "interval": 1.0,
-        "route_id": "upper"
-      },
-      {
-        "at": 164,
-        "enemy_id": "ranged",
-        "count": 41,
-        "interval": 1.4900000000000002,
-        "route_id": "lower"
-      },
-      {
-        "at": 184,
-        "enemy_id": "armored",
-        "count": 43,
-        "interval": 1.42,
-        "route_id": "upper"
-      },
-      {
-        "at": 204,
-        "enemy_id": "buffer",
-        "count": 45,
-        "interval": 1.35,
-        "route_id": "main"
-      },
-      {
-        "at": 224,
-        "enemy_id": "healer",
-        "count": 47,
-        "interval": 1.2800000000000002,
-        "route_id": "lower"
-      },
-      {
-        "at": 244,
-        "enemy_id": "shielded",
-        "count": 49,
-        "interval": 1.21,
-        "route_id": "upper"
-      },
-      {
-        "at": 264,
+        "at": 44.0,
         "enemy_id": "charger",
-        "count": 51,
-        "interval": 1.1400000000000001,
-        "route_id": "main"
+        "count": 4,
+        "interval": 1.9100000000000001,
+        "route_id": "lower",
+        "pacing_phase": "opening"
       },
       {
-        "at": 284,
-        "enemy_id": "splitter",
-        "count": 53,
-        "interval": 1.0700000000000003,
-        "route_id": "lower"
+        "at": 56.0,
+        "enemy_id": "runner",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
       },
       {
-        "at": 304,
+        "at": 64.0,
+        "enemy_id": "grunt",
+        "count": 4,
+        "interval": 1.8400000000000003,
+        "route_id": "upper",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 84.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 98.0,
+        "enemy_id": "grunt",
+        "count": 5,
+        "interval": 2.5,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 104.0,
+        "enemy_id": "grunt",
+        "count": 9,
+        "interval": 0.9875,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 124.0,
+        "enemy_id": "runner",
+        "count": 18,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 132.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 2.2,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 144.0,
+        "enemy_id": "grunt",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 156.0,
+        "enemy_id": "runner",
+        "count": 1,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 164.0,
+        "enemy_id": "grunt",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 184.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 204.0,
+        "enemy_id": "grunt",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 224.0,
+        "enemy_id": "healer",
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 225,
+        "enemy_id": "grunt",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 249,
+        "enemy_id": "runner",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 250,
+        "enemy_id": "shielded",
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 264.0,
+        "enemy_id": "charger",
+        "count": 48,
+        "interval": 0.7,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 273,
+        "enemy_id": "grunt",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 284.0,
+        "enemy_id": "grunt",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 297,
+        "enemy_id": "runner",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 304.0,
         "enemy_id": "warder",
-        "count": 55,
-        "interval": 1.0,
-        "route_id": "upper"
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
       }
     ],
     "routes": {
@@ -3458,7 +3948,33 @@
       "upper": "copper",
       "main": "crimson",
       "lower": "violet"
-    }
+    },
+    "breather_windows": [
+      [
+        112,
+        124
+      ],
+      [
+        240,
+        250
+      ],
+      [
+        363.0,
+        375.0
+      ]
+    ],
+    "pacing_xp_multiplier": 2.0,
+    "pacing_health_multiplier": 1.0,
+    "fodder_pool": [
+      "grunt",
+      "runner"
+    ],
+    "opening_health_scale": 1.0,
+    "deployment_levels": [
+      1,
+      1,
+      1
+    ]
   },
   {
     "id": "stage_08",
@@ -3467,8 +3983,8 @@
     "boss_at_seconds": 390,
     "boss_id": "boss_01",
     "boss_route_id": "main",
-    "enemy_health_multiplier": 1.36,
-    "enemy_damage_multiplier": 0.48,
+    "enemy_health_multiplier": 1.6048,
+    "enemy_damage_multiplier": 0.5376,
     "enemy_speed_multiplier": 1.1,
     "enemy_leak_multiplier": 0.33999999999999997,
     "terrain": [
@@ -3642,11 +4158,11 @@
       "hero_03"
     ],
     "xp_thresholds": [
-      65,
-      140,
-      235,
-      350,
-      500,
+      40,
+      100,
+      190,
+      310,
+      470,
       690,
       930,
       1300,
@@ -3663,144 +4179,212 @@
     ],
     "waves": [
       {
-        "at": 4,
+        "at": 4.0,
         "enemy_id": "charger",
-        "count": 28,
-        "interval": 2.0,
-        "route_id": "main"
-      },
-      {
-        "at": 24,
-        "enemy_id": "splitter",
-        "count": 30,
-        "interval": 1.9300000000000004,
-        "route_id": "lower"
-      },
-      {
-        "at": 44,
-        "enemy_id": "warder",
-        "count": 32,
-        "interval": 1.86,
-        "route_id": "upper"
-      },
-      {
-        "at": 56,
-        "enemy_id": "hilichurl_brute",
-        "count": 2,
-        "interval": 3.2,
-        "route_id": "main"
-      },
-      {
-        "at": 64,
-        "enemy_id": "grunt",
-        "count": 34,
-        "interval": 1.7900000000000003,
-        "route_id": "main"
-      },
-      {
-        "at": 84,
-        "enemy_id": "runner",
-        "count": 36,
-        "interval": 1.7200000000000002,
-        "route_id": "lower"
-      },
-      {
-        "at": 98,
-        "enemy_id": "rift_bat",
-        "count": 3,
-        "interval": 2.5,
-        "route_id": "main"
-      },
-      {
-        "at": 104,
-        "enemy_id": "flyer",
-        "count": 38,
-        "interval": 1.6500000000000001,
-        "route_id": "upper"
-      },
-      {
-        "at": 124,
-        "enemy_id": "ranged",
-        "count": 40,
-        "interval": 1.5800000000000003,
-        "route_id": "main"
-      },
-      {
-        "at": 132,
-        "enemy_id": "originium_bug",
         "count": 4,
-        "interval": 2.2,
-        "route_id": "main"
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
       },
       {
-        "at": 144,
-        "enemy_id": "armored",
-        "count": 42,
-        "interval": 1.5100000000000002,
-        "route_id": "lower"
-      },
-      {
-        "at": 156,
-        "enemy_id": "troop_cannon",
-        "count": 1,
-        "interval": 1.0,
-        "route_id": "main"
-      },
-      {
-        "at": 164,
-        "enemy_id": "buffer",
-        "count": 44,
-        "interval": 1.4400000000000002,
-        "route_id": "upper"
-      },
-      {
-        "at": 184,
-        "enemy_id": "healer",
-        "count": 46,
-        "interval": 1.37,
-        "route_id": "main"
-      },
-      {
-        "at": 204,
-        "enemy_id": "shielded",
-        "count": 48,
-        "interval": 1.3,
-        "route_id": "lower"
-      },
-      {
-        "at": 224,
-        "enemy_id": "charger",
-        "count": 50,
-        "interval": 1.2300000000000002,
-        "route_id": "upper"
-      },
-      {
-        "at": 244,
-        "enemy_id": "splitter",
-        "count": 52,
-        "interval": 1.1600000000000001,
-        "route_id": "main"
-      },
-      {
-        "at": 264,
-        "enemy_id": "warder",
-        "count": 54,
-        "interval": 1.09,
-        "route_id": "lower"
-      },
-      {
-        "at": 284,
-        "enemy_id": "grunt",
-        "count": 56,
-        "interval": 1.0200000000000002,
-        "route_id": "upper"
-      },
-      {
-        "at": 304,
+        "at": 24.0,
         "enemy_id": "runner",
-        "count": 58,
-        "interval": 0.9500000000000002,
-        "route_id": "main"
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "lower",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 44.0,
+        "enemy_id": "grunt",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 56.0,
+        "enemy_id": "runner",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 64.0,
+        "enemy_id": "grunt",
+        "count": 10,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 84.0,
+        "enemy_id": "runner",
+        "count": 10,
+        "interval": 1.8,
+        "route_id": "lower",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 98.0,
+        "enemy_id": "grunt",
+        "count": 5,
+        "interval": 2.5,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 104.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 129,
+        "enemy_id": "ranged",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 132.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 2.2,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 144.0,
+        "enemy_id": "grunt",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 156.0,
+        "enemy_id": "runner",
+        "count": 1,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 164.0,
+        "enemy_id": "grunt",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 184.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 204.0,
+        "enemy_id": "shielded",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 224.0,
+        "enemy_id": "charger",
+        "count": 27,
+        "interval": 0.9961538461538461,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 234,
+        "enemy_id": "grunt",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 244.0,
+        "enemy_id": "grunt",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 258,
+        "enemy_id": "runner",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 264.0,
+        "enemy_id": "warder",
+        "count": 4,
+        "interval": 3.0,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 282,
+        "enemy_id": "grunt",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 284.0,
+        "enemy_id": "grunt",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 304.0,
+        "enemy_id": "runner",
+        "count": 60,
+        "interval": 0.5,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 306,
+        "enemy_id": "runner",
+        "count": 30,
+        "interval": 0.6,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
       }
     ],
     "routes": {
@@ -3953,7 +4537,33 @@
       "upper": "copper",
       "main": "crimson",
       "lower": "violet"
-    }
+    },
+    "breather_windows": [
+      [
+        117,
+        129
+      ],
+      [
+        250,
+        260
+      ],
+      [
+        378.0,
+        390.0
+      ]
+    ],
+    "pacing_xp_multiplier": 2.0,
+    "pacing_health_multiplier": 1.0,
+    "fodder_pool": [
+      "grunt",
+      "runner"
+    ],
+    "opening_health_scale": 1.0,
+    "deployment_levels": [
+      1,
+      1,
+      1
+    ]
   },
   {
     "id": "stage_endless",

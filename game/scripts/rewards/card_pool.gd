@@ -1,11 +1,17 @@
 extends RefCounted
 
+const Synergies = preload("res://scripts/rewards/card_synergies.gd")
+const MAX_REROLLS := 2
+
 const ELEMENTS := ["anemo", "electro", "pyro", "hydro", "geo", "cryo"]
 
 var cards: Array[Dictionary] = []
 var offered: Array[Dictionary] = []
 var history: Array[String] = []
 var levels: Dictionary = {}
+var rerolls_left := 0
+var offer_revision := 0
+var seen_this_offer: Array[String] = []
 var rng := RandomNumberGenerator.new()
 
 func _init(source_cards: Array[Dictionary], seed_value: int = 0) -> void:
@@ -57,6 +63,33 @@ func _reinforcement_count(run) -> int:
 	return count
 
 func draw_three(run) -> Array[Dictionary]:
+	rerolls_left = MAX_REROLLS
+	seen_this_offer.clear()
+	_roll_three(run)
+	_record_offer()
+	return offered.duplicate(true)
+
+func reroll(run) -> bool:
+	if rerolls_left <= 0 or offered.is_empty():
+		return false
+	var previous := offered.duplicate(true)
+	var previous_rng := rng.state
+	_roll_three(run, seen_this_offer)
+	if offered.size() != previous.size():
+		offered.assign(previous)
+		rng.state = previous_rng
+		return false
+	rerolls_left -= 1
+	_record_offer()
+	return true
+
+func _record_offer() -> void:
+	offer_revision += 1
+	for card: Dictionary in offered:
+		if str(card.id) not in seen_this_offer:
+			seen_this_offer.append(str(card.id))
+
+func _roll_three(run, avoid: Array[String] = []) -> void:
 	var candidates: Array[Dictionary] = []
 	for card: Dictionary in cards:
 		if eligible(card, run):
@@ -68,7 +101,7 @@ func draw_three(run) -> Array[Dictionary]:
 			if card.get("effect", "") == "assign_traveler_element":
 				element_cards.append(card)
 		if not element_cards.is_empty():
-			var guaranteed: Dictionary = _take_weighted(element_cards, run)
+			var guaranteed: Dictionary = _take_weighted_preferred(element_cards, run, avoid)
 			offered.append(guaranteed.duplicate(true))
 			candidates.erase(guaranteed)
 	if run.crystal_level % 10 == 0:
@@ -77,7 +110,7 @@ func draw_three(run) -> Array[Dictionary]:
 			if card.get("rarity", "common") == "mythic":
 				mythic_cards.append(card)
 		if not mythic_cards.is_empty():
-			var guaranteed_mythic: Dictionary = _take_weighted(mythic_cards, run)
+			var guaranteed_mythic: Dictionary = _take_weighted_preferred(mythic_cards, run, avoid)
 			offered.append(guaranteed_mythic.duplicate(true))
 			candidates.erase(guaranteed_mythic)
 	if run.crystal_level % 3 == 0:
@@ -86,17 +119,23 @@ func draw_three(run) -> Array[Dictionary]:
 			if bool(card.get("mechanic", false)):
 				mechanic_cards.append(card)
 		if not mechanic_cards.is_empty():
-			var guaranteed_mechanic: Dictionary = _take_weighted(mechanic_cards, run)
+			var guaranteed_mechanic: Dictionary = _take_weighted_preferred(mechanic_cards, run, avoid)
 			offered.append(guaranteed_mechanic.duplicate(true))
 			candidates.erase(guaranteed_mechanic)
 	while offered.size() < 3 and not candidates.is_empty():
-		var selected: Dictionary = _take_weighted(candidates, run)
+		var selected: Dictionary = _take_weighted_preferred(candidates, run, avoid)
 		offered.append(selected.duplicate(true))
 		candidates.erase(selected)
-	return offered.duplicate(true)
 
 func draw(sim) -> void:
 	draw_three(sim.run_state)
+
+func _take_weighted_preferred(pool: Array[Dictionary], run, avoid: Array[String]) -> Dictionary:
+	var fresh: Array[Dictionary] = []
+	for card: Dictionary in pool:
+		if str(card.id) not in avoid:
+			fresh.append(card)
+	return _take_weighted(fresh if not fresh.is_empty() else pool, run)
 
 func adjusted_weight(card: Dictionary, run) -> float:
 	var base_weight := maxf(1.0, float(card.get("weight", 1)))
@@ -166,10 +205,18 @@ func take(index: int, sim, target_hero_id: int = -1) -> bool:
 		picked_name += " · " + str(sim.heroes[target_hero_id].get("name", "角色"))
 	history.append(picked_name)
 	sim.apply_v2_card_effect(card, target_hero_id)
+	Synergies.refresh(sim)
+	rerolls_left = 0
 	return true
 
 func preview(card: Dictionary, sim) -> String:
+	if str(card.get("effect", "")) == "card_bundle":
+		return str(card.get("summary", card.get("description", "")))
 	var value: Variant = card.get("value", 0)
+	if card.get("target", "global") != "character":
+		var stat_names := {"range_flat":"射程", "projectile_count_add":"弹道数", "pierce_add":"贯穿次数", "chain_add":"连锁目标", "armor_flat":"防御"}
+		if stat_names.has(str(card.get("effect", ""))):
+			return "全员%s增加 %d" % [stat_names[str(card.effect)], int(value)]
 	match str(card.get("effect", "")):
 		"assign_traveler_element": return "旅行者本关获得%s元素" % sim.element_name(str(value))
 		"attack_multiplier": return "攻击力 +%d%%" % roundi(float(value) * 100.0)
@@ -177,17 +224,19 @@ func preview(card: Dictionary, sim) -> String:
 		"attack_rate_multiplier": return "攻击速度 +%d%%" % roundi(float(value) * 100.0)
 		"lethal_tempo": return "每次攻击攻速 +12%，每层上限 +120%；停攻 3 秒清空"
 		"conqueror": return "攻击 6 次后伤害 ×2/层；每次攻击回复 10/层"
-		"heartsteel": return "对每名敌人首次攻击时，最大生命 +4/层"
-		"warmogs_armor": return "每 5 秒回复 30/层生命"
+		"heartsteel": return "对每名敌人首次攻击时，最大生命 +10/层"
+		"warmogs_armor": return "每 5 秒回复 100/层生命"
 		"solo_leveling": return "经验获取 ×3/层"
 		"range_flat": return "攻击范围 +%d" % int(value)
 		"armor_flat": return "防御 +%d" % int(value)
 		"crit_flat": return "暴击率 +%d%%" % roundi(float(value) * 100.0)
 		"move_speed_flat": return "移动速度 +%d" % int(value)
+		"squad_range_flat": return "全员射程增加 %d" % int(value)
+		"squad_armor_flat": return "全员防御增加 %d" % int(value)
 		"squad_attack_multiplier": return "全队攻击 +%d%%" % roundi(float(value) * 100.0)
 		"squad_health_multiplier": return "全队最大生命 +%d%%" % roundi(float(value) * 100.0)
 		"squad_rate_multiplier": return "全队攻击速度 +%d%%" % roundi(float(value) * 100.0)
-		"projectile_count_add": return "每次攻击弹道 +%d" % int(value)
+		"projectile_count_add": return "全员攻击弹道 +%d" % int(value)
 		"orbit_add": return "环绕飞剑 +%d，并按等级进化" % int(value)
 		"orbit_spell_add": return "法术环 +%d，并按等级进化" % int(value)
 		"evolving_fireball": return "火球伤害成长，3/6/9级进化"

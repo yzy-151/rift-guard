@@ -1,0 +1,121 @@
+{
+  "mode1_opening": [
+    {
+      "image": "res://assets/story_comics/v85_wake.png",
+      "text": "你像往常一样从床上醒来。"
+    },
+    {
+      "image": "res://assets/story_comics/v85_sock.png",
+      "text": "像往常一样假装在穿袜子。"
+    },
+    {
+      "image": "res://assets/story_comics/v85_rift.png",
+      "text": "你的房间里出现了一道裂隙。虽然预感不好，你还是决定去看看。\n就像明知有哥布林，还要继续深入巢穴的女骑士。"
+    }
+  ],
+  "mode1_won": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_01.png",
+      "text": "你赢下第一场战斗。\n风送来了一位治疗师，也送来一份对你精神状态的合理怀疑。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage2_opening": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_02.png",
+      "text": "你走进赤潮回廊，准备迎接新的冒险。\n迎接你的却是一摞文件，以及一位比你更需要下班的人。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage2_won": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_02.png",
+      "text": "敌人退场以后，一位观众宣布自己是总导演。\n她要求掌声。你决定先检查箱子后面有没有蛋糕。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage3_opening": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_03.png",
+      "text": "你踏入黑曜母巢。\n这里没有排练室，却有人准备把怪物和预算一起重新编排。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage3_won": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_03.png",
+      "text": "你以为胜利能解决一切。\n一位裁缝看了看你的披风，认为事情远没有结束。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage4_opening": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_04.png",
+      "text": "苍穹交叉口的风，把路牌吹成了风向标。\n你遇见一位正准备让天气接受体检的人。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage4_won": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_04.png",
+      "text": "风终于停下来休息。\n你们决定尊重这个难得的好榜样。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage5_opening": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_05.png",
+      "text": "你走进熔炉回旋庭。\n温度很热情，待遇很灼伤，唯一的好消息是裁缝还没下班。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage5_won": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_05.png",
+      "text": "熔炉熄灭了，你成功保住了披风。\n家庭教师宣布：休息时间结束，现在开始总结。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage6_opening": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_06.png",
+      "text": "钟楼的时间卡在开场前三秒。\n演员想要谢幕，报表却想永远加班。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage6_won": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_06.png",
+      "text": "时钟恢复了转动。\n重复的昨天被丢进废纸篓，今天终于可以只过一遍。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage7_opening": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_07.png",
+      "text": "永冻岔路把每一步都变成了一次抽奖。\n你决定先找个愿意扶你的人，再考虑假装从容。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage7_won": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_07.png",
+      "text": "你们穿过冰原。\n离最后一道门越近，计划里的“我们”就写得越大。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_stage8_opening": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_08.png",
+      "text": "蚀日围城就在眼前。\n最后的门承诺给出答案，却对回程路线保持沉默。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ],
+  "mode1_final_won": [
+    {
+      "image": "res://assets/ui/stage_thumbnails_v60/stage_08.png",
+      "text": "门终于打开了。\n你没有成为世界的主人，只记住了要把所有人带回去。",
+      "art_status": "existing_stage_preview_pending_comic"
+    }
+  ]
+}

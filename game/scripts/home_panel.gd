@@ -35,9 +35,7 @@ const DISPLAY_FONT = preload("res://assets/fonts/TiejiliSC-Regular.ttf")
 const HOVER_AUDIO = preload("res://assets/helltaker/audio/button_dialogue_highlight_01.wav")
 const CONFIRM_AUDIO = preload("res://assets/helltaker/audio/button_dialogue_confirm_01.wav")
 
-class HomeMap extends Node2D:
-	var owner_panel
-	var sequences
+class HomeInterior extends Node2D:
 	var font: Font
 	func _draw() -> void:
 		draw_rect(Rect2(0, 0, MAP_WIDTH, VIEW_HEIGHT), Color("#0c0a16"))
@@ -54,44 +52,105 @@ class HomeMap extends Node2D:
 			draw_texture_rect(WALL_VENT, Rect2(x, 179, 80, 120), false, Color(0.69, 0.64, 0.73))
 		draw_line(Vector2(0, 320), Vector2(MAP_WIDTH, 320), Color("#cb3552"), 3.0)
 		draw_rect(Rect2(0, 320, MAP_WIDTH, 400), Color(0.11, 0.04, 0.08, 0.16))
+		_draw_interior_details()
+
+	func _draw_interior_details() -> void:
+		# Wall recesses and warm lamps keep furniture above the walking lane.
+		for x in [180.0, 780.0, 1380.0, 1980.0, 2400.0]:
+			draw_rect(Rect2(x - 90, 98, 180, 179), Color("#090e1c"))
+			draw_rect(Rect2(x - 90, 98, 180, 179), Color("#555268"), false, 4)
+			for pane in 3:
+				draw_rect(Rect2(x - 79 + pane * 54, 110, 45, 150), Color("#202d43"))
+				draw_line(Vector2(x - 73 + pane * 54, 115), Vector2(x - 40 + pane * 54, 145), Color("#34465b"), 3)
+			draw_line(Vector2(x - 68, 278), Vector2(x + 68, 278), Color("#c99383"), 3)
+		for zone in [{"x":30.0,"w":960.0,"title":"01 / 作战与会客区"},{"x":1030.0,"w":730.0,"title":"02 / 档案与荣誉区"},{"x":1800.0,"w":720.0,"title":"03 / 生活与整备区"}]:
+			var x := float(zone.x)
+			var width := float(zone.w)
+			draw_rect(Rect2(x, 350, width, 270), Color(0.10, 0.12, 0.20, 0.30))
+			draw_rect(Rect2(x + 12, 355, width - 24, 258), Color("#67515f"), false, 1)
+			draw_line(Vector2(x + 25, 596), Vector2(x + width - 25, 596), Color("#a3465b"), 2)
+			if font != null: draw_string(font, Vector2(x + 25, 87), str(zone.title), HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("#e0b9b2"))
+		# Upholstered benches, low tables and bookcases; all are decorative.
+		for x in [450.0, 850.0, 1980.0, 2400.0]:
+			draw_rect(Rect2(x - 85, 296, 170, 47), Color("#151423"))
+			draw_rect(Rect2(x - 79, 300, 158, 30), Color("#603748"))
+			for cushion in 3: draw_rect(Rect2(x - 72 + cushion * 49, 329, 45, 19), Color("#865064"))
+			draw_line(Vector2(x - 80, 351), Vector2(x + 80, 351), Color("#ba8290"), 3)
+		for x in [1050.0, 1650.0]:
+			draw_rect(Rect2(x - 40, 187, 80, 102), Color("#181725"))
+			for row in 3:
+				for book in 7:
+					var ink := Color("#8a5566") if book % 2 == 0 else Color("#74869b")
+					draw_rect(Rect2(x - 32 + book * 9, 194 + row * 30, 6, 22 - book % 3 * 3), ink)
+				draw_line(Vector2(x - 36, 218 + row * 30), Vector2(x + 36, 218 + row * 30), Color("#a18888"), 2)
+		for x in [30.0, 1010.0, 1780.0, 2510.0]:
+			draw_rect(Rect2(x - 14, 312, 28, 29), Color("#745061"))
+			for side in [-1.0, 1.0]:
+				draw_colored_polygon(PackedVector2Array([Vector2(x,320),Vector2(x + side * 29,277),Vector2(x + side * 5,290)]),Color("#64867e"))
+
+class HomeMap extends Node2D:
+	var owner_panel
+	var sequences
+	var font: Font
+	func _draw() -> void:
 		for facility: Dictionary in FACILITIES:
 			_draw_facility(facility)
-		for npc: Dictionary in owner_panel.npcs:
-			var id := str(npc.id)
-			var point: Vector2 = npc.pos
-			_draw_shadow(point + Vector2(0, 7), 41.0, 11.0, Color(0, 0, 0, 0.46))
-			_draw_character(id, "idle", point)
-			if font != null:
-				draw_string(font, point + Vector2(-48, -sequences.display_size(id) + 10), str(npc.name), HORIZONTAL_ALIGNMENT_CENTER, 96, 17, Color("#fff0eb"))
-		var player: Vector2 = owner_panel.player_pos
-		_draw_shadow(player + Vector2(0, 7), 32.0, 9.0, Color(0, 0, 0, 0.55))
-		_draw_character("traveler", "run" if owner_panel.moving else "idle", player)
-		if font != null:
-			draw_string(font, player + Vector2(-35, -sequences.display_size("traveler") + 10), "你", HORIZONTAL_ALIGNMENT_CENTER, 70, 17, Color.WHITE)
+		var actors: Array[Dictionary] = owner_panel.npcs.duplicate()
+		actors.append({"id":"traveler","name":"你","pos":owner_panel.player_pos})
+		actors.sort_custom(func(a: Dictionary,b: Dictionary)->bool:return a.pos.y < b.pos.y)
+		var closest: Dictionary = owner_panel.interaction_target()
+		for actor: Dictionary in actors:
+			var id := str(actor.id)
+			var point: Vector2 = actor.pos
+			var player := id == "traveler"
+			var facing: float = owner_panel.facing if player else (1.0 if owner_panel.player_pos.x > point.x else -1.0)
+			var active: bool = not player and str(closest.get("id","")) == id
+			_draw_shadow(point + Vector2(0,7), 32.0, 9.0, Color(0,0,0,0.46))
+			if active:
+				_draw_shadow(point + Vector2(0,5), 38.0 + sin(owner_panel.elapsed * 3.0)*2.0, 10.0, Color(0.42,0.86,0.79,0.24))
+			_draw_character(id, "run" if player and owner_panel.moving else "idle", point, facing)
+			if font != null and not player:
+				draw_string(font, point + Vector2(-60,-sequences.display_size(id)+10), str(actor.name), HORIZONTAL_ALIGNMENT_CENTER,120,16,Color("#fff0eb"))
+				if active: draw_string(font, point + Vector2(-40,-sequences.display_size(id)-14), "[F] 对话", HORIZONTAL_ALIGNMENT_CENTER,80,15,Color("#a8e8d7"))
 
 	func _draw_facility(facility: Dictionary) -> void:
 		var center := Vector2(float(facility.x), 385.0)
-		var active: bool = owner_panel.player_pos.distance_to(Vector2(center.x, 480.0)) < FACILITY_RADIUS
+		var active: bool = str(owner_panel.interaction_target().get("id", "")) == str(facility.id)
 		var accent := Color("#ff5067") if active else Color("#8d3b51")
 		draw_rect(Rect2(center.x - 75, 328, 150, 113), Color("#100d18"))
 		draw_rect(Rect2(center.x - 75, 328, 150, 113), accent, false, 3.0)
 		draw_rect(Rect2(center.x - 61, 342, 122, 55), Color("#1a1d30"))
-		draw_line(Vector2(center.x - 48, 362), Vector2(center.x + 48, 362), accent, 2.0)
-		draw_line(Vector2(center.x - 34, 377), Vector2(center.x + 34, 377), accent.darkened(0.3), 2.0)
+		var glyph := Vector2(center.x, 368)
+		match str(facility.id):
+			"stages":
+				draw_polyline(PackedVector2Array([glyph+Vector2(-36,12),glyph+Vector2(-16,-12),glyph+Vector2(7,8),glyph+Vector2(33,-16)]),Color("#9ad8cd"),3)
+				for offset in [Vector2(-36,12),Vector2(-16,-12),Vector2(7,8),Vector2(33,-16)]:draw_circle(glyph+offset,4,Color("#f7d5a5"))
+			"archive":
+				for side in [-1.0,1.0]: draw_polyline(PackedVector2Array([glyph+Vector2(0,20),glyph+Vector2(side*30,13),glyph+Vector2(side*30,-17),glyph+Vector2(0,-10),glyph+Vector2(0,20)]),Color("#b3c9e0"),2)
+			"achievements":
+				draw_colored_polygon(PackedVector2Array([glyph+Vector2(-18,-18),glyph+Vector2(18,-18),glyph+Vector2(13,4),glyph+Vector2(0,13),glyph+Vector2(-13,4)]),Color("#d9b87d"))
+				draw_line(glyph+Vector2(0,10),glyph+Vector2(0,21),Color("#d9b87d"),3)
+				draw_line(glyph+Vector2(-12,21),glyph+Vector2(12,21),Color("#d9b87d"),3)
+			"settings":
+				for row in 3:
+					var y := glyph.y-16+row*16
+					draw_line(Vector2(glyph.x-33,y),Vector2(glyph.x+33,y),Color("#b6bbd1"),2)
+					draw_circle(Vector2(glyph.x-16+row*15,y),4,accent)
 		if font != null:
 			draw_string(font, Vector2(center.x - 70, 423), str(facility.name), HORIZONTAL_ALIGNMENT_CENTER, 140, 17, Color("#fff0e9"))
 			draw_string(font, Vector2(center.x - 70, 458), str(facility.action), HORIZONTAL_ALIGNMENT_CENTER, 140, 12, Color("#c9aab1"))
 
-	func _draw_character(id: String, state: String, foot: Vector2) -> void:
+	func _draw_character(id: String, state: String, foot: Vector2, facing: float) -> void:
 		var texture: Texture2D = sequences.texture(id, state)
 		if texture == null:
 			return
 		var frame: int = sequences.frame_at_time(id, state, owner_panel.elapsed)
 		var size: float = sequences.display_size(id)
-		var placement: Dictionary = SpriteAnchor.placement(Vector2.ONE * size, sequences.cell(id), sequences.pivot(id), 1.0)
+		var placement: Dictionary = SpriteAnchor.placement(Vector2.ONE * size, sequences.cell(id), sequences.pivot(id), facing)
 		var dest: Rect2 = placement.rect
-		dest.position += foot
+		draw_set_transform(foot, 0.0, Vector2(float(placement.flip_x), 1.0))
 		draw_texture_rect_region(texture, dest, sequences.source_rect(id, state, frame))
+		draw_set_transform(Vector2.ZERO)
 
 	func _draw_shadow(center: Vector2, rx: float, ry: float, color: Color) -> void:
 		var points := PackedVector2Array()
@@ -102,6 +161,7 @@ class HomeMap extends Node2D:
 
 var root: Control
 var map: HomeMap
+var interior: HomeInterior
 var prompt: Label
 var prompt_panel: Panel
 var exit_button: Button
@@ -114,6 +174,7 @@ var player_pos := Vector2(130.0, 535.0)
 var camera_x := 0.0
 var elapsed := 0.0
 var moving := false
+var facing := 1.0
 var busy := false
 var hover_sound: AudioStreamPlayer
 var confirm_sound: AudioStreamPlayer
@@ -128,6 +189,9 @@ func build(owner_hud, game_database, progress) -> void:
 	root.theme = owner_hud.get_child(0).theme
 	root.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(root)
+	interior = HomeInterior.new()
+	interior.font = root.theme.default_font
+	root.add_child(interior)
 	map = HomeMap.new()
 	map.owner_panel = self
 	map.sequences = sequences
@@ -197,10 +261,10 @@ func refresh_residents() -> void:
 			unlocked.append(id)
 	unlocked.sort()
 	# Leave sight lines and F interaction space around the three terminals.
-	var resident_slots := [300.0, 500.0, 700.0, 900.0, 1320.0, 1760.0, 1950.0, 2070.0, 2450.0]
+	var resident_slots := [300.0, 500.0, 700.0, 900.0, 1270.0, 1420.0, 1740.0, 1900.0, 2060.0, 2390.0, 1160.0, 1580.0]
 	for index in unlocked.size():
 		var id := unlocked[index]
-		var x: float = resident_slots[index] if index < resident_slots.size() else 300.0 + float(index) * 210.0
+		var x: float = resident_slots[index] if index < resident_slots.size() else 300.0 + float(index % 10) * 220.0
 		var y := 548.0 + float(index % 3 - 1) * 64.0
 		npcs.append({"id": id, "name": str(database.characters[id].get("name", id)), "pos": Vector2(x, y)})
 	map.queue_redraw()
@@ -248,16 +312,12 @@ func handle_input(event: InputEvent) -> bool:
 			exit_requested.emit()
 			return true
 		if event.keycode == KEY_F:
-			var npc := nearest_resident()
-			var facility := nearest_facility()
-			if not facility.is_empty() and (npc.is_empty() or player_pos.distance_to(Vector2(float(facility.x), 480.0)) < player_pos.distance_to(npc.pos)):
+			var target := interaction_target()
+			if not target.is_empty():
 				confirm_sound.play()
 				busy = true
-				facility_requested.emit(str(facility.id))
-			elif not npc.is_empty():
-				confirm_sound.play()
-				busy = true
-				interact_requested.emit(str(npc.id))
+				if target.has("action"): facility_requested.emit(str(target.id))
+				else: interact_requested.emit(str(target.id))
 			return true
 	return event is InputEventKey and event.keycode in [KEY_W, KEY_A, KEY_S, KEY_D, KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT]
 
@@ -270,23 +330,31 @@ func _process(dt: float) -> void:
 	if Input.is_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT): axis.x += 1.0
 	if Input.is_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP): axis.y -= 1.0
 	if Input.is_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN): axis.y += 1.0
-	moving = axis.length_squared() > 0.0
-	if moving:
-		player_pos += axis.normalized() * WALK_SPEED * dt
-		player_pos.x = clampf(player_pos.x, 30.0, MAP_WIDTH - 30.0)
-		player_pos.y = clampf(player_pos.y, 398.0, 635.0)
+	move_player(axis, dt)
 	_update_camera()
 	map.queue_redraw()
+	var target := interaction_target()
+	prompt.text = ""
+	if not target.is_empty():
+		prompt.text = "[F]  %s" % str(target.action) if target.has("action") else "[F]  与 %s 对话" % str(target.name)
+	prompt_panel.visible = not prompt.text.is_empty()
+
+func interaction_target() -> Dictionary:
 	var npc := nearest_resident()
 	var facility := nearest_facility()
-	if not facility.is_empty() and (npc.is_empty() or player_pos.distance_to(Vector2(float(facility.x), 480.0)) < player_pos.distance_to(npc.pos)):
-		prompt.text = "[F]  %s" % str(facility.action)
-	elif not npc.is_empty():
-		prompt.text = "[F]  与 %s 对话" % str(npc.name)
-	else:
-		prompt.text = ""
-	prompt_panel.visible = not prompt.text.is_empty()
+	if not facility.is_empty() and (npc.is_empty() or player_pos.distance_to(Vector2(float(facility.x),480.0)) < player_pos.distance_to(npc.pos)):
+		return facility
+	return npc
+
+func move_player(axis: Vector2, dt: float) -> void:
+	moving = axis.length_squared() > 0.0
+	if not moving: return
+	if absf(axis.x) > 0.01: facing = signf(axis.x)
+	player_pos += axis.normalized() * WALK_SPEED * dt
+	player_pos.x = clampf(player_pos.x, 30.0, MAP_WIDTH - 30.0)
+	player_pos.y = clampf(player_pos.y, 398.0, 635.0)
 
 func _update_camera() -> void:
 	camera_x = clampf(player_pos.x - VIEW_WIDTH * 0.5, 0.0, MAP_WIDTH - VIEW_WIDTH)
 	map.position.x = -camera_x
+	interior.position.x = -camera_x

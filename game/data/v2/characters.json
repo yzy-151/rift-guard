@@ -145,7 +145,7 @@
       "kind": "heal_gust",
       "cooldown": 18.0,
       "power": 170,
-      "radius": 170,
+      "radius": 230,
       "hit_frame_ratio": 0.46,
       "targeting": "point",
       "timeline": {
@@ -156,7 +156,9 @@
         "sfx_frame": 0.331,
         "recovery": 0.389,
         "shake": 0.34
-      }
+      },
+      "attack_ratio": 0.8,
+      "description": "治疗范围内队友170+80%攻击力生命，获得50共享护盾，并保护范围内队友1.5秒不受伤害。"
     },
     "ultimate": {
       "name": "无咏风域",
@@ -206,7 +208,7 @@
       "kind": "salon_summon",
       "cooldown": 21.0,
       "power": 190,
-      "radius": 190,
+      "radius": 260,
       "hit_frame_ratio": 0.46,
       "targeting": "point",
       "timeline": {
@@ -218,16 +220,18 @@
         "recovery": 0.389,
         "shake": 0.34
       },
-      "attack_ratio": 1.15
+      "attack_ratio": 1.15,
+      "cast_range": 440,
+      "description": "点选440距离内的位置，建立12秒沙龙区域；3位成员以不同频率发射水弹，分别在38/65/90范围造成(190+115%攻击力)×55%/75%/100%水伤，仅攻击舞台内敌人。"
     },
     "ultimate": {
       "name": "万众狂欢",
       "kind": "hydro_fanfare",
       "energy_cost": 165,
       "power": 290,
-      "radius": 290,
+      "radius": 340,
       "hit_frame_ratio": 0.58,
-      "targeting": "point",
+      "targeting": "self",
       "timeline": {
         "duration": 1.18,
         "anticipation": 0.496,
@@ -238,7 +242,8 @@
         "shake": 0.78
       },
       "cooldown": 64.0,
-      "attack_ratio": 1.8
+      "attack_ratio": 1.8,
+      "description": "点按展开随身舞台12秒，开幕造成290+180%攻击力水伤；舞台内友军伤害提高35%，每2秒恢复20+15%芙宁娜攻击力生命，离开舞台不再增伤。"
     },
     "passive": {
       "name": "沙龙礼仪",
@@ -391,7 +396,7 @@
       "kind": "arcane_lance",
       "cooldown": 12.0,
       "power": 160,
-      "radius": 160,
+      "radius": 210,
       "hit_frame_ratio": 0.46,
       "targeting": "point",
       "timeline": {
@@ -403,14 +408,16 @@
         "recovery": 0.389,
         "shake": 0.34
       },
-      "attack_ratio": 1.4
+      "attack_ratio": 1.4,
+      "cast_range": 480,
+      "description": "点选区域，6枚追踪黑晶分配给最近3名敌人；每枚造成(160+140%攻击力)×55%雷伤，叠加8秒黑晶印记，最多3层。"
     },
     "ultimate": {
       "name": "奇美拉",
       "kind": "chimera",
       "energy_cost": 165,
       "power": 300,
-      "radius": 300,
+      "radius": 250,
       "hit_frame_ratio": 0.58,
       "targeting": "point",
       "timeline": {
@@ -423,7 +430,9 @@
         "shake": 0.78
       },
       "cooldown": 52.0,
-      "attack_ratio": 2.5
+      "attack_ratio": 2.5,
+      "cast_range": 480,
+      "description": "点选区域，消耗自身8%生命（不致死）；黑晶两次震击各造成(300+250%攻击力)×35%雷伤，终击×120%，每层印记使终击增伤30%，随后消耗印记并减速2秒。"
     },
     "passive": {
       "name": "黑蛇意志",
@@ -848,10 +857,10 @@
       "name": "引针簇射",
       "kind": "needle_barrage",
       "energy_cost": 180,
-      "power": 76,
-      "radius": 255,
+      "power": 150,
+      "radius": 620,
       "hit_frame_ratio": 0.58,
-      "targeting": "point",
+      "targeting": "direction",
       "timeline": {
         "duration": 1.18,
         "anticipation": 0.496,
@@ -862,8 +871,8 @@
         "shake": 0.78
       },
       "cooldown": 70.0,
-      "needles": 12,
-      "description": "向目标区域射出12根追踪针；每根造成76点无元素伤害并波及附近敌人。",
+      "needles": 15,
+      "description": "朝选定方向连续发射3轮针簇，每轮5根贯穿针，轮间隔0.65秒；射程620，每针150+125%攻击力无元素伤害，并减速2秒。",
       "attack_ratio": 1.25
     },
     "passive": {

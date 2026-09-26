@@ -169,27 +169,86 @@
     {
       "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
       "speaker": "希露菲",
-      "text": "护盾术还差一遍。我的手指倒是已经申请下班。"
+      "text": "我叫菲兹。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
       "speaker": "希露菲",
-      "text": "如果我现在停下，谁来挡下一次攻击？",
+      "text": "你刚才叫的那个名字……我不认识。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "也请不要对着我的脸，一副“我已经全懂了”的样子。",
       "choices": [
         {
-          "text": "你先喝口茶，我陪你守这一班。",
+          "text": "懂了，希露菲今天没来，菲兹只是借她的脸用一下。",
           "response_speaker": "希露菲",
           "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
-          "response": "原来我也能是被惦记的那个人。",
-          "home_success": true
+          "response": "你这样说，不还是已经认出来了吗……",
+          "follow_up": [
+            {
+              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+              "speaker": "希露菲",
+              "text": "如果有人问你见过谁，你会怎么说？",
+              "choices": [
+                {
+                  "text": "一位好心人。名字太长，我记不住。",
+                  "response_speaker": "希露菲",
+                  "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+                  "response": "菲兹明明只有两个字。",
+                  "home_success": true,
+                  "follow_up": [
+                    {
+                      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+                      "speaker": "希露菲",
+                      "text": "……不过，只说见过一位好心人，确实就够了。"
+                    },
+                    {
+                      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+                      "speaker": "希露菲",
+                      "text": "谢谢你没有一定要我承认。"
+                    },
+                    {
+                      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+                      "speaker": "希露菲",
+                      "text": "我可以和你一起走。名字的事，就让你的记性继续不好吧。"
+                    }
+                  ]
+                },
+                {
+                  "text": "我会认真保证：我绝对没见过希露菲。",
+                  "response_speaker": "希露菲",
+                  "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+                  "response": "对方还没有问名字呀。",
+                  "home_success": false,
+                  "home_reason": "你一保证，就等于告诉别人应该来找谁了。",
+                  "follow_up": [
+                    {
+                      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+                      "speaker": "希露菲",
+                      "text": "你一保证，就等于告诉别人应该来找谁了。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
-          "text": "手指还能动就继续练，熟练度最重要。",
+          "text": "请相信我，我会向所有人解释你的真实身份，免得大家误会。",
           "response_speaker": "希露菲",
           "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
-          "response": "把疲惫当作努力，反而会留下空隙。",
+          "response": "不用解释！",
           "home_success": false,
-          "home_reason": "鼓励过度训练，损害了守护所需的稳定性。"
+          "home_reason": "我藏起名字，就是暂时不希望别人知道。你解释清楚以后，我还怎么藏呢？",
+          "follow_up": [
+            {
+              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+              "speaker": "希露菲",
+              "text": "我藏起名字，就是暂时不希望别人知道。你解释清楚以后，我还怎么藏呢？"
+            }
+          ]
         }
       ]
     }
@@ -198,27 +257,61 @@
     {
       "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
       "speaker": "希露菲",
-      "text": "这件披风是我缝的，好像肩膀太紧了。"
+      "text": "你愿意试试我的无咏唱水魔法吗？"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
       "speaker": "希露菲",
-      "text": "现在送出去，会不会被嫌弃？",
+      "text": "先别站那么近……这次可能会有一点失控。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+      "speaker": "希露菲",
+      "text": "我想把洗衣桶里的水转起来，但刚才连桶也一起转了。",
       "choices": [
         {
-          "text": "先问穿它的人舒不舒服，改起来也来得及。",
+          "text": "先救桶！衣服洗不干净还能穿，桶飞走了可真没桶了。",
           "response_speaker": "希露菲",
           "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
-          "response": "谢谢你没替我猜。",
-          "home_success": true
+          "response": "我刚才一直在想怎么控制水，倒是忘了先固定桶。",
+          "home_success": true,
+          "follow_up": [
+            {
+              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+              "speaker": "希露菲",
+              "text": "请帮我扶住这里，我把水流减小一点。"
+            },
+            {
+              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+              "speaker": "希露菲",
+              "text": "……成功了。原来不是魔力不够，是我把简单的事想得太复杂。"
+            },
+            {
+              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+              "speaker": "希露菲",
+              "text": "今天先不学大魔法了。我们先把小桶保住。"
+            }
+          ]
         },
         {
-          "text": "别问，直接给他穿上，惊喜比较重要。",
+          "text": "我相信你的实力，不要压抑自己，把全部魔力释放出来！",
           "response_speaker": "希露菲",
           "response_portrait": "res://assets/characters/sequences/hero_02/portrait.png",
-          "response": "你没问过穿它的人。",
+          "response": "全部……？",
           "home_success": false,
-          "home_reason": "凭自己的判断修改，没问使用者的感受。"
+          "home_reason": "你先去把院门关上吧。我不想再向邻居解释为什么会下袜子雨了。",
+          "follow_up": [
+            {
+              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+              "speaker": "希露菲",
+              "text": "我在洗衣服，不是在攻城呀。"
+            },
+            {
+              "portrait": "res://assets/characters/sequences/hero_02/portrait.png",
+              "speaker": "希露菲",
+              "text": "你先去把院门关上吧。我不想再向邻居解释为什么会下袜子雨了。"
+            }
+          ]
         }
       ]
     }
@@ -625,27 +718,61 @@
     {
       "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
       "speaker": "阿米娅",
-      "text": "值夜的同伴把求助写得比脚注还小。"
+      "text": "请问，你见过一位戴兜帽的人吗？他可能会说自己失忆了。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
       "speaker": "阿米娅",
-      "text": "我该当众替他说出来吗？",
+      "text": "如果他问这里有没有办公室，请告诉他有。我可以现搭。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "……你怎么也开始往后退？",
       "choices": [
         {
-          "text": "先私下问他愿不愿意让我帮忙。",
+          "text": "先别搭！把我也招了吧，我负责看着老板按时下班。",
           "response_speaker": "阿米娅",
           "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
-          "response": "谢谢。今天这五分钟，不算我偷懒吧？",
-          "home_success": true
+          "response": "负责监督我？可是，我才是负责人。",
+          "home_success": true,
+          "follow_up": [
+            {
+              "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+              "speaker": "阿米娅",
+              "text": "……不过，今天已经有三个人劝我休息了。"
+            },
+            {
+              "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+              "speaker": "阿米娅",
+              "text": "好吧，这份工作交给你。第一项任务，是提醒我吃饭。"
+            },
+            {
+              "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+              "speaker": "阿米娅",
+              "text": "不是提醒我边吃饭边批文件。博士以前就是这么提醒的。"
+            }
+          ]
         },
         {
-          "text": "我替他在全基地广播，省得他开口。",
+          "text": "你放心工作，我替你把所有事情都处理好，保证不让你操心。",
           "response_speaker": "阿米娅",
           "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
-          "response": "你宣布了他的困难，却没征求他的同意。",
+          "response": "所有事情？你还没有问过我们需要什么。",
           "home_success": false,
-          "home_reason": "公开了同伴不愿示人的求助。"
+          "home_reason": "照顾别人之前，至少先问一句。否则只是把你的主意交给大家承担。",
+          "follow_up": [
+            {
+              "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+              "speaker": "阿米娅",
+              "text": "博士也说过让我放心。后来他替全办公室订了三十份辣味套餐。"
+            },
+            {
+              "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+              "speaker": "阿米娅",
+              "text": "照顾别人之前，至少先问一句。否则只是把你的主意交给大家承担。"
+            }
+          ]
         }
       ]
     }
@@ -654,27 +781,86 @@
     {
       "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
       "speaker": "阿米娅",
-      "text": "计划书把全部风险签在我一个人名下。"
+      "text": "有人说我应该学会依赖别人。"
     },
     {
       "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
       "speaker": "阿米娅",
-      "text": "负责人是不是就该这样？",
+      "text": "所以，今天下午……我想把自己交给你安排。"
+    },
+    {
+      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+      "speaker": "阿米娅",
+      "text": "只有两个小时。我把之后要处理的文件都带来了。",
       "choices": [
         {
-          "text": "你可以负责，也可以请大家一起看风险。",
+          "text": "不接单，带着工作来休息属于夹带私货。",
           "response_speaker": "阿米娅",
           "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
-          "response": "一起承担不是推卸，而是相信彼此。",
-          "home_success": true
+          "response": "夹带……私货？这些只是紧急文件。",
+          "follow_up": [
+            {
+              "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+              "speaker": "阿米娅",
+              "text": "那你想让我做什么？",
+              "choices": [
+                {
+                  "text": "什么都别做，先陪我给这张长椅增加一点使用率。",
+                  "response_speaker": "阿米娅",
+                  "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+                  "response": "只是坐一会儿吗？",
+                  "home_success": true,
+                  "follow_up": [
+                    {
+                      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+                      "speaker": "阿米娅",
+                      "text": "……你没有说“休息完就能处理更多文件”。"
+                    },
+                    {
+                      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+                      "speaker": "阿米娅",
+                      "text": "谢谢。原来今天的任务，真的可以是没有任务。"
+                    },
+                    {
+                      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+                      "speaker": "阿米娅",
+                      "text": "不过，长椅的使用率不用写成报告交给我。"
+                    }
+                  ]
+                },
+                {
+                  "text": "先休息十分钟，再一起把剩下的工作一口气做完。",
+                  "response_speaker": "阿米娅",
+                  "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+                  "response": "听起来很体贴……但文件一点也没有少。",
+                  "home_success": false,
+                  "home_reason": "我需要的是有人允许我停下来，不是换一个地方继续加班。",
+                  "follow_up": [
+                    {
+                      "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+                      "speaker": "阿米娅",
+                      "text": "我需要的是有人允许我停下来，不是换一个地方继续加班。"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
-          "text": "你是负责人，全签了就算解决了。",
+          "text": "当然可以！以后你什么都不用管，我替你决定就好。",
           "response_speaker": "阿米娅",
           "response_portrait": "res://assets/characters/sequences/hero_06/portrait.png",
-          "response": "一个人签名，救不了所有人。",
+          "response": "我只是想休息两个小时，不是想辞职。",
           "home_success": false,
-          "home_reason": "把负责误解为独自背负全部风险。"
+          "home_reason": "你可以帮我分担，但不能连我的选择也一起拿走。",
+          "follow_up": [
+            {
+              "portrait": "res://assets/characters/sequences/hero_06/portrait.png",
+              "speaker": "阿米娅",
+              "text": "你可以帮我分担，但不能连我的选择也一起拿走。"
+            }
+          ]
         }
       ]
     }

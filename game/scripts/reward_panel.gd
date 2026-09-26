@@ -2,6 +2,8 @@ extends Control
 const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
 const CharacterBreathPreview = preload("res://scripts/character_breath_preview.gd")
 signal chosen(index: int, hero_id: int)
+signal reroll_requested
+const Synergies = preload("res://scripts/rewards/card_synergies.gd")
 
 const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 const UI_SKIN = preload("res://data/ui_skin_profile.tres")
@@ -22,6 +24,13 @@ void fragment() {
 	COLOR = vec4(result, src.a);
 }
 """
+
+var current_sim
+var reroll_button: Button
+var synergy_button: Button
+var synergy_hint: Label
+var synergy_overlay: ColorRect
+var synergy_rows: Array[Label] = []
 
 var buttons: Array[Button] = []
 var card_frames: Array[Sprite2D] = []
@@ -85,9 +94,13 @@ func build(hud) -> void:
 		_build_card(hud, i)
 
 	history_label = hud.label(self, UI_LAYOUT.reward_history_rect.position, UI_LAYOUT.reward_history_rect.size, "", 13, Color("#c2b4bf"))
-	history_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	history_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	history_label.max_lines_visible = 1
+	history_label.clip_text = true
+	history_label.size = UI_LAYOUT.reward_history_rect.size
 	var footer: Label = hud.label(self, UI_LAYOUT.reward_footer_rect.position, UI_LAYOUT.reward_footer_rect.size, "鼠标悬停预览高亮  ·  点击卡牌或按 1 / 2 / 3 选择  ·  强化持续到本局结束", 11, Color("#887c89"))
 	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_build_reward_tools(hud)
 	_build_target_picker(hud)
 
 	hover_sound = AudioStreamPlayer.new()
@@ -153,6 +166,8 @@ func _build_card(hud, index: int) -> void:
 	summary.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	summary.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	summary.clip_text = true
+	summary.max_lines_visible = 2
 	summary_labels.append(summary)
 	var description: Label = hud.label(card, UI_LAYOUT.reward_description_rect.position + Vector2(12, 10), UI_LAYOUT.reward_description_rect.size - Vector2(24, 20), "", 11, MUTED)
 	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -186,17 +201,28 @@ func _scaled_sprite(parent: CanvasItem, texture: Texture2D, rect: Rect2) -> Spri
 	return sprite
 
 func display(sim) -> void:
-	var key := str([sim.run_seed, sim.wave, sim.rewards.history, sim.rewards.offered])
+	current_sim = sim
+	reroll_button.visible = sim.v2_mode
+	synergy_button.visible = sim.v2_mode
+	synergy_hint.visible = sim.v2_mode
+	if sim.v2_mode:
+		reroll_button.text = "刷新 %d/2  [R]" % sim.rewards.rerolls_left
+		reroll_button.disabled = sim.rewards.rerolls_left <= 0 or target_overlay.visible
+	var key := (str(sim.rewards.offer_revision) if sim.v2_mode else "") + str([sim.run_seed, sim.wave, sim.rewards.history, sim.rewards.offered])
 	var opened := not visible
 	show()
 	if offer_key != key:
+		close_target_picker()
+		synergy_overlay.hide()
 		offer_key = key
 		if sim.v2_mode:
 			heading.text = "水晶 Lv.%d  ·  幸运 %.2f" % [sim.run_state.crystal_level, sim.run_state.luck]
 		else:
 			heading.text = "节点 %d / 5 已完成  ·  小队 Lv.%d  ·  三项中选择一项  ·  本局种子 %d" % [sim.wave, sim.team_level, sim.run_seed]
 		for i in 3:
-			_apply_offer(i, sim.rewards.offered[i], sim)
+			buttons[i].visible = i < sim.rewards.offered.size()
+			if buttons[i].visible:
+				_apply_offer(i, sim.rewards.offered[i], sim)
 		history_label.text = "已经获得  " + ("尚无强化，这是你的第一次选择。" if sim.rewards.history.is_empty() else "  /  ".join(sim.rewards.history))
 	for i in 3:
 		buttons[i].focus_next = buttons[(i + 1) % 3].get_path()
@@ -205,6 +231,7 @@ func display(sim) -> void:
 		buttons[i].focus_neighbor_left = buttons[(i + 2) % 3].get_path()
 		buttons[i].focus_neighbor_top = buttons[i].get_path()
 		buttons[i].focus_neighbor_bottom = buttons[i].get_path()
+	_update_synergy_hint()
 	if opened:
 		focused_index = -1
 		buttons[0].grab_focus()
@@ -261,6 +288,7 @@ func _focus_card(index: int) -> void:
 		return
 	var changed := focused_index != index
 	focused_index = index
+	_update_synergy_hint()
 	if changed and visible:
 		_play(hover_sound)
 	for i in buttons.size():
@@ -277,7 +305,7 @@ func _focus_card(index: int) -> void:
 		glow_panels[i].visible = false
 
 func _commit_choice(index: int) -> void:
-	if target_overlay.visible:
+	if target_overlay.visible or synergy_overlay.visible:
 		return
 	_play(confirm_sound)
 	chosen.emit(index, -1)
@@ -307,14 +335,14 @@ func _build_target_picker(hud) -> void:
 		button.clip_contents = true
 		var preview: Control = CharacterBreathPreview.new()
 		preview.transparent_background = true
-		preview.position = Vector2(15, 3)
-		preview.size = Vector2(260, 258)
+		preview.position = UI_LAYOUT.battle_reward_target_portrait_rect.position
+		preview.size = UI_LAYOUT.battle_reward_target_portrait_rect.size
 		button.add_child(preview)
 		target_previews.append(preview)
-		var name_label: Label = hud.label(button, Vector2(12, 266), Vector2(266, 28), "", 18, WHITE)
+		var name_label: Label = hud.label(button, UI_LAYOUT.battle_reward_target_name_rect.position, UI_LAYOUT.battle_reward_target_name_rect.size, "", 18, WHITE)
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		target_name_labels.append(name_label)
-		var hp_label: Label = hud.label(button, Vector2(12, 298), Vector2(266, 22), "", 12, MUTED)
+		var hp_label: Label = hud.label(button, UI_LAYOUT.battle_reward_target_stats_rect.position, UI_LAYOUT.battle_reward_target_stats_rect.size, "", 12, MUTED)
 		hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		target_hp_labels.append(hp_label)
 		button.pressed.connect(_pick_target.bind(i))
@@ -345,6 +373,11 @@ func show_target_picker(index: int, sim) -> void:
 		target_name_labels[i].text = "%d  %s" % [i + 1, str(hero.get("name", "角色"))]
 		target_name_labels[i].add_theme_color_override("font_color", color)
 		target_hp_labels[i].text = "HP %d / %d" % [int(hero.get("hp", 0)), int(hero.get("max_hp", 0))]
+		var benefit := preload("res://scripts/card_benefit_preview.gd").hero_lines(sim.rewards.offered[index], hero)
+		target_hp_labels[i].text += "\n" + (benefit if not benefit.is_empty() else sim.rewards.preview(sim.rewards.offered[index],sim))
+		target_hp_labels[i].autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		target_buttons[i].tooltip_text = Synergies.preview(sim.rewards.offered[index], sim, i)
+	reroll_button.disabled = true
 	target_overlay.show()
 	for button: Button in target_buttons:
 		if button.visible:
@@ -354,6 +387,8 @@ func show_target_picker(index: int, sim) -> void:
 func close_target_picker() -> void:
 	target_overlay.hide()
 	target_card_index = -1
+	if current_sim != null and current_sim.v2_mode:
+		reroll_button.disabled = current_sim.rewards.rerolls_left <= 0
 	if visible and not buttons.is_empty():
 		buttons[0].grab_focus()
 
@@ -466,3 +501,57 @@ func _play(player: AudioStreamPlayer) -> void:
 		return
 	player.stop()
 	player.play()
+
+func _build_reward_tools(hud) -> void:
+	reroll_button = hud.button(self, UI_LAYOUT.battle_reward_reroll_rect, "刷新 2/2  [R]", false)
+	reroll_button.pressed.connect(request_reroll)
+	reroll_button.tooltip_text = "每轮免费刷新2次；尽量避开本轮已见卡牌，不消耗选卡机会。"
+	synergy_button = hud.button(self, UI_LAYOUT.battle_reward_synergy_button_rect, "联动图鉴", false)
+	synergy_button.pressed.connect(show_synergies)
+	synergy_hint = hud.label(self, UI_LAYOUT.battle_reward_synergy_preview_rect.position, UI_LAYOUT.battle_reward_synergy_preview_rect.size, "", 12, Color("#85e6cd"))
+	synergy_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	synergy_hint.clip_text = true
+	synergy_hint.max_lines_visible = 2
+	synergy_hint.size = UI_LAYOUT.battle_reward_synergy_preview_rect.size
+	synergy_overlay = ColorRect.new()
+	synergy_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	synergy_overlay.color = Color(0.015, 0.018, 0.045, 0.98)
+	synergy_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	synergy_overlay.z_index = 110
+	add_child(synergy_overlay)
+	var area: Rect2 = UI_LAYOUT.battle_reward_synergy_overlay_rect
+	hud.label(synergy_overlay, area.position + Vector2(20, 8), Vector2(780, 34), "卡牌联动 · 每组只激活一次", 24, WHITE)
+	hud.label(synergy_overlay, area.position + Vector2(20, 48), Vector2(850, 24), "角色联动需由同一角色持有两张卡；全队联动可由不同角色持有。", 14, MUTED)
+	var close_button: Button = hud.button(synergy_overlay, Rect2(area.end - Vector2(172, area.size.y - 8), Vector2(152, 34)), "返回选卡 [Esc]", false)
+	close_button.pressed.connect(close_synergies)
+	for index in Synergies.RECIPES.size():
+		var row: Label = hud.label(synergy_overlay, area.position + Vector2(20, 88 + index * 64), Vector2(area.size.x - 40, 60), "", 14, WHITE)
+		row.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		row.clip_text = true
+		synergy_rows.append(row)
+	synergy_overlay.hide()
+
+func request_reroll() -> void:
+	if not visible or target_overlay.visible or synergy_overlay.visible or reroll_button.disabled:
+		return
+	_play(confirm_sound)
+	reroll_requested.emit()
+
+func _update_synergy_hint() -> void:
+	if current_sim == null or not current_sim.v2_mode: return
+	var index := maxi(0, focused_index)
+	if index < current_sim.rewards.offered.size():
+		synergy_hint.text = Synergies.preview(current_sim.rewards.offered[index], current_sim)
+
+func show_synergies() -> void:
+	if current_sim == null or not current_sim.v2_mode or target_overlay.visible: return
+	for index in Synergies.RECIPES.size():
+		var recipe: Dictionary = Synergies.RECIPES[index]
+		var state := Synergies.status(recipe, current_sim)
+		synergy_rows[index].text = "%s  ·  %s  +  %s  [%s]\n%s" % [recipe.name, recipe.names[0], recipe.names[1], state, recipe.description]
+		synergy_rows[index].add_theme_color_override("font_color", Color("#85e6cd") if state.begins_with("已激活") else WHITE)
+	synergy_overlay.show()
+
+func close_synergies() -> void:
+	synergy_overlay.hide()
+	if not buttons.is_empty(): buttons[maxi(0, focused_index)].grab_focus()

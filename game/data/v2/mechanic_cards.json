@@ -16,16 +16,27 @@
   {
     "id": "mechanic_prism_fan",
     "name": "棱镜散射",
-    "description": "全队每次攻击额外增加2条扇形弹道。",
+    "description": "全员弹道+1，普攻爆炸半径+25。重复获取时各项加成叠加。",
     "rarity": "epic",
     "weight": 16,
     "target": "global",
-    "effect": "projectile_count_add",
-    "value": 2,
+    "effect": "card_bundle",
+    "value": 0,
     "mechanic": true,
     "tags": [
       "弹道"
-    ]
+    ],
+    "components": [
+      {
+        "effect": "projectile_count_add",
+        "value": 1
+      },
+      {
+        "effect": "blast_add",
+        "value": 25
+      }
+    ],
+    "summary": "全员弹道+1，普攻爆炸半径+25"
   },
   {
     "id": "mechanic_piercing_edge",
@@ -86,7 +97,7 @@
   {
     "id": "support_red_moon",
     "name": "赤月炮击",
-    "description": "每7秒锁定生命值最高的怪物，对预警椭圆内所有敌人造成500点火元素伤害。",
+    "description": "每7秒锁定生命值最高的怪物，对预警椭圆内所有敌人造成1500点火元素伤害。",
     "rarity": "epic",
     "weight": 16,
     "target": "global",
@@ -102,7 +113,7 @@
   {
     "id": "support_crossfire",
     "name": "交叉火力",
-    "description": "每10秒扫射整条水平攻击带，对带内每名敌人造成300点伤害。",
+    "description": "每10秒扫射整条水平攻击带，对带内每名敌人造成900点伤害。",
     "rarity": "rare",
     "weight": 27,
     "target": "global",
@@ -133,7 +144,7 @@
   {
     "id": "support_finale",
     "name": "终幕齐射",
-    "description": "每10秒发动一次300点伤害的全屏齐射。",
+    "description": "每10秒发动一次900点伤害的全屏齐射。",
     "rarity": "legendary",
     "weight": 6,
     "target": "global",
@@ -378,7 +389,7 @@
   {
     "id": "evolve_fireball",
     "name": "天动万象",
-    "description": "场外火球从左上方落下，对半径190内的敌人造成火元素范围伤害；3级分裂、6级留下燃烧地面、9级强化轰击。",
+    "description": "巨型岩星从天而降，对落点椭圆范围造成岩元素群伤并减速2秒，威力为原来的3倍；3级连落3颗，6级范围扩大20%，9级大幅提高伤害。",
     "rarity": "common",
     "weight": 48,
     "target": "global",
@@ -392,17 +403,17 @@
     "evolutions": [
       {
         "level": 3,
-        "name": "分裂火球",
+        "name": "群星连坠",
         "branch": "split"
       },
       {
         "level": 6,
-        "name": "灼热余烬",
-        "branch": "burning_ground"
+        "name": "天倾地裂",
+        "branch": "wide_impact"
       },
       {
         "level": 9,
-        "name": "天火陨星",
+        "name": "万象崩解",
         "branch": "meteor"
       }
     ]
@@ -558,72 +569,132 @@
   {
     "id": "v75_squad_edge",
     "name": "全军锋锐",
-    "description": "全队：攻击力提高50%。",
+    "description": "全员攻击+25%，防御+20。重复获取时各项加成叠加。",
     "rarity": "common",
     "weight": 48,
     "target": "global",
-    "effect": "squad_attack_multiplier",
-    "value": 0.5,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "attack_multiplier",
+        "value": 0.25
+      },
+      {
+        "effect": "armor_flat",
+        "value": 20
+      }
+    ],
+    "summary": "全员攻击+25%，防御+20",
+    "mechanic": true
   },
   {
     "id": "v75_breach_order",
     "name": "破阵号令",
-    "description": "全队：攻击力提高100%。",
+    "description": "全员攻击+100%，移速+30。重复获取时各项加成叠加。",
     "rarity": "rare",
     "weight": 23,
     "target": "global",
-    "effect": "squad_attack_multiplier",
-    "value": 1.0,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "attack_multiplier",
+        "value": 1
+      },
+      {
+        "effect": "move_speed_flat",
+        "value": 30
+      }
+    ],
+    "summary": "全员攻击+100%，移速+30",
+    "mechanic": true
   },
   {
     "id": "v75_annihilation_protocol",
     "name": "灭绝协议",
-    "description": "全队：攻击力提高200%。",
+    "description": "全员攻击+100%，普攻爆炸半径+45。重复获取时各项加成叠加。",
     "rarity": "epic",
     "weight": 9,
     "target": "global",
-    "effect": "squad_attack_multiplier",
-    "value": 2.0,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "attack_multiplier",
+        "value": 1
+      },
+      {
+        "effect": "blast_add",
+        "value": 45
+      }
+    ],
+    "summary": "全员攻击+100%，普攻爆炸半径+45",
+    "mechanic": true
   },
   {
     "id": "v75_legion_avatar",
     "name": "军团化身",
-    "description": "全队：攻击力提高300%。",
+    "description": "全员攻击+150%，生命+100%。重复获取时各项加成叠加。",
     "rarity": "legendary",
     "weight": 3,
     "target": "global",
-    "effect": "squad_attack_multiplier",
-    "value": 3.0,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "attack_multiplier",
+        "value": 1.5
+      },
+      {
+        "effect": "health_multiplier",
+        "value": 1
+      }
+    ],
+    "summary": "全员攻击+150%，生命+100%",
+    "mechanic": true
   },
   {
     "id": "v75_field_medicine",
     "name": "野战医疗",
-    "description": "全队：最大生命提高75%，并恢复等量生命。",
+    "description": "全员生命+30%，每次普攻回复5生命。重复获取时各项加成叠加。",
     "rarity": "common",
     "weight": 46,
     "target": "global",
-    "effect": "squad_health_multiplier",
-    "value": 0.75,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "health_multiplier",
+        "value": 0.3
+      },
+      {
+        "effect": "attack_mend",
+        "value": 5
+      }
+    ],
+    "summary": "全员生命+30%，普攻回血5",
+    "mechanic": true
   },
   {
     "id": "v75_group_regeneration",
@@ -642,16 +713,28 @@
   {
     "id": "v75_guardian_pact",
     "name": "守望契约",
-    "description": "全队：最大生命提高300%，并恢复等量生命。",
+    "description": "全员生命+150%，防御+100。重复获取时各项加成叠加。",
     "rarity": "epic",
     "weight": 8,
     "target": "global",
-    "effect": "squad_health_multiplier",
-    "value": 3.0,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "health_multiplier",
+        "value": 1.5
+      },
+      {
+        "effect": "armor_flat",
+        "value": 100
+      }
+    ],
+    "summary": "全员生命+150%，防御+100",
+    "mechanic": true
   },
   {
     "id": "v75_immortal_legion",
@@ -670,68 +753,116 @@
   {
     "id": "v75_forced_march",
     "name": "急行军",
-    "description": "全队：攻击速度提高20%。",
+    "description": "全员移速+45，防御+15。重复获取时各项加成叠加。",
     "rarity": "common",
     "weight": 46,
     "target": "global",
-    "effect": "squad_rate_multiplier",
-    "value": 0.2,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "move_speed_flat",
+        "value": 45
+      },
+      {
+        "effect": "armor_flat",
+        "value": 15
+      }
+    ],
+    "summary": "全员移速+45，防御+15",
+    "mechanic": true
   },
   {
     "id": "v75_war_rhythm",
     "name": "战争律动",
-    "description": "全队：攻击速度提高40%。",
+    "description": "全员攻速+20%，每次普攻回复6生命。重复获取时各项加成叠加。",
     "rarity": "rare",
     "weight": 22,
     "target": "global",
-    "effect": "squad_rate_multiplier",
-    "value": 0.4,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "attack_rate_multiplier",
+        "value": 0.2
+      },
+      {
+        "effect": "attack_mend",
+        "value": 6
+      }
+    ],
+    "summary": "全员攻速+20%，普攻回血6",
+    "mechanic": true
   },
   {
     "id": "v75_temporal_distortion",
     "name": "时间扭曲",
-    "description": "全队：攻击速度提高80%。",
+    "description": "全员攻速+30%，技能冷却缩减10%。重复获取时各项加成叠加。",
     "rarity": "epic",
     "weight": 8,
     "target": "global",
-    "effect": "squad_rate_multiplier",
-    "value": 0.8,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "attack_rate_multiplier",
+        "value": 0.3
+      },
+      {
+        "effect": "skill_cooldown_add",
+        "value": 0.1
+      }
+    ],
+    "summary": "全员攻速+30%，技能冷却缩减10%",
+    "mechanic": true
   },
   {
     "id": "v75_velocity_field",
     "name": "极速领域",
-    "description": "全队：攻击速度提高120%。",
+    "description": "全员攻速+40%，移速+80。重复获取时各项加成叠加。",
     "rarity": "legendary",
     "weight": 2,
     "target": "global",
-    "effect": "squad_rate_multiplier",
-    "value": 1.2,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "attack_rate_multiplier",
+        "value": 0.4
+      },
+      {
+        "effect": "move_speed_flat",
+        "value": 80
+      }
+    ],
+    "summary": "全员攻速+40%，移速+80",
+    "mechanic": true
   },
   {
     "id": "v75_forward_observation",
     "name": "前沿观测",
-    "description": "全队：攻击范围提高150。",
+    "description": "全队：攻击范围提高40。",
     "rarity": "common",
     "weight": 43,
     "target": "global",
     "effect": "squad_range_flat",
-    "value": 150,
+    "value": 40,
     "tags": [
       "弹道"
     ],
@@ -740,44 +871,80 @@
   {
     "id": "v75_satellite_lock",
     "name": "卫星锁定",
-    "description": "全队：攻击范围提高300。",
+    "description": "全员射程+30，暴击率+10%。重复获取时各项加成叠加。",
     "rarity": "rare",
     "weight": 20,
     "target": "global",
-    "effect": "squad_range_flat",
-    "value": 300,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "range_flat",
+        "value": 30
+      },
+      {
+        "effect": "crit_flat",
+        "value": 0.1
+      }
+    ],
+    "summary": "全员射程+30，暴击率+10%",
+    "mechanic": true
   },
   {
     "id": "v75_omniscient_view",
     "name": "全知视域",
-    "description": "全队：攻击范围提高600。",
+    "description": "全员射程+50，技能范围+30%。重复获取时各项加成叠加。",
     "rarity": "epic",
     "weight": 7,
     "target": "global",
-    "effect": "squad_range_flat",
-    "value": 600,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "range_flat",
+        "value": 50
+      },
+      {
+        "effect": "skill_area_add",
+        "value": 0.3
+      }
+    ],
+    "summary": "全员射程+50，技能范围+30%",
+    "mechanic": true
   },
   {
     "id": "v75_orbital_aim",
     "name": "天基瞄准",
-    "description": "全队：攻击范围提高900。",
+    "description": "全员射程+70，普攻追击伤害+40%。重复获取时各项加成叠加。",
     "rarity": "legendary",
     "weight": 2,
     "target": "global",
-    "effect": "squad_range_flat",
-    "value": 900,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "range_flat",
+        "value": 70
+      },
+      {
+        "effect": "echo_add",
+        "value": 0.4
+      }
+    ],
+    "summary": "全员射程+70，普攻追击伤害+40%",
+    "mechanic": true
   },
   {
     "id": "v75_iron_line",
@@ -796,16 +963,28 @@
   {
     "id": "v75_guardian_formation",
     "name": "守护方阵",
-    "description": "全队：防御提高160。",
+    "description": "全员防御+100，生命+50%。重复获取时各项加成叠加。",
     "rarity": "rare",
     "weight": 20,
     "target": "global",
-    "effect": "squad_armor_flat",
-    "value": 160,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "armor_flat",
+        "value": 100
+      },
+      {
+        "effect": "health_multiplier",
+        "value": 0.5
+      }
+    ],
+    "summary": "全员防御+100，生命+50%",
+    "mechanic": true
   },
   {
     "id": "v75_mountain_bulwark",
@@ -838,47 +1017,76 @@
   {
     "id": "v75_concentrated_fire",
     "name": "多重火力",
-    "description": "全队：每次攻击额外增加1条弹道。",
+    "description": "全员攻击+100%，暴击率+10%。重复获取时各项加成叠加。",
     "rarity": "rare",
     "weight": 19,
     "target": "global",
-    "effect": "projectile_count_add",
-    "value": 1,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "components": [
+      {
+        "effect": "attack_multiplier",
+        "value": 1
+      },
+      {
+        "effect": "crit_flat",
+        "value": 0.1
+      }
+    ],
+    "summary": "全员攻击+100%，暴击率+10%"
   },
   {
     "id": "v75_triple_loading",
     "name": "三联装填",
-    "description": "全队：每次攻击额外增加3条弹道。",
+    "description": "全员每第三次普攻额外增伤150%。重复获取时各项加成叠加。",
     "rarity": "epic",
     "weight": 7,
     "target": "global",
-    "effect": "projectile_count_add",
-    "value": 3,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "components": [
+      {
+        "effect": "third_strike",
+        "value": 1
+      }
+    ],
+    "summary": "全员每第三击增伤150%"
   },
   {
     "id": "v75_piercing_barrage",
     "name": "贯穿弹幕",
-    "description": "全队：弹道贯穿数量增加2，近战斩击范围同步提升。",
+    "description": "全员贯穿+1，普攻追击伤害+25%。重复获取时各项加成叠加。",
     "rarity": "epic",
     "weight": 7,
     "target": "global",
-    "effect": "pierce_add",
-    "value": 2,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
       "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "components": [
+      {
+        "effect": "pierce_add",
+        "value": 1
+      },
+      {
+        "effect": "echo_add",
+        "value": 0.25
+      }
+    ],
+    "summary": "全员贯穿+1，普攻追击伤害+25%"
   },
   {
     "id": "v75_chain_storm",
@@ -1018,7 +1226,7 @@
   {
     "id": "v75_orbital_bombardment",
     "name": "轨道轰炸",
-    "description": "每7秒锁定高生命敌人，对大范围敌人造成600点伤害。",
+    "description": "每7秒锁定高生命敌人，对大范围敌人造成1800点伤害。",
     "rarity": "legendary",
     "weight": 3,
     "target": "global",

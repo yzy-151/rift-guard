@@ -55,6 +55,11 @@ const DEATH_FRAMES: Array[Texture2D] = [
 var letters: float = 0.0
 var auto_mode: bool = false
 var auto_timer: float = 0.0
+var displayed_portrait_key := ""
+var line_entrance: Tween
+var comic_playing := false
+var portrait_entrance_count := 0
+
 var last_portrait: String = "muelsyse"
 var cue_sound: AudioStreamPlayer
 var background_texture: TextureRect
@@ -263,7 +268,7 @@ func build(ui, story) -> void:
 	death_texture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	death_texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	death_overlay.add_child(death_texture)
-	death_reason_label = hud.label(death_overlay, Vector2(170, 500), Vector2(940, 112), "", 22, Color("#f5e8df"))
+	death_reason_label = hud.label(death_overlay, Vector2(170, 500), Vector2(940, 112), "", 18, Color("#f5e8df"))
 	death_reason_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	death_reason_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	death_reason_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -339,6 +344,7 @@ func action(rect: Rect2, text: String, callback: Callable) -> Button:
 	return item
 
 func display() -> void:
+	displayed_portrait_key = ""
 	for item in controls:
 		item.disabled = false
 		item.focus_mode = Control.FOCUS_ALL
@@ -361,6 +367,8 @@ func display() -> void:
 	advance_button.grab_focus()
 
 func show_line() -> void:
+	if line_entrance != null and line_entrance.is_valid():
+		line_entrance.kill()
 	var line: Dictionary = director.current()
 	if line.is_empty():
 		return
@@ -414,48 +422,38 @@ func show_line() -> void:
 	_configure_choices(line)
 	progress.text = ""
 	booper.visible = not director.has_choices()
-	_animate_line_entrance(str(line.get("highlight", "main")))
+	var portrait_key := resolved_portrait + "|" + highlight_mode + "|" + str(line.get("flip", false))
+	var changed := portrait_key != displayed_portrait_key
+	displayed_portrait_key = portrait_key
+	_animate_line_entrance(highlight_mode, changed)
 	_reveal_choices_after_pop(director.index)
 	if cue_sound != null:
 		cue_sound.pitch_scale = 0.98 + float(director.index % 3) * 0.035
 		cue_sound.play()
 
-func _animate_line_entrance(highlight: String) -> void:
-	var main_target: Vector2 = portrait.position
-	var partner_target: Vector2 = partner.position
-	var main_tint: Color = portrait.modulate
-	var partner_tint: Color = partner.modulate
-	portrait.pivot_offset = portrait.size * 0.5
-	partner.pivot_offset = partner.size * 0.5
-	portrait.position = main_target + Vector2(56, 52)
-	partner.position = partner_target + Vector2(-42, 36)
-	portrait.scale = Vector2(0.86, 0.86)
-	partner.scale = Vector2(0.91, 0.91)
-	portrait.rotation = deg_to_rad(2.8)
-	partner.rotation = deg_to_rad(-1.8)
-	portrait.modulate = Color(main_tint.r, main_tint.g, main_tint.b, 0.0)
-	partner.modulate = Color(partner_tint.r, partner_tint.g, partner_tint.b, 0.0)
-	dialogue_box.position.x = -940.0
-	body.pivot_offset = body.size * 0.5
-	body.scale = Vector2(1.055, 1.055)
-	var entrance := create_tween().set_parallel(true)
-	entrance.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	entrance.tween_property(portrait, "position", main_target, 0.34)
-	entrance.tween_property(partner, "position", partner_target, 0.30)
-	entrance.tween_property(portrait, "scale", Vector2.ONE, 0.32)
-	entrance.tween_property(partner, "scale", Vector2.ONE, 0.28)
-	entrance.tween_property(portrait, "rotation", 0.0, 0.30)
-	entrance.tween_property(partner, "rotation", 0.0, 0.28)
-	entrance.tween_property(portrait, "modulate", main_tint, 0.16)
-	entrance.tween_property(partner, "modulate", partner_tint, 0.16)
-	entrance.set_trans(Tween.TRANS_EXPO)
-	entrance.tween_property(dialogue_box, "position:x", 250.0, 0.22)
-	entrance.tween_property(body, "modulate", Color.WHITE, 0.13).set_delay(0.10)
-	entrance.tween_property(body, "scale", Vector2.ONE, 0.20).set_delay(0.08)
-	if highlight == "main":
-		portrait.position.x -= 16.0
-	else:
-		partner.position.x += 16.0
+func _animate_line_entrance(highlight: String, changed: bool = true) -> void:
+	var art: TextureRect = partner if highlight == "partner" else portrait
+	var target := art.position
+	art.scale = Vector2.ONE
+	art.rotation = 0.0
+	art.modulate = Color.WHITE
+	line_entrance = create_tween().set_parallel(true)
+	if changed:
+		portrait_entrance_count += 1
+		art.pivot_offset = art.size * 0.5
+		art.position = target + Vector2(40, 52)
+		art.scale = Vector2(0.86, 0.86)
+		art.rotation = deg_to_rad(2.8)
+		art.modulate.a = 0.0
+		line_entrance.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		line_entrance.tween_property(art, "position", target, 0.34)
+		line_entrance.tween_property(art, "scale", Vector2.ONE, 0.32)
+		line_entrance.tween_property(art, "rotation", 0.0, 0.30)
+		line_entrance.tween_property(art, "modulate:a", 1.0, 0.16)
+	dialogue_box.position.x = 250.0
+	dialogue_box.modulate = Color.WHITE
+	body.scale = Vector2.ONE
+	line_entrance.tween_property(body, "modulate", Color.WHITE, 0.13)
 
 func _reveal_choices_after_pop(expected_index: int) -> void:
 	await get_tree().create_timer(0.16).timeout
@@ -465,7 +463,7 @@ func _reveal_choices_after_pop(expected_index: int) -> void:
 		_reveal_choices()
 
 func _process(dt: float) -> void:
-	if root == null or not root.visible or history_panel.visible:
+	if root == null or not root.visible or history_panel.visible or comic_playing:
 		return
 	booper_elapsed += dt
 	if booper != null and booper.visible:
@@ -550,7 +548,7 @@ func _set_choice_focus(index: int) -> void:
 			create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT).tween_property(button, "scale", target, 0.12)
 
 func choose_option(choice_index: int) -> void:
-	if not line_ended or history_panel.visible or death_playing:
+	if not line_ended or history_panel.visible or death_playing or comic_playing:
 		return
 	var options: Array = director.current().get("choices", [])
 	if choice_index < 0 or choice_index >= options.size():
@@ -593,7 +591,7 @@ func _play_choice_death(reason: String) -> void:
 	fatal_choice_confirmed.emit()
 
 func activate_choice_at(point: Vector2) -> bool:
-	if not root.visible or history_panel.visible or death_playing:
+	if not root.visible or history_panel.visible or death_playing or comic_playing:
 		return false
 	for item in choice_buttons:
 		if item.visible and not item.disabled and item.get_global_rect().has_point(point):
@@ -615,7 +613,7 @@ func activate_choice_at(point: Vector2) -> bool:
 	return true
 
 func advance() -> void:
-	if not director.active or history_panel.visible:
+	if not director.active or history_panel.visible or comic_playing:
 		return
 	if letters < body.get_total_character_count():
 		letters = body.get_total_character_count()
@@ -636,6 +634,8 @@ func advance() -> void:
 		close()
 
 func skip() -> void:
+	if comic_playing:
+		return
 	if director.key.begins_with("home_"):
 		return
 	director.skip()
@@ -672,6 +672,8 @@ func toggle_history() -> void:
 			advance_button.grab_focus()
 
 func handle_input(event: InputEvent) -> void:
+	if comic_playing:
+		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_1 and choice_buttons[0].visible:
 			choose_option(0)
@@ -752,17 +754,19 @@ func play_comic_panel(resource_path: String, caption_text: String = "") -> void:
 	var texture: Texture2D = load(resource_path) as Texture2D
 	if texture == null:
 		return
+	comic_playing = true
 	var root_was_visible := root.visible
+	root.modulate = Color.WHITE
 	root.show()
 	var comic_overlay := ColorRect.new()
 	comic_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	comic_overlay.color = Color("#0b0b20")
-	comic_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	comic_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	root.add_child(comic_overlay)
 	var rect: Rect2 = UI_LAYOUT.dialogue_comic_rect
 	var backing := ColorRect.new()
 	backing.color = Color("#80363d")
-	backing.position = rect.position + Vector2(-10, 7)
+	backing.position = rect.position + Vector2(-10, -4)
 	backing.size = rect.size + Vector2(18, 10)
 	backing.pivot_offset = backing.size * 0.5
 	backing.rotation = deg_to_rad(-1.5)
@@ -776,7 +780,8 @@ func play_comic_panel(resource_path: String, caption_text: String = "") -> void:
 	comic.texture = texture
 	comic.custom_minimum_size = Vector2.ZERO
 	comic.size = rect.size
-	comic.position = rect.position + Vector2(1280, 0)
+	comic.position = rect.position
+	comic.pivot_offset = rect.size * 0.5
 	var caption := Label.new()
 	caption.position = UI_LAYOUT.dialogue_comic_caption_rect.position
 	caption.size = UI_LAYOUT.dialogue_comic_caption_rect.size
@@ -800,11 +805,29 @@ func play_comic_panel(resource_path: String, caption_text: String = "") -> void:
 	continue_icon.modulate = Color(1, 0.52, 0.60, 0)
 	continue_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	comic_overlay.add_child(continue_icon)
+	# Both layers open around the panel center, overshoot, then settle like a comic card.
+	comic.scale = Vector2(0.36, 0.36)
+	comic.rotation = deg_to_rad(-13.0)
+	comic.modulate.a = 0.0
+	backing.scale = Vector2(0.36, 0.36)
+	backing.rotation = deg_to_rad(-15.0)
 	backing.modulate.a = 0.0
-	var arrival := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	arrival.tween_property(comic, "position", rect.position, 0.40)
-	arrival.tween_property(backing, "modulate:a", 1.0, 0.25)
+	# Let the image upload and the dark stage draw before the reveal tween starts.
+	await get_tree().process_frame
+	var arrival := create_tween().set_parallel(true).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
+	arrival.tween_property(comic, "scale", Vector2(1.12, 1.12), 0.31)
+	arrival.tween_property(comic, "rotation", deg_to_rad(2.5), 0.31)
+	arrival.tween_property(comic, "modulate:a", 1.0, 0.16)
+	arrival.tween_property(backing, "scale", Vector2(1.09, 1.09), 0.31)
+	arrival.tween_property(backing, "rotation", deg_to_rad(-3.0), 0.31)
+	arrival.tween_property(backing, "modulate:a", 1.0, 0.16)
 	await arrival.finished
+	var settle := create_tween().set_parallel(true).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	settle.tween_property(comic, "scale", Vector2.ONE, 0.42)
+	settle.tween_property(comic, "rotation", 0.0, 0.42)
+	settle.tween_property(backing, "scale", Vector2.ONE, 0.42)
+	settle.tween_property(backing, "rotation", deg_to_rad(-1.5), 0.42)
+	await settle.finished
 	var text_reveal := create_tween().set_parallel(true)
 	text_reveal.tween_property(caption, "modulate:a", 1.0, 0.25)
 	text_reveal.tween_property(continue_icon, "modulate:a", 1.0, 0.25)
@@ -817,12 +840,16 @@ func play_comic_panel(resource_path: String, caption_text: String = "") -> void:
 	icon_pulse.kill()
 	animation_click_hint.show()
 	var exit_tween := create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	exit_tween.tween_property(comic, "position:x", -rect.size.x, 0.26)
+	exit_tween.tween_property(comic, "scale", Vector2(0.86, 0.86), 0.26)
+	exit_tween.tween_property(comic, "rotation", deg_to_rad(5.0), 0.26)
+	exit_tween.tween_property(comic, "modulate:a", 0.0, 0.24)
+	exit_tween.tween_property(backing, "scale", Vector2(0.86, 0.86), 0.26)
 	exit_tween.tween_property(backing, "modulate:a", 0.0, 0.20)
 	exit_tween.tween_property(caption, "modulate:a", 0.0, 0.18)
 	exit_tween.tween_property(continue_icon, "modulate:a", 0.0, 0.18)
 	await exit_tween.finished
 	comic_overlay.queue_free()
+	comic_playing = false
 	if not root_was_visible:
 		root.hide()
 
