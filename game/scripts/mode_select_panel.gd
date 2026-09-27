@@ -53,7 +53,7 @@ func build(owner_hud) -> void:
 	settings_button = _textured_button(root, Rect2(1026, 50, 196, 52), SETTINGS_SKIN, "⚙  设置  F10", false)
 	settings_button.pressed.connect(func(): _play(confirm_sound); settings_requested.emit())
 	_build_mode_card(Rect2(64, 176, 560, 330), "rift_watch", "01", "裂隙守望", "多角色路线防守", "八关剧情战役 · 折线路径 · 固定 Boss\n守卫水晶，并在每关重建卡牌构筑", "进入关卡选择", "res://assets/ui/rift_v2/stage_thumbnails/stage_03.png", true)
-	_build_mode_card(Rect2(656, 176, 560, 330), "endless_survival", "∞", "无尽生存", "四屏追击生存", "四边刷怪 · 无限升级 · 动态地形\n操纵旅行者移动，同行者跟随攻击", "立即进入荒原", "res://assets/ui/rift_v2/stage_thumbnails/stage_08.png", false)
+	_build_mode_card(Rect2(656, 176, 560, 330), "endless_survival", "∞", "无尽生存", "猩红远征 · 三人小队", "探索任务 · 三选一强化 · 移动安全区\n三人开局，抵御怪潮与周期首领", "开始远征", "res://assets/ui/rift_v2/stage_thumbnails/stage_08.png", false)
 	_build_checkpoint()
 	select_sound = _audio("res://assets/helltaker/audio/button_chapter_highlight_01.wav", -7.0)
 	confirm_sound = _audio("res://assets/helltaker/audio/button_menu_confirm_01.wav", -4.0)

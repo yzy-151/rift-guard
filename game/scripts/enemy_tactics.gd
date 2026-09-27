@@ -83,6 +83,9 @@ static func on_death(s,e: Dictionary) -> void:
  if e.kind!="originium_bug":return
  s.pending_impacts.append({"kind":"bug_blast","pos":e.pos,"life":1.0,"radius":125.0,"damage":float(e.damage)*1.5})
 static func explode(s,impact: Dictionary) -> void:
+ for enemy:Dictionary in s.enemies.duplicate():
+  if enemy.hp>0 and s.is_in_ability_area(impact.pos,enemy.pos,float(impact.radius)):
+   s.apply_hit(enemy,float(impact.damage),"",-1)
  for h in s.heroes:
   if h.hp>0 and h.deployed and s.is_in_ability_area(impact.pos,h.pos,float(impact.radius)):s.damage_hero(h.id,float(impact.damage),{"source_name":"源石虫","source_skill":"死亡爆炸"})
  s.events.append({"kind":"enemy_volatile","pos":impact.pos,"value":ceili(impact.damage),"bug_blast":true,"radius":impact.radius,"duration":0.85})

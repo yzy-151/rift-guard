@@ -1,0 +1,54 @@
+{
+  "before": {
+    "cpu_p50_ms": 5.13,
+    "cpu_p95_ms": 10.774,
+    "draw_calls": 1504.0,
+    "draw_wait_p50_ms": 21.855,
+    "draw_wait_p95_ms": 25.995,
+    "enemies": 80,
+    "frame_p50_ms": 28.361,
+    "frame_p95_ms": 36.331,
+    "label": "before",
+    "static_memory_mb": 238.265393257141,
+    "texture_memory_mb": 641.263847351074
+  },
+  "runtime-after": {
+    "cpu_p50_ms": 2.888,
+    "cpu_p95_ms": 4.693,
+    "draw_calls": 1364.0,
+    "draw_wait_p50_ms": 20.036,
+    "draw_wait_p95_ms": 24.188,
+    "enemies": 80,
+    "frame_p50_ms": 23.718,
+    "frame_p95_ms": 29.536,
+    "label": "runtime-after",
+    "static_memory_mb": 238.772850990295,
+    "texture_memory_mb": 641.763847351074
+  },
+  "after": {
+    "cpu_p50_ms": 2.868,
+    "cpu_p95_ms": 4.58,
+    "draw_calls": 1364.0,
+    "draw_wait_p50_ms": 19.858,
+    "draw_wait_p95_ms": 23.137,
+    "enemies": 80,
+    "frame_p50_ms": 23.487,
+    "frame_p95_ms": 28.217,
+    "label": "after",
+    "static_memory_mb": 238.789757728577,
+    "texture_memory_mb": 607.264064788818
+  },
+  "after-final": {
+    "cpu_p50_ms": 2.807,
+    "cpu_p95_ms": 4.659,
+    "draw_calls": 1364.0,
+    "draw_wait_p50_ms": 20.083,
+    "draw_wait_p95_ms": 24.171,
+    "enemies": 80,
+    "frame_p50_ms": 23.793,
+    "frame_p95_ms": 28.948,
+    "label": "after-final",
+    "static_memory_mb": 238.773255348206,
+    "texture_memory_mb": 607.264064788818
+  }
+}

@@ -98,6 +98,7 @@ var enemy_visual_textures: Dictionary = {}
 var unit_visual_actors: Dictionary = {}
 var character_sequences = CharacterSequenceLibrary.new()
 var enemy_sequences = EnemySequenceLibrary.new()
+var boss_sequence_visuals: Dictionary = {}
 var feedback_director = CombatFeedbackDirector.new()
 var surface_renderer = StageSurfaceRenderer.new()
 var debug_visual_matrix: Array[Dictionary] = []
@@ -203,9 +204,11 @@ func _load_enemy_visuals() -> void:
 func advance(dt: float) -> void:
 	_update_chapter1_material()
 	clock += dt
+	_update_boss_sequence_visuals(dt)
 	_sync_unit_visuals(dt)
 	if sim != null and sim.endless_mode and not sim.heroes.is_empty():
-		camera_center = camera_center.lerp(sim.heroes[0].pos, 1.0 - exp(-dt * 7.0))
+		var expedition_leader: Dictionary = sim.expedition.leader(sim)
+		if not expedition_leader.is_empty(): camera_center = camera_center.lerp(expedition_leader.pos, 1.0 - exp(-dt * 7.0))
 	if stage_exit_active:
 		_advance_stage_exit(dt)
 	for id in shot_flashes:
@@ -374,6 +377,7 @@ func _signature_visual(hero_index: int, ability_kind: String) -> String:
 
 func accept_events(batch: Array[Dictionary]) -> void:
 	for event in batch:
+		_accept_boss_sequence_event(event)
 		if bool(event.get("traveler_rework",false)): continue
 		if str(event.kind).begins_with("traveler_fx_"):
 			if event.kind != "traveler_fx_start": effects.append(effect_pool.acquire(event,float(event.get("delay",0.85))))
@@ -572,6 +576,7 @@ func _draw() -> void:
 	current_actor_transform = Transform2D.IDENTITY
 	draw_set_transform_matrix(current_actor_transform)
 	_draw_stage()
+	if sim.endless_mode: preload("res://scripts/endless_expedition_view.gd").ground(self)
 	_draw_arena_events()
 	Sim.EnemyTactics.draw_ground(self)
 	_draw_enemy_telegraphs()
@@ -766,6 +771,7 @@ func _draw() -> void:
 			draw_ellipse_shadow(shadow_foot - Vector2(0.0, 9.0), 28.0 if actor.hero else unit.size * 0.48, Color(0, 0, 0, 0.5))
 		draw_set_transform_matrix(current_actor_transform)
 		var visual: Dictionary = unit.duplicate()
+		visual.world_pos = unit.pos
 		visual.pos = Vector2.ZERO
 		if actor.hero:
 			_draw_hero(visual)
@@ -778,6 +784,7 @@ func _draw() -> void:
 	if not departing_recruit.is_empty():
 		_draw_departing_recruit()
 	_draw_stage_foreground()
+	if sim.endless_mode: preload("res://scripts/endless_expedition_view.gd").overlay(self)
 	if sim.state == "between":
 		caption(Vector2(548, 127), "队伍休整  %.1fs" % sim.wave_timer, TEAL, 16)
 
@@ -794,6 +801,7 @@ func begin_stage_exit(character_id: String, character_name: String, element: Str
 
 func reset_transients() -> void:
 	route_previews.clear()
+	boss_sequence_visuals.clear()
 	spawn_portals.clear()
 	stage_exit_active = false
 	stage_exit_phase = ""
@@ -821,6 +829,16 @@ func _advance_stage_exit(dt: float) -> void:
 			spawn_portals.erase("stage_exit")
 			stage_exit_finished.emit()
 
+func _stage_exit_visual_sample() -> Dictionary:
+	var moving := stage_exit_phase == "opening" or stage_exit_phase == "departing"
+	var animation := "run" if moving else "idle"
+	var facing := 1.0 if stage_exit_phase == "departing" else -1.0
+	if not moving and not sim.heroes.is_empty():
+		var offset_x: float = sim.heroes[0].pos.x - stage_exit_newcomer_pos.x
+		if absf(offset_x) > 1.0:
+			facing = signf(offset_x)
+	return {"state": animation, "frame": character_sequences.frame_at_time(stage_exit_character_id, animation, stage_exit_timer), "facing": facing}
+
 func _draw_stage_exit() -> void:
 	current_actor_transform = Transform2D.IDENTITY
 	draw_set_transform_matrix(current_actor_transform)
@@ -843,16 +861,17 @@ func _draw_stage_exit() -> void:
 	var aura_color := element_color(stage_exit_element)
 	draw_circle(actor + Vector2(0, -19), 30.0 + sin(clock * 4.0) * 1.5, Color(aura_color, 0.10))
 	draw_arc(actor + Vector2(0, 5), 24.0, clock, clock + PI * 1.55, 28, Color(aura_color, 0.86), 2.2, true)
+	var visual := _stage_exit_visual_sample()
 	if character_sequences.has_character(stage_exit_character_id):
-		var newcomer_texture := character_sequences.texture(stage_exit_character_id, "idle")
+		var newcomer_texture := character_sequences.texture(stage_exit_character_id, visual.state)
 		if newcomer_texture != null:
-			var newcomer_source := character_sequences.source_rect(stage_exit_character_id, "idle", 0)
+			var newcomer_source := character_sequences.source_rect(stage_exit_character_id, visual.state, visual.frame)
 			var newcomer_size := minf(108.0, character_sequences.display_size(stage_exit_character_id))
-			_draw_anchored_texture_region(newcomer_texture, actor + Vector2(0, 8), Vector2.ONE * newcomer_size, character_sequences.cell(stage_exit_character_id), character_sequences.pivot(stage_exit_character_id), -1.0, 1.0, newcomer_source, Color.WHITE)
+			_draw_anchored_texture_region(newcomer_texture, actor + Vector2(0, 8), Vector2.ONE * newcomer_size, character_sequences.cell(stage_exit_character_id), character_sequences.pivot(stage_exit_character_id), visual.facing, 1.0, newcomer_source, Color.WHITE)
 	else:
 		var atlas_index := maxi(0, int(stage_exit_character_id.trim_prefix("hero_")) - 1)
 		var tile := Vector2(atlas_index * 16, 112)
-		draw_texture_rect_region(atlas, Rect2(actor + Vector2(-27, -51), Vector2(54, 54)), Rect2(tile, Vector2(16, 16)), Color.WHITE)
+		_draw_anchored_texture_region(atlas, actor + Vector2(0, 3), Vector2(54, 54), Vector2(16, 16), Vector2(8, 16), visual.facing, 1.0, Rect2(tile, Vector2(16, 16)), Color.WHITE)
 	caption(actor + Vector2(-27, -76), stage_exit_character_name, aura_color, 14)
 	var instruction := "%s已解锁，正在进入下一关" % stage_exit_character_name if stage_exit_phase == "departing" else "通关成功 · 正在迎接 %s · 按 Enter 继续" % stage_exit_character_name
 	caption(Vector2(410, 132), instruction, Color("#ffe5df"), 18)
@@ -1079,19 +1098,13 @@ func _draw_galio_boss_warning(enemy: Dictionary) -> void:
 		var ally_center := world_to_screen(Vector2(enemy.get("galio_guard_pos", points[0]))) + Vector2(0,-35)
 		_kindred_ellipse(ally_center,Vector2(56,80),wind,0.65,3.0,0.07)
 		var takeoff := world_to_screen(Vector2(enemy.get("galio_takeoff_pos", enemy.pos)))
-		if progress < 0.34:
-			var rise := pow(progress/0.34,2.0)
-			_draw_galio_silhouette(takeoff+Vector2(0,-30-rise*450),1.0-rise*0.32,1.0,rise)
-			for trail in 5:
-				var x := float(trail-2)*17.0
-				draw_line(takeoff+Vector2(x,-rise*330),takeoff+Vector2(x,-rise*450-50),Color(wind,rise*0.35),3.0,true)
-		elif progress > 0.65:
-			var fall := pow((progress-0.65)/0.35,2.8)
-			var flight := center+Vector2(0,-560*(1.0-fall)-30)
-			for trail in 7:
-				var x := float(trail-3)*20.0
-				draw_line(flight+Vector2(x,-170),flight+Vector2(x,0),Color(wind,fall*0.3),4.0,true)
-			_draw_galio_silhouette(flight,0.8+fall*0.45,1.0,1.0-fall)
+		var elapsed := progress * float(enemy.special_warning_total)
+		var remaining := float(enemy.special_warning)
+		var facing := -1.0 if Vector2(points[0]).x < Vector2(enemy.pos).x else 1.0
+		if elapsed < enemy_sequences.duration("boss_galio", "takeoff"):
+			_draw_boss_clip("boss_galio", "takeoff", elapsed, takeoff + Vector2(0, ENEMY_FOOT_OFFSET), facing)
+		elif remaining <= 11.0 / 24.0:
+			_draw_boss_clip("boss_galio", "landing", 11.0 / 24.0 - remaining, world_to_screen(Vector2(points[0])) + Vector2(0, ENEMY_FOOT_OFFSET), facing)
 		_kindred_ellipse(center,Vector2(65,26)*(0.45+progress),DangerTelegraph.RED,0.2,2.0,0.22*progress)
 	elif move == "galio_punch":
 		var direction := (Vector2(points[0])-Vector2(enemy.pos)).normalized()
@@ -2137,14 +2150,8 @@ func _stitch_cells(source: Rect2, target: Rect2, max_cells: int = 64) -> Array[R
 
 ## 无尽模式墙体：横墙铺整块石块，竖墙只露顶面、靠下的压在上面、块距收紧。
 func _draw_endless_wall(target: Rect2) -> void:
-	if target.size.y > target.size.x:
-		_draw_endless_wall_column(target)
-		return
-	var cells := _stitch_cells(WALL_STONE_FULL, target)
-	for index in cells.size():
-		draw_texture_rect_region(WALL_STONES[index % WALL_STONES.size()], cells[index], WALL_STONE_FULL)
+	preload("res://scripts/endless_map_art.gd").wall(self,target)
 
-## 纵墙格位：只露顶面、块距收紧、底边贴齐地块，靠下的块后画因此压住上一块的底缘。
 func _wall_column_cells(target: Rect2) -> Array[Rect2]:
 	var band := WALL_STONE_TOP
 	var block_height := target.size.x * band.size.y / band.size.x
@@ -2304,46 +2311,7 @@ func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_fe
 			if float(feature.get("hp", 0.0)) > 0.0: _draw_endless_gate(_terrain_screen_rect(area))
 
 func _draw_endless_stage() -> void:
-	draw_texture_rect(stage_background_8, Rect2(0, 0, 1280, 720), false, Color(0.34, 0.24, 0.30, 1.0))
-	draw_rect(Rect2(0, 0, 1280, 720), Color(0.035, 0.018, 0.045, 0.69))
-	# 100×100 Helltaker floor modules are placed as squares, preserving their original ratio.
-	var top_left := screen_to_world(ENDLESS_PLAYFIELD_SCREEN.position)
-	var bottom_right := screen_to_world(ENDLESS_PLAYFIELD_SCREEN.end)
-	var cell := 100.0
-	var first_x := floorf(top_left.x / cell) * cell
-	var first_y := floorf(top_left.y / cell) * cell
-	for x in range(int(first_x), int(bottom_right.x + cell), int(cell)):
-		for y in range(int(first_y), int(bottom_right.y + cell), int(cell)):
-			var tile_index := posmod(floori(x / cell) * 3 + floori(y / cell) * 5, ENDLESS_FLOOR_TILE_COUNT)
-			var tile_rect := Rect2(world_to_screen(Vector2(x, y)), Vector2(cell, cell))
-			var source_rect := Rect2(tile_index * 104 + 2, 2, 100, 100)
-			draw_texture_rect_region(ENDLESS_FLOOR_ATLAS, tile_rect, source_rect, Color(0.63, 0.48, 0.55, 0.92))
-	# One overlay covers exactly the same contiguous cells without a draw command per tile.
-	var floor_size := Vector2(ceili((int(bottom_right.x + cell) - first_x) / cell) * cell, ceili((int(bottom_right.y + cell) - first_y) / cell) * cell)
-	draw_rect(Rect2(world_to_screen(Vector2(first_x, first_y)), floor_size), Color(0.16, 0.025, 0.06, 0.13))
-	# The central contract dais uses the matching square boss-floor module.
-	var dais_center := world_to_screen(Sim.ENDLESS_ARENA.get_center())
-	for dx in range(-1, 2):
-		for dy in range(-1, 2):
-			var dais_rect := Rect2(dais_center + Vector2(dx * cell, dy * cell) - Vector2(cell * 0.5, cell * 0.5), Vector2(cell, cell))
-			draw_texture_rect(ENDLESS_BOSS_FLOOR, dais_rect, false, Color(0.72, 0.52, 0.58, 0.88))
-	var center := world_to_screen(Sim.ENDLESS_ARENA.get_center())
-	for radius in [220.0, 360.0, 515.0]:
-		draw_arc(center, radius + sin(clock * 0.8 + radius) * 3.0, 0, TAU, 112, Color(0.88, 0.34, 0.42, 0.075), 3.0, true)
-	for i in 24:
-		var angle := float(i) * TAU / 24.0
-		var radius := 210.0 + float((i * 83) % 330)
-		var rune := world_to_screen(Sim.ENDLESS_ARENA.get_center() + Vector2.from_angle(angle) * radius)
-		var glow := 0.12 + sin(clock * 1.8 + i * 0.7) * 0.045
-		draw_arc(rune, 11.0 + float(i % 4) * 3.0, angle + clock * 0.04, angle + PI * 1.42 + clock * 0.04, 18, Color(0.96, 0.40, 0.46, glow), 2.0, true)
-		if i % 4 == 0:
-			draw_circle(rune, 3.0, Color(1.0, 0.69, 0.62, 0.18))
-	var arena_screen := Rect2(world_to_screen(Sim.ENDLESS_ARENA.position), Sim.ENDLESS_ARENA.size)
-	draw_rect(arena_screen, Color(0.92, 0.37, 0.43, 0.34), false, 3.0)
-	# Soft frame and ember bands guide focus toward the playable center.
-	for edge in 5:
-		draw_rect(Rect2(edge * 5, edge * 5, 1280 - edge * 10, 720 - edge * 10), Color(0.02, 0.008, 0.02, 0.07), false, 5.0)
-	caption(Vector2(36, 126), "E N D L E S S   F I E L D   /   猩红荒原", Color("#dcb1ad"), 12)
+	preload("res://scripts/endless_map_art.gd").draw(self)
 
 func _draw_base_projected() -> void:
 	var point: Vector2 = world_to_screen(Vector2(100, 365))
@@ -2586,6 +2554,7 @@ func _draw_traveler(hero: Dictionary, tint: Color, down: bool) -> void:
 	_draw_anchored_texture_region(texture, foot, Vector2(width, height), Vector2(TRAVELER_CELL, TRAVELER_CELL), pivot, facing, 1.0, source, tint)
 
 func _draw_enemy(enemy: Dictionary) -> void:
+	var crowd_lod: bool = sim.endless_mode and sim.enemies.size() >= 48 and not str(enemy.kind).begins_with("boss_")
 	if bool(enemy.get("revive_pending", false)):
 		var corpse := enemy.duplicate()
 		corpse.elapsed = float(enemy.revive_elapsed)
@@ -2621,6 +2590,15 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	elif str(enemy.kind) != "boss_galio":
 		var facing := float(enemy.get("facing", -1.0))
 		_draw_anchored_texture_region(atlas, enemy.pos + Vector2(0, ENEMY_FOOT_OFFSET + bob), Vector2(side, side), Vector2(16, 16), Vector2(8, 16), facing, -1.0, Rect2(0, 144, 16, 16), tint)
+	if crowd_lod:
+		var hp_ratio:=clampf(float(enemy.hp)/maxf(1,float(enemy.max_hp)),0,1)
+		if hp_ratio<0.995 or float(enemy.flash)>0:
+			draw_rect(Rect2(Vector2(-22,-side-2),Vector2(44,4)),Color("302b32"))
+			draw_rect(Rect2(Vector2(-22,-side-2),Vector2(44*hp_ratio,4)),RED)
+		if float(enemy.get("shield",0))>0:draw_rect(Rect2(Vector2(-22,-side-7),Vector2(44,2)),Color("66c8ff"))
+		if int(enemy.id)%8==0:caption(Vector2(-20,-side-13),"Lv.%d" % int(enemy.get("level",1)),Color("f2c7ad"),9)
+		if float(enemy.get("frozen_timer",0))>0:draw_arc(Vector2(0,-18),30,0,TAU,8,Color("a5e4ff"),2)
+		return
 	if not str(enemy.kind).begins_with("boss_"):
 		var ratio: float = clampf(float(enemy.hp) / float(enemy.max_hp), 0, 1)
 		draw_rect(Rect2(enemy.pos + Vector2(-22, -side - 2), Vector2(44, 4)), Color("#302b32"))
@@ -2655,17 +2633,19 @@ func _draw_enemy(enemy: Dictionary) -> void:
 					for sac in 3:
 						draw_circle(body + Vector2(-25 + sac * 25, 20 + sin(clock * 3.0 + sac) * 4.0), 13.0, Color(boss_color, 0.58))
 			"galio":
-				_draw_galio_silhouette(body, 1.0, 1.0, 0.05 + pulse * 0.04)
+				if not enemy_sequences.has_enemy("boss_galio"):
+					_draw_galio_silhouette(body, 1.0, 1.0, 0.05 + pulse * 0.04)
 			"kindred":
-				var bow_center := body + Vector2(-8.0, -10.0)
-				draw_arc(bow_center, 47.0 + pulse * 2.0, -1.24, 1.24, 32, Color("#f0ffff"), 5.0, true)
-				draw_line(bow_center + Vector2(15,-44), bow_center + Vector2(15,44), Color("#adc8dc"), 2.0, true)
-				draw_line(bow_center + Vector2(-34,0), bow_center + Vector2(54,0), Color("#f5ffff"), 3.0, true)
-				var wolf_pos := body + Vector2(cos(clock*1.4)*52.0, -30.0 + sin(clock*1.4)*18.0)
-				draw_circle(wolf_pos, 18.0, Color(0.47,0.28,0.72,0.28))
-				draw_colored_polygon(PackedVector2Array([wolf_pos+Vector2(-18,8),wolf_pos+Vector2(-8,-18),wolf_pos,wolf_pos+Vector2(10,-16),wolf_pos+Vector2(20,8),wolf_pos+Vector2(0,16)]),Color(0.70,0.54,0.94,0.55))
-				draw_circle(wolf_pos+Vector2(-6,-2),2.5,Color("#f4ffff"))
-				draw_circle(wolf_pos+Vector2(6,-2),2.5,Color("#f4ffff"))
+				if not enemy_sequences.has_enemy("boss_03"):
+					var bow_center := body + Vector2(-8.0, -10.0)
+					draw_arc(bow_center, 47.0 + pulse * 2.0, -1.24, 1.24, 32, Color("#f0ffff"), 5.0, true)
+					draw_line(bow_center + Vector2(15,-44), bow_center + Vector2(15,44), Color("#adc8dc"), 2.0, true)
+					draw_line(bow_center + Vector2(-34,0), bow_center + Vector2(54,0), Color("#f5ffff"), 3.0, true)
+					var wolf_pos := body + Vector2(cos(clock*1.4)*52.0, -30.0 + sin(clock*1.4)*18.0)
+					draw_circle(wolf_pos, 18.0, Color(0.47,0.28,0.72,0.28))
+					draw_colored_polygon(PackedVector2Array([wolf_pos+Vector2(-18,8),wolf_pos+Vector2(-8,-18),wolf_pos,wolf_pos+Vector2(10,-16),wolf_pos+Vector2(20,8),wolf_pos+Vector2(0,16)]),Color(0.70,0.54,0.94,0.55))
+					draw_circle(wolf_pos+Vector2(-6,-2),2.5,Color("#f4ffff"))
+					draw_circle(wolf_pos+Vector2(6,-2),2.5,Color("#f4ffff"))
 			"storm":
 				for bolt in 3:
 					var x := -34.0 + bolt * 34.0
@@ -2819,6 +2799,76 @@ func _draw_projectile(projectile: Dictionary) -> void:
 			draw_arc(Vector2.ZERO, 14.0, -1.2, 1.2, 18, Color("#f0d8ff"), 3.0, true)
 	draw_set_transform(Vector2.ZERO)
 
+func _update_boss_sequence_visuals(dt: float) -> void:
+	if sim == null:
+		return
+	var alive := {}
+	for enemy: Dictionary in sim.enemies:
+		if str(enemy.kind) not in ["boss_03", "boss_galio"]:
+			continue
+		var id := int(enemy.id)
+		alive[id] = true
+		var visual: Dictionary = boss_sequence_visuals.get(id, {"pos": enemy.pos, "elapsed": 0.0, "clip": "", "moving": false, "move_time": 0.0})
+		visual.moving = Vector2(enemy.pos).distance_squared_to(Vector2(visual.pos)) > 0.0001
+		visual.pos = enemy.pos
+		visual.elapsed = float(visual.elapsed) + dt
+		visual.move_time = float(visual.move_time) + dt if visual.moving else 0.0
+		boss_sequence_visuals[id] = visual
+	for id in boss_sequence_visuals.keys():
+		if not alive.has(id):
+			boss_sequence_visuals.erase(id)
+
+func _accept_boss_sequence_event(event: Dictionary) -> void:
+	var mapping := {"galio_entrance":"landing", "galio_punch":"punch", "galio_winds":"winds", "galio_durand":"durand", "kindred_dance":"dance", "kindred_wolf":"spirit", "kindred_respite":"spirit", "kindred_dread":"attack", "kindred_hunt":"attack"}
+	var kind := str(event.get("kind", ""))
+	if not mapping.has(kind) or not event.has("caster_id"):
+		return
+	var id := int(event.caster_id)
+	var visual: Dictionary = boss_sequence_visuals.get(id, {"pos": event.get("source", event.pos), "moving": false, "move_time": 0.0})
+	visual.clip = mapping[kind]
+	var direction := Vector2(event.get("finish", event.get("target", event.pos))) - Vector2(event.get("source", event.pos))
+	if absf(direction.x) > 1.0:
+		visual.facing = signf(direction.x)
+	visual.elapsed = 11.0 / 24.0 if kind == "galio_entrance" else 0.0
+	if kind == "kindred_wolf":
+		visual.elapsed = 0.75
+	if kind in ["galio_winds", "galio_durand"]:
+		visual.elapsed = enemy_sequences.duration("boss_galio", visual.clip) - 0.18
+	boss_sequence_visuals[id] = visual
+
+func _dual_boss_sequence_sample(enemy: Dictionary) -> Dictionary:
+	var id := str(enemy.kind)
+	var visual: Dictionary = boss_sequence_visuals.get(int(enemy.id), {})
+	var state := "run" if bool(visual.get("moving", false)) else "idle"
+	var elapsed := float(visual.get("move_time", clock)) if state == "run" else clock
+	var facing := float(enemy.get("facing", -1.0))
+	var world_pos: Vector2 = enemy.get("world_pos", enemy.pos)
+	if bool(enemy.get("special_pending", false)):
+		state = {"galio_punch":"punch_charge", "galio_winds":"winds", "galio_durand":"durand", "kindred_dance":"dance_charge", "kindred_wolf":"spirit", "kindred_dread":"attack", "kindred_hunt":"attack"}.get(str(enemy.special_move), "idle")
+		var phase := 1.0 - float(enemy.special_warning) / maxf(0.01, float(enemy.special_warning_total))
+		elapsed = phase * (0.75 if state == "spirit" else enemy_sequences.duration(id, state))
+		var points: Array = enemy.get("special_warning_positions", [])
+		if not points.is_empty() and absf(Vector2(points[0]).x - world_pos.x) > 1.0:
+			facing = signf(Vector2(points[0]).x - world_pos.x)
+	elif not str(visual.get("clip", "")).is_empty() and float(visual.get("elapsed", 0.0)) < enemy_sequences.duration(id, str(visual.clip)):
+		state = str(visual.clip)
+		elapsed = float(visual.elapsed)
+		facing = float(visual.get("facing", facing))
+	elif bool(enemy.get("attack_pending", false)):
+		state = "attack"
+		var lead := float(enemy.get("warning_total", 1.05 if float(enemy.get("attack_range", 0.0)) > 0.0 else 0.72))
+		var target: Vector2 = enemy.get("warning_pos", world_pos)
+		if absf(target.x - world_pos.x) > 1.0:
+			facing = signf(target.x - world_pos.x)
+		elapsed = (1.0 - clampf(float(enemy.get("warning_timer", 0.0)) / lead, 0.0, 1.0)) * enemy_sequences.duration(id, state)
+	return {"state": state, "frame": enemy_sequences.frame_at_time(id, state, elapsed), "facing": facing}
+
+func _draw_boss_clip(id: String, state: String, elapsed: float, foot: Vector2, facing: float) -> void:
+	var texture := enemy_sequences.texture(id, state)
+	if texture == null:
+		return
+	_draw_anchored_texture_region(texture, foot, Vector2.ONE * enemy_sequences.display_size(id), enemy_sequences.cell(id), enemy_sequences.pivot(id), facing, 1.0, enemy_sequences.source_rect(id, state, enemy_sequences.frame_at_time(id, state, elapsed)), Color.WHITE)
+
 func _draw_sequence_enemy(enemy: Dictionary, bob: float) -> void:
 	var enemy_id := str(enemy.kind)
 	var state := "attack" if bool(enemy.get("attack_pending", false)) or bool(enemy.get("special_pending", false)) or bool(enemy.get("attack_stance", false)) else "run"
@@ -2837,6 +2887,12 @@ func _draw_sequence_enemy(enemy: Dictionary, bob: float) -> void:
 		frame = enemy_sequences.frame_at_phase(enemy_id, state, phase)
 	else:
 		frame = enemy_sequences.frame_at_time(enemy_id, state, clock + float(enemy.id) * 0.137)
+	var facing := float(enemy.get("facing", -1.0))
+	if enemy_id in ["boss_03", "boss_galio"]:
+		var sample := _dual_boss_sequence_sample(enemy)
+		state = sample.state
+		frame = sample.frame
+		facing = sample.facing
 	var texture := enemy_sequences.texture(enemy_id, state)
 	if texture == null:
 		return
@@ -2850,7 +2906,7 @@ func _draw_sequence_enemy(enemy: Dictionary, bob: float) -> void:
 		scale = Vector2(1.10, 0.92)
 	var foot := Vector2(enemy.pos) + Vector2(0.0, ENEMY_FOOT_OFFSET + bob * 0.22)
 	var tint := Color("#fff0e8") if float(enemy.get("flash", 0.0)) > 0.0 and not reduced_effects else Color.WHITE
-	_draw_anchored_texture_region(texture, foot, Vector2(base_size, base_size) * scale, enemy_sequences.cell(enemy_id), enemy_sequences.pivot(enemy_id), float(enemy.get("facing", -1.0)), float(enemy_sequences.definition(enemy_id).get("native_facing", 1.0)), enemy_sequences.source_rect(enemy_id, state, frame), tint, clampf(1.0-float(enemy.get("burrow_timer",0))/0.65,0.01,1.0))
+	_draw_anchored_texture_region(texture, foot, Vector2(base_size, base_size) * scale, enemy_sequences.cell(enemy_id), enemy_sequences.pivot(enemy_id), facing, float(enemy_sequences.definition(enemy_id).get("native_facing", 1.0)), enemy_sequences.source_rect(enemy_id, state, frame), tint, clampf(1.0-float(enemy.get("burrow_timer",0))/0.65,0.01,1.0), enemy_sequences.draw_bounds(enemy_id,state,frame))
 
 func _rift_boss_sequence_state(move: String) -> String:
 	return {"rift_laser":"skill1", "rift_orbs":"skill4", "rift_overhead":"skill3", "rift_storm":"skill2"}.get(move, "attack")
@@ -2919,11 +2975,17 @@ func _draw_departing_recruit() -> void:
 	draw_set_transform(Vector2.ZERO)
 	current_actor_transform = Transform2D.IDENTITY
 
-func _draw_anchored_texture_region(texture: Texture2D, anchor: Vector2, display_size: Vector2, source_size: Vector2, source_pivot: Vector2, facing: float, native_facing: float, source: Rect2, tint: Color, reveal: float = 1.0) -> void:
+func _draw_anchored_texture_region(texture: Texture2D, anchor: Vector2, display_size: Vector2, source_size: Vector2, source_pivot: Vector2, facing: float, native_facing: float, source: Rect2, tint: Color, reveal: float = 1.0, crop: Rect2 = Rect2()) -> void:
 	var placement_data := SpriteAnchor.placement(display_size, source_size, source_pivot, facing, native_facing)
 	var local_transform := Transform2D(Vector2(float(placement_data.flip_x), 0.0), Vector2(0.0, 1.0), anchor)
 	draw_set_transform_matrix(current_actor_transform * local_transform)
 	var rect: Rect2=placement_data.rect
+	if crop.size != Vector2.ZERO and reveal>=1.0:
+		var ratio := rect.size/source.size
+		rect.position += crop.position*ratio
+		rect.size = crop.size*ratio
+		source.position += crop.position
+		source.size = crop.size
 	if reveal<1.0:
 		rect.position.y=rect.end.y-rect.size.y*reveal
 		rect.size.y*=reveal

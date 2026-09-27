@@ -64,10 +64,11 @@ func close() -> void:
 func is_open() -> bool:
 	return root != null and root.visible
 
-func _unhandled_input(event: InputEvent) -> void:
+func handle_input(event: InputEvent) -> bool:
 	if is_open() and event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_ENTER, KEY_SPACE, KEY_ESCAPE]:
-		get_viewport().set_input_as_handled()
 		close()
+		return true
+	return false
 
 func _add_item(item: Dictionary) -> void:
 	var tier := str(item.get("tier", "silver"))

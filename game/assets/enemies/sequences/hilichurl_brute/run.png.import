@@ -3,21 +3,22 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bf71tggykiq6t"
-path="res://.godot/imported/run.png-77eab53ec74165128f4bc039f941e6e3.ctex"
+path.s3tc="res://.godot/imported/run.png-77eab53ec74165128f4bc039f941e6e3.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/enemies/sequences/hilichurl_brute/run.png"
-dest_files=["res://.godot/imported/run.png-77eab53ec74165128f4bc039f941e6e3.ctex"]
+dest_files=["res://.godot/imported/run.png-77eab53ec74165128f4bc039f941e6e3.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.88
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0

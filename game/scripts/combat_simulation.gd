@@ -31,7 +31,9 @@ const GRID_CELL_SIZE := Vector2(60, 40)
 const GRID_COLUMNS := 20
 const GRID_ROWS := 11
 const STAGE_EXIT_AREA = Rect2(185, 215, 900, 320)
-const ENDLESS_ARENA = Rect2(80, 80, 2400, 1280)
+const EndlessExpedition = preload("res://scripts/endless_expedition.gd")
+const ENDLESS_ARENA = EndlessExpedition.ARENA
+var expedition = EndlessExpedition.new()
 const LANES = [270.0, 360.0, 450.0]
 const PROJECTILE_SPEED: float = 720.0
 const AURA_DURATION: float = 3.0
@@ -42,7 +44,7 @@ const HeroSignature = preload("res://scripts/hero_signature_skills.gd")
 const SELF_CENTERED_ABILITY_KINDS := ["wind_cut", "columbia_tide_ring", "columbia_tidal_benediction", "heal_gust", "thread_shelter", "hydro_fanfare", "team_concert", "encore", "mon3tr", "bangboo", "network_overdrive"]
 const GLOBAL_TEAM_ABILITY_KINDS := ["team_concert", "encore", "network_overdrive", "columbia_tidal_benediction"]
 const ENDLESS_BOSS_IDS := ["boss_01", "boss_02", "boss_03", "boss_04", "boss_05", "boss_06"]
-const ENDLESS_ACTIVE_CAP_EARLY := 80
+const ENDLESS_ACTIVE_CAP_EARLY := 48
 const ENDLESS_ACTIVE_CAP_LATE := 96
 const ENDLESS_NAV_CELL_SIZE := 64.0
 const ENDLESS_NAV_CLEARANCE := 48.0
@@ -50,7 +52,7 @@ const ENDLESS_NAV_REFRESH := 0.45
 const MAX_ENDLESS_ENEMY_PROJECTILES := 200
 const MAX_ENDLESS_ENEMY_HAZARDS := 72
 const ENDLESS_LOW_TIER_CAP_EARLY := 42
-const ENDLESS_LOW_TIER_CAP_LATE := 24
+const ENDLESS_LOW_TIER_CAP_LATE := 48
 const ENDLESS_HUT_CAP := 2
 const ENDLESS_LOW_TIER_IDS := ["grunt", "runner", "slime_pyro", "slime_electro", "slime_anemo", "slime_hydro", "slime_cryo"]
 const CAMPAIGN_MINION_BASE_MULTIPLIER := 3.0
@@ -127,7 +129,7 @@ var endless_mode: bool = false
 var active_view_rect: Rect2 = ENDLESS_ARENA
 var endless_spawn_timer: float = 0.0
 var troop_convoy_timer: float = 72.0
-var endless_next_boss_at: float = 90.0
+var endless_next_boss_at: float = 180.0
 var endless_boss_index: int = 0
 var terrain_features: Array[Dictionary] = []
 var formation_mode: String = "hold"
@@ -157,6 +159,9 @@ var endless_nav_columns: int = 0
 var endless_nav_rows: int = 0
 var endless_nav_solid := PackedByteArray()
 var endless_nav_fields: Dictionary = {}
+var endless_nav_cache: Dictionary = {}
+var endless_blocker_bins: Dictionary = {}
+var endless_blocker_index_ready := false
 var endless_nav_refresh_timer: float = 0.0
 
 func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
@@ -169,8 +174,8 @@ func _init(seed_value: int = -1, enable_v2: bool = false) -> void:
 func reset(seed_value: int = -1) -> void:
 	endless_mode = false
 	endless_spawn_timer = 0.0
-	troop_convoy_timer = 72.0
-	endless_next_boss_at = 90.0
+	troop_convoy_timer = 120.0
+	endless_next_boss_at = 180.0
 	endless_boss_index = 0
 	active_view_rect = ENDLESS_ARENA
 	terrain_features.clear()
@@ -270,8 +275,8 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	current_stage_id = stage_id
 	endless_mode = stage_id == "stage_endless"
 	endless_spawn_timer = 0.15
-	troop_convoy_timer = 72.0
-	endless_next_boss_at = 90.0
+	troop_convoy_timer = 120.0
+	endless_next_boss_at = 180.0
 	endless_boss_index = 0
 	active_view_rect = ENDLESS_ARENA
 	database = Database.new()
@@ -284,6 +289,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 		push_error("Invalid squad: " + str(squad_ids))
 		return
 	run_state.reset_for_stage(stage_id)
+	if endless_mode:run_state.mode_id="endless_survival"
 	var stage_definition: Dictionary = database.stages[stage_id]
 	crystal = CrystalProgression.new(_balanced_campaign_xp_thresholds(stage_definition.xp_thresholds) if not endless_mode else stage_definition.xp_thresholds)
 	card_pool = CardPool.new(database.cards, seed_value if seed_value >= 0 else int(Time.get_ticks_usec() % 2147483647))
@@ -341,7 +347,7 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	contract_reward_text = ""
 	recent_spawn_kinds.clear()
 	enemy_support_scan_timer = 0.0
-	combat_contract = database.combat_contracts.get(stage_id, {}).duplicate(true)
+	combat_contract = {} if endless_mode else database.combat_contracts.get(stage_id, {}).duplicate(true)
 	next_construct_id = 0
 	reaction_damage_bonus = 0.0
 	reaction_radius_bonus = 0.0
@@ -392,6 +398,8 @@ func reset_stage(stage_id: String, squad_ids: Array[String] = [], seed_value: in
 	_apply_campaign_progression()
 	_apply_team_resonances()
 	_reset_follow_history()
+	expedition = EndlessExpedition.new()
+	if endless_mode: expedition.setup(self)
 
 func _apply_campaign_progression() -> void:
 	var fortify: int = int(run_state.campaign_perks.get("fortify", 0))
@@ -579,6 +587,10 @@ func choose_reward(index: int, target_hero_id: int = -1) -> bool:
 	var picked_rarity: String = str(picked.get("rarity", "common"))
 	if not rewards.take(index, self, target_hero_id):
 		return false
+	if endless_mode and expedition.cards_remaining > 0:
+		events.append({"kind":"reward_taken","pos":heroes[0].pos,"value":picked_name,"rarity":picked_rarity})
+		expedition.choose_next(self)
+		return true
 	if not debug_reward_resume_state.is_empty():
 		state = debug_reward_resume_state
 		debug_reward_resume_state = ""
@@ -664,6 +676,7 @@ func set_follow_leader(hero_id: int) -> bool:
 	return true
 
 func _load_terrain(stage_definition: Dictionary) -> void:
+	endless_blocker_index_ready=false
 	terrain_features.clear()
 	var claimed_grid_cells := {}
 	var route_grid_cells := _route_grid_keys(stage_definition)
@@ -828,7 +841,7 @@ func _terrain_blocks(point: Vector2, radius: float = 7.0) -> bool:
 	return not _terrain_blocker_at(point, radius).is_empty()
 
 func _terrain_blocker_at(point: Vector2, radius: float = 7.0) -> Dictionary:
-	for feature: Dictionary in terrain_features:
+	for feature: Dictionary in _blocker_candidates(Rect2(point,Vector2.ZERO).grow(radius)):
 		if _feature_blocks(feature) and _feature_contains(feature, point, radius):
 			return feature
 	return {}
@@ -881,7 +894,7 @@ func _feature_segment_hits(feature: Dictionary, from: Vector2, to: Vector2, radi
 	return _segment_hits_rect(from, to, collision.grow(radius))
 
 func _terrain_blocker_on_segment(from: Vector2, to: Vector2, radius: float = 5.0) -> Dictionary:
-	for feature: Dictionary in terrain_features:
+	for feature: Dictionary in _blocker_candidates(Rect2(from,to-from).abs().grow(radius)):
 		if _feature_blocks(feature) and _feature_segment_hits(feature, from, to, radius):
 			return feature
 	return {}
@@ -1147,6 +1160,7 @@ func tick(dt: float) -> void:
 	_enemy_tick(dt)
 	_enemy_projectile_tick(dt)
 	_enemy_hazard_tick(dt)
+	if endless_mode: expedition.tick(self, dt)
 	var party_wiped := endless_mode and (heroes.is_empty() or heroes.all(func(hero: Dictionary) -> bool: return float(hero.get("hp", 0.0)) <= 0.0))
 	if base_hp <= 0 or party_wiped:
 		state = "lost"
@@ -1159,6 +1173,7 @@ func tick(dt: float) -> void:
 	_projectile_tick(dt)
 	_support_tick(dt)
 	_contract_tick()
+	if endless_mode: expedition.open_reward(self)
 	enemies = enemies.filter(func(e: Dictionary) -> bool: return e.hp > 0 or bool(e.get("revive_pending", false)))
 	if v2_mode and not endless_mode:
 		if stage_runtime.time_complete and stage_runtime.all_spawns_emitted and pending_stage_spawns.is_empty() and pending_troop_spawns.is_empty() and enemies.is_empty() and projectiles.is_empty() and not pending_impacts.any(func(p: Dictionary) -> bool: return p.kind=="bug_blast"):
@@ -1214,7 +1229,7 @@ func _contract_tick() -> void:
 
 
 func _endless_tier() -> int:
-	return maxi(1, floori(elapsed / 45.0) + 1)
+	return maxi(1, floori(elapsed / 60.0) + 1)
 
 func _endless_active_cap() -> int:
 	var progression := clampf(elapsed / 540.0, 0.0, 1.0)
@@ -1234,7 +1249,7 @@ func _endless_phase() -> int:
 	return endless_boss_index
 
 func _endless_enemy_level(tier: int) -> int:
-	return maxi(1, tier + _endless_phase() * 3 - 1)
+	return maxi(1, tier + _endless_phase())
 
 func _endless_enemy_pool(phase: int) -> Array[String]:
 	match phase:
@@ -1253,8 +1268,8 @@ func _endless_enemy_scales(tier: int) -> Dictionary:
 	var level := _endless_enemy_level(tier)
 	var late := maxf(0.0, float(level - 6))
 	return {
-		"health": 1.0 + float(level - 1) * 0.22 + pow(late, 1.6) * 0.18,
-		"damage": 1.0 + float(level - 1) * 0.12 + maxf(0.0, float(level - 8)) * 0.38,
+		"health": 0.75 + float(level - 1) * 0.18 + pow(late, 1.35) * 0.08,
+		"damage": 0.80 + float(level - 1) * 0.09 + late * 0.08,
 		"speed": minf(1.42, 1.0 + float(level - 1) * 0.018),
 		"xp": minf(3.5, 1.0 + float(level - 1) * 0.10),
 	}
@@ -1264,10 +1279,6 @@ func _apply_endless_scaling(enemy: Dictionary, tier: int, strength: float = 1.0)
 	var health_scale := lerpf(1.0, float(scales.health), strength)
 	var damage_scale := lerpf(1.0, float(scales.damage), strength)
 	var kind := str(enemy.get("kind", ""))
-	if kind in ["shielded", "hilichurl_brute"] and _endless_phase() >= 3:
-		# The third boss announces these threats; they reach full late-game strength after the fourth.
-		health_scale *= 10.0 if _endless_phase() >= 4 else 4.0
-		damage_scale *= 50.0 if _endless_phase() >= 4 else 12.0
 	enemy.hp *= health_scale
 	enemy.max_hp = enemy.hp
 	enemy.damage *= damage_scale
@@ -1285,7 +1296,7 @@ func _endless_spawn_tick(dt: float) -> void:
 	troop_convoy_timer -= dt
 	if _endless_phase() <= 2 and troop_convoy_timer <= 0.0 and enemies.size() + 7 <= _endless_active_cap():
 		_spawn_endless_troop_group()
-		troop_convoy_timer = 72.0
+		troop_convoy_timer = 120.0
 	endless_spawn_timer -= dt
 	var active_cap := _endless_active_cap()
 	if endless_spawn_timer > 0.0 or enemies.size() >= active_cap:
@@ -1309,6 +1320,8 @@ func _endless_spawn_tick(dt: float) -> void:
 			kind = _endless_quality_enemy(tier, i)
 		if kind in ENDLESS_LOW_TIER_IDS and low_tier_count >= low_tier_cap:
 			kind = _endless_quality_enemy(tier, i)
+		if kind in ["hilichurl_brute","shielded"] and _endless_kind_count([kind])>=8:
+			kind = "grunt" if i%2==0 else "ranged"
 		kind = _balanced_spawn_kind(kind)
 		if kind=="rift_bat" and active_cap-enemies.size()<3: continue
 		var point := _endless_interior_spawn_point(side, ratio) if kind == "splitter" else _endless_edge_point(side, ratio)
@@ -1324,7 +1337,9 @@ func _endless_spawn_tick(dt: float) -> void:
 			low_tier_count += 1
 		if enemies.size() < 84 or kind not in ENDLESS_LOW_TIER_IDS:
 			events.append({"kind": "route_spawn", "pos": point, "route_id": "edge_%d" % side, "flying": bool(enemy.get("flying", false))})
-	endless_spawn_timer += maxf(0.38, 1.16 - elapsed * 0.0012)
+	var tide := fposmod(elapsed, 60.0)
+	var interval := 1.5 if tide < 12.0 else (0.55 if tide > 42.0 else 0.95)
+	endless_spawn_timer += maxf(0.38, interval / (1.0 + elapsed / 900.0))
 
 func _spawn_endless_troop_group() -> void:
 	var group := ["troop_cannon", "troop_melee", "troop_melee", "troop_melee", "troop_ranged", "troop_ranged", "troop_ranged"]
@@ -1359,11 +1374,7 @@ func _endless_interior_spawn_point(side: int, ratio: float) -> Vector2:
 	return ENDLESS_ARENA.get_center()
 
 func _endless_edge_point(side: int, ratio: float) -> Vector2:
-	match posmod(side, 4):
-		0: return Vector2(ENDLESS_ARENA.position.x, lerpf(ENDLESS_ARENA.position.y, ENDLESS_ARENA.end.y, ratio))
-		1: return Vector2(ENDLESS_ARENA.end.x, lerpf(ENDLESS_ARENA.position.y, ENDLESS_ARENA.end.y, ratio))
-		2: return Vector2(lerpf(ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x, ratio), ENDLESS_ARENA.position.y)
-		_: return Vector2(lerpf(ENDLESS_ARENA.position.x, ENDLESS_ARENA.end.x, ratio), ENDLESS_ARENA.end.y)
+	return expedition.spawn_point(self, side, ratio)
 
 func _make_room_for_endless_boss() -> void:
 	var active_cap := _endless_active_cap()
@@ -1387,12 +1398,8 @@ func _make_room_for_endless_boss() -> void:
 		culled_spawns += 1
 
 func _endless_boss_multipliers(number: int) -> Vector2:
-	var health := [1.0, 3.0, 5.0, 20.0, 50.0]
-	var damage := [1.0, 10.0, 20.0, 30.0, 100.0]
-	if number <= health.size():
-		return Vector2(health[number - 1], damage[number - 1])
-	var later := float(number - health.size())
-	return Vector2(minf(100000.0, 50.0 * pow(1.5, later)), minf(100000.0, 100.0 * pow(1.35, later)))
+	var n := float(maxi(0, number - 1))
+	return Vector2(pow(2.15,n) * (1.0+0.35*n), pow(1.48,n))
 
 func _spawn_endless_boss_if_due() -> void:
 	while endless_mode and elapsed >= endless_next_boss_at:
@@ -1411,11 +1418,11 @@ func _spawn_endless_boss_if_due() -> void:
 		boss.shield *= multipliers.x
 		boss.max_shield = boss.shield
 		boss.damage *= multipliers.y
-		boss.level = _endless_enemy_level(_endless_tier()) + 4
+		boss.level = _endless_enemy_level(_endless_tier()) + 4 + boss_number * 3
 		boss.endless_boss_number = boss_number
 		events.append({"kind": "boss_arrival", "pos": boss.pos, "value": str(boss.name), "enemy_id": boss.id})
 		endless_boss_index += 1
-		endless_next_boss_at += 105.0
+		endless_next_boss_at += 150.0
 
 func _spawn_tick(dt: float) -> void:
 	spawn_timer -= dt
@@ -1544,6 +1551,8 @@ func spawn_on_route(kind: String, route_id: String, sequence: int = 0, keep_kind
 	return enemy
 
 func _rebuild_endless_navigation_grid() -> void:
+	endless_nav_cache.clear()
+	_rebuild_endless_blocker_index()
 	endless_nav_fields.clear()
 	endless_nav_refresh_timer = 0.0
 	if not endless_mode:
@@ -1608,6 +1617,10 @@ func _rebuild_endless_navigation_fields() -> void:
 		var target_cell := _nearest_open_endless_nav_cell(Vector2(hero.pos))
 		if not _endless_nav_cell_open(target_cell):
 			continue
+		var cache_key := _endless_nav_index(target_cell)
+		if endless_nav_cache.has(cache_key):
+			endless_nav_fields[int(hero.id)] = endless_nav_cache[cache_key]
+			continue
 		var distances := PackedInt32Array()
 		distances.resize(endless_nav_columns * endless_nav_rows)
 		distances.fill(-1)
@@ -1629,6 +1642,8 @@ func _rebuild_endless_navigation_fields() -> void:
 					continue
 				distances[adjacent_index] = next_distance
 				queue.append(adjacent_index)
+		if endless_nav_cache.size() >= 12:endless_nav_cache.erase(endless_nav_cache.keys()[0])
+		endless_nav_cache[cache_key] = distances
 		endless_nav_fields[int(hero.id)] = distances
 
 func _nearest_active_door_center(point: Vector2) -> Vector2:
@@ -2347,13 +2362,13 @@ func _execute_kindred_special(enemy: Dictionary, move: String) -> void:
 			var wolf_center := Vector2(points[0]) if not points.is_empty() else Vector2(enemy.pos)
 			var wolf_radius := float(enemy.get("special_warning_radius", 240.0))
 			_queue_enemy_hazard({"source_name":Readability.source(enemy).get("source_name","敌方"),"source_skill":Readability.source(enemy).get("source_skill","普通攻击"),"kind":"kindred_wolf_zone","pos":wolf_center,"radius":wolf_radius,"life":5.4 if empowered else 4.6,"total":5.4 if empowered else 4.6,"pulse":0.0,"damage":float(enemy.damage)*(0.55 if empowered else 0.40),"phase":phase})
-			events.append({"kind":"kindred_wolf","pos":wolf_center,"radius":wolf_radius,"phase":phase})
+			events.append({"kind":"kindred_wolf","caster_id":int(enemy.id),"source":cast_source,"pos":wolf_center,"radius":wolf_radius,"phase":phase})
 		"kindred_dread":
 			if not target_ids.is_empty():
 				var target_id := int(target_ids[0])
 				for index in 3:
 					_queue_enemy_projectile({"source_name":Readability.source(enemy).get("source_name","敌方"),"source_skill":Readability.source(enemy).get("source_skill","普通攻击"),"kind":"kindred_dread_arrow","pos":Vector2(enemy.pos)+Vector2(0.0,index*11.0-11.0),"source":Vector2(enemy.pos),"target_id":target_id,"damage":float(enemy.damage)*([0.42,0.54,1.65][index] if empowered else [0.34,0.44,1.24][index]),"speed":560.0+index*65.0,"delay":float(index)*0.28,"life":3.6,"phase":phase,"dread_stack":index+1})
-			events.append({"kind":"kindred_dread","pos":enemy.pos,"target":Vector2(points[0]) if not points.is_empty() else enemy.pos,"phase":phase})
+			events.append({"kind":"kindred_dread","caster_id":int(enemy.id),"source":cast_source,"pos":enemy.pos,"target":Vector2(points[0]) if not points.is_empty() else enemy.pos,"phase":phase})
 		"kindred_hunt":
 			if live.is_empty():
 				live = _kindred_live_heroes()
@@ -2364,7 +2379,7 @@ func _execute_kindred_special(enemy: Dictionary, move: String) -> void:
 				var target: Dictionary = live[index % live.size()]
 				var fan_angle := lerpf(-0.72,0.72,float(index % 8)/7.0)
 				_queue_enemy_projectile({"source_name":Readability.source(enemy).get("source_name","敌方"),"source_skill":Readability.source(enemy).get("source_skill","普通攻击"),"kind":"kindred_arrow","pos":Vector2(enemy.pos)+Vector2.from_angle(PI+fan_angle)*42.0,"source":Vector2(enemy.pos),"target_id":int(target.id),"damage":float(enemy.damage)*(0.34 if empowered else 0.26),"speed":690.0 if empowered else 590.0,"delay":float(index)*0.055,"life":4.0,"phase":phase})
-			events.append({"kind":"kindred_hunt","pos":enemy.pos,"points":points.duplicate(),"count":arrow_count,"phase":phase})
+			events.append({"kind":"kindred_hunt","caster_id":int(enemy.id),"source":cast_source,"pos":enemy.pos,"points":points.duplicate(),"count":arrow_count,"phase":phase})
 	enemy.special_timer = maxf(3.4, float(enemy.get("boss_pulse", 5.8)) * (0.74 if empowered else (0.86 if phase == 2 else 1.0)))
 
 
@@ -2375,7 +2390,7 @@ func _activate_kindred_respite(enemy: Dictionary) -> void:
 	enemy.kindred_respite_center = Vector2(enemy.pos)
 	enemy.kindred_respite_radius = 285.0
 	enemy.hp = maxf(1.0, float(enemy.hp))
-	events.append({"kind":"kindred_respite","pos":enemy.kindred_respite_center,"radius":enemy.kindred_respite_radius,"duration":5.0,"phase":int(enemy.get("boss_phase", 1))})
+	events.append({"kind":"kindred_respite","caster_id":int(enemy.id),"pos":enemy.kindred_respite_center,"radius":enemy.kindred_respite_radius,"duration":5.0,"phase":int(enemy.get("boss_phase", 1))})
 
 
 func _tick_kindred_respite(enemy: Dictionary, dt: float) -> void:
@@ -2620,9 +2635,9 @@ func _bounded_endless_summon_kind(kind: String, index: int) -> String:
 	if enemies.size() >= _endless_active_cap():
 		return ""
 	if kind == "splitter" and _endless_kind_count(["splitter"]) >= ENDLESS_HUT_CAP:
-		return _endless_quality_enemy(maxi(1, floori(elapsed / 45.0) + 1), index)
+		return _endless_quality_enemy(maxi(1, floori(elapsed / 60.0) + 1), index)
 	if kind in ENDLESS_LOW_TIER_IDS and _endless_kind_count(ENDLESS_LOW_TIER_IDS) >= _endless_low_tier_cap():
-		return _endless_quality_enemy(maxi(1, floori(elapsed / 45.0) + 1), index)
+		return _endless_quality_enemy(maxi(1, floori(elapsed / 60.0) + 1), index)
 	return kind
 
 func _boss_summon(enemy: Dictionary, kind: String, count: int) -> int:
@@ -2848,11 +2863,12 @@ func _queue_ability(hero: Dictionary, ability: Dictionary, target: Vector2, ulti
 	events.append({"kind":"vfx_cue","pos":hero.pos if SELF_CENTERED_ABILITY_KINDS.has(str(ability.get("kind", ""))) else target,"hero_id":hero.id,"profile":"ultimate_burst" if ultimate else "skill_field","delay":float(timeline.vfx_frame),"value":str(ability.get("kind","burst")),"traveler_rework":TravelerElements.handles(str(ability.get("kind","")))})
 
 func _pending_impact_tick(dt: float) -> void:
-	var alive: Array[Dictionary] = []
-	for impact: Dictionary in pending_impacts:
+	var due := pending_impacts
+	pending_impacts = []
+	for impact: Dictionary in due:
 		impact.life = float(impact.life) - dt
 		if impact.life > 0.0:
-			alive.append(impact)
+			pending_impacts.append(impact)
 			continue
 		if impact.kind == "bug_blast":
 			EnemyTactics.explode(self,impact)
@@ -2886,7 +2902,6 @@ func _pending_impact_tick(dt: float) -> void:
 			events.append({"kind":"synced_impact","pos":victim.pos,"hero_id":hero_id,"value":ceili(dealt)})
 		else:
 			_execute_ability_impact(hero, impact.get("ability", {}), impact.get("target_pos", hero.pos), bool(impact.get("ultimate", false)))
-	pending_impacts = alive
 
 func _resolve_fireball_support(impact: Dictionary) -> void:
 	var target: Vector2 = impact.target_pos
@@ -3177,7 +3192,7 @@ func _resolve_enemy_warning(enemy: Dictionary) -> void:
 func _apply_enemy_affix(enemy: Dictionary) -> void:
 	if not v2_mode:
 		return
-	var threat := maxi(1, floori(elapsed / 45.0) + 1) if endless_mode else maxi(1, wave)
+	var threat := maxi(1, floori(elapsed / 60.0) + 1) if endless_mode else maxi(1, wave)
 	if threat < 2 or (enemy.id + threat) % 4 != 0:
 		return
 	var pool := ["frenzied", "volatile"]
@@ -3806,6 +3821,7 @@ func apply_hit(enemy: Dictionary, raw_damage: float, element: String, source_her
 				hero.rate += hero.base_rate * kill_frenzy_step * (milestone - frenzy_milestone)
 			frenzy_milestone = milestone
 			events.append({"kind": "frenzy", "pos": enemy.pos, "value": milestone})
+		if endless_mode: expedition.on_kill(enemy)
 		grant_xp(enemy.xp)
 		if float(enemy.get("death_burst", 0.0)) > 0.0:
 			for hero: Dictionary in heroes:
@@ -4579,3 +4595,33 @@ func _evolution_tick(dt: float) -> void:
 		var delay := 1.45 + index * 0.35
 		pending_impacts.append({"kind": "fireball_support", "life": delay, "target_pos": landing, "damage": damage, "radius": (360.0 if fireball_level>=6 else 300.0) * CardSynergies.team_multiplier(self, "skyfire", 1.2), "level": fireball_level})
 		events.append({"kind": "fireball_fall", "pos": landing, "radius": (360.0 if fireball_level>=6 else 300.0) * CardSynergies.team_multiplier(self, "skyfire", 1.2), "duration": delay})
+
+func _rebuild_endless_blocker_index() -> void:
+	endless_blocker_bins.clear();endless_blocker_index_ready=false
+	if not endless_mode:return
+	for feature:Dictionary in terrain_features:
+		if not _feature_blocks(feature):continue
+		var r:=_feature_collision_rect(feature)
+		for cell in feature.get("grid_cells", []):
+			r = r.merge(Rect2(cell))
+		for x in range(floori(r.position.x/256),floori(r.end.x/256)+1):
+			for y in range(floori(r.position.y/256),floori(r.end.y/256)+1):
+				var key:=Vector2i(x,y)
+				if not endless_blocker_bins.has(key):endless_blocker_bins[key]=[]
+				endless_blocker_bins[key].append(feature)
+	endless_blocker_index_ready=true
+
+func _blocker_candidates(area:Rect2) -> Array:
+	if not endless_mode or not endless_blocker_index_ready:return terrain_features
+	# Long rays are cheaper against the small complete obstacle list.
+	if area.size.x>512 or area.size.y>512:return terrain_features
+	var first:=Vector2i(floori(area.position.x/256),floori(area.position.y/256))
+	var last:=Vector2i(floori(area.end.x/256),floori(area.end.y/256))
+	if first==last:return endless_blocker_bins.get(first,[])
+	var result:Array=[]
+	for x in range(first.x,last.x+1):
+		for y in range(first.y,last.y+1):
+			for feature:Dictionary in endless_blocker_bins.get(Vector2i(x,y),[]):
+				if not result.has(feature):
+					result.append(feature)
+	return result

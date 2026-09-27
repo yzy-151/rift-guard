@@ -634,6 +634,9 @@ func process_events() -> void:
 			hud.announce_route_warning(event)
 		if event.kind == "deployment_unlocked":
 			hud.announce_deployment(str(event.name))
+		if event.kind == "expedition_boss_warning":
+			hud.boss_warning.pitch_scale=float(event.get("pitch",0.82))
+			hud.boss_warning.play()
 		if event.kind == "boss_arrival":
 			hud.announce_boss(str(event.value))
 		if event.kind == "boss_phase":
@@ -906,6 +909,12 @@ func set_formation_command(mode: String) -> void:
 	refresh()
 
 func _input(event: InputEvent) -> void:
+	# The achievement modal must receive input before the suspended stage transition.
+	# Pointer events continue to GUI dispatch; no underlying gameplay handles them.
+	if achievement_popup != null and achievement_popup.is_open():
+		if achievement_popup.handle_input(event):
+			get_viewport().set_input_as_handled()
+		return
 	if dialogue != null and dialogue.animation_waiting:
 		var confirms_animation: bool = (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT) or (event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_ENTER, KEY_SPACE, KEY_ESCAPE])
 		if confirms_animation:

@@ -216,7 +216,7 @@ func display(sim) -> void:
 		synergy_overlay.hide()
 		offer_key = key
 		if sim.v2_mode:
-			heading.text = "水晶 Lv.%d  ·  幸运 %.2f" % [sim.run_state.crystal_level, sim.run_state.luck]
+			heading.text = "任务完成 · 连续三次选卡 · 第 %d / 3 次" % (4-sim.expedition.cards_remaining) if sim.endless_mode and sim.expedition.cards_remaining>0 else "水晶 Lv.%d  ·  幸运 %.2f" % [sim.run_state.crystal_level, sim.run_state.luck]
 		else:
 			heading.text = "节点 %d / 5 已完成  ·  小队 Lv.%d  ·  三项中选择一项  ·  本局种子 %d" % [sim.wave, sim.team_level, sim.run_seed]
 		for i in 3:

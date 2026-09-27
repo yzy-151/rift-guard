@@ -96,3 +96,8 @@ func portrait_path(enemy_id: String) -> String:
 
 func procedural(enemy_id: String) -> String:
 	return str(definition(enemy_id).get("procedural", ""))
+func draw_bounds(enemy_id: String, state: String, frame: int) -> Rect2:
+	var bounds: Array = state_definition(enemy_id,state).get("draw_bounds",[])
+	if frame<0 or frame>=bounds.size():return Rect2()
+	var b: Array=bounds[frame]
+	return Rect2(b[0],b[1],b[2],b[3])

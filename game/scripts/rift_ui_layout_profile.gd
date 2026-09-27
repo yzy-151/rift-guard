@@ -127,3 +127,12 @@ class_name RiftUILayoutProfile
 @export var battle_reward_synergy_button_rect := Rect2(1000, 86, 180, 34)
 @export var battle_reward_synergy_preview_rect := Rect2(140, 632, 1000, 34)
 @export var battle_reward_synergy_overlay_rect := Rect2(100, 40, 1080, 640)
+
+@export_group("Endless Expedition")
+@export var battle_expedition_tasks_rect := Rect2(24, 112, 278, 144)
+@export var battle_expedition_minimap_rect := Rect2(1040, 400, 218, 150)
+@export var battle_expedition_reward_rect := Rect2(160, 180, 960, 360)
+
+@export var battle_expedition_warning_rect := Rect2(160, 94, 960, 132)
+
+@export var battle_expedition_completion_rect := Rect2(400,105,480,76)

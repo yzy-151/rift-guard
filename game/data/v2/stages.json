@@ -4567,7 +4567,7 @@
   },
   {
     "id": "stage_endless",
-    "name": "猩红荒原",
+    "name": "猩红远征",
     "duration_seconds": 86400,
     "boss_at_seconds": 999999,
     "boss_id": "boss_01",
@@ -4576,7 +4576,9 @@
     "enemy_speed_multiplier": 1,
     "enemy_leak_multiplier": 1,
     "starting_squad": [
-      "traveler"
+      "traveler",
+      "hero_01",
+      "hero_04"
     ],
     "xp_thresholds": [
       80
@@ -4738,213 +4740,188 @@
     "template_id": "loop",
     "terrain": [
       {
-        "id": "endless_dual_junction",
-        "type": "junction",
+        "id": "exp_wall_0_0",
+        "type": "blocked",
         "rect": [
-          650,
-          640,
+          470,
+          330,
+          360,
+          65
+        ],
+        "label": "远征断墙"
+      },
+      {
+        "id": "exp_wall_0_1",
+        "type": "blocked",
+        "rect": [
+          880,
+          600,
+          65,
+          270
+        ],
+        "label": "远征断墙"
+      },
+      {
+        "id": "exp_wall_0_2",
+        "type": "blocked",
+        "rect": [
+          490,
+          810,
           270,
-          300
+          65
         ],
-        "label": "双向回廊",
-        "layout": "dual"
+        "label": "远征断墙"
       },
       {
-        "id": "endless_north_wall_left",
-        "type": "blocked",
-        "rect": [
-          760,
-          330,
-          440,
-          70
-        ],
-        "label": "北环断墙"
-      },
-      {
-        "id": "endless_north_gate",
-        "type": "door",
-        "rect": [
-          1200,
-          330,
-          160,
-          70
-        ],
-        "label": "北侧血门",
-        "hp": 720
-      },
-      {
-        "id": "endless_north_wall_right",
-        "type": "blocked",
-        "rect": [
-          1360,
-          330,
-          440,
-          70
-        ],
-        "label": "北环断墙"
-      },
-      {
-        "id": "endless_south_wall_left",
-        "type": "blocked",
-        "rect": [
-          760,
-          1040,
-          440,
-          70
-        ],
-        "label": "南环断墙"
-      },
-      {
-        "id": "endless_south_gate",
-        "type": "door",
-        "rect": [
-          1200,
-          1040,
-          160,
-          70
-        ],
-        "label": "南侧血门",
-        "hp": 720
-      },
-      {
-        "id": "endless_south_wall_right",
-        "type": "blocked",
-        "rect": [
-          1360,
-          1040,
-          440,
-          70
-        ],
-        "label": "南环断墙"
-      },
-      {
-        "id": "endless_west_wall_upper",
-        "type": "blocked",
-        "rect": [
-          600,
-          330,
-          70,
-          310
-        ],
-        "label": "西环断墙"
-      },
-      {
-        "id": "endless_west_gate",
-        "type": "door",
-        "rect": [
-          600,
-          640,
-          70,
-          160
-        ],
-        "label": "西侧血门",
-        "hp": 720
-      },
-      {
-        "id": "endless_west_wall_lower",
-        "type": "blocked",
-        "rect": [
-          600,
-          800,
-          70,
-          310
-        ],
-        "label": "西环断墙"
-      },
-      {
-        "id": "endless_east_wall_upper",
-        "type": "blocked",
-        "rect": [
-          1890,
-          330,
-          70,
-          310
-        ],
-        "label": "东环断墙"
-      },
-      {
-        "id": "endless_east_gate",
-        "type": "door",
-        "rect": [
-          1890,
-          640,
-          70,
-          160
-        ],
-        "label": "东侧血门",
-        "hp": 720
-      },
-      {
-        "id": "endless_east_wall_lower",
-        "type": "blocked",
-        "rect": [
-          1890,
-          800,
-          70,
-          310
-        ],
-        "label": "东环断墙"
-      },
-      {
-        "id": "endless_dual_divider",
-        "type": "blocked",
-        "rect": [
-          760,
-          690,
-          58,
-          210
-        ],
-        "label": "双路隔墙"
-      },
-      {
-        "id": "endless_west_high",
+        "id": "exp_high_0_0",
         "type": "high_ground",
         "rect": [
-          300,
-          510,
-          230,
-          105
+          630,
+          460,
+          160,
+          100
         ],
-        "label": "西部高台",
-        "attack_bonus": 0.16,
+        "label": "观测高台",
+        "attack_bonus": 0.12,
         "range_bonus": 1.0
       },
       {
-        "id": "endless_east_high",
+        "id": "exp_wall_1_0",
+        "type": "blocked",
+        "rect": [
+          2110,
+          330,
+          360,
+          65
+        ],
+        "label": "远征断墙"
+      },
+      {
+        "id": "exp_wall_1_1",
+        "type": "blocked",
+        "rect": [
+          2520,
+          600,
+          65,
+          270
+        ],
+        "label": "远征断墙"
+      },
+      {
+        "id": "exp_wall_1_2",
+        "type": "blocked",
+        "rect": [
+          2130,
+          810,
+          270,
+          65
+        ],
+        "label": "远征断墙"
+      },
+      {
+        "id": "exp_high_1_0",
         "type": "high_ground",
         "rect": [
-          2030,
-          820,
-          230,
-          105
+          2270,
+          460,
+          160,
+          100
         ],
-        "label": "东部高台",
-        "attack_bonus": 0.16,
+        "label": "观测高台",
+        "attack_bonus": 0.12,
         "range_bonus": 1.0
       },
       {
-        "id": "endless_north_low",
-        "type": "low_ground",
+        "id": "exp_wall_2_0",
+        "type": "blocked",
         "rect": [
-          1030,
-          150,
-          300,
-          110
+          470,
+          1490,
+          360,
+          65
         ],
-        "label": "北侧血沼",
-        "speed_scale": 0.3
+        "label": "远征断墙"
       },
       {
-        "id": "endless_south_low",
-        "type": "low_ground",
+        "id": "exp_wall_2_1",
+        "type": "blocked",
         "rect": [
-          1260,
-          1180,
-          300,
-          110
+          880,
+          1760,
+          65,
+          270
         ],
-        "label": "南侧血沼",
-        "speed_scale": 0.3
+        "label": "远征断墙"
+      },
+      {
+        "id": "exp_wall_2_2",
+        "type": "blocked",
+        "rect": [
+          490,
+          1970,
+          270,
+          65
+        ],
+        "label": "远征断墙"
+      },
+      {
+        "id": "exp_high_2_0",
+        "type": "high_ground",
+        "rect": [
+          630,
+          1620,
+          160,
+          100
+        ],
+        "label": "观测高台",
+        "attack_bonus": 0.12,
+        "range_bonus": 1.0
+      },
+      {
+        "id": "exp_wall_3_0",
+        "type": "blocked",
+        "rect": [
+          2110,
+          1490,
+          360,
+          65
+        ],
+        "label": "远征断墙"
+      },
+      {
+        "id": "exp_wall_3_1",
+        "type": "blocked",
+        "rect": [
+          2520,
+          1760,
+          65,
+          270
+        ],
+        "label": "远征断墙"
+      },
+      {
+        "id": "exp_wall_3_2",
+        "type": "blocked",
+        "rect": [
+          2130,
+          1970,
+          270,
+          65
+        ],
+        "label": "远征断墙"
+      },
+      {
+        "id": "exp_high_3_0",
+        "type": "high_ground",
+        "rect": [
+          2270,
+          1620,
+          160,
+          100
+        ],
+        "label": "观测高台",
+        "attack_bonus": 0.12,
+        "range_bonus": 1.0
       }
     ],
     "route_material": {

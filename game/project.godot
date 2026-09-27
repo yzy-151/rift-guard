@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V86: Card Reroll and Synergies / 1920x1080"
-config/version="86.0.0"
+config/description="V88: Endless Optimization / 1920x1080"
+config/version="88.0.0"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 

@@ -144,6 +144,8 @@ func build(ui, story) -> void:
 	dialogue_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(dialogue_box)
 	hud.bind(dialogue_box, "dialog_frame")
+	# Skin profile is authoritative: legacy workbook skins must not restore the removed frame.
+	dialogue_box.texture = UI_SKIN.dialogue_box
 	dialogue_box.position = UI_LAYOUT.dialogue_box_rect.position
 	dialogue_box.size = UI_LAYOUT.dialogue_box_rect.size
 	name_label = hud.label(root, UI_LAYOUT.dialogue_name_rect.position, UI_LAYOUT.dialogue_name_rect.size, "", 24, Color("#f0b4ae"))

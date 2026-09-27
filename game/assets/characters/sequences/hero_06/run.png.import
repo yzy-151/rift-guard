@@ -15,9 +15,9 @@ dest_files=["res://.godot/imported/run.png-e2adcb8cf278d08809522994c6be7eca.ctex
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.88
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0

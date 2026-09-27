@@ -1,4 +1,5 @@
 extends CanvasLayer
+
 const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
 signal reward_action(index: int, hero_id: int)
 signal reroll_action
@@ -943,7 +944,7 @@ func refresh(sim, selected_id: int) -> void:
 		var queued := "  +%d卡" % sim.run_state.pending_level_ups if sim.run_state.pending_level_ups > 0 and sim.state != "reward" else ""
 		if sim.endless_mode:
 			progression_label.text = "等级 Lv.%d  •  EXP %s%s  •  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, seconds / 60, seconds % 60]
-			wave_label.text = "威胁等级   %02d" % maxi(1, floori(sim.elapsed / 45.0) + 1)
+			wave_label.text = "威胁等级   %02d" % sim._endless_tier()
 		else:
 			progression_label.text = "水晶 Lv.%d  •  EXP %s%s  •  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, seconds / 60, seconds % 60]
 			wave_label.text = "%02d/%02d · %s" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size(),sim.stage_runtime.pacing_text().left(2)]
@@ -1029,7 +1030,7 @@ func refresh(sim, selected_id: int) -> void:
 				var duration: int = int(stage.get("duration_seconds", 330))
 				modal_title.text = "活下去" if sim.endless_mode else "守住最后一道防线"
 				if sim.endless_mode:
-					modal_copy.text = "猩红荒原 · 四屏开放战场\n敌人从四周追击旅行者，击杀升级并无限构筑。\n右键移动，同行者会跟随并在移动中攻击。"
+					modal_copy.text = "猩红远征 · 三人小队开放战场\n靠近任务点：防守18秒、歼灭16敌或回收3份补给，完成三选一强化。\n右键移动，同行者自动跟随攻击；留意风暴与小地图。"
 				else:
 					modal_copy.text = "%s  ·  %d分%02d秒\n击杀敌人升级水晶，三选一强化可无限叠加。\n选定元素后按 Q 释放战技，守住三条路线。" % [stage.get("name", "裂隙防线"), duration / 60, duration % 60] if sim.v2_mode else "1 守卫阻挡 · 2 火系输出 · 3 水系治疗\n火水交替命中，触发蒸发增伤。\n守住 5 个节点，节点之间三选一强化。"
 				modal_action.text = "进入荒原   →   [Enter]" if sim.endless_mode else "开始防守   →   [Enter]"
