@@ -1,7 +1,8 @@
 extends RefCounted
 # Bounded per-enemy states. No extra per-frame full-neighbour scans.
+const BUG_BLAST_RADIUS := 80.0
 static func initialize(e: Dictionary) -> void:
- if e.kind=="armored": e.burrow_new=true
+ if e.kind=="armored": e.burrow_new=false
  if e.kind=="buffer": e.medic_timer=2.0+fposmod(float(e.id)*0.37,2.0)
 static func begin_burrow(s,e: Dictionary) -> void:
  e.burrow_new=false
@@ -40,6 +41,8 @@ static func begin_burrow(s,e: Dictionary) -> void:
   s.projectile_neighbor_cache.clear()
   return
 static func tick(s,e: Dictionary,dt: float) -> bool:
+ if float(e.get("frozen_timer",0))>0:return true
+ if e.kind in ["charger","hilichurl_brute"] and tick_committed_attack(s,e,dt):return true
  if bool(e.get("burrow_new",false)):begin_burrow(s,e)
  if float(e.get("burrow_timer",0))>0:
   e.burrow_timer=maxf(0,float(e.burrow_timer)-dt)
@@ -65,7 +68,57 @@ static func tick(s,e: Dictionary,dt: float) -> bool:
    e.pos=Vector2(e.pos).move_toward(e.retreat_pos,float(e.speed)*1.45*dt*(0.7 if e.slow_timer>0 else 1.0))
   return true
  return false
+
+static func tick_committed_attack(s,e: Dictionary,dt: float) -> bool:
+ e.tactic_cooldown=maxf(0.0,float(e.get("tactic_cooldown",2.0))-dt)
+ if float(e.get("dash_windup",0.0))>0.0:
+  e.dash_windup=maxf(0.0,float(e.dash_windup)-dt)
+  if float(e.dash_windup)<=0.0:e.dash_time=0.66;e.dash_hits=[]
+  return true
+ if float(e.get("dash_time",0.0))>0.0:
+  var step=minf(dt,float(e.dash_time))
+  e.dash_time=maxf(0.0,float(e.dash_time)-dt)
+  var start=Vector2(e.pos)
+  var finish=start+Vector2(e.dash_direction)*440.0*step*(0.7 if float(e.get("slow_timer",0))>0 else 1.0)
+  if s.terrain_line_blocked(start,finish,16.0):e.dash_time=0.0;return true
+  e.pos=finish
+  for hero: Dictionary in s.heroes:
+   if hero.hp<=0 or not bool(hero.deployed) or int(hero.id) in e.dash_hits:continue
+   if Geometry2D.get_closest_point_to_segment(hero.pos,start,finish).distance_to(hero.pos)<=34.0:
+    e.dash_hits.append(int(hero.id))
+    s.damage_hero(int(hero.id),float(e.damage)*1.15,{"source_name":"野猪骑士","source_skill":"锁向冲锋"})
+  return true
+ if float(e.get("spin_windup",0.0))>0:
+  e.spin_windup=maxf(0,float(e.spin_windup)-dt)
+  if float(e.spin_windup)<=0:e.spin_time=1.8;e.spin_pulse=0.0
+  return true
+ if float(e.get("spin_time",0.0))>0:
+  e.spin_time=maxf(0,float(e.spin_time)-dt)
+  e.spin_pulse=float(e.get("spin_pulse",0))-dt
+  if float(e.spin_pulse)<=0:
+   e.spin_pulse+=0.55
+   for hero: Dictionary in s.heroes:
+    if hero.hp>0 and bool(hero.deployed) and s.is_in_ability_area(e.pos,hero.pos,125.0):
+     s.damage_hero(int(hero.id),float(e.damage)*0.40,{"source_name":"丘丘暴徒","source_skill":"旋斧"})
+   s.events.append({"kind":"enemy_spin","pos":e.pos,"radius":125.0,"duration":0.55,"enemy_id":e.id})
+  return true
+ if float(e.tactic_cooldown)>0.0 or bool(e.get("attack_pending",false)):return false
+ var target: Dictionary=s._nearest_live_hero(e.pos) if s.endless_mode or Array(e.get("route_points",[])).size()<2 else s.EnemyMelee.target(s,e)
+ if target.is_empty():return false
+ var distance=Vector2(e.pos).distance_to(target.pos)
+ if str(e.kind)=="charger" and distance<=300.0 and distance>=80.0 and not s.terrain_line_blocked(e.pos,target.pos,16.0):
+  e.tactic_cooldown=6.0;e.dash_windup=0.72;e.dash_direction=(Vector2(target.pos)-Vector2(e.pos)).normalized()
+  e.dash_target=Vector2(e.pos)+Vector2(e.dash_direction)*290.0
+  e.attack_pending=false
+  s.events.append({"kind":"enemy_dash_warning","pos":e.pos,"target":e.dash_target,"width":68.0,"duration":0.72,"enemy_id":e.id})
+  return true
+ if str(e.kind)=="hilichurl_brute" and distance<=160.0 and distance>=s.EnemyMelee.distance(e)-2.0:
+  e.tactic_cooldown=7.0;e.spin_windup=0.9;e.attack_pending=false
+  s.events.append({"kind":"enemy_warning","pos":e.pos,"source":e.pos,"radius":125.0,"life":0.9,"duration":0.9,"boss":false,"name":"旋斧蓄力","enemy_id":e.id})
+  return true
+ return false
 static func bat_destination(s,e: Dictionary,fallback: Vector2) -> Vector2:
+ if not s.endless_mode:return fallback
  if e.kind!="rift_bat":return fallback
  var target: Dictionary=s._nearest_live_hero(e.pos)
  if target.is_empty() or Vector2(e.pos).distance_squared_to(target.pos)>650*650:return fallback
@@ -81,7 +134,7 @@ static func after_attack(s,e: Dictionary) -> void:
  e.retreat_timer=1.25;e.attack_timer=maxf(e.attack_timer,1.7)
 static func on_death(s,e: Dictionary) -> void:
  if e.kind!="originium_bug":return
- s.pending_impacts.append({"kind":"bug_blast","pos":e.pos,"life":1.0,"radius":125.0,"damage":float(e.damage)*1.5})
+ s.pending_impacts.append({"kind":"bug_blast","pos":e.pos,"life":1.0,"radius":BUG_BLAST_RADIUS,"damage":float(e.damage)*1.5})
 static func explode(s,impact: Dictionary) -> void:
  for h in s.heroes:
   if h.hp>0 and h.deployed and s.is_in_ability_area(impact.pos,h.pos,float(impact.radius)):s.damage_hero(h.id,float(impact.damage),{"source_name":"源石虫","source_skill":"死亡爆炸"})
@@ -89,30 +142,27 @@ static func explode(s,impact: Dictionary) -> void:
 static func draw_ground(v) -> void:
  for impact in v.sim.pending_impacts:
   if impact.kind!="bug_blast":continue
-  var c: Vector2=v.world_to_screen(impact.pos)+Vector2(0,8)
+  var c: Vector2=v.world_to_screen(impact.pos)+v.ground_visual_offset()
   var r: Vector2=v.sim.ability_area_screen_radii(impact.pos,impact.radius)
   var t=clampf(1.0-float(impact.life),0,1)
-  var pulse=0.5+0.5*sin(v.clock*(12+t*18))
+  var pulse=0.5+0.5*sin(v.clock*(10+t*14))
   var outline=v._ability_ellipse_points(c,r)
   var fill=outline.duplicate();fill.resize(fill.size()-1)
-  v.draw_colored_polygon(fill,Color(0.92,0.025,0.07,0.15+pulse*0.12))
-  v.draw_polyline(outline,Color(1,0.10,0.18,0.95),3.5,true)
-  v._draw_dedicated_arc(c,r*(1-t*0.88),0,TAU,Color(1,0.38,0.38,0.72),2)
-  for i in 12:
-   var angle=i*TAU/12
-   var a=c+Vector2(cos(angle)*r.x,sin(angle)*r.y)
-   v.draw_line(a,a.lerp(c,0.13),Color(1,0.35,0.35,0.9),3,true)
-  v.draw_polyline(PackedVector2Array([c+Vector2(0,-24),c+Vector2(16,4),c+Vector2(-16,4),c+Vector2(0,-24)]),Color(1,0.6,0.6),2.5,true)
-  v.caption(c+Vector2(-4,-1),"!",Color(1,0.9,0.9),20)
+  v.draw_colored_polygon(fill,Color(0.92,0.025,0.07,0.055+pulse*0.035))
+  v.draw_polyline(outline,Color(1,0.16,0.26,0.68+pulse*0.20),1.8,true)
+  # One honest blast footprint; urgency stays at the source, not wheel spokes.
+  var tip=c+Vector2(0,-20-t*8)
+  v.draw_line(tip+Vector2(-4,0),tip+Vector2(-4,9),Color(1,0.76,0.66),2.8,true)
+  v.draw_circle(tip+Vector2(-4,14),1.5,Color(1,0.76,0.66))
+  var bar=Rect2(c+Vector2(-15,10),Vector2(30,3))
+  v.draw_rect(bar,Color(0.16,0.02,0.04,0.85))
+  v.draw_rect(Rect2(bar.position,Vector2(bar.size.x*(1-t),3)),Color(1,0.26,0.31))
 
  for e in v.sim.enemies:
   if e.hp<=0:continue
   if float(e.get("burrow_timer",0))>0:
    var c: Vector2=v.world_to_screen(e.pos)
-   v._draw_dedicated_arc(c,Vector2(28,10),0,TAU,Color(0.75,0.47,0.3,0.9),3)
-   for i in 5:
-    var d=Vector2(cos(i*TAU/5)*38,sin(i*TAU/5)*14)
-    v.draw_polyline(PackedVector2Array([c+d*0.2,c+d*0.55+Vector2(4,-3),c+d]),Color(0.94,0.61,0.3),2,true)
+   preload("res://scripts/impact_flash_vfx.gd").rift(v,c+Vector2(0,-25),26,Color("#c2a3ff"),v.clock,0.8,-1.0)
   if float(e.get("medic_link",0))>0:
    var target: Dictionary=v.sim.find_enemy(int(e.get("medic_target",-1)))
    if target.is_empty() or target.hp<=0:continue
@@ -123,20 +173,13 @@ static func draw_ground(v) -> void:
    for i in 3:v.draw_circle(a.lerp(b,fposmod(v.clock*1.8+i/3.0,1)),3,Color(0.8,1,0.85,alpha))
 
 static func draw_blast(v,e: Dictionary) -> void:
- var t=clampf(1-float(e.life)/float(e.total),0,1)
- var fade=1-smoothstep(0.25,1,t)
- var c: Vector2=v.world_to_screen(e.pos)+Vector2(0,8)
- var r: Vector2=v.sim.ability_area_screen_radii(e.pos,float(e.radius))
- var outline=v._ability_ellipse_points(c,r*maxf(0.05,minf(1,t*4)))
- var fill=outline.duplicate();fill.resize(fill.size()-1)
- v.draw_colored_polygon(fill,Color(1,0.08,0.13,fade*0.25))
- v.draw_polyline(outline,Color(1,0.22,0.24,fade),6*(1-t)+1,true)
- for i in 12:
-  var angle=i*TAU/12
-  var d=Vector2(cos(angle)*r.x,sin(angle)*r.y)
-  var p=c+d*minf(0.95,t*2.8)
-  v.draw_line(p-d*0.13,p,Color(1,0.58,0.29,fade),3,true)
- if t<0.3:v.draw_circle(c,18*(1-t/0.3),Color(1,0.9,0.7,(1-t/0.3)*0.9))
+ var age=maxf(0.0,float(e.total)-float(e.life))
+ if age>0.48:return
+ var center:Vector2=v.world_to_screen(e.pos)+v.ground_visual_offset()
+ var seed_value:int=int(e.get("enemy_id",e.get("seed",17)))
+ var radii:Vector2=v.sim.ability_area_screen_radii(e.pos,float(e.get("radius",BUG_BLAST_RADIUS)))
+ # Painted clouds fit the same projected footprint as the unchanged warning/damage.
+ preload("res://scripts/cartoon_explosion_vfx.gd").burst(v,center,age,1.0,seed_value,v.reduced_effects,radii/80.0)
 
 # Keep a defeated shielded unit in the simulation, but HP zero excludes all targeting.
 static var revival_sequences = preload("res://scripts/enemy_sequence_library.gd").new()

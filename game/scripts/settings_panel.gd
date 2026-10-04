@@ -2,6 +2,7 @@ extends CanvasLayer
 
 signal setting_changed(key: String, value: Variant)
 signal closed
+signal workshop_requested
 
 const WHITE := Color("#f6eeea")
 const MUTED := Color("#b49ba2")
@@ -16,6 +17,7 @@ var sliders: Dictionary = {}
 var value_labels: Dictionary = {}
 var reduced_button: Button
 var close_button: Button
+var workshop_button: Button
 var syncing := false
 
 func build(owner_hud) -> void:
@@ -68,6 +70,8 @@ func build(owner_hud) -> void:
 		setting_changed.emit("reduced_effects", enabled))
 	close_button = owner_hud.button(content, UI_LAYOUT.settings_close_rect, "保存并返回   [Esc]", true)
 	close_button.pressed.connect(close)
+	workshop_button = owner_hud.button(content, Rect2(48, 393, 664, 40), "示范工坊   /   自由摆放角色、怪物与卡牌", false)
+	workshop_button.pressed.connect(func(): workshop_requested.emit())
 	root.hide()
 
 func _add_slider(parent: Node, key: String, title: String, index: int) -> void:

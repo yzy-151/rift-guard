@@ -1,0 +1,6 @@
+{
+	"checks": 35,
+	"failures": [],
+	"native_render_checks": true,
+	"renderer": "Windows"
+}

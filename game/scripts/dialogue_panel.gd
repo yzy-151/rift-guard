@@ -19,7 +19,6 @@ var director
 var hud
 var root: Control
 var portrait: TextureRect
-var dialogue_box: NinePatchRect
 var partner: TextureRect
 var name_label: Label
 var body: RichTextLabel
@@ -33,7 +32,7 @@ var skip_button: Button
 var controls: Array[Button] = []
 var choice_buttons: Array[Button] = []
 var choice_frames: Array[TextureRect] = []
-## 选中态放大 + 亮色，未选中态缩小 + 暗色（参考 Helltaker 选项框）
+## 保留原二选一选项框；移除的仅是剧情正文的巨大骷髅空框。
 const CHOICE_SELECTED_SCALE := 1.06
 const CHOICE_IDLE_SCALE := 0.94
 const CHOICE_SELECTED_FONT_SIZE := 20
@@ -132,20 +131,6 @@ func build(ui, story) -> void:
 	stage_rule.color = Color("#c75a66")
 	stage_rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(stage_rule)
-	dialogue_box = NinePatchRect.new()
-	dialogue_box.texture = UI_SKIN.dialogue_box
-	dialogue_box.material = dark_to_blue
-	dialogue_box.position = UI_LAYOUT.dialogue_box_rect.position
-	dialogue_box.size = UI_LAYOUT.dialogue_box_rect.size
-	dialogue_box.patch_margin_left = 115
-	dialogue_box.patch_margin_right = 115
-	dialogue_box.patch_margin_top = 36
-	dialogue_box.patch_margin_bottom = 36
-	dialogue_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(dialogue_box)
-	hud.bind(dialogue_box, "dialog_frame")
-	dialogue_box.position = UI_LAYOUT.dialogue_box_rect.position
-	dialogue_box.size = UI_LAYOUT.dialogue_box_rect.size
 	name_label = hud.label(root, UI_LAYOUT.dialogue_name_rect.position, UI_LAYOUT.dialogue_name_rect.size, "", 24, Color("#f0b4ae"))
 	body = RichTextLabel.new()
 	body.position = UI_LAYOUT.dialogue_body_rect.position
@@ -404,8 +389,7 @@ func show_line() -> void:
 	active_art.modulate = Color.WHITE
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	last_portrait = line.portrait
-	name_label.text = "◆  %s  ◆" % str(line.speaker)
-	dialogue_box.modulate = Color(1, 1, 1, 0)
+	name_label.text = str(line.speaker)
 	name_label.modulate = Color.WHITE
 	progress.position = UI_LAYOUT.dialogue_progress_rect.position
 	progress.size = UI_LAYOUT.dialogue_progress_rect.size
@@ -450,8 +434,6 @@ func _animate_line_entrance(highlight: String, changed: bool = true) -> void:
 		line_entrance.tween_property(art, "scale", Vector2.ONE, 0.32)
 		line_entrance.tween_property(art, "rotation", 0.0, 0.30)
 		line_entrance.tween_property(art, "modulate:a", 1.0, 0.16)
-	dialogue_box.position.x = 250.0
-	dialogue_box.modulate = Color.WHITE
 	body.scale = Vector2.ONE
 	line_entrance.tween_property(body, "modulate", Color.WHITE, 0.13)
 
@@ -486,6 +468,7 @@ func _configure_choices(line: Dictionary) -> void:
 		item.hide()
 		item.disabled = true
 		item.focus_mode = Control.FOCUS_NONE
+		item.text = ""
 		if i < options.size():
 			item.text = str(options[i].get("text", ""))
 	var has_choices := not options.is_empty()
@@ -494,7 +477,7 @@ func _configure_choices(line: Dictionary) -> void:
 	auto_button.disabled = has_choices
 	auto_button.visible = not has_choices
 	history_button.visible = not has_choices
-	skip_button.visible = not has_choices and not director.key.begins_with("home_")
+	skip_button.visible = not has_choices and not (director.key.begins_with("home_") or director.key.begins_with("explore_"))
 	booper.visible = not has_choices
 func _reveal_choices() -> void:
 	if not director.has_choices() or history_panel.visible:
@@ -504,7 +487,6 @@ func _reveal_choices() -> void:
 	progress.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	progress.modulate = Color("#f0b4ae")
 	var dim_dialogue := create_tween().set_parallel(true).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-	dim_dialogue.tween_property(dialogue_box, "modulate", Color(1, 1, 1, 0.0), 0.16)
 	dim_dialogue.tween_property(name_label, "modulate", Color.WHITE, 0.16)
 	dim_dialogue.tween_property(body, "modulate", Color.WHITE, 0.16)
 	dim_dialogue.tween_property(progress, "modulate", Color(1, 1, 1, 0.95), 0.16)
@@ -526,13 +508,13 @@ func _reveal_choices() -> void:
 		choice_buttons[0].grab_focus()
 		_set_choice_focus(0)
 
-## 选中：亮色描边 + 放大 + 字号更大；未选中：暗色描边 + 缩小 + 字号更小。
+## 选中项恢复原红框、放大与提亮；未选中项恢复原灰框。
 func _choice_scale(selected: bool) -> Vector2:
 	var value := CHOICE_SELECTED_SCALE if selected else CHOICE_IDLE_SCALE
 	return Vector2(value, value)
 
 func _set_choice_focus(index: int) -> void:
-	for i in choice_frames.size():
+	for i in choice_buttons.size():
 		var selected := i == index
 		choice_frames[i].texture = UI_SKIN.choice_frame_red if selected else UI_SKIN.choice_frame_gray
 		choice_frames[i].modulate = Color.WHITE if selected else Color(0.88, 0.84, 0.86, 0.95)
@@ -636,7 +618,7 @@ func advance() -> void:
 func skip() -> void:
 	if comic_playing:
 		return
-	if director.key.begins_with("home_"):
+	if director.key.begins_with("home_") or director.key.begins_with("explore_"):
 		return
 	director.skip()
 	close()
@@ -906,7 +888,6 @@ func play_angry_departure(character_id: String) -> void:
 	root.show()
 	root.modulate = Color.WHITE
 	portrait.hide()
-	dialogue_box.hide()
 	body.hide()
 	name_label.hide()
 	progress.hide()
@@ -940,7 +921,6 @@ func play_angry_departure(character_id: String) -> void:
 		departure.tween_property(portrait, "position:x", -portrait.size.x - 80.0, 0.75)
 		await departure.finished
 	portrait.hide()
-	dialogue_box.show()
 	body.show()
 	name_label.show()
 	progress.show()

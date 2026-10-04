@@ -27,6 +27,9 @@ func _ready() -> void:
 	add_child(music_player)
 	_load_settings()
 	_apply_levels()
+	# Scene changes share one native window; restore this mode's saved preference.
+	if DisplayServer.get_name().to_lower() != "headless":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if bool(values.fullscreen) else DisplayServer.WINDOW_MODE_WINDOWED)
 
 func _ensure_bus(bus_name: String) -> void:
 	if AudioServer.get_bus_index(bus_name) >= 0:

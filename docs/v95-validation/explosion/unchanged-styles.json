@@ -1,0 +1,22 @@
+[
+  {
+    "style": "shared_burst",
+    "exact_match": true
+  },
+  {
+    "style": "beam",
+    "exact_match": true
+  },
+  {
+    "style": "rift",
+    "exact_match": true
+  },
+  {
+    "style": "impact",
+    "exact_match": true
+  },
+  {
+    "style": "lightning",
+    "exact_match": true
+  }
+]

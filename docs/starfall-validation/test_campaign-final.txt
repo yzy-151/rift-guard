@@ -1,0 +1,6 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+BALANCE seed=11 phase=won time=270.2 wave=9 kills=577 level=25 core=745.6 hp=[190.0, 190.0, 190.0] casts=83
+BALANCE seed=22 phase=won time=280.7 wave=9 kills=714 level=33 core=246.6 hp=[220.0, 220.0, 220.0] casts=88
+BALANCE seed=33 phase=won time=270.2 wave=9 kills=620 level=28 core=556.5 hp=[220.0, 220.0, 220.0] casts=83
+PASS: three default-health campaigns completed with public inputs

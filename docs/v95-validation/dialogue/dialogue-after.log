@@ -1,0 +1,48 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.30 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3050 Laptop GPU
+
+V95 DIALOGUE PASS: native dialogue validation uses isolated QA save
+V95 DIALOGUE PASS: native main menu opens original home
+V95 DIALOGUE PASS: unlocked Amiya exists on original home map
+V95 DIALOGUE PASS: native F opens Amiya's authored interaction
+V95 OBSERVATION: {"choice_texts":["",""],"choices":0,"empty_frame":false,"frame_texture":"","label":"amiya-original-line","line":0,"speaker":"阿米娅","story":"home_hero_06_4","workbook_frame":{"asset":"dialog_frame","bottom":60.0,"font_size":0.0,"height":244.0,"left":95.0,"mode":"ninepatch","right":95.0,"row":5,"text":"","top":130.0,"width":720.0,"x":48.0,"y":442.0},"workbook_frame_asset":"res://assets/gothic/panel_main_horned.png"}
+V95 DIALOGUE PASS: Amiya ordinary line: skull and empty dialogue frame are absent
+V95 DIALOGUE PASS: Amiya ordinary line: original two-choice frame textures are retained
+V95 DIALOGUE PASS: Amiya ordinary line: original dialogue text remains visible
+V95 DIALOGUE PASS: Amiya ordinary line: original character portrait remains visible
+V95 DIALOGUE PASS: Amiya ordinary line: original speaker remains named
+V95 DIALOGUE PASS: Amiya ordinary line: ordinary line shows no empty choice controls
+V95 DIALOGUE PASS: native pointer advances Amiya story to actual choices
+V95 OBSERVATION: {"choice_texts":["先写他的名字，再问家人想留下些什么。","写最高荣誉吧，名字反而不够响亮。"],"choices":2,"empty_frame":false,"frame_texture":"","label":"amiya-choices","line":1,"speaker":"阿米娅","story":"home_hero_06_4","workbook_frame":{"asset":"dialog_frame","bottom":60.0,"font_size":0.0,"height":244.0,"left":95.0,"mode":"ninepatch","right":95.0,"row":5,"text":"","top":130.0,"width":720.0,"x":48.0,"y":442.0},"workbook_frame_asset":"res://assets/gothic/panel_main_horned.png"}
+V95 DIALOGUE PASS: Amiya actual choices: skull and empty dialogue frame are absent
+V95 DIALOGUE PASS: Amiya actual choices: original two-choice frame textures are retained
+V95 DIALOGUE PASS: Amiya actual choices: original dialogue text remains visible
+V95 DIALOGUE PASS: Amiya actual choices: original character portrait remains visible
+V95 DIALOGUE PASS: Amiya actual choices: original speaker remains named
+V95 DIALOGUE PASS: authored choice controls contain readable option text
+V95 DIALOGUE PASS: original selected red and idle gray choice frames are restored
+V95 DIALOGUE PASS: native Tab moves focus to second actual option
+V95 DIALOGUE PASS: restored choice frames follow keyboard focus
+V95 DIALOGUE PASS: native number key commits one authored home choice
+V95 DIALOGUE PASS: Amiya response: skull and empty dialogue frame are absent
+V95 DIALOGUE PASS: Amiya response: original two-choice frame textures are retained
+V95 DIALOGUE PASS: Amiya response: original dialogue text remains visible
+V95 DIALOGUE PASS: Amiya response: original character portrait remains visible
+V95 DIALOGUE PASS: Amiya response: original speaker remains named
+V95 DIALOGUE PASS: Amiya response: ordinary line shows no empty choice controls
+V95 DIALOGUE PASS: response removes choices instead of leaving an empty option frame
+V95 DIALOGUE PASS: home dialogue and original animation acknowledgement return control to home
+V95 DIALOGUE PASS: home interaction leaves no pending animation gate
+V95 DIALOGUE PASS: native Escape returns home to main menu
+V95 DIALOGUE PASS: original campaign comics lead to authored opening dialogue
+V95 DIALOGUE PASS: campaign opening: skull and empty dialogue frame are absent
+V95 DIALOGUE PASS: campaign opening: original two-choice frame textures are retained
+V95 DIALOGUE PASS: campaign opening: original dialogue text remains visible
+V95 DIALOGUE PASS: campaign opening: original character portrait remains visible
+V95 DIALOGUE PASS: campaign opening: original speaker remains named
+V95 DIALOGUE PASS: campaign opening: ordinary line shows no empty choice controls
+V95 DIALOGUE PASS: native pointer advances campaign opening to actual choices
+V95 DIALOGUE PASS: native pointer commits one authored campaign choice
+V95 DIALOGUE PASS: original campaign success and stage transitions start battle without hanging
+V95 DIALOGUE PASS: all expected home and campaign dialogue branches executed
+V95 DIALOGUE COMPLETE: 42 checks, 0 failures

@@ -1,0 +1,20 @@
+{
+  "version": "92.0.0",
+  "engine": "Godot 4.6 stable official",
+  "native_checks": 88,
+  "native_failures": 0,
+  "native_exit_code": 0,
+  "stderr_bytes": 0,
+  "files": [
+    {
+      "file": "RiftGuard-V92.exe",
+      "bytes": 104578048,
+      "sha256": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b"
+    },
+    {
+      "file": "RiftGuard-V92.pck",
+      "bytes": 305506920,
+      "sha256": "09e0269670bddb64c2030e66d52c613604cc309161e7d4fa6b4d05ca5cc61cac"
+    }
+  ]
+}

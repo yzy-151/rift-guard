@@ -2,22 +2,42 @@ extends RefCounted
 const RED=Color("#ff405c")
 static func outline(v,points: PackedVector2Array,remaining: float,total: float,fill: bool=true) -> void:
  if points.size()<3:return
- if fill and Geometry2D.triangulate_polygon(points).size()>0:v.draw_colored_polygon(points,Color(RED,0.09))
- var closed=points.duplicate();closed.append(points[0])
- v.draw_polyline(closed,Color(RED,0.9),2.0,true)
- var center=Vector2.ZERO
- for point in points:center+=point
- center/=points.size()
  var ratio=clampf(remaining/maxf(total,0.01),0,1)
- var inner=PackedVector2Array()
- for point in closed:inner.append(center+(point-center)*ratio)
- v.draw_polyline(inner,Color(RED,0.45),1.5,true)
+ var progress=1.0-ratio
+ var urgency=smoothstep(0.55,1.0,progress)
+ if fill and Geometry2D.triangulate_polygon(points).size()>0:v.draw_colored_polygon(points,Color(RED,0.025+urgency*0.06))
+ var closed=points.duplicate();closed.append(points[0])
+ # The full damage footprint stays fixed; only the perimeter timer progresses.
+ # This also keeps donut interiors genuinely empty instead of shrinking a
+ # misleading danger ring across the safe center.
+ v.draw_polyline(closed,Color(RED,0.40+urgency*0.42),1.2+urgency*0.4,true)
+ var length=0.0
+ for i in range(1,closed.size()):length+=closed[i-1].distance_to(closed[i])
+ var left=length*progress
+ var elapsed_edge=PackedVector2Array([closed[0]])
+ for i in range(1,closed.size()):
+  var segment=closed[i-1].distance_to(closed[i])
+  if left<=0.0:break
+  elapsed_edge.append(closed[i-1].lerp(closed[i],minf(1.0,left/maxf(0.001,segment))))
+  left-=segment
+ if elapsed_edge.size()>1:v.draw_polyline(elapsed_edge,Color("#ffd9d1",0.4+urgency*0.32),1.0,true)
+ # Bold corner marks read on both dark floors and pale illustrated terrain.
+ for i in range(0,points.size(),maxi(1,points.size()/4)):
+  var tangent=(points[(i+1)%points.size()]-points[i]).normalized()
+  var side=tangent.orthogonal()
+  v.draw_line(points[i]-side*4.0,points[i]+side*4.0,Color("#fff4d6",0.4+urgency*0.3),1.2,true)
 static func circle_points(v,point: Vector2,radius: float) -> PackedVector2Array:
  var points=PackedVector2Array()
  for i in 48:points.append(v.world_to_screen(point+Vector2.from_angle(i*TAU/48)*radius))
  return points
+static func capsule_points(v,source: Vector2,target: Vector2,radius: float) -> PackedVector2Array:
+ var points=PackedVector2Array()
+ var heading=(target-source).angle()
+ for i in 17:points.append(v.world_to_screen(target+Vector2.from_angle(heading-PI/2+i*PI/16)*radius))
+ for i in 17:points.append(v.world_to_screen(source+Vector2.from_angle(heading+PI/2+i*PI/16)*radius))
+ return points
 static func area(v,point: Vector2,radius: float,remaining: float,total: float) -> void:
- var center: Vector2=v.world_to_screen(point)+Vector2(0,8)
+ var center: Vector2=v.world_to_screen(point)+v.ground_visual_offset()
  var radii: Vector2=v.sim.ability_area_screen_radii(point,radius)
  var points=PackedVector2Array()
  for i in 48:points.append(center+Vector2(cos(i*TAU/48)*radii.x,sin(i*TAU/48)*radii.y))

@@ -1,0 +1,176 @@
+{
+  "version": "93.0.0",
+  "date": "2026-10-04",
+  "engine": "Godot4.6 stable",
+  "runtime": "Windows native OpenGL Compatibility, RTX3050 Laptop",
+  "exported_checks": 96,
+  "exported_failures": 0,
+  "exported_scope": [
+    "original menu/squad/home/exploration",
+    "four15-second campaign/endless fixtures",
+    "three endless layouts",
+    "40 voice resources and actual playback",
+    "settings workshop entry,isolated simulation,Gwen placement/enemy placement/real E,return to original settings"
+  ],
+  "source_checks": {
+    "balance_routes": 124,
+    "workshop_headless": 78,
+    "workshop_native": 78,
+    "signature": 21,
+    "legacy_signature": 26,
+    "visual_contract_native": 35,
+    "simulation": 294,
+    "melee_spacing": 42,
+    "melee_pressure": 18,
+    "terrain": 150,
+    "hud": 45,
+    "audio_integration": 17,
+    "comic": 15
+  },
+  "known_test_limits": [
+    "Legacy HUD and legacy signature QA reported teardown resource warnings; new isolated/native release runs had none.",
+    "Balance evidence includes controlled10-second fixtures and one60-second opening; not a complete eight-stage balance playthrough.",
+    "Four roster characters remain marked unfinished."
+  ],
+  "package": [
+    {
+      "file": "RiftGuard-V93.exe",
+      "bytes": 104578048,
+      "sha256": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b"
+    },
+    {
+      "file": "RiftGuard-V93.pck",
+      "bytes": 305561336,
+      "sha256": "620d51ddea8e87c3053d86b0ebaecba850502a4a5130fc2815febaf1f3791f69"
+    }
+  ],
+  "media": [
+    {
+      "file": "gwen-needles.gif",
+      "bytes": 2073924,
+      "sha256": "06a3a9d7d9125aff0c59c9275f7d25581fa99b453d21ea2e1fa0280e3af3d354",
+      "decode": "passed",
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "gif",
+            "codec_type": "video",
+            "width": 960,
+            "height": 540,
+            "r_frame_rate": "15/1"
+          }
+        ],
+        "format": {
+          "duration": "8.000000"
+        }
+      }
+    },
+    {
+      "file": "impact-relay.gif",
+      "bytes": 3947980,
+      "sha256": "bbb52e06c6a01a614177d3650f7f6bf5cced5b8b03c99ada40b2f007e1eb1c7a",
+      "decode": "passed",
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "gif",
+            "codec_type": "video",
+            "width": 960,
+            "height": 540,
+            "r_frame_rate": "15/1"
+          }
+        ],
+        "format": {
+          "duration": "9.200000"
+        }
+      }
+    },
+    {
+      "file": "route-spawn.gif",
+      "bytes": 1576191,
+      "sha256": "ece7299bb18bbd55164536b143134368cd2d0b55145539f651008090294f9863",
+      "decode": "passed",
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "gif",
+            "codec_type": "video",
+            "width": 960,
+            "height": 540,
+            "r_frame_rate": "15/1"
+          }
+        ],
+        "format": {
+          "duration": "7.740000"
+        }
+      }
+    },
+    {
+      "file": "v93-workshop-combat.mp4",
+      "bytes": 4596718,
+      "sha256": "bf934edb00a9e1996273899757b3c2cb10d896e3407ef974374c5a669ddb2935",
+      "decode": "passed",
+      "info": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "24/1"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "25.000000"
+        }
+      }
+    }
+  ],
+  "audio_levels": [
+    "[Parsed_volumedetect_0 @ 0000017f49104080] mean_volume: -29.8 dB",
+    "[Parsed_volumedetect_0 @ 0000017f49104080] max_volume: -5.9 dB"
+  ],
+  "logs": {
+    "build-v93": {
+      "errors": [],
+      "sha256": "fd48cac0f554225ca50c8b3a245b430a0d208da96e7a2236f02dfc165694fdfc"
+    },
+    "export-native": {
+      "errors": [],
+      "sha256": "4c407ce89b14040613d5c7b3c469ffabaa9284caadda034d0240be288617f376"
+    },
+    "v93-demo": {
+      "errors": [],
+      "sha256": "8a92bdeeaf45ef00365af17e2b8ad448be245dc6bf4c68ae77183934389f467b"
+    },
+    "visual-contract": {
+      "errors": [],
+      "sha256": "35a11feb74bc1a7acc8dd3e01e5f632afd8a7ef059dff34b041199aa0af8f66e"
+    },
+    "qa-comic": {
+      "errors": [],
+      "sha256": "bb3c9e320cd8e4e00456509a4f353997c6cd3212759f521f5386bf86af4d4f74"
+    },
+    "qa-terrain": {
+      "errors": [],
+      "sha256": "aa08b17f92c18371b926ecf585fc5418e0e27ce7a25f66fa2c3efdaabc10bff2"
+    },
+    "qa-audio": {
+      "errors": [],
+      "sha256": "b18d7755d9217ff15b98765ac2402ba2d9c53d16c67d31651ca0a3108f863af5"
+    }
+  }
+}

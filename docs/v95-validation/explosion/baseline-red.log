@@ -1,0 +1,118 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.30 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3050 Laptop GPU
+
+V95 EXPLOSION PASS: explosion validation uses isolated save data
+V95 EXPLOSION PASS: actual battle and simulation initialized
+V95 EXPLOSION FAIL: death full paints thick maroon smoke lobes
+V95 EXPLOSION FAIL: death full paints red inner lobes
+V95 EXPLOSION PASS: death full retains a white yellow ignition core
+V95 EXPLOSION FAIL: death full explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: death full phase 0.025 has bounded draw work
+V95 EXPLOSION PASS: death full phase 0.110 has bounded draw work
+V95 EXPLOSION PASS: death full phase 0.240 has bounded draw work
+V95 EXPLOSION PASS: death full phase 0.400 has bounded draw work
+V95 EXPLOSION PASS: death full dissipates without retained geometry
+V95 EXPLOSION FAIL: death reduced paints thick maroon smoke lobes
+V95 EXPLOSION FAIL: death reduced paints red inner lobes
+V95 EXPLOSION PASS: death reduced retains a white yellow ignition core
+V95 EXPLOSION PASS: death reduced explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: death reduced phase 0.025 has bounded draw work
+V95 EXPLOSION PASS: death reduced phase 0.110 has bounded draw work
+V95 EXPLOSION PASS: death reduced phase 0.240 has bounded draw work
+V95 EXPLOSION PASS: death reduced phase 0.400 has bounded draw work
+V95 EXPLOSION PASS: death reduced dissipates without retained geometry
+V95 EXPLOSION FAIL: death_burst full paints thick maroon smoke lobes
+V95 EXPLOSION FAIL: death_burst full paints red inner lobes
+V95 EXPLOSION PASS: death_burst full retains a white yellow ignition core
+V95 EXPLOSION FAIL: death_burst full explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: death_burst full phase 0.025 has bounded draw work
+V95 EXPLOSION PASS: death_burst full phase 0.110 has bounded draw work
+V95 EXPLOSION PASS: death_burst full phase 0.240 has bounded draw work
+V95 EXPLOSION PASS: death_burst full phase 0.400 has bounded draw work
+V95 EXPLOSION PASS: death_burst full dissipates without retained geometry
+V95 EXPLOSION FAIL: death_burst reduced paints thick maroon smoke lobes
+V95 EXPLOSION FAIL: death_burst reduced paints red inner lobes
+V95 EXPLOSION PASS: death_burst reduced retains a white yellow ignition core
+V95 EXPLOSION PASS: death_burst reduced explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: death_burst reduced phase 0.025 has bounded draw work
+V95 EXPLOSION PASS: death_burst reduced phase 0.110 has bounded draw work
+V95 EXPLOSION PASS: death_burst reduced phase 0.240 has bounded draw work
+V95 EXPLOSION PASS: death_burst reduced phase 0.400 has bounded draw work
+V95 EXPLOSION PASS: death_burst reduced dissipates without retained geometry
+V95 EXPLOSION FAIL: enemy_volatile full paints thick maroon smoke lobes
+V95 EXPLOSION FAIL: enemy_volatile full paints red inner lobes
+V95 EXPLOSION PASS: enemy_volatile full retains a white yellow ignition core
+V95 EXPLOSION FAIL: enemy_volatile full explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: enemy_volatile full phase 0.025 has bounded draw work
+V95 EXPLOSION PASS: enemy_volatile full phase 0.110 has bounded draw work
+V95 EXPLOSION PASS: enemy_volatile full phase 0.240 has bounded draw work
+V95 EXPLOSION PASS: enemy_volatile full phase 0.400 has bounded draw work
+V95 EXPLOSION PASS: enemy_volatile full dissipates without retained geometry
+V95 EXPLOSION FAIL: enemy_volatile reduced paints thick maroon smoke lobes
+V95 EXPLOSION FAIL: enemy_volatile reduced paints red inner lobes
+V95 EXPLOSION PASS: enemy_volatile reduced retains a white yellow ignition core
+V95 EXPLOSION PASS: enemy_volatile reduced explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: enemy_volatile reduced phase 0.025 has bounded draw work
+V95 EXPLOSION PASS: enemy_volatile reduced phase 0.110 has bounded draw work
+V95 EXPLOSION PASS: enemy_volatile reduced phase 0.240 has bounded draw work
+V95 EXPLOSION PASS: enemy_volatile reduced phase 0.400 has bounded draw work
+V95 EXPLOSION PASS: enemy_volatile reduced dissipates without retained geometry
+V95 EXPLOSION FAIL: source bug death creates no premature duplicate burst before its fuse
+V95 EXPLOSION PASS: dedicated bug explosion creates no second comic accent
+V95 EXPLOSION PASS: original atlas deaths keep their original animation only
+V95 EXPLOSION PASS: shared_burst keeps its existing independent drawing style
+V95 EXPLOSION PASS: beam keeps its existing independent drawing style
+V95 EXPLOSION PASS: rift keeps its existing independent drawing style
+V95 EXPLOSION PASS: impact keeps its existing independent drawing style
+V95 EXPLOSION PASS: lightning keeps its existing independent drawing style
+V95 EXPLOSION PASS: campaign bug retains one 80-radius blast with one-second fuse
+V95 EXPLOSION PASS: campaign bug keeps original damage multiplier
+V95 EXPLOSION PASS: campaign bug deals no damage before the fuse completes
+V95 EXPLOSION PASS: campaign original 79/81/120 projected damage boundaries remain exact
+V95 EXPLOSION PASS: campaign bug detonates exactly once
+V95 EXPLOSION PASS: campaign completed blast cannot damage again
+V95 EXPLOSION PASS: campaign painted blast phase 0.025 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast drawing is bounded
+V95 EXPLOSION PASS: campaign painted blast phase 0.110 stays inside its true projected footprint
+V95 EXPLOSION FAIL: campaign dedicated bug blast uses the cartoon smoke and fire palette
+V95 EXPLOSION PASS: campaign dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: campaign painted blast phase 0.240 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: campaign painted blast phase 0.400 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast drawing is bounded
+V95 EXPLOSION PASS: campaign painted blast phase 0.025 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast drawing is bounded
+V95 EXPLOSION PASS: campaign painted blast phase 0.110 stays inside its true projected footprint
+V95 EXPLOSION FAIL: campaign dedicated bug blast uses the cartoon smoke and fire palette
+V95 EXPLOSION PASS: campaign dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: campaign painted blast phase 0.240 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: campaign painted blast phase 0.400 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast drawing is bounded
+V95 EXPLOSION PASS: endless bug retains one 80-radius blast with one-second fuse
+V95 EXPLOSION PASS: endless bug keeps original damage multiplier
+V95 EXPLOSION PASS: endless bug deals no damage before the fuse completes
+V95 EXPLOSION PASS: endless original 79/81/120 projected damage boundaries remain exact
+V95 EXPLOSION PASS: endless bug detonates exactly once
+V95 EXPLOSION PASS: endless completed blast cannot damage again
+V95 EXPLOSION FAIL: endless painted blast phase 0.025 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: endless painted blast phase 0.110 stays inside its true projected footprint
+V95 EXPLOSION FAIL: endless dedicated bug blast uses the cartoon smoke and fire palette
+V95 EXPLOSION PASS: endless dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: endless painted blast phase 0.240 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: endless painted blast phase 0.400 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: endless painted blast phase 0.025 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: endless painted blast phase 0.110 stays inside its true projected footprint
+V95 EXPLOSION FAIL: endless dedicated bug blast uses the cartoon smoke and fire palette
+V95 EXPLOSION PASS: endless dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: endless painted blast phase 0.240 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast drawing is bounded
+V95 EXPLOSION FAIL: endless painted blast phase 0.400 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast drawing is bounded
+V95 EXPLOSION PASS: native actual bug retains its warning until the complete fuse
+V95 EXPLOSION PASS: native actual bug event dispatch renders exactly one dedicated blast
+V95 EXPLOSION COMPLETE: 114 checks, 32 failures

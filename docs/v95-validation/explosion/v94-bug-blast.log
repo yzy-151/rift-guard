@@ -1,0 +1,93 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+PASS campaign ordinary horizontal queues exactly one blast
+PASS campaign ordinary horizontal authoritative radius is 80
+PASS campaign ordinary horizontal preserves one-second fuse and scaled damage
+PASS campaign ordinary horizontal death has no immediate damage
+PASS campaign ordinary horizontal drawn warning exactly matches damage projection
+PASS campaign ordinary horizontal allows dodge throughout warning
+PASS campaign ordinary horizontal canonical 79 receives unchanged damage
+PASS campaign ordinary horizontal canonical 81 stays safe
+PASS campaign ordinary horizontal canonical 120 stays safe
+PASS campaign ordinary horizontal resolves once and forwards radius to flash
+PASS campaign ordinary horizontal cannot damage twice
+PASS campaign ordinary vertical queues exactly one blast
+PASS campaign ordinary vertical authoritative radius is 80
+PASS campaign ordinary vertical preserves one-second fuse and scaled damage
+PASS campaign ordinary vertical death has no immediate damage
+PASS campaign ordinary vertical drawn warning exactly matches damage projection
+PASS campaign ordinary vertical allows dodge throughout warning
+PASS campaign ordinary vertical canonical 79 receives unchanged damage
+PASS campaign ordinary vertical canonical 81 stays safe
+PASS campaign ordinary vertical canonical 120 stays safe
+PASS campaign ordinary vertical resolves once and forwards radius to flash
+PASS campaign ordinary vertical cannot damage twice
+PASS campaign volatile horizontal queues exactly one blast
+PASS campaign volatile horizontal authoritative radius is 80
+PASS campaign volatile horizontal preserves one-second fuse and scaled damage
+PASS campaign volatile horizontal death has no immediate damage
+PASS campaign volatile horizontal drawn warning exactly matches damage projection
+PASS campaign volatile horizontal allows dodge throughout warning
+PASS campaign volatile horizontal canonical 79 receives unchanged damage
+PASS campaign volatile horizontal canonical 81 stays safe
+PASS campaign volatile horizontal canonical 120 stays safe
+PASS campaign volatile horizontal resolves once and forwards radius to flash
+PASS campaign volatile horizontal cannot damage twice
+PASS campaign volatile vertical queues exactly one blast
+PASS campaign volatile vertical authoritative radius is 80
+PASS campaign volatile vertical preserves one-second fuse and scaled damage
+PASS campaign volatile vertical death has no immediate damage
+PASS campaign volatile vertical drawn warning exactly matches damage projection
+PASS campaign volatile vertical allows dodge throughout warning
+PASS campaign volatile vertical canonical 79 receives unchanged damage
+PASS campaign volatile vertical canonical 81 stays safe
+PASS campaign volatile vertical canonical 120 stays safe
+PASS campaign volatile vertical resolves once and forwards radius to flash
+PASS campaign volatile vertical cannot damage twice
+PASS endless ordinary horizontal queues exactly one blast
+PASS endless ordinary horizontal authoritative radius is 80
+PASS endless ordinary horizontal preserves one-second fuse and scaled damage
+PASS endless ordinary horizontal death has no immediate damage
+PASS endless ordinary horizontal drawn warning exactly matches damage projection
+PASS endless ordinary horizontal allows dodge throughout warning
+PASS endless ordinary horizontal canonical 79 receives unchanged damage
+PASS endless ordinary horizontal canonical 81 stays safe
+PASS endless ordinary horizontal canonical 120 stays safe
+PASS endless ordinary horizontal resolves once and forwards radius to flash
+PASS endless ordinary horizontal cannot damage twice
+PASS endless ordinary vertical queues exactly one blast
+PASS endless ordinary vertical authoritative radius is 80
+PASS endless ordinary vertical preserves one-second fuse and scaled damage
+PASS endless ordinary vertical death has no immediate damage
+PASS endless ordinary vertical drawn warning exactly matches damage projection
+PASS endless ordinary vertical allows dodge throughout warning
+PASS endless ordinary vertical canonical 79 receives unchanged damage
+PASS endless ordinary vertical canonical 81 stays safe
+PASS endless ordinary vertical canonical 120 stays safe
+PASS endless ordinary vertical resolves once and forwards radius to flash
+PASS endless ordinary vertical cannot damage twice
+PASS endless volatile horizontal queues exactly one blast
+PASS endless volatile horizontal authoritative radius is 80
+PASS endless volatile horizontal preserves one-second fuse and scaled damage
+PASS endless volatile horizontal death has no immediate damage
+PASS endless volatile horizontal drawn warning exactly matches damage projection
+PASS endless volatile horizontal allows dodge throughout warning
+PASS endless volatile horizontal canonical 79 receives unchanged damage
+PASS endless volatile horizontal canonical 81 stays safe
+PASS endless volatile horizontal canonical 120 stays safe
+PASS endless volatile horizontal resolves once and forwards radius to flash
+PASS endless volatile horizontal cannot damage twice
+PASS endless volatile vertical queues exactly one blast
+PASS endless volatile vertical authoritative radius is 80
+PASS endless volatile vertical preserves one-second fuse and scaled damage
+PASS endless volatile vertical death has no immediate damage
+PASS endless volatile vertical drawn warning exactly matches damage projection
+PASS endless volatile vertical allows dodge throughout warning
+PASS endless volatile vertical canonical 79 receives unchanged damage
+PASS endless volatile vertical canonical 81 stays safe
+PASS endless volatile vertical canonical 120 stays safe
+PASS endless volatile vertical resolves once and forwards radius to flash
+PASS endless volatile vertical cannot damage twice
+PASS 80-radius flash stays proportionate to its footprint
+PASS flash scales from the authoritative event radius
+V94 BUG BLAST checks=90 failures=0

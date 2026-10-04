@@ -1,0 +1,201 @@
+[
+  {
+    "bat_retreat_frames": 0,
+    "dash_frames": 0,
+    "events": {
+      "death": 1,
+      "enemy_volatile": 1,
+      "heal": 1,
+      "hit": 1,
+      "hurt": 1
+    },
+    "fps": 24,
+    "frames": 144,
+    "id": "monster-originium",
+    "spin_frames": 0,
+    "start_frame": 1
+  },
+  {
+    "bat_retreat_frames": 0,
+    "dash_frames": 16,
+    "events": {
+      "enemy_dash_warning": 1,
+      "heal": 3,
+      "hurt": 5
+    },
+    "fps": 24,
+    "frames": 168,
+    "id": "monster-charge-jump",
+    "spin_frames": 0,
+    "start_frame": 145
+  },
+  {
+    "bat_retreat_frames": 0,
+    "dash_frames": 0,
+    "events": {
+      "enemy_spin": 4,
+      "enemy_warning": 1,
+      "heal": 3,
+      "hurt": 6
+    },
+    "fps": 24,
+    "frames": 168,
+    "id": "monster-spin",
+    "spin_frames": 44,
+    "start_frame": 313
+  },
+  {
+    "bat_retreat_frames": 62,
+    "dash_frames": 0,
+    "events": {
+      "heal": 2,
+      "hurt": 2
+    },
+    "fps": 24,
+    "frames": 168,
+    "id": "monster-bat",
+    "spin_frames": 0,
+    "start_frame": 481
+  },
+  {
+    "bat_retreat_frames": 0,
+    "dash_frames": 0,
+    "events": {
+      "boss_warning": 5,
+      "heal": 4,
+      "hurt": 19,
+      "rift_laser": 1,
+      "rift_orb_hit": 10,
+      "rift_orbs": 1,
+      "rift_overhead": 1,
+      "rift_storm": 1
+    },
+    "fps": 24,
+    "frames": 288,
+    "id": "boss-rift",
+    "spin_frames": 0,
+    "start_frame": 649
+  },
+  {
+    "bat_retreat_frames": 0,
+    "dash_frames": 0,
+    "events": {
+      "boss_warning": 5,
+      "enemy_warning": 17,
+      "heal": 4,
+      "hurt": 29,
+      "slime_bounce": 1,
+      "slime_bounce_hit": 3,
+      "slime_burst": 1,
+      "slime_court": 1,
+      "slime_court_hit": 5,
+      "slime_glob_hit": 5,
+      "slime_reflux": 1
+    },
+    "fps": 24,
+    "frames": 288,
+    "id": "boss-slime",
+    "spin_frames": 0,
+    "start_frame": 937
+  },
+  {
+    "bat_retreat_frames": 0,
+    "dash_frames": 0,
+    "events": {
+      "boss_skill_charge": 8,
+      "boss_warning": 8,
+      "enemy_shot": 7,
+      "enemy_warning": 21,
+      "galio_entrance": 1,
+      "galio_guard": 1,
+      "heal": 5,
+      "hurt": 82,
+      "kindred_arrow_hit": 30,
+      "kindred_dance": 1,
+      "kindred_dread": 2,
+      "kindred_hunt": 1,
+      "kindred_wolf": 2,
+      "kindred_wolf_strike": 14
+    },
+    "fps": 24,
+    "frames": 360,
+    "id": "boss-kindred-galio",
+    "spin_frames": 0,
+    "start_frame": 1225
+  },
+  {
+    "bat_retreat_frames": 0,
+    "dash_frames": 0,
+    "events": {
+      "barrage": 2,
+      "contract_complete": 1,
+      "crossfire": 1,
+      "crystal_guard": 1,
+      "crystallize": 1,
+      "fireball_fall": 2,
+      "fireball_impact": 1,
+      "frozen": 10,
+      "heal": 8,
+      "hit": 43,
+      "roxy_thunder": 6,
+      "shatter": 2,
+      "shot": 30,
+      "skill_geometry": 2,
+      "splash": 26,
+      "support_heal": 1,
+      "ultimate_cast": 2,
+      "ultimate_impact": 2,
+      "vaporize": 1,
+      "vfx_cue": 2
+    },
+    "fps": 24,
+    "frames": 264,
+    "id": "support-shapes",
+    "spin_frames": 0,
+    "start_frame": 1585
+  },
+  {
+    "bat_retreat_frames": 0,
+    "dash_frames": 0,
+    "events": {
+      "enemy_spin": 4,
+      "enemy_warning": 1,
+      "hurt": 7
+    },
+    "fps": 24,
+    "frames": 240,
+    "id": "monster-spacing",
+    "spacing": [
+      {
+        "distance_to_hero": 96.0,
+        "id": 1,
+        "kind": "hilichurl_brute",
+        "slot": 2,
+        "traveled": 681.234924316406
+      },
+      {
+        "distance_to_hero": 95.1685409545898,
+        "id": 2,
+        "kind": "grunt",
+        "slot": 6,
+        "traveled": 445.824401855469
+      },
+      {
+        "distance_to_hero": 60.0,
+        "id": 3,
+        "kind": "runner",
+        "slot": 7,
+        "traveled": 521.7470703125
+      },
+      {
+        "distance_to_hero": 66.7999877929688,
+        "id": 4,
+        "kind": "armored",
+        "slot": 0,
+        "traveled": 539.521850585938
+      }
+    ],
+    "spin_frames": 44,
+    "start_frame": 1849
+  }
+]

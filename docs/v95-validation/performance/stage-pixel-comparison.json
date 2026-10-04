@@ -1,0 +1,86 @@
+[
+  {
+    "stage": "stage_01",
+    "changed_over_8": 0,
+    "fraction": 0.0,
+    "bbox": null
+  },
+  {
+    "stage": "stage_02",
+    "changed_over_8": 0,
+    "fraction": 0.0,
+    "bbox": null
+  },
+  {
+    "stage": "stage_03",
+    "changed_over_8": 217,
+    "fraction": 0.0001096998420221169,
+    "bbox": [
+      606,
+      300,
+      1612,
+      750
+    ]
+  },
+  {
+    "stage": "stage_04",
+    "changed_over_8": 57,
+    "fraction": 2.881516587677725e-05,
+    "bbox": [
+      263,
+      734,
+      278,
+      750
+    ]
+  },
+  {
+    "stage": "stage_05",
+    "changed_over_8": 57,
+    "fraction": 2.881516587677725e-05,
+    "bbox": [
+      1597,
+      734,
+      1612,
+      750
+    ]
+  },
+  {
+    "stage": "stage_06",
+    "changed_over_8": 0,
+    "fraction": 0.0,
+    "bbox": null
+  },
+  {
+    "stage": "stage_07",
+    "changed_over_8": 57,
+    "fraction": 2.881516587677725e-05,
+    "bbox": [
+      1597,
+      176,
+      1612,
+      192
+    ]
+  },
+  {
+    "stage": "stage_08",
+    "changed_over_8": 57,
+    "fraction": 2.881516587677725e-05,
+    "bbox": [
+      263,
+      734,
+      278,
+      750
+    ]
+  },
+  {
+    "stage": "stage_endless",
+    "changed_over_8": 0,
+    "fraction": 0.0,
+    "bbox": [
+      0,
+      156,
+      1875,
+      218
+    ]
+  }
+]

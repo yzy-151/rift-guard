@@ -3,7 +3,7 @@ extends RefCounted
 static func point(c: Vector2,r: Vector2,a: float) -> Vector2:
  return c+Vector2(cos(a)*r.x,sin(a)*r.y)
 static func draw(v,o: Dictionary,h: Dictionary) -> void:
- var c: Vector2=v.world_to_screen(h.pos)+Vector2(0,8)
+ var c: Vector2=v.world_to_screen(h.pos)+v.ground_visual_offset()
  var r: Vector2=v.sim.ability_area_screen_radii(h.pos,float(o.radius))
  var fade=smoothstep(0,0.85,float(o.life))*smoothstep(0,0.35,float(o.get("age",1)))
  var blade=str(o.get("visual",""))=="blade"
@@ -38,7 +38,7 @@ static func effect(v,e: Dictionary) -> void:
  var t=clampf(1-float(e.life)/float(e.total),0,1)
  var fade=1-smoothstep(0.35,1,t)
  var color=Color("#ffd38e") if str(e.get("visual",""))=="blade" else Color("#b49aff")
- var center: Vector2=v.world_to_screen(e.get("center",e.pos))+Vector2(0,8)
+ var center: Vector2=v.world_to_screen(e.get("center",e.pos))+v.ground_visual_offset()
  var r: Vector2=v.sim.ability_area_screen_radii(e.get("center",e.pos),float(e.radius))
  if e.kind=="orbit_storm":
   for i in 3:

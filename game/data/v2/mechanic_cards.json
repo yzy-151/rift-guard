@@ -2,7 +2,7 @@
   {
     "id": "mechanic_twin_arc",
     "name": "双生弹幕",
-    "description": "全队每次攻击额外增加1条弹道，近战同步追加斩击。",
+    "description": "全队普攻弹道+1（近战追加单体斩击），最多4条；各额外弹道依次造成60%、36%、21.6%伤害。",
     "rarity": "rare",
     "weight": 34,
     "target": "global",
@@ -11,12 +11,13 @@
     "mechanic": true,
     "tags": [
       "弹道"
-    ]
+    ],
+    "summary": "全队普攻弹道+1（近战追加单体斩击），最多4条；各额外弹道依次造成60%、36%、21.6%伤害。"
   },
   {
     "id": "mechanic_prism_fan",
     "name": "棱镜散射",
-    "description": "全员弹道+1，普攻爆炸半径+25。重复获取时各项加成叠加。",
+    "description": "全员弹道+1，普攻爆炸半径+25。重复获取时各项加成叠加。 总弹道上限4条，额外弹道依次为60%/36%/21.6%伤害；爆炸半径上限120，仅每条弹道首次命中触发，对最多3名邻敌造成40%伤害。",
     "rarity": "epic",
     "weight": 16,
     "target": "global",
@@ -36,12 +37,12 @@
         "value": 25
       }
     ],
-    "summary": "全员弹道+1，普攻爆炸半径+25"
+    "summary": "全员弹道+1，普攻爆炸半径+25。重复获取时各项加成叠加。 总弹道上限4条，额外弹道依次为60%/36%/21.6%伤害；爆炸半径上限120，仅每条弹道首次命中触发，对最多3名邻敌造成40%伤害。"
   },
   {
     "id": "mechanic_piercing_edge",
     "name": "贯穿锋芒",
-    "description": "全队弹道贯穿数量增加1，近战斩击范围同步提升。",
+    "description": "全队普攻额外贯穿+1，最多3次，每次保留75%伤害；近战在斩击范围内追加目标。",
     "rarity": "rare",
     "weight": 30,
     "target": "global",
@@ -50,26 +51,28 @@
     "mechanic": true,
     "tags": [
       "弹道"
-    ]
+    ],
+    "summary": "全队普攻额外贯穿+1，最多3次，每次保留75%伤害；近战在斩击范围内追加目标。"
   },
   {
     "id": "mechanic_chain_arc",
     "name": "万雷天牢引",
-    "description": "全队攻击额外连锁5名附近敌人。",
+    "description": "全队普攻弹射+2，最多3次；每次飞向140范围内的新目标，保留65%伤害，不重复命中。",
     "rarity": "epic",
     "weight": 15,
     "target": "global",
     "effect": "chain_add",
-    "value": 5,
+    "value": 2,
     "mechanic": true,
     "tags": [
       "反应"
-    ]
+    ],
+    "summary": "全队普攻弹射+2，最多3次；每次飞向140范围内的新目标，保留65%伤害，不重复命中。"
   },
   {
     "id": "mechanic_blast_core",
     "name": "爆裂核心",
-    "description": "全队攻击爆炸半径提高120。",
+    "description": "全队普攻爆炸半径+120。 爆炸半径上限120，仅每条弹道首次命中触发，对最多3名邻敌造成40%伤害。",
     "rarity": "epic",
     "weight": 14,
     "target": "global",
@@ -78,12 +81,13 @@
     "mechanic": true,
     "tags": [
       "反应"
-    ]
+    ],
+    "summary": "全队普攻爆炸半径+120。 爆炸半径上限120，仅每条弹道首次命中触发，对最多3名邻敌造成40%伤害。"
   },
   {
     "id": "mechanic_rapid_echo",
     "name": "追击回声",
-    "description": "全队攻击后追加一次100%伤害的追击。",
+    "description": "全队攻击后追加一次100%伤害的追击。 追击只对首目标结算，总追加伤害上限60%。",
     "rarity": "rare",
     "weight": 30,
     "target": "global",
@@ -92,7 +96,8 @@
     "mechanic": true,
     "tags": [
       "支援"
-    ]
+    ],
+    "summary": "全队攻击后追加一次100%伤害的追击。 追击只对首目标结算，总追加伤害上限60%。"
   },
   {
     "id": "support_red_moon",
@@ -285,7 +290,7 @@
   {
     "id": "mythic_projectile_storm",
     "name": "神格·万象弹幕",
-    "description": "全队弹道增加1、攻击速度提高24%、贯穿增加1。",
+    "description": "全队弹道增加1、攻击速度提高24%、贯穿增加1。 总弹道上限4条，额外弹道依次60%/36%/21.6%；额外贯穿上限3次，每次保留75%伤害。",
     "rarity": "mythic",
     "weight": 1,
     "target": "global",
@@ -294,12 +299,13 @@
     "mechanic": true,
     "tags": [
       "弹道"
-    ]
+    ],
+    "summary": "全队弹道增加1、攻击速度提高24%、贯穿增加1。 总弹道上限4条，额外弹道依次60%/36%/21.6%；额外贯穿上限3次，每次保留75%伤害。"
   },
   {
     "id": "mythic_world_breaker",
     "name": "神格·碎界",
-    "description": "全队攻击提高150%，攻击获得巨型爆炸并追加6次连锁。",
+    "description": "全队攻击提高150%，普攻爆炸半径达到120，并解锁3次弹射。 爆炸只在首命中触发，最多3名邻敌受到40%伤害；弹射每次保留65%，140范围内转移且不重复命中。",
     "rarity": "mythic",
     "weight": 1,
     "target": "global",
@@ -308,7 +314,8 @@
     "mechanic": true,
     "tags": [
       "支援"
-    ]
+    ],
+    "summary": "全队攻击提高150%，普攻爆炸半径达到120，并解锁3次弹射。 爆炸只在首命中触发，最多3名邻敌受到40%伤害；弹射每次保留65%，140范围内转移且不重复命中。"
   },
   {
     "id": "mythic_eternal_support",
@@ -621,7 +628,7 @@
   {
     "id": "v75_annihilation_protocol",
     "name": "灭绝协议",
-    "description": "全员攻击+100%，普攻爆炸半径+45。重复获取时各项加成叠加。",
+    "description": "全员攻击+100%，普攻爆炸半径+45。重复获取时各项加成叠加。 爆炸半径上限120，仅每条弹道首次命中触发，对最多3名邻敌造成40%伤害。",
     "rarity": "epic",
     "weight": 9,
     "target": "global",
@@ -641,7 +648,7 @@
         "value": 45
       }
     ],
-    "summary": "全员攻击+100%，普攻爆炸半径+45",
+    "summary": "全员攻击+100%，普攻爆炸半径+45。重复获取时各项加成叠加。 爆炸半径上限120，仅每条弹道首次命中触发，对最多3名邻敌造成40%伤害。",
     "mechanic": true
   },
   {
@@ -857,21 +864,22 @@
   {
     "id": "v75_forward_observation",
     "name": "前沿观测",
-    "description": "全队：攻击范围提高40。",
+    "description": "全队普攻射程+12；所有射程成长合计最多为初始射程的60%。",
     "rarity": "common",
     "weight": 43,
     "target": "global",
     "effect": "squad_range_flat",
-    "value": 40,
+    "value": 12,
     "tags": [
       "弹道"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "summary": "全队普攻射程+12；所有射程成长合计最多为初始射程的60%。"
   },
   {
     "id": "v75_satellite_lock",
     "name": "卫星锁定",
-    "description": "全员射程+30，暴击率+10%。重复获取时各项加成叠加。",
+    "description": "全员射程+12，暴击率+10%。重复获取时各项加成叠加。 射程成长合计上限为初始射程的60%。",
     "rarity": "rare",
     "weight": 20,
     "target": "global",
@@ -884,20 +892,20 @@
     "components": [
       {
         "effect": "range_flat",
-        "value": 30
+        "value": 12
       },
       {
         "effect": "crit_flat",
         "value": 0.1
       }
     ],
-    "summary": "全员射程+30，暴击率+10%",
+    "summary": "全员射程+12，暴击率+10%。重复获取时各项加成叠加。 射程成长合计上限为初始射程的60%。",
     "mechanic": true
   },
   {
     "id": "v75_omniscient_view",
     "name": "全知视域",
-    "description": "全员射程+50，技能范围+30%。重复获取时各项加成叠加。",
+    "description": "全员射程+12，技能范围+30%。重复获取时各项加成叠加。 射程成长合计上限为初始射程的60%。",
     "rarity": "epic",
     "weight": 7,
     "target": "global",
@@ -910,20 +918,20 @@
     "components": [
       {
         "effect": "range_flat",
-        "value": 50
+        "value": 12
       },
       {
         "effect": "skill_area_add",
         "value": 0.3
       }
     ],
-    "summary": "全员射程+50，技能范围+30%",
+    "summary": "全员射程+12，技能范围+30%。重复获取时各项加成叠加。 射程成长合计上限为初始射程的60%。",
     "mechanic": true
   },
   {
     "id": "v75_orbital_aim",
     "name": "天基瞄准",
-    "description": "全员射程+70，普攻追击伤害+40%。重复获取时各项加成叠加。",
+    "description": "全员射程+18，普攻追击伤害+40%。重复获取时各项加成叠加。 射程成长合计上限为初始射程的60%。 追击只对首目标结算，总追加伤害上限60%。",
     "rarity": "legendary",
     "weight": 2,
     "target": "global",
@@ -936,14 +944,14 @@
     "components": [
       {
         "effect": "range_flat",
-        "value": 70
+        "value": 18
       },
       {
         "effect": "echo_add",
         "value": 0.4
       }
     ],
-    "summary": "全员射程+70，普攻追击伤害+40%",
+    "summary": "全员射程+18，普攻追击伤害+40%。重复获取时各项加成叠加。 射程成长合计上限为初始射程的60%。 追击只对首目标结算，总追加伤害上限60%。",
     "mechanic": true
   },
   {
@@ -1065,7 +1073,7 @@
   {
     "id": "v75_piercing_barrage",
     "name": "贯穿弹幕",
-    "description": "全员贯穿+1，普攻追击伤害+25%。重复获取时各项加成叠加。",
+    "description": "全员贯穿+1，普攻追击伤害+25%。重复获取时各项加成叠加。 额外贯穿上限3次，每次保留75%伤害；追击只对首目标结算，总追加伤害上限60%。",
     "rarity": "epic",
     "weight": 7,
     "target": "global",
@@ -1086,42 +1094,44 @@
         "value": 0.25
       }
     ],
-    "summary": "全员贯穿+1，普攻追击伤害+25%"
+    "summary": "全员贯穿+1，普攻追击伤害+25%。重复获取时各项加成叠加。 额外贯穿上限3次，每次保留75%伤害；追击只对首目标结算，总追加伤害上限60%。"
   },
   {
     "id": "v75_chain_storm",
     "name": "连锁风暴",
-    "description": "全队：攻击额外连锁10名附近敌人。",
+    "description": "全队普攻弹射+3，最多3次；每次飞向140范围内的新目标，保留65%伤害，不重复命中。",
     "rarity": "legendary",
     "weight": 2,
     "target": "global",
     "effect": "chain_add",
-    "value": 10,
+    "value": 3,
     "tags": [
       "反应"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "summary": "全队普攻弹射+3，最多3次；每次飞向140范围内的新目标，保留65%伤害，不重复命中。"
   },
   {
     "id": "v75_superheavy_blast",
     "name": "超重爆破",
-    "description": "全队：攻击爆炸半径提高220。",
+    "description": "全队普攻爆炸半径+120。 爆炸半径上限120，仅每条弹道首次命中触发，对最多3名邻敌造成40%伤害。",
     "rarity": "legendary",
     "weight": 2,
     "target": "global",
     "effect": "blast_add",
-    "value": 220,
+    "value": 120,
     "tags": [
       "反应"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "summary": "全队普攻爆炸半径+120。 爆炸半径上限120，仅每条弹道首次命中触发，对最多3名邻敌造成40%伤害。"
   },
   {
     "id": "v75_rewritten_echo",
     "name": "复写回声",
-    "description": "全队：攻击后追加一次150%伤害的追击。",
+    "description": "全队：攻击后追加一次150%伤害的追击。 追击只对首目标结算，总追加伤害上限60%。",
     "rarity": "legendary",
     "weight": 2,
     "target": "global",
@@ -1131,7 +1141,8 @@
       "支援"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "summary": "全队：攻击后追加一次150%伤害的追击。 追击只对首目标结算，总追加伤害上限60%。"
   },
   {
     "id": "v75_skill_overload",

@@ -1,0 +1,152 @@
+{
+  "version": "94.0.0",
+  "date": "2026-10-04",
+  "engine": "Godot 4.6 stable",
+  "rendering": "Windows OpenGL Compatibility",
+  "checks": {
+    "endflow-native": {
+      "checks": 111,
+      "failures": 0,
+      "exit_code": 0,
+      "errors": []
+    },
+    "endflow-headless": {
+      "checks": 111,
+      "failures": 0,
+      "exit_code": 0,
+      "errors": []
+    },
+    "classic-native": {
+      "checks": 96,
+      "failures": 0,
+      "exit_code": 0,
+      "errors": []
+    }
+  },
+  "artifacts": {
+    "RiftGuard-V94.exe": {
+      "bytes": 104578048,
+      "sha256": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b"
+    },
+    "RiftGuard-V94.pck": {
+      "bytes": 305578948,
+      "sha256": "a31e9e48445fd292fc976416f18f232b72454e3d94114fffc33a785d289f8690"
+    }
+  },
+  "screenshots": {
+    "01-menu.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "02-home.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "03-squad.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "04-campaign.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "05-endless.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "06-harbor.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "07-garden.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "08-endless-selection.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "09-frost-isles.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "10-wind-cross.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "11-workshop.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "final-win-completed.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "final-win-success.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "stage-win-completed.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "stage-win-field-exit.png": {
+      "width": 1280,
+      "height": 720
+    },
+    "stage-win-success.png": {
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "scope": "Controlled combat fixtures and native input ending flows; not eight full manual campaign playthroughs.",
+  "media": {
+    "workshop-bug-preview.gif": {
+      "bytes": 6314302,
+      "sha256": "76596b9b9dcb584b0018dd0a805771b4261201ddc9f67bdbf25c03dfff38d6d4",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "gif",
+            "width": 1280,
+            "height": 720,
+            "r_frame_rate": "24/1",
+            "nb_frames": "144"
+          }
+        ],
+        "format": {
+          "duration": "6.000000"
+        }
+      },
+      "full_decode_passed": true
+    },
+    "workshop-bug-preview.mp4": {
+      "bytes": 1202679,
+      "sha256": "60ed6623584e35023957442fc73fa3a5ca0b52f7d29be8e53363cc21c5db6b60",
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "24/1",
+            "nb_frames": "144"
+          },
+          {
+            "codec_name": "aac",
+            "r_frame_rate": "0/0",
+            "nb_frames": "283"
+          }
+        ],
+        "format": {
+          "duration": "6.000000"
+        }
+      },
+      "full_decode_passed": true
+    }
+  }
+}

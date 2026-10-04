@@ -18,7 +18,7 @@ static func neutral(v,e: Dictionary,ultimate: bool) -> void:
 	var t=clampf(1.0-float(e.life)/float(e.total),0.0,1.0)
 	var alpha=(0.25+0.75*t) if casting else 1.0-smoothstep(0.30,1.0,t)
 	var world=Vector2(e.pos)
-	var c=v.world_to_screen(world)+Vector2(0,8)
+	var c=v.world_to_screen(world)+v.ground_visual_offset()
 	var radius=float(e.get("radius",330.0 if ultimate else 145.0))
 	var r=v.sim.ability_area_screen_radii(world,radius)
 	v._draw_skill_area_ellipse(world,radius,GOLD,alpha*0.6)
@@ -100,5 +100,5 @@ static func thunder(v,e: Dictionary) -> void:
 		v.draw_polyline(bolt,Color(RAIN,alpha*0.16),12.0,true)
 		v.draw_polyline(bolt,Color(RAIN,alpha*0.8),4.0,true)
 		v.draw_polyline(bolt,Color(0.95,0.99,1,alpha),1.7,true)
-		v._draw_dedicated_arc(p+Vector2(0,8),Vector2(24,9)*(0.3+t),0,TAU,Color(RAIN,alpha*0.7),2.0)
+		v._draw_dedicated_arc(p+v.ground_visual_offset(),Vector2(24,9)*(0.3+t),0,TAU,Color(RAIN,alpha*0.7),2.0)
 		index+=1

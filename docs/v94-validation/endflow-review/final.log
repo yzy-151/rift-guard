@@ -1,0 +1,18 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+V94 ENDFLOW PASS: saves stay isolated beneath --qa-output
+V94 ENDFLOW PASS: real production ending animations remain enabled
+V94 ENDFLOW PASS: final-win: actual scheduler produces win
+V94 ENDFLOW PASS: final-win: native comics, successful choice and animation complete
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":2,"animation_waiting":false,"death_playing":false,"label":"final-win-completed","menu_opens":2,"mode_menu":true,"narrative_choices":1,"old_result_card":false,"pending_stage":"","prelude":false,"saved_runs":1,"squad":false,"squad_opens":0,"stage":"stage_08","state":"ready","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: final-win: authored success choice is followed without skipping narrative
+V94 ENDFLOW PASS: final-win: final campaign returns to menu exactly once
+V94 ENDFLOW PASS: final-win: no unfinished animation acknowledgement
+V94 ENDFLOW PASS: final-win: completion releases terminal-state guards
+V94 ENDFLOW PASS: final-win: both unwanted result popups remain absent
+V94 ENDFLOW PASS: final-win: result saved exactly once
+V94 ENDFLOW PASS: final-win: achievement still awarded
+V94 ENDFLOW PASS: final-win: achievement persisted to isolated save
+V94 ENDFLOW PASS: final-win: achievement still awarded
+V94 ENDFLOW PASS: final-win: achievement persisted to isolated save
+V94 ENDFLOW COMPLETE: 14 checks, 0 failures

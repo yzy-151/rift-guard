@@ -1,0 +1,77 @@
+{
+  "version": "100.0.0",
+  "validated_on": "2026-10-04",
+  "engine": "Godot 4.6 stable",
+  "source_base": "V86 fede2683391953d082300ef577f2967bb82fd6a9",
+  "release_tag": "v100",
+  "artifacts": [
+    {
+      "name": "RiftGuard-V100.exe",
+      "bytes": 104578048,
+      "sha256": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b"
+    },
+    {
+      "name": "RiftGuard-V100.pck",
+      "bytes": 305658000,
+      "sha256": "be3a9792e07e3b41c3dfb71f774213094e0b645d63379986ad9b08a388de3132"
+    }
+  ],
+  "release_test_cases": [
+    {
+      "headless": true,
+      "exit_code": 0,
+      "name": "simulation",
+      "error_markers": false,
+      "checks": 78
+    },
+    {
+      "headless": false,
+      "exit_code": 0,
+      "name": "pause",
+      "error_markers": false,
+      "checks": 72
+    },
+    {
+      "headless": false,
+      "exit_code": 0,
+      "name": "dialogue",
+      "error_markers": false,
+      "checks": 42
+    },
+    {
+      "headless": false,
+      "exit_code": 0,
+      "name": "explosion",
+      "error_markers": false,
+      "checks": 129
+    },
+    {
+      "headless": false,
+      "exit_code": 0,
+      "name": "endflow",
+      "error_markers": false,
+      "checks": 111
+    },
+    {
+      "headless": false,
+      "exit_code": 0,
+      "name": "classic",
+      "error_markers": false,
+      "checks": 96
+    },
+    {
+      "headless": false,
+      "exit_code": 0,
+      "name": "performance",
+      "error_markers": false
+    }
+  ],
+  "total_assertions": 528,
+  "shipped_performance": "performance/shipped-v100.json",
+  "notes": [
+    "V100 publishes the completed V86-based work; existing remote V88 is preserved separately.",
+    "All 7 shipping executable processes exited 0 without script/runtime errors.",
+    "Historical QA flag names identify regression suites; the tested package is V100.",
+    "Controlled fixtures, not complete manual campaign playthroughs; QA saves isolated."
+  ]
+}

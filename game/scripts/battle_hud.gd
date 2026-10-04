@@ -1,5 +1,6 @@
 extends CanvasLayer
 const GeneratedIconCatalog = preload("res://scripts/content/generated_icon_catalog.gd")
+const PausePresentation = preload("res://scripts/pause_presentation.gd")
 signal reward_action(index: int, hero_id: int)
 signal reroll_action
 signal primary_action
@@ -91,6 +92,7 @@ var modal_action: Button
 var signature: String = ""
 var reduced: bool = false
 var muted: bool = false
+var external_battle_audio: bool = false
 var background_buttons: Array[Button] = []
 var right_rail_shell: Panel
 var support_panel: Panel
@@ -138,6 +140,9 @@ var boss_shield_bar: ProgressBar
 var boss_secondary_shield_bar: ProgressBar
 var boss_hp_label: Label
 var boss_phase_label: Label
+var contract_notice: Panel
+var contract_notice_label: Label
+var contract_notice_tween: Tween
 var boss_alert: Label
 var boss_alert_frame: Panel
 var boss_alert_ticker: Label
@@ -153,6 +158,8 @@ var wave_timeline_panel: Panel
 var wave_timeline_labels: Array[Label] = []
 var formation_buttons: Dictionary = {}
 var pause_details: Panel
+var pause_presentation
+var pause_continue_button: Button
 var pause_menu_button: Button
 var pause_status_label: Label
 var pause_settings_button: Button
@@ -167,6 +174,37 @@ var pause_hero_labels: Array[Label] = []
 var hero_hp_bars: Array[ProgressBar] = []
 var ui_highlight: AudioStreamPlayer
 var ui_confirm: AudioStreamPlayer
+var xp_bar: ProgressBar
+var xp_shimmer: ColorRect
+var shield_label: Label
+var buff_title: Label
+var buff_page_label: Label
+var buff_previous: Button
+var buff_next: Button
+var buff_empty_label: Label
+var buff_page := 0
+var buff_page_count := 1
+var buff_signature := ""
+var buff_seen: Dictionary = {}
+var hero_hp_trails: Array[ProgressBar] = []
+var skill_charge: ProgressBar
+var ultimate_charge: ProgressBar
+var toast_queue: Array[Dictionary] = []
+var active_toast: Dictionary = {}
+var toast_remaining := 0.0
+var danger_remaining := 0.0
+var arrival_remaining := 0.0
+var motion_pops: Dictionary = {}
+var last_xp := -1
+var shimmer_remaining := 0.0
+var previous_selection := -99
+var previous_q_ready := false
+var previous_e_ready := false
+var last_run_key := ""
+var portrait_cache: Dictionary = {}
+const BUFF_PAGE_SIZE := 10
+const TOAST_LIMIT := 6
+
 
 func _ready() -> void:
 	ui_highlight = AudioStreamPlayer.new()
@@ -202,47 +240,47 @@ func _ready() -> void:
 	topbar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(topbar)
 	var top_rule := ColorRect.new()
-	top_rule.position = Vector2(16, 62)
+	top_rule.position = Vector2(16, 53)
 	top_rule.size = Vector2(1248, 2)
-	top_rule.color = Color("#ef3150")
+	top_rule.color = Color("#b12b43")
 	top_rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(top_rule)
 	var brand_accent := ColorRect.new()
-	brand_accent.position = UI_LAYOUT.battle_title_rect.position + Vector2(0, 8)
-	brand_accent.size = Vector2(4, 39)
-	brand_accent.color = Color("#ff3655")
+	brand_accent.position = Vector2(27, 14)
+	brand_accent.size = Vector2(3, 28)
+	brand_accent.color = Color("#f24660")
 	brand_accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(brand_accent)
-	var brand_title := label(root, UI_LAYOUT.battle_title_rect.position + Vector2(13, -1), Vector2(184, 34), "裂 隙 守 望", 23, WHITE)
-	brand_title.add_theme_font_override("font", DISPLAY_FONT)
-	brand_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	var brand_subtitle := label(root, UI_LAYOUT.battle_title_rect.position + Vector2(15, 34), Vector2(185, 14), "RIFT GUARD  /  CHAPTER I", 8, Color("#ff526a"))
-	brand_subtitle.add_theme_constant_override("outline_size", 2)
-	brand_subtitle.add_theme_color_override("font_outline_color", Color("#16070c"))
-	for separator_x in [232.0, 830.0, 1138.0]:
+	for separator_x in [376.0, 944.0, 1137.0]:
 		var separator := ColorRect.new()
-		separator.position = Vector2(separator_x, 15)
-		separator.size = Vector2(1, 42)
-		separator.color = Color("#6e2637")
+		separator.position = Vector2(separator_x, 14)
+		separator.size = Vector2(1, 27)
+		separator.color = Color("#612331")
 		separator.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		root.add_child(separator)
-	progression_label = label(root, Vector2(250, 35), Vector2(335, 18), "", 9, WHITE)
-	progression_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	progression_label.clip_text = true
-	base_label = label(root, Vector2(400, 10), Vector2(185, 21), "", 10, TEAL)
-	base_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	base_label.clip_text = true
-	wave_label = label(root, Vector2(590, 10), Vector2(110, 21), "", 10, Color("#ff7185"))
-	wave_label.clip_text = true
-	count_label = label(root, Vector2(590, 35), Vector2(125, 18), "", 9, WHITE)
-	count_label.clip_text = true
-	map_name_label = label(root, Vector2(250, 10), Vector2(140, 21), "", 11, Color("#e8b1b4"))
-	map_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	map_name_label = label(root, Vector2(40, 5), Vector2(321, 25), "", 18, WHITE)
+	map_name_label.add_theme_font_override("font", DISPLAY_FONT)
 	map_name_label.clip_text = true
-	status_label = label(root, Vector2(570, 35), Vector2(550, 18), "", 9, MUTED)
+	progression_label = label(root, Vector2(42, 28), Vector2(318, 18), "", 12, MUTED)
+	progression_label.clip_text = true
+	xp_bar = _meter(root, Rect2(42, 47, 318, 3), Color("#f04a65"))
+	xp_shimmer = ColorRect.new()
+	xp_shimmer.position = xp_bar.position
+	xp_shimmer.size = Vector2(24, 3)
+	xp_shimmer.color = Color("#ffe9d5")
+	xp_shimmer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	xp_shimmer.hide()
+	root.add_child(xp_shimmer)
+	wave_label = label(root, Vector2(392, 6), Vector2(254, 23), "", 16, Color("#ff91a2"))
+	wave_label.clip_text = true
+	count_label = label(root, Vector2(392, 30), Vector2(538, 18), "", 12, MUTED)
+	count_label.hide()
+	base_label = label(root, Vector2(959, 7), Vector2(172, 21), "", 14, WHITE)
+	base_label.clip_text = true
+	shield_label = label(root, Vector2(959, 30), Vector2(172, 18), "", 12, MUTED)
+	shield_label.clip_text = true
+	status_label = label(root, Vector2.ZERO, Vector2.ZERO, "", 12, MUTED)
 	status_label.hide()
-	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	status_label.clip_text = true
 	var archive_btn := button(root, UI_LAYOUT.battle_archive_rect, "图鉴  [F2]", false)
 	archive_btn.pressed.connect(func(): compendium_action.emit())
 	archive_btn.hide()
@@ -252,24 +290,24 @@ func _ready() -> void:
 	pause_button.position = UI_LAYOUT.battle_pause_rect.position
 	pause_button.size = UI_LAYOUT.battle_pause_rect.size
 	pause_button.pressed.connect(func(): pause_action.emit())
-	right_rail_shell = panel(root, UI_LAYOUT.battle_right_shell_rect, Color(0.018, 0.022, 0.065, 0.62), Color("#8d3f52"))
-	right_rail_shell.add_theme_stylebox_override("panel", hud_shelf_style(Color(0.018, 0.022, 0.065, 0.62), Color("#7b2638"), 1))
-	for separator_x in [670.0, 930.0]:
+	right_rail_shell = panel(root, UI_LAYOUT.battle_right_shell_rect, Color(0.024, 0.010, 0.018, 0.98), Color("#8d3f52"))
+	right_rail_shell.add_theme_stylebox_override("panel", hud_shelf_style(Color(0.024, 0.010, 0.018, 0.98), Color("#7b2638"), 1))
+	for separator_x in [566.0, 865.0, 966.0]:
 		var deck_separator := ColorRect.new()
-		deck_separator.position = Vector2(separator_x, 596)
-		deck_separator.size = Vector2(1, 88)
+		deck_separator.position = Vector2(separator_x, 629)
+		deck_separator.size = Vector2(1, 75)
 		deck_separator.color = Color("#8d263a")
 		deck_separator.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		root.add_child(deck_separator)
 	var right_rail_mark := label(right_rail_shell, Vector2(10, 574), Vector2(212, 18), "R I F T   C O M M A N D", 8, Color("#794452"))
 	right_rail_mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	right_rail_mark.hide()
-	support_panel = panel(root, Rect2(840, 9, 285, 48), Color(0, 0, 0, 0), Color(0, 0, 0, 0))
+	support_panel = panel(root, Rect2(654, 8, 218, 40), Color(0, 0, 0, 0), Color(0, 0, 0, 0))
 	support_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	for i in 6:
 		var column := int(i / 3)
 		var row := i % 3
-		var support_label := label(support_panel, Vector2(8 + column * 141, 3 + row * 14), Vector2(137, 14), "", 8, WHITE)
+		var support_label := label(support_panel, Vector2(4 + column * 108, 2 + row * 12), Vector2(104, 12), "", 8, WHITE)
 		support_label.mouse_filter = Control.MOUSE_FILTER_STOP
 		support_label.gui_input.connect(_support_label_input.bind(i))
 		support_labels.append(support_label)
@@ -279,15 +317,32 @@ func _ready() -> void:
 	buff_panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	buff_panel.clip_contents = true
 
-	for i in 15:
+	buff_title = label(buff_panel, Vector2(0, 0), Vector2(165, 20), "构筑 / 0", 12, WHITE)
+	buff_empty_label = label(buff_panel, Vector2(0, 29), Vector2(255, 44), "击退敌人，升级水晶
+收集强化，形成流派", 12, MUTED)
+	for i in BUFF_PAGE_SIZE:
 		var column := i % 5
 		var row := int(i / 5)
-		var buff_icon := icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(7 + column * 61, 8 + row * 29, 18, 18), Color("#d6b4f0"))
+		var buff_icon := icon(buff_panel, "res://assets/ui/icons/temporary/nieobie/card.svg", Rect2(column * 53, 23 + row * 34, 31, 31), WHITE)
 		buff_icon.mouse_filter = Control.MOUSE_FILTER_STOP
 		buff_icon.gui_input.connect(_buff_icon_input.bind(i))
 		buff_icons.append(buff_icon)
 		buff_details.append({})
-		buff_labels.append(label(buff_panel, Vector2(29 + column * 61, 7 + row * 29), Vector2(30, 20), "", 8, WHITE))
+		var stack := label(buff_panel, Vector2(30 + column * 53, 36 + row * 34), Vector2(22, 17), "", 11, WHITE)
+		stack.clip_text = true
+		buff_labels.append(stack)
+	buff_previous = button(buff_panel, Rect2(176, 0, 22, 20), "‹", false)
+	buff_next = button(buff_panel, Rect2(240, 0, 22, 20), "›", false)
+	for navigation in [buff_previous, buff_next]:
+		navigation.add_theme_font_size_override("font_size", 15)
+		for state in ["normal", "hover", "pressed", "disabled", "focus"]:
+			navigation.add_theme_stylebox_override(state, StyleBoxEmpty.new())
+	buff_page_label = label(buff_panel, Vector2(198, 1), Vector2(42, 18), "1/1", 11, MUTED)
+	buff_page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	buff_previous.pressed.connect(func(): change_buff_page(-1))
+	buff_next.pressed.connect(func(): change_buff_page(1))
+	buff_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	buff_panel.gui_input.connect(_buff_scroll_input)
 	buff_panel.hide()
 	deployment_notice = label(root, UI_LAYOUT.battle_deployment_notice_rect.position, UI_LAYOUT.battle_deployment_notice_rect.size, "", 16, Color("#a7ffdd"))
 	deployment_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -314,17 +369,17 @@ func _ready() -> void:
 	boss_style.corner_radius_bottom_left = 13
 	boss_style.corner_radius_bottom_right = 2
 	boss_style.shadow_color = Color(0.8, 0.02, 0.12, 0.32)
-	boss_style.shadow_size = 8
+	boss_style.shadow_size = 3
 	boss_panel.add_theme_stylebox_override("panel", boss_style)
-	var boss_badge := label(boss_panel, Vector2(10, 7), Vector2(54, 22), "BOSS", 11, Color("#ffcf42"))
+	var boss_badge := label(boss_panel, Vector2(6, 3), Vector2(50, 22), "BOSS", 10, Color("#ffcf42"))
 	boss_badge.add_theme_font_override("font", DISPLAY_FONT)
 	boss_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var boss_name_rect: Rect2 = UI_LAYOUT.battle_boss_name_rect
 	boss_name_label = label(boss_panel, boss_name_rect.position, boss_name_rect.size, "", 14, Color("#fff1ee"))
-	boss_name_label.add_theme_font_override("font", DISPLAY_FONT)
+	boss_name_label.clip_text = true
 	boss_name_label.add_theme_color_override("font_shadow_color", Color("#8f102d"))
 	boss_name_label.add_theme_constant_override("shadow_offset_y", 2)
-	boss_phase_label = label(boss_panel, Vector2(418, 7), Vector2(112, 22), "", 10, Color("#ff8095"))
+	boss_phase_label = label(boss_panel, Vector2(335, 4), Vector2(106, 19), "", 10, Color("#ff8095"))
 	boss_phase_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	boss_phase_label.add_theme_font_override("font", DISPLAY_FONT)
 	boss_hp_bar = ProgressBar.new()
@@ -408,7 +463,7 @@ func _ready() -> void:
 	boss_panel.hide()
 	wave_timeline_panel = panel(root, UI_LAYOUT.battle_timeline_rect, Color(0.025, 0.010, 0.024, 0.94), Color("#d13b55"))
 	wave_timeline_panel.add_theme_stylebox_override("panel", counter_badge_style())
-	var timeline_item := label(wave_timeline_panel, Vector2(10, 1), Vector2(188, 23), "", 10, WHITE)
+	var timeline_item := label(wave_timeline_panel, Vector2(8, 0), Vector2(258, 23), "", 12, WHITE)
 	timeline_item.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	timeline_item.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	wave_timeline_labels.append(timeline_item)
@@ -419,24 +474,25 @@ func _ready() -> void:
 	boss_scene_tint.color = Color(0.48, 0.015, 0.045, 0.0)
 	boss_scene_tint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(boss_scene_tint)
-	boss_alert_frame = panel(root, Rect2(170, 224, 940, 116), Color(0.035, 0.025, 0.05, 0.68), Color("#ff3b36"))
+	boss_alert_frame = panel(root, Rect2(390, 126, 500, 64), Color(0.035, 0.025, 0.05, 0.68), Color("#ff3b36"))
 	var alert_style := StyleBoxFlat.new()
 	alert_style.bg_color = Color(0.035, 0.025, 0.05, 0.68)
 	alert_style.border_color = Color("#ff3b36")
-	alert_style.border_width_left = 12
+	alert_style.border_width_left = 4
 	alert_style.border_width_top = 3
-	alert_style.border_width_right = 12
+	alert_style.border_width_right = 2
 	alert_style.border_width_bottom = 3
 	alert_style.corner_radius_top_right = 18
 	alert_style.corner_radius_bottom_left = 18
 	alert_style.shadow_color = Color(1.0, 0.02, 0.04, 0.42)
-	alert_style.shadow_size = 12
+	alert_style.shadow_size = 4
 	boss_alert_frame.add_theme_stylebox_override("panel", alert_style)
 	boss_alert_frame.clip_contents = true
 	boss_alert_ticker = label(boss_alert_frame, Vector2(15, 88), Vector2(1320, 20), "CAUTION // HOSTILE LIFEFORM // IMPACT PREDICTION // CAUTION // HOSTILE LIFEFORM //", 9, Color("#ffcf42"))
 	boss_alert_ticker.add_theme_font_override("font", DISPLAY_FONT)
+	boss_alert_ticker.hide()
 	boss_alert_frame.hide()
-	boss_alert = label(root, Vector2(212, 230), Vector2(856, 84), "", 34, Color("#fff1ed"))
+	boss_alert = label(root, Vector2(412, 132), Vector2(456, 48), "", 19, Color("#fff1ed"))
 	boss_alert.add_theme_font_override("font", DISPLAY_FONT)
 	boss_alert.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	boss_alert.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -444,7 +500,13 @@ func _ready() -> void:
 	boss_alert.add_theme_constant_override("shadow_offset_x", 4)
 	boss_alert.add_theme_constant_override("shadow_offset_y", 4)
 	boss_alert.hide()
-	boss_skill_warning_panel = panel(root, Rect2(205, 150, 870, 86), Color(0.035, 0.02, 0.035, 0.66), Color("#ff493f"))
+	contract_notice = panel(root, Rect2(390, 30, 540, 20), Color(0.035, 0.025, 0.04, 0.96), Color("#ba4b62"))
+	contract_notice_label = label(contract_notice, Vector2(8, 0), Vector2(524, 20), "", 12, Color("#c4ffe6"))
+	contract_notice_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	contract_notice_label.clip_text = true
+	contract_notice.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	contract_notice.hide()
+	boss_skill_warning_panel = panel(root, Rect2(430, 120, 420, 34), Color(0.035, 0.02, 0.035, 0.66), Color("#ff493f"))
 	var skill_warning_style := StyleBoxFlat.new()
 	skill_warning_style.bg_color = Color(0.035, 0.02, 0.035, 0.66)
 	skill_warning_style.border_color = Color("#ff493f")
@@ -456,12 +518,13 @@ func _ready() -> void:
 	skill_warning_style.corner_radius_bottom_right = 12
 	boss_skill_warning_panel.add_theme_stylebox_override("panel", skill_warning_style)
 	boss_skill_warning_panel.clip_contents = true
-	boss_skill_warning_icon = label(boss_skill_warning_panel, Vector2(14, 8), Vector2(70, 52), "⚠", 42, Color("#ffcf42"))
+	boss_skill_warning_icon = label(boss_skill_warning_panel, Vector2(5, 3), Vector2(28, 26), "⚠", 19, Color("#ffcf42"))
 	boss_skill_warning_icon.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	boss_skill_warning_title = label(boss_skill_warning_panel, Vector2(92, 7), Vector2(750, 43), "", 28, Color("#fff2ee"))
-	boss_skill_warning_title.add_theme_font_override("font", DISPLAY_FONT)
+	boss_skill_warning_title = label(boss_skill_warning_panel, Vector2(36, 3), Vector2(375, 27), "", 14, Color("#fff2ee"))
+	boss_skill_warning_title.clip_text = true
 	boss_skill_warning_ticker = label(boss_skill_warning_panel, Vector2(100, 58), Vector2(1240, 20), "EVA // DANGER // PATTERN LOCKED // EVA // DANGER // PATTERN LOCKED //", 9, Color("#ff665e"))
 	boss_skill_warning_ticker.add_theme_font_override("font", DISPLAY_FONT)
+	boss_skill_warning_ticker.hide()
 	boss_skill_warning_panel.hide()
 	command_rail = panel(root, UI_LAYOUT.battle_party_rect, Color(0.035, 0.014, 0.028, 0.84), Color("#b95868"))
 	command_rail.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
@@ -469,173 +532,96 @@ func _ready() -> void:
 	action_rail = panel(root, UI_LAYOUT.battle_action_rect, Color(0.028, 0.012, 0.024, 0.88), Color("#73404f"))
 	action_rail.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	skill_button = button(root, UI_LAYOUT.battle_skill_rect, "", true)
-	skill_button.clip_contents = true
-	var ability_empty := StyleBoxEmpty.new()
-	for ability_state in ["normal", "hover", "pressed", "focus", "disabled"]:
-		skill_button.add_theme_stylebox_override(ability_state, ability_empty)
-	skill_button.add_theme_font_size_override("font_size", 10)
-	skill_frame = TextureRect.new()
-	skill_frame.texture = UI_SKIN.skill_frame_red
-	skill_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	skill_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	skill_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	skill_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	skill_button.add_child(skill_frame)
-	skill_frame.hide()
-	skill_icon = icon(skill_button, "res://assets/ui/skill_icons_v64/10_sword_slash_rgba.png", Rect2(7, 7, 42, 42), WHITE)
-	skill_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	skill_cooldown_overlay = ColorRect.new()
-	skill_cooldown_overlay.position = Vector2(7, 7)
-	skill_cooldown_overlay.size = Vector2(42, 42)
-	skill_cooldown_overlay.color = Color(0.015, 0.006, 0.018, 0.72)
-	skill_cooldown_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	skill_button.add_child(skill_cooldown_overlay)
-	skill_name_label = label(skill_button, Vector2.ZERO, Vector2.ZERO, "", 1, WHITE)
-	skill_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	skill_name_label.clip_text = true
-	var skill_key_plate := ColorRect.new()
-	skill_key_plate.position = Vector2(54, 31)
-	skill_key_plate.size = Vector2(34, 18)
-	skill_key_plate.color = Color(0, 0, 0, 0)
-	skill_key_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	skill_button.add_child(skill_key_plate)
-	skill_cd_label = label(skill_button, Vector2(54, 7), Vector2(52, 20), "READY", 11, Color("#fff4ec"))
-	skill_cd_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	skill_cd_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	skill_key_label = label(skill_button, Vector2(54, 31), Vector2(52, 18), "Q战技", 9, Color("#ffd9de"))
-	skill_key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	skill_cd_label.add_theme_color_override("font_shadow_color", Color.BLACK)
-	skill_cd_label.add_theme_constant_override("shadow_offset_y", 2)
-	skill_button.pressed.connect(func():
-		_show_ability_info(false)
-		skill_action.emit())
 	ultimate_button = button(root, UI_LAYOUT.battle_ultimate_rect, "", true)
-	ultimate_button.clip_contents = true
-	for ability_state in ["normal", "hover", "pressed", "focus", "disabled"]:
-		ultimate_button.add_theme_stylebox_override(ability_state, ability_empty)
-	ultimate_button.add_theme_font_size_override("font_size", 10)
+	for ability_button in [skill_button, ultimate_button]:
+		ability_button.clip_contents = false
+		ability_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+			ability_button.add_theme_stylebox_override(state, _battle_card_style(Color("#713443") if state != "hover" else Color("#f04a65"), state == "hover"))
+	skill_frame = TextureRect.new()
 	ultimate_frame = TextureRect.new()
-	ultimate_frame.texture = UI_SKIN.ultimate_frame_red
-	ultimate_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	ultimate_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	ultimate_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	ultimate_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	skill_button.add_child(skill_frame)
 	ultimate_button.add_child(ultimate_frame)
+	skill_frame.hide()
 	ultimate_frame.hide()
-	ultimate_icon = icon(ultimate_button, "res://assets/ui/skill_icons_v64/15_explosion_rgba.png", Rect2(7, 7, 42, 42), WHITE)
-	ultimate_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ultimate_cooldown_overlay = ColorRect.new()
-	ultimate_cooldown_overlay.position = Vector2(7, 7)
-	ultimate_cooldown_overlay.size = Vector2(42, 42)
-	ultimate_cooldown_overlay.color = Color(0.015, 0.006, 0.018, 0.72)
-	ultimate_cooldown_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ultimate_button.add_child(ultimate_cooldown_overlay)
-	ultimate_name_label = label(ultimate_button, Vector2.ZERO, Vector2.ZERO, "", 1, WHITE)
-	ultimate_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	skill_name_label = label(skill_button, Vector2(9, 4), Vector2(124, 19), "", 12, WHITE)
+	ultimate_name_label = label(ultimate_button, Vector2(9, 4), Vector2(124, 19), "", 12, WHITE)
+	skill_name_label.clip_text = true
 	ultimate_name_label.clip_text = true
-	var ultimate_key_plate := ColorRect.new()
-	ultimate_key_plate.position = Vector2(54, 31)
-	ultimate_key_plate.size = Vector2(34, 18)
-	ultimate_key_plate.color = Color(0, 0, 0, 0)
-	ultimate_key_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	ultimate_button.add_child(ultimate_key_plate)
-	ultimate_cd_label = label(ultimate_button, Vector2(54, 7), Vector2(52, 20), "READY", 11, Color("#ffe7a5"))
-	ultimate_cd_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	ultimate_cd_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	ultimate_key_label = label(ultimate_button, Vector2(54, 31), Vector2(52, 18), "E终极", 9, Color("#fff0ae"))
-	ultimate_key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	ultimate_cd_label.add_theme_color_override("font_shadow_color", Color.BLACK)
-	ultimate_cd_label.add_theme_constant_override("shadow_offset_y", 2)
-	ultimate_button.pressed.connect(func():
-		_show_ability_info(true)
-		ultimate_action.emit())
-	var formation_specs := [["squad", "全队 Z"], ["follow", "跟随 X"], ["hold", "坚守 C"]]
+	skill_icon = icon(skill_button, "res://assets/ui/skill_icons_v64/10_sword_slash_rgba.png", Rect2(8, 24, 50, 50), WHITE)
+	ultimate_icon = icon(ultimate_button, "res://assets/ui/skill_icons_v64/15_explosion_rgba.png", Rect2(8, 24, 50, 50), WHITE)
+	skill_cooldown_overlay = ColorRect.new()
+	ultimate_cooldown_overlay = ColorRect.new()
+	for pair in [[skill_button, skill_cooldown_overlay], [ultimate_button, ultimate_cooldown_overlay]]:
+		var shade: ColorRect = pair[1]
+		shade.position = Vector2(8, 24)
+		shade.size = Vector2(50, 50)
+		shade.color = Color(0.01, 0.005, 0.01, 0.22)
+		shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		pair[0].add_child(shade)
+	skill_key_label = label(skill_button, Vector2(68, 24), Vector2(61, 22), "Q 战技", 12, Color("#ff91a2"))
+	ultimate_key_label = label(ultimate_button, Vector2(68, 24), Vector2(61, 22), "E 终极", 12, Color("#f3cd80"))
+	skill_cd_label = label(skill_button, Vector2(68, 49), Vector2(65, 23), "就绪", 15, WHITE)
+	ultimate_cd_label = label(ultimate_button, Vector2(68, 49), Vector2(65, 23), "充能", 15, WHITE)
+	skill_charge = _meter(skill_button, Rect2(8, 79, 126, 3), Color("#ee526c"))
+	ultimate_charge = _meter(ultimate_button, Rect2(8, 79, 126, 3), Color("#f3cd80"))
+	skill_button.pressed.connect(func(): skill_action.emit())
+	ultimate_button.pressed.connect(func(): ultimate_action.emit())
+	skill_button.gui_input.connect(_ability_info_input.bind(false))
+	ultimate_button.gui_input.connect(_ability_info_input.bind(true))
+	var formation_specs := [["squad", "Z  全队"], ["follow", "X  跟随"], ["hold", "C  坚守"]]
 	for i in formation_specs.size():
 		var mode: String = str(formation_specs[i][0])
-		var formation_btn := button(root, Rect2(UI_LAYOUT.battle_formation_rect.position + Vector2(i * 70, 0), Vector2(66, UI_LAYOUT.battle_formation_rect.size.y)), str(formation_specs[i][1]), false)
-		formation_btn.add_theme_font_size_override("font_size", 9)
+		var formation_btn := button(root, Rect2(UI_LAYOUT.battle_formation_rect.position + Vector2(0, i * 29), Vector2(82, 25)), str(formation_specs[i][1]), false)
+		formation_btn.add_theme_font_size_override("font_size", 12)
+		for state in ["normal", "hover", "pressed", "focus", "disabled"]:
+			formation_btn.add_theme_stylebox_override(state, _battle_card_style(Color("#723143") if state != "hover" else Color("#ed5873"), false))
 		formation_btn.pressed.connect(func(): formation_action.emit(mode))
 		formation_buttons[mode] = formation_btn
-
 	for i in 3:
 		var hero_btn := button(root, Rect2(UI_LAYOUT.battle_hero_card_rect.position + UI_LAYOUT.battle_hero_card_gap * i, UI_LAYOUT.battle_hero_card_rect.size), "", true)
-		bind(hero_btn, "hero_card_%d" % (i + 1))
-		hero_btn.position = UI_LAYOUT.battle_hero_card_rect.position + UI_LAYOUT.battle_hero_card_gap * i
-		hero_btn.size = UI_LAYOUT.battle_hero_card_rect.size
 		hero_btn.name = "HeroCard%d" % (i + 1)
-		var hero_empty := StyleBoxEmpty.new()
-		for hero_state in ["normal", "hover", "pressed", "focus", "disabled"]:
-			hero_btn.add_theme_stylebox_override(hero_state, hero_empty)
-		var hero_frame := TextureRect.new()
-		hero_frame.texture = UI_SKIN.hero_frame_red if i == 0 else UI_SKIN.hero_frame_gray
-		hero_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		hero_frame.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		hero_frame.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		hero_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		hero_btn.add_child(hero_frame)
-		hero_frame.hide()
-		hero_card_frames.append(hero_frame)
+		hero_btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		hero_btn.pressed.connect(func(): select_action.emit(i))
 		hero_btn.gui_input.connect(_hero_card_input.bind(i))
 		hero_buttons.append(hero_btn)
-		var lock_label := label(hero_btn, Vector2(8, 11), Vector2(44, 48), "🔒", 22, Color("#ff667b"))
-		lock_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lock_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		lock_label.add_theme_color_override("font_shadow_color", Color.BLACK)
-		lock_label.add_theme_constant_override("shadow_offset_y", 2)
-		lock_label.hide()
-		hero_lock_labels.append(lock_label)
-		var portrait_frame := panel(hero_btn, Rect2(7, 10, 46, 50), Color("#33232d"), TEAL)
-		var portrait_back := ColorRect.new()
-		portrait_back.position = Vector2(3, 3)
-		portrait_back.size = Vector2(40, 44)
-		portrait_back.color = Color("#ead9dc")
-		portrait_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		portrait_frame.add_child(portrait_back)
+		var hero_frame := TextureRect.new()
+		hero_btn.add_child(hero_frame)
+		hero_frame.hide()
+		hero_card_frames.append(hero_frame)
+		var portrait_frame := panel(hero_btn, Rect2(5, 7, 54, 72), Color("#ead9dc"), Color("#6d3445"))
+		portrait_frame.add_theme_stylebox_override("panel", hud_shelf_style(Color("#ead9dc"), Color("#6d3445"), 2))
+		portrait_frame.clip_contents = true
 		var portrait_image := TextureRect.new()
-		portrait_image.position = Vector2(3, 3)
-		portrait_image.size = Vector2(40, 44)
+		portrait_image.position = Vector2(2, 2)
+		portrait_image.size = Vector2(50, 68)
 		portrait_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		portrait_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		portrait_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		portrait_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		portrait_frame.add_child(portrait_image)
 		hero_portraits.append(portrait_image)
-		hero_name_labels.append(label(hero_btn, Vector2(58, 5), Vector2(96, 18), "%d  未部署" % [i + 1], 12, WHITE))
-		var element_badge := label(hero_btn, Vector2(158, 5), Vector2(34, 18), "无", 10, MUTED)
-		element_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		element_badge.add_theme_color_override("font_outline_color", Color("#160d14"))
-		element_badge.add_theme_constant_override("outline_size", 2)
+		var key_badge := label(hero_btn, Vector2(7, 7), Vector2(18, 20), str(i + 1), 12, Color.WHITE)
+		key_badge.add_theme_color_override("font_outline_color", Color("#140a0f"))
+		key_badge.add_theme_constant_override("outline_size", 6)
+		var lock_label := label(hero_btn, Vector2(8, 30), Vector2(48, 20), "锁定", 12, WHITE)
+		lock_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lock_label.add_theme_color_override("font_outline_color", Color("#180b12"))
+		lock_label.add_theme_constant_override("outline_size", 6)
+		lock_label.hide()
+		hero_lock_labels.append(lock_label)
+		var hero_name := label(hero_btn, Vector2(66, 6), Vector2(103, 20), "未部署", 13, WHITE)
+		hero_name.clip_text = true
+		hero_name_labels.append(hero_name)
+		var element_badge := label(hero_btn, Vector2(145, 31), Vector2(24, 18), "", 12, MUTED)
+		element_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		hero_element_labels.append(element_badge)
-		var hp_bar := ProgressBar.new()
-		hp_bar.position = Vector2(58, 27)
-		hp_bar.size = UI_LAYOUT.battle_hero_hp_bar_size
-		hp_bar.show_percentage = false
-		var hp_bg := StyleBoxFlat.new()
-		hp_bg.bg_color = Color("#251923")
-		var hp_fill := StyleBoxFlat.new()
-		hp_fill.bg_color = Color("#be5364")
-		hp_bar.add_theme_stylebox_override("background", hp_bg)
-		hp_bar.add_theme_stylebox_override("fill", hp_fill)
-		hero_btn.add_child(hp_bar)
-		hp_bar.position = Vector2(58, 27)
-		hp_bar.size = UI_LAYOUT.battle_hero_hp_bar_size
-		hero_hp_bars.append(hp_bar)
-		var energy_bar := ProgressBar.new()
-		energy_bar.position = Vector2(58, 52)
-		energy_bar.size = UI_LAYOUT.battle_hero_energy_bar_size
-		energy_bar.show_percentage = false
-		var energy_bg := StyleBoxFlat.new()
-		energy_bg.bg_color = Color("#251923")
-		var energy_fill := StyleBoxFlat.new()
-		energy_fill.bg_color = Color("#f2bd5d")
-		energy_bar.add_theme_stylebox_override("background", energy_bg)
-		energy_bar.add_theme_stylebox_override("fill", energy_fill)
-		hero_btn.add_child(energy_bar)
-		energy_bar.position = Vector2(58, 52)
-		energy_bar.size = UI_LAYOUT.battle_hero_energy_bar_size
-		hero_energy_bars.append(energy_bar)
-		hero_statuses.append(label(hero_btn, Vector2(58, 34), Vector2(134, 14), "", 9, WHITE))
-		hero_details.append(label(hero_btn, Vector2(58, 56), Vector2(134, 10), "", 8, MUTED))
+		hero_statuses.append(label(hero_btn, Vector2(66, 30), Vector2(81, 19), "待命", 12, WHITE))
+		hero_hp_trails.append(_meter(hero_btn, Rect2(66, 55, 101, 6), Color("#fff1d2")))
+		var hp := _meter(hero_btn, Rect2(66, 55, 101, 6), Color("#e85670"))
+		hp.add_theme_stylebox_override("background", StyleBoxEmpty.new())
+		hero_hp_bars.append(hp)
+		hero_details.append(label(hero_btn, Vector2(66, 63), Vector2(101, 17), "", 11, MUTED))
+		hero_energy_bars.append(_meter(hero_btn, Rect2(66, 82, 101, 3), Color("#f3cd80")))
 	ability_hint_label = label(root, Vector2.ZERO, Vector2.ZERO, "", 1, TEAL)
 	preview_hint_label = label(root, Vector2.ZERO, Vector2.ZERO, "", 1, MUTED)
 	background_buttons = [archive_btn, pause_button, skill_button, ultimate_button]
@@ -664,69 +650,36 @@ func _ready() -> void:
 	modal_copy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	modal_action = button(modal_card, Rect2(42, 281, 536, 47), "", true)
 	modal_action.pressed.connect(func(): primary_action.emit())
-	pause_details = panel(overlay, Rect2(55, 28, 1170, 664), Color("#171119"), Color("#a34c60"))
-	var pause_scrim := ColorRect.new()
-	pause_scrim.position = Vector2(18, 12)
-	pause_scrim.size = Vector2(1134, 640)
-	pause_scrim.color = Color(0.020, 0.012, 0.019, 0.985)
-	pause_scrim.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pause_details.add_child(pause_scrim)
-	var build_column := ColorRect.new()
-	build_column.position = Vector2(22, 112)
-	build_column.size = Vector2(520, 380)
-	build_column.color = Color(0.060, 0.030, 0.050, 0.96)
-	build_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pause_details.add_child(build_column)
-	var stats_column := ColorRect.new()
-	stats_column.position = Vector2(558, 112)
-	stats_column.size = Vector2(590, 380)
-	stats_column.color = Color(0.070, 0.025, 0.040, 0.96)
-	stats_column.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	pause_details.add_child(stats_column)
-	label(pause_details, Vector2(34, 20), Vector2(720, 20), "P A U S E   /   战 术 暂 停", 11, TEAL)
-	label(pause_details, Vector2(34, 45), Vector2(500, 34), "作战状态与队伍构筑", 25, WHITE)
-	pause_status_label = label(pause_details, Vector2(34, 80), Vector2(1090, 24), "", 12, Color("#e8b1b4"))
-	label(pause_details, Vector2(34, 120), Vector2(500, 22), "已 获 得 强 化", 13, Color("#d6b4f0"))
-	for i in 12:
-		pause_buff_labels.append(label(pause_details, Vector2(34, 150 + i * 27), Vector2(496, 24), "", 12, WHITE))
-	label(pause_details, Vector2(570, 120), Vector2(550, 22), "当 前 角 色 数 值", 13, Color("#ffb0b7"))
-	for i in 3:
-		pause_hero_labels.append(label(pause_details, Vector2(570, 151 + i * 108), Vector2(550, 98), "", 12, WHITE))
-	pause_settings_button = button(pause_details, Rect2(34, 514, 340, 42), "⚙  设置", false)
+	pause_presentation = PausePresentation.new()
+	overlay.add_child(pause_presentation)
+	pause_presentation.build(self)
+	pause_details = pause_presentation
+	pause_status_label = pause_presentation.status
+	pause_settings_button = pause_presentation.actions.settings
 	pause_settings_button.pressed.connect(func(): settings_action.emit())
-	pause_restart_button = button(pause_details, Rect2(390, 514, 340, 42), "↻  重开", false)
+	pause_restart_button = pause_presentation.actions.restart
 	pause_restart_button.pressed.connect(request_restart_confirmation)
-	pause_squad_button = button(pause_details, Rect2(746, 514, 362, 42), "▦  图鉴", false)
+	pause_squad_button = pause_presentation.actions.compendium
 	pause_squad_button.pressed.connect(func(): compendium_action.emit())
 	pause_stage_button = button(pause_details, Rect2(), "", false)
 	pause_stage_button.hide()
-	pause_menu_button = button(pause_details, Rect2(34, 574, 340, 46), "⌂  主菜单", false)
+	pause_menu_button = pause_presentation.actions.menu
 	pause_menu_button.pressed.connect(func(): main_menu_action.emit())
-	pause_map_button = button(pause_details, Rect2(390, 574, 340, 46), "◇  路线", false)
+	pause_map_button = pause_presentation.actions.map
 	pause_map_button.pressed.connect(func(): map_action.emit())
-	var pause_continue := button(pause_details, Rect2(746, 574, 362, 46), "▶  继续防守", true)
-	pause_continue.pressed.connect(func(): primary_action.emit())
+	pause_continue_button = pause_presentation.actions["continue"]
+	pause_continue_button.pressed.connect(func(): primary_action.emit())
+	# Keep the internal debug hook out of the player-facing pause presentation.
 	pause_help_button = Button.new()
-	pause_help_button.position = Vector2(1082, 22)
-	pause_help_button.size = Vector2(54, 24)
-	pause_help_button.text = "help"
-	pause_help_button.flat = true
 	pause_help_button.focus_mode = Control.FOCUS_NONE
-	pause_help_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	pause_help_button.add_theme_font_override("font", DISPLAY_FONT)
-	pause_help_button.add_theme_font_size_override("font_size", 11)
-	pause_help_button.add_theme_color_override("font_color", Color("#705760"))
-	pause_help_button.add_theme_color_override("font_hover_color", Color("#d09aa5"))
-	pause_help_button.add_theme_color_override("font_pressed_color", Color("#ff6178"))
-	for state_name in ["normal", "hover", "pressed", "focus", "disabled"]:
-		pause_help_button.add_theme_stylebox_override(state_name, StyleBoxEmpty.new())
 	pause_help_button.pressed.connect(func(): debug_reward_action.emit())
 	pause_details.add_child(pause_help_button)
+	pause_help_button.hide()
 	restart_dialog = ConfirmationDialog.new()
 	restart_dialog.title = "确认重开"
 	restart_dialog.dialog_text = "确定放弃当前战斗进度并重新开始本关吗？"
 	restart_dialog.ok_button_text = "重开本关"
-	restart_dialog.cancel_button_text = "返回设置"
+	restart_dialog.cancel_button_text = "返回暂停"
 	restart_dialog.initial_position = Window.WINDOW_INITIAL_POSITION_CENTER_PRIMARY_SCREEN
 	restart_dialog.min_size = Vector2i(520, 210)
 	restart_dialog.confirmed.connect(func(): restart_action.emit())
@@ -912,43 +865,49 @@ func icon(parent: Node, path: String, rect: Rect2, color: Color = Color.WHITE) -
 	return item
 
 func refresh(sim, selected_id: int) -> void:
-	if sim.state == "running" and not deployment_notice_active and not deployment_queue.is_empty():
-		_show_deployment_notice(deployment_queue.pop_front())
-	if sim.state in ["ready", "lost", "won"]:
-		deployment_queue.clear()
-		deployment_notice.hide()
+	var run_key := str([sim.current_stage_id, sim.endless_layout_id, sim.run_seed])
+	if not last_run_key.is_empty() and run_key != last_run_key:
+		reset_transients()
+	last_run_key = run_key
 	last_sim = sim
 	last_selected_id = selected_id
-	var next_signature: String = str([sim.state, sim.base_hp, sim.base_max_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming, ultimate_aiming, sim.formation_mode])
+	if sim.state == "paused": refresh_pause_details(sim)
+	var next_signature: String = str([sim.current_stage_id, sim.endless_layout_id, sim.run_state.buff_levels if sim.v2_mode else {}, sim.state, sim.base_hp, sim.base_max_hp, sim.wave, sim.kills, sim.enemies.size(), sim.reactions, sim.kill_streak, ceili(sim.wave_timer), selected_id, sim.team_level, sim.team_xp, sim.run_seed, sim.rewards.history, sim.supports, ceili(sim.traveler_skill_cooldown * 10.0), sim.geo_constructs.size(), skill_aiming, ultimate_aiming, sim.formation_mode, sim.crystal_shield, reduced, sim.contract_status()])
 	for enemy: Dictionary in sim.enemies:
 		if str(enemy.get("kind", "")).begins_with("boss_"):
 			next_signature += str([ceili(float(enemy.hp)), ceili(float(enemy.get("shield", 0.0)))])
 	if sim.v2_mode:
 		var stage_clock := floori(sim.elapsed) if sim.endless_mode else floori(sim.stage_runtime.remaining_seconds())
-		next_signature += str([sim.run_state.traveler_element, sim.run_state.traveler_secondary_element, sim.run_state.luck, sim.run_state.pending_level_ups, sim.run_state.active_resonances, stage_clock, sim.upcoming_waves(3)])
+		next_signature += str([sim.run_state.crystal_level, sim.run_state.crystal_xp, sim.run_state.traveler_element, sim.run_state.traveler_secondary_element, sim.run_state.luck, sim.run_state.pending_level_ups, sim.run_state.active_resonances, stage_clock, sim.upcoming_waves(3)])
 	for hero in sim.heroes:
-		next_signature += str([ceili(hero.hp), hero.moving, hero.blocked, hero.get("deployed", true), roundi(float(hero.get("energy", 0.0))), roundi(float(hero.get("skill_cooldown", 0.0)) * 10.0), roundi(float(hero.get("ultimate_cooldown", 0.0)) * 10.0)])
+		next_signature += str([hero.name, ceili(hero.hp), hero.moving, hero.blocked, hero.get("deployed", true), roundi(float(hero.get("energy", 0.0))), roundi(float(hero.get("skill_cooldown", 0.0)) * 10.0), roundi(float(hero.get("ultimate_cooldown", 0.0)) * 10.0)])
 	if next_signature == signature:
 		return
 	signature = next_signature
 	if sim.endless_mode:
 		var traveler: Dictionary = sim.heroes[0] if not sim.heroes.is_empty() else {}
-		base_label.text = "◆ HP %d/%d  ◇盾 %d" % [ceili(float(traveler.get("hp", 0.0))), ceili(float(traveler.get("max_hp", 0.0))), ceili(sim.crystal_shield)]
+		base_label.text = "生命  %d / %d" % [ceili(float(traveler.get("hp", 0.0))), ceili(float(traveler.get("max_hp", 0.0)))]
 	else:
-		base_label.text = "◆ 基地 %d/%d  ◇盾 %d" % [sim.base_hp, sim.base_max_hp, ceili(sim.crystal_shield)] if sim.v2_mode else "◆ 基地 %d/%d" % [sim.base_hp, sim.base_max_hp]
+		base_label.text = "核心  %d / %d" % [sim.base_hp, sim.base_max_hp]
+	shield_label.text = "护盾 %d  ·  击退 %d" % [ceili(sim.crystal_shield), sim.kills]
 	if sim.v2_mode:
 		var next_xp: int = sim.endless_next_threshold() if sim.endless_mode else sim.crystal.next_threshold(sim.run_state)
+		xp_bar.max_value = maxi(1, next_xp)
+		xp_bar.value = sim.run_state.crystal_xp if next_xp > 0 else xp_bar.max_value
+		if last_xp >= 0 and last_xp != sim.run_state.crystal_xp:
+			shimmer_remaining = 0.65 if not reduced else 0.0
+		last_xp = sim.run_state.crystal_xp
 		var xp_text: String = "MAX" if next_xp < 0 else "%d / %d" % [sim.run_state.crystal_xp, next_xp]
 		var seconds: int = floori(sim.elapsed) if sim.endless_mode else ceili(sim.stage_runtime.remaining_seconds())
 		var queued := "  +%d卡" % sim.run_state.pending_level_ups if sim.run_state.pending_level_ups > 0 and sim.state != "reward" else ""
 		if sim.endless_mode:
-			progression_label.text = "等级 Lv.%d  •  EXP %s%s  •  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, seconds / 60, seconds % 60]
-			wave_label.text = "威胁等级   %02d" % maxi(1, floori(sim.elapsed / 45.0) + 1)
+			progression_label.text = "Lv.%d  ·  经验 %s%s" % [sim.run_state.crystal_level, xp_text, queued]
+			wave_label.text = "威胁 %02d  ·  生存 %02d:%02d" % [maxi(1, floori(sim.elapsed / 45.0) + 1), seconds / 60, seconds % 60]
 		else:
-			progression_label.text = "水晶 Lv.%d  •  EXP %s%s  •  %02d:%02d" % [sim.run_state.crystal_level, xp_text, queued, seconds / 60, seconds % 60]
-			wave_label.text = "%02d/%02d · %s" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size(),sim.stage_runtime.pacing_text().left(2)]
+			progression_label.text = "水晶 Lv.%d  ·  经验 %s%s" % [sim.run_state.crystal_level, xp_text, queued]
+			wave_label.text = "波次 %02d / %02d   ·   %02d:%02d" % [sim.wave, sim.stage_runtime.definition.get("waves", []).size(), seconds / 60, seconds % 60]
 			wave_label.tooltip_text = sim.stage_runtime.pacing_text()
-		map_name_label.text = str(sim.database.stages.get(sim.current_stage_id, {}).get("name", sim.current_stage_id))
+		map_name_label.text = str(sim.endless_forecast().layout_name) if sim.endless_mode else str(sim.database.stages.get(sim.current_stage_id, {}).get("name", sim.current_stage_id))
 	else:
 		progression_label.text = "小队 Lv.%d / 5    ·    经验 %d    ·    强化 %d    ·    种子 %d" % [sim.team_level, sim.team_xp, sim.rewards.history.size(), sim.run_seed]
 		wave_label.text = "节点   %02d / 05" % sim.wave
@@ -963,6 +922,7 @@ func refresh(sim, selected_id: int) -> void:
 	refresh_boss(sim)
 	refresh_wave_timeline(sim)
 	refresh_formations(sim, selected_id)
+	_update_ticker()
 	if selected_id == -2:
 		status_label.text = "全队移动 · 右键指定队形中心"
 	if selected_id >= 0 and selected_id < sim.heroes.size():
@@ -985,26 +945,48 @@ func refresh(sim, selected_id: int) -> void:
 		hero_lock_labels[i].visible = not sim.deployment_slot_unlocked(i)
 		if hero_lock_labels[i].visible:
 			hero_lock_labels[i].move_to_front()
-		hero_hp_bars[i].max_value = maxf(1.0, float(hero.max_hp))
-		hero_hp_bars[i].value = maxf(0.0, float(hero.hp))
+		var hp_max := maxf(1.0, float(hero.max_hp))
+		var hp_value := maxf(0.0, float(hero.hp))
+		if hero_hp_trails[i].max_value != hp_max or hp_value > hero_hp_trails[i].value or reduced:
+			hero_hp_trails[i].max_value = hp_max
+			hero_hp_trails[i].value = hp_value
+		hero_hp_bars[i].max_value = hp_max
+		hero_hp_bars[i].value = hp_value
 		hero_energy_bars[i].max_value = maxf(1.0, float(hero.get("max_energy", 100.0)))
 		hero_energy_bars[i].value = maxf(0.0, float(hero.get("energy", 0.0)))
 		hero_portraits[i].texture = portrait_texture(hero, sim)
-		hero_name_labels[i].text = "%d  %s" % [i + 1, hero.name]
-		hero_element_labels[i].text = "Lv.%d" % sim.deployment_required_level(i) if hero_lock_labels[i].visible else sim.element_name(str(hero.get("element", "none")))
+		hero_name_labels[i].text = str(hero.name)
+		hero_name_labels[i].tooltip_text = str(hero.name)
+		hero_element_labels[i].text = "" if hero_lock_labels[i].visible else sim.element_name(str(hero.get("element", "none")))
 		var hero_color: Color = element_color(str(hero.get("element", ""))) if hero.get("character_id", "") == "traveler" and hero.get("element", "") != "" else Color(hero.color)
-		hero_name_labels[i].add_theme_color_override("font_color", hero_color)
 		hero_element_labels[i].add_theme_color_override("font_color", hero_color)
-		var hp_ratio := float(hero.hp) / maxf(1.0, float(hero.max_hp))
-		hero_buttons[i].modulate = Color("#ff7888") if hp_ratio <= 0.25 and hero.hp > 0.0 else (Color.WHITE if i == selected_id else Color("#91a0a8"))
-		hero_card_frames[i].texture = UI_SKIN.hero_frame_red if i == selected_id or hp_ratio <= 0.25 else UI_SKIN.hero_frame_gray
-		for hero_state in ["normal", "hover", "pressed", "focus", "disabled"]:
-			hero_buttons[i].add_theme_stylebox_override(hero_state, _battle_card_style(hero_color if i == selected_id else Color("#74414d"), i == selected_id))
-		var status: String = "倒地" if hero.hp <= 0 else (("同行" if sim.endless_mode else "待命") if not bool(hero.get("deployed", true)) else ("移动中" if hero.moving else "就绪"))
-		hero_details[i].text = "ATK %.0f  ·  %.1f/s" % [hero.damage, hero.rate]
-		hero_statuses[i].text = "HP %d/%d · %s" % [ceili(hero.hp), ceili(hero.max_hp), status]
+		var is_down := hp_value <= 0.0
+		var is_locked: bool = hero_lock_labels[i].visible
+		var is_deployed: bool = bool(hero.get("deployed", true))
+		var selected: bool = i == selected_id
+		hero_buttons[i].modulate = Color.WHITE
+		hero_portraits[i].modulate = Color(0.45, 0.36, 0.40) if is_down or is_locked else Color.WHITE
+		var border := Color("#f25571") if selected else Color("#6c3445")
+		if is_down: border = Color("#7b6b75")
+		var card_state := str([selected, is_down, is_locked])
+		if str(hero_buttons[i].get_meta("card_state", "")) != card_state:
+			hero_buttons[i].set_meta("card_state", card_state)
+			for state in ["normal", "pressed", "focus", "disabled"]:
+				hero_buttons[i].add_theme_stylebox_override(state, _battle_card_style(border, selected))
+			hero_buttons[i].add_theme_stylebox_override("hover", _battle_card_style(Color("#ff9caf"), true))
+		var state_text := "倒地" if is_down else ("已部署" if is_deployed else "待命 · 拖出")
+		if bool(hero.moving) and is_deployed and not is_down: state_text = "移动中"
+		if is_locked: state_text = "Lv.%d 解锁" % sim.deployment_required_level(i)
+		hero_statuses[i].text = state_text
+		hero_statuses[i].add_theme_color_override("font_color", Color("#ff9cab") if is_down else (Color("#a1e3cb") if is_deployed else MUTED))
+		hero_details[i].text = "%d / %d" % [ceili(hp_value), ceili(hp_max)]
+		hero_buttons[i].tooltip_text = "%s · %s\n生命 %d/%d · 攻击 %.0f · 攻速 %.1f/s\n点击选中 / 拖出部署 / 右键撤回" % [hero.name, state_text, ceili(hp_value), ceili(hp_max), hero.damage, hero.rate]
+	if selected_id != previous_selection:
+		if selected_id >= 0 and selected_id < hero_buttons.size(): _pop(hero_portraits[selected_id], 0.12)
+		previous_selection = selected_id
 	var was_visible: bool = overlay.visible
-	overlay.visible = sim.state in ["ready", "paused", "won"]
+	overlay.visible = sim.state in ["ready", "paused"]
+	modal_card.visible = sim.state == "ready"
 	for control in background_buttons:
 		control.focus_mode = Control.FOCUS_NONE if overlay.visible or sim.state == "reward" else Control.FOCUS_ALL
 	if sim.state == "reward":
@@ -1014,15 +996,13 @@ func refresh(sim, selected_id: int) -> void:
 		reward_panel.hide()
 	if overlay.visible:
 		pause_details.visible = sim.state == "paused"
-		modal_card.visible = sim.state not in ["paused", "lost"]
-		if sim.state == "paused":
-			refresh_pause_details(sim)
-		modal_action.focus_next = modal_action.get_path()
-		modal_action.focus_previous = modal_action.get_path()
-		modal_action.focus_neighbor_top = modal_action.get_path()
-		modal_action.focus_neighbor_bottom = modal_action.get_path()
-		modal_action.focus_neighbor_left = modal_action.get_path()
-		modal_action.focus_neighbor_right = modal_action.get_path()
+		if sim.state == "ready":
+			modal_action.focus_next = modal_action.get_path()
+			modal_action.focus_previous = modal_action.get_path()
+			modal_action.focus_neighbor_top = modal_action.get_path()
+			modal_action.focus_neighbor_bottom = modal_action.get_path()
+			modal_action.focus_neighbor_left = modal_action.get_path()
+			modal_action.focus_neighbor_right = modal_action.get_path()
 		match sim.state:
 			"ready":
 				var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {}) if sim.v2_mode else {}
@@ -1037,18 +1017,10 @@ func refresh(sim, selected_id: int) -> void:
 				modal_title.text = "战术暂停"
 				modal_copy.text = "战场、弹体和攻击冷却已冻结。\n准备好后，继续守住你的防线。"
 				modal_action.text = "继续防守   →   [空格]"
-			"won":
-				var base_percent := roundi(float(sim.base_hp) / maxf(1.0, float(sim.base_max_hp)) * 100.0)
-				var grade := result_grade(base_percent, sim.best_streak)
-				var unlock_copy := "下一作战区域已解锁。" if sim.v2_mode and sim.current_stage_id != "stage_03" else "本章作战区域已全部完成。"
-				modal_title.text = "防线守住了"
-				modal_copy.text = "评级 %s  ·  击退 %d  ·  基地 %d  ·  最高连杀 %d\n元素反应 %d 次  ·  %s\n本关构筑将在进入下一关时重置，可按 F4 选择关卡。" % [grade, sim.kills, base_percent, sim.best_streak, sim.reactions, unlock_copy]
-				modal_action.text = "再守一次   →   [Enter]"
-			"lost":
-				modal_title.text = "核心已经失守"
-				modal_copy.text = "击退 %d 名敌人  ·  坚持到第 %d 波\n让火水射程重叠，守卫拦住压力最大的通道。\n倒地队员会在波次结束后半血归队。" % [sim.kills, sim.wave]
-				modal_action.text = "重新布防   →   [Enter]"
-		if not was_visible or get_viewport().gui_get_focus_owner() != modal_action:
+		if sim.state == "paused":
+			if pause_details.is_visible_in_tree() and not restart_dialog.visible and (not was_visible or get_viewport().gui_get_focus_owner() not in pause_presentation.focus_order):
+				pause_continue_button.grab_focus()
+		elif not was_visible or get_viewport().gui_get_focus_owner() != modal_action:
 			modal_action.grab_focus()
 
 func refresh_boss(sim) -> void:
@@ -1071,7 +1043,7 @@ func refresh_boss(sim) -> void:
 	boss_hp_bar.size = Vector2(split_width, original_size.y) if not secondary.is_empty() else original_size
 	var shield: float = float(active.get("shield", 0.0))
 	var hp: float = maxf(0.0, float(active.hp))
-	boss_name_label.text = "DUAL TARGET // %s  +  %s" % [str(active.get("name", "裂隙首领")), str(secondary.get("name", ""))] if not secondary.is_empty() else "TARGET // %s" % str(active.get("name", "裂隙首领"))
+	boss_name_label.text = "%s  +  %s" % [str(active.get("name", "裂隙首领")), str(secondary.get("name", ""))] if not secondary.is_empty() else str(active.get("name", "裂隙首领"))
 	boss_phase_label.text = "P%s / P%s" % [int(active.get("boss_phase", 1)), int(secondary.get("boss_phase", 1))] if not secondary.is_empty() else "PHASE %s" % ["I", "II", "III"][clampi(int(active.get("boss_phase", 1)) - 1, 0, 2)]
 	boss_hp_bar.max_value = maxf(1.0, float(active.max_hp))
 	boss_hp_bar.value = hp
@@ -1102,20 +1074,25 @@ func refresh_boss(sim) -> void:
 	boss_hp_label.text = "K %03d%%  G %03d%%" % [hp_percent, secondary_percent]
 
 func refresh_wave_timeline(sim) -> void:
-	var active_boss := boss_panel.visible
-	wave_timeline_panel.visible = sim.v2_mode and not sim.endless_mode and sim.state in ["running", "paused", "between"] and not active_boss
+	wave_timeline_panel.visible = sim.v2_mode and sim.state in ["running", "paused", "between"]
 	if not wave_timeline_panel.visible:
+		return
+	if sim.endless_mode:
+		var forecast: Dictionary = sim.endless_forecast()
+		wave_timeline_labels[0].text = ("补给窗口 " if float(forecast.supply_remaining) > 0 else "首领预告 ") + "%s · %02ds" % [str(forecast.next_boss), ceili(float(forecast.eta))]
+		wave_timeline_labels[0].add_theme_color_override("font_color", Color("#ffb0bb") if bool(forecast.warning) else MUTED)
+		wave_timeline_panel.tooltip_text = "阶段 %d · 敌人 Lv.%d · 下一阶段 %s" % [int(forecast.phase), int(forecast.level), str(forecast.next_roster)]
 		return
 	var upcoming: Array[Dictionary] = sim.upcoming_waves(1)
 	var alive: int = sim.enemies.filter(func(enemy: Dictionary) -> bool: return float(enemy.get("hp", 0.0)) > 0.0).size()
 	if upcoming.is_empty():
-		wave_timeline_labels[0].text = "◆  怪物 %02d / %02d" % [alive, alive]
+		wave_timeline_labels[0].text = "场上 %02d  ·  最后防线" % alive
 		wave_timeline_labels[0].add_theme_color_override("font_color", MUTED)
 		return
 	var item: Dictionary = upcoming[0]
 	var eta := ceili(float(item.get("eta", 0.0)))
 	var prefix := "BOSS" if bool(item.get("boss", false)) else "%02ds" % eta
-	wave_timeline_labels[0].text = "◆  怪物 %02d / %02d  ·  %s" % [alive, alive + int(item.get("count", 1)), prefix]
+	wave_timeline_labels[0].text = "场上 %02d  ·  增援 +%02d / %s" % [alive, int(item.get("count", 1)), prefix]
 	wave_timeline_labels[0].add_theme_color_override("font_color", Color("#ff899c") if bool(item.get("boss", false)) else WHITE)
 func refresh_formations(sim, selected_id: int) -> void:
 	for mode: String in formation_buttons:
@@ -1129,7 +1106,7 @@ func announce_route_warning(event: Dictionary) -> void:
 	if bool(event.get("boss", false)):
 		_show_boss_alert("⚠  BOSS APPROACHING\n首领即将登场", 0.82, 1.6)
 		return
-	if boss_warning != null and not muted:
+	if boss_warning != null and not muted and not external_battle_audio:
 		boss_warning.stop()
 		boss_warning.pitch_scale = 0.82 if bool(event.get("boss", false)) else 1.18
 		boss_warning.volume_db = -8.0 if bool(event.get("boss", false)) else -15.0
@@ -1137,89 +1114,52 @@ func announce_route_warning(event: Dictionary) -> void:
 
 
 func _show_boss_alert(copy: String, pitch: float = 0.82, hold: float = 1.20) -> void:
-	if boss_warning != null and not muted:
-		boss_warning.stop()
+	if danger_remaining > 0.0: return
+	if boss_warning != null and not muted and not external_battle_audio:
 		boss_warning.pitch_scale = pitch
-		boss_warning.volume_db = -8.0
 		boss_warning.play()
-	boss_alert.text = copy
-	boss_alert.position = Vector2(212, 230)
-	boss_alert.modulate = Color(1, 1, 1, 0)
-	boss_alert.scale = Vector2(1.12, 1.12)
-	boss_alert.pivot_offset = boss_alert.size * 0.5
-	boss_alert_frame.position = Vector2(170, 224)
-	boss_alert_ticker.position.x = 18.0
-	boss_alert_frame.modulate = Color(1, 1, 1, 0)
-	boss_alert_frame.scale = Vector2(0.94, 0.94)
-	boss_alert_frame.pivot_offset = boss_alert_frame.size * 0.5
-	boss_scene_tint.color.a = 0.0
-	boss_scene_tint.show()
+	boss_alert_frame.position = Vector2(430, 120)
+	boss_alert_frame.size = Vector2(420, 34)
+	boss_alert.position = Vector2(442, 123)
+	boss_alert.size = Vector2(396, 27)
+	boss_alert.add_theme_font_size_override("font_size", 15)
+	boss_alert.clip_text = true
+	boss_alert.text = copy.replace("\n", " · ")
+	boss_alert.modulate = Color.WHITE
+	boss_alert.scale = Vector2.ONE
+	boss_alert_frame.modulate = Color.WHITE
+	boss_alert_frame.scale = Vector2.ONE
 	boss_alert_frame.show()
 	boss_alert.show()
-	var entrance := create_tween().set_parallel(true)
-	entrance.tween_property(boss_scene_tint, "color:a", 0.24, 0.15).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-	entrance.tween_property(boss_alert_frame, "modulate:a", 1.0, 0.12)
-	entrance.tween_property(boss_alert_frame, "scale", Vector2.ONE, 0.24).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	entrance.tween_property(boss_alert, "modulate:a", 1.0, 0.12).set_delay(0.04)
-	entrance.tween_property(boss_alert, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	entrance.tween_property(boss_alert_ticker, "position:x", -330.0, maxf(0.9, hold + 0.45))
-	await entrance.finished
-	await get_tree().create_timer(hold).timeout
-	var out := create_tween().set_parallel(true)
-	out.tween_property(boss_alert, "modulate:a", 0.0, 0.24)
-	out.tween_property(boss_alert_frame, "modulate:a", 0.0, 0.24)
-	out.tween_property(boss_scene_tint, "color:a", 0.0, 0.32)
-	await out.finished
-	boss_alert.hide()
-	boss_alert_frame.hide()
-	boss_scene_tint.hide()
+	arrival_remaining = hold + 0.3
+	_pop(boss_alert_frame, 0.035)
 
 func announce_boss_skill_warning(name: String, duration: float, phase: int) -> void:
-	if boss_skill_warning_tween != null and boss_skill_warning_tween.is_valid():
-		boss_skill_warning_tween.kill()
-	if boss_skill_flash_tween != null and boss_skill_flash_tween.is_valid():
-		boss_skill_flash_tween.kill()
-	if boss_warning != null and not muted:
-		boss_warning.stop()
-		boss_warning.pitch_scale = 0.88 if phase >= 2 else 1.0
-		boss_warning.volume_db = -5.5
-		boss_warning.play()
-	boss_skill_warning_title.text = "⚠  %s  //  PHASE %s" % [name, ["I", "II", "III"][clampi(phase - 1, 0, 2)]]
-	boss_skill_warning_title.modulate = Color.WHITE
-	boss_skill_warning_icon.modulate = Color.WHITE
-	boss_skill_warning_panel.modulate = Color(1, 1, 1, 0)
-	boss_skill_warning_panel.position = Vector2(225, 150)
-	boss_skill_warning_ticker.position.x = 100.0
+	arrival_remaining = 0.0
+	boss_alert_frame.hide()
+	boss_alert.hide()
+	boss_scene_tint.hide()
+	boss_skill_warning_title.text = "%s  ·  阶段 %d" % [name, phase]
+	boss_skill_warning_title.tooltip_text = name
+	boss_skill_warning_panel.position = Vector2(430, 120)
+	boss_skill_warning_panel.modulate = Color.WHITE
 	boss_skill_warning_panel.show()
-	boss_skill_warning_tween = create_tween()
-	boss_skill_warning_tween.set_parallel(true)
-	boss_skill_warning_tween.tween_property(boss_skill_warning_panel, "modulate:a", 1.0, 0.10)
-	boss_skill_warning_tween.tween_property(boss_skill_warning_panel, "position:x", 205.0, 0.18).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-	boss_skill_warning_tween.tween_property(boss_skill_warning_ticker, "position:x", -410.0, maxf(0.65, duration))
-	boss_skill_warning_tween.chain().tween_property(boss_skill_warning_panel, "modulate:a", 0.0, 0.18).set_delay(maxf(0.20, duration - 0.32))
-	boss_skill_warning_tween.chain().tween_callback(func(): boss_skill_warning_panel.hide())
-	boss_skill_flash_tween = create_tween()
-	for flash_index in maxi(2, ceili(duration / 0.28)):
-		boss_skill_flash_tween.tween_property(boss_skill_warning_title, "modulate", Color(1.0, 0.28, 0.30, 0.36), 0.10)
-		boss_skill_flash_tween.parallel().tween_property(boss_skill_warning_icon, "modulate", Color(1.0, 0.20, 0.20, 0.30), 0.10)
-		boss_skill_flash_tween.tween_property(boss_skill_warning_title, "modulate", Color.WHITE, 0.10)
-		boss_skill_flash_tween.parallel().tween_property(boss_skill_warning_icon, "modulate", Color.WHITE, 0.10)
-
+	danger_remaining = clampf(duration, 0.35, 12.0)
+	_pop(boss_skill_warning_panel, 0.04)
 
 func announce_contract(name: String, reward: String) -> void:
-	await _show_boss_alert("C O N T R A C T   C L E A R\n%s  ·  %s" % [name, reward], 1.22, 0.82)
+	_queue_toast("契约达成 · %s · %s" % [name, reward], 3, 3.3)
 
 func announce_boss(name: String) -> void:
-	await _show_boss_alert("W A R N I N G\n%s  降 临" % name, 0.82, 1.85)
+	_show_boss_alert("首领降临 · " + name, 0.82, 1.85)
+
 func announce_arena_event(kind: String, duration: float) -> void:
-	arena_event_name = kind.replace("_", " ").to_upper()
-	arena_event_until_ms = Time.get_ticks_msec() + roundi(minf(duration, 6.0) * 1000.0)
+	arena_event_name = {"hazard":"危险区域启动", "wind":"风向改变", "spring":"泉台涌动"}.get(kind, kind.replace("_", " "))
+	_queue_toast("场地变化 · " + arena_event_name, 2, minf(duration, 4.0))
 
 func announce_boss_phase(name: String, phase: int) -> void:
-	var header := "P H A S E   II" if phase == 2 else "F I N A L   P H A S E"
-	await _show_boss_alert("%s\n%s  狂 暴 阶 段" % [header, name], 1.08 if phase == 2 else 0.88, 1.20)
-	if boss_warning != null:
-		boss_warning.pitch_scale = 1.0
+	_show_boss_alert("阶段 %d · %s 狂暴" % [phase, name], 1.08, 1.5)
+
 func result_grade(base_hp: int, streak: int) -> String:
 	if base_hp >= 85 and streak >= 20:
 		return "S"
@@ -1230,7 +1170,8 @@ func result_grade(base_hp: int, streak: int) -> String:
 	return "C"
 
 func refresh_supports(sim) -> void:
-	support_panel.visible = sim.v2_mode and not sim.supports.is_empty() and sim.state in ["running", "between", "paused"]
+	# Support cards already live in the buff dock; the legacy text overlaps the timeline.
+	support_panel.visible = false
 	for i in support_labels.size():
 		support_labels[i].text = ""
 		support_details[i] = {}
@@ -1267,78 +1208,60 @@ func resonance_summary(sim) -> String:
 			names.append(str(resonance.get("name", id)))
 	return " / ".join(names)
 func refresh_pause_details(sim) -> void:
-	var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {}) if sim.v2_mode else {}
-	var mode_name := "无尽生存" if sim.endless_mode else "裂隙守望"
-	var time_value := floori(sim.elapsed) if sim.endless_mode else ceili(sim.stage_runtime.remaining_seconds())
-	var time_text := "%02d:%02d" % [time_value / 60, time_value % 60]
-	pause_status_label.text = "%s · %s · %s · 击退%d · 敌%d · Lv.%d · 幸运%.2f · 契约 %s · PERF %d%% / 丢弃%d" % [mode_name, str(stage.get("name", sim.current_stage_id)), time_text, sim.kills, sim.enemies.size(), sim.run_state.crystal_level, sim.run_state.luck, sim.contract_status(), roundi(sim.performance_budget.quality_scale*100.0), sim.culled_spawns]
-	var active_resonance_text: String = resonance_summary(sim)
-	if not active_resonance_text.is_empty():
-		pause_status_label.text += " · 共鸣 " + active_resonance_text
-	for item in pause_buff_labels:
-		item.text = ""
-	var card_names: Dictionary = {}
-	if sim.database != null:
-		for card: Dictionary in sim.database.cards:
-			card_names[str(card.id)] = str(card.name)
-	var ids: Array = sim.run_state.buff_levels.keys()
-	ids.sort()
-	var buff_start: int = 0
-	if not active_resonance_text.is_empty():
-		pause_buff_labels[0].text = "◇  队伍共鸣     " + active_resonance_text
-		pause_buff_labels[0].add_theme_color_override("font_color", Color("#f4c873"))
-		buff_start = 1
-	for i in mini(ids.size(), pause_buff_labels.size() - buff_start):
-		var id := str(ids[i])
-		pause_buff_labels[i + buff_start].text = "◆  %s     Lv.%d" % [card_names.get(id, id), int(sim.run_state.buff_levels[id])]
-		pause_buff_labels[i + buff_start].add_theme_color_override("font_color", WHITE)
-	if ids.is_empty() and buff_start == 0:
-		pause_buff_labels[0].text = "尚未获得强化卡牌"
-	for i in pause_hero_labels.size():
-		pause_hero_labels[i].text = ""
-		if i >= sim.heroes.size():
-			pause_hero_labels[i].text = "%d  未部署角色\nHP --/--    ATK --    ASPD --\n射程 --    护甲 --    移速 --    弹道 --" % [i + 1]
-			pause_hero_labels[i].add_theme_color_override("font_color", MUTED)
-			continue
-		var hero: Dictionary = sim.heroes[i]
-		var element_text: String = str(sim.element_name(str(hero.get("element", "none"))))
-		if not str(hero.get("secondary_element", "")).is_empty():
-			element_text += " + " + sim.element_name(str(hero.secondary_element))
-		pause_hero_labels[i].text = "%d  %s  ·  %s  ·  %s\nHP  %4d / %-4d     ATK  %4.0f     ASPD  %.2f/s\nRNG %4.0f          DEF  %4.0f     SPD   %4.0f     ×%d" % [i + 1, hero.name, hero.role, element_text, ceili(hero.hp), ceili(hero.max_hp), hero.damage, hero.rate, hero.range, hero.armor, hero.speed, int(hero.get("projectile_count", 1))]
+	pause_presentation.refresh_content(sim, last_selected_id)
 
 func refresh_buffs(sim) -> void:
 	buff_panel.visible = sim.v2_mode and sim.state in ["running", "between", "paused"]
-	for i in buff_labels.size():
-		buff_labels[i].text = ""
-		buff_icons[i].hide()
-		buff_details[i] = {}
-	if not buff_panel.visible or sim.run_state.buff_levels.is_empty():
-		return
+	if not buff_panel.visible: return
+	var next_buff_signature := str([sim.run_state.buff_levels, buff_page])
+	if next_buff_signature == buff_signature: return
+	buff_signature = next_buff_signature
 	var cards: Dictionary = {}
-	for card: Dictionary in sim.database.cards:
-		cards[str(card.id)] = card
+	for card: Dictionary in sim.database.cards: cards[str(card.id)] = card
 	var rarity_rank := {"common": 0, "rare": 1, "epic": 2, "legendary": 3}
 	var rarity_color := {"common": Color("#b7b8bd"), "rare": Color("#52b9ff"), "epic": Color("#c37cff"), "legendary": Color("#ffc55c")}
 	var ids: Array = sim.run_state.buff_levels.keys()
 	ids.sort_custom(func(a: Variant, b: Variant) -> bool:
-		var a_id := str(a); var b_id := str(b)
-		var a_card: Dictionary = cards.get(a_id, {}); var b_card: Dictionary = cards.get(b_id, {})
-		var a_rank: int = int(rarity_rank.get(str(a_card.get("rarity", "common")), 0)); var b_rank: int = int(rarity_rank.get(str(b_card.get("rarity", "common")), 0))
-		if a_rank != b_rank: return a_rank > b_rank
-		var a_level := int(sim.run_state.buff_levels.get(a_id, 0)); var b_level := int(sim.run_state.buff_levels.get(b_id, 0))
-		return a_level > b_level if a_level != b_level else a_id < b_id)
-	for i in mini(buff_labels.size(), ids.size()):
-		var id := str(ids[i]); var card: Dictionary = cards.get(id, {})
-		var rarity := str(card.get("rarity", "common")); var effect := str(card.get("effect", ""))
-		var card_icon := GeneratedIconCatalog.card_texture(card)
-		buff_icons[i].texture = card_icon if card_icon != null else _buff_icon_for(effect)
-		buff_icons[i].modulate = Color.WHITE
+		var rank_a := int(rarity_rank.get(str(cards.get(str(a), {}).get("rarity", "common")), 0))
+		var rank_b := int(rarity_rank.get(str(cards.get(str(b), {}).get("rarity", "common")), 0))
+		return rank_a > rank_b if rank_a != rank_b else str(a) < str(b))
+	buff_page_count = maxi(1, ceili(float(ids.size()) / BUFF_PAGE_SIZE))
+	buff_page = clampi(buff_page, 0, buff_page_count - 1)
+	buff_title.text = "构筑 / %d" % ids.size()
+	buff_page_label.text = "%d/%d" % [buff_page + 1, buff_page_count]
+	buff_previous.disabled = buff_page == 0
+	buff_next.disabled = buff_page >= buff_page_count - 1
+	buff_empty_label.visible = ids.is_empty()
+	for i in BUFF_PAGE_SIZE:
+		buff_icons[i].hide()
+		buff_labels[i].text = ""
+		buff_details[i] = {}
+		var index := buff_page * BUFF_PAGE_SIZE + i
+		if index >= ids.size(): continue
+		var id := str(ids[index])
+		var card: Dictionary = cards.get(id, {})
 		var level := int(sim.run_state.buff_levels[id])
-		buff_icons[i].tooltip_text = "%s · Lv.%d" % [str(card.get("name", id)), level]
-		buff_details[i] = {"title": "%s  ·  Lv.%d" % [str(card.get("name", id)), level], "body": str(card.get("description", "暂无说明"))}
+		var card_icon := GeneratedIconCatalog.card_texture(card)
+		buff_icons[i].texture = card_icon if card_icon != null else _buff_icon_for(str(card.get("effect", "")))
+		buff_icons[i].modulate = Color.WHITE
+		buff_icons[i].tooltip_text = "%s · ×%d\n%s\n点击查看详情 · 滚轮翻页" % [str(card.get("name", id)), level, str(card.get("description", ""))]
+		buff_details[i] = {"id": id, "title": "%s · ×%d" % [str(card.get("name", id)), level], "body": str(card.get("description", "暂无说明"))}
 		buff_icons[i].show()
-		buff_labels[i].text = "Lv.%d" % int(sim.run_state.buff_levels[id])
-		buff_labels[i].add_theme_color_override("font_color", rarity_color.get(rarity, WHITE))
+		buff_labels[i].text = "×%d" % level
+		buff_labels[i].tooltip_text = "叠加 %d 次" % level
+		buff_labels[i].add_theme_color_override("font_color", rarity_color.get(str(card.get("rarity", "common")), WHITE))
+		if int(buff_seen.get(id, 0)) < level: _pop(buff_icons[i], 0.25)
+		buff_seen[id] = level
+
+func change_buff_page(direction: int) -> void:
+	buff_page = clampi(buff_page + direction, 0, buff_page_count - 1)
+	if last_sim != null: refresh_buffs(last_sim)
+
+func _buff_scroll_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
+			change_buff_page(1 if event.button_index == MOUSE_BUTTON_WHEEL_DOWN else -1)
+			get_viewport().set_input_as_handled()
 
 func _buff_icon_for(effect: String) -> Texture2D:
 	if "speed" in effect or "rate" in effect: return SKILL_ICON_SPEED
@@ -1354,34 +1277,9 @@ func _buff_icon_for(effect: String) -> Texture2D:
 	return SKILL_ICON_SLASH
 
 func _layout_right_rail(sim) -> void:
-	# The former right rail is now a compact bottom command deck, leaving the full width for combat.
-	right_rail_shell.position = UI_LAYOUT.battle_right_shell_rect.position
-	right_rail_shell.size = UI_LAYOUT.battle_right_shell_rect.size
-	command_rail.position = UI_LAYOUT.battle_party_rect.position
-	command_rail.size = UI_LAYOUT.battle_party_rect.size
-	for i in hero_buttons.size():
-		hero_buttons[i].position = UI_LAYOUT.battle_hero_card_rect.position + UI_LAYOUT.battle_hero_card_gap * i
-		hero_buttons[i].size = UI_LAYOUT.battle_hero_card_rect.size
-	action_rail.position = UI_LAYOUT.battle_action_rect.position
-	action_rail.size = UI_LAYOUT.battle_action_rect.size
-	skill_button.position = UI_LAYOUT.battle_skill_rect.position
-	skill_button.size = UI_LAYOUT.battle_skill_rect.size
-	ultimate_button.position = UI_LAYOUT.battle_ultimate_rect.position
-	ultimate_button.size = UI_LAYOUT.battle_ultimate_rect.size
-	ability_hint_label.position = UI_LAYOUT.battle_ability_hint_rect.position
-	ability_hint_label.size = UI_LAYOUT.battle_ability_hint_rect.size
-	var formation_width := 72.0
-	for i in formation_buttons.size():
-		var mode: String = ["squad", "follow", "hold"][i]
-		formation_buttons[mode].position = UI_LAYOUT.battle_formation_rect.position + Vector2(i * (formation_width + 7.0), 0)
-		formation_buttons[mode].size = Vector2(formation_width, UI_LAYOUT.battle_formation_rect.size.y)
-	preview_hint_label.position = UI_LAYOUT.battle_preview_hint_rect.position
-	preview_hint_label.size = UI_LAYOUT.battle_preview_hint_rect.size
-	buff_panel.position = UI_LAYOUT.battle_buff_rect.position
-	buff_panel.size = UI_LAYOUT.battle_buff_rect.size
-	support_panel.position = Vector2(840, 9)
-	support_panel.size = Vector2(285, 48)
 	right_rail_shell.visible = sim.v2_mode
+	ability_hint_label.hide()
+	preview_hint_label.hide()
 
 func set_skill_aiming(enabled: bool) -> void:
 	skill_aiming = enabled
@@ -1392,51 +1290,69 @@ func set_ultimate_aiming(enabled: bool) -> void:
 	signature = ""
 
 func refresh_skill(sim, selected_id: int) -> void:
-	var visible: bool = sim.v2_mode and sim.state in ["running", "between", "paused"]
-	skill_button.visible = visible
-	ultimate_button.visible = visible
-	if not visible:
-		return
+	var active: bool = sim.v2_mode and sim.state in ["running", "between", "paused"]
+	skill_button.visible = active
+	ultimate_button.visible = active
+	if not active: return
 	var hero: Dictionary = sim.heroes[selected_id] if selected_id >= 0 and selected_id < sim.heroes.size() else {}
 	if hero.is_empty():
 		skill_button.disabled = true
 		ultimate_button.disabled = true
+		skill_name_label.text = "选择角色"
+		ultimate_name_label.text = "选择角色"
+		skill_cd_label.text = "—"
+		ultimate_cd_label.text = "—"
+		skill_icon.modulate = Color(1, 1, 1, 0.35)
+		ultimate_icon.modulate = Color(1, 1, 1, 0.35)
+		skill_charge.value = 0.0
+		ultimate_charge.value = 0.0
+		skill_cooldown_overlay.show()
+		ultimate_cooldown_overlay.show()
+		previous_q_ready = false
+		previous_e_ready = false
 		return
 	var element := str(hero.get("element", "none"))
-	var color := element_color(element)
 	var character_id := str(hero.get("character_id", ""))
 	var q_texture := GeneratedIconCatalog.ability_texture(character_id, false)
 	var e_texture := GeneratedIconCatalog.ability_texture(character_id, true)
 	skill_icon.texture = q_texture if q_texture != null else skill_icon_for(element)
 	ultimate_icon.texture = e_texture if e_texture != null else ultimate_icon_for(element)
-	skill_frame.texture = UI_SKIN.skill_frame_red if skill_aiming else UI_SKIN.skill_frame_gray
-	ultimate_frame.texture = UI_SKIN.ultimate_frame_red if ultimate_aiming else UI_SKIN.ultimate_frame_gray
 	var cooldown := float(hero.get("skill_cooldown", 0.0))
-	skill_icon.modulate = Color(1.0, 1.0, 1.0, 0.22 if cooldown > 0.0 else 0.86)
-	ultimate_icon.modulate = Color(1.0, 1.0, 1.0, 0.86)
-	var deployed := bool(hero.get("deployed", false))
-	skill_button.text = ""
-	skill_button.tooltip_text = ""
-	skill_name_label.text = sim.hero_skill_name(selected_id)
-	skill_cooldown_overlay.visible = cooldown > 0.0 or not deployed
-	skill_cd_label.text = "落点" if skill_aiming else ("%.1fs" % cooldown if cooldown > 0.0 else "READY")
-	skill_key_label.text = "Q冷却" if cooldown > 0.0 else "Q战技"
-	skill_cd_label.add_theme_color_override("font_color", Color("#ff9eaa") if cooldown > 0.0 else Color("#fff4ec"))
-	skill_button.disabled = sim.state != "running"
-	var energy := float(hero.get("energy", 0.0))
-	var maximum := float(hero.get("max_energy", 100.0))
 	var ultimate_cooldown := float(hero.get("ultimate_cooldown", 0.0))
-	var energy_ready := energy >= maximum
-	var ultimate_status := "冷却 %.1fs" % ultimate_cooldown if ultimate_cooldown > 0.0 else "E · %d/%d" % [roundi(energy), roundi(maximum)]
-	ultimate_button.text = ""
-	ultimate_button.tooltip_text = ""
+	var energy := float(hero.get("energy", 0.0))
+	var maximum := maxf(1.0, float(hero.get("max_energy", 100.0)))
+	var deployed := bool(hero.get("deployed", false)) and float(hero.hp) > 0.0
+	var q_ready := cooldown <= 0.0 and deployed
+	var e_ready := ultimate_cooldown <= 0.0 and energy >= maximum and deployed
+	skill_icon.modulate = Color(1.0, 1.0, 1.0, 1.0 if q_ready else 0.62)
+	ultimate_icon.modulate = Color(1.0, 1.0, 1.0, 1.0 if e_ready else 0.62)
+	skill_name_label.text = sim.hero_skill_name(selected_id)
 	ultimate_name_label.text = sim.hero_ultimate_name(selected_id)
-	ultimate_cooldown_overlay.visible = ultimate_cooldown > 0.0 or not energy_ready or not deployed
-	ultimate_frame.modulate = Color("#fff2b4") if energy_ready and ultimate_cooldown <= 0.0 else Color.WHITE
-	ultimate_cd_label.text = "落点" if ultimate_aiming else ("%.1fs" % ultimate_cooldown if ultimate_cooldown > 0.0 else ("READY" if energy_ready else "%d%%" % roundi(energy / maxf(1.0, maximum) * 100.0)))
-	ultimate_key_label.text = "E冷却" if ultimate_cooldown > 0.0 else ("E终极" if energy_ready else "E充能")
-	ultimate_cd_label.add_theme_color_override("font_color", Color("#ff9eaa") if ultimate_cooldown > 0.0 else Color("#fff0a8") if energy_ready else Color("#ffe7a5"))
-	ultimate_button.disabled = sim.state != "running"
+	skill_button.tooltip_text = "Q · %s\n%s\n右键查看数值详情" % [skill_name_label.text, str(sim.hero_ability(selected_id, false).get("description", ""))]
+	ultimate_button.tooltip_text = "E · %s\n%s\n右键查看数值详情" % [ultimate_name_label.text, str(sim.hero_ability(selected_id, true).get("description", ""))]
+	skill_cd_label.text = "选落点" if skill_aiming else ("待部署" if not deployed else ("%.1fs" % cooldown if cooldown > 0.0 else "就绪"))
+	ultimate_cd_label.text = "选落点" if ultimate_aiming else ("待部署" if not deployed else ("%.1fs" % ultimate_cooldown if ultimate_cooldown > 0.0 else ("就绪" if e_ready else "%d%%" % roundi(energy / maximum * 100.0))))
+	skill_cd_label.add_theme_color_override("font_color", Color("#ff9eaa") if cooldown > 0.0 else WHITE)
+	ultimate_cd_label.add_theme_color_override("font_color", Color("#f3cd80"))
+	skill_key_label.text = "Q 战技"
+	ultimate_key_label.text = "E 终极"
+	skill_button.disabled = sim.state != "running" or not q_ready
+	ultimate_button.disabled = sim.state != "running" or not e_ready
+	skill_cooldown_overlay.visible = not q_ready
+	ultimate_cooldown_overlay.visible = not e_ready
+	var total_cooldown := maxf(0.1, float(sim.hero_ability(selected_id, false).get("cooldown", 1.0)))
+	skill_charge.value = clampf(1.0 - cooldown / total_cooldown, 0.0, 1.0) * 100.0 if deployed else 0.0
+	ultimate_charge.value = clampf(energy / maximum, 0.0, 1.0) * 100.0
+	if selected_id == previous_selection:
+		if q_ready and not previous_q_ready: _pop(skill_icon, 0.24)
+		if e_ready and not previous_e_ready: _pop(ultimate_icon, 0.24)
+	previous_q_ready = q_ready
+	previous_e_ready = e_ready
+
+func _ability_info_input(event: InputEvent, ultimate: bool) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		_show_ability_info(ultimate)
+		get_viewport().set_input_as_handled()
 
 func skill_icon_for(element: String) -> Texture2D:
 	return {"anemo": SKILL_ICON_TORNADO, "electro": SKILL_ICON_LIGHTNING, "pyro": SKILL_ICON_FIRE, "hydro": SKILL_ICON_WATER, "geo": SKILL_ICON_ROCK, "cryo": SKILL_ICON_ICE}.get(element, SKILL_ICON_SLASH)
@@ -1446,6 +1362,7 @@ func ultimate_icon_for(element: String) -> Texture2D:
 
 func portrait_texture(hero: Dictionary, sim_ref = null) -> Texture2D:
 	var character_id := str(hero.get("character_id", ""))
+	if portrait_cache.has(character_id): return portrait_cache[character_id]
 	if sim_ref != null and sim_ref.database != null:
 		var character: Dictionary = sim_ref.database.characters.get(character_id, {})
 		var asset: Dictionary = sim_ref.database.assets.get(str(character.get("asset_key", "")), {})
@@ -1453,6 +1370,7 @@ func portrait_texture(hero: Dictionary, sim_ref = null) -> Texture2D:
 		if not portrait_path.is_empty() and ResourceLoader.exists(portrait_path):
 			var portrait_resource: Resource = ResourceLoader.load(portrait_path)
 			if portrait_resource is Texture2D:
+				portrait_cache[character_id] = portrait_resource
 				return portrait_resource
 	if character_id == "hero_03":
 		var latest_portrait_path := "res://assets/characters/sequences/hero_03/portrait.png"
@@ -1508,12 +1426,12 @@ func _battle_card_style(border: Color, focused: bool) -> StyleBoxFlat:
 	box.border_color = border
 	box.set_border_width_all(2 if focused else 1)
 	box.border_width_left = 4 if focused else 2
-	box.corner_radius_top_left = 4
-	box.corner_radius_top_right = 4
-	box.corner_radius_bottom_left = 4
-	box.corner_radius_bottom_right = 4
-	box.shadow_color = Color(border, 0.22 if focused else 0.0)
-	box.shadow_size = 6 if focused else 0
+	box.corner_radius_top_left = 0
+	box.corner_radius_top_right = 9
+	box.corner_radius_bottom_left = 5
+	box.corner_radius_bottom_right = 0
+	box.shadow_color = Color(0, 0, 0, 0.7)
+	box.shadow_size = 2 if focused else 0
 	return box
 
 func request_restart_confirmation() -> void:
@@ -1530,6 +1448,7 @@ func _support_label_input(event: InputEvent, index: int) -> void:
 			get_viewport().set_input_as_handled()
 
 func _buff_icon_input(event: InputEvent, index: int) -> void:
+	_buff_scroll_input(event)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if index >= 0 and index < buff_details.size() and not buff_details[index].is_empty():
 			_show_info(str(buff_details[index].get("title", "强化")), str(buff_details[index].get("body", "")))
@@ -1584,17 +1503,133 @@ func _input(event: InputEvent) -> void:
 			info_popover.hide()
 
 func announce_deployment(character_name: String) -> void:
-	deployment_queue.append(character_name)
+	_queue_toast("增援就绪 · %s  /  拖出角色卡部署" % character_name, 1, 4.0)
 
 func _show_deployment_notice(character_name: String) -> void:
-	deployment_notice_active = true
-	deployment_notice.text = "增援就绪 · %s\n点击或拖动角色卡，将其部署到战场" % character_name
-	deployment_notice.modulate.a = 0.0
-	deployment_notice.show()
-	var notice_tween := create_tween()
-	notice_tween.tween_property(deployment_notice, "modulate:a", 1.0, 0.18)
-	notice_tween.tween_interval(3.5)
-	notice_tween.tween_property(deployment_notice, "modulate:a", 0.0, 0.35)
-	await notice_tween.finished
-	deployment_notice.hide()
+	announce_deployment(character_name)
+
+func _meter(parent: Node, rect: Rect2, fill: Color) -> ProgressBar:
+	var meter := ProgressBar.new()
+	meter.position = rect.position
+	# ProgressBar has an inherited theme minimum height even with text hidden.
+	# Scale the actual control so the painted bar and hit rectangle stay thin.
+	meter.size = Vector2(rect.size.x, 32.0)
+	meter.scale.y = rect.size.y / 32.0
+	meter.show_percentage = false
+	meter.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	meter.add_theme_font_size_override("font_size", 1)
+	var background := StyleBoxFlat.new()
+	background.bg_color = Color("#301521")
+	var foreground := StyleBoxFlat.new()
+	foreground.bg_color = fill
+	meter.add_theme_stylebox_override("background", background)
+	meter.add_theme_stylebox_override("fill", foreground)
+	parent.add_child(meter)
+	return meter
+
+func _pop(control: Control, strength: float) -> void:
+	if reduced: return
+	control.pivot_offset = control.size * 0.5
+	motion_pops[control.get_instance_id()] = {"node": control, "age": 0.0, "strength": strength}
+
+func _queue_toast(copy: String, priority: int, duration: float) -> void:
+	var item := {"copy": copy, "priority": priority, "duration": maxf(0.3, duration)}
+	if not active_toast.is_empty() and str(active_toast.copy) == copy: return
+	for queued in toast_queue:
+		if str(queued.copy) == copy: return
+	if active_toast.is_empty() or priority > int(active_toast.priority):
+		if not active_toast.is_empty() and toast_remaining > 0.8:
+			active_toast.duration = toast_remaining
+			toast_queue.append(active_toast)
+		active_toast = item
+		toast_remaining = float(item.duration)
+		_pop(contract_notice_label, 0.018)
+	else:
+		toast_queue.append(item)
+	toast_queue.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.priority) > int(b.priority))
+	while toast_queue.size() > TOAST_LIMIT: toast_queue.pop_back()
+	_update_ticker()
+
+func _update_ticker() -> void:
+	if contract_notice == null: return
+	contract_notice.visible = last_sim != null and last_sim.state in ["running", "between", "paused"]
+	if not active_toast.is_empty():
+		contract_notice_label.text = str(active_toast.copy)
+		contract_notice_label.add_theme_color_override("font_color", Color("#b5f1cf") if int(active_toast.priority) >= 3 else Color("#edc5b2"))
+	elif last_sim != null:
+		contract_notice_label.text = "契约 · " + last_sim.contract_status()
+		contract_notice_label.add_theme_color_override("font_color", MUTED)
+	contract_notice_label.tooltip_text = contract_notice_label.text
+
+func _process(delta: float) -> void:
+	if last_sim == null or get_child_count() == 0 or not get_child(0).visible: return
+	if last_sim.state not in ["running", "between"]: return
+	for i in hero_buttons.size():
+		var base: Vector2 = UI_LAYOUT.battle_hero_card_rect.position + UI_LAYOUT.battle_hero_card_gap * i
+		var lift := -3.0 if i == last_selected_id or hero_buttons[i].is_hovered() else 0.0
+		var goal := base + Vector2(0.0, lift if not reduced else 0.0)
+		hero_buttons[i].position = hero_buttons[i].position.lerp(goal, minf(1.0, delta * 17.0)) if not reduced else goal
+		if hero_hp_trails[i].value > hero_hp_bars[i].value:
+			hero_hp_trails[i].value = move_toward(hero_hp_trails[i].value, hero_hp_bars[i].value, delta * hero_hp_bars[i].max_value * 0.5) if not reduced else hero_hp_bars[i].value
+	for id in motion_pops.keys():
+		var motion: Dictionary = motion_pops[id]
+		var control: Control = motion.node
+		if not is_instance_valid(control):
+			motion_pops.erase(id)
+			continue
+		motion.age = float(motion.age) + delta
+		var age := float(motion.age)
+		if reduced or age > 0.45:
+			control.scale = Vector2.ONE
+			motion_pops.erase(id)
+		else:
+			control.scale = Vector2.ONE * (1.0 + sin(age / 0.45 * PI) * exp(-age * 5.0) * float(motion.strength))
+	shimmer_remaining = maxf(0.0, shimmer_remaining - delta)
+	xp_shimmer.visible = shimmer_remaining > 0.0 and not reduced
+	if xp_shimmer.visible:
+		xp_shimmer.position.x = xp_bar.position.x + (1.0 - shimmer_remaining / 0.65) * (xp_bar.size.x - xp_shimmer.size.x)
+		xp_shimmer.modulate.a = sin(shimmer_remaining / 0.65 * PI)
+	if toast_remaining > 0.0:
+		toast_remaining -= delta
+		if toast_remaining <= 0.0:
+			active_toast.clear()
+			if not toast_queue.is_empty():
+				active_toast = toast_queue.pop_front()
+				toast_remaining = float(active_toast.duration)
+				_pop(contract_notice_label, 0.018)
+			_update_ticker()
+	if danger_remaining > 0.0:
+		danger_remaining -= delta
+		if danger_remaining <= 0.0: boss_skill_warning_panel.hide()
+	if arrival_remaining > 0.0:
+		arrival_remaining -= delta
+		if arrival_remaining <= 0.0:
+			boss_alert.hide()
+			boss_alert_frame.hide()
+
+func reset_transients() -> void:
+	for motion: Dictionary in motion_pops.values():
+		if is_instance_valid(motion.node): motion.node.scale = Vector2.ONE
+	motion_pops.clear()
+	toast_queue.clear()
+	active_toast.clear()
+	toast_remaining = 0.0
+	danger_remaining = 0.0
+	arrival_remaining = 0.0
+	deployment_queue.clear()
 	deployment_notice_active = false
+	arena_event_until_ms = 0
+	for transient in [deployment_notice, contract_notice, boss_alert, boss_alert_frame, boss_scene_tint, boss_skill_warning_panel, info_popover, xp_shimmer]:
+		if is_instance_valid(transient): transient.hide()
+	for old_tween in [contract_notice_tween, boss_skill_warning_tween, boss_skill_flash_tween]:
+		if old_tween != null and old_tween.is_valid(): old_tween.kill()
+	buff_page = 0
+	buff_signature = ""
+	buff_seen.clear()
+	last_xp = -1
+	shimmer_remaining = 0.0
+	previous_selection = -99
+	previous_q_ready = false
+	previous_e_ready = false
+	last_run_key = ""
+	signature = ""

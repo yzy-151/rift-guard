@@ -28,6 +28,7 @@ var checkpoint_title: Label
 var checkpoint_detail: Label
 var select_sound: AudioStreamPlayer
 var confirm_sound: AudioStreamPlayer
+var starfall_button: Button
 
 func build(owner_hud) -> void:
 	hud = owner_hud
@@ -52,6 +53,10 @@ func build(owner_hud) -> void:
 	owner_hud.label(root, Vector2(74, 124), Vector2(760, 20), "不同模式使用独立规则与地图，强化均可无限叠加。", 12, MUTED)
 	settings_button = _textured_button(root, Rect2(1026, 50, 196, 52), SETTINGS_SKIN, "⚙  设置  F10", false)
 	settings_button.pressed.connect(func(): _play(confirm_sound); settings_requested.emit())
+	starfall_button = _textured_button(root, Rect2(750, 50, 254, 52), SETTINGS_SKIN, "星夜守望  /  附加模式", true)
+	starfall_button.name = "Mode_starfall"
+	starfall_button.tooltip_text = "独立月泉远征与三人同行玩法；不改变裂隙守望的剧情和构筑。"
+	starfall_button.pressed.connect(func(): _play(confirm_sound); root.hide(); chosen.emit("starfall"))
 	_build_mode_card(Rect2(64, 176, 560, 330), "rift_watch", "01", "裂隙守望", "多角色路线防守", "八关剧情战役 · 折线路径 · 固定 Boss\n守卫水晶，并在每关重建卡牌构筑", "进入关卡选择", "res://assets/ui/rift_v2/stage_thumbnails/stage_03.png", true)
 	_build_mode_card(Rect2(656, 176, 560, 330), "endless_survival", "∞", "无尽生存", "四屏追击生存", "四边刷怪 · 无限升级 · 动态地形\n操纵旅行者移动，同行者跟随攻击", "立即进入荒原", "res://assets/ui/rift_v2/stage_thumbnails/stage_08.png", false)
 	_build_checkpoint()
@@ -131,7 +136,7 @@ func _build_checkpoint() -> void:
 	panel.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	root.add_child(panel)
 	checkpoint_title = hud.label(panel, Vector2(96, 32), Vector2(650, 28), "基地 / HOME", 19, WHITE)
-	checkpoint_detail = hud.label(panel, Vector2(96, 64), Vector2(650, 46), "漫步双屏基地，与已解锁的角色对话。", 11, MUTED)
+	checkpoint_detail = hud.label(panel, Vector2(96, 64), Vector2(650, 46), "基地 · 雾灯港 · 月影温室\n穿过区域出口，遇见访客与新的故事。", 11, MUTED)
 	checkpoint_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	continue_button = hud.button(panel, Rect2(790, 39, 265, 66), "进入基地  →", false)
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]:
@@ -241,7 +246,7 @@ func activate_at(point: Vector2) -> bool:
 func update_checkpoint(_result: Dictionary, _database) -> void:
 	continue_button.disabled = false
 	checkpoint_title.text = "基地 / HOME"
-	checkpoint_detail.text = "漫步双屏基地，与已解锁的角色对话。"
+	checkpoint_detail.text = "基地 · 雾灯港 · 月影温室\n穿过区域出口，遇见访客与新的故事。"
 
 func open() -> void:
 	root.show()

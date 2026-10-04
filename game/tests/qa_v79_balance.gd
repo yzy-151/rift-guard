@@ -45,7 +45,8 @@ func run() -> void:
  s=setup()
  for h in s.heroes:h.hp=100
  var speed=s.heroes[1].speed
- s.activate_hero_skill(1,s.heroes[1].pos);advance(s,0.8)
+ # V91 healing is an aimed cone; commit it toward the injured ally.
+ s.activate_hero_skill(1,s.heroes[0].pos);advance(s,0.8)
  check(s.heroes[0].hp>100,"Sylphie Q heals allies")
  check(s.heroes[0].invulnerable_timer>0,"Sylphie Q protection applied")
  check(s.heroes[1].speed==speed,"Healing does not permanently stack movement")

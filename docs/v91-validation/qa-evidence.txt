@@ -1,0 +1,435 @@
+FILE: stdout.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.30 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3050 Laptop GPU
+
+V91 RELEASE: checks=78 failures=0; four 15-second combat fixtures, exploration, 3 layouts, 40 voice slots, packaged audio playback
+
+
+FILE: qa_v91_environment_review_final.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+V91 ENVIRONMENT: 12340 checks / 0 failures; 8 stages, 3 arenas, exact terrain union, painted textures
+
+
+FILE: home-pure-final.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+HOME EXPLORATION: 40 checks; 0 failures
+
+
+FILE: home-flow-checked.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.30 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3050 Laptop GPU
+
+V91 HOME FLOW: 0 failures; portals, regional portrait dialogue, persistent journal, return
+
+
+FILE: endless-flow-polished.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.30 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3050 Laptop GPU
+
+V91 ENDLESS FLOW: 0 failures; map selection, actual layouts, squad, return
+
+
+FILE: v91-final.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+PASS 01 upper/0 movement and paint share route
+PASS 01 upper/0 ground stays on road (0.0)
+PASS 01 upper/0 reaches exit without stalling
+PASS 01 upper/1 movement and paint share route
+PASS 01 upper/1 ground stays on road (0.0)
+PASS 01 upper/1 reaches exit without stalling
+PASS 01 upper/2 movement and paint share route
+PASS 01 upper/2 ground stays on road (0.0)
+PASS 01 upper/2 reaches exit without stalling
+PASS 01 main/0 movement and paint share route
+PASS 01 main/0 ground stays on road (0.0)
+PASS 01 main/0 reaches exit without stalling
+PASS 01 main/1 movement and paint share route
+PASS 01 main/1 ground stays on road (0.0)
+PASS 01 main/1 reaches exit without stalling
+PASS 01 main/2 movement and paint share route
+PASS 01 main/2 ground stays on road (0.0)
+PASS 01 main/2 reaches exit without stalling
+PASS 01 lower/0 movement and paint share route
+PASS 01 lower/0 ground stays on road (0.0)
+PASS 01 lower/0 reaches exit without stalling
+PASS 01 lower/1 movement and paint share route
+PASS 01 lower/1 ground stays on road (0.0)
+PASS 01 lower/1 reaches exit without stalling
+PASS 01 lower/2 movement and paint share route
+PASS 01 lower/2 ground stays on road (0.0)
+PASS 01 lower/2 reaches exit without stalling
+PASS 02 upper/0 movement and paint share route
+PASS 02 upper/0 ground stays on road (0.0)
+PASS 02 upper/0 reaches exit without stalling
+PASS 02 upper/1 movement and paint share route
+PASS 02 upper/1 ground stays on road (0.0)
+PASS 02 upper/1 reaches exit without stalling
+PASS 02 upper/2 movement and paint share route
+PASS 02 upper/2 ground stays on road (0.0)
+PASS 02 upper/2 reaches exit without stalling
+PASS 02 main/0 movement and paint share route
+PASS 02 main/0 ground stays on road (0.0)
+PASS 02 main/0 reaches exit without stalling
+PASS 02 main/1 movement and paint share route
+PASS 02 main/1 ground stays on road (0.0)
+PASS 02 main/1 reaches exit without stalling
+PASS 02 main/2 movement and paint share route
+PASS 02 main/2 ground stays on road (0.0)
+PASS 02 main/2 reaches exit without stalling
+PASS 02 lower/0 movement and paint share route
+PASS 02 lower/0 ground stays on road (0.0)
+PASS 02 lower/0 reaches exit without stalling
+PASS 02 lower/1 movement and paint share route
+PASS 02 lower/1 ground stays on road (0.0)
+PASS 02 lower/1 reaches exit without stalling
+PASS 02 lower/2 movement and paint share route
+PASS 02 lower/2 ground stays on road (0.0)
+PASS 02 lower/2 reaches exit without stalling
+PASS 03 upper/0 movement and paint share route
+PASS 03 upper/0 ground stays on road (0.0)
+PASS 03 upper/0 reaches exit without stalling
+PASS 03 upper/1 movement and paint share route
+PASS 03 upper/1 ground stays on road (0.0)
+PASS 03 upper/1 reaches exit without stalling
+PASS 03 upper/2 movement and paint share route
+PASS 03 upper/2 ground stays on road (0.0)
+PASS 03 upper/2 reaches exit without stalling
+PASS 03 main/0 movement and paint share route
+PASS 03 main/0 ground stays on road (0.0)
+PASS 03 main/0 reaches exit without stalling
+PASS 03 main/1 movement and paint share route
+PASS 03 main/1 ground stays on road (0.0)
+PASS 03 main/1 reaches exit without stalling
+PASS 03 main/2 movement and paint share route
+PASS 03 main/2 ground stays on road (0.0)
+PASS 03 main/2 reaches exit without stalling
+PASS 03 lower/0 movement and paint share route
+PASS 03 lower/0 ground stays on road (0.0)
+PASS 03 lower/0 reaches exit without stalling
+PASS 03 lower/1 movement and paint share route
+PASS 03 lower/1 ground stays on road (0.0)
+PASS 03 lower/1 reaches exit without stalling
+PASS 03 lower/2 movement and paint share route
+PASS 03 lower/2 ground stays on road (0.0)
+PASS 03 lower/2 reaches exit without stalling
+PASS 04 upper/0 movement and paint share route
+PASS 04 upper/0 ground stays on road (0.0)
+PASS 04 upper/0 reaches exit without stalling
+PASS 04 upper/1 movement and paint share route
+PASS 04 upper/1 ground stays on road (0.0)
+PASS 04 upper/1 reaches exit without stalling
+PASS 04 upper/2 movement and paint share route
+PASS 04 upper/2 ground stays on road (0.0)
+PASS 04 upper/2 reaches exit without stalling
+PASS 04 main/0 movement and paint share route
+PASS 04 main/0 ground stays on road (0.0)
+PASS 04 main/0 reaches exit without stalling
+PASS 04 main/1 movement and paint share route
+PASS 04 main/1 ground stays on road (0.0)
+PASS 04 main/1 reaches exit without stalling
+PASS 04 main/2 movement and paint share route
+PASS 04 main/2 ground stays on road (0.0)
+PASS 04 main/2 reaches exit without stalling
+PASS 04 lower/0 movement and paint share route
+PASS 04 lower/0 ground stays on road (0.0)
+PASS 04 lower/0 reaches exit without stalling
+PASS 04 lower/1 movement and paint share route
+PASS 04 lower/1 ground stays on road (0.0)
+PASS 04 lower/1 reaches exit without stalling
+PASS 04 lower/2 movement and paint share route
+PASS 04 lower/2 ground stays on road (0.0)
+PASS 04 lower/2 reaches exit without stalling
+PASS 05 upper/0 movement and paint share route
+PASS 05 upper/0 ground stays on road (0.0)
+PASS 05 upper/0 reaches exit without stalling
+PASS 05 upper/1 movement and paint share route
+PASS 05 upper/1 ground stays on road (0.0)
+PASS 05 upper/1 reaches exit without stalling
+PASS 05 upper/2 movement and paint share route
+PASS 05 upper/2 ground stays on road (0.0)
+PASS 05 upper/2 reaches exit without stalling
+PASS 05 main/0 movement and paint share route
+PASS 05 main/0 ground stays on road (0.0)
+PASS 05 main/0 reaches exit without stalling
+PASS 05 main/1 movement and paint share route
+PASS 05 main/1 ground stays on road (0.0)
+PASS 05 main/1 reaches exit without stalling
+PASS 05 main/2 movement and paint share route
+PASS 05 main/2 ground stays on road (0.0)
+PASS 05 main/2 reaches exit without stalling
+PASS 05 lower/0 movement and paint share route
+PASS 05 lower/0 ground stays on road (0.0)
+PASS 05 lower/0 reaches exit without stalling
+PASS 05 lower/1 movement and paint share route
+PASS 05 lower/1 ground stays on road (0.0)
+PASS 05 lower/1 reaches exit without stalling
+PASS 05 lower/2 movement and paint share route
+PASS 05 lower/2 ground stays on road (0.0)
+PASS 05 lower/2 reaches exit without stalling
+PASS 06 upper/0 movement and paint share route
+PASS 06 upper/0 ground stays on road (0.0)
+PASS 06 upper/0 reaches exit without stalling
+PASS 06 upper/1 movement and paint share route
+PASS 06 upper/1 ground stays on road (0.0)
+PASS 06 upper/1 reaches exit without stalling
+PASS 06 upper/2 movement and paint share route
+PASS 06 upper/2 ground stays on road (0.0)
+PASS 06 upper/2 reaches exit without stalling
+PASS 06 main/0 movement and paint share route
+PASS 06 main/0 ground stays on road (0.0)
+PASS 06 main/0 reaches exit without stalling
+PASS 06 main/1 movement and paint share route
+PASS 06 main/1 ground stays on road (0.0)
+PASS 06 main/1 reaches exit without stalling
+PASS 06 main/2 movement and paint share route
+PASS 06 main/2 ground stays on road (0.0)
+PASS 06 main/2 reaches exit without stalling
+PASS 06 lower/0 movement and paint share route
+PASS 06 lower/0 ground stays on road (0.0)
+PASS 06 lower/0 reaches exit without stalling
+PASS 06 lower/1 movement and paint share route
+PASS 06 lower/1 ground stays on road (0.0)
+PASS 06 lower/1 reaches exit without stalling
+PASS 06 lower/2 movement and paint share route
+PASS 06 lower/2 ground stays on road (0.0)
+PASS 06 lower/2 reaches exit without stalling
+PASS 07 upper/0 movement and paint share route
+PASS 07 upper/0 ground stays on road (0.0)
+PASS 07 upper/0 reaches exit without stalling
+PASS 07 upper/1 movement and paint share route
+PASS 07 upper/1 ground stays on road (0.0)
+PASS 07 upper/1 reaches exit without stalling
+PASS 07 upper/2 movement and paint share route
+PASS 07 upper/2 ground stays on road (0.0)
+PASS 07 upper/2 reaches exit without stalling
+PASS 07 main/0 movement and paint share route
+PASS 07 main/0 ground stays on road (0.0)
+PASS 07 main/0 reaches exit without stalling
+PASS 07 main/1 movement and paint share route
+PASS 07 main/1 ground stays on road (0.0)
+PASS 07 main/1 reaches exit without stalling
+PASS 07 main/2 movement and paint share route
+PASS 07 main/2 ground stays on road (0.0)
+PASS 07 main/2 reaches exit without stalling
+PASS 07 lower/0 movement and paint share route
+PASS 07 lower/0 ground stays on road (0.0)
+PASS 07 lower/0 reaches exit without stalling
+PASS 07 lower/1 movement and paint share route
+PASS 07 lower/1 ground stays on road (0.0)
+PASS 07 lower/1 reaches exit without stalling
+PASS 07 lower/2 movement and paint share route
+PASS 07 lower/2 ground stays on road (0.0)
+PASS 07 lower/2 reaches exit without stalling
+PASS 08 upper/0 movement and paint share route
+PASS 08 upper/0 ground stays on road (0.0)
+PASS 08 upper/0 reaches exit without stalling
+PASS 08 upper/1 movement and paint share route
+PASS 08 upper/1 ground stays on road (0.0)
+PASS 08 upper/1 reaches exit without stalling
+PASS 08 upper/2 movement and paint share route
+PASS 08 upper/2 ground stays on road (0.0)
+PASS 08 upper/2 reaches exit without stalling
+PASS 08 main/0 movement and paint share route
+PASS 08 main/0 ground stays on road (0.0)
+PASS 08 main/0 reaches exit without stalling
+PASS 08 main/1 movement and paint share route
+PASS 08 main/1 ground stays on road (0.0)
+PASS 08 main/1 reaches exit without stalling
+PASS 08 main/2 movement and paint share route
+PASS 08 main/2 ground stays on road (0.0)
+PASS 08 main/2 reaches exit without stalling
+PASS 08 lower/0 movement and paint share route
+PASS 08 lower/0 ground stays on road (0.0)
+PASS 08 lower/0 reaches exit without stalling
+PASS 08 lower/1 movement and paint share route
+PASS 08 lower/1 ground stays on road (0.0)
+PASS 08 lower/1 reaches exit without stalling
+PASS 08 lower/2 movement and paint share route
+PASS 08 lower/2 ground stays on road (0.0)
+PASS 08 lower/2 reaches exit without stalling
+PASS displaced ground unit returns to route
+PASS endless layout selection API exists
+PASS endless growth forecast API exists
+PASS shared skill geometry API exists
+PASS traveler has an explicit delivery mechanism
+PASS hero_01 has an explicit delivery mechanism
+PASS hero_02 has an explicit delivery mechanism
+PASS hero_03 has an explicit delivery mechanism
+PASS hero_04 has an explicit delivery mechanism
+PASS hero_06 has an explicit delivery mechanism
+PASS hero_07 has an explicit delivery mechanism
+PASS hero_08 has an explicit delivery mechanism
+PASS hero_10 has an explicit delivery mechanism
+PASS hero_13 has an explicit delivery mechanism
+PASS ten heroes cover at least five attack mechanisms
+PASS cross includes horizontal arm
+PASS cross includes vertical arm
+PASS cross excludes empty corner
+PASS base cross does not reach beyond its declared arm
+PASS resonant core expands the shared ultimate preview
+PASS resonant core expands actual noncircular ultimate damage
+PASS cast direction remains committed when caster moves during anticipation
+PASS water lance truly pierces a straight line without bending
+PASS first piercing card increases actual hit capacity (0)
+PASS first piercing card increases actual hit capacity (1)
+PASS locked straight shot can be evaded after launch
+PASS lob does not damage before reaching its locked ground point
+PASS moving away avoids lob splash
+PASS returning blade hits each enemy once per leg
+PASS music attack creates three distinct fixed rays
+PASS scissor cone waits for the attack hit frame
+PASS moving behind the fixed cone avoids scissor damage
+PASS traveler actual skill release exposes shared footprint
+PASS traveler survives own normal skill sequence
+PASS hero_01 actual skill release exposes shared footprint
+PASS hero_01 survives own normal skill sequence
+PASS hero_02 actual skill release exposes shared footprint
+PASS hero_02 survives own normal skill sequence
+PASS hero_03 actual skill release exposes shared footprint
+PASS hero_03 survives own normal skill sequence
+PASS hero_04 actual skill release exposes shared footprint
+PASS hero_04 survives own normal skill sequence
+PASS hero_06 actual skill release exposes shared footprint
+PASS hero_06 survives own normal skill sequence
+PASS hero_07 actual skill release exposes shared footprint
+PASS hero_07 survives own normal skill sequence
+PASS hero_08 actual skill release exposes shared footprint
+PASS hero_08 survives own normal skill sequence
+PASS hero_10 actual skill release exposes shared footprint
+PASS hero_10 survives own normal skill sequence
+PASS hero_13 actual skill release exposes shared footprint
+PASS hero_13 survives own normal skill sequence
+PASS layout accepted blood_gate
+PASS layout loads actual terrain and safe start blood_gate
+PASS layout preview comes from terrain blood_gate
+PASS layout accepted frost_isles
+PASS layout loads actual terrain and safe start frost_isles
+PASS layout preview comes from terrain frost_isles
+PASS layout accepted wind_cross
+PASS layout loads actual terrain and safe start wind_cross
+PASS layout preview comes from terrain wind_cross
+PASS three layouts have different playable obstacle fields
+PASS endless opening publishes entry feedback for each deployed hero
+PASS repeated start cannot replay entry feedback
+PASS boss advance warns fifteen seconds ahead
+PASS each phase supplies once with bounded recovery
+PASS eight-second supply window suspends reinforcement pressure
+PASS inherited endless build keeps chosen layout
+PASS objective rotation includes a physical supply point
+PASS supply objective completes through real time inside its circle
+PASS charger commits a visible windup before charging
+PASS sidestepping evades a committed charge
+PASS brute warns before a bounded spin attack
+PASS remaining in brute spin takes periodic contact damage
+PASS freeze pauses the committed dash warning
+PASS committed charge rejoins its original road segment
+PASS boss landing displacement rejoins the painted route
+PASS summoned ground units inherit route and progress
+V91 SIMULATION: checks=294 failures=0
+
+
+FILE: melee-final.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+PASS grunt stops one body away: 61.20
+PASS grunt deals real melee damage from the stand-off point
+PASS grunt holds a stable attack position
+PASS runner stops one body away: 60.00
+PASS runner deals real melee damage from the stand-off point
+PASS runner holds a stable attack position
+PASS armored stops one body away: 66.80
+PASS armored deals real melee damage from the stand-off point
+PASS armored holds a stable attack position
+PASS charger stops one body away: 65.20
+PASS charger deals real melee damage from the stand-off point
+PASS charger holds a stable attack position
+PASS shielded stops one body away: 78.80
+PASS shielded deals real melee damage from the stand-off point
+PASS shielded holds a stable attack position
+PASS originium_bug stops one body away: 60.00
+PASS originium_bug deals real melee damage from the stand-off point
+PASS originium_bug holds a stable attack position
+PASS hilichurl_brute stops one body away: 96.00
+PASS hilichurl_brute deals real melee damage from the stand-off point
+PASS hilichurl_brute holds a stable attack position
+PASS crowd member 0 avoids hero overlap
+PASS crowd member 1 avoids hero overlap
+PASS crowd member 2 avoids hero overlap
+PASS crowd member 3 avoids hero overlap
+PASS crowd member 4 avoids hero overlap
+PASS crowd member 5 avoids hero overlap
+PASS crowd member 6 avoids hero overlap
+PASS crowd member 7 avoids hero overlap
+PASS crowd uses separate attack/wait positions: 42.82
+PASS front rank attacks while excess melee enemies wait
+PASS disengaged enemy returns to its interrupted road
+PASS overlapping spawn recovers through movement
+PASS charge landing rebuilds melee separation
+PASS boss jump landing reacquires a safe melee position
+PASS moving beyond committed contact range dodges a normal swing
+PASS ranged enemies keep their original ranged stopping distance
+PASS brute cannot start spinning inside a hero body
+PASS brute establishes its body spacing before spinning
+PASS endless three-hero crowd keeps body spacing: 61.20
+PASS endless crowd does not collapse onto shared attack points: 43.17
+PASS endless front ranks still land real attacks
+V91 MELEE SPACING: checks=42 failures=0
+
+
+FILE: melee-pressure-final.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+PASS fixture stays under original active cap 60/96
+PERF 60_stationary mean_ms=5.754 p95_ms=8.895 max_ms=24.065 ticks_per_second=173.8
+PERF 60_slot_batch mean_ms=1.010 p95_ms=2.645 max_ms=3.042 ticks_per_second=990.0
+CROWD count=60 moving=false ready=11 unassigned=0 furthest_hero=245.6
+PASS front ranks keep dealing damage under pressure
+PASS at least one attacker reaches a usable front slot
+PASS fixture stays under original active cap 80/96
+PERF 80_stationary mean_ms=7.084 p95_ms=12.834 max_ms=24.353 ticks_per_second=141.2
+PERF 80_slot_batch mean_ms=1.706 p95_ms=5.094 max_ms=6.147 ticks_per_second=586.1
+CROWD count=80 moving=false ready=13 unassigned=16 furthest_hero=301.1
+PASS front ranks keep dealing damage under pressure
+PASS at least one attacker reaches a usable front slot
+PASS fixture stays under original active cap 96/96
+PERF 96_stationary mean_ms=9.219 p95_ms=17.253 max_ms=30.877 ticks_per_second=108.5
+PERF 96_slot_batch mean_ms=2.204 p95_ms=7.021 max_ms=7.879 ticks_per_second=453.7
+CROWD count=96 moving=false ready=13 unassigned=29 furthest_hero=301.1
+PASS front ranks keep dealing damage under pressure
+PASS at least one attacker reaches a usable front slot
+PASS fixture stays under original active cap 96/96
+PERF 96_moving mean_ms=11.396 p95_ms=17.353 max_ms=30.578 ticks_per_second=87.7
+PERF 96_slot_batch mean_ms=2.066 p95_ms=5.917 max_ms=6.563 ticks_per_second=484.0
+CROWD count=96 moving=true ready=0 unassigned=26 furthest_hero=364.1
+PASS moving squad draws a majority of the pursuing crowd: 71/96
+PASS front ranks keep dealing damage under pressure
+PASS at least one attacker reaches a usable front slot
+PASS mixed first-wave enemies traverse every original route without a junction deadlock
+WALL front crossed=8/12
+PASS wall approach reaches the squad instead of blocking the whole wave
+PASS wall pursuit resumes actual attacks
+PASS all rear-rank enemies cross once defeated front ranks release passage
+PASS wall approach keeps strict final body spacing: 42.60
+V91 PRESSURE: checks=18 failures=0
+
+
+FILE: classic-final.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+CLASSIC REGRESSIONS: checks=246 failures=0
+
+
+FILE: qa-presentation.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.30 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3050 Laptop GPU
+
+V91 PRESENTATION QA: 112 checks; 0 failures
+
+
+FILE: death-behavior.log
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+FINAL DEATH / VOLATILE / BRUTE QA: 27 checks; 0 failures; bug explosion frame 30; hurt events 1

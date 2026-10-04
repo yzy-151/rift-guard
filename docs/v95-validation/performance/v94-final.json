@@ -1,0 +1,217 @@
+{
+	"fixtures": [
+		{
+			"archive": {
+				"max_ms": 0.022,
+				"mean_ms": 0.0117416666666667,
+				"p95_ms": 0.017,
+				"samples": 120
+			},
+			"draw": {
+				"max_ms": 6.651,
+				"mean_ms": 4.742175,
+				"p95_ms": 6.306,
+				"samples": 120
+			},
+			"draw_hero": {
+				"max_ms": 3.243,
+				"mean_ms": 0.0852595238095236,
+				"p95_ms": 0.108,
+				"samples": 420
+			},
+			"draw_stage": {
+				"max_ms": 33.442,
+				"mean_ms": 3.22111428571429,
+				"p95_ms": 3.917,
+				"samples": 140
+			},
+			"draw_telegraphs": {
+				"max_ms": 0.006,
+				"mean_ms": 0.00341428571428572,
+				"p95_ms": 0.004,
+				"samples": 140
+			},
+			"enemy_count": 0,
+			"events": {
+				"max_ms": 0.136,
+				"mean_ms": 0.0361833333333333,
+				"p95_ms": 0.051,
+				"samples": 120
+			},
+			"fixture": "campaign-empty",
+			"frame": {
+				"max_ms": 14.827,
+				"mean_ms": 11.8853833333333,
+				"p95_ms": 14.046,
+				"samples": 120
+			},
+			"hud": {
+				"max_ms": 1.402,
+				"mean_ms": 0.826908333333333,
+				"p95_ms": 1.165,
+				"samples": 120
+			},
+			"projectile_count": 0,
+			"quality": 1.0,
+			"simulation": {
+				"max_ms": 0.641,
+				"mean_ms": 0.292533333333333,
+				"p95_ms": 0.409,
+				"samples": 120
+			},
+			"visual": {
+				"max_ms": 0.115,
+				"mean_ms": 0.0658666666666667,
+				"p95_ms": 0.091,
+				"samples": 120
+			}
+		},
+		{
+			"archive": {
+				"max_ms": 0.038,
+				"mean_ms": 0.0223666666666667,
+				"p95_ms": 0.034,
+				"samples": 120
+			},
+			"draw": {
+				"max_ms": 11.817,
+				"mean_ms": 6.6386,
+				"p95_ms": 10.108,
+				"samples": 120
+			},
+			"draw_enemy": {
+				"max_ms": 26.939,
+				"mean_ms": 0.056150510204082,
+				"p95_ms": 0.076,
+				"samples": 1960
+			},
+			"draw_hero": {
+				"max_ms": 0.156,
+				"mean_ms": 0.0702642857142857,
+				"p95_ms": 0.122,
+				"samples": 420
+			},
+			"draw_stage": {
+				"max_ms": 5.946,
+				"mean_ms": 3.41779285714286,
+				"p95_ms": 5.524,
+				"samples": 140
+			},
+			"draw_telegraphs": {
+				"max_ms": 0.211,
+				"mean_ms": 0.0119285714285714,
+				"p95_ms": 0.016,
+				"samples": 140
+			},
+			"enemy_count": 14,
+			"events": {
+				"max_ms": 0.144,
+				"mean_ms": 0.039625,
+				"p95_ms": 0.051,
+				"samples": 120
+			},
+			"fixture": "campaign-crowd",
+			"frame": {
+				"max_ms": 26.292,
+				"mean_ms": 16.498475,
+				"p95_ms": 23.309,
+				"samples": 120
+			},
+			"hud": {
+				"max_ms": 1.636,
+				"mean_ms": 0.927075,
+				"p95_ms": 1.391,
+				"samples": 120
+			},
+			"projectile_count": 0,
+			"quality": 1.0,
+			"simulation": {
+				"max_ms": 3.776,
+				"mean_ms": 1.90841666666667,
+				"p95_ms": 2.929,
+				"samples": 120
+			},
+			"visual": {
+				"max_ms": 0.115,
+				"mean_ms": 0.0715416666666666,
+				"p95_ms": 0.103,
+				"samples": 120
+			}
+		},
+		{
+			"archive": {
+				"max_ms": 0.339,
+				"mean_ms": 0.0808333333333333,
+				"p95_ms": 0.121,
+				"samples": 120
+			},
+			"draw": {
+				"max_ms": 49.53,
+				"mean_ms": 13.6349166666667,
+				"p95_ms": 22.182,
+				"samples": 72
+			},
+			"draw_enemy": {
+				"max_ms": 38.762,
+				"mean_ms": 0.0546337182970998,
+				"p95_ms": 0.068,
+				"samples": 8832
+			},
+			"draw_hero": {
+				"max_ms": 22.246,
+				"mean_ms": 0.218666666666667,
+				"p95_ms": 0.124,
+				"samples": 276
+			},
+			"draw_stage": {
+				"max_ms": 5.371,
+				"mean_ms": 2.80202173913043,
+				"p95_ms": 4.329,
+				"samples": 92
+			},
+			"draw_telegraphs": {
+				"max_ms": 1.865,
+				"mean_ms": 0.230304347826087,
+				"p95_ms": 0.997,
+				"samples": 92
+			},
+			"enemy_count": 96,
+			"events": {
+				"max_ms": 0.795,
+				"mean_ms": 0.0744833333333333,
+				"p95_ms": 0.239,
+				"samples": 120
+			},
+			"fixture": "endless-stress",
+			"frame": {
+				"max_ms": 107.567,
+				"mean_ms": 55.728625,
+				"p95_ms": 88.183,
+				"samples": 120
+			},
+			"hud": {
+				"max_ms": 1.14,
+				"mean_ms": 0.148858333333333,
+				"p95_ms": 0.661,
+				"samples": 120
+			},
+			"projectile_count": 1,
+			"quality": 0.58,
+			"simulation": {
+				"max_ms": 71.825,
+				"mean_ms": 39.5706916666667,
+				"p95_ms": 57.394,
+				"samples": 120
+			},
+			"visual": {
+				"max_ms": 0.145,
+				"mean_ms": 0.0891416666666666,
+				"p95_ms": 0.113,
+				"samples": 120
+			}
+		}
+	],
+	"pack": "D:/FILEEEEEEEEEEE/同人游戏/rift-guard-astra/releases/V94/RiftGuard-V94.pck",
+	"renderer": "Windows",
+	"version": "95.0.0"
+}

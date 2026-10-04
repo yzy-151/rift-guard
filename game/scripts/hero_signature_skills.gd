@@ -1,9 +1,28 @@
 extends RefCounted
 # Gameplay owns all endpoints and hit timing; the view only renders this state.
 const KINDS := ["needle_barrage", "arcane_lance", "chimera", "salon_summon", "hydro_fanfare"]
+const NEEDLE_SPEED := 780.0
+const NEEDLE_RADIUS := 14.0
+const NEEDLE_VOLLEY_COUNTS := [1, 3, 5]
+const NEEDLE_VOLLEY_TIMES := [0.0, 0.55, 1.10]
+const NEEDLE_INTERVAL := 0.072
+
+const BasicAttackRules = preload("res://scripts/basic_attack_rules.gd")
+
+static func launch_attack(sim, hero: Dictionary, victim: Dictionary, damage: float, critical: bool, index: int = 0) -> void:
+	BasicAttackRules.launch_attack(sim, hero, victim, damage, critical, index)
+
+static func attack_hit(sim, shot: Dictionary, enemy: Dictionary, hero: Dictionary) -> void:
+	BasicAttackRules.attack_hit(sim, shot, enemy, hero)
+
+static func tick_attack(sim, shot: Dictionary, dt: float) -> bool:
+	return BasicAttackRules.tick_attack(sim, shot, dt)
 
 static func handles(kind: String) -> bool:
 	return kind in KINDS
+
+static func resonance(sim, hero: Dictionary, kind: String, label: String, point: Vector2) -> void:
+	sim.events.append({"kind":"identity_resonance","pos":point,"hero_id":hero.id,"character_id":hero.character_id,"ability_kind":kind,"value":label,"radius":65.0,"element":hero.element,"duration":0.65})
 
 static func target_point(sim, hero: Dictionary, ability: Dictionary, target: Vector2) -> Vector2:
 	if str(ability.kind) == "hydro_fanfare":
@@ -17,19 +36,23 @@ static func target_point(sim, hero: Dictionary, ability: Dictionary, target: Vec
 	return origin + delta.limit_length(reach)
 
 static func start(sim, hero: Dictionary, ability: Dictionary, target: Vector2, power: float, radius: float) -> void:
+	if float(hero.hp) <= 0.0 or not bool(hero.deployed): return
 	var kind := str(ability.kind)
-	var duration: float = {"needle_barrage":3.2, "arcane_lance":2.2, "chimera":2.6, "salon_summon":12.0, "hydro_fanfare":12.0}[kind]
+	var duration: float = {"needle_barrage":2.75, "arcane_lance":2.2, "chimera":2.6, "salon_summon":12.0, "hydro_fanfare":12.0}[kind]
+	if kind == "needle_barrage": duration = maxf(duration, 1.388 + radius / NEEDLE_SPEED + 0.30)
 	var zone := {"kind":kind, "signature":true, "pos":target, "source":Vector2(hero.pos), "hero_id":int(hero.id), "life":duration, "total":duration, "elapsed":0.0, "power":power, "area":radius, "pulse":0.0, "shots":[], "released":0, "hit_ids":[], "timers":[0.2,0.6,1.0]}
+	zone.geometry=sim.ability_preview_geometry(hero,ability,target)
+	zone.character_id=str(hero.character_id)
 	if kind == "needle_barrage":
-		zone.pos = target_point(sim, hero, ability, target)
-		zone["direction"] = (Vector2(zone.pos) - Vector2(hero.pos)).normalized()
+		zone["direction"] = (target - Vector2(hero.pos)).normalized() if target.distance_squared_to(hero.pos) > 1.0 else Vector2.RIGHT
+		zone.pos = Vector2(hero.pos) + Vector2(zone.direction) * radius
 	elif kind == "chimera":
 		hero.hp = maxf(1.0, float(hero.hp) - float(hero.max_hp) * 0.08)
 	elif kind == "hydro_fanfare":
 		zone.pos = Vector2(hero.pos)
 		sim._damage_area(zone.pos, radius, power, "hydro", int(hero.id))
 	sim.skill_effects.append(zone)
-	sim.events.append({"kind":"signature_start", "skill":kind, "pos":zone.pos, "source":hero.pos, "radius":radius})
+	sim.events.append({"kind":"signature_start", "skill":kind, "pos":zone.pos, "source":hero.pos, "radius":radius,"hero_id":hero.id,"character_id":hero.character_id,"geometry":zone.geometry})
 
 static func candidates(sim, center: Vector2, radius: float) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
@@ -65,39 +88,55 @@ static func tick(sim, zone: Dictionary, dt: float) -> bool:
 			if float(zone.pulse) <= 0.0 and float(zone.life) > 0.4:
 				zone.pulse += 2.0
 				var recipients: Array[Vector2] = []
+				var before := int(zone.get("fanfare",0))
 				for ally: Dictionary in sim.heroes:
 					if ally.hp > 0.0 and bool(ally.deployed) and sim.is_in_ability_area(zone.pos,ally.pos,float(zone.area)):
+						if float(ally.hp)<float(ally.max_hp): zone.fanfare=mini(5,int(zone.get("fanfare",0))+1)
 						ally.hp = minf(float(ally.max_hp),float(ally.hp)+20.0+float(hero.damage)*0.15)
 						recipients.append(ally.pos)
 				sim.events.append({"kind":"signature_heal", "pos":zone.pos, "targets":recipients, "radius":zone.area})
+				if int(zone.get("fanfare",0))>before: resonance(sim,hero,"hydro_fanfare","欢腾 %d/5" % int(zone.fanfare),zone.pos)
 	return float(zone.life) > 0.0
 
-static func _needles(sim, zone: Dictionary, dt: float) -> void:
-	while int(zone.released)<15 and float(zone.elapsed)>=float(int(zone.released)/5)*0.65+float(int(zone.released)%5)*0.066:
-		var index := int(zone.released)
-		if index % 5 == 0:
-			sim.events.append({"kind":"signature_needle_volley","pos":zone.source,"volley":index/5})
-		var direction := Vector2(zone.direction)
-		var side := Vector2(-direction.y,direction.x)
-		var offset: float = [0.0,-34.0,34.0,-62.0,62.0][index % 5]
-		var source := Vector2(zone.source)-direction*20.0+side*offset
-		zone.shots.append({"pos":source,"start":source,"age":0.0,"index":index,"hits":[],"done":false})
-		zone.released = index+1
+static func _needles(sim, zone: Dictionary, _dt: float) -> void:
+	var direction := Vector2(zone.direction)
+	var side := Vector2(-direction.y,direction.x)
+	var global_index := 0
+	for volley in 3:
+		for member in int(NEEDLE_VOLLEY_COUNTS[volley]):
+			var release_time: float = float(NEEDLE_VOLLEY_TIMES[volley]) + float(member) * NEEDLE_INTERVAL
+			if global_index >= int(zone.released) and float(zone.elapsed) + 0.00001 >= release_time:
+				if member == 0:
+					sim.events.append({"kind":"signature_needle_volley","pos":zone.source,"direction":direction,"volley":volley,"count":NEEDLE_VOLLEY_COUNTS[volley],"hero_id":zone.hero_id})
+				var offset: float = [0.0,-26.0,26.0,-52.0,52.0][member]
+				var source := Vector2(zone.source) + side * offset
+				zone.shots.append({"pos":source,"previous":source,"start":source,"release_time":release_time,"age":0.0,"index":global_index,"volley":volley,"hits":[],"done":false})
+				zone.released = global_index + 1
+			global_index += 1
 	for shot: Dictionary in zone.shots:
 		if bool(shot.done): continue
 		var previous := Vector2(shot.pos)
-		shot.age = float(shot.age)+dt
-		var distance := float(shot.age)*900.0
-		var direction := Vector2(zone.direction)
+		shot.previous = previous
+		# Newly released needles only travel for the time since their own release.
+		# This keeps slow-motion, single-step and coarse frame ticks equivalent.
+		shot.age = maxf(0.0, float(zone.elapsed) - float(shot.release_time))
+		var distance := minf(float(shot.age) * NEEDLE_SPEED, float(zone.area))
 		var offset := Vector2(shot.start)-Vector2(zone.source)
-		shot.pos = Vector2(zone.source)+direction*minf(distance,float(zone.area))+offset*(1.0-smoothstep(0.0,125.0,distance))
+		shot.pos = Vector2(zone.source) + direction * distance + offset * (1.0 - smoothstep(0.0,160.0,distance))
 		for enemy: Dictionary in sim.enemies.duplicate():
-			if enemy.hp <= 0.0 or int(enemy.id) in shot.hits: continue
-			if segment_hit(enemy.pos,previous,shot.pos,18.0):
+			if enemy.hp <= 0.0 or int(enemy.id) in shot.hits or not sim._ability_target_visible(enemy.pos): continue
+			if segment_hit(enemy.pos,previous,shot.pos,NEEDLE_RADIUS):
 				shot.hits.append(int(enemy.id))
 				sim.apply_hit(enemy,float(zone.power),"",int(zone.hero_id))
+				var stitches: Dictionary = zone.get("stitches",{})
+				stitches[int(enemy.id)]=int(stitches.get(int(enemy.id),0))+1
+				zone.stitches=stitches
+				if int(stitches[int(enemy.id)])%5==0:
+					var owner: Dictionary=sim.heroes[int(zone.hero_id)]
+					owner.hp=minf(float(owner.max_hp),float(owner.hp)+float(owner.max_hp)*0.035)
+					resonance(sim,owner,"needle_barrage","五针缝合",owner.pos)
 				enemy.slow_timer = maxf(float(enemy.get("slow_timer",0.0)),2.0)
-				sim.events.append({"kind":"signature_needle_hit","pos":enemy.pos,"direction":direction})
+				sim.events.append({"kind":"signature_needle_hit","pos":enemy.pos,"direction":direction,"hero_id":zone.hero_id,"needle_index":shot.index})
 		if distance >= float(zone.area):
 			shot.done = true
 			shot["ended_at"] = float(zone.elapsed)
@@ -132,14 +171,19 @@ static func _chimera(sim, zone: Dictionary) -> void:
 	while int(zone.released)<3 and float(zone.elapsed)>=thresholds[int(zone.released)]:
 		var index := int(zone.released)
 		var hit_positions: Array[Vector2] = []
-		for enemy: Dictionary in candidates(sim,zone.pos,float(zone.area)):
+		for enemy: Dictionary in sim.enemies.duplicate():
+			if enemy.hp<=0 or not sim._ability_target_visible(enemy.pos) or not sim.is_in_skill_geometry(zone.geometry,enemy.pos): continue
 			var marks := int(enemy.get("amiya_marks",0)) if float(enemy.get("amiya_mark_until",0.0)) > sim.elapsed else 0
 			var bonus := 1.0+float(marks)*0.3 if index==2 else 1.0
 			sim.apply_hit(enemy,float(zone.power)*(0.35 if index<2 else 1.2)*bonus,"electro",int(zone.hero_id))
 			enemy.slow_timer = maxf(float(enemy.get("slow_timer",0.0)),2.0)
-			if index==2: enemy.amiya_marks = 0
+			if index==2:
+				enemy.amiya_marks = 0
+				var owner: Dictionary=sim.heroes[int(zone.hero_id)]
+				owner.energy=minf(float(owner.max_energy),float(owner.energy)+float(marks)*2.0)
+				if marks>0: resonance(sim,owner,"chimera","印记解放 +%d" % (marks*2),enemy.pos)
 			hit_positions.append(enemy.pos)
-		sim.events.append({"kind":"signature_chimera_pulse","pos":zone.pos,"radius":zone.area,"index":index,"targets":hit_positions})
+		sim.events.append({"kind":"signature_chimera_pulse","pos":zone.pos,"source":zone.source,"radius":zone.area,"geometry":zone.geometry,"index":index,"targets":hit_positions})
 		zone.released = index+1
 
 static func salon_position(zone: Dictionary, index: int) -> Vector2:
@@ -179,5 +223,5 @@ static func outgoing_multiplier(sim, id: int) -> float:
 		if bool(zone.get("signature",false)) and str(zone.kind)=="hydro_fanfare" and float(zone.life)>0.4 and not bool(zone.get("cancelled",false)):
 			var owner: Dictionary = sim.heroes[int(zone.hero_id)]
 			if owner.hp>0.0 and bool(owner.deployed) and sim.is_in_ability_area(owner.pos,sim.heroes[id].pos,float(zone.area)):
-				return 1.35
+				return 1.20+float(zone.get("fanfare",0))*0.05
 	return 1.0

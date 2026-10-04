@@ -1,0 +1,99 @@
+[
+  {
+    "after": {
+      "enemy_hp": [],
+      "energy": 130.0,
+      "hp": 835.2,
+      "pos": "(566.0, 416.0)",
+      "reservoir": 0
+    },
+    "before": {
+      "energy": 130.0,
+      "hp": 835.2,
+      "pos": "(566.0, 416.0)",
+      "reservoir": 0
+    },
+    "case": "relay",
+    "events": {
+      "relay:active": 1,
+      "relay:cooldown": 1,
+      "relay:warning": 1
+    },
+    "frames": 192,
+    "seconds": 8,
+    "stage": "stage_01"
+  },
+  {
+    "after": {
+      "enemy_hp": [],
+      "energy": 24.0,
+      "hp": 801.2,
+      "pos": "(371.0, 467.0)",
+      "reservoir": 8.0
+    },
+    "before": {
+      "energy": 0.0,
+      "hp": 745.2,
+      "pos": "(371.0, 467.0)",
+      "reservoir": 80.0
+    },
+    "case": "spring",
+    "events": {
+      "spring:pulse": 4
+    },
+    "frames": 192,
+    "seconds": 8,
+    "stage": "stage_02"
+  },
+  {
+    "after": {
+      "enemy_hp": [],
+      "energy": 130.0,
+      "hp": 835.2,
+      "pos": "(855.0, 530.0)",
+      "reservoir": 0
+    },
+    "before": {
+      "energy": 130.0,
+      "hp": 835.2,
+      "pos": "(472.0, 530.0)",
+      "reservoir": 0
+    },
+    "case": "wind_lane",
+    "events": {
+      "wind_lane:pulse": 3
+    },
+    "frames": 192,
+    "seconds": 8,
+    "stage": "stage_03"
+  },
+  {
+    "after": {
+      "enemy_hp": [
+        56.0,
+        56.0,
+        56.0
+      ],
+      "energy": 130.0,
+      "hp": 81.7241379310345,
+      "pos": "(710.0, 411.0)",
+      "reservoir": 0
+    },
+    "before": {
+      "energy": 130.0,
+      "hp": 90.0,
+      "pos": "(710.0, 321.0)",
+      "reservoir": 0
+    },
+    "case": "hazard_lane",
+    "events": {
+      "hazard_lane:active": 1,
+      "hazard_lane:cooldown": 1,
+      "hazard_lane:pulse": 3,
+      "hazard_lane:warning": 1
+    },
+    "frames": 192,
+    "seconds": 8,
+    "stage": "stage_05"
+  }
+]

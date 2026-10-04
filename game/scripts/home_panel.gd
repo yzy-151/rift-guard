@@ -6,6 +6,9 @@ signal exit_requested
 
 const Sequences = preload("res://scripts/character_sequence_library.gd")
 const SpriteAnchor = preload("res://scripts/sprite_anchor.gd")
+const Regions = preload("res://scripts/home_regions.gd")
+const Exploration = preload("res://scripts/home_exploration.gd")
+const RegionArt = preload("res://scripts/home_region_art.gd")
 const MAP_WIDTH := 2560.0
 const VIEW_WIDTH := 1280.0
 const VIEW_HEIGHT := 720.0
@@ -37,7 +40,11 @@ const CONFIRM_AUDIO = preload("res://assets/helltaker/audio/button_dialogue_conf
 
 class HomeInterior extends Node2D:
 	var font: Font
+	var owner_panel
 	func _draw() -> void:
+		if owner_panel != null and owner_panel.exploration.region != "base":
+			RegionArt.draw(self, owner_panel.exploration.region, owner_panel.elapsed, font)
+			return
 		draw_rect(Rect2(0, 0, MAP_WIDTH, VIEW_HEIGHT), Color("#0c0a16"))
 		# The same 100px square floor modules used by the endless battle map.
 		for col in 26:
@@ -93,8 +100,10 @@ class HomeMap extends Node2D:
 	var sequences
 	var font: Font
 	func _draw() -> void:
-		for facility: Dictionary in FACILITIES:
+		for facility: Dictionary in owner_panel.facilities():
 			_draw_facility(facility)
+		for portal: Dictionary in Regions.portals(owner_panel.exploration.region):
+			_draw_portal(portal)
 		var actors: Array[Dictionary] = owner_panel.npcs.duplicate()
 		actors.append({"id":"traveler","name":"你","pos":owner_panel.player_pos})
 		actors.sort_custom(func(a: Dictionary,b: Dictionary)->bool:return a.pos.y < b.pos.y)
@@ -110,8 +119,28 @@ class HomeMap extends Node2D:
 				_draw_shadow(point + Vector2(0,5), 38.0 + sin(owner_panel.elapsed * 3.0)*2.0, 10.0, Color(0.42,0.86,0.79,0.24))
 			_draw_character(id, "run" if player and owner_panel.moving else "idle", point, facing)
 			if font != null and not player:
-				draw_string(font, point + Vector2(-60,-sequences.display_size(id)+10), str(actor.name), HORIZONTAL_ALIGNMENT_CENTER,120,16,Color("#fff0eb"))
-				if active: draw_string(font, point + Vector2(-40,-sequences.display_size(id)-14), "[F] 对话", HORIZONTAL_ALIGNMENT_CENTER,80,15,Color("#a8e8d7"))
+				var size := minf(144.0, sequences.display_size(id))
+				draw_string(font, point + Vector2(-70,-size+5), str(actor.name), HORIZONTAL_ALIGNMENT_CENTER,140,16,Color("#fff0eb"))
+				if active: draw_string(font, point + Vector2(-55,-size-18), "[F] 对话", HORIZONTAL_ALIGNMENT_CENTER,110,15,Color("#a8e8d7"))
+				elif owner_panel.exploration.region != "base" and not owner_panel.exploration.completed.has(Regions.story_key(owner_panel.exploration.region,id)):
+					draw_circle(point+Vector2(0,-size-22),8,Color("#f7d598"))
+
+	func _draw_portal(portal: Dictionary) -> void:
+		var x := float(portal.x)
+		var tint := Color(str(Regions.INFO[str(portal.id)].accent))
+		var active := str(owner_panel.interaction_target().get("destination", "")) == str(portal.id)
+		var frame := Rect2(x-43,307,86,205)
+		draw_rect(frame,Color("#111322"))
+		draw_rect(frame,tint if active else tint.darkened(0.45),false,5)
+		draw_rect(Rect2(x-32,320,64,179),Color(tint,0.13))
+		for i in range(4):
+			var y := 475.0-fposmod(owner_panel.elapsed*24+i*37,145.0)
+			draw_line(Vector2(x-24,y),Vector2(x,y-12),Color(tint,0.35),3)
+			draw_line(Vector2(x,y-12),Vector2(x+24,y),Color(tint,0.35),3)
+		draw_line(Vector2(x-49,514),Vector2(x+49,514),tint,5)
+		if font != null:
+			draw_string(font,Vector2(x-95,282),str(portal.name),HORIZONTAL_ALIGNMENT_CENTER,190,17,tint)
+			draw_string(font,Vector2(x-85,545),"[F] 通行" if active else "区域出口",HORIZONTAL_ALIGNMENT_CENTER,170,14,Color("#e1cbd0"))
 
 	func _draw_facility(facility: Dictionary) -> void:
 		var center := Vector2(float(facility.x), 385.0)
@@ -145,7 +174,7 @@ class HomeMap extends Node2D:
 		if texture == null:
 			return
 		var frame: int = sequences.frame_at_time(id, state, owner_panel.elapsed)
-		var size: float = sequences.display_size(id)
+		var size: float = minf(144.0, sequences.display_size(id))
 		var placement: Dictionary = SpriteAnchor.placement(Vector2.ONE * size, sequences.cell(id), sequences.pivot(id), facing)
 		var dest: Rect2 = placement.rect
 		draw_set_transform(foot, 0.0, Vector2(float(placement.flip_x), 1.0))
@@ -178,11 +207,17 @@ var facing := 1.0
 var busy := false
 var hover_sound: AudioStreamPlayer
 var confirm_sound: AudioStreamPlayer
+var exploration
+var region_title: Label
+var region_summary: Label
+var region_fade: ColorRect
 
 func build(owner_hud, game_database, progress) -> void:
 	hud = owner_hud
 	database = game_database
 	compendium = progress
+	exploration = Exploration.new(str(compendium.save_path).get_base_dir().path_join("home-exploration.json"))
+	if exploration.region != "base": player_pos = Vector2(185,535)
 	layer = 15
 	root = Control.new()
 	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -191,6 +226,7 @@ func build(owner_hud, game_database, progress) -> void:
 	add_child(root)
 	interior = HomeInterior.new()
 	interior.font = root.theme.default_font
+	interior.owner_panel = self
 	root.add_child(interior)
 	map = HomeMap.new()
 	map.owner_panel = self
@@ -224,9 +260,9 @@ func build(owner_hud, game_database, progress) -> void:
 	separator.color = Color("#6e2637")
 	separator.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(separator)
-	var title: Label = hud.label(root, Vector2(252, 7), Vector2(390, 26), "基地 / HOME", 17, Color("#fff1e8"))
-	title.add_theme_font_override("font", DISPLAY_FONT)
-	hud.label(root, Vector2(252, 36), Vector2(685, 18), "WASD / 方向键移动  ·  靠近角色或设施按 F 交互", 10, Color("#c9abb3"))
+	region_title = hud.label(root, Vector2(252, 7), Vector2(800, 26), "基地 / HOME", 17, Color("#fff1e8"))
+	region_title.add_theme_font_override("font", DISPLAY_FONT)
+	region_summary = hud.label(root, Vector2(252, 36), Vector2(820, 18), "", 11, Color("#c9abb3"))
 	exit_button = hud.button(root, Rect2(1123, 12, 132, 44), "返回", false)
 	hud.apply_compact_hud_button_style(exit_button)
 	exit_button.pressed.connect(func(): exit_requested.emit())
@@ -249,10 +285,57 @@ func build(owner_hud, game_database, progress) -> void:
 	confirm_sound.stream = CONFIRM_AUDIO
 	confirm_sound.bus = "SFX"
 	add_child(confirm_sound)
+	region_fade = ColorRect.new()
+	region_fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	region_fade.color = Color("#0a0b14")
+	region_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	region_fade.modulate.a = 0.0
+	root.add_child(region_fade)
 	root.hide()
+
+func facilities() -> Array:
+	return FACILITIES if exploration.region == "base" else []
+
+func exploration_story_key(character_id: String) -> String:
+	var key := Regions.story_key(exploration.region,character_id)
+	return key if Regions.stories().has(key) and not exploration.completed.has(key) else ""
+
+func travel_to(destination: String, animated: bool = true) -> bool:
+	var arrival_x := 185.0
+	var connected := false
+	for portal: Dictionary in Regions.portals(exploration.region):
+		if str(portal.id) == destination:
+			arrival_x = float(portal.arrival_x)
+			connected = true
+	if not connected or busy: return false
+	busy = true
+	if animated:
+		var fade_out := create_tween()
+		fade_out.tween_property(region_fade,"modulate:a",1.0,0.18)
+		await fade_out.finished
+	if not exploration.enter(destination): busy = false; return false
+	player_pos = Vector2(arrival_x,535)
+	moving = false
+	refresh_residents()
+	_update_camera()
+	interior.queue_redraw()
+	if animated:
+		var fade_in := create_tween()
+		fade_in.tween_property(region_fade,"modulate:a",0.0,0.26)
+		await fade_in.finished
+	busy = false
+	return true
 
 func refresh_residents() -> void:
 	npcs.clear()
+	if exploration.region != "base":
+		for visitor: Dictionary in Regions.residents(exploration.region):
+			var id := str(visitor.id)
+			if database.characters.has(id) and bool(database.characters[id].get("content_ready",false)) and sequences.has_character(id):
+				npcs.append({"id":id,"name":str(database.characters[id].get("name",id)),"pos":visitor.pos})
+		_update_region_header()
+		map.queue_redraw()
+		return
 	var unlocked: Array[String] = []
 	for id: String in database.characters:
 		if id == "traveler":
@@ -268,6 +351,14 @@ func refresh_residents() -> void:
 		var y := 548.0 + float(index % 3 - 1) * 64.0
 		npcs.append({"id": id, "name": str(database.characters[id].get("name", id)), "pos": Vector2(x, y)})
 	map.queue_redraw()
+	_update_region_header()
+
+func _update_region_header() -> void:
+	var info: Dictionary = Regions.INFO[exploration.region]
+	region_title.text = "%s    ·    已探索 %d / 3    ·    见闻 %d / 7" % [str(info.name),exploration.visited.size(),exploration.completed.size()]
+	region_title.modulate = Color(str(info.accent))
+	var hint := "向右穿过基地，寻找通往雾灯港的出口" if exploration.region == "base" else ("东侧升降梯通往月影温室；西侧回到基地" if exploration.region == "harbor" else "沿花房漫步，与访客交谈；西侧升降梯返回港口")
+	region_summary.text = "WASD 移动 · F 交互    /    " + hint
 
 func open() -> void:
 	refresh_residents()
@@ -294,7 +385,7 @@ func nearest_resident() -> Dictionary:
 func nearest_facility() -> Dictionary:
 	var best: Dictionary = {}
 	var distance := FACILITY_RADIUS
-	for facility: Dictionary in FACILITIES:
+	for facility: Dictionary in facilities():
 		var check := player_pos.distance_to(Vector2(float(facility.x), 480.0))
 		if check < distance:
 			best = facility
@@ -315,6 +406,9 @@ func handle_input(event: InputEvent) -> bool:
 			var target := interaction_target()
 			if not target.is_empty():
 				confirm_sound.play()
+				if target.has("destination"):
+					travel_to(str(target.destination))
+					return true
 				busy = true
 				if target.has("action"): facility_requested.emit(str(target.id))
 				else: interact_requested.emit(str(target.id))
@@ -333,6 +427,7 @@ func _process(dt: float) -> void:
 	move_player(axis, dt)
 	_update_camera()
 	map.queue_redraw()
+	interior.queue_redraw()
 	var target := interaction_target()
 	prompt.text = ""
 	if not target.is_empty():
@@ -342,6 +437,12 @@ func _process(dt: float) -> void:
 func interaction_target() -> Dictionary:
 	var npc := nearest_resident()
 	var facility := nearest_facility()
+	for portal: Dictionary in Regions.portals(exploration.region):
+		var distance := player_pos.distance_to(Vector2(float(portal.x),480))
+		if distance < FACILITY_RADIUS and (npc.is_empty() or distance < player_pos.distance_to(npc.pos)) and (facility.is_empty() or distance < player_pos.distance_to(Vector2(float(facility.x),480))):
+			var target := portal.duplicate()
+			target.destination = str(portal.id)
+			return target
 	if not facility.is_empty() and (npc.is_empty() or player_pos.distance_to(Vector2(float(facility.x),480.0)) < player_pos.distance_to(npc.pos)):
 		return facility
 	return npc

@@ -1,0 +1,734 @@
+[
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_laser"
+		],
+		"frame": 62,
+		"hp_delta": 622.362154198316,
+		"hurt_events": 3,
+		"time": 2.58333333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_orb_hit"
+		],
+		"frame": 126,
+		"hp_delta": 40.1041666666715,
+		"hurt_events": 1,
+		"time": 5.25,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_orb_hit"
+		],
+		"frame": 132,
+		"hp_delta": 40.1041666666715,
+		"hurt_events": 1,
+		"time": 5.5,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_orb_hit"
+		],
+		"frame": 136,
+		"hp_delta": 48.9406779661076,
+		"hurt_events": 1,
+		"time": 5.66666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_orb_hit"
+		],
+		"frame": 140,
+		"hp_delta": 40.1041666666642,
+		"hurt_events": 1,
+		"time": 5.83333333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_orb_hit"
+		],
+		"frame": 141,
+		"hp_delta": 48.9406779660931,
+		"hurt_events": 1,
+		"time": 5.875,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_orb_hit"
+		],
+		"frame": 146,
+		"hp_delta": 39.8275862068986,
+		"hurt_events": 1,
+		"time": 6.08333333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_orb_hit"
+		],
+		"frame": 151,
+		"hp_delta": 40.1041666666642,
+		"hurt_events": 1,
+		"time": 6.29166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_orb_hit",
+			"rift_orb_hit"
+		],
+		"frame": 152,
+		"hp_delta": 88.7682641729916,
+		"hurt_events": 2,
+		"time": 6.33333333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_orb_hit"
+		],
+		"frame": 164,
+		"hp_delta": 39.8275862068986,
+		"hurt_events": 1,
+		"time": 6.83333333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_overhead"
+		],
+		"frame": 178,
+		"hp_delta": 567.038695694522,
+		"hurt_events": 3,
+		"time": 7.41666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-rift",
+		"events": [
+			"rift_storm"
+		],
+		"frame": 243,
+		"hp_delta": 773.234585037993,
+		"hurt_events": 3,
+		"time": 10.125,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_bounce_hit"
+		],
+		"frame": 52,
+		"hp_delta": 56.4758798363546,
+		"hurt_events": 2,
+		"time": 2.16666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_bounce_hit"
+		],
+		"frame": 57,
+		"hp_delta": 43.2661694915223,
+		"hurt_events": 1,
+		"time": 2.375,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_bounce_hit"
+		],
+		"frame": 61,
+		"hp_delta": 78.7203917137522,
+		"hurt_events": 2,
+		"time": 2.54166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_glob_hit"
+		],
+		"frame": 125,
+		"hp_delta": 0.0,
+		"hurt_events": 0,
+		"time": 5.20833333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_glob_hit"
+		],
+		"frame": 133,
+		"hp_delta": 0.0,
+		"hurt_events": 0,
+		"time": 5.54166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_glob_hit"
+		],
+		"frame": 139,
+		"hp_delta": 22.4200209655173,
+		"hurt_events": 2,
+		"time": 5.79166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_glob_hit"
+		],
+		"frame": 142,
+		"hp_delta": 0.0,
+		"hurt_events": 0,
+		"time": 5.91666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_glob_hit"
+		],
+		"frame": 144,
+		"hp_delta": 22.4200209655173,
+		"hurt_events": 2,
+		"time": 6.0,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_reflux"
+		],
+		"frame": 171,
+		"hp_delta": 87.2307043314504,
+		"hurt_events": 2,
+		"time": 7.125,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_court_hit"
+		],
+		"frame": 239,
+		"hp_delta": 48.9342975517793,
+		"hurt_events": 2,
+		"time": 9.95833333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_court_hit"
+		],
+		"frame": 242,
+		"hp_delta": 48.9342975517939,
+		"hurt_events": 2,
+		"time": 10.0833333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_court_hit"
+		],
+		"frame": 251,
+		"hp_delta": 48.9342975517793,
+		"hurt_events": 2,
+		"time": 10.4583333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_court_hit"
+		],
+		"frame": 260,
+		"hp_delta": 21.8871172413783,
+		"hurt_events": 1,
+		"time": 10.8333333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-slime",
+		"events": [
+			"slime_court_hit"
+		],
+		"frame": 265,
+		"hp_delta": 21.8871172413783,
+		"hurt_events": 1,
+		"time": 11.0416666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 53,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 2.20833333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 67,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 2.79166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 82,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 3.41666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 97,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 4.04166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 112,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 4.66666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 127,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 5.29166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 130,
+		"hp_delta": 19.9329103448254,
+		"hurt_events": 1,
+		"time": 5.41666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 136,
+		"hp_delta": 25.7955310344842,
+		"hurt_events": 1,
+		"time": 5.66666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 141,
+		"hp_delta": 72.6964965517254,
+		"hurt_events": 1,
+		"time": 5.875,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 142,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 5.91666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 157,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 6.54166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"galio_entrance"
+		],
+		"frame": 175,
+		"hp_delta": 363.729548801864,
+		"hurt_events": 3,
+		"time": 7.29166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 182,
+		"hp_delta": 15.3486666666722,
+		"hurt_events": 1,
+		"time": 7.58333333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit",
+			"kindred_arrow_hit"
+		],
+		"frame": 185,
+		"hp_delta": 34.0792429378489,
+		"hurt_events": 2,
+		"time": 7.70833333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 188,
+		"hp_delta": 15.2428137930983,
+		"hurt_events": 1,
+		"time": 7.83333333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 189,
+		"hp_delta": 18.7305762711912,
+		"hurt_events": 1,
+		"time": 7.875,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 190,
+		"hp_delta": 15.3486666666722,
+		"hurt_events": 1,
+		"time": 7.91666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 191,
+		"hp_delta": 15.2428137930983,
+		"hurt_events": 1,
+		"time": 7.95833333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit",
+			"kindred_arrow_hit"
+		],
+		"frame": 193,
+		"hp_delta": 34.0792429378489,
+		"hurt_events": 2,
+		"time": 8.04166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 195,
+		"hp_delta": 15.2428137930983,
+		"hurt_events": 1,
+		"time": 8.125,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit",
+			"kindred_arrow_hit"
+		],
+		"frame": 197,
+		"hp_delta": 34.0792429378635,
+		"hurt_events": 2,
+		"time": 8.20833333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 199,
+		"hp_delta": 15.2428137930983,
+		"hurt_events": 1,
+		"time": 8.29166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 201,
+		"hp_delta": 18.7305762711912,
+		"hurt_events": 1,
+		"time": 8.375,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 202,
+		"hp_delta": 15.3486666666577,
+		"hurt_events": 1,
+		"time": 8.41666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 203,
+		"hp_delta": 15.2428137930983,
+		"hurt_events": 1,
+		"time": 8.45833333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 205,
+		"hp_delta": 18.7305762711912,
+		"hurt_events": 1,
+		"time": 8.54166666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 208,
+		"hp_delta": 74.2761471264384,
+		"hurt_events": 2,
+		"time": 8.66666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 237,
+		"hp_delta": 15.9389999999985,
+		"hurt_events": 1,
+		"time": 9.875,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 239,
+		"hp_delta": 15.9389999999985,
+		"hurt_events": 1,
+		"time": 9.95833333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit",
+			"kindred_arrow_hit"
+		],
+		"frame": 240,
+		"hp_delta": 35.3899830508453,
+		"hurt_events": 2,
+		"time": 10.0,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit",
+			"kindred_arrow_hit"
+		],
+		"frame": 242,
+		"hp_delta": 35.2800589129183,
+		"hurt_events": 2,
+		"time": 10.0833333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 243,
+		"hp_delta": 19.4509830508468,
+		"hurt_events": 1,
+		"time": 10.125,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 244,
+		"hp_delta": 15.8290758620715,
+		"hurt_events": 1,
+		"time": 10.1666666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_arrow_hit"
+		],
+		"frame": 245,
+		"hp_delta": 15.8290758620569,
+		"hurt_events": 1,
+		"time": 10.2083333333333,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 283,
+		"hp_delta": 75.8800872783904,
+		"hurt_events": 3,
+		"time": 11.7916666666667,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 297,
+		"hp_delta": 75.880087278405,
+		"hurt_events": 3,
+		"time": 12.375,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 312,
+		"hp_delta": 134.913420611731,
+		"hurt_events": 4,
+		"time": 13.0,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 327,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 13.625,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 342,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 14.25,
+		"vfx_same_frame": true
+	},
+	{
+		"case": "boss-kindred-galio",
+		"events": [
+			"kindred_wolf_strike"
+		],
+		"frame": 357,
+		"hp_delta": 75.8800872783977,
+		"hurt_events": 3,
+		"time": 14.875,
+		"vfx_same_frame": true
+	}
+]

@@ -8,7 +8,7 @@
     "armor": 45,
     "attack": 48,
     "attack_rate": 1.3,
-    "attack_range": 245,
+    "attack_range": 115,
     "move_speed": 118,
     "block": 3,
     "can_hit_air": false,
@@ -21,7 +21,7 @@
       "power": 125,
       "radius": 145,
       "hit_frame_ratio": 0.46,
-      "targeting": "point",
+      "targeting": "direction",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -31,7 +31,11 @@
         "recovery": 0.389,
         "shake": 0.34
       },
-      "attack_ratio": 0.85
+      "attack_ratio": 0.85,
+      "shape": "line",
+      "length": 420,
+      "width": 96,
+      "description": "沿锁定方向挥出贯穿剑气，击退长条区域内敌人并获得少量共享护盾。"
     },
     "ultimate": {
       "name": "星落裁决",
@@ -51,7 +55,8 @@
         "shake": 0.78
       },
       "cooldown": 44.0,
-      "attack_ratio": 2.0
+      "attack_ratio": 2.0,
+      "description": "在选定区域降下星落裁决，并获得少量共享护盾；切换元素后使用对应元素终结技。"
     },
     "passive": {
       "name": "异界适应",
@@ -59,7 +64,9 @@
       "description": "切换元素后下一次技能获得额外反应倍率。"
     },
     "animation_profile": "traveler",
-    "content_ready": true
+    "content_ready": true,
+    "attack_delivery": "melee_cone",
+    "attack_description": "短扇剑斩锁定挥砍方向，命中前敌人可走出剑弧；元素技能提供少量共享护盾。"
   },
   {
     "id": "hero_01",
@@ -70,7 +77,7 @@
     "armor": 22,
     "attack": 50,
     "attack_rate": 1.0,
-    "attack_range": 365,
+    "attack_range": 250,
     "move_speed": 112,
     "block": 0,
     "can_hit_air": true,
@@ -94,7 +101,10 @@
         "shake": 0.34
       },
       "attack_ratio": 0.62,
-      "description": "点按后水环环绕自身10秒，每0.8秒对附近敌人造成44+62%攻击力的水元素伤害，并为自身恢复18+20%攻击力的生命。"
+      "description": "移动水环持续10秒，只命中环带内敌人；每0.8秒治疗范围内生命比例最低的友军。",
+      "shape": "ring",
+      "length": 480,
+      "width": 100
     },
     "ultimate": {
       "name": "碧海赐福",
@@ -115,7 +125,7 @@
       },
       "cooldown": 58.0,
       "attack_ratio": 0.0,
-      "description": "连接已上场队友，使每人的攻击力提高等于哥伦比亚当前攻击力100%的数值，持续25秒。"
+      "description": "为已上场友军提供等同自身攻击力的攻击加成，持续25秒。"
     },
     "passive": {
       "name": "潮声余韵",
@@ -123,7 +133,9 @@
       "description": "连续对同一目标造成水元素伤害时，每次伤害提高4%，最多提高20%。"
     },
     "animation_profile": "hero_01",
-    "content_ready": true
+    "content_ready": true,
+    "attack_delivery": "homing",
+    "attack_description": "追踪水音命中后可跳向附近敌人；潮环中心留出静水区。"
   },
   {
     "id": "hero_02",
@@ -134,7 +146,7 @@
     "armor": 24,
     "attack": 30,
     "attack_rate": 1.15,
-    "attack_range": 325,
+    "attack_range": 225,
     "move_speed": 116,
     "block": 0,
     "can_hit_air": true,
@@ -147,7 +159,7 @@
       "power": 170,
       "radius": 230,
       "hit_frame_ratio": 0.46,
-      "targeting": "point",
+      "targeting": "direction",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -158,7 +170,10 @@
         "shake": 0.34
       },
       "attack_ratio": 0.8,
-      "description": "治疗范围内队友170+80%攻击力生命，获得50共享护盾，并保护范围内队友1.5秒不受伤害。"
+      "description": "朝指定方向展开扇形净风，治疗、净化减速、回复4能量并提供1.5秒保护。",
+      "shape": "cone",
+      "length": 360,
+      "width": 100
     },
     "ultimate": {
       "name": "无咏风域",
@@ -178,7 +193,8 @@
         "shake": 0.78
       },
       "cooldown": 58.0,
-      "attack_ratio": 2.1
+      "attack_ratio": 2.1,
+      "description": "生成牵引风域，持续聚拢敌人并为域内队友恢复生命。"
     },
     "passive": {
       "name": "静风守护",
@@ -186,7 +202,9 @@
       "description": "治疗同时提供短暂护盾与移动速度。"
     },
     "animation_profile": "hero_02",
-    "content_ready": true
+    "content_ready": true,
+    "attack_delivery": "boomerang",
+    "attack_description": "风种固定朝目标方向飞出后折返，每程对每名敌人仅命中一次。"
   },
   {
     "id": "hero_03",
@@ -197,7 +215,7 @@
     "armor": 20,
     "attack": 35,
     "attack_rate": 1.05,
-    "attack_range": 340,
+    "attack_range": 240,
     "move_speed": 114,
     "block": 0,
     "can_hit_air": true,
@@ -243,7 +261,7 @@
       },
       "cooldown": 64.0,
       "attack_ratio": 1.8,
-      "description": "点按展开随身舞台12秒，开幕造成290+180%攻击力水伤；舞台内友军伤害提高35%，每2秒恢复20+15%芙宁娜攻击力生命，离开舞台不再增伤。"
+      "description": "12秒舞台持续恢复区域内队友；每次有效治疗积累欢腾，伤害增益从20%升至最多45%。"
     },
     "passive": {
       "name": "沙龙礼仪",
@@ -251,7 +269,9 @@
       "description": "召唤物命中会附着水元素并返还能量。"
     },
     "animation_profile": "hero_03",
-    "content_ready": true
+    "content_ready": true,
+    "attack_delivery": "lob",
+    "attack_description": "水弹锁定发射时的落点，以抛物线抵达后小范围溅射；移动目标可以躲开。"
   },
   {
     "id": "hero_04",
@@ -262,7 +282,7 @@
     "armor": 18,
     "attack": 52,
     "attack_rate": 0.92,
-    "attack_range": 380,
+    "attack_range": 280,
     "move_speed": 110,
     "block": 0,
     "can_hit_air": true,
@@ -275,7 +295,7 @@
       "power": 195,
       "radius": 230,
       "hit_frame_ratio": 0.46,
-      "targeting": "point",
+      "targeting": "direction",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -285,7 +305,10 @@
         "recovery": 0.389,
         "shake": 0.34
       },
-      "description": "治疗目标区域内友军195点生命。"
+      "description": "向选定方向放出长条治疗水线，净化友军减速并伤害线上敌人；蓄水使下次暴雨威力提高30%。",
+      "shape": "line",
+      "length": 520,
+      "width": 110
     },
     "ultimate": {
       "name": "豪雷积层云",
@@ -305,7 +328,11 @@
         "shake": 0.78
       },
       "cooldown": 61.0,
-      "attack_ratio": 2.2
+      "attack_ratio": 2.2,
+      "description": "落点展开十字暴雨，十字两臂每0.85秒伤害敌人；十字空角不受主技能伤害。",
+      "shape": "cross",
+      "length": 620,
+      "width": 110
     },
     "passive": {
       "name": "魔力潮涌",
@@ -313,7 +340,9 @@
       "description": "能量越高，主动技能的伤害与范围越高。"
     },
     "animation_profile": "hero_04",
-    "content_ready": true
+    "content_ready": true,
+    "attack_delivery": "piercing",
+    "attack_description": "水枪沿发射方向直线贯穿最多3名敌人，穿透卡继续增加上限。"
   },
   {
     "id": "hero_05",
@@ -324,7 +353,7 @@
     "armor": 22,
     "attack": 28,
     "attack_rate": 1.12,
-    "attack_range": 350,
+    "attack_range": 240,
     "move_speed": 112,
     "block": 0,
     "can_hit_air": true,
@@ -385,7 +414,7 @@
     "armor": 26,
     "attack": 49,
     "attack_rate": 1.02,
-    "attack_range": 360,
+    "attack_range": 260,
     "move_speed": 112,
     "block": 0,
     "can_hit_air": true,
@@ -419,7 +448,7 @@
       "power": 300,
       "radius": 250,
       "hit_frame_ratio": 0.58,
-      "targeting": "point",
+      "targeting": "direction",
       "timeline": {
         "duration": 1.18,
         "anticipation": 0.496,
@@ -432,7 +461,10 @@
       "cooldown": 52.0,
       "attack_ratio": 2.5,
       "cast_range": 480,
-      "description": "点选区域，消耗自身8%生命（不致死）；黑晶两次震击各造成(300+250%攻击力)×35%雷伤，终击×120%，每层印记使终击增伤30%，随后消耗印记并减速2秒。"
+      "description": "支付8%最大生命，沿选定方向连续释放三次狭长奇美拉脉冲；终击消耗印记增伤，每层返还2能量。",
+      "shape": "line",
+      "length": 580,
+      "width": 180
     },
     "passive": {
       "name": "黑蛇意志",
@@ -440,7 +472,9 @@
       "description": "生命降低时获得攻击力与减伤。"
     },
     "animation_profile": "hero_06",
-    "content_ready": true
+    "content_ready": true,
+    "attack_delivery": "homing",
+    "attack_description": "黑色法术追踪目标，命中后链跳附近敌人。"
   },
   {
     "id": "hero_07",
@@ -451,7 +485,7 @@
     "armor": 28,
     "attack": 38,
     "attack_rate": 1.1,
-    "attack_range": 340,
+    "attack_range": 235,
     "move_speed": 116,
     "block": 0,
     "can_hit_air": true,
@@ -464,7 +498,7 @@
       "power": 180,
       "radius": 180,
       "hit_frame_ratio": 0.46,
-      "targeting": "point",
+      "targeting": "direction",
       "timeline": {
         "duration": 0.72,
         "anticipation": 0.216,
@@ -475,8 +509,11 @@
         "shake": 0.34
       },
       "element": "pyro",
-      "description": "奏出灼热音浪，造成火元素范围伤害并击退敌人。",
-      "attack_ratio": 1.35
+      "description": "以施法方向展开扇形火音，击退命中敌人，原扇区留下5秒余韵。",
+      "attack_ratio": 1.35,
+      "shape": "cone",
+      "length": 420,
+      "width": 120
     },
     "ultimate": {
       "name": "焰色交响曲",
@@ -485,7 +522,7 @@
       "power": 330,
       "radius": 330,
       "hit_frame_ratio": 0.58,
-      "targeting": "point",
+      "targeting": "direction",
       "timeline": {
         "duration": 1.18,
         "anticipation": 0.496,
@@ -497,8 +534,11 @@
       },
       "cooldown": 65.0,
       "element": "pyro",
-      "description": "引燃交响领域，造成高额火元素范围伤害并强化全队暴击。",
-      "attack_ratio": 2.6
+      "description": "三条平行琴键带每隔0.7秒依次奏响并击退；全队获得10秒18%暴击率，重复释放不永久叠加。",
+      "attack_ratio": 2.6,
+      "shape": "lanes",
+      "length": 600,
+      "width": 68
     },
     "passive": {
       "name": "命运和弦",
@@ -506,7 +546,9 @@
       "description": "音乐攻击积累和声，满层时追加风元素音浪并扩散附着。"
     },
     "animation_profile": "hero_07",
-    "content_ready": true
+    "content_ready": true,
+    "attack_delivery": "fan",
+    "attack_description": "三枚音符按固定扇形方向发射，敌人可以穿过弹道间隙。"
   },
   {
     "id": "hero_08",
@@ -517,7 +559,7 @@
     "armor": 32,
     "attack": 34,
     "attack_rate": 1.0,
-    "attack_range": 330,
+    "attack_range": 250,
     "move_speed": 110,
     "block": 1,
     "can_hit_air": true,
@@ -540,7 +582,11 @@
         "recovery": 0.389,
         "shake": 0.34
       },
-      "attack_ratio": 1.25
+      "attack_ratio": 1.25,
+      "description": "十字冰花冻结两臂敌人；已被冻结的目标额外受到35%碎冰伤害。",
+      "shape": "cross",
+      "length": 430,
+      "width": 86
     },
     "ultimate": {
       "name": "冰结之森",
@@ -560,7 +606,11 @@
         "shake": 0.78
       },
       "cooldown": 63.0,
-      "attack_ratio": 2.4
+      "attack_ratio": 2.4,
+      "description": "落点展开横向长方冰森，持续12秒，首次冻结并持续伤害减速。",
+      "shape": "rectangle",
+      "length": 670,
+      "width": 140
     },
     "passive": {
       "name": "精灵加护",
@@ -568,7 +618,9 @@
       "description": "部署时为全队提供护盾。"
     },
     "animation_profile": "hero_08",
-    "content_ready": true
+    "content_ready": true,
+    "attack_delivery": "piercing",
+    "attack_description": "冰矛固定直线贯穿最多3名敌人并减速。"
   },
   {
     "id": "hero_09",
@@ -579,7 +631,7 @@
     "armor": 20,
     "attack": 32,
     "attack_rate": 1.16,
-    "attack_range": 355,
+    "attack_range": 245,
     "move_speed": 114,
     "block": 0,
     "can_hit_air": true,
@@ -640,7 +692,7 @@
     "armor": 25,
     "attack": 36,
     "attack_rate": 1.18,
-    "attack_range": 345,
+    "attack_range": 230,
     "move_speed": 118,
     "block": 0,
     "can_hit_air": true,
@@ -664,7 +716,10 @@
         "shake": 0.34
       },
       "description": "三排风刃自上而下依次从地图左端扫向右端；每隔1秒攻击一排，造成风元素伤害并击退命中敌人1格。",
-      "attack_ratio": 1.3
+      "attack_ratio": 1.3,
+      "shape": "rows",
+      "length": 1000,
+      "width": 80
     },
     "ultimate": {
       "name": "长风复苏",
@@ -685,7 +740,10 @@
       },
       "cooldown": 62.0,
       "duration": 12.0,
-      "description": "在目标区域持续12秒，每0.85秒为友军恢复42点生命。"
+      "description": "落点长方风庭持续12秒，每0.85秒治疗、净化减速并回复1能量。",
+      "shape": "rectangle",
+      "length": 570,
+      "width": 160
     },
     "passive": {
       "name": "三相同调",
@@ -693,7 +751,9 @@
       "description": "传送门周期复制友方弹道。"
     },
     "animation_profile": "hero_10",
-    "content_ready": true
+    "content_ready": true,
+    "attack_delivery": "boomerang",
+    "attack_description": "双风刃飞出后折返，每程命中每名敌人一次。"
   },
   {
     "id": "hero_11",
@@ -704,7 +764,7 @@
     "armor": 38,
     "attack": 40,
     "attack_rate": 1.0,
-    "attack_range": 340,
+    "attack_range": 210,
     "move_speed": 108,
     "block": 1,
     "can_hit_air": true,
@@ -766,7 +826,7 @@
     "armor": 18,
     "attack": 43,
     "attack_rate": 1.22,
-    "attack_range": 365,
+    "attack_range": 260,
     "move_speed": 122,
     "block": 0,
     "can_hit_air": true,
@@ -827,7 +887,7 @@
     "armor": 76,
     "attack": 96,
     "attack_rate": 1.42,
-    "attack_range": 345,
+    "attack_range": 110,
     "move_speed": 122,
     "block": 2,
     "can_hit_air": true,
@@ -850,7 +910,7 @@
         "recovery": 0.389,
         "shake": 0.34
       },
-      "description": "攻击范围内所有友军5秒内免受伤害。",
+      "description": "以自身为中心345范围内的已上场友军获得5秒保护。",
       "duration": 5.0
     },
     "ultimate": {
@@ -871,9 +931,12 @@
         "shake": 0.78
       },
       "cooldown": 70.0,
-      "needles": 15,
-      "description": "朝选定方向连续发射3轮针簇，每轮5根贯穿针，轮间隔0.65秒；射程620，每针150+125%攻击力无元素伤害，并减速2秒。",
-      "attack_ratio": 1.25
+      "needles": 9,
+      "description": "沿指定方向分三段发射1/3/5枚飞针；针身接触敌人才结算，每枚可穿过敌人一次并减速2秒。",
+      "attack_ratio": 1.25,
+      "shape": "line",
+      "length": 620,
+      "width": 48
     },
     "passive": {
       "name": "剪影织卫",
@@ -881,6 +944,8 @@
       "description": "高生命、高攻击的无元素近远程守卫。"
     },
     "animation_profile": "hero_13",
-    "content_ready": true
+    "content_ready": true,
+    "attack_delivery": "melee_cone",
+    "attack_description": "剪刃在锁定方向的短扇区内延迟命中，可同时剪击多名敌人。"
   }
 ]

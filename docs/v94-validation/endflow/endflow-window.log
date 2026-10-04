@@ -1,0 +1,127 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.30 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3050 Laptop GPU
+
+V94 ENDFLOW PASS: saves stay isolated beneath --qa-output
+V94 ENDFLOW PASS: real production ending animations remain enabled
+V94 ENDFLOW PASS: campaign-loss-click: real simulation detects terminal loss
+V94 ENDFLOW PASS: campaign-loss-click: original death animation reaches acknowledgement
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":0,"animation_waiting":true,"death_playing":true,"label":"campaign-loss-click-before-ack","menu_opens":1,"mode_menu":false,"narrative_choices":0,"old_result_card":false,"pending_stage":"","prelude":false,"saved_runs":1,"squad":false,"squad_opens":0,"stage":"stage_03","state":"lost","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: campaign-loss-click: one native acknowledgement returns to menu
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":0,"animation_waiting":false,"death_playing":false,"label":"campaign-loss-click-after-ack","menu_opens":2,"mode_menu":true,"narrative_choices":0,"old_result_card":false,"pending_stage":"","prelude":false,"saved_runs":1,"squad":false,"squad_opens":0,"stage":"stage_03","state":"ready","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: campaign-loss-click: menu opens exactly once without squad transition
+V94 ENDFLOW PASS: campaign-loss-click: no animation or input gate remains waiting
+V94 ENDFLOW PASS: campaign-loss-click: completion releases terminal-state guards
+V94 ENDFLOW PASS: campaign-loss-click: no earned-achievement popup
+V94 ENDFLOW PASS: campaign-loss-click: result recorded exactly once
+V94 ENDFLOW PASS: campaign-loss-click: achievement still awarded
+V94 ENDFLOW PASS: campaign-loss-click: achievement persisted to isolated save
+V94 ENDFLOW PASS: native reentry: main menu opens campaign stage selector
+V94 ENDFLOW PASS: native reentry: stage selector opens squad
+V94 ENDFLOW PASS: native reentry: next run starts through squad and original opening narrative
+V94 ENDFLOW PASS: native reentry: loss acknowledgement is rearmed
+V94 ENDFLOW PASS: repeated-loss-enter: real simulation detects terminal loss
+V94 ENDFLOW PASS: repeated-loss-enter: original death animation reaches acknowledgement
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":4,"animation_waiting":true,"death_playing":true,"label":"repeated-loss-enter-before-ack","menu_opens":2,"mode_menu":false,"narrative_choices":1,"old_result_card":false,"pending_stage":"","prelude":false,"saved_runs":2,"squad":false,"squad_opens":2,"stage":"stage_01","state":"lost","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: repeated-loss-enter: one native acknowledgement returns to menu
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":4,"animation_waiting":false,"death_playing":false,"label":"repeated-loss-enter-after-ack","menu_opens":3,"mode_menu":true,"narrative_choices":1,"old_result_card":false,"pending_stage":"","prelude":false,"saved_runs":2,"squad":false,"squad_opens":2,"stage":"stage_01","state":"ready","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: repeated-loss-enter: menu opens exactly once without squad transition
+V94 ENDFLOW PASS: repeated-loss-enter: no animation or input gate remains waiting
+V94 ENDFLOW PASS: repeated-loss-enter: completion releases terminal-state guards
+V94 ENDFLOW PASS: repeated-loss-enter: no earned-achievement popup
+V94 ENDFLOW PASS: repeated-loss-enter: result recorded exactly once
+V94 ENDFLOW PASS: repeated-loss-enter: achievement still awarded
+V94 ENDFLOW PASS: repeated-loss-enter: achievement persisted to isolated save
+V94 ENDFLOW PASS: endless-loss-space: real simulation detects terminal loss
+V94 ENDFLOW PASS: endless-loss-space: original death animation reaches acknowledgement
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":4,"animation_waiting":true,"death_playing":true,"label":"endless-loss-space-before-ack","menu_opens":3,"mode_menu":false,"narrative_choices":1,"old_result_card":false,"pending_stage":"","prelude":false,"saved_runs":3,"squad":false,"squad_opens":2,"stage":"stage_endless","state":"lost","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: endless-loss-space: one native acknowledgement returns to menu
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":4,"animation_waiting":false,"death_playing":false,"label":"endless-loss-space-after-ack","menu_opens":4,"mode_menu":true,"narrative_choices":1,"old_result_card":false,"pending_stage":"","prelude":false,"saved_runs":3,"squad":false,"squad_opens":2,"stage":"stage_endless","state":"ready","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: endless-loss-space: menu opens exactly once without squad transition
+V94 ENDFLOW PASS: endless-loss-space: no animation or input gate remains waiting
+V94 ENDFLOW PASS: endless-loss-space: completion releases terminal-state guards
+V94 ENDFLOW PASS: endless-loss-space: no earned-achievement popup
+V94 ENDFLOW PASS: endless-loss-space: result recorded exactly once
+V94 ENDFLOW PASS: endless-loss-space: achievement still awarded
+V94 ENDFLOW PASS: endless-loss-space: achievement persisted to isolated save
+V94 ENDFLOW PASS: stage-win: actual scheduler produces win
+V94 ENDFLOW PASS: stage-win: native comics, successful choice and animation complete
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":6,"animation_waiting":false,"death_playing":false,"label":"stage-win-completed","menu_opens":4,"mode_menu":false,"narrative_choices":2,"old_result_card":false,"pending_stage":"stage_02","prelude":false,"saved_runs":4,"squad":true,"squad_opens":3,"stage":"stage_01","state":"stage_exit","story_active":false,"story_key":"mode1_won"}
+V94 ENDFLOW PASS: stage-win: authored success choice is followed without skipping narrative
+V94 ENDFLOW PASS: stage-win: next-stage squad opens exactly once
+V94 ENDFLOW PASS: stage-win: field exit leads to correct next stage
+V94 ENDFLOW PASS: stage-win: no unfinished animation acknowledgement
+V94 ENDFLOW PASS: stage-win: completion releases terminal-state guards
+V94 ENDFLOW PASS: stage-win: both unwanted result popups remain absent
+V94 ENDFLOW PASS: stage-win: result saved exactly once
+V94 ENDFLOW PASS: stage-win: achievement still awarded
+V94 ENDFLOW PASS: stage-win: achievement persisted to isolated save
+V94 ENDFLOW PASS: stage-win: achievement still awarded
+V94 ENDFLOW PASS: stage-win: achievement persisted to isolated save
+V94 ENDFLOW PASS: final-win: actual scheduler produces win
+V94 ENDFLOW PASS: final-win: native comics, successful choice and animation complete
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":8,"animation_waiting":false,"death_playing":false,"label":"final-win-completed","menu_opens":5,"mode_menu":true,"narrative_choices":3,"old_result_card":false,"pending_stage":"","prelude":false,"saved_runs":5,"squad":false,"squad_opens":3,"stage":"stage_08","state":"ready","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: final-win: authored success choice is followed without skipping narrative
+V94 ENDFLOW PASS: final-win: final campaign returns to menu exactly once
+V94 ENDFLOW PASS: final-win: no unfinished animation acknowledgement
+V94 ENDFLOW PASS: final-win: completion releases terminal-state guards
+V94 ENDFLOW PASS: final-win: both unwanted result popups remain absent
+V94 ENDFLOW PASS: final-win: result saved exactly once
+V94 ENDFLOW PASS: final-win: achievement still awarded
+V94 ENDFLOW PASS: final-win: achievement persisted to isolated save
+V94 ENDFLOW PASS: final-win: achievement still awarded
+V94 ENDFLOW PASS: final-win: achievement persisted to isolated save
+V94 ENDFLOW PASS: stage-win-seen: actual scheduler produces win
+V94 ENDFLOW PASS: stage-win-seen: native comics, successful choice and animation complete
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":8,"animation_waiting":false,"death_playing":false,"label":"stage-win-seen-completed","menu_opens":5,"mode_menu":false,"narrative_choices":3,"old_result_card":false,"pending_stage":"stage_02","prelude":false,"saved_runs":6,"squad":true,"squad_opens":4,"stage":"stage_01","state":"stage_exit","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: stage-win-seen: unavailable narrative uses completion fallback
+V94 ENDFLOW PASS: stage-win-seen: next-stage squad opens exactly once
+V94 ENDFLOW PASS: stage-win-seen: field exit leads to correct next stage
+V94 ENDFLOW PASS: stage-win-seen: no unfinished animation acknowledgement
+V94 ENDFLOW PASS: stage-win-seen: completion releases terminal-state guards
+V94 ENDFLOW PASS: stage-win-seen: both unwanted result popups remain absent
+V94 ENDFLOW PASS: stage-win-seen: result saved exactly once
+V94 ENDFLOW PASS: stage-win-seen: achievement still awarded
+V94 ENDFLOW PASS: stage-win-seen: achievement persisted to isolated save
+V94 ENDFLOW PASS: stage-win-seen: achievement still awarded
+V94 ENDFLOW PASS: stage-win-seen: achievement persisted to isolated save
+V94 ENDFLOW PASS: stage-win-missing: actual scheduler produces win
+V94 ENDFLOW PASS: stage-win-missing: native comics, successful choice and animation complete
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":8,"animation_waiting":false,"death_playing":false,"label":"stage-win-missing-completed","menu_opens":5,"mode_menu":false,"narrative_choices":3,"old_result_card":false,"pending_stage":"stage_02","prelude":false,"saved_runs":7,"squad":true,"squad_opens":5,"stage":"stage_01","state":"stage_exit","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: stage-win-missing: unavailable narrative uses completion fallback
+V94 ENDFLOW PASS: stage-win-missing: next-stage squad opens exactly once
+V94 ENDFLOW PASS: stage-win-missing: field exit leads to correct next stage
+V94 ENDFLOW PASS: stage-win-missing: no unfinished animation acknowledgement
+V94 ENDFLOW PASS: stage-win-missing: completion releases terminal-state guards
+V94 ENDFLOW PASS: stage-win-missing: both unwanted result popups remain absent
+V94 ENDFLOW PASS: stage-win-missing: result saved exactly once
+V94 ENDFLOW PASS: stage-win-missing: achievement still awarded
+V94 ENDFLOW PASS: stage-win-missing: achievement persisted to isolated save
+V94 ENDFLOW PASS: stage-win-missing: achievement still awarded
+V94 ENDFLOW PASS: stage-win-missing: achievement persisted to isolated save
+V94 ENDFLOW PASS: final-win-seen: actual scheduler produces win
+V94 ENDFLOW PASS: final-win-seen: native comics, successful choice and animation complete
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":8,"animation_waiting":false,"death_playing":false,"label":"final-win-seen-completed","menu_opens":6,"mode_menu":true,"narrative_choices":3,"old_result_card":false,"pending_stage":"","prelude":false,"saved_runs":8,"squad":false,"squad_opens":5,"stage":"stage_08","state":"ready","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: final-win-seen: unavailable narrative uses completion fallback
+V94 ENDFLOW PASS: final-win-seen: final campaign returns to menu exactly once
+V94 ENDFLOW PASS: final-win-seen: no unfinished animation acknowledgement
+V94 ENDFLOW PASS: final-win-seen: completion releases terminal-state guards
+V94 ENDFLOW PASS: final-win-seen: both unwanted result popups remain absent
+V94 ENDFLOW PASS: final-win-seen: result saved exactly once
+V94 ENDFLOW PASS: final-win-seen: achievement still awarded
+V94 ENDFLOW PASS: final-win-seen: achievement persisted to isolated save
+V94 ENDFLOW PASS: final-win-seen: achievement still awarded
+V94 ENDFLOW PASS: final-win-seen: achievement persisted to isolated save
+V94 ENDFLOW PASS: final-win-missing: actual scheduler produces win
+V94 ENDFLOW PASS: final-win-missing: native comics, successful choice and animation complete
+V94 OBSERVATION: {"achievement_popup":false,"acknowledgements":8,"animation_waiting":false,"death_playing":false,"label":"final-win-missing-completed","menu_opens":7,"mode_menu":true,"narrative_choices":3,"old_result_card":false,"pending_stage":"","prelude":false,"saved_runs":9,"squad":false,"squad_opens":5,"stage":"stage_08","state":"ready","story_active":false,"story_key":""}
+V94 ENDFLOW PASS: final-win-missing: unavailable narrative uses completion fallback
+V94 ENDFLOW PASS: final-win-missing: final campaign returns to menu exactly once
+V94 ENDFLOW PASS: final-win-missing: no unfinished animation acknowledgement
+V94 ENDFLOW PASS: final-win-missing: completion releases terminal-state guards
+V94 ENDFLOW PASS: final-win-missing: both unwanted result popups remain absent
+V94 ENDFLOW PASS: final-win-missing: result saved exactly once
+V94 ENDFLOW PASS: final-win-missing: achievement still awarded
+V94 ENDFLOW PASS: final-win-missing: achievement persisted to isolated save
+V94 ENDFLOW PASS: final-win-missing: achievement still awarded
+V94 ENDFLOW PASS: final-win-missing: achievement persisted to isolated save
+V94 ENDFLOW COMPLETE: 111 checks, 0 failures

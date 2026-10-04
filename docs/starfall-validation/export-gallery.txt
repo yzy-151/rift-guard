@@ -1,0 +1,12 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.30 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3050 Laptop GPU
+
+CAPTURE 01-title 0
+CAPTURE 02-party 0
+CAPTURE 03-battle 0
+CAPTURE 04-upgrade 0
+CAPTURE 05-boss 0
+CAPTURE 06-pause 0
+CAPTURE 07-settings 0
+CAPTURE 08-result 0
+STARFALL_GALLERY_PASS [{"page":"01-title","saved":true},{"page":"02-party","saved":true},{"page":"03-battle","saved":true},{"page":"04-upgrade","saved":true},{"page":"05-boss","saved":true},{"page":"06-pause","saved":true},{"page":"07-settings","saved":true},{"page":"08-result","saved":true}]

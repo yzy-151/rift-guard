@@ -1,15 +1,15 @@
 extends RefCounted
-## World coordinates stay authoritative. All screen picking uses the inverse.
+## Planar campaign board. Simulation coordinates remain authoritative, including
+## routes and terrain. A translation reserves the original HUD margins without
+## skew, depth scaling or a different horizontal/vertical distance unit.
 const DEPTH_START: float = 140.0
 const DEPTH_SIZE: float = 440.0
-static func depth_scale(point: Vector2) -> float:
-	return 0.65 + 0.35 * (point.y - DEPTH_START) / DEPTH_SIZE
+const SCREEN_OFFSET := Vector2(0.0, -24.0)
+static func depth_scale(_point: Vector2) -> float:
+	return 1.0
 static func project(point: Vector2) -> Vector2:
-	var t: float = (point.y - DEPTH_START) / DEPTH_SIZE
-	return Vector2(640.0 + (point.x - 640.0) * (0.70 + 0.30 * t) * 1.03 + 10.0 * (1.0 - t), 92.0 + 482.0 * t)
+	return point + SCREEN_OFFSET
 static func unproject(point: Vector2) -> Vector2:
-	var t: float = (point.y - 92.0) / 482.0
-	var factor: float = maxf(0.1, 0.70 + 0.30 * t)
-	return Vector2(640.0 + (point.x - 640.0 - 10.0 * (1.0 - t)) / (factor * 1.03), DEPTH_START + DEPTH_SIZE * t)
+	return point - SCREEN_OFFSET
 static func polygon(rect: Rect2) -> PackedVector2Array:
 	return PackedVector2Array([project(rect.position), project(Vector2(rect.end.x, rect.position.y)), project(rect.end), project(Vector2(rect.position.x, rect.end.y))])

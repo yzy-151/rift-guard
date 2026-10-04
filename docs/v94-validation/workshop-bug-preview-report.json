@@ -1,0 +1,32 @@
+{
+	"blast_radius": 80.0,
+	"events": [
+		{
+			"at": 0.800000000000001,
+			"enemy_id": 1,
+			"kind": "apply_hit"
+		},
+		{
+			"at": 1.8,
+			"kind": "bug_blast",
+			"radius": 80.0
+		},
+		{
+			"at": 3.46666666666666,
+			"enemy_id": 2,
+			"kind": "apply_hit"
+		},
+		{
+			"at": 4.46666666666666,
+			"kind": "bug_blast",
+			"radius": 80.0
+		}
+	],
+	"fps": 24,
+	"hero_distance": 297.321380615234,
+	"hero_hp_after": 960.0,
+	"hero_hp_before": 960.0,
+	"recorded_frames": 147,
+	"renderer": "Windows",
+	"setup_frames": 17
+}

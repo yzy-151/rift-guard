@@ -1,0 +1,64 @@
+{
+	"checks": 42,
+	"failures": [],
+	"observations": [
+		{
+			"choice_texts": [
+				"",
+				""
+			],
+			"choices": 0,
+			"empty_frame": false,
+			"frame_texture": "",
+			"label": "amiya-original-line",
+			"line": 0,
+			"speaker": "阿米娅",
+			"story": "home_hero_06_4",
+			"workbook_frame": {
+				"asset": "dialog_frame",
+				"bottom": 60.0,
+				"font_size": 0.0,
+				"height": 244.0,
+				"left": 95.0,
+				"mode": "ninepatch",
+				"right": 95.0,
+				"row": 5,
+				"text": "",
+				"top": 130.0,
+				"width": 720.0,
+				"x": 48.0,
+				"y": 442.0
+			},
+			"workbook_frame_asset": "res://assets/gothic/panel_main_horned.png"
+		},
+		{
+			"choice_texts": [
+				"先写他的名字，再问家人想留下些什么。",
+				"写最高荣誉吧，名字反而不够响亮。"
+			],
+			"choices": 2,
+			"empty_frame": false,
+			"frame_texture": "",
+			"label": "amiya-choices",
+			"line": 1,
+			"speaker": "阿米娅",
+			"story": "home_hero_06_4",
+			"workbook_frame": {
+				"asset": "dialog_frame",
+				"bottom": 60.0,
+				"font_size": 0.0,
+				"height": 244.0,
+				"left": 95.0,
+				"mode": "ninepatch",
+				"right": 95.0,
+				"row": 5,
+				"text": "",
+				"top": 130.0,
+				"width": 720.0,
+				"x": 48.0,
+				"y": 442.0
+			},
+			"workbook_frame_asset": "res://assets/gothic/panel_main_horned.png"
+		}
+	]
+}

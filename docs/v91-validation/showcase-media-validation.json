@@ -1,0 +1,101 @@
+[
+  {
+    "id": "monster-originium",
+    "width": 960,
+    "height": 540,
+    "frames": 90,
+    "duration_ms": 6000,
+    "loop": 0,
+    "first_to_key_change": 0.5283159722222223,
+    "bytes": 1166169,
+    "sha256": "916784978d7dc9b0ef7f904a62c711b13f50c69b542ac30dd04eefc5027ce3db"
+  },
+  {
+    "id": "monster-charge-jump",
+    "width": 960,
+    "height": 540,
+    "frames": 105,
+    "duration_ms": 7000,
+    "loop": 0,
+    "first_to_key_change": 0.7434207818930041,
+    "bytes": 998412,
+    "sha256": "51959208ec68829c194519688e05c4838f8da1074e776fd84b1b8610a6f64e1c"
+  },
+  {
+    "id": "monster-spin",
+    "width": 960,
+    "height": 540,
+    "frames": 105,
+    "duration_ms": 7000,
+    "loop": 0,
+    "first_to_key_change": 0.7052732767489712,
+    "bytes": 1419625,
+    "sha256": "c7667076bcd3683847d2d73986ba2f0320a644f3076100267cc41553ffcded1b"
+  },
+  {
+    "id": "monster-bat",
+    "width": 960,
+    "height": 540,
+    "frames": 105,
+    "duration_ms": 7000,
+    "loop": 0,
+    "first_to_key_change": 0.4599691358024692,
+    "bytes": 858042,
+    "sha256": "df8024d6c4a46d7564a13f9306091626a67067de08b496efcdc978933d14efef"
+  },
+  {
+    "id": "boss-rift",
+    "width": 800,
+    "height": 450,
+    "frames": 144,
+    "duration_ms": 12000,
+    "loop": 0,
+    "first_to_key_change": 3.7921416666666663,
+    "bytes": 3558022,
+    "sha256": "7ce7f9b64fb7dbcfc00cf65eb627bc4a10d4a3d18c4190fc63cdd1430f437e16"
+  },
+  {
+    "id": "boss-slime",
+    "width": 800,
+    "height": 450,
+    "frames": 144,
+    "duration_ms": 12000,
+    "loop": 0,
+    "first_to_key_change": 6.286681481481481,
+    "bytes": 3605155,
+    "sha256": "25b94678b206d942bd4b9ba9baf9a0febea5b30b349830c55d6f9a4b43170732"
+  },
+  {
+    "id": "boss-kindred-galio",
+    "width": 800,
+    "height": 450,
+    "frames": 180,
+    "duration_ms": 15000,
+    "loop": 0,
+    "first_to_key_change": 7.036082407407409,
+    "bytes": 8723383,
+    "sha256": "b309ecedbb7cf56403c88e22d700665a3af2a573efff7c0a0679f2ee30fb9766"
+  },
+  {
+    "id": "support-shapes",
+    "width": 960,
+    "height": 540,
+    "frames": 165,
+    "duration_ms": 11000,
+    "loop": 0,
+    "first_to_key_change": 2.096943801440329,
+    "bytes": 5590292,
+    "sha256": "5a8dccc87d7d0caa9ea270fb22f8c7c12cc9cf2029183b65b7f91471c29e6a45"
+  },
+  {
+    "id": "monster-spacing",
+    "width": 960,
+    "height": 540,
+    "frames": 150,
+    "duration_ms": 10000,
+    "loop": 0,
+    "first_to_key_change": 1.6974041923868313,
+    "bytes": 2429313,
+    "sha256": "c0c0a0162259f44090cf4cd6f57b699a94bee6d434ac24bec27e24194f1acc28"
+  }
+]

@@ -1,0 +1,9 @@
+{
+	"checks": 64,
+	"display": "headless",
+	"failures": [],
+	"original_upgrades_checked": 14,
+	"pause_nodes": 98,
+	"pause_refresh_revision": 4,
+	"resolution": "(1280, 720)"
+}

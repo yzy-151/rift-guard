@@ -1,0 +1,153 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+PASS relay requires a living deployed hero to charge
+PASS downed hero cannot charge relay
+PASS relay gains charge while hero holds its activation area
+PASS leaving relay before full charge cancels incomplete charge
+PASS charged relay visibly warns before doing damage
+PASS relay electro line deals actual damage and triggers existing elemental reactions
+PASS relay uses effect rectangle instead of a radial hit
+PASS relay activation uses shared terrain_react feedback
+PASS relay feedback reports its actual directly affected target count
+PASS relay damages once and enters its own cooldown
+PASS relay instances charge and cool down independently
+PASS full heroes consume no spring water and cause no repeated feedback
+PASS spring restores real health and ultimate energy
+PASS spring ignores undeployed and downed heroes
+PASS spring pays actual recovery from a shared finite reservoir
+PASS spring emits existing positive healing feedback
+PASS spring cannot restore more than its remaining resource
+PASS spent spring exposes a depleted state
+PASS spring replenishes only a bounded amount after its recovery interval
+PASS spring replenishment never exceeds capacity
+PASS hazard has a harmless readable warning before eruption
+PASS hazard eruption damages both teams
+PASS hazard rectangle excludes outside and undeployed units
+PASS hazard records elemental aura and a named damage source
+PASS hazard short active window finishes in cooldown
+PASS hazard cooldown is safe and does not continue ticking damage
+PASS hazard has exactly three bounded pulses per eruption
+PASS hazard feedback and hit detection share exact area
+PASS wind increases actual aligned hero movement by 35 percent
+PASS wind does not force or accelerate movement against its direction
+PASS wind never displaces a stationary defender
+PASS wind movement preserves wall collision and arena bounds
+PASS wind assists grounded enemies without changing their road
+PASS wind-assisted melee crowd preserves hero and enemy body spacing
+PASS wind-assisted melee front rank still lands actual attacks
+PASS paused freezes functional terrain timers and resources
+PASS reward freezes functional terrain timers and resources
+PASS ready freezes functional terrain timers and resources
+PASS won freezes functional terrain timers and resources
+PASS lost freezes functional terrain timers and resources
+PASS between freezes functional terrain timers and resources
+PASS stage_exit freezes functional terrain timers and resources
+PASS campaign 1 includes functional terrain
+PASS campaign 1 preserves original map features
+PASS stage_01_encounter_relay_0 stays nonblocking and inside its map
+PASS stage_01_encounter_relay_0 pedestal and effect clear old walls and doors
+PASS stage_01_encounter_relay_0 exposes render contract
+PASS campaign 2 includes functional terrain
+PASS campaign 2 preserves original map features
+PASS stage_02_encounter_relay_0 stays nonblocking and inside its map
+PASS stage_02_encounter_relay_0 pedestal and effect clear old walls and doors
+PASS stage_02_encounter_relay_0 exposes render contract
+PASS stage_02_encounter_spring_1 stays nonblocking and inside its map
+PASS stage_02_encounter_spring_1 pedestal and effect clear old walls and doors
+PASS stage_02_encounter_spring_1 exposes render contract
+PASS campaign 3 includes functional terrain
+PASS campaign 3 preserves original map features
+PASS stage_03_encounter_relay_0 stays nonblocking and inside its map
+PASS stage_03_encounter_relay_0 pedestal and effect clear old walls and doors
+PASS stage_03_encounter_relay_0 exposes render contract
+PASS stage_03_encounter_spring_1 stays nonblocking and inside its map
+PASS stage_03_encounter_spring_1 pedestal and effect clear old walls and doors
+PASS stage_03_encounter_spring_1 exposes render contract
+PASS stage_03_encounter_wind_lane_2 stays nonblocking and inside its map
+PASS stage_03_encounter_wind_lane_2 pedestal and effect clear old walls and doors
+PASS stage_03_encounter_wind_lane_2 exposes render contract
+PASS campaign 4 includes functional terrain
+PASS campaign 4 preserves original map features
+PASS stage_04_encounter_wind_lane_0 stays nonblocking and inside its map
+PASS stage_04_encounter_wind_lane_0 pedestal and effect clear old walls and doors
+PASS stage_04_encounter_wind_lane_0 exposes render contract
+PASS stage_04_encounter_spring_1 stays nonblocking and inside its map
+PASS stage_04_encounter_spring_1 pedestal and effect clear old walls and doors
+PASS stage_04_encounter_spring_1 exposes render contract
+PASS stage_04_encounter_relay_2 stays nonblocking and inside its map
+PASS stage_04_encounter_relay_2 pedestal and effect clear old walls and doors
+PASS stage_04_encounter_relay_2 exposes render contract
+PASS campaign 5 includes functional terrain
+PASS campaign 5 preserves original map features
+PASS stage_05_encounter_hazard_lane_0 stays nonblocking and inside its map
+PASS stage_05_encounter_hazard_lane_0 pedestal and effect clear old walls and doors
+PASS stage_05_encounter_hazard_lane_0 exposes render contract
+PASS stage_05_encounter_spring_1 stays nonblocking and inside its map
+PASS stage_05_encounter_spring_1 pedestal and effect clear old walls and doors
+PASS stage_05_encounter_spring_1 exposes render contract
+PASS stage_05_encounter_relay_2 stays nonblocking and inside its map
+PASS stage_05_encounter_relay_2 pedestal and effect clear old walls and doors
+PASS stage_05_encounter_relay_2 exposes render contract
+PASS stage_05_encounter_wind_lane_3 stays nonblocking and inside its map
+PASS stage_05_encounter_wind_lane_3 pedestal and effect clear old walls and doors
+PASS stage_05_encounter_wind_lane_3 exposes render contract
+PASS campaign 6 includes functional terrain
+PASS campaign 6 preserves original map features
+PASS stage_06_encounter_relay_0 stays nonblocking and inside its map
+PASS stage_06_encounter_relay_0 pedestal and effect clear old walls and doors
+PASS stage_06_encounter_relay_0 exposes render contract
+PASS stage_06_encounter_spring_1 stays nonblocking and inside its map
+PASS stage_06_encounter_spring_1 pedestal and effect clear old walls and doors
+PASS stage_06_encounter_spring_1 exposes render contract
+PASS stage_06_encounter_wind_lane_2 stays nonblocking and inside its map
+PASS stage_06_encounter_wind_lane_2 pedestal and effect clear old walls and doors
+PASS stage_06_encounter_wind_lane_2 exposes render contract
+PASS stage_06_encounter_hazard_lane_3 stays nonblocking and inside its map
+PASS stage_06_encounter_hazard_lane_3 pedestal and effect clear old walls and doors
+PASS stage_06_encounter_hazard_lane_3 exposes render contract
+PASS campaign 7 includes functional terrain
+PASS campaign 7 preserves original map features
+PASS stage_07_encounter_relay_0 stays nonblocking and inside its map
+PASS stage_07_encounter_relay_0 pedestal and effect clear old walls and doors
+PASS stage_07_encounter_relay_0 exposes render contract
+PASS stage_07_encounter_spring_1 stays nonblocking and inside its map
+PASS stage_07_encounter_spring_1 pedestal and effect clear old walls and doors
+PASS stage_07_encounter_spring_1 exposes render contract
+PASS stage_07_encounter_wind_lane_2 stays nonblocking and inside its map
+PASS stage_07_encounter_wind_lane_2 pedestal and effect clear old walls and doors
+PASS stage_07_encounter_wind_lane_2 exposes render contract
+PASS stage_07_encounter_hazard_lane_3 stays nonblocking and inside its map
+PASS stage_07_encounter_hazard_lane_3 pedestal and effect clear old walls and doors
+PASS stage_07_encounter_hazard_lane_3 exposes render contract
+PASS campaign 8 includes functional terrain
+PASS campaign 8 preserves original map features
+PASS stage_08_encounter_relay_0 stays nonblocking and inside its map
+PASS stage_08_encounter_relay_0 pedestal and effect clear old walls and doors
+PASS stage_08_encounter_relay_0 exposes render contract
+PASS stage_08_encounter_spring_1 stays nonblocking and inside its map
+PASS stage_08_encounter_spring_1 pedestal and effect clear old walls and doors
+PASS stage_08_encounter_spring_1 exposes render contract
+PASS stage_08_encounter_wind_lane_2 stays nonblocking and inside its map
+PASS stage_08_encounter_wind_lane_2 pedestal and effect clear old walls and doors
+PASS stage_08_encounter_wind_lane_2 exposes render contract
+PASS stage_08_encounter_hazard_lane_3 stays nonblocking and inside its map
+PASS stage_08_encounter_hazard_lane_3 pedestal and effect clear old walls and doors
+PASS stage_08_encounter_hazard_lane_3 exposes render contract
+PASS campaign introduces the four mechanics gradually
+PASS endless blood_gate includes meaningful functional terrain
+PASS endless blood_gate effect regions clear walls and map edges
+PASS endless blood_gate ticks real terrain despite legacy early return
+PASS endless blood_gate reset restores independent resource state
+PASS endless frost_isles includes meaningful functional terrain
+PASS endless frost_isles effect regions clear walls and map edges
+PASS endless frost_isles ticks real terrain despite legacy early return
+PASS endless frost_isles reset restores independent resource state
+PASS endless wind_cross includes meaningful functional terrain
+PASS endless wind_cross effect regions clear walls and map edges
+PASS endless wind_cross ticks real terrain despite legacy early return
+PASS endless wind_cross reset restores independent resource state
+PASS blood_gate preview includes functional terrain in its actual map positions
+PASS frost_isles preview includes functional terrain in its actual map positions
+PASS wind_cross preview includes functional terrain in its actual map positions
+PASS campaign reset clears endless-only functional features
+V92 TERRAIN: checks=150 failures=0

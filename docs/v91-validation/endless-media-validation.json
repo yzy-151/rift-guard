@@ -1,0 +1,97 @@
+{
+  "source": "Godot 4.6 native Movie Maker; real simulation at 24 fps",
+  "controls": "Directed fixture: enemy spawns, hero HP and skill energy adjusted; not a natural difficulty run",
+  "accepted_casts": "12/12",
+  "maps": [
+    "blood_gate",
+    "frost_isles",
+    "wind_cross"
+  ],
+  "media": [
+    {
+      "file": "endless-blood-gate.gif",
+      "bytes": 5662634,
+      "sha256": "b825f23f0f0f4d74557e1a07dfa9585f63406ef8a092efac378c959fde2fd762",
+      "decode": "pass",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "gif",
+          "codec_type": "video",
+          "width": 900,
+          "height": 506,
+          "nb_frames": "126"
+        }
+      ],
+      "format": {
+        "duration": "10.500000"
+      }
+    },
+    {
+      "file": "endless-frost-isles.gif",
+      "bytes": 6932444,
+      "sha256": "0f1d9e270d056959661f62911d3379e2346247780a986b6393c75c622b30d8df",
+      "decode": "pass",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "gif",
+          "codec_type": "video",
+          "width": 900,
+          "height": 506,
+          "nb_frames": "126"
+        }
+      ],
+      "format": {
+        "duration": "10.500000"
+      }
+    },
+    {
+      "file": "endless-wind-cross.gif",
+      "bytes": 7561250,
+      "sha256": "953aa2733f792065e6e69f80f03cd501bcbae2f0d3c5186b6841c560354214d5",
+      "decode": "pass",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "gif",
+          "codec_type": "video",
+          "width": 900,
+          "height": 506,
+          "nb_frames": "126"
+        }
+      ],
+      "format": {
+        "duration": "10.500000"
+      }
+    },
+    {
+      "file": "v91-endless-showcase.mp4",
+      "bytes": 9570570,
+      "sha256": "e25b93533f20f7b1ff39eb62aa78c131933607d2c33d6a540ba7feb14bbc58e6",
+      "decode": "pass",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720,
+          "nb_frames": "869"
+        },
+        {
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "nb_frames": "1698"
+        }
+      ],
+      "format": {
+        "duration": "36.208333"
+      }
+    }
+  ]
+}

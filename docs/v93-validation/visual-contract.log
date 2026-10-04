@@ -1,0 +1,39 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 546.30 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 3050 Laptop GPU
+
+PASS hero_13 actually starts its ultimate cast
+PASS hero_13 real ultimate_cast reaches its dedicated signature windup exactly once
+PASS hero_06 actually starts its ultimate cast
+PASS hero_06 real ultimate_cast reaches its dedicated signature windup exactly once
+PASS same-route simultaneous waves and enemy groups all survive ingestion
+PASS four live warnings draw one shared route with all four entries
+PASS cannon warning preserves group count and actual enemy count
+PASS same enemy on separate waves retains each wave number and count
+PASS boss warning retains actual boss name
+PASS native draw actually emits every simultaneous warning label
+PASS simultaneous warning labels have separate readable rows
+PASS first warning expires without erasing later same-route warnings
+PASS boss warning expires independently of troop and later grunt warnings
+PASS troop warning expires at its own lead time
+PASS all route warning overlays finish after their actual lifetimes
+PASS burst fixture uses translated camera and non-origin impact
+PASS boss_move additive glow centers on the actual camera-transformed impact
+PASS boss_move normal burst silhouette remains visibly rendered at the impact
+PASS boss_move normal burst fragments finish within half a second
+PASS boss_summon additive glow centers on the actual camera-transformed impact
+PASS boss_summon normal burst silhouette remains visibly rendered at the impact
+PASS boss_summon normal burst fragments finish within half a second
+PASS boss_phase additive glow centers on the actual camera-transformed impact
+PASS boss_phase normal burst silhouette remains visibly rendered at the impact
+PASS boss_phase normal burst fragments finish within half a second
+PASS boss_move reduced mode omits additive burst glow
+PASS boss_move reduced burst silhouette remains visibly rendered at the impact
+PASS boss_move reduced burst fragments finish within half a second
+PASS boss_summon reduced mode omits additive burst glow
+PASS boss_summon reduced burst silhouette remains visibly rendered at the impact
+PASS boss_summon reduced burst fragments finish within half a second
+PASS boss_phase reduced mode omits additive burst glow
+PASS boss_phase reduced burst silhouette remains visibly rendered at the impact
+PASS boss_phase reduced burst fragments finish within half a second
+PASS all scheduled contracts finished without an aborted test coroutine
+V93 VISUAL CONTRACT: 35 checks, 0 failures

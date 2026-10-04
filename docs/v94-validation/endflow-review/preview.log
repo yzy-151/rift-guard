@@ -1,0 +1,9 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+V94 ENDFLOW PASS: final story preview completes through real input
+V94 ENDFLOW PASS: preview restores original story director
+V94 ENDFLOW PASS: preview preserves paused campaign and stage
+V94 ENDFLOW PASS: preview neither returns to menu nor advances stage
+V94 ENDFLOW PASS: preview leaves no endflow input lock
+V94 ENDFLOW PASS: preview returns to existing pause controls
+V94 PREVIEW checks=6 failures=0

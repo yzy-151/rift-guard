@@ -50,7 +50,7 @@ static func event(v,e: Dictionary) -> void:
  var color=COLORS.get(str(e.get("element","")),Color.WHITE)
  var t=clampf(1-float(e.life)/float(e.total),0,1)
  var alpha=1-smoothstep(0.15,1.0,t)
- var c=v.world_to_screen(e.pos)+Vector2(0,8)
+ var c=v.world_to_screen(e.pos)+v.ground_visual_offset()
  var r=v.sim.ability_area_screen_radii(e.pos,float(e.get("radius",160)))
  if e.kind=="traveler_fx_cast":
   ring(v,c,r*(0.86+t*0.14),color,sin(t*PI)*0.7,1.8)
@@ -118,7 +118,7 @@ static func zone(v,z: Dictionary) -> void:
  var color=COLORS[z.element]
  var alpha=minf(1,float(z.elapsed)/0.24)*minf(1,float(z.life)/0.75)
  if bool(z.get("cancelled",false)): alpha=minf(alpha,float(z.life)/0.45)
- var c=v.world_to_screen(z.pos)+Vector2(0,8)
+ var c=v.world_to_screen(z.pos)+v.ground_visual_offset()
  var r=v.sim.ability_area_screen_radii(z.pos,float(z.radius))
  var time=float(z.elapsed)
  if key=="cryo_q":

@@ -1,0 +1,154 @@
+[
+  {
+    "file": "hazard.gif",
+    "sha256": "5fb240f187393eb89b2b77de16a670cf48105307df7fbbb43f7bc14d0caf743c",
+    "bytes": 3084769,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "gif",
+          "codec_type": "video",
+          "width": 960,
+          "height": 540
+        }
+      ],
+      "format": {
+        "duration": "8.000000"
+      }
+    }
+  },
+  {
+    "file": "hud-motion.gif",
+    "sha256": "2bd8d321908e9e750c34e2e0d9092eaf218c63e08ceaab6102598c359d606504",
+    "bytes": 2200910,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "gif",
+          "codec_type": "video",
+          "width": 1024,
+          "height": 576
+        }
+      ],
+      "format": {
+        "duration": "6.000000"
+      }
+    }
+  },
+  {
+    "file": "hud-motion.mp4",
+    "sha256": "75e3160cc0e0bbb827626f69250604ad870438a7f37662dac799875b44b97bed",
+    "bytes": 765300,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "format": {
+        "duration": "6.000000"
+      }
+    }
+  },
+  {
+    "file": "relay.gif",
+    "sha256": "c4499fdcfcf3303d71f3a5fcaf3f58fe6757847c374ac24ee106e58f5b1ca358",
+    "bytes": 4306613,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "gif",
+          "codec_type": "video",
+          "width": 960,
+          "height": 540
+        }
+      ],
+      "format": {
+        "duration": "8.000000"
+      }
+    }
+  },
+  {
+    "file": "spring.gif",
+    "sha256": "3f79c8ce385cf977c3f2c83abecd16efd22f09afae16af8d7b4c4c755a29373d",
+    "bytes": 1745282,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "gif",
+          "codec_type": "video",
+          "width": 960,
+          "height": 540
+        }
+      ],
+      "format": {
+        "duration": "8.000000"
+      }
+    }
+  },
+  {
+    "file": "terrain-showcase.mp4",
+    "sha256": "94e4ef5185acd1467f62e21a57d5773f262ba75e853ceb7f513788703ccd240d",
+    "bytes": 3153957,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "width": 1280,
+          "height": 720
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio"
+        }
+      ],
+      "format": {
+        "duration": "32.000000"
+      }
+    }
+  },
+  {
+    "file": "wind.gif",
+    "sha256": "c75d62a745621997348015e2b78e212b1e132a461c8fc83f769dbd2319f1d975",
+    "bytes": 2918713,
+    "probe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "gif",
+          "codec_type": "video",
+          "width": 960,
+          "height": 540
+        }
+      ],
+      "format": {
+        "duration": "8.000000"
+      }
+    }
+  }
+]

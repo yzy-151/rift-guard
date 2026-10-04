@@ -1,0 +1,4 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+ENDURANCE: 600.0s wave=20 kills=2723 peaks enemies=43 projectiles=67 pickups=53
+PASS: 201 Starfall simulation assertions

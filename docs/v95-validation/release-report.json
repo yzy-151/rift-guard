@@ -1,0 +1,78 @@
+{
+  "version": "95.0.0",
+  "validated_on": "2026-10-04",
+  "engine": "Godot 4.6 stable",
+  "artifacts": [
+    {
+      "name": "RiftGuard-V95.exe",
+      "bytes": 104578048,
+      "sha256": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b"
+    },
+    {
+      "name": "RiftGuard-V95.pck",
+      "bytes": 305658016,
+      "sha256": "ecea09add40764f5a990e185275ed8c7f92707a408efae0f0372ea76c0e00c8f"
+    }
+  ],
+  "release_test_cases": [
+    {
+      "headless": true,
+      "error_markers": false,
+      "exit_code": 0,
+      "name": "simulation",
+      "checks": 78
+    },
+    {
+      "headless": false,
+      "error_markers": false,
+      "exit_code": 0,
+      "name": "pause",
+      "checks": 72
+    },
+    {
+      "headless": false,
+      "error_markers": false,
+      "exit_code": 0,
+      "name": "dialogue",
+      "checks": 42
+    },
+    {
+      "headless": false,
+      "error_markers": false,
+      "exit_code": 0,
+      "name": "explosion",
+      "checks": 129
+    },
+    {
+      "headless": false,
+      "error_markers": false,
+      "exit_code": 0,
+      "name": "endflow",
+      "checks": 111
+    },
+    {
+      "headless": false,
+      "error_markers": false,
+      "exit_code": 0,
+      "name": "classic",
+      "checks": 96
+    },
+    {
+      "headless": false,
+      "error_markers": false,
+      "exit_code": 0,
+      "name": "performance"
+    }
+  ],
+  "total_assertions": 528,
+  "review": "Two P2 findings fixed and independently rechecked; 78 simulation checks pass.",
+  "source_comparison": [
+    "performance/v94-final.json",
+    "performance/v95-final.json"
+  ],
+  "shipped_performance": "performance/shipped-v95.json",
+  "notes": [
+    "Controlled fixtures, not complete manual campaign playthroughs.",
+    "Original two-choice frames restored. QA saves isolated."
+  ]
+}
