@@ -61,6 +61,8 @@ var checkpoint_warning: Label
 var checkpoint_overlay: CanvasLayer
 var qa_storage_path := ""
 var settings_from_menu := false
+var stage_selection_origin := "menu"
+var squad_selection_origin := "stages"
 var pending_endless_inheritance: Dictionary = {}
 var sound_timer: float = 0.0
 var attack_sound_timer: float = 0.0
@@ -268,7 +270,12 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if "--v101-test" in OS.get_cmdline_user_args():
+	if "--v102-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v102_test")
+	elif "--v101-test" in OS.get_cmdline_user_args():
 		test_mode = true
 		checkpoint_testing = true
 		set_physics_process(false)
@@ -609,6 +616,10 @@ func run_v101_test() -> void:
 	var code: int = await load("res://scripts/qa_v101_workshop.gd").new().run(self)
 	await _quit_after_audio_cleanup(code)
 
+func run_v102_test() -> void:
+	var code: int = await load("res://scripts/qa_v102_modes.gd").new().run(self)
+	await _quit_after_audio_cleanup(code)
+
 func run_v95_test() -> void:
 	open_mode_menu()
 	for suite: String in ["dialogue", "explosion", "pause", "simulation", "performance"]:
@@ -756,6 +767,7 @@ func choose_mode(mode_id: String) -> void:
 		endless_select_panel.open(sim.endless_layout_options(),sim.endless_layout_id)
 	else:
 		sim.run_state.mode_id = "rift_watch"
+		stage_selection_origin = "menu"
 		stage_select_panel.open()
 
 func _stop_scene_audio(node: Node) -> void:
@@ -1117,11 +1129,15 @@ func _input(event: InputEvent) -> void:
 	if squad_panel.is_open():
 		if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ENTER:
 			squad_panel.confirm()
+		elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+			squad_panel.root.hide()
+			_squad_selection_cancelled()
 		get_viewport().set_input_as_handled()
 		return
 	if stage_select_panel.is_open():
 		if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 			stage_select_panel.close()
+			_stage_select_cancelled()
 		get_viewport().set_input_as_handled()
 		return
 	if picker.visible:
@@ -1320,6 +1336,8 @@ func _stage_select_cancelled() -> void:
 	if home_facility_source == "stages":
 		home_facility_source = ""
 		home_panel.open()
+	elif stage_selection_origin == "pause":
+		refresh()
 	else:
 		mode_select_panel.open()
 
@@ -1529,6 +1547,8 @@ func advance_stage() -> void:
 	compendium.clear_stage(sim.current_stage_id, unlocks)
 	pending_stage_id = str(ids[index + 1])
 	pending_stage_number = index + 2
+	stage_selection_origin = "menu"
+	squad_selection_origin = "stages"
 	squad_panel.open(pending_stage_id, sim.run_state.squad, unlocks)
 	sound.stop()
 
@@ -1587,7 +1607,7 @@ func _campaign_event_closed() -> void:
 		campaign_map_panel.open()
 
 func open_current_squad() -> void:
-	if story.active or compendium_panel.is_open() or squad_panel.is_open() or sim.state not in ["ready", "won", "paused"]:
+	if story.active or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or sim.state not in ["ready", "won", "paused"]:
 		return
 	var mode: Dictionary = sim.database.modes.get(sim.run_state.mode_id, {})
 	var ids: Array = mode.get("stage_ids", [])
@@ -1596,12 +1616,14 @@ func open_current_squad() -> void:
 		return
 	pending_stage_id = sim.current_stage_id
 	pending_stage_number = index + 1
+	squad_selection_origin = "pause"
 	squad_panel.open(pending_stage_id, sim.run_state.squad)
 	sound.stop()
 
 func open_stage_select() -> void:
 	if story.active or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or sim.state not in ["ready", "won", "paused"]:
 		return
+	stage_selection_origin = "pause" if sim.state == "paused" else "menu"
 	stage_select_panel.open()
 	sound.stop()
 
@@ -1613,9 +1635,9 @@ func choose_stage(stage_id: String) -> void:
 	var index := ids.find(stage_id)
 	if index < 0:
 		return
-	sim.run_state.mode_id = selected_mode
 	pending_stage_id = stage_id
 	pending_stage_number = index + 1
+	squad_selection_origin = "endless" if stage_id == "stage_endless" else "stages"
 	squad_panel.open(stage_id, sim.run_state.squad)
 
 func _squad_selection_cancelled() -> void:
@@ -1628,16 +1650,19 @@ func _squad_selection_cancelled() -> void:
 		audio_director.set_scene("battle")
 		refresh()
 		return
-	if pending_stage_id == "stage_endless":
-		pending_stage_id = ""
-		pending_stage_number = 0
-		mode_select_panel.open()
+	pending_stage_id = ""
+	pending_stage_number = 0
+	if squad_selection_origin == "pause":
+		refresh()
+	elif squad_selection_origin == "endless":
+		endless_select_panel.open(sim.endless_layout_options(), sim.endless_layout_id)
 	else:
 		stage_select_panel.open()
 
 func confirm_next_squad(squad: Array[String]) -> void:
 	if pending_stage_id.is_empty():
 		return
+	sim.run_state.mode_id = "endless_survival" if pending_stage_id == "stage_endless" else "rift_watch"
 	battle_audio.reset()
 	home_facility_source = ""
 	story.reset()

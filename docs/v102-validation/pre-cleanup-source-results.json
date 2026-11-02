@@ -1,0 +1,170 @@
+[
+  {
+    "name": "ui-lab",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 16,
+    "seconds": 0.66,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:19:58.045764+00:00"
+  },
+  {
+    "name": "scenarios",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 180,
+    "seconds": 5.83,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:20:03.883085+00:00"
+  },
+  {
+    "name": "modes-1280x720",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 84,
+    "seconds": 25.19,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:20:29.065486+00:00"
+  },
+  {
+    "name": "pause-1280x720",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 74,
+    "seconds": 8.36,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:20:37.421484+00:00"
+  },
+  {
+    "name": "modes-1920x1080",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 84,
+    "seconds": 26.58,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:21:04.011608+00:00"
+  },
+  {
+    "name": "pause-1920x1080",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 74,
+    "seconds": 8.0,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:21:12.026482+00:00"
+  },
+  {
+    "name": "simulation",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 78,
+    "seconds": 6.03,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:21:18.044233+00:00"
+  },
+  {
+    "name": "dialogue",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 42,
+    "seconds": 17.97,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:21:36.020549+00:00"
+  },
+  {
+    "name": "endflow",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 111,
+    "seconds": 39.59,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:22:15.612246+00:00"
+  },
+  {
+    "name": "classic",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 96,
+    "seconds": 18.41,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:22:34.013342+00:00"
+  },
+  {
+    "name": "explosion",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 129,
+    "seconds": 30.34,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:23:04.359283+00:00"
+  },
+  {
+    "name": "workshop",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 46,
+    "seconds": 8.48,
+    "identity": {
+      "source_sha256": "39d7afe7f49ffda649b772003af7ed48c9ff00d07e2f173c403c4be2cc1856dc",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "validated_at": "2026-11-02T23:23:12.841273+00:00"
+  }
+]

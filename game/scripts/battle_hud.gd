@@ -659,10 +659,11 @@ func _ready() -> void:
 	pause_settings_button.pressed.connect(func(): settings_action.emit())
 	pause_restart_button = pause_presentation.actions.restart
 	pause_restart_button.pressed.connect(request_restart_confirmation)
-	pause_squad_button = pause_presentation.actions.compendium
-	pause_squad_button.pressed.connect(func(): compendium_action.emit())
-	pause_stage_button = button(pause_details, Rect2(), "", false)
-	pause_stage_button.hide()
+	pause_presentation.actions.compendium.pressed.connect(func(): compendium_action.emit())
+	pause_squad_button = pause_presentation.actions.squad
+	pause_squad_button.pressed.connect(func(): squad_action.emit())
+	pause_stage_button = pause_presentation.actions.stages
+	pause_stage_button.pressed.connect(func(): stage_action.emit())
 	pause_menu_button = pause_presentation.actions.menu
 	pause_menu_button.pressed.connect(func(): main_menu_action.emit())
 	pause_map_button = pause_presentation.actions.map

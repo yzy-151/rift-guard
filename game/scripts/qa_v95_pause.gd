@@ -149,9 +149,9 @@ func run(target: Node) -> int:
 	await capture("04-pause-reduced")
 	game.hud.reduced=false; game.hud.refresh(game.sim,game.selected_id)
 	panel.actions["continue"].grab_focus()
-	for i in 6:
+	for i in panel.focus_order.size():
 		await key(KEY_TAB)
-		check(game.get_viewport().gui_get_focus_owner()==panel.focus_order[(i+1)%6],"Tab follows six-action loop %d" %i)
+		check(game.get_viewport().gui_get_focus_owner()==panel.focus_order[(i+1)%panel.focus_order.size()],"Tab follows all pause actions %d" %i)
 	await key(KEY_ENTER)
 	check(game.sim.state=="running" and not panel.is_visible_in_tree(),"Enter on Continue resumes real battle")
 	await key(KEY_SPACE); await click(panel.actions["continue"])

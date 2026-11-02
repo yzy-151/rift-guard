@@ -1,0 +1,133 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 610.88 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 5060 Ti
+
+V95 EXPLOSION PASS: explosion validation uses isolated save data
+V95 EXPLOSION PASS: actual battle and simulation initialized
+V95 EXPLOSION PASS: death full paints thick maroon smoke lobes
+V95 EXPLOSION PASS: death full paints red inner lobes
+V95 EXPLOSION PASS: death full retains a white yellow ignition core
+V95 EXPLOSION PASS: death full explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: death full expanding smoke remains overlapping masses instead of a flower ring
+V95 EXPLOSION PASS: death full hot curls are limited to the central fire tongues
+V95 EXPLOSION PASS: death full phase 0.025 draws bounded visible geometry
+V95 EXPLOSION PASS: death full phase 0.110 draws bounded visible geometry
+V95 EXPLOSION PASS: death full phase 0.240 draws bounded visible geometry
+V95 EXPLOSION PASS: death full phase 0.400 draws bounded visible geometry
+V95 EXPLOSION PASS: death full dissipates without retained geometry
+V95 EXPLOSION PASS: death reduced paints thick maroon smoke lobes
+V95 EXPLOSION PASS: death reduced paints red inner lobes
+V95 EXPLOSION PASS: death reduced retains a white yellow ignition core
+V95 EXPLOSION PASS: death reduced explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: death reduced expanding smoke remains overlapping masses instead of a flower ring
+V95 EXPLOSION PASS: death reduced hot curls are limited to the central fire tongues
+V95 EXPLOSION PASS: death reduced phase 0.025 draws bounded visible geometry
+V95 EXPLOSION PASS: death reduced phase 0.110 draws bounded visible geometry
+V95 EXPLOSION PASS: death reduced phase 0.240 draws bounded visible geometry
+V95 EXPLOSION PASS: death reduced phase 0.400 draws bounded visible geometry
+V95 EXPLOSION PASS: death reduced dissipates without retained geometry
+V95 EXPLOSION PASS: death_burst full paints thick maroon smoke lobes
+V95 EXPLOSION PASS: death_burst full paints red inner lobes
+V95 EXPLOSION PASS: death_burst full retains a white yellow ignition core
+V95 EXPLOSION PASS: death_burst full explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: death_burst full expanding smoke remains overlapping masses instead of a flower ring
+V95 EXPLOSION PASS: death_burst full hot curls are limited to the central fire tongues
+V95 EXPLOSION PASS: death_burst full phase 0.025 draws bounded visible geometry
+V95 EXPLOSION PASS: death_burst full phase 0.110 draws bounded visible geometry
+V95 EXPLOSION PASS: death_burst full phase 0.240 draws bounded visible geometry
+V95 EXPLOSION PASS: death_burst full phase 0.400 draws bounded visible geometry
+V95 EXPLOSION PASS: death_burst full dissipates without retained geometry
+V95 EXPLOSION PASS: death_burst reduced paints thick maroon smoke lobes
+V95 EXPLOSION PASS: death_burst reduced paints red inner lobes
+V95 EXPLOSION PASS: death_burst reduced retains a white yellow ignition core
+V95 EXPLOSION PASS: death_burst reduced explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: death_burst reduced expanding smoke remains overlapping masses instead of a flower ring
+V95 EXPLOSION PASS: death_burst reduced hot curls are limited to the central fire tongues
+V95 EXPLOSION PASS: death_burst reduced phase 0.025 draws bounded visible geometry
+V95 EXPLOSION PASS: death_burst reduced phase 0.110 draws bounded visible geometry
+V95 EXPLOSION PASS: death_burst reduced phase 0.240 draws bounded visible geometry
+V95 EXPLOSION PASS: death_burst reduced phase 0.400 draws bounded visible geometry
+V95 EXPLOSION PASS: death_burst reduced dissipates without retained geometry
+V95 EXPLOSION PASS: enemy_volatile full paints thick maroon smoke lobes
+V95 EXPLOSION PASS: enemy_volatile full paints red inner lobes
+V95 EXPLOSION PASS: enemy_volatile full retains a white yellow ignition core
+V95 EXPLOSION PASS: enemy_volatile full explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: enemy_volatile full expanding smoke remains overlapping masses instead of a flower ring
+V95 EXPLOSION PASS: enemy_volatile full hot curls are limited to the central fire tongues
+V95 EXPLOSION PASS: enemy_volatile full phase 0.025 draws bounded visible geometry
+V95 EXPLOSION PASS: enemy_volatile full phase 0.110 draws bounded visible geometry
+V95 EXPLOSION PASS: enemy_volatile full phase 0.240 draws bounded visible geometry
+V95 EXPLOSION PASS: enemy_volatile full phase 0.400 draws bounded visible geometry
+V95 EXPLOSION PASS: enemy_volatile full dissipates without retained geometry
+V95 EXPLOSION PASS: enemy_volatile reduced paints thick maroon smoke lobes
+V95 EXPLOSION PASS: enemy_volatile reduced paints red inner lobes
+V95 EXPLOSION PASS: enemy_volatile reduced retains a white yellow ignition core
+V95 EXPLOSION PASS: enemy_volatile reduced explosion has no spokes, shard lines or flare sprites
+V95 EXPLOSION PASS: enemy_volatile reduced expanding smoke remains overlapping masses instead of a flower ring
+V95 EXPLOSION PASS: enemy_volatile reduced hot curls are limited to the central fire tongues
+V95 EXPLOSION PASS: enemy_volatile reduced phase 0.025 draws bounded visible geometry
+V95 EXPLOSION PASS: enemy_volatile reduced phase 0.110 draws bounded visible geometry
+V95 EXPLOSION PASS: enemy_volatile reduced phase 0.240 draws bounded visible geometry
+V95 EXPLOSION PASS: enemy_volatile reduced phase 0.400 draws bounded visible geometry
+V95 EXPLOSION PASS: enemy_volatile reduced dissipates without retained geometry
+V95 EXPLOSION PASS: source bug death creates no premature duplicate burst before its fuse
+V95 EXPLOSION PASS: dedicated bug explosion creates no second comic accent
+V95 EXPLOSION PASS: original atlas deaths keep their original animation only
+V95 EXPLOSION PASS: shared_burst keeps its existing independent drawing style
+V95 EXPLOSION PASS: beam keeps its existing independent drawing style
+V95 EXPLOSION PASS: rift keeps its existing independent drawing style
+V95 EXPLOSION PASS: impact keeps its existing independent drawing style
+V95 EXPLOSION PASS: lightning keeps its existing independent drawing style
+V95 EXPLOSION PASS: campaign bug retains one 80-radius blast with one-second fuse
+V95 EXPLOSION PASS: campaign bug keeps original damage multiplier
+V95 EXPLOSION PASS: campaign bug deals no damage before the fuse completes
+V95 EXPLOSION PASS: campaign original 79/81/120 projected damage boundaries remain exact
+V95 EXPLOSION PASS: campaign bug detonates exactly once
+V95 EXPLOSION PASS: campaign completed blast cannot damage again
+V95 EXPLOSION PASS: campaign painted blast phase 0.025 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: campaign painted blast phase 0.110 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated bug blast uses the cartoon smoke and fire palette
+V95 EXPLOSION PASS: campaign dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: campaign painted blast phase 0.240 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: campaign painted blast phase 0.400 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: campaign painted blast phase 0.025 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: campaign painted blast phase 0.110 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated bug blast uses the cartoon smoke and fire palette
+V95 EXPLOSION PASS: campaign dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: campaign painted blast phase 0.240 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: campaign painted blast phase 0.400 stays inside its true projected footprint
+V95 EXPLOSION PASS: campaign dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: endless bug retains one 80-radius blast with one-second fuse
+V95 EXPLOSION PASS: endless bug keeps original damage multiplier
+V95 EXPLOSION PASS: endless bug deals no damage before the fuse completes
+V95 EXPLOSION PASS: endless original 79/81/120 projected damage boundaries remain exact
+V95 EXPLOSION PASS: endless bug detonates exactly once
+V95 EXPLOSION PASS: endless completed blast cannot damage again
+V95 EXPLOSION PASS: endless painted blast phase 0.025 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: endless painted blast phase 0.110 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated bug blast uses the cartoon smoke and fire palette
+V95 EXPLOSION PASS: endless dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: endless painted blast phase 0.240 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: endless painted blast phase 0.400 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: endless painted blast phase 0.025 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: endless painted blast phase 0.110 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated bug blast uses the cartoon smoke and fire palette
+V95 EXPLOSION PASS: endless dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: endless painted blast phase 0.240 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: endless painted blast phase 0.400 stays inside its true projected footprint
+V95 EXPLOSION PASS: endless dedicated blast draws bounded visible geometry
+V95 EXPLOSION PASS: native actual bug retains its warning until the complete fuse
+V95 EXPLOSION PASS: native actual enemy tick removes the defeated bug from live actors
+V95 EXPLOSION PASS: native original down animation advances through the real one-second fuse
+V95 EXPLOSION PASS: native actual bug event dispatch renders exactly one dedicated blast
+V95 EXPLOSION PASS: native original down tail expires naturally during the explosion
+V95 EXPLOSION COMPLETE: 129 checks, 0 failures

@@ -1,0 +1,41 @@
+{
+  "version": "102.0.0",
+  "base": "fde715d06c1945164d55e83dc4fd5a26e3c2c560",
+  "validated_at": "2026-11-02T23:37:26.207389+00:00",
+  "identity": {
+    "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+    "binaries": {
+      "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+      "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+    }
+  },
+  "phases": {
+    "source": {
+      "processes": 12,
+      "checks": 1014,
+      "failures": 0
+    },
+    "release": {
+      "processes": 10,
+      "checks": 818,
+      "failures": 0
+    }
+  },
+  "artifacts": [
+    {
+      "name": "RiftGuard-V102.exe",
+      "bytes": 104578048,
+      "sha256": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b"
+    },
+    {
+      "name": "RiftGuard-V102.pck",
+      "bytes": 305695852,
+      "sha256": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+    },
+    {
+      "name": "RiftGuard-V102-Windows.zip",
+      "bytes": 375167391,
+      "sha256": "491e2c5e3048431d13eef1534c2c991be90b3e7054fb48f26f9e20cd115ae677"
+    }
+  ]
+}

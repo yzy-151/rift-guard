@@ -1,0 +1,152 @@
+[
+  {
+    "name": "pause-1280x720",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 74,
+    "seconds": 7.55,
+    "identity": {
+      "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+      "binaries": {
+        "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+        "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+      }
+    },
+    "validated_at": "2026-11-02T23:28:52.547566+00:00"
+  },
+  {
+    "name": "modes-1920x1080",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 84,
+    "seconds": 25.88,
+    "identity": {
+      "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+      "binaries": {
+        "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+        "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+      }
+    },
+    "validated_at": "2026-11-02T23:29:18.428481+00:00"
+  },
+  {
+    "name": "pause-1920x1080",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 74,
+    "seconds": 6.94,
+    "identity": {
+      "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+      "binaries": {
+        "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+        "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+      }
+    },
+    "validated_at": "2026-11-02T23:29:25.361395+00:00"
+  },
+  {
+    "name": "simulation",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 78,
+    "seconds": 5.83,
+    "identity": {
+      "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+      "binaries": {
+        "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+        "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+      }
+    },
+    "validated_at": "2026-11-02T23:29:31.197431+00:00"
+  },
+  {
+    "name": "dialogue",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 42,
+    "seconds": 16.89,
+    "identity": {
+      "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+      "binaries": {
+        "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+        "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+      }
+    },
+    "validated_at": "2026-11-02T23:29:48.085737+00:00"
+  },
+  {
+    "name": "endflow",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 111,
+    "seconds": 37.7,
+    "identity": {
+      "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+      "binaries": {
+        "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+        "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+      }
+    },
+    "validated_at": "2026-11-02T23:30:25.780517+00:00"
+  },
+  {
+    "name": "classic",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 96,
+    "seconds": 16.36,
+    "identity": {
+      "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+      "binaries": {
+        "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+        "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+      }
+    },
+    "validated_at": "2026-11-02T23:30:42.146315+00:00"
+  },
+  {
+    "name": "explosion",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 129,
+    "seconds": 28.58,
+    "identity": {
+      "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+      "binaries": {
+        "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+        "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+      }
+    },
+    "validated_at": "2026-11-02T23:31:10.730575+00:00"
+  },
+  {
+    "name": "workshop",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 46,
+    "seconds": 6.72,
+    "identity": {
+      "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+      "binaries": {
+        "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+        "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+      }
+    },
+    "validated_at": "2026-11-02T23:31:17.460359+00:00"
+  },
+  {
+    "name": "modes-1280x720",
+    "ok": true,
+    "exit_code": 0,
+    "checks": 84,
+    "seconds": 23.12,
+    "identity": {
+      "source_sha256": "dd5397d39a57f7d31e4855b2254131a25c6ff05eea5dc02f34b376caabe0b1a3",
+      "binaries": {
+        "RiftGuard-V102.exe": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b",
+        "RiftGuard-V102.pck": "c095fe33ffd3fed959ba967fbd7d9ac663297ec2538f63fbc33ccc31e9c14734"
+      }
+    },
+    "validated_at": "2026-11-02T23:32:33.002228+00:00"
+  }
+]

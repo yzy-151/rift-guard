@@ -1,0 +1,88 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 610.88 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 5060 Ti
+
+V102 PASS: isolated save enabled
+V102 PASS: native capture 01-menu
+V102 PASS: menu settings mouse entry
+V102 PASS: settings returns menu
+V102 PASS: campaign card mouse entry
+V102 PASS: fresh save locks stage two
+V102 PASS: native capture 02-stage-locks
+V102 PASS: stage Escape returns menu
+V102 PASS: stage Back returns menu
+V102 PASS: stage one opens squad
+V102 PASS: native capture 03-squad
+V102 PASS: squad Escape returns stages
+V102 PASS: opening narrative reaches battle
+V102 PASS: formation starts chosen stage
+V102 PASS: HUD press and battlefield release deploy hero
+V102 PASS: right click moves deployed hero
+V102 PASS: active skill mouse aim
+V102 PASS: active skill commits once
+V102 PASS: ultimate mouse aim
+V102 PASS: ultimate commits once and spends energy
+V102 PASS: native capture 04-battle
+V102 PASS: level up opens card choice
+V102 PASS: native capture 05-rewards
+V102 PASS: card mouse selection applies once
+V102 PASS: HUD pause opens menu
+V102 PASS: native capture 06-pause
+V102 PASS: pause exposes squad and stages
+V102 PASS: pause action in viewport: continue
+V102 PASS: pause action in viewport: settings
+V102 PASS: pause action in viewport: restart
+V102 PASS: pause action in viewport: squad
+V102 PASS: pause action in viewport: stages
+V102 PASS: pause action in viewport: compendium
+V102 PASS: pause action in viewport: map
+V102 PASS: pause action in viewport: menu
+V102 PASS: pause settings mouse entry
+V102 PASS: settings Escape returns pause
+V102 PASS: pause squad mouse entry
+V102 PASS: squad Escape returns original pause
+V102 PASS: squad Back returns original pause
+V102 PASS: pause stages mouse entry
+V102 PASS: stage Escape returns original pause
+V102 PASS: stage Back returns original pause
+V102 PASS: stage unlock refreshes
+V102 PASS: stage two narrative reaches battle
+V102 PASS: stage switch resets and starts stage two
+V102 PASS: pause menu mouse return
+V102 PASS: endless card opens three layouts
+V102 PASS: native capture 07-endless-layouts
+V102 PASS: endless layout Escape returns menu
+V102 FAIL: endless layout mouse entry blood_gate
+V102 FAIL: endless squad Escape returns layouts
+V102 FAIL: endless starts selected layout blood_gate
+V102 PASS: native capture 08-endless-blood_gate
+V102 FAIL: endless pause squad reachable
+V102 FAIL: endless squad returns pause
+V102 FAIL: F3 cannot stack squad over stage selector
+V102 FAIL: previewing campaign stage preserves endless mode
+V102 FAIL: cancel cross-mode preview returns endless pause
+V102 FAIL: cancel does not mutate live mode
+V102 FAIL: squad remains reachable after cancelling cross-mode preview
+V102 PASS: endless layout mouse entry frost_isles
+V102 PASS: endless squad Escape returns layouts
+V102 PASS: endless starts selected layout frost_isles
+V102 PASS: native capture 08-endless-frost_isles
+V102 PASS: endless pause squad reachable
+V102 PASS: endless squad returns pause
+V102 PASS: F3 cannot stack squad over stage selector
+V102 PASS: previewing campaign stage preserves endless mode
+V102 PASS: cancel cross-mode preview returns endless pause
+V102 PASS: cancel does not mutate live mode
+V102 PASS: squad remains reachable after cancelling cross-mode preview
+V102 PASS: endless layout mouse entry wind_cross
+V102 PASS: endless squad Escape returns layouts
+V102 PASS: endless starts selected layout wind_cross
+V102 PASS: native capture 08-endless-wind_cross
+V102 PASS: endless pause squad reachable
+V102 PASS: endless squad returns pause
+V102 PASS: F3 cannot stack squad over stage selector
+V102 PASS: previewing campaign stage preserves endless mode
+V102 PASS: cancel cross-mode preview returns endless pause
+V102 PASS: cancel does not mutate live mode
+V102 PASS: squad remains reachable after cancelling cross-mode preview
+V102 PASS: all modes return to menu
+V102 MODES: 84 checks, 10 failures

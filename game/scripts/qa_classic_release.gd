@@ -30,7 +30,7 @@ func run(game: Node) -> void:
 	var environment_art=load("res://scripts/battle_environment_art.gd")
 	for theme: String in ["crimson","frost","wind","meadow"]:
 		check(environment_art.texture(theme)!=null,"painted ground packaged: "+theme)
-	check(str(ProjectSettings.get_setting("application/config/version")) == "101.0.0", "V101 package version")
+	check(str(ProjectSettings.get_setting("application/config/version")) == "102.0.0", "V102 package version")
 	var device_atlas = load("res://assets/world/v92-devices/functional-atlas.png")
 	check(device_atlas is Texture2D and device_atlas.get_width() > 1000, "functional terrain atlas packaged")
 	game.open_mode_menu()
