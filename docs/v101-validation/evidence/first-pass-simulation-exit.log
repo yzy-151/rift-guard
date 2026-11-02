@@ -1,0 +1,85 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+
+V95 SIMULATION PASS: reverse spawn order preserves forward queue and front-rank strikes
+V95 SIMULATION PASS: dead front rank releases the next unit's queue reservation
+V95 SIMULATION PASS: moving blocker invalidates shared lane ranks on the next tick
+V95 SIMULATION PASS: indexed movement collision matches complete scan across 160 cell-boundary probes
+V95 SIMULATION PASS: indexed reserved slots match complete scan across 160 probes
+V95 SIMULATION PASS: body moved across cells blocks later movement in the same tick
+V95 SIMULATION PASS: moved reservation is visible in its new cell during the same tick
+V95 SIMULATION PASS: dead and released reservations never survive through cached dictionary references
+V95 SIMULATION PASS: terrain index preserves exact ellipse/rect/grid collision and authored obstacle priority in 240 probes
+V95 SIMULATION PASS: closed door remains solid in cached terrain
+V95 SIMULATION PASS: door destruction removes collision immediately within the same tick
+V95 SIMULATION PASS: real skill knockback updates body membership across multiple cells immediately
+V95 SIMULATION PASS: all mixed enemies cross nearby authored lanes and merged junctions without a deadlock
+V95 SIMULATION PASS: hero-overlap front and rear recover their body gap (reverse=false)
+V95 SIMULATION PASS: hero-overlap queue resumes real front attacks (reverse=false)
+V95 SIMULATION PASS: temporary overlap recovery never becomes continuing crowd retreat (reverse=false)
+V95 SIMULATION PASS: hero-overlap front and rear recover their body gap (reverse=true)
+V95 SIMULATION PASS: hero-overlap queue resumes real front attacks (reverse=true)
+V95 SIMULATION PASS: temporary overlap recovery never becomes continuing crowd retreat (reverse=true)
+V95 SIMULATION PASS: endless manual order accepts a goal beyond a long wall
+V95 SIMULATION PASS: endless manual order rounds the entire wall to its own goal rather than hero flow fields
+V95 SIMULATION PASS: endless manual wall detour preserves collision for every movement step
+V95 SIMULATION PASS: endless manual goal clears on arrival and autonomous targeting resumes
+V95 SIMULATION PASS: grunt horizontal crowd gap 27 never walks backward to resolve enemy compression
+V95 SIMULATION PASS: grunt horizontal crowd gap 27 stays on authored segment
+V95 SIMULATION PASS: grunt horizontal crowd gap 27 retains hero body standoff
+V95 SIMULATION PASS: grunt horizontal crowd gap 27 front rank still attacks
+V95 SIMULATION PASS: grunt horizontal crowd gap 27 resumes forward travel when blocker leaves
+V95 SIMULATION PASS: hilichurl_brute horizontal crowd gap 27 never walks backward to resolve enemy compression
+V95 SIMULATION PASS: hilichurl_brute horizontal crowd gap 27 stays on authored segment
+V95 SIMULATION PASS: hilichurl_brute horizontal crowd gap 27 retains hero body standoff
+V95 SIMULATION PASS: hilichurl_brute horizontal crowd gap 27 front rank still attacks
+V95 SIMULATION PASS: hilichurl_brute horizontal crowd gap 27 resumes forward travel when blocker leaves
+V95 SIMULATION PASS: grunt vertical crowd gap 27 never walks backward to resolve enemy compression
+V95 SIMULATION PASS: grunt vertical crowd gap 27 stays on authored segment
+V95 SIMULATION PASS: grunt vertical crowd gap 27 retains hero body standoff
+V95 SIMULATION PASS: grunt vertical crowd gap 27 front rank still attacks
+V95 SIMULATION PASS: grunt vertical crowd gap 27 resumes forward travel when blocker leaves
+V95 SIMULATION PASS: hilichurl_brute vertical crowd gap 27 never walks backward to resolve enemy compression
+V95 SIMULATION PASS: hilichurl_brute vertical crowd gap 27 stays on authored segment
+V95 SIMULATION PASS: hilichurl_brute vertical crowd gap 27 retains hero body standoff
+V95 SIMULATION PASS: hilichurl_brute vertical crowd gap 27 front rank still attacks
+V95 SIMULATION PASS: hilichurl_brute vertical crowd gap 27 resumes forward travel when blocker leaves
+V95 SIMULATION PASS: hilichurl_brute horizontal crowd gap 95 never walks backward to resolve enemy compression
+V95 SIMULATION PASS: hilichurl_brute horizontal crowd gap 95 stays on authored segment
+V95 SIMULATION PASS: hilichurl_brute horizontal crowd gap 95 retains hero body standoff
+V95 SIMULATION PASS: hilichurl_brute horizontal crowd gap 95 front rank still attacks
+V95 SIMULATION PASS: hilichurl_brute horizontal crowd gap 95 resumes forward travel when blocker leaves
+V95 SIMULATION PASS: overlap with hero still recovers to intentional standoff
+V95 SIMULATION PASS: real knockback can still displace enemy upstream
+V95 SIMULATION PASS: knocked-back enemy resumes forward approach
+V95 SIMULATION PASS: off-route skill displacement rejoins interrupted segment
+V95 SIMULATION PASS: natural charger retains committed dash startup
+V95 SIMULATION PASS: committed dash still moves through its own action
+V95 SIMULATION PASS: workshop defaults to live combat for both sides
+V95 SIMULATION PASS: hero walking order accepted
+V95 SIMULATION PASS: hero order changes destination without teleporting
+V95 SIMULATION PASS: hero walks at real movement speed with auto attacks disabled
+V95 SIMULATION PASS: hero walking order reaches its goal
+V95 SIMULATION PASS: enemy walking order accepted
+V95 SIMULATION PASS: enemy order never teleports
+V95 SIMULATION PASS: enemy action toggle freezes its walking order
+V95 SIMULATION PASS: enemy walks toward manual goal before autonomous targeting
+V95 SIMULATION PASS: enemy resumes natural combat after manual destination
+V95 SIMULATION PASS: workshop enemies approach heroes in either direction instead of leaking left
+V95 SIMULATION PASS: live workshop resolves both hero and enemy attacks
+V95 SIMULATION PASS: enemy accepts destination beyond a wall
+V95 SIMULATION PASS: enemy walking never clips through an obstacle
+V95 SIMULATION PASS: enemy reaches manual goal by walking around wall
+V95 SIMULATION PASS: hero accepts destination beyond a wall
+V95 SIMULATION PASS: hero walking never clips through an obstacle
+V95 SIMULATION PASS: hero reaches manual goal by walking around wall
+V95 SIMULATION PASS: manual destination does not cancel a committed dash
+V95 SIMULATION PASS: queued enemy walking resumes after committed dash
+V95 SIMULATION PASS: freeze still stops a manually commanded enemy
+V95 SIMULATION PASS: manual walking continues after freeze ends
+V95 SIMULATION PASS: illegal enemy destination is rejected without relocation
+V95 SIMULATION PASS: stationary structures retain their authored immobility
+V95 SIMULATION COMPLETE: 78 checks, 0 failures
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2641)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:810)

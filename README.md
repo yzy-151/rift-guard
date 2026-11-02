@@ -1,5 +1,11 @@
 # 裂隙守望 · Rift Guard
 
+## V101：工坊实验场景存取
+
+基于 V100 新增三个独立工坊场景槽，保存地图、单位摆放、卡牌构筑和实验开关；F5 保存、F9 载入，支持覆盖确认、错误提示与跨进程恢复，载入后暂停在满血实验起点。
+
+本地 Windows 包：`releases/V101-20261103/RiftGuard-V101-Windows.zip`，解压后运行 EXE，保留同名 PCK。见 [V101 发布说明](docs/v101-release-notes.md)、[V101 实验计划](docs/superpowers/plans/2026-11-02-v101-workshop-scenarios.md) 和 [V101 验证记录](docs/v101-validation/README.md)。V101 源码在独立 `v101-workshop-scenarios` 分支；下方保留已发布 V100 的下载入口。
+
 ## V100：经典玩法、漫画音画与自由工坊
 
 [下载 V100 Windows 版](https://github.com/yzy-151/rift-guard/releases/tag/v100)。解压 `RiftGuard-V100-Windows.zip` 后运行 `RiftGuard-V100.exe`，保留同目录 PCK。源码工程为 `game/project.godot`，使用 Godot 4.6。

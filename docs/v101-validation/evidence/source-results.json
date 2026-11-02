@@ -1,0 +1,252 @@
+[
+  {
+    "name": "scenarios",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 5.2,
+    "summary": [
+      "V101 SCENARIOS: 180 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:20:12.475397+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 180
+  },
+  {
+    "name": "workshop",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 9.9,
+    "summary": [
+      "V93 WORKSHOP: 82 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:20:22.379929+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 82
+  },
+  {
+    "name": "toolbar",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 4.9,
+    "summary": [
+      "V94 WORKSHOP TOOLBAR: 54 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:20:27.277785+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 54
+  },
+  {
+    "name": "ui-lab",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 0.64,
+    "summary": [
+      "UI LAB PASS: workspace rebuilds reflected dialogue page",
+      "UI LAB PASS: workspace exposes field names and values",
+      "UI LAB COMPLETE: 16 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:20:27.918099+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 16
+  },
+  {
+    "name": "restart-write",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 4.72,
+    "summary": [
+      "V101 WORKSHOP: 10 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:20:32.636296+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 10
+  },
+  {
+    "name": "restart-read",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 5.72,
+    "summary": [
+      "V101 WORKSHOP: 30 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:20:38.361406+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 30
+  },
+  {
+    "name": "workshop-1280x720",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 8.3,
+    "summary": [
+      "V101 WORKSHOP: 46 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:20:46.658785+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 46
+  },
+  {
+    "name": "workshop-1920x1080",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 9.98,
+    "summary": [
+      "V101 WORKSHOP: 46 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:20:56.640177+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 46
+  },
+  {
+    "name": "simulation",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 6.21,
+    "summary": [
+      "V95 SIMULATION PASS: illegal enemy destination is rejected without relocation",
+      "V95 SIMULATION PASS: stationary structures retain their authored immobility",
+      "V95 SIMULATION COMPLETE: 78 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:21:02.849295+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 78
+  },
+  {
+    "name": "pause",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 7.4,
+    "summary": [
+      "V95 PAUSE PASS: R shortcut opens existing restart confirmation",
+      "V95 PAUSE PASS: Enter confirms actual retry and resets the current run",
+      "V95 PAUSE PASS: mouse Menu returns to existing mode selection"
+    ],
+    "validated_at": "2026-11-02T21:21:10.248716+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 72
+  },
+  {
+    "name": "dialogue",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 18.14,
+    "summary": [
+      "V95 DIALOGUE PASS: original campaign success and stage transitions start battle without hanging",
+      "V95 DIALOGUE PASS: all expected home and campaign dialogue branches executed",
+      "V95 DIALOGUE COMPLETE: 42 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:21:28.389845+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 42
+  },
+  {
+    "name": "explosion",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 30.27,
+    "summary": [
+      "V95 EXPLOSION PASS: native actual bug event dispatch renders exactly one dedicated blast",
+      "V95 EXPLOSION PASS: native original down tail expires naturally during the explosion",
+      "V95 EXPLOSION COMPLETE: 129 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:21:58.660516+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 129
+  },
+  {
+    "name": "endflow",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 39.45,
+    "summary": [
+      "V94 ENDFLOW PASS: final-win-missing: achievement still awarded",
+      "V94 ENDFLOW PASS: final-win-missing: achievement persisted to isolated save",
+      "V94 ENDFLOW COMPLETE: 111 checks, 0 failures"
+    ],
+    "validated_at": "2026-11-02T21:22:38.109803+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 111
+  },
+  {
+    "name": "classic",
+    "ok": true,
+    "exit_code": 0,
+    "seconds": 18.57,
+    "summary": [
+      "V100 RELEASE: checks=96 failures=0; four 15-second combat fixtures, terrain, exploration, 3 layouts, 40 voice slots, packaged audio and isolated workshop"
+    ],
+    "validated_at": "2026-11-02T21:22:56.684858+00:00",
+    "identity": {
+      "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+      "binaries": {
+        "Godot_v4.6-stable_win64_console.exe": "fc759f9d296fe54f09ab66d41df6ddd2d278493b0e71109f6688ef029ad271ae"
+      }
+    },
+    "checks": 96
+  }
+]

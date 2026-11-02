@@ -1,0 +1,98 @@
+{
+  "recorded_at": "2026-11-02T21:17:02.671368+00:00",
+  "baseline_simulation_runs": 12,
+  "baseline_leak_iterations": [
+    4,
+    8,
+    9,
+    11
+  ],
+  "leaked_classes": [
+    "OggPacketSequence",
+    "AudioStreamOggVorbis",
+    "AudioStreamPlaybackOggVorbis",
+    "OggPacketSequencePlayback"
+  ],
+  "leaked_resource": "res://assets/helltaker/audio/Epitomize.ogg::OggPacketSequence_dw7iy",
+  "plain_timer_probe_ms": 0.193,
+  "guarded_timer_probe_ms": 241.746,
+  "upstream_reference": "https://github.com/godotengine/godot/issues/76745",
+  "modified_files": {
+    "game\\scripts\\main.gd": "647feed07f49f4f03fb96cdf89ba1d6aefc39dbfae3a0f45666e95f448882949",
+    "game\\tests\\qa_v93_workshop.gd": "7ca8ce89ce304772d57566f453e52a12d5e52e66524f754d91f06cc786665209"
+  },
+  "final_runs": [
+    {
+      "suite": "simulation",
+      "iteration": 1,
+      "verbose": false,
+      "seconds": 5.83,
+      "exit": 0,
+      "leak": false,
+      "error": false,
+      "summary": [
+        "V95 SIMULATION COMPLETE: 78 checks, 0 failures"
+      ]
+    },
+    {
+      "suite": "simulation",
+      "iteration": 2,
+      "verbose": false,
+      "seconds": 5.92,
+      "exit": 0,
+      "leak": false,
+      "error": false,
+      "summary": [
+        "V95 SIMULATION COMPLETE: 78 checks, 0 failures"
+      ]
+    },
+    {
+      "suite": "simulation",
+      "iteration": 3,
+      "verbose": true,
+      "seconds": 5.83,
+      "exit": 0,
+      "leak": false,
+      "error": false,
+      "summary": [
+        "V95 SIMULATION COMPLETE: 78 checks, 0 failures"
+      ]
+    },
+    {
+      "suite": "workshop",
+      "iteration": 1,
+      "verbose": false,
+      "seconds": 9.35,
+      "exit": 0,
+      "leak": false,
+      "error": false,
+      "summary": [
+        "V93 WORKSHOP: 82 checks, 0 failures"
+      ]
+    },
+    {
+      "suite": "workshop",
+      "iteration": 2,
+      "verbose": false,
+      "seconds": 9.45,
+      "exit": 0,
+      "leak": false,
+      "error": false,
+      "summary": [
+        "V93 WORKSHOP: 82 checks, 0 failures"
+      ]
+    },
+    {
+      "suite": "workshop",
+      "iteration": 3,
+      "verbose": true,
+      "seconds": 9.45,
+      "exit": 0,
+      "leak": false,
+      "error": false,
+      "summary": [
+        "V93 WORKSHOP: 82 checks, 0 failures"
+      ]
+    }
+  ]
+}

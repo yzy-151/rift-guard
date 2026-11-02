@@ -30,7 +30,7 @@ func run(game: Node) -> void:
 	var environment_art=load("res://scripts/battle_environment_art.gd")
 	for theme: String in ["crimson","frost","wind","meadow"]:
 		check(environment_art.texture(theme)!=null,"painted ground packaged: "+theme)
-	check(str(ProjectSettings.get_setting("application/config/version")) == "100.0.0", "V100 package version")
+	check(str(ProjectSettings.get_setting("application/config/version")) == "101.0.0", "V101 package version")
 	var device_atlas = load("res://assets/world/v92-devices/functional-atlas.png")
 	check(device_atlas is Texture2D and device_atlas.get_width() > 1000, "functional terrain atlas packaged")
 	game.open_mode_menu()
@@ -155,7 +155,5 @@ func run(game: Node) -> void:
 		workshop.close()
 		await game.get_tree().process_frame
 		check(game.workshop == null and game.sim == original_sim and game.settings_panel.is_open(), "workshop returns to original settings and simulation")
-	game._stop_scene_audio(game)
-	await game.get_tree().create_timer(0.2).timeout
 	print("V100 RELEASE: checks=%d failures=%d; four 15-second combat fixtures, terrain, exploration, 3 layouts, 40 voice slots, packaged audio and isolated workshop" % [checks, failures.size()])
-	game.get_tree().call_deferred("quit", 0 if failures.is_empty() else 1)
+	await game._quit_after_audio_cleanup(0 if failures.is_empty() else 1)

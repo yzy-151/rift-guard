@@ -1,0 +1,44 @@
+{
+  "version": "101.0.0",
+  "source_base": "18082a8151a66fa0df21f3dd1d8e51dcb04b5ccc",
+  "validated_at": "2026-11-02T21:28:58.508260+00:00",
+  "engine": "Godot 4.6 stable",
+  "phases": {
+    "source": {
+      "processes": 14,
+      "assertions": 992,
+      "failures": 0,
+      "restart_processes": [
+        40804,
+        38416
+      ]
+    },
+    "release": {
+      "processes": 10,
+      "assertions": 660,
+      "failures": 0,
+      "restart_processes": [
+        64208,
+        29204
+      ]
+    }
+  },
+  "source_sha256": "3c5aab4ebeb6b082fe2f533f7cd81493f4f05512b37bedc529fd344241e142e9",
+  "artifacts": [
+    {
+      "name": "RiftGuard-V101.exe",
+      "bytes": 104578048,
+      "sha256": "f9cb815a32a1ae3a73ad8699ed2b068cb76fe01636d7e8538243056fac05f37b"
+    },
+    {
+      "name": "RiftGuard-V101.pck",
+      "bytes": 305686224,
+      "sha256": "cefe9d45af7e2c31b568e70f9d503ad857bfde55c26fe5eb8f58d2b0ffcd3494"
+    },
+    {
+      "name": "RiftGuard-V101-Windows.zip",
+      "bytes": 343472843,
+      "sha256": "0205373a82c5028b230f4409814a1c83ee61878b2acae4e613ed1e78391893bf"
+    }
+  ]
+}

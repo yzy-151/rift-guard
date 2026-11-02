@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_layout")
 schema_version = 4
+battle_workshop_scenario_bar_rect = Rect2(480, 68, 784, 70)
 mode_header_rect = Rect2(54, 22, 790, 134)
 mode_settings_rect = Rect2(1010, 55, 205, 50)
 mode_campaign_rect = Rect2(68, 182, 550, 330)

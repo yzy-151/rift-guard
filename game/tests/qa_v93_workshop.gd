@@ -55,12 +55,11 @@ func run() -> void:
 	check(game.has_method("open_workshop"), "settings exposes independent workshop")
 	if game.has_method("open_workshop"):
 		await exercise_workshop()
-	game._stop_scene_audio(game)
 	var report := {"checks":checks,"failures":failures,"renderer":DisplayServer.get_name()}
 	var report_file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
 	report_file.store_string(JSON.stringify(report, "\t"))
 	print("V93 WORKSHOP: %d checks, %d failures" % [checks, failures.size()])
-	quit(0 if failures.is_empty() else 1)
+	await game._quit_after_audio_cleanup(0 if failures.is_empty() else 1)
 
 func exercise_workshop() -> void:
 	var initial_sim = game.sim

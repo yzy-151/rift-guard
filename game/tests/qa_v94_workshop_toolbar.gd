@@ -104,8 +104,7 @@ func run() -> void:
 	await click(workshop.buttons.exit)
 	for i in 3: await process_frame
 	check(game.workshop == null and game.settings_panel.is_open(), "exit mouse action returns to settings and frees workshop")
-	game._stop_scene_audio(game)
 	var file := FileAccess.open(output.path_join("report.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify({"checks":checks, "failures":failures, "renderer":DisplayServer.get_name(), "capture_width":last_capture_size.x, "capture_height":last_capture_size.y}, "\t"))
 	print("V94 WORKSHOP TOOLBAR: %d checks, %d failures" % [checks, failures.size()])
-	quit(0 if failures.is_empty() else 1)
+	await game._quit_after_audio_cleanup(0 if failures.is_empty() else 1)

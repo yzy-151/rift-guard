@@ -227,6 +227,11 @@ func apply_card(card: Dictionary) -> bool:
 	if effect in ["assign_traveler_element", "dual_element_mythic"] and hero.character_id != "traveler":
 		message = "此卡改变旅行者元素，请先选中旅行者。"
 		return false
+	# Shared effects depend on who already exists, including undeployed heroes.
+	# Stable ids preserve that chronology when experiment configurations replay.
+	var roster: Array[Dictionary] = []
+	for member: Dictionary in sim.heroes:
+		roster.append({"character_id":str(member.character_id), "deployed":bool(member.deployed)})
 	var applied := card.duplicate(true)
 	# Existing character effects take a runtime ID. Team-only mechanics remain
 	# honest about their original shared scope in the card description.
@@ -236,7 +241,7 @@ func apply_card(card: Dictionary) -> bool:
 	sim.run_state.buff_levels[str(card.id)] = int(sim.run_state.buff_levels.get(str(card.id), 0)) + 1
 	sim.run_state.rebuild_tags(sim.database.cards)
 	sim.apply_v2_card_effect(applied, selected_id)
-	cards_applied.append({"hero_id":selected_id, "card":card.duplicate(true)})
+	cards_applied.append({"hero_id":selected_id, "card":card.duplicate(true), "roster":roster})
 	message = "%s 获得「%s」；队伍机制仍按卡牌原有效果结算。" % [hero.name, card.name]
 	return true
 

@@ -3,6 +3,9 @@ class_name RiftUILayoutProfile
 
 @export var schema_version := 4
 
+@export_group("Workshop Scenarios")
+@export var battle_workshop_scenario_bar_rect := Rect2(480, 68, 784, 70)
+
 @export_group("Mode Select")
 @export var mode_header_rect := Rect2(54, 22, 790, 134)
 @export var mode_settings_rect := Rect2(1010, 55, 205, 50)

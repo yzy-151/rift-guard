@@ -1,0 +1,76 @@
+Godot Engine v4.6.stable.official.89cea1439 - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 610.88 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 5060 Ti
+
+V95 PAUSE PASS: saves isolated beneath QA output
+V95 PAUSE PASS: Space opens actual pause presentation
+V95 PAUSE PASS: legacy blank text card stays hidden
+V95 PAUSE PASS: dominant Continue receives initial keyboard focus
+V95 PAUSE PASS: selected hero uses large original character art
+V95 PAUSE PASS: large portrait identifies selected character
+V95 PAUSE PASS: empty build has authored next-step guidance
+V95 PAUSE PASS: original portrait retained for hero 0
+V95 PAUSE PASS: real HP hierarchy for hero 0
+V95 PAUSE PASS: real combat stats for hero 0
+V95 PAUSE PASS: HP stays a thin strip separated from two stat lines for hero 0
+V95 PAUSE PASS: original portrait retained for hero 1
+V95 PAUSE PASS: real HP hierarchy for hero 1
+V95 PAUSE PASS: real combat stats for hero 1
+V95 PAUSE PASS: HP stays a thin strip separated from two stat lines for hero 1
+V95 PAUSE PASS: original portrait retained for hero 2
+V95 PAUSE PASS: real HP hierarchy for hero 2
+V95 PAUSE PASS: real combat stats for hero 2
+V95 PAUSE PASS: HP stays a thin strip separated from two stat lines for hero 2
+V95 PAUSE PASS: internal reward debug hook is absent from player presentation
+V95 PAUSE PASS: player copy contains no technical telemetry
+V95 PAUSE PASS: actual simulation clock remains frozen while paused
+V95 PAUSE PASS: native capture has exact requested resolution: 01-pause-empty
+V95 PAUSE PASS: save native capture: 01-pause-empty
+V95 PAUSE PASS: 240 unchanged refreshes neither rebuild content nor create children
+V95 PAUSE PASS: stat-only change refreshes pause data exactly once
+V95 PAUSE PASS: full build retains every upgrade beyond first four
+V95 PAUSE PASS: upgrade preserves original name, icon and level: element_resonance_anemo
+V95 PAUSE PASS: upgrade preserves original name, icon and level: element_resonance_cryo
+V95 PAUSE PASS: upgrade preserves original name, icon and level: element_resonance_electro
+V95 PAUSE PASS: upgrade preserves original name, icon and level: element_resonance_geo
+V95 PAUSE PASS: upgrade preserves original name, icon and level: element_resonance_hydro
+V95 PAUSE PASS: upgrade preserves original name, icon and level: element_resonance_pyro
+V95 PAUSE PASS: upgrade preserves original name, icon and level: global_attack_1
+V95 PAUSE PASS: upgrade preserves original name, icon and level: global_health_1
+V95 PAUSE PASS: upgrade preserves original name, icon and level: single_armor_rare
+V95 PAUSE PASS: upgrade preserves original name, icon and level: single_attack_common
+V95 PAUSE PASS: upgrade preserves original name, icon and level: single_health_common
+V95 PAUSE PASS: upgrade preserves original name, icon and level: single_move_rare
+V95 PAUSE PASS: upgrade preserves original name, icon and level: single_range_rare
+V95 PAUSE PASS: upgrade preserves original name, icon and level: single_speed_common
+V95 PAUSE PASS: full build replaces empty state with compact original icon chips
+V95 PAUSE PASS: native capture has exact requested resolution: 02-pause-full
+V95 PAUSE PASS: save native capture: 02-pause-full
+V95 PAUSE PASS: all upgrades remain reachable through horizontal scroll
+V95 PAUSE PASS: mouse wheel navigates full upgrade strip
+V95 PAUSE PASS: native capture has exact requested resolution: 03-pause-full-tail
+V95 PAUSE PASS: save native capture: 03-pause-full-tail
+V95 PAUSE PASS: full build cache keeps node count and render revision stable
+V95 PAUSE PASS: reduced effects preserves static pause content
+V95 PAUSE PASS: native capture has exact requested resolution: 04-pause-reduced
+V95 PAUSE PASS: save native capture: 04-pause-reduced
+V95 PAUSE PASS: Tab follows six-action loop 0
+V95 PAUSE PASS: Tab follows six-action loop 1
+V95 PAUSE PASS: Tab follows six-action loop 2
+V95 PAUSE PASS: Tab follows six-action loop 3
+V95 PAUSE PASS: Tab follows six-action loop 4
+V95 PAUSE PASS: Tab follows six-action loop 5
+V95 PAUSE PASS: Enter on Continue resumes real battle
+V95 PAUSE PASS: mouse Continue resumes real battle
+V95 PAUSE PASS: mouse Settings opens existing settings
+V95 PAUSE PASS: Escape returns from Settings to pause
+V95 PAUSE PASS: F10 shortcut remains available
+V95 PAUSE PASS: mouse Gallery opens original compendium
+V95 PAUSE PASS: Escape returns from Gallery to pause
+V95 PAUSE PASS: mouse Route preserves existing eligible campaign navigation
+V95 PAUSE PASS: Escape returns from Route to pause
+V95 PAUSE PASS: mouse Retry opens existing confirmation
+V95 PAUSE PASS: Enter on Cancel returns to pause without losing current battle
+V95 PAUSE PASS: R shortcut opens existing restart confirmation
+V95 PAUSE PASS: Enter confirms actual retry and resets the current run
+V95 PAUSE PASS: mouse Menu returns to existing mode selection
+V95 PAUSE RESULT {"checks":72,"display":"Windows","failures":[],"original_upgrades_checked":14,"pause_nodes":98,"pause_refresh_revision":4,"resolution":"(1280, 720)"}

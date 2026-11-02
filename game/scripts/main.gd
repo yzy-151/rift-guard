@@ -268,7 +268,12 @@ func _ready() -> void:
 	if not content.errors.is_empty():
 		var warning = hud.label(hud.get_child(0), Vector2(32, 102), Vector2(1215, 42), "Excel 配置未应用：" + content.errors[0] + "（完整记录：config-errors.txt）", 14, Color("#ff9c8c"))
 		warning.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if OS.get_cmdline_user_args().has("--v95-performance-test") or OS.get_cmdline_user_args().has("--v95-dialogue-test") or OS.get_cmdline_user_args().has("--v95-explosion-test") or OS.get_cmdline_user_args().has("--v95-pause-test") or OS.get_cmdline_user_args().has("--v95-simulation-test"):
+	if "--v101-test" in OS.get_cmdline_user_args():
+		test_mode = true
+		checkpoint_testing = true
+		set_physics_process(false)
+		call_deferred("run_v101_test")
+	elif OS.get_cmdline_user_args().has("--v95-performance-test") or OS.get_cmdline_user_args().has("--v95-dialogue-test") or OS.get_cmdline_user_args().has("--v95-explosion-test") or OS.get_cmdline_user_args().has("--v95-pause-test") or OS.get_cmdline_user_args().has("--v95-simulation-test"):
 		test_mode = false
 		checkpoint_testing = true
 		set_physics_process(false)
@@ -598,17 +603,29 @@ func run_classic_release_test() -> void:
 
 func run_v94_endflow_test() -> void:
 	var code: int = await preload("res://scripts/qa_v94_endflow.gd").new().run(self)
-	_stop_scene_audio(self)
-	get_tree().quit(code)
+	await _quit_after_audio_cleanup(code)
+
+func run_v101_test() -> void:
+	var code: int = await load("res://scripts/qa_v101_workshop.gd").new().run(self)
+	await _quit_after_audio_cleanup(code)
 
 func run_v95_test() -> void:
 	open_mode_menu()
 	for suite: String in ["dialogue", "explosion", "pause", "simulation", "performance"]:
 		if ("--v95-%s-test" % suite) in OS.get_cmdline_user_args():
 			var code: int = await load("res://scripts/qa_v95_%s.gd" % suite).new().run(self)
-			_stop_scene_audio(self)
-			get_tree().quit(code)
+			await _quit_after_audio_cleanup(code)
 			return
+
+func _quit_after_audio_cleanup(code: int) -> void:
+	_stop_scene_audio(self)
+	process_mode = Node.PROCESS_MODE_DISABLED
+	# Stopped OGG playbacks need audio-thread time to release their packet sequences.
+	# A synchronous QA suite can consume a new timer in its already elapsed frame.
+	var deadline := Time.get_ticks_msec() + 120
+	while Time.get_ticks_msec() < deadline:
+		await get_tree().create_timer(0.12, true, false, true).timeout
+	get_tree().quit(code)
 
 func _physics_process(dt: float) -> void:
 	if workshop != null or (settings_panel != null and settings_panel.is_open()): return
@@ -743,7 +760,9 @@ func choose_mode(mode_id: String) -> void:
 
 func _stop_scene_audio(node: Node) -> void:
 	if node == battle_audio: battle_audio.reset()
-	if node is AudioStreamPlayer: node.stop()
+	if node is AudioStreamPlayer:
+		node.stop()
+		node.stream = null
 	for child: Node in node.get_children(): _stop_scene_audio(child)
 
 func choose_endless_layout(layout_id: String) -> void:
@@ -1694,6 +1713,7 @@ func open_workshop() -> void:
 		workshop_suspended.append(snapshot)
 		child.process_mode = Node.PROCESS_MODE_DISABLED
 	workshop = WorkshopPanel.new()
+	if not qa_storage_path.is_empty(): workshop.scenario_directory = qa_storage_path.path_join("workshop_scenarios")
 	add_child(workshop)
 	workshop.build(hud, bool(audio_director.values.reduced_effects))
 	workshop.closed.connect(_workshop_closed)

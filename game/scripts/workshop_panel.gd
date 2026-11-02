@@ -8,6 +8,7 @@ const Audio = preload("res://scripts/battle_audio_director.gd")
 const Icons = preload("res://scripts/content/generated_icon_catalog.gd")
 const Layouts = preload("res://scripts/classic_endless_layouts.gd")
 const Toolbar = preload("res://scripts/workshop_toolbar.gd")
+const ScenarioBar = preload("res://scripts/workshop_scenario_bar.gd")
 const RED := Color("#ed5d6f")
 const WHITE := Color("#f6eeea")
 const MUTED := Color("#b49ba2")
@@ -42,6 +43,8 @@ var reduced_effects := false
 var closing := false
 var marker: Node2D
 var pan_keys: Dictionary = {}
+var scenario_directory := "user://workshop_scenarios"
+var scenario_bar
 
 class SelectionMarker extends Node2D:
 	var owner_panel
@@ -157,7 +160,32 @@ func build(owner_hud, reduced: bool = false) -> void:
 	_button(bottom, Rect2(950, 9, 152, 32), "E 终结技", "ultimate", func(): _begin_aim(true))
 	_button(bottom, Rect2(1108, 9, 128, 32), "移除 [Delete]", "remove", func(): session.remove_selected(); refresh())
 	notice = _label(bottom, Rect2(16, 61, 1220, 22), "", 12, RED)
+	scenario_bar = ScenarioBar.new()
+	ui.add_child(scenario_bar)
+	scenario_bar.build(self, scenario_directory)
 	refresh()
+
+func restore_scenario(restored) -> void:
+	session = restored
+	placement_kind = ""
+	placement_id = ""
+	aiming = ""
+	pan_keys.clear()
+	card_search.release_focus()
+	camera_center = Session.Sim.ENDLESS_ARENA.get_center()
+	for index in map_picker.item_count:
+		var row: Dictionary = map_picker.get_item_metadata(index)
+		if str(row.stage) == session.stage_id and str(row.layout) == session.layout_id:
+			map_picker.select(index)
+			break
+	for row: Array in [["auto", "auto_attack", "自动普攻"], ["enemy_action", "enemy_action", "敌人行动"], ["invulnerable", "invulnerable", "角色无敌"], ["energy", "infinite_energy", "无限能量 / 冷却"]]:
+		var enabled := bool(session.get(row[1]))
+		buttons[row[0]].set_pressed_no_signal(enabled)
+		buttons[row[0]].text = str(row[2]) + (" ✓" if enabled else " —")
+	var speed_picker: OptionButton = buttons.speed
+	for index in speed_picker.item_count:
+		if is_equal_approx(float(speed_picker.get_item_metadata(index)), session.speed): speed_picker.select(index)
+	_reset_visuals()
 
 func _panel(parent: Node, rect: Rect2) -> Panel:
 	return hud.panel(parent, rect, Color("#180e16"), Color("#75414c"))
@@ -345,18 +373,22 @@ func refresh() -> void:
 	marker.queue_redraw()
 
 func over_ui(point: Vector2) -> bool:
+	if scenario_bar != null and scenario_bar.get_global_rect().has_point(point): return true
 	return Rect2(16, 10, 1248, 48).has_point(point) or Rect2(16, 616, 1248, 92).has_point(point) or (drawer.visible and drawer.get_global_rect().has_point(point)) or collapse_button.get_global_rect().has_point(point)
 
 func handle_input(event: InputEvent) -> bool:
 	if closing: return true
+	if scenario_bar != null and scenario_bar.confirmation.visible: return false
 	if event is InputEventKey and event.keycode in [KEY_W, KEY_A, KEY_S, KEY_D]:
 		pan_keys[event.keycode] = event.pressed and not card_search.has_focus()
-	for picker: OptionButton in [map_picker, hero_picker, enemy_picker, card_picker, buttons.get("speed")]:
+	for picker: OptionButton in [map_picker, hero_picker, enemy_picker, card_picker, buttons.get("speed"), scenario_bar.picker]:
 		if picker.get_popup().visible: return false
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode in [KEY_ESCAPE, KEY_F10]: close(); return true
 		if card_search.has_focus(): return false
 		match event.keycode:
+			KEY_F5: scenario_bar.request_save(); return true
+			KEY_F9: scenario_bar.request_load(); return true
 			KEY_TAB: toggle_drawer(); return true
 			KEY_SPACE: toggle_pause(); return true
 			KEY_PERIOD: step_once(); return true

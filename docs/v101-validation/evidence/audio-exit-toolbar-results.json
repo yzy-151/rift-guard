@@ -1,0 +1,26 @@
+[
+  {
+    "suite": "toolbar",
+    "iteration": 1,
+    "verbose": false,
+    "seconds": 4.9,
+    "exit": 0,
+    "leak": false,
+    "error": false,
+    "summary": [
+      "V94 WORKSHOP TOOLBAR: 54 checks, 0 failures"
+    ]
+  },
+  {
+    "suite": "toolbar",
+    "iteration": 2,
+    "verbose": true,
+    "seconds": 4.91,
+    "exit": 0,
+    "leak": false,
+    "error": false,
+    "summary": [
+      "V94 WORKSHOP TOOLBAR: 54 checks, 0 failures"
+    ]
+  }
+]

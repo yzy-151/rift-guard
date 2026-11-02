@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V100 · 经典裂隙守望 · 漫画音画与自由工坊"
-config/version="100.0.0"
+config/description="V101 · 工坊实验场景存取"
+config/version="101.0.0"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 

@@ -1,0 +1,13 @@
+{
+  "validated_at": "2026-11-02T21:30:30.063657+00:00",
+  "zip_sha256": "0205373a82c5028b230f4409814a1c83ee61878b2acae4e613ed1e78391893bf",
+  "binary_hashes_match": true,
+  "crc_ok": true,
+  "executable_directory": "C:\\Users\\23081\\Desktop\\codex\\rift-guard-v101\\outputs\\v101-zip-smoke-20261103-02",
+  "pid": 64320,
+  "exit_code": 0,
+  "seconds": 7.73,
+  "native_renderer": true,
+  "test_workflow_flags": false,
+  "player_saves_isolated": true
+}
