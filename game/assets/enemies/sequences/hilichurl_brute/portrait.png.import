@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b2b6vifjfqjyk"
 path.s3tc="res://.godot/imported/portrait.png-d416b28c65bce90d48c4a66637d12f53.s3tc.ctex"
+path.etc2="res://.godot/imported/portrait.png-d416b28c65bce90d48c4a66637d12f53.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/enemies/sequences/hilichurl_brute/portrait.png"
-dest_files=["res://.godot/imported/portrait.png-d416b28c65bce90d48c4a66637d12f53.s3tc.ctex"]
+dest_files=["res://.godot/imported/portrait.png-d416b28c65bce90d48c4a66637d12f53.s3tc.ctex", "res://.godot/imported/portrait.png-d416b28c65bce90d48c4a66637d12f53.etc2.ctex"]
 
 [params]
 

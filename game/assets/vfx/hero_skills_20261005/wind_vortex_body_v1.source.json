@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-05",
+  "generator": "Built-in image_gen.imagegen",
+  "mode": "text-to-image",
+  "transparent_background": true,
+  "source": "C:\\Users\\23081\\.codex\\generated_images\\01a10a67-694c-7440-b5c9-9e66c6b24083\\exec-dbc3629b-9175-406e-86a4-07298a11bbd1.png",
+  "final_asset": "res://assets/vfx/hero_skills_20261005/wind_vortex_body_v1.png",
+  "prompt_file": "wind_vortex_body_v1.prompt.txt",
+  "editing": "Copied unmodified original PNG. No image postprocessing.",
+  "dimensions": [
+    1135,
+    1386
+  ],
+  "rgba": true,
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "fully_transparent_pixels": 854842,
+  "nonzero_alpha_pixels": 718268,
+  "alpha_at_least_200_pixels": 680103,
+  "alpha_at_least_250_pixels": 658675,
+  "alpha_bbox": [
+    0,
+    19,
+    1095,
+    1364
+  ],
+  "body_width_height_ratio": 0.8141263940520446,
+  "intended_game_display_size": [
+    122,
+    154
+  ],
+  "bytes": 1302441,
+  "sha256": "AA6F62B3F4401A672743BD5DA2BA20E3DC93983563BD39973895321BE1B98995",
+  "integration": "Asset-only delivery; parent owns import and gameplay integration."
+}

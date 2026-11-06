@@ -32,6 +32,7 @@ func _run() -> void:
 	check(Adapter.records(skin, "Mode").size() >= 3, "mode skin fields reflect automatically")
 	check(Validator.validate(layout, "Layout").is_empty(), "production layout validates")
 	check(Validator.validate(skin, "Skin").is_empty(), "production skin validates")
+	check(skin.mode_portrait != null, "production menu character binding survives a fresh load")
 	var invalid := layout.duplicate(true)
 	invalid.dialogue_body_rect = Rect2(0, 0, -10, 20)
 	check(not Validator.validate(invalid, "Invalid").is_empty(), "negative rect is rejected")

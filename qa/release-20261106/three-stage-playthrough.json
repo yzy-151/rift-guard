@@ -1,0 +1,9113 @@
+[
+	{
+		"boss_events": [
+			{
+				"kind": "slime_bounce",
+				"time": 352.600000000065
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 352.600000000065
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 352.800000000065
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 352.966666666732
+			},
+			{
+				"kind": "slime_burst",
+				"time": 360.133333333404
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 360.200000000071
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 360.633333333405
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 360.800000000071
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 360.933333333405
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 361.300000000072
+			},
+			{
+				"kind": "slime_attack",
+				"time": 365.966666666742
+			},
+			{
+				"kind": "slime_reflux",
+				"time": 367.966666666744
+			},
+			{
+				"kind": "slime_attack",
+				"time": 369.566666666745
+			},
+			{
+				"kind": "slime_court",
+				"time": 371.40000000008
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 371.466666666747
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 371.566666666747
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 371.666666666747
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 371.866666666747
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 371.90000000008
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 371.933333333414
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 372.00000000008
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 372.166666666747
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 372.20000000008
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 372.20000000008
+			},
+			{
+				"kind": "slime_court_final",
+				"time": 372.466666666747
+			},
+			{
+				"kind": "slime_attack",
+				"time": 374.566666666749
+			},
+			{
+				"kind": "slime_attack",
+				"time": 376.233333333417
+			},
+			{
+				"kind": "slime_bounce",
+				"time": 376.433333333417
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 376.433333333417
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 376.566666666751
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 376.700000000084
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 376.800000000084
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 376.933333333418
+			},
+			{
+				"kind": "slime_burst",
+				"time": 381.300000000088
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 381.333333333421
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 381.566666666755
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 381.833333333421
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 381.866666666755
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 381.966666666755
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 382.033333333422
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 382.033333333422
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 382.066666666755
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 382.100000000088
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 382.166666666755
+			},
+			{
+				"kind": "slime_reflux",
+				"time": 386.466666666759
+			},
+			{
+				"kind": "slime_court",
+				"time": 391.466666666762
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 391.666666666763
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 391.866666666763
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 391.93333333343
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 391.966666666763
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 392.000000000096
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 392.000000000096
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 392.03333333343
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 392.166666666763
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 392.266666666763
+			},
+			{
+				"kind": "slime_court_hit",
+				"time": 392.300000000096
+			},
+			{
+				"kind": "slime_court_final",
+				"time": 392.53333333343
+			},
+			{
+				"kind": "slime_attack",
+				"time": 394.400000000098
+			},
+			{
+				"kind": "slime_bounce",
+				"time": 396.5000000001
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 396.5000000001
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 396.633333333433
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 396.766666666767
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 396.866666666767
+			},
+			{
+				"kind": "slime_bounce_hit",
+				"time": 397.0000000001
+			},
+			{
+				"kind": "slime_burst",
+				"time": 401.36666666677
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 401.533333333437
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 401.700000000104
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 401.733333333437
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 401.966666666771
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 402.000000000104
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 402.000000000104
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 402.133333333438
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 402.133333333438
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 402.166666666771
+			},
+			{
+				"kind": "slime_glob_hit",
+				"time": 402.166666666771
+			}
+		],
+		"carry": {
+			"buff_levels": {
+				"element_resonance_pyro": 1,
+				"global_attack_1": 1,
+				"global_speed_1": 1,
+				"global_speed_rare": 2,
+				"mythic_projectile_storm": 1,
+				"orbit_arcane_blades": 1,
+				"single_armor_rare": 1,
+				"single_health_rare": 1,
+				"support_red_moon": 1,
+				"v75_duet_echo": 1,
+				"v75_vitality_drill": 1
+			},
+			"card_synergies": {
+
+			},
+			"crystal_level": 13,
+			"crystal_shield": 0.0,
+			"crystal_xp": 4917,
+			"death_burst_ratio": 0.0,
+			"elite_damage_bonus": 0.0,
+			"energy_gain_bonus": 0.0,
+			"execute_threshold": 0.0,
+			"fireball_level": 0,
+			"frenzy_milestone": 0,
+			"heroes": [
+				{
+					"armor": 45.0,
+					"base_damage": 48.0,
+					"base_hp": 720.0,
+					"base_rate": 1.3,
+					"blast_radius": 0.0,
+					"block": 3,
+					"can_hit_air": false,
+					"card_attack_idle": 3.0,
+					"chain_count": 0,
+					"character_id": "traveler",
+					"cleave": true,
+					"cleave_ratio": 0.9,
+					"conqueror_attacks": 0,
+					"crit_chance": 0.08,
+					"damage": 60.0,
+					"echo_ratio": 0.0,
+					"element": "pyro",
+					"frenzy_bonus": 0.0,
+					"hp": 0.0,
+					"max_hp": 720.0,
+					"pierce": 0,
+					"projectile_count": 3,
+					"range": 245.0,
+					"rate": 2.3712,
+					"secondary_element": "",
+					"slow": false,
+					"speed": 118.0,
+					"splash": false
+				},
+				{
+					"armor": 44.0,
+					"base_damage": 35.0,
+					"base_hp": 420.0,
+					"base_rate": 1.05,
+					"blast_radius": 78.0,
+					"block": 0,
+					"can_hit_air": true,
+					"card_attack_idle": 1.13333333333333,
+					"chain_count": 0,
+					"character_id": "hero_03",
+					"cleave": false,
+					"cleave_ratio": 0.9,
+					"conqueror_attacks": 0,
+					"crit_chance": 0.0,
+					"damage": 43.75,
+					"echo_ratio": 0.22,
+					"element": "hydro",
+					"frenzy_bonus": 0.0,
+					"hp": 408.055084571187,
+					"max_hp": 630.0,
+					"pierce": 0,
+					"projectile_count": 3,
+					"range": 340.0,
+					"rate": 1.9152,
+					"secondary_element": "",
+					"slow": false,
+					"speed": 114.0,
+					"splash": true
+				}
+			],
+			"kill_frenzy_step": 0.0,
+			"luck": 0.04,
+			"orbitals": [
+				{
+					"age": 298.100000000022,
+					"count": 3,
+					"damage": 31.0,
+					"element": "",
+					"hero_id": 2,
+					"interval": 0.755,
+					"level": 1,
+					"life": 99700.8999999393,
+					"phase": 2.36872805332248,
+					"radius": 170.0,
+					"source_card": "orbit_arcane_blades",
+					"storm_timer": -294.900000000019,
+					"timer": 0.225000000000068,
+					"visual": "blade"
+				}
+			],
+			"reaction_damage_bonus": 0.0,
+			"reaction_radius_bonus": 0.0,
+			"skill_area_bonus": 0.0,
+			"skill_cooldown_reduction": 0.0,
+			"skill_duration_bonus": 0.0,
+			"skill_power_bonus": 0.0,
+			"squad": [
+				"traveler",
+				"hero_03"
+			],
+			"supports": {
+				"support_barrage": {
+					"interval": 9.0,
+					"power": 130.0,
+					"radius": 150.0,
+					"stacks": 1,
+					"timer": 6.63333333333396
+				}
+			},
+			"tag_synergy_levels": {
+				"护盾": 1
+			},
+			"traveler_element": "pyro",
+			"traveler_secondary_element": "none"
+		},
+		"casts": [
+			{
+				"ability": "无锋回旋",
+				"element": "",
+				"hero": "traveler",
+				"time": 4.19999999999999,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 4.19999999999999,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 4.19999999999999,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 13.5333333333333,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 25.2000000000004,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 28.9000000000006,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 28.9000000000006,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 44.2666666666667,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 44.2666666666667,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 46.1333333333333,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 46.5999999999999,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 54.9999999999994,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 59.6666666666658,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 67.5999999999987,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 75.066666666665,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 78.3333333333315,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 88.5999999999975,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 90.4666666666641,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 93.2333333333306,
+				"ultimate": true
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 104.43333333333,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 105.83333333333,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 116.066666666663,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 116.066666666663,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 121.199999999996,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 125.399999999995,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 136.599999999995,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 137.066666666661,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 150.133333333327,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 151.999999999994,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 157.599999999994,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 158.06666666666,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 162.733333333327,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 167.399999999993,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 179.066666666659,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 182.799999999992,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 184.199999999992,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 195.866666666658,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 198.199999999991,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 200.066666666658,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 213.59999999999,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 218.266666666657,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 221.066666666657,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 221.066666666657,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 221.99999999999,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 231.333333333323,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 242.066666666655,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 246.733333333322,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 252.333333333322,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 262.133333333326,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 263.06666666666,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 266.33333333333,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 277.533333333338,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 279.400000000007,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 284.066666666677,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 286.400000000012,
+				"ultimate": true
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 286.400000000012,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 292.933333333351,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 305.066666666694,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 308.333333333363,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 320.466666666706,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 323.733333333375,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 326.06666666671,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 336.800000000052,
+				"ultimate": true
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 337.733333333386,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 339.133333333388,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 347.066666666727,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 350.800000000063,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 354.5333333334,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 354.5333333334,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 368.066666666744,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 369.933333333412,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 385.333333333424,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 388.600000000094,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 389.066666666761,
+				"ultimate": false
+			}
+		],
+		"choices": [
+			{
+				"id": "element_resonance_pyro",
+				"index": 0,
+				"level": 2,
+				"name": "元素共鸣 火",
+				"offered": [
+					{
+						"_base_value": "pyro",
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "仅旅行者获得火元素；已有元素时不再出现元素共鸣。最高 1 级。",
+						"effect": "assign_traveler_element",
+						"excludes": [],
+						"id": "element_resonance_pyro",
+						"max_stacks": 1.0,
+						"min_crystal_level": 2.0,
+						"name": "元素共鸣 火",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "仅旅行者获得火元素；已有元素时不再出现元素共鸣。",
+						"tags": [
+							"反应"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": "pyro",
+						"weight": 48.0
+					},
+					{
+						"_base_components": [
+							{
+								"effect": "move_speed_flat",
+								"value": 18.0
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "move_speed_flat",
+								"value": 18.0
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"description": "移速 +18；防御 +6。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_forced_march",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "急行军",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "移速 +18；防御 +6",
+						"tags": [
+							"机动",
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.18,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队生命上限 +18%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_health_multiplier",
+						"excludes": [],
+						"id": "global_health_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "极限剂量",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队生命上限 +18%",
+						"tags": [
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.18,
+						"weight": 48.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 13.2666666666666
+			},
+			{
+				"id": "global_speed_1",
+				"index": 1,
+				"level": 3,
+				"name": "统一节奏",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "health_multiplier",
+								"value": 0.16
+							},
+							{
+								"effect": "attack_mend",
+								"value": 1.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "health_multiplier",
+								"value": 0.16
+							},
+							{
+								"effect": "attack_mend",
+								"value": 1.0
+							}
+						],
+						"description": "生命上限 +16%；每击回复 2 生命。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_field_medicine",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "野战医疗",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "生命上限 +16%；每击回复 2 生命",
+						"tags": [
+							"护盾",
+							"恢复"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.1,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +10%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "统一节奏",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队攻速 +10%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.1,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.3,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "所有坚果最大生命额外提高30% / 层，并每秒恢复12点生命 / 层。最高 3 级。",
+						"effect": "device_nut_repair",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_nut_repair.png",
+						"id": "device_nut_repair",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "坚果修护",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "坚果生命 +30%，每秒修复12 / 层",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.3,
+						"weight": 48.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 27.2666666666672
+			},
+			{
+				"id": "global_attack_1",
+				"index": 1,
+				"level": 4,
+				"name": "协同进攻",
+				"offered": [
+					{
+						"_base_value": 0.1,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "所有机关购买价格降低10%／级，最多降低20%；已经部署的机关不重复返还差价。最高 2 级。",
+						"effect": "device_soil_discount",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_soil_discount.png",
+						"id": "device_soil_discount",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "沃土采购",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "机关价格 -10% / 层，最多 -30%",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0
+						],
+						"value": 0.1,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.13,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻击 +13%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_attack_multiplier",
+						"excludes": [],
+						"id": "global_attack_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "协同进攻",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队攻击 +13%",
+						"tags": [
+							"进攻"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.13,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.15,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "购买的攻击格攻击力加成额外提高15个百分点 / 层，立即作用于格子上的角色。最高 3 级。",
+						"effect": "device_power_pad",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_power_pad.png",
+						"id": "device_power_pad",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "高能攻击格",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "攻击格额外攻击加成 +15个百分点 / 层",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.15,
+						"weight": 48.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 41.2666666666669
+			},
+			{
+				"id": "v75_vitality_drill",
+				"index": 0,
+				"level": 5,
+				"name": "血性训练",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "health_multiplier",
+								"value": 0.24
+							},
+							{
+								"effect": "attack_mend",
+								"value": 1.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "health_multiplier",
+								"value": 0.24
+							},
+							{
+								"effect": "attack_mend",
+								"value": 1.0
+							}
+						],
+						"description": "生命上限 +24%；每击回复 2 生命。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_vitality_drill",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "血性训练",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "生命上限 +24%；每击回复 2 生命",
+						"tags": [
+							"护盾",
+							"恢复"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 5.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "向日葵每8秒产金每级＋5，最高＋15；升级不改变产金周期。最高3级。",
+						"effect": "device_photosynthesis",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_photosynthesis.png",
+						"id": "device_photosynthesis",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "光合作用",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "向日葵每8秒产金每级＋5，最高＋15；升级不改变产金周期",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 5.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 22.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "射程 +22。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "range_flat",
+						"excludes": [],
+						"id": "v75_close_focus_lens",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "近焦镜片",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "射程 +22",
+						"tags": [
+							"瞄准"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 22.0,
+						"weight": 48.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 55.3999999999994
+			},
+			{
+				"id": "global_speed_rare",
+				"index": 1,
+				"level": 6,
+				"name": "全军加速",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "range_flat",
+								"value": 30.0
+							},
+							{
+								"effect": "crit_flat",
+								"value": 0.06
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "range_flat",
+								"value": 30.0
+							},
+							{
+								"effect": "crit_flat",
+								"value": 0.06
+							}
+						],
+						"description": "射程 +30；暴击率 +6%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_satellite_lock",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "卫星锁定",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "射程 +30；暴击率 +6%",
+						"tags": [
+							"瞄准",
+							"暴击"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.16,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +16%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_rare",
+						"max_stacks": 2.0,
+						"min_crystal_level": 3.0,
+						"name": "全军加速",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "全队攻速 +16%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.16,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.25,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "植物生命每级＋25%，最高＋100%。最高4级。",
+						"effect": "device_rooted",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_rooted.png",
+						"id": "device_rooted",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "深根扎营",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "植物生命每级＋25%，最高＋100%",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.25,
+						"weight": 48.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 79.0666666666647
+			},
+			{
+				"id": "v75_duet_echo",
+				"index": 0,
+				"level": 7,
+				"name": "二重奏鸣",
+				"offered": [
+					{
+						"_base_value": 0.2,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "普攻追加 20% 追击伤害。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "echo_add",
+						"excludes": [],
+						"id": "v75_duet_echo",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 5.0,
+						"name": "二重奏鸣",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "普攻追加 20% 追击伤害",
+						"tags": [
+							"弹道"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.2,
+						"weight": 13.0
+					},
+					{
+						"_base_value": 0.2,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "所有攻击植物伤害每级＋20%，最高＋80%。最高4级。",
+						"effect": "device_botanist",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_botanist.png",
+						"id": "device_botanist",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "植物学家",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "所有攻击植物伤害每级＋20%，最高＋80%",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.2,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 10.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队防御 +10。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_armor_flat",
+						"excludes": [],
+						"id": "v75_iron_line",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "钢铁阵线",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队防御 +10",
+						"tags": [
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 10.0,
+						"weight": 48.0
+					}
+				],
+				"rarity": "epic",
+				"recipient": 2,
+				"time": 93.0666666666639
+			},
+			{
+				"id": "orbit_arcane_blades",
+				"index": 2,
+				"level": 8,
+				"name": "星轨剑阵",
+				"offered": [
+					{
+						"_base_value": 0.2,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "所有豌豆及西瓜攻击附带寒冰效果：目标移速降低20%，持续2秒。最高 1 级。",
+						"effect": "device_frost",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_frost.png",
+						"id": "device_frost",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "极地育种",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "豌豆与西瓜：减速20%，持续2秒",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 0.2,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.25,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "植物生命每级＋25%，最高＋100%。最高4级。",
+						"effect": "device_rooted",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_rooted.png",
+						"id": "device_rooted",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "深根扎营",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "植物生命每级＋25%，最高＋100%",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.25,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 3.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "1／2／3级飞剑进化为3／6／9把；4级解锁剑阵风暴。最高4级。",
+						"effect": "orbit_add",
+						"evolution_levels": [
+							1.0,
+							3.0,
+							6.0,
+							9.0
+						],
+						"evolutions": [
+							{
+								"branch": "range",
+								"level": 3.0,
+								"name": "扩展剑环"
+							},
+							{
+								"branch": "count",
+								"level": 6.0,
+								"name": "六芒剑轮"
+							}
+						],
+						"excludes": [],
+						"id": "orbit_arcane_blades",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "星轨剑阵",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "1／2／3级飞剑进化为3／6／9把；4级解锁剑阵风暴",
+						"tags": [
+							"召唤"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 3.0,
+						"weight": 34.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 107.066666666663
+			},
+			{
+				"id": "support_red_moon",
+				"index": 2,
+				"level": 9,
+				"name": "赤月炮击",
+				"offered": [
+					{
+						"_base_value": 1.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "弹道 +1。最高2级。",
+						"effect": "projectile_count_add",
+						"excludes": [],
+						"id": "v75_multishot_training",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "多重射击",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "弹道 +1",
+						"tags": [
+							"弹道"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0
+						],
+						"value": 1.0,
+						"weight": 28.0
+					},
+					{
+						"_base_components": [
+							{
+								"effect": "range_flat",
+								"value": 40.0
+							},
+							{
+								"effect": "skill_area_add",
+								"value": 0.2
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "range_flat",
+								"value": 40.0
+							},
+							{
+								"effect": "skill_area_add",
+								"value": 0.2
+							}
+						],
+						"description": "射程 +40；范围技能半径 +20%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_omniscient_view",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 5.0,
+						"name": "全知视域",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "射程 +40；范围技能半径 +20%",
+						"tags": [
+							"瞄准",
+							"技能"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.0,
+						"weight": 13.0
+					},
+					{
+						"_base_value": 130.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "每9秒落点炮击，首级基础伤害390；升级提高伤害、范围并缩短间隔。最高3级；联动效果可进一步放大。",
+						"effect": "support_barrage",
+						"excludes": [],
+						"id": "support_red_moon",
+						"interval": 9.0,
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 5.0,
+						"name": "赤月炮击",
+						"next_level": 1,
+						"radius": 150.0,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "每9秒落点炮击，首级基础伤害390；升级提高伤害、范围并缩短间隔",
+						"tags": [
+							"支援"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 130.0,
+						"weight": 13.0
+					}
+				],
+				"rarity": "epic",
+				"recipient": 2,
+				"time": 139.799999999995
+			},
+			{
+				"id": "mythic_projectile_storm",
+				"index": 0,
+				"level": 10,
+				"name": "神格·万象弹幕",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "projectile_count_add",
+								"value": 2.0
+							},
+							{
+								"effect": "attack_rate_multiplier",
+								"value": 0.38
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "projectile_count_add",
+								"value": 2.0
+							},
+							{
+								"effect": "attack_rate_multiplier",
+								"value": 0.38
+							}
+						],
+						"description": "弹道 +2；攻速 +38%。最高1级。",
+						"effect": "card_bundle",
+						"excludes": [
+							"mythic_world_breaker",
+							"mythic_eternal_support"
+						],
+						"id": "mythic_projectile_storm",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 10.0,
+						"name": "神格·万象弹幕",
+						"next_level": 1,
+						"rarity": "mythic",
+						"requires": [],
+						"summary": "弹道 +2；攻速 +38%",
+						"tags": [
+							"弹道",
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 0.0,
+						"weight": 1.0
+					},
+					{
+						"_base_value": 0.12,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "攻击植物攻击间隔每级减少12%，最高减少36%；向日葵周期不变。最高3级。",
+						"effect": "device_quick_growth",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_quick_growth.png",
+						"id": "device_quick_growth",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "快速生长",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "攻击植物攻击间隔每级减少12%，最高减少36%；向日葵周期不变",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.12,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.45,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "元素反应伤害 +45%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "reaction_damage_add",
+						"excludes": [],
+						"id": "v75_reaction_amplification",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 5.0,
+						"name": "反应增幅",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "元素反应伤害 +45%",
+						"tags": [
+							"反应"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.45,
+						"weight": 13.0
+					}
+				],
+				"rarity": "mythic",
+				"recipient": 2,
+				"time": 185.366666666659
+			},
+			{
+				"id": "global_speed_rare",
+				"index": 0,
+				"level": 11,
+				"name": "全军加速",
+				"offered": [
+					{
+						"_base_value": 0.16,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +16%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_rare",
+						"max_stacks": 2.0,
+						"min_crystal_level": 3.0,
+						"name": "全军加速",
+						"next_level": 2,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "全队攻速 +16%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.15,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.184,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.4,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "幸运 +0.40，显著提高高品质卡权重，累计最高1.50。最高1级。",
+						"effect": "luck_add",
+						"excludes": [],
+						"id": "luck_blessing_epic",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 5.0,
+						"name": "女神眷顾",
+						"next_level": 1,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "幸运 +0.40，显著提高高品质卡权重，累计最高1.50",
+						"tags": [
+							"幸运"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 0.4,
+						"weight": 13.0
+					},
+					{
+						"_base_value": 0.26,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "攻速 +26%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "attack_rate_multiplier",
+						"excludes": [],
+						"id": "single_speed_rare",
+						"max_stacks": 2.0,
+						"min_crystal_level": 3.0,
+						"name": "疾风连击",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "攻速 +26%",
+						"tags": [
+							"节奏"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.26,
+						"weight": 28.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 210.299999999991
+			},
+			{
+				"id": "single_armor_rare",
+				"index": 2,
+				"level": 12,
+				"name": "战术装甲",
+				"offered": [
+					{
+						"_base_value": 40.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "反应半径 +40。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "reaction_radius_add",
+						"excludes": [],
+						"id": "v75_reaction_diffusion",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "反应扩散",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "反应半径 +40",
+						"tags": [
+							"反应"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 40.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 2.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "场上及之后部署的豌豆射手、寒冰射手进化为双发射手，每轮连续发射2颗豌豆；保留已有寒冰效果。最高 1 级。",
+						"effect": "device_repeater",
+						"excludes": [
+							"device_threepeater",
+							"device_gatling",
+							"device_melon"
+						],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_repeater.png",
+						"id": "device_repeater",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "双发射手",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "全体豌豆系进化：每轮双发",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"upgrade_tier": 1.0,
+						"value": 2.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 24.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "防御 +24。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "armor_flat",
+						"excludes": [],
+						"id": "single_armor_rare",
+						"max_stacks": 3.0,
+						"min_crystal_level": 3.0,
+						"name": "战术装甲",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "防御 +24",
+						"tags": [
+							"护盾"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 24.0,
+						"weight": 28.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 1,
+				"time": 256.733333333322
+			},
+			{
+				"id": "single_health_rare",
+				"index": 0,
+				"level": 13,
+				"name": "强化体魄",
+				"offered": [
+					{
+						"_base_value": 0.5,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "生命上限 +50%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "health_multiplier",
+						"excludes": [],
+						"id": "single_health_rare",
+						"max_stacks": 2.0,
+						"min_crystal_level": 3.0,
+						"name": "强化体魄",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "生命上限 +50%",
+						"tags": [
+							"护盾"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.5,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.1,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +10%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "统一节奏",
+						"next_level": 2,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队攻速 +10%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.15,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.115,
+						"weight": 48.0
+					},
+					{
+						"_base_components": [
+							{
+								"effect": "projectile_count_add",
+								"value": 1.0
+							},
+							{
+								"effect": "blast_add",
+								"value": 28.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "projectile_count_add",
+								"value": 1.0
+							},
+							{
+								"effect": "blast_add",
+								"value": 28.0
+							}
+						],
+						"description": "弹道 +1；普攻爆炸半径 +28。最高1级。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "mechanic_prism_fan",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 5.0,
+						"name": "棱镜散射",
+						"next_level": 1,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "弹道 +1；普攻爆炸半径 +28",
+						"tags": [
+							"弹道"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 0.0,
+						"weight": 13.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 1,
+				"time": 316.63333333337
+			}
+		],
+		"event_counts": {
+			"ability_audio": 73,
+			"arena_event": 1,
+			"barrage": 30,
+			"boss_arrival": 1,
+			"boss_phase": 1,
+			"boss_warning": 10,
+			"chain": 34,
+			"contract_complete": 1,
+			"critical": 63,
+			"crystal_guard": 31,
+			"death": 282,
+			"deploy": 2,
+			"deployment_unlocked": 1,
+			"device_pea_cast": 660,
+			"device_pea_hit": 488,
+			"device_place": 9,
+			"device_sun": 50,
+			"dodge": 14,
+			"down": 1,
+			"echo": 2047,
+			"electro_charged": 17,
+			"element_attuned": 1,
+			"enemy_arrival": 282,
+			"enemy_heal": 11,
+			"enemy_projectile_cast": 27,
+			"enemy_volatile": 104,
+			"enemy_warning": 92,
+			"frozen": 133,
+			"geo_break": 2,
+			"geo_hit": 34,
+			"goblin_spawn": 2,
+			"heal": 278,
+			"hit": 7783,
+			"hurt": 105,
+			"kill_streak": 10,
+			"knockback": 8,
+			"level_up": 12,
+			"melt": 91,
+			"multishot": 1049,
+			"orbit_hit": 70,
+			"overloaded": 7,
+			"projectile_impact": 980,
+			"reward_taken": 12,
+			"route_spawn": 278,
+			"route_warning": 48,
+			"shaman_land": 1,
+			"shatter": 46,
+			"shield_break": 110,
+			"shield_hit": 374,
+			"shot": 1585,
+			"signature_heal": 36,
+			"signature_needle_hit": 44,
+			"signature_needle_volley": 15,
+			"signature_salon_hit": 325,
+			"signature_start": 30,
+			"skill_cast": 57,
+			"skill_impact": 13,
+			"skill_none": 1,
+			"slash": 2621,
+			"slime_attack": 5,
+			"slime_bounce": 3,
+			"slime_bounce_hit": 13,
+			"slime_burst": 3,
+			"slime_court": 2,
+			"slime_court_final": 2,
+			"slime_court_hit": 20,
+			"slime_glob_hit": 25,
+			"slime_reflux": 2,
+			"splash": 4110,
+			"stage_start": 1,
+			"superconduct": 2,
+			"synced_impact": 2187,
+			"tag_synergy": 1,
+			"team_resonance": 1,
+			"trap_pulse": 19,
+			"traveler_fx_cast": 31,
+			"traveler_fx_hit": 93,
+			"traveler_fx_start": 31,
+			"ultimate_cast": 17,
+			"vaporize": 315,
+			"vfx_cue": 73,
+			"wave": 1,
+			"weather_pulse": 51,
+			"won": 1
+		},
+		"kills": 282,
+		"level": 13,
+		"purchases": [
+			{
+				"gold_after": 20,
+				"kind": "sunflower",
+				"pos": [
+					420.0,
+					220.0
+				],
+				"time": 0.0
+			},
+			{
+				"gold_after": 8,
+				"kind": "pea",
+				"pos": [
+					540.0,
+					380.0
+				],
+				"time": 24.1333333333337
+			},
+			{
+				"gold_after": 8,
+				"kind": "pea",
+				"pos": [
+					720.0,
+					380.0
+				],
+				"time": 54.2333333333328
+			},
+			{
+				"gold_after": 40,
+				"kind": "pea",
+				"pos": [
+					660.0,
+					500.0
+				],
+				"time": 84.3999999999978
+			},
+			{
+				"gold_after": 18,
+				"kind": "barricade",
+				"pos": [
+					660.0,
+					260.0
+				],
+				"time": 90.4333333333308
+			},
+			{
+				"gold_after": 90,
+				"kind": "pea",
+				"pos": [
+					540.0,
+					260.0
+				],
+				"time": 114.499999999996
+			},
+			{
+				"gold_after": 62,
+				"kind": "pea",
+				"pos": [
+					540.0,
+					500.0
+				],
+				"time": 126.566666666662
+			},
+			{
+				"gold_after": 72,
+				"kind": "barricade",
+				"pos": [
+					420.0,
+					380.0
+				],
+				"time": 138.633333333328
+			},
+			{
+				"gold_after": 144,
+				"kind": "pea",
+				"pos": [
+					780.0,
+					260.0
+				],
+				"time": 162.76666666666
+			}
+		],
+		"seed": 6121,
+		"stage": "stage_01",
+		"state": "won",
+		"stats": [
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 0,
+				"kills5": 0,
+				"level": 1,
+				"projectiles": 0,
+				"time": 0.03
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 0,
+				"kills5": 0,
+				"level": 1,
+				"projectiles": 0,
+				"time": 5.03
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 2,
+				"kills5": 2,
+				"level": 1,
+				"projectiles": 1,
+				"time": 10.03
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 5,
+				"kills5": 3,
+				"level": 2,
+				"projectiles": 1,
+				"time": 15.03
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 6,
+				"kills5": 1,
+				"level": 2,
+				"projectiles": 0,
+				"time": 20.03
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 9,
+				"kills5": 3,
+				"level": 3,
+				"projectiles": 1,
+				"time": 25.03
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 13,
+				"kills5": 4,
+				"level": 3,
+				"projectiles": 0,
+				"time": 30.0
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 14,
+				"kills5": 1,
+				"level": 4,
+				"projectiles": 0,
+				"time": 35.0
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 14,
+				"kills5": 0,
+				"level": 4,
+				"projectiles": 0,
+				"time": 40.0
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 14,
+				"kills5": 0,
+				"level": 4,
+				"projectiles": 0,
+				"time": 44.97
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 17,
+				"kills5": 3,
+				"level": 4,
+				"projectiles": 0,
+				"time": 49.97
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 19,
+				"kills5": 2,
+				"level": 4,
+				"projectiles": 0,
+				"time": 54.97
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 21,
+				"kills5": 2,
+				"level": 5,
+				"projectiles": 1,
+				"time": 59.97
+			},
+			{
+				"enemies": 8,
+				"hp": 12,
+				"kills": 22,
+				"kills5": 1,
+				"level": 5,
+				"projectiles": 0,
+				"time": 64.97
+			},
+			{
+				"enemies": 9,
+				"hp": 12,
+				"kills": 24,
+				"kills5": 2,
+				"level": 5,
+				"projectiles": 0,
+				"time": 69.97
+			},
+			{
+				"enemies": 11,
+				"hp": 12,
+				"kills": 27,
+				"kills5": 3,
+				"level": 5,
+				"projectiles": 0,
+				"time": 74.97
+			},
+			{
+				"enemies": 9,
+				"hp": 12,
+				"kills": 29,
+				"kills5": 2,
+				"level": 6,
+				"projectiles": 1,
+				"time": 79.97
+			},
+			{
+				"enemies": 9,
+				"hp": 12,
+				"kills": 30,
+				"kills5": 1,
+				"level": 6,
+				"projectiles": 0,
+				"time": 84.97
+			},
+			{
+				"enemies": 7,
+				"hp": 12,
+				"kills": 33,
+				"kills5": 3,
+				"level": 6,
+				"projectiles": 1,
+				"time": 89.97
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 39,
+				"kills5": 6,
+				"level": 7,
+				"projectiles": 0,
+				"time": 94.93
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 43,
+				"kills5": 4,
+				"level": 7,
+				"projectiles": 0,
+				"time": 99.93
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 46,
+				"kills5": 3,
+				"level": 7,
+				"projectiles": 0,
+				"time": 104.93
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 50,
+				"kills5": 4,
+				"level": 8,
+				"projectiles": 0,
+				"time": 109.9
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 50,
+				"kills5": 0,
+				"level": 8,
+				"projectiles": 0,
+				"time": 114.9
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 59,
+				"kills5": 9,
+				"level": 8,
+				"projectiles": 1,
+				"time": 119.9
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 61,
+				"kills5": 2,
+				"level": 8,
+				"projectiles": 0,
+				"time": 124.9
+			},
+			{
+				"enemies": 5,
+				"hp": 12,
+				"kills": 63,
+				"kills5": 2,
+				"level": 8,
+				"projectiles": 0,
+				"time": 129.9
+			},
+			{
+				"enemies": 11,
+				"hp": 12,
+				"kills": 64,
+				"kills5": 1,
+				"level": 8,
+				"projectiles": 0,
+				"time": 134.9
+			},
+			{
+				"enemies": 10,
+				"hp": 12,
+				"kills": 67,
+				"kills5": 3,
+				"level": 9,
+				"projectiles": 1,
+				"time": 139.9
+			},
+			{
+				"enemies": 11,
+				"hp": 12,
+				"kills": 69,
+				"kills5": 2,
+				"level": 9,
+				"projectiles": 0,
+				"time": 144.9
+			},
+			{
+				"enemies": 12,
+				"hp": 12,
+				"kills": 72,
+				"kills5": 3,
+				"level": 9,
+				"projectiles": 0,
+				"time": 149.9
+			},
+			{
+				"enemies": 14,
+				"hp": 12,
+				"kills": 74,
+				"kills5": 2,
+				"level": 9,
+				"projectiles": 0,
+				"time": 154.9
+			},
+			{
+				"enemies": 11,
+				"hp": 12,
+				"kills": 78,
+				"kills5": 4,
+				"level": 9,
+				"projectiles": 1,
+				"time": 159.9
+			},
+			{
+				"enemies": 7,
+				"hp": 12,
+				"kills": 83,
+				"kills5": 5,
+				"level": 9,
+				"projectiles": 0,
+				"time": 164.9
+			},
+			{
+				"enemies": 5,
+				"hp": 12,
+				"kills": 88,
+				"kills5": 5,
+				"level": 9,
+				"projectiles": 0,
+				"time": 169.9
+			},
+			{
+				"enemies": 8,
+				"hp": 12,
+				"kills": 88,
+				"kills5": 0,
+				"level": 9,
+				"projectiles": 0,
+				"time": 174.9
+			},
+			{
+				"enemies": 8,
+				"hp": 12,
+				"kills": 88,
+				"kills5": 0,
+				"level": 9,
+				"projectiles": 0,
+				"time": 179.9
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 93,
+				"kills5": 5,
+				"level": 9,
+				"projectiles": 0,
+				"time": 184.9
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 97,
+				"kills5": 4,
+				"level": 10,
+				"projectiles": 0,
+				"time": 189.9
+			},
+			{
+				"enemies": 6,
+				"hp": 12,
+				"kills": 98,
+				"kills5": 1,
+				"level": 10,
+				"projectiles": 3,
+				"time": 194.9
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 104,
+				"kills5": 6,
+				"level": 10,
+				"projectiles": 3,
+				"time": 199.9
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 108,
+				"kills5": 4,
+				"level": 10,
+				"projectiles": 3,
+				"time": 204.9
+			},
+			{
+				"enemies": 5,
+				"hp": 12,
+				"kills": 113,
+				"kills5": 5,
+				"level": 10,
+				"projectiles": 0,
+				"time": 209.9
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 124,
+				"kills5": 11,
+				"level": 11,
+				"projectiles": 0,
+				"time": 214.9
+			},
+			{
+				"enemies": 7,
+				"hp": 12,
+				"kills": 130,
+				"kills5": 6,
+				"level": 11,
+				"projectiles": 1,
+				"time": 219.9
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 139,
+				"kills5": 9,
+				"level": 11,
+				"projectiles": 0,
+				"time": 224.9
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 139,
+				"kills5": 0,
+				"level": 11,
+				"projectiles": 0,
+				"time": 229.9
+			},
+			{
+				"enemies": 9,
+				"hp": 12,
+				"kills": 144,
+				"kills5": 5,
+				"level": 11,
+				"projectiles": 3,
+				"time": 234.9
+			},
+			{
+				"enemies": 17,
+				"hp": 12,
+				"kills": 148,
+				"kills5": 4,
+				"level": 11,
+				"projectiles": 3,
+				"time": 239.9
+			},
+			{
+				"enemies": 24,
+				"hp": 12,
+				"kills": 157,
+				"kills5": 9,
+				"level": 11,
+				"projectiles": 3,
+				"time": 244.9
+			},
+			{
+				"enemies": 26,
+				"hp": 12,
+				"kills": 166,
+				"kills5": 9,
+				"level": 11,
+				"projectiles": 3,
+				"time": 249.9
+			},
+			{
+				"enemies": 24,
+				"hp": 12,
+				"kills": 172,
+				"kills5": 6,
+				"level": 11,
+				"projectiles": 2,
+				"time": 254.9
+			},
+			{
+				"enemies": 24,
+				"hp": 12,
+				"kills": 179,
+				"kills5": 7,
+				"level": 12,
+				"projectiles": 4,
+				"time": 259.9
+			},
+			{
+				"enemies": 25,
+				"hp": 12,
+				"kills": 186,
+				"kills5": 7,
+				"level": 12,
+				"projectiles": 0,
+				"time": 264.9
+			},
+			{
+				"enemies": 22,
+				"hp": 12,
+				"kills": 194,
+				"kills5": 8,
+				"level": 12,
+				"projectiles": 0,
+				"time": 269.9
+			},
+			{
+				"enemies": 20,
+				"hp": 12,
+				"kills": 201,
+				"kills5": 7,
+				"level": 12,
+				"projectiles": 0,
+				"time": 274.9
+			},
+			{
+				"enemies": 17,
+				"hp": 12,
+				"kills": 205,
+				"kills5": 4,
+				"level": 12,
+				"projectiles": 0,
+				"time": 279.9
+			},
+			{
+				"enemies": 15,
+				"hp": 12,
+				"kills": 212,
+				"kills5": 7,
+				"level": 12,
+				"projectiles": 0,
+				"time": 284.9
+			},
+			{
+				"enemies": 20,
+				"hp": 12,
+				"kills": 218,
+				"kills5": 6,
+				"level": 12,
+				"projectiles": 1,
+				"time": 289.9
+			},
+			{
+				"enemies": 25,
+				"hp": 12,
+				"kills": 223,
+				"kills5": 5,
+				"level": 12,
+				"projectiles": 3,
+				"time": 294.9
+			},
+			{
+				"enemies": 29,
+				"hp": 12,
+				"kills": 226,
+				"kills5": 3,
+				"level": 12,
+				"projectiles": 0,
+				"time": 299.9
+			},
+			{
+				"enemies": 30,
+				"hp": 12,
+				"kills": 230,
+				"kills5": 4,
+				"level": 12,
+				"projectiles": 4,
+				"time": 304.9
+			},
+			{
+				"enemies": 29,
+				"hp": 12,
+				"kills": 236,
+				"kills5": 6,
+				"level": 12,
+				"projectiles": 0,
+				"time": 309.9
+			},
+			{
+				"enemies": 26,
+				"hp": 12,
+				"kills": 243,
+				"kills5": 7,
+				"level": 12,
+				"projectiles": 3,
+				"time": 314.9
+			},
+			{
+				"enemies": 21,
+				"hp": 12,
+				"kills": 252,
+				"kills5": 9,
+				"level": 13,
+				"projectiles": 0,
+				"time": 319.9
+			},
+			{
+				"enemies": 17,
+				"hp": 12,
+				"kills": 260,
+				"kills5": 8,
+				"level": 13,
+				"projectiles": 3,
+				"time": 324.9
+			},
+			{
+				"enemies": 12,
+				"hp": 12,
+				"kills": 265,
+				"kills5": 5,
+				"level": 13,
+				"projectiles": 0,
+				"time": 329.9
+			},
+			{
+				"enemies": 8,
+				"hp": 12,
+				"kills": 269,
+				"kills5": 4,
+				"level": 13,
+				"projectiles": 0,
+				"time": 334.9
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 275,
+				"kills5": 6,
+				"level": 13,
+				"projectiles": 7,
+				"time": 339.9
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 277,
+				"kills5": 2,
+				"level": 13,
+				"projectiles": 0,
+				"time": 344.9
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 277,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 3,
+				"time": 349.9
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 277,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 354.9
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 277,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 359.9
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 277,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 364.9
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 277,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 3,
+				"time": 369.9
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 277,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 374.9
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 280,
+				"kills5": 3,
+				"level": 13,
+				"projectiles": 0,
+				"time": 379.9
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 281,
+				"kills5": 1,
+				"level": 13,
+				"projectiles": 0,
+				"time": 384.9
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 281,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 389.9
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 281,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 394.9
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 281,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 3,
+				"time": 399.9
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 282,
+				"kills5": 1,
+				"level": 13,
+				"projectiles": 2,
+				"time": 404.9
+			}
+		],
+		"time": 405.166666666773
+	},
+	{
+		"boss_events": [
+			{
+				"kind": "rift_laser",
+				"time": 313.600000000034
+			},
+			{
+				"kind": "rift_laser",
+				"time": 321.333333333373
+			},
+			{
+				"kind": "rift_storm",
+				"time": 328.000000000045
+			},
+			{
+				"kind": "rift_orbs",
+				"time": 333.90000000005
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.033333333383
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.20000000005
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.266666666717
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.333333333384
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.40000000005
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.466666666717
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.566666666717
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.600000000051
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.666666666717
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.700000000051
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.833333333384
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.866666666717
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 334.966666666718
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 335.033333333384
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 335.166666666718
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 335.233333333384
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 335.400000000051
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 335.400000000051
+			},
+			{
+				"kind": "rift_storm",
+				"time": 339.133333333388
+			},
+			{
+				"kind": "rift_overhead",
+				"time": 344.466666666725
+			},
+			{
+				"kind": "rift_laser",
+				"time": 349.800000000063
+			},
+			{
+				"kind": "rift_orbs",
+				"time": 354.266666666733
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 354.566666666733
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 354.700000000067
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 354.766666666733
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 354.866666666733
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 355.000000000067
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 355.0333333334
+			},
+			{
+				"kind": "rift_orb_hit",
+				"time": 355.100000000067
+			},
+			{
+				"kind": "rift_storm",
+				"time": 359.50000000007
+			}
+		],
+		"carry": {
+			"buff_levels": {
+				"element_resonance_pyro": 1,
+				"evolve_fireball": 1,
+				"global_speed_1": 2,
+				"global_speed_rare": 1,
+				"mechanic_twin_arc": 1,
+				"mythic_projectile_storm": 1,
+				"v75_battlefield_transfusion": 1,
+				"v75_multishot_training": 1,
+				"v75_nashor_cadence": 1,
+				"v75_squad_edge": 2
+			},
+			"card_synergies": {
+
+			},
+			"crystal_level": 13,
+			"crystal_shield": 44.345,
+			"crystal_xp": 4616,
+			"death_burst_ratio": 0.0,
+			"elite_damage_bonus": 0.0,
+			"energy_gain_bonus": 0.0,
+			"execute_threshold": 0.0,
+			"fireball_level": 1,
+			"frenzy_milestone": 0,
+			"heroes": [
+				{
+					"armor": 57.9,
+					"base_damage": 48.0,
+					"base_hp": 720.0,
+					"base_rate": 1.3,
+					"blast_radius": 0.0,
+					"block": 3,
+					"can_hit_air": false,
+					"card_attack_idle": 0.1,
+					"chain_count": 0,
+					"character_id": "traveler",
+					"cleave": true,
+					"cleave_ratio": 0.9,
+					"conqueror_attacks": 0,
+					"crit_chance": 0.08,
+					"damage": 64.08,
+					"echo_ratio": 0.0,
+					"element": "pyro",
+					"frenzy_bonus": 0.0,
+					"hp": 80.0,
+					"max_hp": 720.0,
+					"pierce": 0,
+					"projectile_count": 5,
+					"range": 245.0,
+					"rate": 2.2815,
+					"secondary_element": "",
+					"slow": false,
+					"speed": 118.0,
+					"splash": false
+				},
+				{
+					"armor": 32.9,
+					"base_damage": 35.0,
+					"base_hp": 420.0,
+					"base_rate": 1.05,
+					"blast_radius": 78.0,
+					"block": 0,
+					"can_hit_air": true,
+					"card_attack_idle": 0.166666666666667,
+					"chain_count": 0,
+					"character_id": "hero_03",
+					"cleave": false,
+					"cleave_ratio": 0.9,
+					"conqueror_attacks": 0,
+					"crit_chance": 0.0,
+					"damage": 46.725,
+					"echo_ratio": 0.22,
+					"element": "hydro",
+					"frenzy_bonus": 0.0,
+					"hp": 80.0,
+					"max_hp": 420.0,
+					"pierce": 0,
+					"projectile_count": 5,
+					"range": 340.0,
+					"rate": 1.84275,
+					"secondary_element": "",
+					"slow": false,
+					"speed": 114.0,
+					"splash": true
+				},
+				{
+					"armor": 88.9,
+					"base_damage": 96.0,
+					"base_hp": 960.0,
+					"base_rate": 1.42,
+					"blast_radius": 52.0,
+					"block": 2,
+					"can_hit_air": true,
+					"card_attack_idle": 0.2,
+					"chain_count": 0,
+					"character_id": "hero_13",
+					"cleave": false,
+					"cleave_ratio": 0.9,
+					"conqueror_attacks": 0,
+					"crit_chance": 0.0,
+					"damage": 128.16,
+					"echo_ratio": 0.15,
+					"element": "",
+					"frenzy_bonus": 0.0,
+					"hp": 102.0,
+					"max_hp": 960.0,
+					"pierce": 0,
+					"projectile_count": 5,
+					"range": 345.0,
+					"rate": 2.8897,
+					"secondary_element": "",
+					"slow": false,
+					"speed": 122.0,
+					"splash": true
+				}
+			],
+			"kill_frenzy_step": 0.0,
+			"luck": 0.0,
+			"orbitals": [],
+			"reaction_damage_bonus": 0.0,
+			"reaction_radius_bonus": 0.0,
+			"skill_area_bonus": 0.0,
+			"skill_cooldown_reduction": 0.0,
+			"skill_duration_bonus": 0.0,
+			"skill_power_bonus": 0.0,
+			"squad": [
+				"traveler",
+				"hero_03",
+				"hero_13"
+			],
+			"supports": {
+				"support_heal": {
+					"interval": 11.0,
+					"power": 80.0,
+					"radius": 100.0,
+					"stacks": 1,
+					"timer": 9.63333333333362
+				}
+			},
+			"tag_synergy_levels": {
+				"弹道": 1
+			},
+			"traveler_element": "pyro",
+			"traveler_secondary_element": "none"
+		},
+		"casts": [
+			{
+				"ability": "无锋回旋",
+				"element": "",
+				"hero": "traveler",
+				"time": 4.19999999999999,
+				"ultimate": false
+			},
+			{
+				"ability": "无锋回旋",
+				"element": "",
+				"hero": "traveler",
+				"time": 13.5333333333333,
+				"ultimate": false
+			},
+			{
+				"ability": "无锋回旋",
+				"element": "",
+				"hero": "traveler",
+				"time": 22.866666666667,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 30.333333333334,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 32.2000000000007,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 32.6666666666674,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 47.5666666666665,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 51.7666666666663,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 54.0999999999995,
+				"ultimate": true
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 55.0333333333328,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 62.9333333333323,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 73.1666666666651,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 77.3666666666648,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 104.366666666663,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 104.366666666663,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 104.366666666663,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 104.366666666663,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 118.333333333329,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 120.666666666662,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 125.799999999995,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 136.033333333328,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 138.366666666661,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 147.233333333328,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 147.699999999994,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 151.433333333327,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 162.633333333327,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 175.199999999993,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 175.199999999993,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 175.199999999993,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 183.133333333326,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 205.066666666658,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 205.066666666658,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 210.199999999991,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 218.133333333324,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 220.466666666657,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 220.933333333323,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 226.066666666656,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 240.066666666656,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 244.266666666655,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 247.066666666655,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 247.533333333322,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 255.466666666655,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 268.066666666664,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 271.800000000001,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 278.333333333339,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 279.266666666673,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 287.200000000013,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 288.600000000014,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 289.066666666681,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 305.400000000027,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 310.066666666698,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 311.933333333366,
+				"ultimate": true
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 312.400000000033,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 320.80000000004,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 331.066666666714,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 339.000000000054,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 339.000000000054,
+				"ultimate": true
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 346.466666666727,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 360.933333333405,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 360.933333333405,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 360.933333333405,
+				"ultimate": true
+			}
+		],
+		"choices": [
+			{
+				"id": "element_resonance_pyro",
+				"index": 0,
+				"level": 2,
+				"name": "元素共鸣 火",
+				"offered": [
+					{
+						"_base_value": "pyro",
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "仅旅行者获得火元素；已有元素时不再出现元素共鸣。最高 1 级。",
+						"effect": "assign_traveler_element",
+						"excludes": [],
+						"id": "element_resonance_pyro",
+						"max_stacks": 1.0,
+						"min_crystal_level": 2.0,
+						"name": "元素共鸣 火",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "仅旅行者获得火元素；已有元素时不再出现元素共鸣。",
+						"tags": [
+							"反应"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": "pyro",
+						"weight": 48.0
+					},
+					{
+						"_base_components": [
+							{
+								"effect": "move_speed_flat",
+								"value": 18.0
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "move_speed_flat",
+								"value": 18.0
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"description": "移速 +18；防御 +6。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_forced_march",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "急行军",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "移速 +18；防御 +6",
+						"tags": [
+							"机动",
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.18,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队生命上限 +18%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_health_multiplier",
+						"excludes": [],
+						"id": "global_health_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "极限剂量",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队生命上限 +18%",
+						"tags": [
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.18,
+						"weight": 48.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 29.9666666666673
+			},
+			{
+				"id": "global_speed_1",
+				"index": 1,
+				"level": 4,
+				"name": "统一节奏",
+				"offered": [
+					{
+						"_base_value": 0.15,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "购买的射程格射程加成额外提高15个百分点 / 层，立即作用于格子上的角色。最高 3 级。",
+						"effect": "device_range_pad",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_range_pad.png",
+						"id": "device_range_pad",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "远眺射程格",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "射程格额外射程加成 +15个百分点 / 层",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.15,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.1,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +10%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "统一节奏",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队攻速 +10%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.1,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.2,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "所有豌豆及西瓜攻击附带寒冰效果：目标移速降低20%，持续2秒。最高 1 级。",
+						"effect": "device_frost",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_frost.png",
+						"id": "device_frost",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "极地育种",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "豌豆与西瓜：减速20%，持续2秒",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 0.2,
+						"weight": 28.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 43.9666666666667
+			},
+			{
+				"id": "v75_squad_edge",
+				"index": 0,
+				"level": 5,
+				"name": "全军锋锐",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "attack_multiplier",
+								"value": 0.1
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "attack_multiplier",
+								"value": 0.1
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"description": "攻击 +10%；防御 +6。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_squad_edge",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "全军锋锐",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "攻击 +10%；防御 +6",
+						"tags": [
+							"进攻",
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.18,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队生命上限 +18%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_health_multiplier",
+						"excludes": [],
+						"id": "global_health_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "极限剂量",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队生命上限 +18%",
+						"tags": [
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.18,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.15,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "购买的攻击格攻击力加成额外提高15个百分点 / 层，立即作用于格子上的角色。最高 3 级。",
+						"effect": "device_power_pad",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_power_pad.png",
+						"id": "device_power_pad",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "高能攻击格",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "攻击格额外攻击加成 +15个百分点 / 层",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.15,
+						"weight": 48.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 57.9666666666659
+			},
+			{
+				"id": "v75_nashor_cadence",
+				"index": 2,
+				"level": 6,
+				"name": "纳什之牙",
+				"offered": [
+					{
+						"_base_value": 0.16,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "普攻追加 16% 追击伤害。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "echo_add",
+						"excludes": [],
+						"id": "mechanic_rapid_echo",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "追击回声",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "普攻追加 16% 追击伤害",
+						"tags": [
+							"弹道"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.16,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 5.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "向日葵每8秒产金每级＋5，最高＋15；升级不改变产金周期。最高3级。",
+						"effect": "device_photosynthesis",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_photosynthesis.png",
+						"id": "device_photosynthesis",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "光合作用",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "向日葵每8秒产金每级＋5，最高＋15；升级不改变产金周期",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 5.0,
+						"weight": 48.0
+					},
+					{
+						"_base_components": [
+							{
+								"effect": "attack_rate_multiplier",
+								"value": 0.28
+							},
+							{
+								"effect": "echo_add",
+								"value": 0.15
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "attack_rate_multiplier",
+								"value": 0.28
+							},
+							{
+								"effect": "echo_add",
+								"value": 0.15
+							}
+						],
+						"description": "攻速 +28%；普攻追加 15% 追击伤害。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_nashor_cadence",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 5.0,
+						"name": "纳什之牙",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "攻速 +28%；普攻追加 15% 追击伤害",
+						"tags": [
+							"节奏",
+							"弹道"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.0,
+						"weight": 13.0
+					}
+				],
+				"rarity": "epic",
+				"recipient": 2,
+				"time": 71.9666666666651
+			},
+			{
+				"id": "v75_squad_edge",
+				"index": 0,
+				"level": 7,
+				"name": "全军锋锐",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "attack_multiplier",
+								"value": 0.1
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "attack_multiplier",
+								"value": 0.115
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.9
+							}
+						],
+						"description": "攻击 +10%；防御 +6。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_squad_edge",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "全军锋锐",
+						"next_level": 2,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "攻击 +10%；防御 +6",
+						"tags": [
+							"进攻",
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.15,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.26,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +26%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_epic",
+						"max_stacks": 2.0,
+						"min_crystal_level": 5.0,
+						"name": "风暴节拍",
+						"next_level": 1,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "全队攻速 +26%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.26,
+						"weight": 13.0
+					},
+					{
+						"_base_value": 0.25,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "植物生命每级＋25%，最高＋100%。最高4级。",
+						"effect": "device_rooted",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_rooted.png",
+						"id": "device_rooted",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "深根扎营",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "植物生命每级＋25%，最高＋100%",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.25,
+						"weight": 48.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 85.9666666666644
+			},
+			{
+				"id": "mechanic_twin_arc",
+				"index": 0,
+				"level": 7,
+				"name": "双生弹幕",
+				"offered": [
+					{
+						"_base_value": 1.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "弹道 +1。最高1级。",
+						"effect": "projectile_count_add",
+						"excludes": [],
+						"id": "mechanic_twin_arc",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "双生弹幕",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "弹道 +1",
+						"tags": [
+							"弹道"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 1.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.2,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "所有攻击植物伤害每级＋20%，最高＋80%。最高4级。",
+						"effect": "device_botanist",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_botanist.png",
+						"id": "device_botanist",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "植物学家",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "所有攻击植物伤害每级＋20%，最高＋80%",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.2,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 10.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队防御 +10。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_armor_flat",
+						"excludes": [],
+						"id": "v75_iron_line",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "钢铁阵线",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队防御 +10",
+						"tags": [
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 10.0,
+						"weight": 48.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 99.9666666666636
+			},
+			{
+				"id": "evolve_fireball",
+				"index": 2,
+				"level": 8,
+				"name": "天动万象",
+				"offered": [
+					{
+						"_base_value": 0.2,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "所有豌豆及西瓜攻击附带寒冰效果：目标移速降低20%，持续2秒。最高 1 级。",
+						"effect": "device_frost",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_frost.png",
+						"id": "device_frost",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "极地育种",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "豌豆与西瓜：减速20%，持续2秒",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 0.2,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.25,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "植物生命每级＋25%，最高＋100%。最高4级。",
+						"effect": "device_rooted",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_rooted.png",
+						"id": "device_rooted",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "深根扎营",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "植物生命每级＋25%，最高＋100%",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.25,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.16,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "1级单枚陨石，2级三重陨石，3级扩大落点，4级终极冲击。最高4级。",
+						"effect": "evolving_fireball",
+						"evolution_levels": [
+							1.0,
+							3.0,
+							6.0,
+							9.0
+						],
+						"evolutions": [
+							{
+								"branch": "split",
+								"level": 3.0,
+								"name": "群星连坠"
+							},
+							{
+								"branch": "wide_impact",
+								"level": 6.0,
+								"name": "天倾地裂"
+							},
+							{
+								"branch": "meteor",
+								"level": 9.0,
+								"name": "万象崩解"
+							}
+						],
+						"excludes": [],
+						"id": "evolve_fireball",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "天动万象",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "1级单枚陨石，2级三重陨石，3级扩大落点，4级终极冲击",
+						"tags": [
+							"召唤"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.16,
+						"weight": 34.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 113.966666666663
+			},
+			{
+				"id": "v75_multishot_training",
+				"index": 0,
+				"level": 9,
+				"name": "多重射击",
+				"offered": [
+					{
+						"_base_value": 1.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "弹道 +1。最高2级。",
+						"effect": "projectile_count_add",
+						"excludes": [],
+						"id": "v75_multishot_training",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "多重射击",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "弹道 +1",
+						"tags": [
+							"弹道"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0
+						],
+						"value": 1.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 10.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队防御 +10。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_armor_flat",
+						"excludes": [],
+						"id": "v75_iron_line",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "钢铁阵线",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队防御 +10",
+						"tags": [
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 10.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 115.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "每7秒横向扫射，首级基础伤害345；升级提高伤害、范围并缩短间隔。最高3级；联动效果可进一步放大。",
+						"effect": "support_crossfire",
+						"excludes": [],
+						"id": "support_crossfire",
+						"interval": 7.0,
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "交叉火力",
+						"next_level": 1,
+						"radius": 100.0,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "每7秒横向扫射，首级基础伤害345；升级提高伤害、范围并缩短间隔",
+						"tags": [
+							"支援"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 115.0,
+						"weight": 28.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 127.966666666662
+			},
+			{
+				"id": "mythic_projectile_storm",
+				"index": 0,
+				"level": 10,
+				"name": "神格·万象弹幕",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "projectile_count_add",
+								"value": 2.0
+							},
+							{
+								"effect": "attack_rate_multiplier",
+								"value": 0.38
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "projectile_count_add",
+								"value": 2.0
+							},
+							{
+								"effect": "attack_rate_multiplier",
+								"value": 0.38
+							}
+						],
+						"description": "弹道 +2；攻速 +38%。最高1级。",
+						"effect": "card_bundle",
+						"excludes": [
+							"mythic_world_breaker",
+							"mythic_eternal_support"
+						],
+						"id": "mythic_projectile_storm",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 10.0,
+						"name": "神格·万象弹幕",
+						"next_level": 1,
+						"rarity": "mythic",
+						"requires": [],
+						"summary": "弹道 +2；攻速 +38%",
+						"tags": [
+							"弹道",
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 0.0,
+						"weight": 1.0
+					},
+					{
+						"_base_value": 0.3,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "土豆雷等爆炸植物伤害提高30% / 层，爆炸范围扩大20% / 层。最高 2 级。",
+						"effect": "device_mine_chain",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_mine_chain.png",
+						"id": "device_mine_chain",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 5.0,
+						"name": "爆破育苗",
+						"next_level": 1,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "爆炸植物：伤害 +30%，范围 +20% / 层",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0
+						],
+						"value": 0.3,
+						"weight": 13.0
+					},
+					{
+						"_base_value": 40.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "反应半径 +40。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "reaction_radius_add",
+						"excludes": [],
+						"id": "v75_reaction_diffusion",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "反应扩散",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "反应半径 +40",
+						"tags": [
+							"反应"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 40.0,
+						"weight": 28.0
+					}
+				],
+				"rarity": "mythic",
+				"recipient": 2,
+				"time": 151.566666666661
+			},
+			{
+				"id": "global_speed_rare",
+				"index": 0,
+				"level": 11,
+				"name": "全军加速",
+				"offered": [
+					{
+						"_base_value": 0.16,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +16%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_rare",
+						"max_stacks": 2.0,
+						"min_crystal_level": 3.0,
+						"name": "全军加速",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "全队攻速 +16%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.16,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 2.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "1／2／3级法术环进化为2／3／4个，伤害与半径同步成长。最高3级。",
+						"effect": "orbit_spell_add",
+						"evolution_levels": [
+							1.0,
+							3.0,
+							6.0
+						],
+						"evolutions": [
+							{
+								"level": 3.0,
+								"name": "双重环流"
+							},
+							{
+								"level": 6.0,
+								"name": "元素共振"
+							}
+						],
+						"excludes": [],
+						"id": "orbit_spell_rings",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 5.0,
+						"name": "术式环流",
+						"next_level": 1,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "1／2／3级法术环进化为2／3／4个，伤害与半径同步成长",
+						"tags": [
+							"召唤"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 2.0,
+						"weight": 17.0
+					},
+					{
+						"_base_value": 0.26,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "攻速 +26%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "attack_rate_multiplier",
+						"excludes": [],
+						"id": "single_speed_rare",
+						"max_stacks": 2.0,
+						"min_crystal_level": 3.0,
+						"name": "疾风连击",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "攻速 +26%",
+						"tags": [
+							"节奏"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.26,
+						"weight": 28.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 165.56666666666
+			},
+			{
+				"id": "v75_battlefield_transfusion",
+				"index": 0,
+				"level": 12,
+				"name": "战地输血",
+				"offered": [
+					{
+						"_base_value": 80.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "每11秒全队回复80生命，并修复水晶28生命。最高2级；联动效果可进一步放大。",
+						"effect": "support_heal",
+						"excludes": [],
+						"id": "v75_battlefield_transfusion",
+						"interval": 11.0,
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "战地输血",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"radius": 100.0,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "每11秒全队回复80生命，并修复水晶28生命",
+						"tags": [
+							"支援"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 80.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 2.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "场上及之后部署的豌豆射手、寒冰射手进化为双发射手，每轮连续发射2颗豌豆；保留已有寒冰效果。最高 1 级。",
+						"effect": "device_repeater",
+						"excludes": [
+							"device_threepeater",
+							"device_gatling",
+							"device_melon"
+						],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_repeater.png",
+						"id": "device_repeater",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "双发射手",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "全体豌豆系进化：每轮双发",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"upgrade_tier": 1.0,
+						"value": 2.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 24.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "防御 +24。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "armor_flat",
+						"excludes": [],
+						"id": "single_armor_rare",
+						"max_stacks": 3.0,
+						"min_crystal_level": 3.0,
+						"name": "战术装甲",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "防御 +24",
+						"tags": [
+							"护盾"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 24.0,
+						"weight": 28.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 248.599999999988
+			},
+			{
+				"id": "global_speed_1",
+				"index": 1,
+				"level": 13,
+				"name": "统一节奏",
+				"offered": [
+					{
+						"_base_value": 75.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队射程 +75。最高1级。",
+						"effect": "squad_range_flat",
+						"excludes": [],
+						"id": "global_range_legendary",
+						"max_stacks": 1.0,
+						"min_crystal_level": 7.0,
+						"name": "天眼矩阵",
+						"next_level": 1,
+						"rarity": "legendary",
+						"requires": [],
+						"summary": "全队射程 +75",
+						"tags": [
+							"瞄准"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 75.0,
+						"weight": 5.0
+					},
+					{
+						"_base_value": 0.1,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +10%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "统一节奏",
+						"next_level": 2,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队攻速 +10%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.15,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.115,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 1.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "贯穿 +1。最高1级。",
+						"effect": "pierce_add",
+						"excludes": [],
+						"id": "mechanic_piercing_edge",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "贯穿锋芒",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "贯穿 +1",
+						"tags": [
+							"弹道"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 1.0,
+						"weight": 28.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 306.233333333361
+			}
+		],
+		"event_counts": {
+			"ability_audio": 56,
+			"arena_event": 2,
+			"boss_arrival": 1,
+			"boss_phase": 2,
+			"boss_warning": 9,
+			"chain": 6,
+			"contract_complete": 1,
+			"critical": 39,
+			"crystal_guard": 66,
+			"crystallize": 23,
+			"death": 240,
+			"deploy": 3,
+			"deployment_unlocked": 2,
+			"device_pea_cast": 148,
+			"device_pea_hit": 124,
+			"device_place": 9,
+			"device_sun": 45,
+			"dodge": 18,
+			"down": 7,
+			"echo": 1601,
+			"electro_charged": 5,
+			"element_attuned": 1,
+			"enemy_arrival": 240,
+			"enemy_projectile_cast": 62,
+			"enemy_volatile": 1,
+			"enemy_warning": 80,
+			"fireball_fall": 30,
+			"fireball_impact": 30,
+			"geo_break": 1,
+			"geo_hit": 11,
+			"heal": 18,
+			"hit": 4958,
+			"hurt": 53,
+			"kill_streak": 12,
+			"knockback": 7,
+			"level_up": 12,
+			"multishot": 624,
+			"overloaded": 1,
+			"projectile_impact": 809,
+			"revive": 7,
+			"reward_taken": 12,
+			"rift_laser": 3,
+			"rift_orb_hit": 25,
+			"rift_orbs": 2,
+			"rift_overhead": 1,
+			"rift_storm": 3,
+			"route_spawn": 238,
+			"route_warning": 30,
+			"shaman_land": 1,
+			"shield_break": 27,
+			"shield_hit": 163,
+			"shot": 783,
+			"signature_heal": 30,
+			"signature_needle_hit": 13,
+			"signature_needle_volley": 13,
+			"signature_salon_hit": 157,
+			"signature_start": 25,
+			"skill_cast": 45,
+			"skill_impact": 12,
+			"skill_none": 3,
+			"slash": 2123,
+			"splash": 3101,
+			"stage_start": 1,
+			"support_heal": 11,
+			"synced_impact": 1538,
+			"tag_synergy": 1,
+			"team_resonance": 1,
+			"trap_pulse": 25,
+			"traveler_fx_cast": 24,
+			"traveler_fx_hit": 66,
+			"traveler_fx_start": 22,
+			"ultimate_cast": 16,
+			"vaporize": 150,
+			"vfx_cue": 58,
+			"wave": 1,
+			"weather_pulse": 45,
+			"won": 1
+		},
+		"kills": 240,
+		"level": 13,
+		"purchases": [
+			{
+				"gold_after": 20,
+				"kind": "sunflower",
+				"pos": [
+					420.0,
+					220.0
+				],
+				"time": 0.0
+			},
+			{
+				"gold_after": 64,
+				"kind": "pea",
+				"pos": [
+					540.0,
+					380.0
+				],
+				"time": 36.2000000000005
+			},
+			{
+				"gold_after": 88,
+				"kind": "pea",
+				"pos": [
+					660.0,
+					500.0
+				],
+				"time": 60.2666666666658
+			},
+			{
+				"gold_after": 32,
+				"kind": "pea",
+				"pos": [
+					720.0,
+					380.0
+				],
+				"time": 72.2999999999985
+			},
+			{
+				"gold_after": 26,
+				"kind": "barricade",
+				"pos": [
+					660.0,
+					260.0
+				],
+				"time": 78.3333333333315
+			},
+			{
+				"gold_after": 170,
+				"kind": "pea",
+				"pos": [
+					540.0,
+					260.0
+				],
+				"time": 120.466666666662
+			},
+			{
+				"gold_after": 118,
+				"kind": "pea",
+				"pos": [
+					540.0,
+					500.0
+				],
+				"time": 132.499999999995
+			},
+			{
+				"gold_after": 224,
+				"kind": "barricade",
+				"pos": [
+					420.0,
+					380.0
+				],
+				"time": 144.566666666661
+			},
+			{
+				"gold_after": 256,
+				"kind": "pea",
+				"pos": [
+					780.0,
+					260.0
+				],
+				"time": 156.633333333327
+			}
+		],
+		"seed": 6121,
+		"stage": "stage_02",
+		"state": "won",
+		"stats": [
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 0,
+				"kills5": 0,
+				"level": 1,
+				"projectiles": 0,
+				"time": 0.03
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 0,
+				"kills5": 0,
+				"level": 1,
+				"projectiles": 0,
+				"time": 5.03
+			},
+			{
+				"enemies": 9,
+				"hp": 12,
+				"kills": 0,
+				"kills5": 0,
+				"level": 1,
+				"projectiles": 0,
+				"time": 10.03
+			},
+			{
+				"enemies": 14,
+				"hp": 12,
+				"kills": 0,
+				"kills5": 0,
+				"level": 1,
+				"projectiles": 0,
+				"time": 15.03
+			},
+			{
+				"enemies": 14,
+				"hp": 12,
+				"kills": 0,
+				"kills5": 0,
+				"level": 1,
+				"projectiles": 0,
+				"time": 20.03
+			},
+			{
+				"enemies": 14,
+				"hp": 12,
+				"kills": 1,
+				"kills5": 1,
+				"level": 1,
+				"projectiles": 0,
+				"time": 25.03
+			},
+			{
+				"enemies": 15,
+				"hp": 12,
+				"kills": 3,
+				"kills5": 2,
+				"level": 2,
+				"projectiles": 1,
+				"time": 30.03
+			},
+			{
+				"enemies": 8,
+				"hp": 12,
+				"kills": 12,
+				"kills5": 9,
+				"level": 4,
+				"projectiles": 0,
+				"time": 35.03
+			},
+			{
+				"enemies": 11,
+				"hp": 12,
+				"kills": 12,
+				"kills5": 0,
+				"level": 4,
+				"projectiles": 0,
+				"time": 40.03
+			},
+			{
+				"enemies": 10,
+				"hp": 12,
+				"kills": 14,
+				"kills5": 2,
+				"level": 4,
+				"projectiles": 0,
+				"time": 45.0
+			},
+			{
+				"enemies": 8,
+				"hp": 12,
+				"kills": 16,
+				"kills5": 2,
+				"level": 4,
+				"projectiles": 0,
+				"time": 50.0
+			},
+			{
+				"enemies": 5,
+				"hp": 12,
+				"kills": 19,
+				"kills5": 3,
+				"level": 5,
+				"projectiles": 0,
+				"time": 55.0
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 23,
+				"kills5": 4,
+				"level": 5,
+				"projectiles": 0,
+				"time": 59.97
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 26,
+				"kills5": 3,
+				"level": 5,
+				"projectiles": 1,
+				"time": 64.97
+			},
+			{
+				"enemies": 6,
+				"hp": 12,
+				"kills": 28,
+				"kills5": 2,
+				"level": 6,
+				"projectiles": 0,
+				"time": 69.97
+			},
+			{
+				"enemies": 5,
+				"hp": 12,
+				"kills": 33,
+				"kills5": 5,
+				"level": 7,
+				"projectiles": 1,
+				"time": 74.93
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 38,
+				"kills5": 5,
+				"level": 7,
+				"projectiles": 0,
+				"time": 79.93
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 38,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 84.93
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 38,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 89.9
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 38,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 94.9
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 38,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 99.9
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 38,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 104.87
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 44,
+				"kills5": 6,
+				"level": 8,
+				"projectiles": 0,
+				"time": 109.87
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 47,
+				"kills5": 3,
+				"level": 8,
+				"projectiles": 0,
+				"time": 114.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 55,
+				"kills5": 8,
+				"level": 8,
+				"projectiles": 0,
+				"time": 119.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 62,
+				"kills5": 7,
+				"level": 9,
+				"projectiles": 1,
+				"time": 124.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 63,
+				"kills5": 1,
+				"level": 9,
+				"projectiles": 0,
+				"time": 129.8
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 64,
+				"kills5": 1,
+				"level": 9,
+				"projectiles": 0,
+				"time": 134.8
+			},
+			{
+				"enemies": 7,
+				"hp": 12,
+				"kills": 70,
+				"kills5": 6,
+				"level": 9,
+				"projectiles": 0,
+				"time": 139.8
+			},
+			{
+				"enemies": 9,
+				"hp": 12,
+				"kills": 78,
+				"kills5": 8,
+				"level": 9,
+				"projectiles": 0,
+				"time": 144.8
+			},
+			{
+				"enemies": 12,
+				"hp": 12,
+				"kills": 84,
+				"kills5": 6,
+				"level": 9,
+				"projectiles": 0,
+				"time": 149.8
+			},
+			{
+				"enemies": 9,
+				"hp": 12,
+				"kills": 92,
+				"kills5": 8,
+				"level": 10,
+				"projectiles": 5,
+				"time": 154.8
+			},
+			{
+				"enemies": 7,
+				"hp": 12,
+				"kills": 100,
+				"kills5": 8,
+				"level": 10,
+				"projectiles": 5,
+				"time": 159.8
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 108,
+				"kills5": 8,
+				"level": 11,
+				"projectiles": 0,
+				"time": 164.8
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 111,
+				"kills5": 3,
+				"level": 11,
+				"projectiles": 0,
+				"time": 169.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 111,
+				"kills5": 0,
+				"level": 11,
+				"projectiles": 0,
+				"time": 174.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 112,
+				"kills5": 1,
+				"level": 11,
+				"projectiles": 0,
+				"time": 179.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 112,
+				"kills5": 0,
+				"level": 11,
+				"projectiles": 0,
+				"time": 184.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 113,
+				"kills5": 1,
+				"level": 11,
+				"projectiles": 0,
+				"time": 189.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 113,
+				"kills5": 0,
+				"level": 11,
+				"projectiles": 0,
+				"time": 194.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 113,
+				"kills5": 0,
+				"level": 11,
+				"projectiles": 0,
+				"time": 199.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 113,
+				"kills5": 0,
+				"level": 11,
+				"projectiles": 0,
+				"time": 204.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 117,
+				"kills5": 4,
+				"level": 11,
+				"projectiles": 0,
+				"time": 209.77
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 122,
+				"kills5": 5,
+				"level": 11,
+				"projectiles": 3,
+				"time": 214.77
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 128,
+				"kills5": 6,
+				"level": 11,
+				"projectiles": 5,
+				"time": 219.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 136,
+				"kills5": 8,
+				"level": 11,
+				"projectiles": 0,
+				"time": 224.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 140,
+				"kills5": 4,
+				"level": 11,
+				"projectiles": 0,
+				"time": 229.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 141,
+				"kills5": 1,
+				"level": 11,
+				"projectiles": 0,
+				"time": 234.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 141,
+				"kills5": 0,
+				"level": 11,
+				"projectiles": 0,
+				"time": 239.77
+			},
+			{
+				"enemies": 6,
+				"hp": 12,
+				"kills": 146,
+				"kills5": 5,
+				"level": 11,
+				"projectiles": 5,
+				"time": 244.77
+			},
+			{
+				"enemies": 6,
+				"hp": 12,
+				"kills": 157,
+				"kills5": 11,
+				"level": 12,
+				"projectiles": 5,
+				"time": 249.77
+			},
+			{
+				"enemies": 5,
+				"hp": 12,
+				"kills": 167,
+				"kills5": 10,
+				"level": 12,
+				"projectiles": 0,
+				"time": 254.77
+			},
+			{
+				"enemies": 5,
+				"hp": 12,
+				"kills": 176,
+				"kills5": 9,
+				"level": 12,
+				"projectiles": 5,
+				"time": 259.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 184,
+				"kills5": 8,
+				"level": 12,
+				"projectiles": 5,
+				"time": 264.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 185,
+				"kills5": 1,
+				"level": 12,
+				"projectiles": 0,
+				"time": 269.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 190,
+				"kills5": 5,
+				"level": 12,
+				"projectiles": 0,
+				"time": 274.77
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 195,
+				"kills5": 5,
+				"level": 12,
+				"projectiles": 2,
+				"time": 279.77
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 201,
+				"kills5": 6,
+				"level": 12,
+				"projectiles": 0,
+				"time": 284.77
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 207,
+				"kills5": 6,
+				"level": 12,
+				"projectiles": 0,
+				"time": 289.77
+			},
+			{
+				"enemies": 7,
+				"hp": 12,
+				"kills": 212,
+				"kills5": 5,
+				"level": 12,
+				"projectiles": 0,
+				"time": 294.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 219,
+				"kills5": 7,
+				"level": 12,
+				"projectiles": 0,
+				"time": 299.77
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 219,
+				"kills5": 0,
+				"level": 12,
+				"projectiles": 0,
+				"time": 304.77
+			},
+			{
+				"enemies": 7,
+				"hp": 12,
+				"kills": 231,
+				"kills5": 12,
+				"level": 13,
+				"projectiles": 0,
+				"time": 309.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 237,
+				"kills5": 6,
+				"level": 13,
+				"projectiles": 0,
+				"time": 314.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 238,
+				"kills5": 1,
+				"level": 13,
+				"projectiles": 0,
+				"time": 319.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 238,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 324.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 238,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 329.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 239,
+				"kills5": 1,
+				"level": 13,
+				"projectiles": 0,
+				"time": 334.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 239,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 339.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 239,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 344.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 239,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 349.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 239,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 354.77
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 239,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 359.77
+			}
+		],
+		"time": 361.966666666739
+	},
+	{
+		"boss_events": [],
+		"carry": {
+			"buff_levels": {
+				"element_resonance_pyro": 1,
+				"evolve_fireball": 1,
+				"global_speed_1": 2,
+				"global_speed_epic": 1,
+				"global_speed_rare": 1,
+				"mechanic_twin_arc": 1,
+				"mythic_projectile_storm": 1,
+				"v75_battlefield_transfusion": 1,
+				"v75_multishot_training": 1,
+				"v75_squad_edge": 1,
+				"v75_vitality_drill": 1
+			},
+			"card_synergies": {
+
+			},
+			"crystal_level": 13,
+			"crystal_shield": 0.0,
+			"crystal_xp": 5568,
+			"death_burst_ratio": 0.0,
+			"elite_damage_bonus": 0.0,
+			"energy_gain_bonus": 0.0,
+			"execute_threshold": 0.0,
+			"fireball_level": 1,
+			"frenzy_milestone": 0,
+			"heroes": [
+				{
+					"armor": 51.0,
+					"base_damage": 48.0,
+					"base_hp": 720.0,
+					"base_rate": 1.3,
+					"blast_radius": 0.0,
+					"block": 3,
+					"can_hit_air": false,
+					"card_attack_idle": 0.766666666666667,
+					"chain_count": 0,
+					"character_id": "traveler",
+					"cleave": true,
+					"cleave_ratio": 0.9,
+					"conqueror_attacks": 0,
+					"crit_chance": 0.08,
+					"damage": 58.56,
+					"echo_ratio": 0.0,
+					"element": "pyro",
+					"frenzy_bonus": 0.0,
+					"hp": 182.0,
+					"max_hp": 720.0,
+					"pierce": 0,
+					"projectile_count": 5,
+					"range": 245.0,
+					"rate": 2.6195,
+					"secondary_element": "",
+					"slow": false,
+					"speed": 118.0,
+					"splash": false
+				},
+				{
+					"armor": 26.0,
+					"base_damage": 35.0,
+					"base_hp": 420.0,
+					"base_rate": 1.05,
+					"blast_radius": 78.0,
+					"block": 0,
+					"can_hit_air": true,
+					"card_attack_idle": 0.6,
+					"chain_count": 0,
+					"character_id": "hero_03",
+					"cleave": false,
+					"cleave_ratio": 0.9,
+					"conqueror_attacks": 0,
+					"crit_chance": 0.0,
+					"damage": 42.7,
+					"echo_ratio": 0.22,
+					"element": "hydro",
+					"frenzy_bonus": 0.0,
+					"hp": 160.0,
+					"max_hp": 420.0,
+					"pierce": 0,
+					"projectile_count": 5,
+					"range": 340.0,
+					"rate": 2.11575,
+					"secondary_element": "",
+					"slow": false,
+					"speed": 114.0,
+					"splash": true
+				},
+				{
+					"armor": 82.0,
+					"base_damage": 96.0,
+					"base_hp": 960.0,
+					"base_rate": 1.42,
+					"blast_radius": 52.0,
+					"block": 2,
+					"can_hit_air": true,
+					"card_attack_idle": 0.6,
+					"card_levels": {
+						"attack_mend": 1.0
+					},
+					"chain_count": 0,
+					"character_id": "hero_13",
+					"cleave": false,
+					"cleave_ratio": 0.9,
+					"conqueror_attacks": 0,
+					"crit_chance": 0.0,
+					"damage": 117.12,
+					"echo_ratio": 0.0,
+					"element": "",
+					"frenzy_bonus": 0.0,
+					"hp": 210.23460807033,
+					"max_hp": 1190.4,
+					"pierce": 0,
+					"projectile_count": 5,
+					"range": 345.0,
+					"rate": 2.8613,
+					"secondary_element": "",
+					"slow": false,
+					"speed": 122.0,
+					"splash": true
+				}
+			],
+			"kill_frenzy_step": 0.0,
+			"luck": 0.0,
+			"orbitals": [],
+			"reaction_damage_bonus": 0.0,
+			"reaction_radius_bonus": 0.0,
+			"skill_area_bonus": 0.0,
+			"skill_cooldown_reduction": 0.0,
+			"skill_duration_bonus": 0.0,
+			"skill_power_bonus": 0.0,
+			"squad": [
+				"traveler",
+				"hero_03",
+				"hero_13"
+			],
+			"supports": {
+				"support_heal": {
+					"interval": 11.0,
+					"power": 80.0,
+					"radius": 100.0,
+					"stacks": 1,
+					"timer": 9.13333333333388
+				}
+			},
+			"tag_synergy_levels": {
+				"弹道": 1
+			},
+			"traveler_element": "pyro",
+			"traveler_secondary_element": "none"
+		},
+		"casts": [
+			{
+				"ability": "无锋回旋",
+				"element": "",
+				"hero": "traveler",
+				"time": 4.19999999999999,
+				"ultimate": false
+			},
+			{
+				"ability": "无锋回旋",
+				"element": "",
+				"hero": "traveler",
+				"time": 13.5333333333333,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 14.9333333333333,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 22.866666666667,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 28.4666666666672,
+				"ultimate": true
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 34.033333333334,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 36.3666666666672,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 38.2333333333337,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 38.2333333333337,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 54.0666666666662,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 58.2333333333326,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 78.2666666666648,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 78.2666666666648,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 80.1333333333314,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 107.166666666663,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 107.166666666663,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 107.166666666663,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 107.166666666663,
+				"ultimate": true
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 112.299999999996,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 114.166666666663,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 123.466666666662,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 129.066666666662,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 138.866666666661,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 146.333333333328,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 150.066666666661,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 154.26666666666,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 165.46666666666,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 172.466666666659,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 172.466666666659,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 172.466666666659,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 190.199999999992,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 190.199999999992,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 190.199999999992,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 193.466666666658,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 214.466666666657,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 214.466666666657,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 223.79999999999,
+				"ultimate": true
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 224.266666666657,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 229.866666666656,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 235.466666666656,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 236.866666666656,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 252.266666666655,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 257.866666666656,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 260.199999999991,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 261.599999999992,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 268.133333333331,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 278.866666666673,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 282.133333333342,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 283.533333333343,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 294.266666666685,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 298.933333333356,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 299.86666666669,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 301.266666666691,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 318.066666666704,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 320.866666666706,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 328.333333333379,
+				"ultimate": false
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 332.066666666715,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 333.466666666716,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 340.466666666722,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 341.866666666723,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 348.866666666729,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 362.400000000073,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 362.86666666674,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 364.266666666741,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 365.666666666742,
+				"ultimate": true
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 379.666666666753,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 383.866666666756,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 395.066666666765,
+				"ultimate": false
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 396.466666666766,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 398.800000000102,
+				"ultimate": true
+			},
+			{
+				"ability": "引针簇射",
+				"element": "",
+				"hero": "hero_13",
+				"time": 402.533333333438,
+				"ultimate": true
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 404.866666666773,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 410.933333333445,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 425.86666666679,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 426.333333333457,
+				"ultimate": false
+			},
+			{
+				"ability": "万众狂欢",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 432.866666666795,
+				"ultimate": true
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 432.866666666795,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 441.733333333469,
+				"ultimate": false
+			},
+			{
+				"ability": "孤心沙龙",
+				"element": "hydro",
+				"hero": "hero_03",
+				"time": 446.866666666807,
+				"ultimate": false
+			},
+			{
+				"ability": "焰锋三叠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 457.133333333481,
+				"ultimate": false
+			},
+			{
+				"ability": "天火连坠",
+				"element": "pyro",
+				"hero": "traveler",
+				"time": 457.133333333481,
+				"ultimate": true
+			},
+			{
+				"ability": "丝缕缠流",
+				"element": "",
+				"hero": "hero_13",
+				"time": 466.933333333489,
+				"ultimate": false
+			}
+		],
+		"choices": [
+			{
+				"id": "element_resonance_pyro",
+				"index": 0,
+				"level": 2,
+				"name": "元素共鸣 火",
+				"offered": [
+					{
+						"_base_value": "pyro",
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "仅旅行者获得火元素；已有元素时不再出现元素共鸣。最高 1 级。",
+						"effect": "assign_traveler_element",
+						"excludes": [],
+						"id": "element_resonance_pyro",
+						"max_stacks": 1.0,
+						"min_crystal_level": 2.0,
+						"name": "元素共鸣 火",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "仅旅行者获得火元素；已有元素时不再出现元素共鸣。",
+						"tags": [
+							"反应"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": "pyro",
+						"weight": 48.0
+					},
+					{
+						"_base_components": [
+							{
+								"effect": "move_speed_flat",
+								"value": 18.0
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "move_speed_flat",
+								"value": 18.0
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"description": "移速 +18；防御 +6。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_forced_march",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "急行军",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "移速 +18；防御 +6",
+						"tags": [
+							"机动",
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.18,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队生命上限 +18%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_health_multiplier",
+						"excludes": [],
+						"id": "global_health_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "极限剂量",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队生命上限 +18%",
+						"tags": [
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.18,
+						"weight": 48.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 14.5666666666666
+			},
+			{
+				"id": "global_speed_1",
+				"index": 1,
+				"level": 4,
+				"name": "统一节奏",
+				"offered": [
+					{
+						"_base_value": 0.15,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "购买的射程格射程加成额外提高15个百分点 / 层，立即作用于格子上的角色。最高 3 级。",
+						"effect": "device_range_pad",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_range_pad.png",
+						"id": "device_range_pad",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "远眺射程格",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "射程格额外射程加成 +15个百分点 / 层",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.15,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.1,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +10%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "统一节奏",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队攻速 +10%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.1,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.2,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "所有豌豆及西瓜攻击附带寒冰效果：目标移速降低20%，持续2秒。最高 1 级。",
+						"effect": "device_frost",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_frost.png",
+						"id": "device_frost",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "极地育种",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "豌豆与西瓜：减速20%，持续2秒",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 0.2,
+						"weight": 28.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 28.5666666666672
+			},
+			{
+				"id": "v75_squad_edge",
+				"index": 0,
+				"level": 5,
+				"name": "全军锋锐",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "attack_multiplier",
+								"value": 0.1
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "attack_multiplier",
+								"value": 0.1
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"description": "攻击 +10%；防御 +6。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_squad_edge",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "全军锋锐",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "攻击 +10%；防御 +6",
+						"tags": [
+							"进攻",
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.18,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队生命上限 +18%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_health_multiplier",
+						"excludes": [],
+						"id": "global_health_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "极限剂量",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队生命上限 +18%",
+						"tags": [
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.18,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.15,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "购买的攻击格攻击力加成额外提高15个百分点 / 层，立即作用于格子上的角色。最高 3 级。",
+						"effect": "device_power_pad",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_power_pad.png",
+						"id": "device_power_pad",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "高能攻击格",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "攻击格额外攻击加成 +15个百分点 / 层",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.15,
+						"weight": 48.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 42.5666666666668
+			},
+			{
+				"id": "v75_vitality_drill",
+				"index": 0,
+				"level": 7,
+				"name": "血性训练",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "health_multiplier",
+								"value": 0.24
+							},
+							{
+								"effect": "attack_mend",
+								"value": 1.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "health_multiplier",
+								"value": 0.24
+							},
+							{
+								"effect": "attack_mend",
+								"value": 1.0
+							}
+						],
+						"description": "生命上限 +24%；每击回复 2 生命。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_vitality_drill",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "血性训练",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "生命上限 +24%；每击回复 2 生命",
+						"tags": [
+							"护盾",
+							"恢复"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 5.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "向日葵每8秒产金每级＋5，最高＋15；升级不改变产金周期。最高3级。",
+						"effect": "device_photosynthesis",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_photosynthesis.png",
+						"id": "device_photosynthesis",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "光合作用",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "向日葵每8秒产金每级＋5，最高＋15；升级不改变产金周期",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 5.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 22.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "射程 +22。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "range_flat",
+						"excludes": [],
+						"id": "v75_close_focus_lens",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "近焦镜片",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "射程 +22",
+						"tags": [
+							"瞄准"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 22.0,
+						"weight": 48.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 56.566666666666
+			},
+			{
+				"id": "global_speed_epic",
+				"index": 1,
+				"level": 7,
+				"name": "风暴节拍",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "attack_multiplier",
+								"value": 0.1
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.0
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "attack_multiplier",
+								"value": 0.115
+							},
+							{
+								"effect": "armor_flat",
+								"value": 6.9
+							}
+						],
+						"description": "攻击 +10%；防御 +6。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "card_bundle",
+						"excludes": [],
+						"id": "v75_squad_edge",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "全军锋锐",
+						"next_level": 2,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "攻击 +10%；防御 +6",
+						"tags": [
+							"进攻",
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.15,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.26,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +26%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_epic",
+						"max_stacks": 2.0,
+						"min_crystal_level": 5.0,
+						"name": "风暴节拍",
+						"next_level": 1,
+						"rarity": "epic",
+						"requires": [],
+						"summary": "全队攻速 +26%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.26,
+						"weight": 13.0
+					},
+					{
+						"_base_value": 0.25,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "植物生命每级＋25%，最高＋100%。最高4级。",
+						"effect": "device_rooted",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_rooted.png",
+						"id": "device_rooted",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "深根扎营",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "植物生命每级＋25%，最高＋100%",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.25,
+						"weight": 48.0
+					}
+				],
+				"rarity": "epic",
+				"recipient": 2,
+				"time": 70.5666666666652
+			},
+			{
+				"id": "mechanic_twin_arc",
+				"index": 0,
+				"level": 7,
+				"name": "双生弹幕",
+				"offered": [
+					{
+						"_base_value": 1.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "弹道 +1。最高1级。",
+						"effect": "projectile_count_add",
+						"excludes": [],
+						"id": "mechanic_twin_arc",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "双生弹幕",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "弹道 +1",
+						"tags": [
+							"弹道"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 1.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.2,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "所有攻击植物伤害每级＋20%，最高＋80%。最高4级。",
+						"effect": "device_botanist",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_botanist.png",
+						"id": "device_botanist",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "植物学家",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "所有攻击植物伤害每级＋20%，最高＋80%",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.2,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 10.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队防御 +10。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_armor_flat",
+						"excludes": [],
+						"id": "v75_iron_line",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "钢铁阵线",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队防御 +10",
+						"tags": [
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 10.0,
+						"weight": 48.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 84.5666666666644
+			},
+			{
+				"id": "evolve_fireball",
+				"index": 2,
+				"level": 8,
+				"name": "天动万象",
+				"offered": [
+					{
+						"_base_value": 0.2,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "所有豌豆及西瓜攻击附带寒冰效果：目标移速降低20%，持续2秒。最高 1 级。",
+						"effect": "device_frost",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_frost.png",
+						"id": "device_frost",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "极地育种",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "豌豆与西瓜：减速20%，持续2秒",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 0.2,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 0.25,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "植物生命每级＋25%，最高＋100%。最高4级。",
+						"effect": "device_rooted",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_rooted.png",
+						"id": "device_rooted",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 2.0,
+						"name": "深根扎营",
+						"next_level": 1,
+						"rarity": "common",
+						"requires": [],
+						"summary": "植物生命每级＋25%，最高＋100%",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.25,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 0.16,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "1级单枚陨石，2级三重陨石，3级扩大落点，4级终极冲击。最高4级。",
+						"effect": "evolving_fireball",
+						"evolution_levels": [
+							1.0,
+							3.0,
+							6.0,
+							9.0
+						],
+						"evolutions": [
+							{
+								"branch": "split",
+								"level": 3.0,
+								"name": "群星连坠"
+							},
+							{
+								"branch": "wide_impact",
+								"level": 6.0,
+								"name": "天倾地裂"
+							},
+							{
+								"branch": "meteor",
+								"level": 9.0,
+								"name": "万象崩解"
+							}
+						],
+						"excludes": [],
+						"id": "evolve_fireball",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "天动万象",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "1级单枚陨石，2级三重陨石，3级扩大落点，4级终极冲击",
+						"tags": [
+							"召唤"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.16,
+						"weight": 34.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 107.766666666663
+			},
+			{
+				"id": "v75_multishot_training",
+				"index": 0,
+				"level": 9,
+				"name": "多重射击",
+				"offered": [
+					{
+						"_base_value": 1.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "弹道 +1。最高2级。",
+						"effect": "projectile_count_add",
+						"excludes": [],
+						"id": "v75_multishot_training",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "多重射击",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "弹道 +1",
+						"tags": [
+							"弹道"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0
+						],
+						"value": 1.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 10.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队防御 +10。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_armor_flat",
+						"excludes": [],
+						"id": "v75_iron_line",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "钢铁阵线",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队防御 +10",
+						"tags": [
+							"护盾"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 10.0,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 115.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "每7秒横向扫射，首级基础伤害345；升级提高伤害、范围并缩短间隔。最高3级；联动效果可进一步放大。",
+						"effect": "support_crossfire",
+						"excludes": [],
+						"id": "support_crossfire",
+						"interval": 7.0,
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "交叉火力",
+						"next_level": 1,
+						"radius": 100.0,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "每7秒横向扫射，首级基础伤害345；升级提高伤害、范围并缩短间隔",
+						"tags": [
+							"支援"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 115.0,
+						"weight": 28.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 121.766666666662
+			},
+			{
+				"id": "mythic_projectile_storm",
+				"index": 0,
+				"level": 10,
+				"name": "神格·万象弹幕",
+				"offered": [
+					{
+						"_base_components": [
+							{
+								"effect": "projectile_count_add",
+								"value": 2.0
+							},
+							{
+								"effect": "attack_rate_multiplier",
+								"value": 0.38
+							}
+						],
+						"_base_value": 0.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"components": [
+							{
+								"effect": "projectile_count_add",
+								"value": 2.0
+							},
+							{
+								"effect": "attack_rate_multiplier",
+								"value": 0.38
+							}
+						],
+						"description": "弹道 +2；攻速 +38%。最高1级。",
+						"effect": "card_bundle",
+						"excludes": [
+							"mythic_world_breaker",
+							"mythic_eternal_support"
+						],
+						"id": "mythic_projectile_storm",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 10.0,
+						"name": "神格·万象弹幕",
+						"next_level": 1,
+						"rarity": "mythic",
+						"requires": [],
+						"summary": "弹道 +2；攻速 +38%",
+						"tags": [
+							"弹道",
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 0.0,
+						"weight": 1.0
+					},
+					{
+						"_base_value": 0.12,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "攻击植物攻击间隔每级减少12%，最高减少36%；向日葵周期不变。最高3级。",
+						"effect": "device_quick_growth",
+						"excludes": [],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_quick_growth.png",
+						"id": "device_quick_growth",
+						"max_stacks": 3.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "快速生长",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "攻击植物攻击间隔每级减少12%，最高减少36%；向日葵周期不变",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 0.12,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 40.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "反应半径 +40。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "reaction_radius_add",
+						"excludes": [],
+						"id": "v75_reaction_diffusion",
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "反应扩散",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "反应半径 +40",
+						"tags": [
+							"反应"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 40.0,
+						"weight": 28.0
+					}
+				],
+				"rarity": "mythic",
+				"recipient": 2,
+				"time": 165.799999999993
+			},
+			{
+				"id": "global_speed_rare",
+				"index": 0,
+				"level": 11,
+				"name": "全军加速",
+				"offered": [
+					{
+						"_base_value": 0.16,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +16%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_rare",
+						"max_stacks": 2.0,
+						"min_crystal_level": 3.0,
+						"name": "全军加速",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "全队攻速 +16%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.16,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 3.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "1／2／3级飞剑进化为3／6／9把；4级解锁剑阵风暴。最高4级。",
+						"effect": "orbit_add",
+						"evolution_levels": [
+							1.0,
+							3.0,
+							6.0,
+							9.0
+						],
+						"evolutions": [
+							{
+								"branch": "range",
+								"level": 3.0,
+								"name": "扩展剑环"
+							},
+							{
+								"branch": "count",
+								"level": 6.0,
+								"name": "六芒剑轮"
+							}
+						],
+						"excludes": [],
+						"id": "orbit_arcane_blades",
+						"max_stacks": 4.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "星轨剑阵",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "1／2／3级飞剑进化为3／6／9把；4级解锁剑阵风暴",
+						"tags": [
+							"召唤"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.0,
+							1.0,
+							1.0
+						],
+						"value": 3.0,
+						"weight": 34.0
+					},
+					{
+						"_base_value": 0.26,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "攻速 +26%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "attack_rate_multiplier",
+						"excludes": [],
+						"id": "single_speed_rare",
+						"max_stacks": 2.0,
+						"min_crystal_level": 3.0,
+						"name": "疾风连击",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "攻速 +26%",
+						"tags": [
+							"节奏"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 0.26,
+						"weight": 28.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 202.333333333324
+			},
+			{
+				"id": "v75_battlefield_transfusion",
+				"index": 0,
+				"level": 12,
+				"name": "战地输血",
+				"offered": [
+					{
+						"_base_value": 80.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "每11秒全队回复80生命，并修复水晶28生命。最高2级；联动效果可进一步放大。",
+						"effect": "support_heal",
+						"excludes": [],
+						"id": "v75_battlefield_transfusion",
+						"interval": 11.0,
+						"max_stacks": 2.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "战地输血",
+						"next_level": 1,
+						"placeholder_icon": true,
+						"radius": 100.0,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "每11秒全队回复80生命，并修复水晶28生命",
+						"tags": [
+							"支援"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15
+						],
+						"value": 80.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 2.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "场上及之后部署的豌豆射手、寒冰射手进化为双发射手，每轮连续发射2颗豌豆；保留已有寒冰效果。最高 1 级。",
+						"effect": "device_repeater",
+						"excludes": [
+							"device_threepeater",
+							"device_gatling",
+							"device_melon"
+						],
+						"family": "device",
+						"icon": "res://assets/ui/device_card_icons_20261005/device_repeater.png",
+						"id": "device_repeater",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "双发射手",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "全体豌豆系进化：每轮双发",
+						"tags": [
+							"机关",
+							"device"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"upgrade_tier": 1.0,
+						"value": 2.0,
+						"weight": 28.0
+					},
+					{
+						"_base_value": 24.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "防御 +24。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "armor_flat",
+						"excludes": [],
+						"id": "single_armor_rare",
+						"max_stacks": 3.0,
+						"min_crystal_level": 3.0,
+						"name": "战术装甲",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "防御 +24",
+						"tags": [
+							"护盾"
+						],
+						"target": "character",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 24.0,
+						"weight": 28.0
+					}
+				],
+				"rarity": "rare",
+				"recipient": 2,
+				"time": 254.633333333321
+			},
+			{
+				"id": "global_speed_1",
+				"index": 1,
+				"level": 13,
+				"name": "统一节奏",
+				"offered": [
+					{
+						"_base_value": 75.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队射程 +75。最高1级。",
+						"effect": "squad_range_flat",
+						"excludes": [],
+						"id": "global_range_legendary",
+						"max_stacks": 1.0,
+						"min_crystal_level": 7.0,
+						"name": "天眼矩阵",
+						"next_level": 1,
+						"rarity": "legendary",
+						"requires": [],
+						"summary": "全队射程 +75",
+						"tags": [
+							"瞄准"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 75.0,
+						"weight": 5.0
+					},
+					{
+						"_base_value": 0.1,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "全队攻速 +10%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+						"effect": "squad_rate_multiplier",
+						"excludes": [],
+						"id": "global_speed_1",
+						"max_stacks": 3.0,
+						"min_crystal_level": 2.0,
+						"name": "统一节奏",
+						"next_level": 2,
+						"rarity": "common",
+						"requires": [],
+						"summary": "全队攻速 +10%",
+						"tags": [
+							"节奏"
+						],
+						"target": "global",
+						"upgrade_scale": 1.15,
+						"upgrade_scales": [
+							1.0,
+							1.15,
+							1.3
+						],
+						"value": 0.115,
+						"weight": 48.0
+					},
+					{
+						"_base_value": 1.0,
+						"balance_version": "2026-10-05-finite-builds",
+						"description": "贯穿 +1。最高1级。",
+						"effect": "pierce_add",
+						"excludes": [],
+						"id": "mechanic_piercing_edge",
+						"max_stacks": 1.0,
+						"mechanic": true,
+						"min_crystal_level": 3.0,
+						"name": "贯穿锋芒",
+						"next_level": 1,
+						"rarity": "rare",
+						"requires": [],
+						"summary": "贯穿 +1",
+						"tags": [
+							"弹道"
+						],
+						"target": "global",
+						"upgrade_scale": 1.0,
+						"upgrade_scales": [
+							1.0
+						],
+						"value": 1.0,
+						"weight": 28.0
+					}
+				],
+				"rarity": "common",
+				"recipient": 2,
+				"time": 329.566666666713
+			}
+		],
+		"event_counts": {
+			"ability_audio": 79,
+			"arena_event": 4,
+			"boss_arrival": 1,
+			"boss_phase": 4,
+			"boss_skill_charge": 42,
+			"boss_warning": 42,
+			"chain": 11,
+			"contract_complete": 1,
+			"critical": 98,
+			"crystal_guard": 100,
+			"crystallize": 23,
+			"death": 274,
+			"deploy": 3,
+			"deployment_unlocked": 2,
+			"device_pea_cast": 364,
+			"device_pea_hit": 303,
+			"device_place": 9,
+			"device_sun": 58,
+			"dodge": 75,
+			"down": 9,
+			"echo": 1220,
+			"electro_charged": 6,
+			"element_attuned": 1,
+			"enemy_arrival": 274,
+			"enemy_projectile_cast": 4,
+			"enemy_shot": 4,
+			"enemy_volatile": 63,
+			"enemy_warning": 174,
+			"fireball_fall": 46,
+			"fireball_impact": 45,
+			"galio_durand": 3,
+			"galio_entrance": 5,
+			"galio_guard": 1,
+			"galio_punch": 2,
+			"galio_winds": 3,
+			"galio_winds_pulse": 24,
+			"geo_hit": 4,
+			"heal": 203,
+			"hit": 5519,
+			"hurt": 177,
+			"kill_streak": 13,
+			"kindred_arrow_hit": 163,
+			"kindred_dance": 5,
+			"kindred_dread": 7,
+			"kindred_hunt": 4,
+			"kindred_lasers": 6,
+			"kindred_respite": 1,
+			"kindred_respite_end": 1,
+			"kindred_wolf": 6,
+			"kindred_wolf_strike": 52,
+			"knockback": 6,
+			"level_up": 12,
+			"multishot": 1031,
+			"overloaded": 3,
+			"projectile_impact": 1265,
+			"revive": 9,
+			"reward_taken": 12,
+			"route_spawn": 269,
+			"route_warning": 27,
+			"shaman_land": 1,
+			"shield_break": 39,
+			"shield_hit": 860,
+			"shot": 1116,
+			"signature_heal": 42,
+			"signature_needle_hit": 14,
+			"signature_needle_volley": 15,
+			"signature_salon_hit": 247,
+			"signature_start": 33,
+			"skill_cast": 62,
+			"skill_impact": 15,
+			"skill_none": 2,
+			"slash": 3366,
+			"splash": 4975,
+			"stage_start": 1,
+			"support_heal": 20,
+			"swirl": 76,
+			"swirl_spread": 76,
+			"synced_impact": 2450,
+			"tag_synergy": 1,
+			"team_resonance": 1,
+			"trap_pulse": 15,
+			"traveler_fx_cast": 34,
+			"traveler_fx_hit": 99,
+			"traveler_fx_start": 33,
+			"ultimate_cast": 20,
+			"vaporize": 153,
+			"vfx_cue": 80,
+			"wave": 1,
+			"weather_pulse": 59,
+			"won": 1
+		},
+		"kills": 274,
+		"level": 13,
+		"purchases": [
+			{
+				"gold_after": 20,
+				"kind": "sunflower",
+				"pos": [
+					420.0,
+					220.0
+				],
+				"time": 0.0
+			},
+			{
+				"gold_after": 32,
+				"kind": "pea",
+				"pos": [
+					540.0,
+					380.0
+				],
+				"time": 24.1333333333337
+			},
+			{
+				"gold_after": 48,
+				"kind": "pea",
+				"pos": [
+					720.0,
+					380.0
+				],
+				"time": 42.2000000000002
+			},
+			{
+				"gold_after": 28,
+				"kind": "pea",
+				"pos": [
+					660.0,
+					500.0
+				],
+				"time": 60.2333333333325
+			},
+			{
+				"gold_after": 46,
+				"kind": "barricade",
+				"pos": [
+					660.0,
+					260.0
+				],
+				"time": 84.3333333333311
+			},
+			{
+				"gold_after": 126,
+				"kind": "pea",
+				"pos": [
+					540.0,
+					260.0
+				],
+				"time": 114.466666666663
+			},
+			{
+				"gold_after": 134,
+				"kind": "pea",
+				"pos": [
+					540.0,
+					500.0
+				],
+				"time": 126.499999999995
+			},
+			{
+				"gold_after": 144,
+				"kind": "barricade",
+				"pos": [
+					420.0,
+					380.0
+				],
+				"time": 138.566666666661
+			},
+			{
+				"gold_after": 56,
+				"kind": "pea",
+				"pos": [
+					780.0,
+					260.0
+				],
+				"time": 150.633333333327
+			}
+		],
+		"seed": 6121,
+		"stage": "stage_03",
+		"state": "won",
+		"stats": [
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 0,
+				"kills5": 0,
+				"level": 1,
+				"projectiles": 0,
+				"time": 0.03
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 0,
+				"kills5": 0,
+				"level": 1,
+				"projectiles": 0,
+				"time": 5.03
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 0,
+				"kills5": 0,
+				"level": 1,
+				"projectiles": 0,
+				"time": 10.03
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 3,
+				"kills5": 3,
+				"level": 2,
+				"projectiles": 0,
+				"time": 15.03
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 8,
+				"kills5": 5,
+				"level": 3,
+				"projectiles": 0,
+				"time": 20.03
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 11,
+				"kills5": 3,
+				"level": 3,
+				"projectiles": 0,
+				"time": 25.03
+			},
+			{
+				"enemies": 5,
+				"hp": 12,
+				"kills": 14,
+				"kills5": 3,
+				"level": 4,
+				"projectiles": 1,
+				"time": 30.0
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 17,
+				"kills5": 3,
+				"level": 4,
+				"projectiles": 0,
+				"time": 35.0
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 23,
+				"kills5": 6,
+				"level": 5,
+				"projectiles": 0,
+				"time": 40.0
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 26,
+				"kills5": 3,
+				"level": 5,
+				"projectiles": 0,
+				"time": 44.97
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 29,
+				"kills5": 3,
+				"level": 6,
+				"projectiles": 0,
+				"time": 49.97
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 32,
+				"kills5": 3,
+				"level": 6,
+				"projectiles": 0,
+				"time": 54.97
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 34,
+				"kills5": 2,
+				"level": 7,
+				"projectiles": 0,
+				"time": 59.93
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 34,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 64.93
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 34,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 69.93
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 34,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 74.9
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 35,
+				"kills5": 1,
+				"level": 7,
+				"projectiles": 0,
+				"time": 79.9
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 38,
+				"kills5": 3,
+				"level": 7,
+				"projectiles": 0,
+				"time": 84.87
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 41,
+				"kills5": 3,
+				"level": 7,
+				"projectiles": 0,
+				"time": 89.87
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 41,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 94.87
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 41,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 99.87
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 41,
+				"kills5": 0,
+				"level": 7,
+				"projectiles": 0,
+				"time": 104.87
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 45,
+				"kills5": 4,
+				"level": 8,
+				"projectiles": 2,
+				"time": 109.87
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 55,
+				"kills5": 10,
+				"level": 8,
+				"projectiles": 2,
+				"time": 114.87
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 63,
+				"kills5": 8,
+				"level": 9,
+				"projectiles": 0,
+				"time": 119.87
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 66,
+				"kills5": 3,
+				"level": 9,
+				"projectiles": 0,
+				"time": 124.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 68,
+				"kills5": 2,
+				"level": 9,
+				"projectiles": 2,
+				"time": 129.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 70,
+				"kills5": 2,
+				"level": 9,
+				"projectiles": 2,
+				"time": 134.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 74,
+				"kills5": 4,
+				"level": 9,
+				"projectiles": 0,
+				"time": 139.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 76,
+				"kills5": 2,
+				"level": 9,
+				"projectiles": 0,
+				"time": 144.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 78,
+				"kills5": 2,
+				"level": 9,
+				"projectiles": 0,
+				"time": 149.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 80,
+				"kills5": 2,
+				"level": 9,
+				"projectiles": 0,
+				"time": 154.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 85,
+				"kills5": 5,
+				"level": 9,
+				"projectiles": 0,
+				"time": 159.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 88,
+				"kills5": 3,
+				"level": 9,
+				"projectiles": 0,
+				"time": 164.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 92,
+				"kills5": 4,
+				"level": 10,
+				"projectiles": 0,
+				"time": 169.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 93,
+				"kills5": 1,
+				"level": 10,
+				"projectiles": 0,
+				"time": 174.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 94,
+				"kills5": 1,
+				"level": 10,
+				"projectiles": 0,
+				"time": 179.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 94,
+				"kills5": 0,
+				"level": 10,
+				"projectiles": 0,
+				"time": 184.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 94,
+				"kills5": 0,
+				"level": 10,
+				"projectiles": 0,
+				"time": 189.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 98,
+				"kills5": 4,
+				"level": 10,
+				"projectiles": 0,
+				"time": 194.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 103,
+				"kills5": 5,
+				"level": 10,
+				"projectiles": 5,
+				"time": 199.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 109,
+				"kills5": 6,
+				"level": 11,
+				"projectiles": 0,
+				"time": 204.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 110,
+				"kills5": 1,
+				"level": 11,
+				"projectiles": 0,
+				"time": 209.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 115,
+				"kills5": 5,
+				"level": 11,
+				"projectiles": 5,
+				"time": 214.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 115,
+				"kills5": 0,
+				"level": 11,
+				"projectiles": 0,
+				"time": 219.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 121,
+				"kills5": 6,
+				"level": 11,
+				"projectiles": 0,
+				"time": 224.83
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 126,
+				"kills5": 5,
+				"level": 11,
+				"projectiles": 0,
+				"time": 229.83
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 136,
+				"kills5": 10,
+				"level": 11,
+				"projectiles": 0,
+				"time": 234.83
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 146,
+				"kills5": 10,
+				"level": 11,
+				"projectiles": 0,
+				"time": 239.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 154,
+				"kills5": 8,
+				"level": 11,
+				"projectiles": 2,
+				"time": 244.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 155,
+				"kills5": 1,
+				"level": 11,
+				"projectiles": 0,
+				"time": 249.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 157,
+				"kills5": 2,
+				"level": 12,
+				"projectiles": 0,
+				"time": 254.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 162,
+				"kills5": 5,
+				"level": 12,
+				"projectiles": 0,
+				"time": 259.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 166,
+				"kills5": 4,
+				"level": 12,
+				"projectiles": 0,
+				"time": 264.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 171,
+				"kills5": 5,
+				"level": 12,
+				"projectiles": 0,
+				"time": 269.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 173,
+				"kills5": 2,
+				"level": 12,
+				"projectiles": 0,
+				"time": 274.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 175,
+				"kills5": 2,
+				"level": 12,
+				"projectiles": 0,
+				"time": 279.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 182,
+				"kills5": 7,
+				"level": 12,
+				"projectiles": 0,
+				"time": 284.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 186,
+				"kills5": 4,
+				"level": 12,
+				"projectiles": 5,
+				"time": 289.83
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 191,
+				"kills5": 5,
+				"level": 12,
+				"projectiles": 0,
+				"time": 294.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 197,
+				"kills5": 6,
+				"level": 12,
+				"projectiles": 0,
+				"time": 299.83
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 205,
+				"kills5": 8,
+				"level": 12,
+				"projectiles": 0,
+				"time": 304.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 212,
+				"kills5": 7,
+				"level": 12,
+				"projectiles": 0,
+				"time": 309.83
+			},
+			{
+				"enemies": 0,
+				"hp": 12,
+				"kills": 212,
+				"kills5": 0,
+				"level": 12,
+				"projectiles": 0,
+				"time": 314.83
+			},
+			{
+				"enemies": 16,
+				"hp": 12,
+				"kills": 214,
+				"kills5": 2,
+				"level": 12,
+				"projectiles": 0,
+				"time": 319.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 229,
+				"kills5": 15,
+				"level": 12,
+				"projectiles": 0,
+				"time": 324.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 233,
+				"kills5": 4,
+				"level": 13,
+				"projectiles": 0,
+				"time": 329.83
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 236,
+				"kills5": 3,
+				"level": 13,
+				"projectiles": 0,
+				"time": 334.83
+			},
+			{
+				"enemies": 9,
+				"hp": 12,
+				"kills": 241,
+				"kills5": 5,
+				"level": 13,
+				"projectiles": 0,
+				"time": 339.83
+			},
+			{
+				"enemies": 14,
+				"hp": 12,
+				"kills": 246,
+				"kills5": 5,
+				"level": 13,
+				"projectiles": 0,
+				"time": 344.83
+			},
+			{
+				"enemies": 11,
+				"hp": 12,
+				"kills": 255,
+				"kills5": 9,
+				"level": 13,
+				"projectiles": 3,
+				"time": 349.83
+			},
+			{
+				"enemies": 4,
+				"hp": 12,
+				"kills": 266,
+				"kills5": 11,
+				"level": 13,
+				"projectiles": 8,
+				"time": 354.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 269,
+				"kills5": 3,
+				"level": 13,
+				"projectiles": 0,
+				"time": 359.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 269,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 364.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 270,
+				"kills5": 1,
+				"level": 13,
+				"projectiles": 0,
+				"time": 369.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 270,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 374.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 270,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 379.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 270,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 384.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 271,
+				"kills5": 1,
+				"level": 13,
+				"projectiles": 0,
+				"time": 389.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 271,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 394.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 271,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 399.83
+			},
+			{
+				"enemies": 3,
+				"hp": 12,
+				"kills": 271,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 404.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 272,
+				"kills5": 1,
+				"level": 13,
+				"projectiles": 0,
+				"time": 409.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 272,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 414.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 272,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 419.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 272,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 424.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 272,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 429.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 272,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 5,
+				"time": 434.83
+			},
+			{
+				"enemies": 2,
+				"hp": 12,
+				"kills": 272,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 439.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 273,
+				"kills5": 1,
+				"level": 13,
+				"projectiles": 0,
+				"time": 444.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 273,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 449.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 273,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 454.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 273,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 459.83
+			},
+			{
+				"enemies": 1,
+				"hp": 12,
+				"kills": 273,
+				"kills5": 0,
+				"level": 13,
+				"projectiles": 0,
+				"time": 464.83
+			}
+		],
+		"time": 467.500000000156
+	}
+]

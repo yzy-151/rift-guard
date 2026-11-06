@@ -1,0 +1,3 @@
+https://kenney.nl/assets/sci-fi-sounds
+https://kenney.nl/assets/impact-sounds
+Existing in-project ability recording provenance is retained per cue in the audit. CC designed processed/composite cues, not newly authenticated original-game extractions. No reference-video audio is shipped.

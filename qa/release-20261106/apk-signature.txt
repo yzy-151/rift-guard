@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): true
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Rift Guard, OU=Game, O=Rift Guard, C=CN
+Signer #1 certificate SHA-256 digest: 2953d43fab49def318be12402abaa7a9597070105e5c7467f7b10c161dee2c4a
+Signer #1 certificate SHA-1 digest: 105a660e1b8c02261d2d1a0948b566d93a685202
+Signer #1 certificate MD5 digest: 35711da7cee52a344a31d700744d726b
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 3072
+Signer #1 public key SHA-256 digest: c2441378291bf92fc55f8296ada9e2069304dd76a4660956fbf5df9dcd99ae55
+Signer #1 public key SHA-1 digest: ee7836f70dc14f9adbde4817249c9dce7e400404
+Signer #1 public key MD5 digest: 0adca7a3e8daed85e2c5a8952e200f60

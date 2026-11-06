@@ -1,46 +1,54 @@
 extends RefCounted
-## Low-contrast cut stone and tall, solid basalt barricades.
+## One quiet floor surface; cover geometry shares the collision profile.
+const PROFILE = preload("res://data/stage_profiles/endless_arena_profile.gd")
+const FLOOR = preload("res://assets/world/endless_20261006/arena_floor.png")
+
 static func draw(v) -> void:
- v.draw_rect(Rect2(0,0,1280,720),Color("16151e"))
- var bounds:Rect2=v.visible_world_rect().grow(180)
- for row in range(floori(bounds.position.y/72),ceili(bounds.end.y/72)):
-  var shift:=64 if posmod(row,2)==1 else 0
-  for col in range(floori(bounds.position.x/128)-1,ceili(bounds.end.x/128)+1):
-   var p:Vector2=v.world_to_screen(Vector2(col*128+shift,row*72))
-   var k:=posmod(col*17+row*31,9)
-   var c:Color=[Color("292832"),Color("2d2b35"),Color("302d38"),Color("282731")][k%4]
-   var outline:=PackedVector2Array([p+Vector2(7,2),p+Vector2(119,2),p+Vector2(126,9),p+Vector2(126,61),p+Vector2(118,70),p+Vector2(8,70),p+Vector2(2,64),p+Vector2(2,9)])
-   v.draw_colored_polygon(outline,c)
-   v.draw_line(p+Vector2(9,3),p+Vector2(118,3),Color("393540"),1)
-   if k==3:
-    v.draw_polyline(PackedVector2Array([p+Vector2(92,70),p+Vector2(80,53),p+Vector2(92,38)]),Color("211f29"),1.5)
-   if k==7:
-    v.draw_colored_polygon(PackedVector2Array([p+Vector2(15,51),p+Vector2(32,48),p+Vector2(43,59),p+Vector2(24,61)]),Color("24222c"))
-static func wall(v,r:Rect2) -> void:
- if not Rect2(-140,-140,1560,1000).intersects(r):return
- # The dark plinth exactly covers the impassable footprint; height rises above it.
- v.draw_rect(Rect2(r.position+Vector2(12,18),r.size+Vector2(14,6)),Color(0,0,0,0.35))
- v.draw_rect(r.grow(3),Color("0c0b12"))
- var horizontal:=r.size.x>=r.size.y
- var length:float=r.size.x if horizontal else r.size.y
- var count:=maxi(1,ceili(length/80.0))
- for i in count:
-  var a:Rect2=Rect2(r.position+Vector2(i*length/count,0),Vector2(length/count,r.size.y)) if horizontal else Rect2(r.position+Vector2(0,i*length/count),Vector2(r.size.x,length/count))
-  var h:=48.0+float(i%3)*9.0
-  var tl:=a.position+Vector2(5,-h)
-  var tr:=Vector2(a.end.x-5,a.position.y-h+8)
-  var bl:=Vector2(a.position.x+3,a.end.y-10-h)
-  var br:=Vector2(a.end.x-3,a.end.y-7-h)
-  var front:=PackedVector2Array([bl,br,a.end-Vector2(2,0),Vector2(a.position.x+2,a.end.y)])
-  v.draw_colored_polygon(front,Color("463541"))
-  v.draw_polyline(PackedVector2Array([bl,br,a.end-Vector2(2,0),Vector2(a.position.x+2,a.end.y),bl]),Color("100d17"),4,true)
-  v.draw_colored_polygon(PackedVector2Array([tr,Vector2(a.end.x,a.position.y+3),a.end-Vector2(2,0),br]),Color("271e2c"))
-  var top:=PackedVector2Array([tl+Vector2(7,-6),tr,br,bl,tl])
-  v.draw_colored_polygon(top,Color("74606a"))
-  v.draw_polyline(PackedVector2Array([tl+Vector2(7,-6),tr,br,bl,tl,tl+Vector2(7,-6)]),Color("17111d"),4,true)
-  v.draw_line(bl+Vector2(5,0),br-Vector2(4,0),Color("a18386"),2)
-  var mid:Vector2=(bl+br)/2
-  v.draw_polyline(PackedVector2Array([mid,mid+Vector2(-7,16),mid+Vector2(4,27),mid+Vector2(-2,h-5)]),Color("1d1521"),3)
-  if i%2==0:
-   var shard:=PackedVector2Array([mid+Vector2(-9,20),mid+Vector2(1,12),mid+Vector2(11,24),mid+Vector2(0,38)])
-   v.draw_colored_polygon(shard,Color("883847"))
+	v.draw_rect(Rect2(0,0,1280,720),Color("111217"))
+	var target := Rect2(v.world_to_screen(PROFILE.ARENA.position),PROFILE.ARENA.size)
+	v.draw_texture_rect(FLOOR,target,false,Color("dadfe1"))
+	# This rim is the real arena boundary, never an interior false obstacle.
+	v.draw_rect(target.grow(-6),Color("0c0d10"),false,12)
+	v.draw_rect(target.grow(-15),Color("63504d"),false,2)
+
+static func wall(v,r: Rect2,block_index: int = 0,opacity: float = 1.0) -> void:
+	if not Rect2(-140,-140,1560,1000).intersects(r): return
+	var horizontal := r.size.x >= r.size.y
+	var height := 50.0
+	var top := r.position-Vector2(0,height)
+	var bottom := Vector2(r.position.x,r.end.y-height)
+	var right_top := Vector2(r.end.x,r.position.y-height)
+	var right_bottom := r.end-Vector2(0,height)
+	var shadow := Rect2(r.position+Vector2(5,10),r.size+Vector2(14,10))
+	v.draw_rect(shadow,Color(0,0,0,.28*opacity))
+	v.draw_rect(r.grow(3),Color("101217",opacity))
+	var front := PackedVector2Array([bottom,right_bottom,r.end,Vector2(r.position.x,r.end.y)])
+	masonry(v,front,Color(.95,1.0,1.08,opacity),Rect2(230,130,90,50))
+	v.draw_colored_polygon(PackedVector2Array([right_top,right_top+Vector2(8,8),r.end+Vector2(8,0),r.end,right_bottom]),Color("1c2129",opacity))
+	var cap := PackedVector2Array([top+Vector2(7,0),right_top-Vector2(7,0),right_top+Vector2(0,7),right_bottom-Vector2(0,5),bottom+Vector2(0,-5),top+Vector2(0,7)])
+	masonry(v,cap,Color(1.5,1.6,1.7,opacity),Rect2(260,180,90,50))
+	v.draw_polyline(PackedVector2Array([bottom,right_bottom,r.end,Vector2(r.position.x,r.end.y),bottom]),Color("0c1016",opacity),3,true)
+	var closed := cap.duplicate(); closed.append(cap[0])
+	v.draw_polyline(closed,Color("10141b",opacity),3,true)
+	v.draw_line(bottom+Vector2(4,-4),right_bottom-Vector2(4,4),Color("89909a",opacity),2,true)
+	# A stout inset strap reads as solid cover, rather than a floor tile.
+	if horizontal:
+		var middle := r.get_center().x
+		v.draw_rect(Rect2(middle-6,r.end.y-height+3,12,height-8),Color("22262d",opacity))
+		v.draw_rect(Rect2(middle-3,r.end.y-height+7,6,12),Color("916657",opacity))
+	else:
+		var middle := r.get_center().y-height
+		v.draw_line(Vector2(r.position.x+3,middle),Vector2(r.end.x-3,middle),Color("373e47",opacity),4,true)
+	if block_index % 2 == 0:
+		v.draw_colored_polygon(PackedVector2Array([top+Vector2(12,14),top+Vector2(28,11),top+Vector2(33,17),top+Vector2(20,21)]),Color("535a65",opacity))
+
+static func masonry(v,points: PackedVector2Array,color: Color,source: Rect2) -> void:
+	var minimum := points[0]
+	var maximum := points[0]
+	for point: Vector2 in points:
+		minimum=minimum.min(point); maximum=maximum.max(point)
+	var extent := (maximum-minimum).max(Vector2.ONE)
+	var uvs := PackedVector2Array()
+	for point: Vector2 in points:
+		uvs.append((source.position+(point-minimum)/extent*source.size)/FLOOR.get_size())
+	v.draw_polygon(points,PackedColorArray([color]),uvs,FLOOR)

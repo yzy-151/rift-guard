@@ -1,0 +1,6 @@
+--------- beginning of main
+11-06 10:08:55.089  5406  5472 I godot   : Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+11-06 10:08:55.190  5406  5472 E godot   : WARNING: Failed to load cached shader, recompiling.
+11-06 10:08:55.190  5406  5472 E godot   :    at: _load_from_cache (drivers/gles3/shader_gles3.cpp:618)
+11-06 10:08:55.601  5406  5472 I godot   : OpenGL API OpenGL ES 3.1 (4.5.0 NVIDIA 610.88) - Compatibility - Using Device: Google (NVIDIA Corporation) - Android Emulator OpenGL ES Translator (NVIDIA GeForce RTX 5060 Ti/PCIe/SSE2)
+11-06 10:08:55.621  5406  5472 I godot   : 

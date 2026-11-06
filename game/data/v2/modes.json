@@ -2,16 +2,11 @@
   {
     "id": "rift_watch",
     "name": "模式一：裂隙守望",
-    "description": "八张五分钟以上路线关卡，最多三名角色拖放部署并完成分支剧情构筑。",
+    "description": "三章试玩版：从裂隙初遇到双首领决战，通关后可携带构筑进入无尽。",
     "stage_ids": [
       "stage_01",
       "stage_02",
-      "stage_03",
-      "stage_04",
-      "stage_05",
-      "stage_06",
-      "stage_07",
-      "stage_08"
+      "stage_03"
     ],
     "max_squad_size": 3,
     "buff_stack_limit": 0,

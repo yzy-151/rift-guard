@@ -1,0 +1,1453 @@
+{
+  "attack_traveler": {
+    "files": [
+      "res://assets/sfx/v91/attack_traveler_0.ogg",
+      "res://assets/sfx/v91/attack_traveler_1.ogg",
+      "res://assets/sfx/v91/attack_traveler_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_traveler_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_traveler_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_traveler_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_traveler_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_01": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_01_0.ogg",
+      "res://assets/sfx/v91/attack_hero_01_1.ogg",
+      "res://assets/sfx/v91/attack_hero_01_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_01_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_01_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_01_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_01_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_02": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_02_0.ogg",
+      "res://assets/sfx/v91/attack_hero_02_1.ogg",
+      "res://assets/sfx/v91/attack_hero_02_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_02_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_02_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_02_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_02_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_03": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_03_0.ogg",
+      "res://assets/sfx/v91/attack_hero_03_1.ogg",
+      "res://assets/sfx/v91/attack_hero_03_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_03_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_03_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_03_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_03_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_04": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_04_0.ogg",
+      "res://assets/sfx/v91/attack_hero_04_1.ogg",
+      "res://assets/sfx/v91/attack_hero_04_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_04_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_04_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_04_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_04_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_05": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_05_0.ogg",
+      "res://assets/sfx/v91/attack_hero_05_1.ogg",
+      "res://assets/sfx/v91/attack_hero_05_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_05_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_05_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_05_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_05_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_06": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_06_0.ogg",
+      "res://assets/sfx/v91/attack_hero_06_1.ogg",
+      "res://assets/sfx/v91/attack_hero_06_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Arknights / Hypergryph; Closure Wiki Amiya audio"
+    ]
+  },
+  "skill_hero_06_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_06_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement",
+      "Arknights / Hypergryph original skills via Closure Wiki"
+    ]
+  },
+  "skill_hero_06_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_06_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement",
+      "Arknights / Hypergryph original skills via Closure Wiki"
+    ]
+  },
+  "attack_hero_07": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_07_0.ogg",
+      "res://assets/sfx/v91/attack_hero_07_1.ogg",
+      "res://assets/sfx/v91/attack_hero_07_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_07_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_07_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_07_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_07_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_08": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_08_0.ogg",
+      "res://assets/sfx/v91/attack_hero_08_1.ogg",
+      "res://assets/sfx/v91/attack_hero_08_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_08_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_08_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_08_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_08_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_09": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_09_0.ogg",
+      "res://assets/sfx/v91/attack_hero_09_1.ogg",
+      "res://assets/sfx/v91/attack_hero_09_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_09_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_09_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_09_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_09_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_10": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_10_0.ogg",
+      "res://assets/sfx/v91/attack_hero_10_1.ogg",
+      "res://assets/sfx/v91/attack_hero_10_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_10_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_10_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_10_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_10_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_11": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_11_0.ogg",
+      "res://assets/sfx/v91/attack_hero_11_1.ogg",
+      "res://assets/sfx/v91/attack_hero_11_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_11_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_11_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement",
+      "Arknights / Hypergryph original skills via Closure Wiki"
+    ]
+  },
+  "skill_hero_11_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_11_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement",
+      "Arknights / Hypergryph original skills via Closure Wiki"
+    ]
+  },
+  "attack_hero_12": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_12_0.ogg",
+      "res://assets/sfx/v91/attack_hero_12_1.ogg",
+      "res://assets/sfx/v91/attack_hero_12_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_12_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_12_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_12_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_12_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "attack_hero_13": {
+    "files": [
+      "res://assets/sfx/v91/attack_hero_13_0.ogg",
+      "res://assets/sfx/v91/attack_hero_13_1.ogg",
+      "res://assets/sfx/v91/attack_hero_13_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -17,
+    "cooldown": 0.13,
+    "priority": 1,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_13_q": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_13_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -10,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "skill_hero_13_e": {
+    "files": [
+      "res://assets/sfx/v91/skill_hero_13_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_none_q": {
+    "files": [
+      "res://assets/sfx/v91/traveler_none_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_none_e": {
+    "files": [
+      "res://assets/sfx/v91/traveler_none_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_anemo_q": {
+    "files": [
+      "res://assets/sfx/v91/traveler_anemo_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_anemo_e": {
+    "files": [
+      "res://assets/sfx/v91/traveler_anemo_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_pyro_q": {
+    "files": [
+      "res://assets/sfx/v91/traveler_pyro_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_pyro_e": {
+    "files": [
+      "res://assets/sfx/v91/traveler_pyro_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_hydro_q": {
+    "files": [
+      "res://assets/sfx/v91/traveler_hydro_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_hydro_e": {
+    "files": [
+      "res://assets/sfx/v91/traveler_hydro_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_cryo_q": {
+    "files": [
+      "res://assets/sfx/v91/traveler_cryo_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_cryo_e": {
+    "files": [
+      "res://assets/sfx/v91/traveler_cryo_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_electro_q": {
+    "files": [
+      "res://assets/sfx/v91/traveler_electro_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_electro_e": {
+    "files": [
+      "res://assets/sfx/v91/traveler_electro_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_geo_q": {
+    "files": [
+      "res://assets/sfx/v91/traveler_geo_q.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "traveler_geo_e": {
+    "files": [
+      "res://assets/sfx/v91/traveler_geo_e.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "boss_warning_eva": {
+    "files": [
+      "res://assets/sfx/v91/boss_warning_eva.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "galio_durand": {
+    "files": [
+      "res://assets/sfx/v91/galio_durand.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "galio_durand_charge": {
+    "files": [
+      "res://assets/sfx/v91/galio_durand_charge.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -9,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "galio_entrance": {
+    "files": [
+      "res://assets/sfx/v91/galio_entrance.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "galio_entrance_charge": {
+    "files": [
+      "res://assets/sfx/v91/galio_entrance_charge.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -9,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "galio_punch": {
+    "files": [
+      "res://assets/sfx/v91/galio_punch.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "galio_punch_charge": {
+    "files": [
+      "res://assets/sfx/v91/galio_punch_charge.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -9,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "galio_winds": {
+    "files": [
+      "res://assets/sfx/v91/galio_winds.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "galio_winds_charge": {
+    "files": [
+      "res://assets/sfx/v91/galio_winds_charge.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -9,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_arrow_hit": {
+    "files": [
+      "res://assets/sfx/v91/kindred_arrow_hit.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_dance": {
+    "files": [
+      "res://assets/sfx/v91/kindred_dance.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_dance_charge": {
+    "files": [
+      "res://assets/sfx/v91/kindred_dance_charge.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -9,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_dread": {
+    "files": [
+      "res://assets/sfx/v91/kindred_dread.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_dread_charge": {
+    "files": [
+      "res://assets/sfx/v91/kindred_dread_charge.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -9,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_hunt": {
+    "files": [
+      "res://assets/sfx/v91/kindred_hunt.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_hunt_charge": {
+    "files": [
+      "res://assets/sfx/v91/kindred_hunt_charge.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -9,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_respite": {
+    "files": [
+      "res://assets/sfx/v91/kindred_respite.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_respite_end": {
+    "files": [
+      "res://assets/sfx/v91/kindred_respite_end.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_wolf": {
+    "files": [
+      "res://assets/sfx/v91/kindred_wolf.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_wolf_charge": {
+    "files": [
+      "res://assets/sfx/v91/kindred_wolf_charge.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -9,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_wolf_strike": {
+    "files": [
+      "res://assets/sfx/v91/kindred_wolf_strike.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "rift_laser": {
+    "files": [
+      "res://assets/sfx/v91/rift_laser.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement",
+      "Arknights / Hypergryph Amiya attack texture via Closure Wiki"
+    ]
+  },
+  "rift_orbs": {
+    "files": [
+      "res://assets/sfx/v91/rift_orbs.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement",
+      "Arknights / Hypergryph Amiya attack texture via Closure Wiki"
+    ]
+  },
+  "rift_overhead": {
+    "files": [
+      "res://assets/sfx/v91/rift_overhead.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement",
+      "Arknights / Hypergryph Amiya attack texture via Closure Wiki"
+    ]
+  },
+  "rift_storm": {
+    "files": [
+      "res://assets/sfx/v91/rift_storm.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement",
+      "Arknights / Hypergryph Amiya attack texture via Closure Wiki"
+    ]
+  },
+  "slime_attack": {
+    "files": [
+      "res://assets/sfx/v91/slime_attack.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "slime_bounce": {
+    "files": [
+      "res://assets/sfx/v91/slime_bounce.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "slime_burst": {
+    "files": [
+      "res://assets/sfx/v91/slime_burst.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "slime_court": {
+    "files": [
+      "res://assets/sfx/v91/slime_court.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "slime_reflux": {
+    "files": [
+      "res://assets/sfx/v91/slime_reflux.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -6,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_lasers": {
+    "files": [
+      "res://assets/sfx/v91/kindred_lasers.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -8,
+    "cooldown": 0.4,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "kindred_lasers_charge": {
+    "files": [
+      "res://assets/sfx/v91/kindred_lasers_charge.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -8,
+    "cooldown": 0.4,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "hit_metal": {
+    "files": [
+      "res://assets/sfx/v91/hit_metal.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -21,
+    "cooldown": 0.08,
+    "priority": 0,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "hit_water": {
+    "files": [
+      "res://assets/sfx/v91/hit_water.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -21,
+    "cooldown": 0.08,
+    "priority": 0,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "hit_ice": {
+    "files": [
+      "res://assets/sfx/v91/hit_ice.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -21,
+    "cooldown": 0.08,
+    "priority": 0,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "hit_fire": {
+    "files": [
+      "res://assets/sfx/v91/hit_fire.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -21,
+    "cooldown": 0.08,
+    "priority": 0,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "hit_earth": {
+    "files": [
+      "res://assets/sfx/v91/hit_earth.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -21,
+    "cooldown": 0.08,
+    "priority": 0,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "hit_electric": {
+    "files": [
+      "res://assets/sfx/v91/hit_electric.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -21,
+    "cooldown": 0.08,
+    "priority": 0,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "hit_wind": {
+    "files": [
+      "res://assets/sfx/v91/hit_wind.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -21,
+    "cooldown": 0.08,
+    "priority": 0,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "hit_dark": {
+    "files": [
+      "res://assets/sfx/v91/hit_dark.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -21,
+    "cooldown": 0.08,
+    "priority": 0,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement",
+      "Arknights / Hypergryph Amiya attack texture via Closure Wiki"
+    ]
+  },
+  "hit_machine": {
+    "files": [
+      "res://assets/sfx/v91/hit_machine.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -21,
+    "cooldown": 0.08,
+    "priority": 0,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "hit_music": {
+    "files": [
+      "res://assets/sfx/v91/hit_music.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -21,
+    "cooldown": 0.08,
+    "priority": 0,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "shield_break": {
+    "files": [
+      "res://assets/sfx/v91/shield_break.ogg"
+    ],
+    "category": "impact",
+    "gain_db": -12,
+    "cooldown": 0.25,
+    "priority": 2,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "heal": {
+    "files": [
+      "res://assets/sfx/v91/heal.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -17,
+    "cooldown": 0.75,
+    "priority": 2,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "needle_volley": {
+    "files": [
+      "res://assets/sfx/v91/needle_volley.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -11,
+    "cooldown": 0.18,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "cast_small": {
+    "files": [
+      "res://assets/sfx/v91/cast_small.ogg"
+    ],
+    "category": "cast",
+    "gain_db": -19,
+    "cooldown": 0.12,
+    "priority": 2,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "cast_big": {
+    "files": [
+      "res://assets/sfx/v91/cast_big.ogg"
+    ],
+    "category": "cast",
+    "gain_db": -15,
+    "cooldown": 0.2,
+    "priority": 3,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "hero_down": {
+    "files": [
+      "res://assets/sfx/v91/hero_down.ogg"
+    ],
+    "category": "down",
+    "gain_db": -5,
+    "cooldown": 0.5,
+    "priority": 6,
+    "sources": [
+      "Arknights / Hypergryph b_char_dead; https://assets.closure.wiki/v3/audio/sound_beta_2/battle/b_char/b_char_dead.mp3"
+    ]
+  },
+  "voice_down_hero_06": {
+    "files": [
+      "res://assets/sfx/v91/voice_down_hero_06.ogg"
+    ],
+    "category": "voice",
+    "gain_db": -4,
+    "cooldown": 15,
+    "priority": 7,
+    "sources": [
+      "Arknights / Hypergryph, original Japanese operation failure voice; https://closure.wiki/operators/amiya"
+    ]
+  },
+  "voice_down_hero_11": {
+    "files": [
+      "res://assets/sfx/v91/voice_down_hero_11.ogg"
+    ],
+    "category": "voice",
+    "gain_db": -4,
+    "cooldown": 15,
+    "priority": 7,
+    "sources": [
+      "Arknights / Hypergryph, original Japanese operation failure voice; https://closure.wiki/operators/kaltsit"
+    ]
+  },
+  "spawn_hilichurl": {
+    "files": [
+      "res://assets/sfx/v91/hilichurl_0.ogg",
+      "res://assets/sfx/v91/hilichurl_1.ogg"
+    ],
+    "category": "spawn",
+    "gain_db": -13,
+    "cooldown": 5,
+    "priority": 2,
+    "sources": [
+      "Genshin Impact / HoYoverse, Hilichurl voice; https://huggingface.co/datasets/AquaV/genshin-voices-separated"
+    ]
+  },
+  "spawn_zombie": {
+    "files": [
+      "res://assets/sfx/v91/zombie_0.ogg",
+      "res://assets/sfx/v91/zombie_1.ogg",
+      "res://assets/sfx/v91/zombie_2.ogg"
+    ],
+    "category": "spawn",
+    "gain_db": -12,
+    "cooldown": 6,
+    "priority": 2,
+    "sources": [
+      "Plants vs. Zombies / PopCap EA; https://www.sounds-resource.com/pc_computer/plantsvszombies/sheet/1430/"
+    ]
+  },
+  "spawn_heavy": {
+    "files": [
+      "res://assets/sfx/v91/spawn_heavy.ogg"
+    ],
+    "category": "spawn",
+    "gain_db": -15,
+    "cooldown": 6,
+    "priority": 2,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  }
+}

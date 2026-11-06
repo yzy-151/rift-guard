@@ -2,23 +2,32 @@
   {
     "id": "mechanic_twin_arc",
     "name": "双生弹幕",
-    "description": "全队每次攻击额外增加1条弹道，近战同步追加斩击。",
+    "description": "弹道 +1。最高1级。",
     "rarity": "rare",
-    "weight": 34,
+    "weight": 28,
     "target": "global",
     "effect": "projectile_count_add",
     "value": 1,
     "mechanic": true,
     "tags": [
       "弹道"
-    ]
+    ],
+    "max_stacks": 1,
+    "summary": "弹道 +1",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mechanic_prism_fan",
     "name": "棱镜散射",
-    "description": "全员弹道+1，普攻爆炸半径+25。重复获取时各项加成叠加。",
+    "description": "弹道 +1；普攻爆炸半径 +28。最高1级。",
     "rarity": "epic",
-    "weight": 16,
+    "weight": 13,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
@@ -33,311 +42,559 @@
       },
       {
         "effect": "blast_add",
-        "value": 25
+        "value": 28
       }
     ],
-    "summary": "全员弹道+1，普攻爆炸半径+25"
+    "summary": "弹道 +1；普攻爆炸半径 +28",
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mechanic_piercing_edge",
     "name": "贯穿锋芒",
-    "description": "全队弹道贯穿数量增加1，近战斩击范围同步提升。",
+    "description": "贯穿 +1。最高1级。",
     "rarity": "rare",
-    "weight": 30,
+    "weight": 28,
     "target": "global",
     "effect": "pierce_add",
     "value": 1,
     "mechanic": true,
     "tags": [
       "弹道"
-    ]
+    ],
+    "max_stacks": 1,
+    "summary": "贯穿 +1",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mechanic_chain_arc",
     "name": "万雷天牢引",
-    "description": "全队攻击额外连锁5名附近敌人。",
+    "description": "连锁 +1。最高1级。",
     "rarity": "epic",
-    "weight": 15,
+    "weight": 13,
     "target": "global",
     "effect": "chain_add",
-    "value": 5,
+    "value": 1,
     "mechanic": true,
     "tags": [
-      "反应"
-    ]
+      "弹道"
+    ],
+    "max_stacks": 1,
+    "summary": "连锁 +1",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mechanic_blast_core",
     "name": "爆裂核心",
-    "description": "全队攻击爆炸半径提高120。",
+    "description": "普攻爆炸半径 +50。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 14,
+    "weight": 13,
     "target": "global",
     "effect": "blast_add",
-    "value": 120,
+    "value": 50,
     "mechanic": true,
     "tags": [
-      "反应"
-    ]
+      "弹道"
+    ],
+    "max_stacks": 2,
+    "summary": "普攻爆炸半径 +50",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mechanic_rapid_echo",
     "name": "追击回声",
-    "description": "全队攻击后追加一次100%伤害的追击。",
+    "description": "普攻追加 16% 追击伤害。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 30,
+    "weight": 28,
     "target": "global",
     "effect": "echo_add",
-    "value": 1.0,
+    "value": 0.16,
     "mechanic": true,
     "tags": [
-      "支援"
-    ]
+      "弹道"
+    ],
+    "max_stacks": 2,
+    "summary": "普攻追加 16% 追击伤害",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "support_red_moon",
     "name": "赤月炮击",
-    "description": "每7秒锁定生命值最高的怪物，对预警椭圆内所有敌人造成1500点火元素伤害。",
+    "description": "每9秒落点炮击，首级基础伤害390；升级提高伤害、范围并缩短间隔。最高3级；联动效果可进一步放大。",
     "rarity": "epic",
-    "weight": 16,
+    "weight": 13,
     "target": "global",
     "effect": "support_barrage",
-    "value": 500,
-    "interval": 7,
-    "radius": 180,
+    "value": 130,
+    "interval": 9.0,
+    "radius": 150,
     "mechanic": true,
     "tags": [
       "支援"
-    ]
+    ],
+    "max_stacks": 3,
+    "summary": "每9秒落点炮击，首级基础伤害390；升级提高伤害、范围并缩短间隔",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "support_crossfire",
     "name": "交叉火力",
-    "description": "每10秒扫射整条水平攻击带，对带内每名敌人造成900点伤害。",
+    "description": "每7秒横向扫射，首级基础伤害345；升级提高伤害、范围并缩短间隔。最高3级；联动效果可进一步放大。",
     "rarity": "rare",
-    "weight": 27,
+    "weight": 28,
     "target": "global",
     "effect": "support_crossfire",
-    "value": 300,
-    "interval": 10,
+    "value": 115,
+    "interval": 7.0,
     "mechanic": true,
     "tags": [
       "支援"
-    ]
+    ],
+    "max_stacks": 3,
+    "summary": "每7秒横向扫射，首级基础伤害345；升级提高伤害、范围并缩短间隔",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "radius": 100,
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "support_tidal_aid",
     "name": "潮汐急救",
-    "description": "每8秒治疗全队、扶起倒地角色并修复水晶100点。",
+    "description": "每9秒全队回复60生命，并修复水晶21生命。最高3级；联动效果可进一步放大。",
     "rarity": "rare",
-    "weight": 25,
+    "weight": 28,
     "target": "global",
     "effect": "support_heal",
-    "value": 100,
-    "interval": 8,
+    "value": 60,
+    "interval": 9.0,
     "mechanic": true,
     "tags": [
-      "支援",
-      "护盾"
-    ]
+      "支援"
+    ],
+    "max_stacks": 3,
+    "summary": "每9秒全队回复60生命，并修复水晶21生命",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "radius": 100,
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "support_finale",
     "name": "终幕齐射",
-    "description": "每10秒发动一次900点伤害的全屏齐射。",
+    "description": "每10秒全场冲击首级390伤害；升级增加一轮，单轮伤害与频率同步强化。最高2级；联动效果可进一步放大。",
     "rarity": "legendary",
-    "weight": 6,
+    "weight": 5,
     "target": "global",
     "effect": "support_finale",
-    "value": 300,
-    "interval": 10,
+    "value": 130,
+    "interval": 10.0,
     "mechanic": true,
     "tags": [
       "支援"
-    ]
+    ],
+    "max_stacks": 2,
+    "summary": "每10秒全场冲击首级390伤害；升级增加一轮，单轮伤害与频率同步强化",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "radius": 9999,
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "reinforcement_pyro",
     "name": "增援·宵宫",
-    "description": "若队伍未满，宵宫立即加入本关并自动作战。",
+    "description": "若队伍未满，宵宫立即加入本关并自动作战。最高 1 级。",
     "rarity": "epic",
-    "weight": 18,
+    "weight": 13,
     "target": "global",
     "effect": "deploy_reinforcement",
     "value": "hero_02",
     "mechanic": true,
     "tags": [
       "召唤"
-    ]
+    ],
+    "max_stacks": 1,
+    "summary": "若队伍未满，宵宫立即加入本关并自动作战。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "reinforcement_hydro",
     "name": "增援·芙宁娜",
-    "description": "若队伍未满，芙宁娜立即加入本关并自动作战。",
+    "description": "若队伍未满，芙宁娜立即加入本关并自动作战。最高 1 级。",
     "rarity": "epic",
-    "weight": 18,
+    "weight": 13,
     "target": "global",
     "effect": "deploy_reinforcement",
     "value": "hero_03",
     "mechanic": true,
     "tags": [
       "召唤"
-    ]
+    ],
+    "max_stacks": 1,
+    "summary": "若队伍未满，芙宁娜立即加入本关并自动作战。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mechanic_execution",
     "name": "收集者",
-    "description": "获得30%处决线；重复选择每层再提高30%，最高65%。",
-    "rarity": "rare",
-    "weight": 26,
+    "description": "处决线 +10%（最高18%）。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+    "rarity": "epic",
+    "weight": 13,
     "target": "global",
     "effect": "execute_threshold_add",
-    "value": 0.3,
+    "value": 0.1,
     "mechanic": true,
     "tags": [
-      "暴击"
-    ]
+      "进攻"
+    ],
+    "max_stacks": 2,
+    "summary": "处决线 +10%（最高18%）",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mechanic_overflow",
     "name": "过量火力",
-    "description": "击杀时引爆目标，造成其最大生命30%的范围伤害，可叠加。",
+    "description": "击杀爆破造成目标最大生命 8% 伤害（最高12%）。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "legendary",
-    "weight": 7,
+    "weight": 5,
     "target": "global",
     "effect": "death_burst_add",
-    "value": 0.3,
+    "value": 0.08,
     "mechanic": true,
     "tags": [
-      "支援"
-    ]
+      "弹道"
+    ],
+    "max_stacks": 2,
+    "summary": "击杀爆破造成目标最大生命 8% 伤害（最高12%）",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mechanic_giant_slayer",
     "name": "巨人杀手",
-    "description": "对首领与重甲敌人造成的伤害提高100%，可叠加。",
+    "description": "精英与首领伤害 +35%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "global",
     "effect": "elite_damage_add",
-    "value": 1.0,
+    "value": 0.35,
     "mechanic": true,
     "tags": [
-      "支援"
-    ]
+      "进攻"
+    ],
+    "max_stacks": 2,
+    "summary": "精英与首领伤害 +35%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mechanic_battle_fever",
     "name": "战意沸腾",
-    "description": "每击杀10名敌人，攻击提高并获得4%攻击速度。",
+    "description": "每10击杀攻速 +2.5%，累计最高30%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "legendary",
-    "weight": 6,
+    "weight": 5,
     "target": "global",
     "effect": "kill_frenzy_add",
-    "value": 0.04,
+    "value": 0.025,
     "mechanic": true,
     "tags": [
-      "支援"
-    ]
+      "节奏"
+    ],
+    "max_stacks": 2,
+    "summary": "每10击杀攻速 +2.5%，累计最高30%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "luck_spark_common",
     "name": "幸运火花",
-    "description": "命运开始偏向你：小幅提高稀有、史诗、传奇与神话卡的出现权重。",
+    "description": "幸运 +0.15，显著提高高品质卡权重，累计最高1.50。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 50,
+    "weight": 48,
     "target": "global",
     "effect": "luck_add",
-    "value": 0.5,
+    "value": 0.15,
     "mechanic": true,
     "tags": [
-      "支援"
-    ]
+      "幸运"
+    ],
+    "max_stacks": 3,
+    "summary": "幸运 +0.15，显著提高高品质卡权重，累计最高1.50",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "luck_shift_rare",
     "name": "命运偏转",
-    "description": "显著提高高阶卡权重，普通卡权重随幸运降低。",
+    "description": "幸运 +0.25，显著提高高品质卡权重，累计最高1.50。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 24,
+    "weight": 28,
     "target": "global",
     "effect": "luck_add",
-    "value": 1.0,
+    "value": 0.25,
     "mechanic": true,
     "tags": [
-      "支援"
-    ]
+      "幸运"
+    ],
+    "max_stacks": 2,
+    "summary": "幸运 +0.25，显著提高高品质卡权重，累计最高1.50",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "luck_blessing_epic",
     "name": "女神眷顾",
-    "description": "大幅提高传奇与神话卡权重，让后续选择更容易突破上限。",
+    "description": "幸运 +0.40，显著提高高品质卡权重，累计最高1.50。最高1级。",
     "rarity": "epic",
-    "weight": 9,
+    "weight": 13,
     "target": "global",
     "effect": "luck_add",
-    "value": 2.0,
+    "value": 0.4,
     "mechanic": true,
     "tags": [
-      "支援"
-    ]
+      "幸运"
+    ],
+    "max_stacks": 1,
+    "summary": "幸运 +0.40，显著提高高品质卡权重，累计最高1.50",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mythic_projectile_storm",
     "name": "神格·万象弹幕",
-    "description": "全队弹道增加1、攻击速度提高24%、贯穿增加1。",
+    "description": "弹道 +2；攻速 +38%。最高1级。",
     "rarity": "mythic",
     "weight": 1,
     "target": "global",
-    "effect": "mythic_projectile_storm",
+    "effect": "card_bundle",
     "value": 0,
     "mechanic": true,
     "tags": [
-      "弹道"
-    ]
+      "弹道",
+      "节奏"
+    ],
+    "max_stacks": 1,
+    "summary": "弹道 +2；攻速 +38%",
+    "upgrade_scales": [
+      1.0
+    ],
+    "components": [
+      {
+        "effect": "projectile_count_add",
+        "value": 2
+      },
+      {
+        "effect": "attack_rate_multiplier",
+        "value": 0.38
+      }
+    ],
+    "excludes": [
+      "mythic_world_breaker",
+      "mythic_eternal_support"
+    ],
+    "min_crystal_level": 10,
+    "requires": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mythic_world_breaker",
     "name": "神格·碎界",
-    "description": "全队攻击提高150%，攻击获得巨型爆炸并追加6次连锁。",
+    "description": "攻击 +110%；普攻爆炸半径 +80；精英与首领伤害 +30%。最高1级。",
     "rarity": "mythic",
     "weight": 1,
     "target": "global",
-    "effect": "mythic_world_breaker",
+    "effect": "card_bundle",
     "value": 0,
     "mechanic": true,
     "tags": [
-      "支援"
-    ]
+      "进攻",
+      "弹道"
+    ],
+    "max_stacks": 1,
+    "summary": "攻击 +110%；普攻爆炸半径 +80；精英与首领伤害 +30%",
+    "upgrade_scales": [
+      1.0
+    ],
+    "components": [
+      {
+        "effect": "attack_multiplier",
+        "value": 1.1
+      },
+      {
+        "effect": "blast_add",
+        "value": 80
+      },
+      {
+        "effect": "elite_damage_add",
+        "value": 0.3
+      }
+    ],
+    "excludes": [
+      "mythic_projectile_storm",
+      "mythic_eternal_support"
+    ],
+    "min_crystal_level": 10,
+    "requires": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "mythic_eternal_support",
     "name": "神格·永恒终幕",
-    "description": "每1.8秒发动一次高威力全屏终幕齐射，并可继续无限叠加强化。",
+    "description": "每3.6秒全场冲击首级360伤害；升级增加一轮，单轮伤害与频率同步强化。最高1级；联动效果可进一步放大。",
     "rarity": "mythic",
     "weight": 1,
     "target": "global",
-    "effect": "mythic_eternal_support",
-    "value": 220,
-    "interval": 1.8,
+    "effect": "support_finale",
+    "value": 120,
+    "interval": 3.6,
     "mechanic": true,
     "tags": [
       "支援"
-    ]
+    ],
+    "max_stacks": 1,
+    "summary": "每3.6秒全场冲击首级360伤害；升级增加一轮，单轮伤害与频率同步强化",
+    "upgrade_scales": [
+      1.0
+    ],
+    "radius": 9999,
+    "support_interval_cap": 3.2,
+    "excludes": [
+      "mythic_projectile_storm",
+      "mythic_world_breaker"
+    ],
+    "requires_any": [
+      "support_red_moon",
+      "support_crossfire",
+      "support_finale",
+      "v75_orbital_bombardment"
+    ],
+    "min_crystal_level": 10,
+    "requires": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "orbit_arcane_blades",
     "name": "星轨剑阵",
-    "description": "选定角色：生成环绕飞剑，初始攻击半径248；等级提高会增加数量、伤害与半径，9级触发剑雨。",
+    "description": "1／2／3级飞剑进化为3／6／9把；4级解锁剑阵风暴。最高4级。",
     "rarity": "rare",
-    "weight": 24,
+    "weight": 34,
     "target": "character",
     "effect": "orbit_add",
     "value": 3,
     "mechanic": true,
     "tags": [
-      "召唤",
-      "弹道"
+      "召唤"
     ],
     "evolutions": [
       {
@@ -349,27 +606,39 @@
         "level": 6,
         "name": "六芒剑轮",
         "branch": "count"
-      },
-      {
-        "level": 9,
-        "name": "星轨剑雨",
-        "branch": "storm"
       }
+    ],
+    "max_stacks": 4,
+    "summary": "1／2／3级飞剑进化为3／6／9把；4级解锁剑阵风暴",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds",
+    "evolution_levels": [
+      1,
+      3,
+      6,
+      9
     ]
   },
   {
     "id": "orbit_spell_rings",
     "name": "术式环流",
-    "description": "选定角色：生成成长型法术环，初始攻击半径248；等级提高会增加数量、伤害与半径。",
+    "description": "1／2／3级法术环进化为2／3／4个，伤害与半径同步成长。最高3级。",
     "rarity": "epic",
-    "weight": 13,
+    "weight": 17,
     "target": "character",
     "effect": "orbit_spell_add",
-    "value": 4,
+    "value": 2,
     "mechanic": true,
     "tags": [
-      "召唤",
-      "反应"
+      "召唤"
     ],
     "evolutions": [
       {
@@ -379,26 +648,37 @@
       {
         "level": 6,
         "name": "元素共振"
-      },
-      {
-        "level": 9,
-        "name": "无尽回廊"
       }
+    ],
+    "max_stacks": 3,
+    "summary": "1／2／3级法术环进化为2／3／4个，伤害与半径同步成长",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds",
+    "evolution_levels": [
+      1,
+      3,
+      6
     ]
   },
   {
     "id": "evolve_fireball",
     "name": "天动万象",
-    "description": "巨型岩星从天而降，对落点椭圆范围造成岩元素群伤并减速2秒，威力为原来的3倍；3级连落3颗，6级范围扩大20%，9级大幅提高伤害。",
-    "rarity": "common",
-    "weight": 48,
+    "description": "1级单枚陨石，2级三重陨石，3级扩大落点，4级终极冲击。最高4级。",
+    "rarity": "rare",
+    "weight": 34,
     "target": "global",
     "effect": "evolving_fireball",
     "value": 0.16,
     "mechanic": true,
     "tags": [
-      "支援",
-      "范围"
+      "召唤"
     ],
     "evolutions": [
       {
@@ -416,12 +696,30 @@
         "name": "万象崩解",
         "branch": "meteor"
       }
+    ],
+    "max_stacks": 4,
+    "summary": "1级单枚陨石，2级三重陨石，3级扩大落点，4级终极冲击",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds",
+    "evolution_levels": [
+      1,
+      3,
+      6,
+      9
     ]
   },
   {
     "id": "relic_drop_resonant",
     "name": "遗物·共鸣核心",
-    "description": "本局规则改变：技能返还能量并扩大终结技。",
+    "description": "本局规则改变：技能返还能量并扩大终结技。最高 1 级。",
     "rarity": "legendary",
     "weight": 5,
     "target": "global",
@@ -431,12 +729,21 @@
     "tags": [
       "反应",
       "支援"
-    ]
+    ],
+    "max_stacks": 1,
+    "summary": "本局规则改变：技能返还能量并扩大终结技。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "relic_drop_orbit",
     "name": "遗物·环轨锻炉",
-    "description": "本局规则改变：环绕物复制并扩大轨道。",
+    "description": "现有与之后的飞剑、法术环轨道额外增加 1 枚，半径提高 20%。最高 1 级。",
     "rarity": "legendary",
     "weight": 5,
     "target": "global",
@@ -445,14 +752,27 @@
     "mechanic": true,
     "tags": [
       "召唤"
-    ]
+    ],
+    "max_stacks": 1,
+    "summary": "飞剑／法术环数量 +1、轨道半径 +20%",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires_any": [
+      "orbit_arcane_blades",
+      "orbit_spell_rings"
+    ],
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "relic_drop_clock",
     "name": "遗物·预知时钟",
-    "description": "本局规则改变：敌方预警延长，成功闪避恢复能量。",
+    "description": "本局规则改变：敌方预警延长，成功闪避恢复能量。最高 1 级。",
     "rarity": "epic",
-    "weight": 9,
+    "weight": 13,
     "target": "global",
     "effect": "grant_relic",
     "value": "relic_warning_clock",
@@ -460,26 +780,44 @@
     "tags": [
       "护盾",
       "支援"
-    ]
+    ],
+    "max_stacks": 1,
+    "summary": "本局规则改变：敌方预警延长，成功闪避恢复能量。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "relic_drop_glass",
     "name": "遗物·绯红透镜",
-    "description": "伤害提高35%，承伤提高20%，形成高风险构筑。",
-    "rarity": "legendary",
-    "weight": 4,
+    "description": "伤害提高35%，承伤提高20%，形成高风险构筑。最高 1 级。",
+    "rarity": "epic",
+    "weight": 13,
     "target": "global",
     "effect": "grant_relic",
     "value": "relic_glass_cannon",
     "mechanic": true,
     "tags": [
       "暴击"
-    ]
+    ],
+    "max_stacks": 1,
+    "summary": "伤害提高35%，承伤提高20%，形成高风险构筑。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "relic_drop_heartbeat",
     "name": "遗物·第二心跳",
-    "description": "每名角色本局首次阵亡时以35%生命复苏。",
+    "description": "每名角色本局首次阵亡时以35%生命复苏。最高 1 级。",
     "rarity": "mythic",
     "weight": 1,
     "target": "global",
@@ -489,233 +827,354 @@
     "tags": [
       "支援",
       "护盾"
-    ]
+    ],
+    "max_stacks": 1,
+    "summary": "每名角色本局首次阵亡时以35%生命复苏。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 10,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "lethal_tempo",
     "name": "致命节奏",
-    "description": "选定角色每次攻击提高12%攻击速度，每层上限提高120%；停止攻击3秒后清空。",
+    "description": "每击攻速 +7%／级，最高 +45%／级；停攻3秒重置。最高2级。",
     "rarity": "epic",
-    "weight": 8,
+    "weight": 13,
     "target": "character",
     "effect": "lethal_tempo",
-    "value": 0.12,
+    "value": 0.04,
     "max_bonus": 1.2,
     "timeout": 3.0,
     "mechanic": true,
     "tags": [
-      "弹道"
-    ]
+      "技巧"
+    ],
+    "max_stacks": 2,
+    "summary": "每击攻速 +7%／级，最高 +45%／级；停攻3秒重置",
+    "upgrade_scales": [
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "conqueror",
     "name": "征服者",
-    "description": "选定角色攻击6次后，攻击伤害翻倍；每次攻击回复10点生命。重复选择可叠加伤害倍数和治疗量。",
+    "description": "连续6击后伤害 +30%／级，每击回复3／级；停攻3秒重置。最高2级。",
     "rarity": "epic",
-    "weight": 14,
+    "weight": 13,
     "target": "character",
     "effect": "conqueror",
-    "value": 10,
+    "value": 0.18,
     "required_attacks": 6,
     "mechanic": true,
     "tags": [
-      "弹道",
-      "护盾"
-    ]
+      "技巧"
+    ],
+    "max_stacks": 2,
+    "summary": "连续6击后伤害 +30%／级，每击回复3／级；停攻3秒重置",
+    "upgrade_scales": [
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "heartsteel",
     "name": "心之钢",
-    "description": "选定角色首次攻击每名敌人时，每层使自身最大生命提高10点。",
+    "description": "首次命中每名敌人生命上限 +4／级；累计成长最高600。最高3级。",
     "rarity": "rare",
-    "weight": 23,
+    "weight": 28,
     "target": "character",
     "effect": "heartsteel",
-    "value": 10,
+    "value": 2,
     "mechanic": true,
     "tags": [
       "护盾"
-    ]
+    ],
+    "max_stacks": 3,
+    "summary": "首次命中每名敌人生命上限 +4／级；累计成长最高600",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "warmogs_armor",
     "name": "狂徒铠甲",
-    "description": "选定角色每5秒每层恢复100点生命。",
+    "description": "每5秒回复每级40生命＋角色最大生命的1.5%。最高3级。",
     "rarity": "rare",
-    "weight": 24,
+    "weight": 28,
     "target": "character",
     "effect": "warmogs_armor",
-    "value": 100,
+    "value": 30,
     "interval": 5,
     "mechanic": true,
     "tags": [
       "护盾"
-    ]
+    ],
+    "max_stacks": 3,
+    "summary": "每5秒回复每级40生命＋角色最大生命的1.5%",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "solo_leveling",
     "name": "我独自升级",
-    "description": "本局经验获取变为3倍；每次重复选择都会再乘3倍。",
-    "rarity": "legendary",
-    "weight": 7,
+    "description": "本局经验获取 +35%／级；最高 +70%。最高 2 级。",
+    "rarity": "epic",
+    "weight": 13,
     "target": "global",
     "effect": "solo_leveling",
-    "value": 3,
+    "value": 0.35,
     "mechanic": true,
     "tags": [
-      "支援"
-    ]
+      "成长"
+    ],
+    "max_stacks": 2,
+    "summary": "本局经验获取 +35%／级；最高 +70%",
+    "upgrade_scales": [
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_squad_edge",
     "name": "全军锋锐",
-    "description": "全员攻击+25%，防御+20。重复获取时各项加成叠加。",
+    "description": "攻击 +10%；防御 +6。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
     "weight": 48,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "进攻",
+      "护盾"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_multiplier",
-        "value": 0.25
+        "value": 0.1
       },
       {
         "effect": "armor_flat",
-        "value": 20
+        "value": 6
       }
     ],
-    "summary": "全员攻击+25%，防御+20",
-    "mechanic": true
+    "summary": "攻击 +10%；防御 +6",
+    "mechanic": true,
+    "max_stacks": 3,
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_breach_order",
     "name": "破阵号令",
-    "description": "全员攻击+100%，移速+30。重复获取时各项加成叠加。",
+    "description": "攻击 +21%；移速 +18。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 23,
+    "weight": 28,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "进攻",
+      "机动"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_multiplier",
-        "value": 1
+        "value": 0.21
       },
       {
         "effect": "move_speed_flat",
-        "value": 30
+        "value": 18
       }
     ],
-    "summary": "全员攻击+100%，移速+30",
-    "mechanic": true
+    "summary": "攻击 +21%；移速 +18",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_annihilation_protocol",
     "name": "灭绝协议",
-    "description": "全员攻击+100%，普攻爆炸半径+45。重复获取时各项加成叠加。",
+    "description": "攻击 +32%；普攻爆炸半径 +30。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 9,
+    "weight": 13,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
+      "进攻",
       "弹道"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_multiplier",
-        "value": 1
+        "value": 0.32
       },
       {
         "effect": "blast_add",
-        "value": 45
+        "value": 30
       }
     ],
-    "summary": "全员攻击+100%，普攻爆炸半径+45",
-    "mechanic": true
+    "summary": "攻击 +32%；普攻爆炸半径 +30",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_legion_avatar",
     "name": "军团化身",
-    "description": "全员攻击+150%，生命+100%。重复获取时各项加成叠加。",
+    "description": "攻击 +55%；生命上限 +35%。最高1级。",
     "rarity": "legendary",
-    "weight": 3,
+    "weight": 5,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "进攻",
+      "护盾"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_multiplier",
-        "value": 1.5
+        "value": 0.55
       },
       {
         "effect": "health_multiplier",
-        "value": 1
+        "value": 0.35
       }
     ],
-    "summary": "全员攻击+150%，生命+100%",
-    "mechanic": true
+    "summary": "攻击 +55%；生命上限 +35%",
+    "mechanic": true,
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_field_medicine",
     "name": "野战医疗",
-    "description": "全员生命+30%，每次普攻回复5生命。重复获取时各项加成叠加。",
+    "description": "生命上限 +16%；每击回复 2 生命。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 46,
+    "weight": 48,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "护盾"
+      "护盾",
+      "恢复"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "health_multiplier",
-        "value": 0.3
+        "value": 0.16
       },
       {
         "effect": "attack_mend",
-        "value": 5
+        "value": 1
       }
     ],
-    "summary": "全员生命+30%，普攻回血5",
-    "mechanic": true
+    "summary": "生命上限 +16%；每击回复 2 生命",
+    "mechanic": true,
+    "max_stacks": 3,
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_group_regeneration",
     "name": "群体再生",
-    "description": "全队：最大生命提高150%，并恢复等量生命。",
+    "description": "全队生命上限 +35%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 22,
+    "weight": 28,
     "target": "global",
     "effect": "squad_health_multiplier",
-    "value": 1.5,
+    "value": 0.35,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 2,
+    "summary": "全队生命上限 +35%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_guardian_pact",
     "name": "守望契约",
-    "description": "全员生命+150%，防御+100。重复获取时各项加成叠加。",
+    "description": "生命上限 +40%；防御 +24。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 8,
+    "weight": 13,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
@@ -726,159 +1185,229 @@
     "components": [
       {
         "effect": "health_multiplier",
-        "value": 1.5
+        "value": 0.4
       },
       {
         "effect": "armor_flat",
-        "value": 100
+        "value": 24
       }
     ],
-    "summary": "全员生命+150%，防御+100",
-    "mechanic": true
+    "summary": "生命上限 +40%；防御 +24",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_immortal_legion",
     "name": "永生军势",
-    "description": "全队：最大生命提高450%，并恢复等量生命。",
+    "description": "全队生命上限 +100%。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "global",
     "effect": "squad_health_multiplier",
-    "value": 4.5,
+    "value": 1.0,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 1,
+    "summary": "全队生命上限 +100%",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_forced_march",
     "name": "急行军",
-    "description": "全员移速+45，防御+15。重复获取时各项加成叠加。",
+    "description": "移速 +18；防御 +6。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 46,
+    "weight": 48,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "机动",
+      "护盾"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "move_speed_flat",
-        "value": 45
+        "value": 18
       },
       {
         "effect": "armor_flat",
-        "value": 15
+        "value": 6
       }
     ],
-    "summary": "全员移速+45，防御+15",
-    "mechanic": true
+    "summary": "移速 +18；防御 +6",
+    "mechanic": true,
+    "max_stacks": 3,
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_war_rhythm",
     "name": "战争律动",
-    "description": "全员攻速+20%，每次普攻回复6生命。重复获取时各项加成叠加。",
+    "description": "攻速 +14%；每击回复 2 生命。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 22,
+    "weight": 28,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "节奏",
+      "恢复"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_rate_multiplier",
-        "value": 0.2
+        "value": 0.14
       },
       {
         "effect": "attack_mend",
-        "value": 6
+        "value": 1
       }
     ],
-    "summary": "全员攻速+20%，普攻回血6",
-    "mechanic": true
+    "summary": "攻速 +14%；每击回复 2 生命",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_temporal_distortion",
     "name": "时间扭曲",
-    "description": "全员攻速+30%，技能冷却缩减10%。重复获取时各项加成叠加。",
+    "description": "攻速 +18%；技能冷却 -8%（累计最高40%）。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 8,
+    "weight": 13,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "节奏",
+      "技能"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_rate_multiplier",
-        "value": 0.3
+        "value": 0.18
       },
       {
         "effect": "skill_cooldown_add",
-        "value": 0.1
+        "value": 0.08
       }
     ],
-    "summary": "全员攻速+30%，技能冷却缩减10%",
-    "mechanic": true
+    "summary": "攻速 +18%；技能冷却 -8%（累计最高40%）",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_velocity_field",
     "name": "极速领域",
-    "description": "全员攻速+40%，移速+80。重复获取时各项加成叠加。",
-    "rarity": "legendary",
-    "weight": 2,
+    "description": "攻速 +28%；移速 +40。最高1级。",
+    "rarity": "epic",
+    "weight": 13,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "节奏",
+      "机动"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_rate_multiplier",
-        "value": 0.4
+        "value": 0.28
       },
       {
         "effect": "move_speed_flat",
-        "value": 80
+        "value": 40
       }
     ],
-    "summary": "全员攻速+40%，移速+80",
-    "mechanic": true
+    "summary": "攻速 +28%；移速 +40",
+    "mechanic": true,
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_forward_observation",
     "name": "前沿观测",
-    "description": "全队：攻击范围提高40。",
+    "description": "全队射程 +20。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 43,
+    "weight": 48,
     "target": "global",
     "effect": "squad_range_flat",
-    "value": 40,
+    "value": 20,
     "tags": [
-      "弹道"
+      "瞄准"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 3,
+    "summary": "全队射程 +20",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_satellite_lock",
     "name": "卫星锁定",
-    "description": "全员射程+30，暴击率+10%。重复获取时各项加成叠加。",
+    "description": "射程 +30；暴击率 +6%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 20,
+    "weight": 28,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "瞄准",
+      "暴击"
     ],
     "placeholder_icon": true,
     "components": [
@@ -888,84 +1417,123 @@
       },
       {
         "effect": "crit_flat",
-        "value": 0.1
+        "value": 0.06
       }
     ],
-    "summary": "全员射程+30，暴击率+10%",
-    "mechanic": true
+    "summary": "射程 +30；暴击率 +6%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_omniscient_view",
     "name": "全知视域",
-    "description": "全员射程+50，技能范围+30%。重复获取时各项加成叠加。",
+    "description": "射程 +40；范围技能半径 +20%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 7,
+    "weight": 13,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "瞄准",
+      "技能"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "range_flat",
-        "value": 50
+        "value": 40
       },
       {
         "effect": "skill_area_add",
-        "value": 0.3
+        "value": 0.2
       }
     ],
-    "summary": "全员射程+50，技能范围+30%",
-    "mechanic": true
+    "summary": "射程 +40；范围技能半径 +20%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_orbital_aim",
     "name": "天基瞄准",
-    "description": "全员射程+70，普攻追击伤害+40%。重复获取时各项加成叠加。",
+    "description": "射程 +65；普攻追加 18% 追击伤害。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
+      "瞄准",
       "弹道"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "range_flat",
-        "value": 70
+        "value": 65
       },
       {
         "effect": "echo_add",
-        "value": 0.4
+        "value": 0.18
       }
     ],
-    "summary": "全员射程+70，普攻追击伤害+40%",
-    "mechanic": true
+    "summary": "射程 +65；普攻追加 18% 追击伤害",
+    "mechanic": true,
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_iron_line",
     "name": "钢铁阵线",
-    "description": "全队：防御提高80。",
+    "description": "全队防御 +10。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 43,
+    "weight": 48,
     "target": "global",
     "effect": "squad_armor_flat",
-    "value": 80,
+    "value": 10,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 3,
+    "summary": "全队防御 +10",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_guardian_formation",
     "name": "守护方阵",
-    "description": "全员防御+100，生命+50%。重复获取时各项加成叠加。",
+    "description": "防御 +20；生命上限 +24%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 20,
+    "weight": 28,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
@@ -976,81 +1544,119 @@
     "components": [
       {
         "effect": "armor_flat",
-        "value": 100
+        "value": 20
       },
       {
         "effect": "health_multiplier",
-        "value": 0.5
+        "value": 0.24
       }
     ],
-    "summary": "全员防御+100，生命+50%",
-    "mechanic": true
+    "summary": "防御 +20；生命上限 +24%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_mountain_bulwark",
     "name": "山岳壁垒",
-    "description": "全队：防御提高320。",
+    "description": "全队防御 +32。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 7,
+    "weight": 13,
     "target": "global",
     "effect": "squad_armor_flat",
-    "value": 320,
+    "value": 32,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 2,
+    "summary": "全队防御 +32",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_absolute_domain",
     "name": "绝对领域",
-    "description": "全队：防御提高500。",
+    "description": "全队防御 +65。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "global",
     "effect": "squad_armor_flat",
-    "value": 500,
+    "value": 65,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 1,
+    "summary": "全队防御 +65",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_concentrated_fire",
     "name": "多重火力",
-    "description": "全员攻击+100%，暴击率+10%。重复获取时各项加成叠加。",
+    "description": "攻击 +22%；暴击率 +7%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 19,
+    "weight": 28,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "进攻",
+      "暴击"
     ],
     "placeholder_icon": true,
     "mechanic": true,
     "components": [
       {
         "effect": "attack_multiplier",
-        "value": 1
+        "value": 0.22
       },
       {
         "effect": "crit_flat",
-        "value": 0.1
+        "value": 0.07
       }
     ],
-    "summary": "全员攻击+100%，暴击率+10%"
+    "summary": "攻击 +22%；暴击率 +7%",
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_triple_loading",
     "name": "三联装填",
-    "description": "全员每第三次普攻额外增伤150%。重复获取时各项加成叠加。",
-    "rarity": "epic",
-    "weight": 7,
+    "description": "每第三击伤害 +50%。最高1级。",
+    "rarity": "rare",
+    "weight": 28,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "技巧"
     ],
     "placeholder_icon": true,
     "mechanic": true,
@@ -1060,14 +1666,22 @@
         "value": 1
       }
     ],
-    "summary": "全员每第三击增伤150%"
+    "summary": "每第三击伤害 +50%",
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_piercing_barrage",
     "name": "贯穿弹幕",
-    "description": "全员贯穿+1，普攻追击伤害+25%。重复获取时各项加成叠加。",
+    "description": "贯穿 +1；普攻追加 12% 追击伤害。最高1级。",
     "rarity": "epic",
-    "weight": 7,
+    "weight": 13,
     "target": "global",
     "effect": "card_bundle",
     "value": 0,
@@ -1083,192 +1697,799 @@
       },
       {
         "effect": "echo_add",
-        "value": 0.25
+        "value": 0.12
       }
     ],
-    "summary": "全员贯穿+1，普攻追击伤害+25%"
+    "summary": "贯穿 +1；普攻追加 12% 追击伤害",
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_chain_storm",
     "name": "连锁风暴",
-    "description": "全队：攻击额外连锁10名附近敌人。",
+    "description": "连锁 +2。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "global",
     "effect": "chain_add",
-    "value": 10,
+    "value": 2,
     "tags": [
-      "反应"
+      "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 1,
+    "summary": "连锁 +2",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_superheavy_blast",
     "name": "超重爆破",
-    "description": "全队：攻击爆炸半径提高220。",
+    "description": "普攻爆炸半径 +85。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "global",
     "effect": "blast_add",
-    "value": 220,
+    "value": 85,
     "tags": [
-      "反应"
+      "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 1,
+    "summary": "普攻爆炸半径 +85",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_rewritten_echo",
     "name": "复写回声",
-    "description": "全队：攻击后追加一次150%伤害的追击。",
+    "description": "普攻追加 27% 追击伤害。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "global",
     "effect": "echo_add",
-    "value": 1.5,
+    "value": 0.27,
     "tags": [
-      "支援"
+      "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 1,
+    "summary": "普攻追加 27% 追击伤害",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_skill_overload",
     "name": "技能超载",
-    "description": "全队Q技能与E终结技伤害提高120%。",
+    "description": "技能伤害 +45%；能量获取 +12%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 7,
+    "weight": 13,
     "target": "global",
-    "effect": "skill_power_add",
-    "value": 1.2,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
-      "支援"
+      "技能"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "技能伤害 +45%；能量获取 +12%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "components": [
+      {
+        "effect": "skill_power_add",
+        "value": 0.45
+      },
+      {
+        "effect": "energy_gain_add",
+        "value": 0.12
+      }
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_time_compression",
     "name": "时间压缩",
-    "description": "全队Q技能与E终结技冷却时间缩短35%，总缩减上限65%。",
+    "description": "技能冷却 -17%（累计最高40%）。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 7,
+    "weight": 13,
     "target": "global",
     "effect": "skill_cooldown_add",
-    "value": 0.35,
+    "value": 0.17,
     "tags": [
-      "支援"
+      "技能"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "技能冷却 -17%（累计最高40%）",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_wide_area_formula",
     "name": "广域术式",
-    "description": "全队范围技能的作用范围提高120%。",
+    "description": "范围技能半径 +30%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 7,
+    "weight": 13,
     "target": "global",
     "effect": "skill_area_add",
-    "value": 1.2,
+    "value": 0.3,
     "tags": [
-      "反应"
+      "技能"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "范围技能半径 +30%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_lingering_field",
     "name": "延时领域",
-    "description": "全队持续型技能的持续时间提高150%。",
+    "description": "持续技能时间 +30%；能量获取 +8%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 18,
+    "weight": 28,
     "target": "global",
-    "effect": "skill_duration_add",
-    "value": 1.5,
+    "effect": "card_bundle",
+    "value": 0,
     "tags": [
-      "支援"
+      "技能"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "持续技能时间 +30%；能量获取 +8%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "components": [
+      {
+        "effect": "skill_duration_add",
+        "value": 0.3
+      },
+      {
+        "effect": "energy_gain_add",
+        "value": 0.08
+      }
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_reaction_amplification",
     "name": "反应增幅",
-    "description": "全队元素反应伤害提高120%。",
+    "description": "元素反应伤害 +45%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 7,
+    "weight": 13,
     "target": "global",
     "effect": "reaction_damage_add",
-    "value": 1.2,
+    "value": 0.45,
     "tags": [
       "反应"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "元素反应伤害 +45%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_reaction_diffusion",
     "name": "反应扩散",
-    "description": "全队元素反应作用半径提高240。",
+    "description": "反应半径 +40。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 18,
+    "weight": 28,
     "target": "global",
     "effect": "reaction_radius_add",
-    "value": 240,
+    "value": 40,
     "tags": [
       "反应"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "反应半径 +40",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_orbital_bombardment",
     "name": "轨道轰炸",
-    "description": "每7秒锁定高生命敌人，对大范围敌人造成1800点伤害。",
+    "description": "每9秒落点炮击，首级基础伤害540；升级提高伤害、范围并缩短间隔。最高2级；联动效果可进一步放大。",
     "rarity": "legendary",
-    "weight": 3,
+    "weight": 5,
     "target": "global",
     "effect": "support_barrage",
-    "value": 600,
+    "value": 180,
     "tags": [
       "支援"
     ],
     "placeholder_icon": true,
     "mechanic": true,
-    "interval": 7,
-    "radius": 240
+    "interval": 9.0,
+    "radius": 190,
+    "max_stacks": 2,
+    "summary": "每9秒落点炮击，首级基础伤害540；升级提高伤害、范围并缩短间隔",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_battlefield_transfusion",
     "name": "战地输血",
-    "description": "每8秒治疗全队、扶起倒地角色并修复水晶150点。",
+    "description": "每11秒全队回复80生命，并修复水晶28生命。最高2级；联动效果可进一步放大。",
     "rarity": "rare",
-    "weight": 17,
+    "weight": 28,
     "target": "global",
     "effect": "support_heal",
-    "value": 150,
+    "value": 80,
     "tags": [
-      "支援",
-      "护盾"
+      "支援"
     ],
     "placeholder_icon": true,
     "mechanic": true,
-    "interval": 8
+    "interval": 11.0,
+    "max_stacks": 2,
+    "summary": "每11秒全队回复80生命，并修复水晶28生命",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "radius": 100,
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_crystal_reconstruction",
     "name": "水晶再构",
-    "description": "水晶最大生命提高120，并立即恢复120点生命。",
+    "description": "水晶生命上限与当前生命 +65。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 20,
+    "weight": 28,
     "target": "global",
     "effect": "crystal_health_flat",
-    "value": 120,
+    "value": 65,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 2,
+    "summary": "水晶生命上限与当前生命 +65",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_botanist",
+    "name": "植物学家",
+    "description": "所有攻击植物伤害每级＋20%，最高＋80%。最高4级。",
+    "summary": "所有攻击植物伤害每级＋20%，最高＋80%",
+    "rarity": "common",
+    "weight": 48,
+    "target": "global",
+    "family": "device",
+    "effect": "device_botanist",
+    "value": 0.2,
+    "max_stacks": 4,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_botanist.png",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_repeater",
+    "name": "双发射手",
+    "description": "场上及之后部署的豌豆射手、寒冰射手进化为双发射手，每轮连续发射2颗豌豆；保留已有寒冰效果。最高 1 级。",
+    "summary": "全体豌豆系进化：每轮双发",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "family": "device",
+    "effect": "device_repeater",
+    "value": 2,
+    "max_stacks": 1,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [
+      "device_threepeater",
+      "device_gatling",
+      "device_melon"
+    ],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_repeater.png",
+    "upgrade_tier": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_threepeater",
+    "name": "三发射手",
+    "description": "场上及之后部署的豌豆射手、寒冰射手进化为三发射手，同时攻击自身、上一行和下一行；保留已有寒冰效果。最高 1 级。",
+    "summary": "全体豌豆系进化：同时覆盖3行",
+    "rarity": "rare",
+    "weight": 24,
+    "target": "global",
+    "family": "device",
+    "effect": "device_threepeater",
+    "value": 3,
+    "max_stacks": 1,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [
+      "device_gatling",
+      "device_melon"
+    ],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_threepeater.png",
+    "upgrade_tier": 2,
+    "upgrade_scales": [
+      1.0
+    ],
+    "requires_any": [
+      "device_repeater"
+    ],
+    "min_crystal_level": 4,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_gatling",
+    "name": "机枪豌豆",
+    "description": "场上及之后部署的豌豆射手、寒冰射手进化为机枪豌豆，每轮连续发射4颗豌豆；保留已有寒冰效果。最高 1 级。",
+    "summary": "全体豌豆系进化：每轮四连发",
+    "rarity": "legendary",
+    "weight": 5,
+    "target": "global",
+    "family": "device",
+    "effect": "device_gatling",
+    "value": 4,
+    "max_stacks": 1,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [
+      "device_melon"
+    ],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_gatling.png",
+    "upgrade_tier": 3,
+    "upgrade_scales": [
+      1.0
+    ],
+    "requires_any": [
+      "device_repeater",
+      "device_threepeater"
+    ],
+    "min_crystal_level": 7,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_melon",
+    "name": "西瓜投手",
+    "description": "场上及之后部署的豌豆射手、寒冰射手改为西瓜投手，抛出西瓜造成范围伤害；保留已有寒冰效果。最高 1 级。",
+    "summary": "全体豌豆系进化：抛物线西瓜范围攻击",
+    "rarity": "epic",
+    "weight": 15,
+    "target": "global",
+    "family": "device",
+    "effect": "device_melon",
+    "value": 1,
+    "max_stacks": 1,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [
+      "device_gatling"
+    ],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_melon.png",
+    "upgrade_tier": 4,
+    "upgrade_scales": [
+      1.0
+    ],
+    "requires_any": [
+      "device_botanist",
+      "device_repeater",
+      "device_threepeater",
+      "device_gatling"
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_frost",
+    "name": "极地育种",
+    "description": "所有豌豆及西瓜攻击附带寒冰效果：目标移速降低20%，持续2秒。最高 1 级。",
+    "summary": "豌豆与西瓜：减速20%，持续2秒",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "family": "device",
+    "effect": "device_frost",
+    "value": 0.2,
+    "max_stacks": 1,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_frost.png",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_iron_nut",
+    "name": "铁坚果",
+    "description": "场上及之后部署的坚果墙进化为铁坚果，最大生命变为2.5倍并获得30护甲；保持当前生命比例。最高 1 级。",
+    "summary": "全体坚果进化：生命 ×2.5，护甲 +30",
+    "rarity": "epic",
+    "weight": 13,
+    "target": "global",
+    "family": "device",
+    "effect": "device_iron_nut",
+    "value": 2.5,
+    "max_stacks": 1,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_iron_nut.png",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_nut_repair",
+    "name": "坚果修护",
+    "description": "所有坚果最大生命额外提高30% / 层，并每秒恢复12点生命 / 层。最高 3 级。",
+    "summary": "坚果生命 +30%，每秒修复12 / 层",
+    "rarity": "common",
+    "weight": 48,
+    "target": "global",
+    "family": "device",
+    "effect": "device_nut_repair",
+    "value": 0.3,
+    "max_stacks": 3,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_nut_repair.png",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_power_pad",
+    "name": "高能攻击格",
+    "description": "购买的攻击格攻击力加成额外提高15个百分点 / 层，立即作用于格子上的角色。最高 3 级。",
+    "summary": "攻击格额外攻击加成 +15个百分点 / 层",
+    "rarity": "common",
+    "weight": 48,
+    "target": "global",
+    "family": "device",
+    "effect": "device_power_pad",
+    "value": 0.15,
+    "max_stacks": 3,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_power_pad.png",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_range_pad",
+    "name": "远眺射程格",
+    "description": "购买的射程格射程加成额外提高15个百分点 / 层，立即作用于格子上的角色。最高 3 级。",
+    "summary": "射程格额外射程加成 +15个百分点 / 层",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "family": "device",
+    "effect": "device_range_pad",
+    "value": 0.15,
+    "max_stacks": 3,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_range_pad.png",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_soil_discount",
+    "name": "沃土采购",
+    "description": "所有机关购买价格降低10%／级，最多降低20%；已经部署的机关不重复返还差价。最高 2 级。",
+    "summary": "机关价格 -10% / 层，最多 -30%",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "family": "device",
+    "effect": "device_soil_discount",
+    "value": 0.1,
+    "max_stacks": 2,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_soil_discount.png",
+    "upgrade_scales": [
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_photosynthesis",
+    "name": "光合作用",
+    "description": "向日葵每8秒产金每级＋5，最高＋15；升级不改变产金周期。最高3级。",
+    "summary": "向日葵每8秒产金每级＋5，最高＋15；升级不改变产金周期",
+    "rarity": "common",
+    "weight": 48,
+    "target": "global",
+    "family": "device",
+    "effect": "device_photosynthesis",
+    "value": 5,
+    "max_stacks": 3,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_photosynthesis.png",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_quick_growth",
+    "name": "快速生长",
+    "description": "攻击植物攻击间隔每级减少12%，最高减少36%；向日葵周期不变。最高3级。",
+    "summary": "攻击植物攻击间隔每级减少12%，最高减少36%；向日葵周期不变",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "global",
+    "family": "device",
+    "effect": "device_quick_growth",
+    "value": 0.12,
+    "max_stacks": 3,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_quick_growth.png",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_mine_chain",
+    "name": "爆破育苗",
+    "description": "土豆雷等爆炸植物伤害提高30% / 层，爆炸范围扩大20% / 层。最高 2 级。",
+    "summary": "爆炸植物：伤害 +30%，范围 +20% / 层",
+    "rarity": "epic",
+    "weight": 13,
+    "target": "global",
+    "family": "device",
+    "effect": "device_mine_chain",
+    "value": 0.3,
+    "max_stacks": 2,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_mine_chain.png",
+    "upgrade_scales": [
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_rooted",
+    "name": "深根扎营",
+    "description": "植物生命每级＋25%，最高＋100%。最高4级。",
+    "summary": "植物生命每级＋25%，最高＋100%",
+    "rarity": "common",
+    "weight": 48,
+    "target": "global",
+    "family": "device",
+    "effect": "device_rooted",
+    "value": 0.25,
+    "max_stacks": 4,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_rooted.png",
+    "upgrade_scales": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "device_salvage",
+    "name": "循环园艺",
+    "description": "机关被敌人摧毁或一次性机关触发消耗时，返还实际支付金币的50%；每个机关只返还一次。最高 1 级。",
+    "summary": "机关被摧毁或消耗：返还实付金币50%",
+    "rarity": "epic",
+    "weight": 13,
+    "target": "global",
+    "family": "device",
+    "effect": "device_salvage",
+    "value": 0.5,
+    "max_stacks": 1,
+    "mechanic": true,
+    "tags": [
+      "机关",
+      "device"
+    ],
+    "requires": [],
+    "excludes": [],
+    "icon": "res://assets/ui/device_card_icons_20261005/device_salvage.png",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   }
 ]

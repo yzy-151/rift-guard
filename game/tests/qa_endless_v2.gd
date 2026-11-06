@@ -9,16 +9,16 @@ func run():
  s.reset_stage("stage_endless",squad,42);s.start()
  s.expedition._complete(s.expedition.tasks[0]);s.expedition.completion_notice=0
  s.expedition.open_reward(s)
- check(s.state=="reward" and s.expedition.cards_remaining==3,"existing card UI reward state")
+ check(s.state=="reward" and s.expedition.cards_remaining==1,"existing card UI reward state")
  var pending:int=s.run_state.pending_level_ups
- for i in 3:
+ for i in 1:
   var taken:=false
   for card in 3:
    for hero in 3:
     if s.choose_reward(card,hero):taken=true;break
    if taken:break
   check(taken,"card %d accepted" % i)
- check(s.state=="running" and s.expedition.cards_remaining==0,"three picks return to combat")
+ check(s.state=="running" and s.expedition.cards_remaining==0,"task pick returns to combat")
  check(s.run_state.pending_level_ups==pending,"quest does not consume level-up cards")
  check(s.expedition.ground_distance(Vector2.ZERO,Vector2(0,80))==200,"ellipse collision metric")
  check(s._endless_boss_multipliers(6).x>100,"late boss scaling")

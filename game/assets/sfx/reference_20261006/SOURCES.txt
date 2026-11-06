@@ -1,0 +1,4 @@
+https://kenney.nl/assets/impact-sounds
+https://kenney.nl/assets/sci-fi-sounds
+https://opengameart.org/content/50-rpg-sound-effects
+CC designs combine existing local Kenney CC0 foley/impact recordings and existing attributed Riot ability recordings. Exact source cuts, source URLs and hashes are in qa/combat-audio-reference-20261006/audio-audit.json. Original attribution is retained from project records, not newly authenticated here. No extracted reference-video soundtrack is shipped.

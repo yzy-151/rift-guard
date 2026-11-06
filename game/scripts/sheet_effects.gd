@@ -1,5 +1,6 @@
 extends Node2D
 
+const CompactFeedback = preload("res://scripts/combat_feedback_v3.gd")
 const Stage = preload("res://scripts/stage_projection.gd")
 const FX_CIRCLE = preload("res://assets/vfx/third_party/kenney_particle/circle_05.png")
 const FX_FLARE = preload("res://assets/vfx/third_party/kenney_particle/flare_01.png")
@@ -26,7 +27,7 @@ func accept(batch: Array[Dictionary]) -> void:
 		return
 	for event: Dictionary in batch:
 		var kind := str(event.get("kind", ""))
-		if kind not in ["heal", "hit", "critical", "shield_break", "skill_cast", "skill_impact", "ultimate_impact", "element_burst"]:
+		if kind not in ["heal", "shield_break", "skill_cast", "skill_impact", "ultimate_impact", "element_burst"]:
 			continue
 		if (kind == "skill_cast" and str(event.get("value", "")) == "静风疗愈") or (kind == "skill_impact" and str(event.get("ability_kind", "")) == "heal_gust"):
 			continue
@@ -108,25 +109,16 @@ func draw_behind_units(target: CanvasItem) -> void:
 			continue
 
 		var fraction: float = clampf(float(effect.age) / duration(kind), 0.0, 1.0)
-		var seed: float = float(effect.seed)
-		var base_size: float = float({
-			"hit":62.0, "critical":108.0, "shield_break":132.0, "skill_cast":92.0,
-			"skill_impact":156.0, "ultimate_impact":224.0, "ultimate_ring":286.0, "element_burst":184.0
-		}.get(kind, 110.0))
-		var scale_value: float = lerpf(0.34, 1.24, ease(fraction, -1.7))
-		if kind == "ultimate_ring":
-			scale_value = lerpf(0.34, 1.52, ease(fraction, 0.65))
-		var opacity: float = pow(1.0 - fraction, 0.66)
 		var tint: Color = element_tint(str(effect.element))
-		var rotation: float = (seed - 0.5) * 1.6 + fraction * (1.2 if kind in ["ultimate_ring", "skill_impact"] else 0.18)
-		target.draw_set_transform(point, rotation, Vector2.ONE * scale_value)
-		var texture: Texture2D = visual_texture(kind, str(effect.element))
-		var rect: Rect2 = Rect2(Vector2.ONE * -base_size * 0.5, Vector2.ONE * base_size)
-		target.draw_texture_rect(texture, rect, false, Color(tint, opacity * (0.88 if kind == "ultimate_ring" else 1.0)))
-		if kind in ["skill_impact", "ultimate_impact", "element_burst"]:
-			var trace_rect := Rect2(Vector2(-base_size * 0.62, -base_size * 0.18), Vector2(base_size * 1.24, base_size * 0.36))
-			target.draw_texture_rect(FX_TRACE, trace_rect, false, Color(tint.lightened(0.22), opacity * 0.70))
-		target.draw_set_transform(Vector2.ZERO)
+		var strength: float = {"shield_break":1.0, "skill_cast":0.9, "skill_impact":1.6, "ultimate_impact":2.2, "ultimate_ring":2.0, "element_burst":1.7}.get(kind, 1.0)
+		if kind == "ultimate_ring":
+			var ring := PackedVector2Array()
+			for index in 33:
+				var angle := float(index) / 32.0 * TAU
+				ring.append(point + Vector2(cos(angle) * 90.0, sin(angle) * 36.0) * (0.4 + fraction))
+			target.draw_polyline(ring, Color(tint, pow(1.0 - fraction, 1.7) * 0.6), 2.0, true)
+		else:
+			CompactFeedback.burst(target, point + Vector2(0, -18), tint, fraction, strength, false, float(effect.seed))
 
 
 func _draw_heal(target: CanvasItem, effect: Dictionary, point: Vector2) -> void:

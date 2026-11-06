@@ -1,73 +1,27 @@
 # 裂隙守望 · Rift Guard
 
-《裂隙守望》是一款将多角色路线防守、Roguelike 构筑与分支剧情结合的 2.5D 动作防守游戏。工程以 Godot 4 制作，运行与验收规格为 1920×1080。
+角色构筑、路线防守、分支剧情与无尽生存。Godot 4.4.1 制作。
 
-## 最新版本
+## 三章试玩版 · 2026.11.6.1
 
-[V88 Windows EXE 下载](https://github.com/yzy-151/rift-guard/releases/tag/v88) · [素材与性能优化实测](docs/v88-optimization.md)
+[下载 Windows 单文件版和 Android 安装包](https://github.com/yzy-151/rift-guard/releases/tag/demo-2026.11.6.1) · [版本内容与操作说明](docs/release-20261106.md)
 
-## 当前界面
+![启动画面](qa/release-20261106/boot.png)
 
-模式选择、关卡选择、编队、角色档案、剧情和三选一增益已统一为红黑视觉体系。界面素材保持原始宽高比，按钮、卡片与内部信息遵循安全边距。
+本次开放前三关，按顺序解锁，第四关及之后暂时关闭。初始旅行者独自出发，剧情中结识芙宁娜、格温；第三关有完整收尾，通关可以继续无尽模式。
 
-![模式选择](docs/v61-validation/01-mode-select.png)
+拖动角色上场，搭配卡牌与植物机关，守住水晶并击败首领。保留家园、图鉴、分支剧情与示范工坊。
 
-![关卡选择](docs/v61-validation/02-stage-select.png)
+![三关选择](qa/release-20261106/three-chapters.png)
 
-![剧情界面](docs/v61-validation/05a-dialogue-booper.png)
+## 一键游玩
 
-![三选一增益](docs/v62-reward-validation/01-reward-default.png)
+- Windows：下载 RiftGuard.exe，双击运行；F11切换全屏。
+- Android：下载 RiftGuard-Android.apk 并安装，横屏触控；支持arm64-v8a和x86_64。
+- 完整快捷键、触控说明与测试范围见[发行说明](docs/release-20261106.md)。
 
-## 角色界面
+## 开发
 
-当前具有正式立绘和动作素材的可用角色为：旅行者、哥伦比亚、希露菲、芙宁娜、艾米莉亚、丰川祥子、阿米娅，以及新加入的格温、洛琪希、风堇。缺少正式立绘或动作素材的角色保持未解锁，旧存档也不会绕过该限制。
+用Godot 4.4.1打开 game/project.godot。界面以1280×720逻辑尺寸等比缩放，使用Compatibility渲染器。
 
-![角色编队](docs/v61-validation/03-squad-scroll.png)
-
-![角色档案](docs/v61-validation/04-character-detail.png)
-
-## 战斗
-
-普通模式包含路线防守、可交互地形、Boss 阶段和关卡推进；无尽模式支持四屏地图、动态刷怪、角色独立移动与屏外单位降频模拟。Q/E 技能采用固定伤害加攻击力倍率，冷却按强度区分；150 张卡牌（新增图标未交付前使用问号占位）和 26 个角色技能使用独立图标。角色普通攻击、技能和元素反应使用独立反馈。
-
-![战斗 HUD](docs/v64-validation/02-battle-hud.png)
-
-![风堇三排逐次风刃](docs/v72-validation/fengjin-middle.png)
-
-![哥伦比亚潮汐能量输送](docs/v72-validation/columbia-transit.png)
-
-![永猎双子千珏四技能与羊灵生息](docs/v73-validation/kindred-boss-showcase.gif)
-
-![无尽模式地图](docs/v61-validation/08-endless-map.png)
-
-## 地图与怪物
-
-第一关使用蒙德草地、七天神像、高台、沼泽、自动机关和可破坏栅栏；后续关卡保持暗色格子主题。第一关 Boss 为史莱姆王，第二关为裂隙统领，第三关为永猎双子·千珏，并在残血阶段触发加里奥英雄登场。敌人包含史莱姆、丘丘人、弓箭手、萨满、哥布林、哥布林茅房、大型怪物与多阶段 Boss。
-
-![V65 八关地形总览](docs/v65-validation/contact-sheet.png)
-
-![新角色与怪物](docs/v69-validation/01-slimedown-and-brute-stance.png)
-
-![怪物图鉴](docs/v51-validation/monster-compendium.png)
-
-## 运行
-
-- Godot 工程：`game/project.godot`
-- 设计与验收分辨率：`1920×1080`
-- UI 实验台逻辑坐标：`1280×720`，运行时等比缩放
-- Windows 发布包：[下载 V78 Windows 版](https://github.com/yzy-151/rift-guard/releases/tag/v78)
-
-使用 Godot 4.4.1 打开工程后运行主场景即可。UI 布局与素材替换方法见 [Godot UI 编辑手册](docs/UI-GODOT-EDITING-MANUAL.md)。
-
-## 操作
-
-- `WASD`：移动当前角色
-- 鼠标右键：移动或取消技能瞄准
-- `1 / 2 / 3`：切换角色
-- `Q`：主动技能
-- `E`：终结技
-- `Space`：暂停
-- 暂停菜单 `help`：调试用三选一卡牌抽取
-- `F2`：图鉴
-- `F4`：关卡选择
-- `F10`：设置
+[Godot UI编辑手册](docs/UI-GODOT-EDITING-MANUAL.md) · [历史V88版本](https://github.com/yzy-151/rift-guard/releases/tag/v88)

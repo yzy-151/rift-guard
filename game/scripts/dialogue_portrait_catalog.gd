@@ -39,6 +39,8 @@ func has_speaker(speaker: String) -> bool:
 
 func resolve_line(line: Dictionary) -> String:
 	var original: String = str(line.get("portrait", ""))
+	if bool(line.get("portrait_locked", false)) and ResourceLoader.exists(original):
+		return original
 	var speaker: String = _normalized_speaker(str(line.get("speaker", "")))
 	if not portraits.has(speaker):
 		return original

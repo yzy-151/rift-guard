@@ -1,0 +1,878 @@
+{
+  "format_version": 1,
+  "source": "research/helltaker-reference/exported-primary/Assets",
+  "pixels_per_cell": 100,
+  "pivot_coordinates": "PNG top-left pixel coordinates, including original transparent margins",
+  "backgrounds": {
+    "hub": {
+      "path": "res://assets/world/home_helltaker_20261008/Home07.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "pivot": [
+        960.0,
+        540.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "world_center": [
+        3.0,
+        3.0
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "source_pixel_formula": "[960 + (world_x - 3) * 100, 540 - (world_y - 3) * 100]"
+    },
+    "hub_foreground": {
+      "path": "res://assets/world/home_helltaker_20261008/Home07B.png",
+      "size": [
+        1256,
+        1080
+      ],
+      "pivot": [
+        628.0,
+        540.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        117.07612,
+        99.07612,
+        1121.8477,
+        912.8478
+      ],
+      "world_center": [
+        3,
+        3
+      ],
+      "draw_after_characters": true
+    },
+    "puzzle_01": {
+      "path": "res://assets/world/home_helltaker_20261008/chapterBG0001.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "pivot": [
+        960.0,
+        540.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "world_center": [
+        3.0,
+        3.0
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "source_pixel_formula": "[960 + (world_x - 3) * 100, 540 - (world_y - 3) * 100]"
+    },
+    "puzzle_02": {
+      "path": "res://assets/world/home_helltaker_20261008/chapterBG0002.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "pivot": [
+        960.0,
+        540.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "world_center": [
+        3.0,
+        3.0
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "source_pixel_formula": "[960 + (world_x - 3) * 100, 540 - (world_y - 3) * 100]"
+    },
+    "puzzle_03": {
+      "path": "res://assets/world/home_helltaker_20261008/chapterBG0003.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "pivot": [
+        960.0,
+        540.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "world_center": [
+        3.0,
+        3.0
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "source_pixel_formula": "[960 + (world_x - 3) * 100, 540 - (world_y - 3) * 100]"
+    }
+  },
+  "assets": {
+    "block": {
+      "path": "res://assets/world/home_helltaker_20261008/boxExport0001.png",
+      "size": [
+        100,
+        140
+      ],
+      "pivot": [
+        50.0,
+        70.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        9.026751,
+        45.076122,
+        81.9465,
+        86.87256
+      ]
+    },
+    "key": {
+      "path": "res://assets/world/home_helltaker_20261008/assets100V20104.png",
+      "size": [
+        100,
+        220
+      ],
+      "pivot": [
+        50.0,
+        110.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        11.026751,
+        91.04291,
+        71.9465,
+        80.88097
+      ],
+      "frames": [
+        "res://assets/world/home_helltaker_20261008/assets100V20104.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20105.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20106.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20107.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20108.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20109.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20110.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20111.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20112.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20113.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20114.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20115.png"
+      ],
+      "fps": 12
+    },
+    "spikes_off": {
+      "path": "res://assets/world/home_helltaker_20261008/assets100V20120.png",
+      "size": [
+        100,
+        220
+      ],
+      "pivot": [
+        50.0,
+        110.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        7.0429077,
+        63.051315,
+        85.914185,
+        73.87256
+      ]
+    },
+    "spikes_on": {
+      "path": "res://assets/world/home_helltaker_20261008/assets100V20116.png",
+      "size": [
+        100,
+        220
+      ],
+      "pivot": [
+        50.0,
+        110.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        4.036285,
+        63.051315,
+        90.936966,
+        87.935776
+      ],
+      "frames": [
+        "res://assets/world/home_helltaker_20261008/assets100V20116.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20117.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20118.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20119.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20120.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20121.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20122.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20123.png"
+      ],
+      "fps": 12
+    },
+    "flame_base": {
+      "path": "res://assets/world/home_helltaker_20261008/FLAMEbase0001.png",
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        40.0,
+        42.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        0,
+        0,
+        80,
+        84
+      ]
+    },
+    "flame_base_off": {
+      "path": "res://assets/world/home_helltaker_20261008/FLAMEbase0002.png",
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        40.0,
+        42.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        0,
+        0,
+        80,
+        84
+      ]
+    },
+    "enemy_idle": {
+      "path": "res://assets/world/home_helltaker_20261008/assets100V20225.png",
+      "size": [
+        100,
+        220
+      ],
+      "pivot": [
+        50.0,
+        110.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        4.026751,
+        93.07612,
+        87.9465,
+        87.880974
+      ],
+      "frames": [
+        "res://assets/world/home_helltaker_20261008/assets100V20225.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20226.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20227.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20228.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20229.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20230.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20231.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20232.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20233.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20234.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20235.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20236.png"
+      ],
+      "fps": 12
+    },
+    "enemy_hit": {
+      "path": "res://assets/world/home_helltaker_20261008/assets100V20198.png",
+      "size": [
+        100,
+        220
+      ],
+      "pivot": [
+        50.0,
+        110.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        6.0761204,
+        93.07612,
+        88.89713,
+        65.847755
+      ],
+      "frames": [
+        "res://assets/world/home_helltaker_20261008/assets100V20198.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20199.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20200.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20201.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20202.png",
+        "res://assets/world/home_helltaker_20261008/assets100V20203.png"
+      ],
+      "fps": 12
+    },
+    "portal": {
+      "path": "res://assets/world/home_helltaker_20261008/PORTAL0001.png",
+      "size": [
+        150,
+        150
+      ],
+      "pivot": [
+        75.0,
+        75.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        26.07612,
+        22.07612,
+        106.89713,
+        119.89713
+      ],
+      "frames": [
+        "res://assets/world/home_helltaker_20261008/PORTAL0001.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0002.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0003.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0004.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0005.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0006.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0007.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0008.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0009.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0010.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0011.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0012.png"
+      ],
+      "fps": 12
+    },
+    "flame": {
+      "path": "res://assets/world/home_helltaker_20261008/fire0001.png",
+      "size": [
+        120,
+        116
+      ],
+      "pivot": [
+        60.0,
+        58.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        7.0761204,
+        0,
+        108.84776,
+        106.96966
+      ],
+      "frames": [
+        "res://assets/world/home_helltaker_20261008/fire0001.png",
+        "res://assets/world/home_helltaker_20261008/fire0002.png",
+        "res://assets/world/home_helltaker_20261008/fire0003.png",
+        "res://assets/world/home_helltaker_20261008/fire0004.png",
+        "res://assets/world/home_helltaker_20261008/fire0005.png",
+        "res://assets/world/home_helltaker_20261008/fire0006.png",
+        "res://assets/world/home_helltaker_20261008/fire0007.png",
+        "res://assets/world/home_helltaker_20261008/fire0008.png",
+        "res://assets/world/home_helltaker_20261008/fire0009.png",
+        "res://assets/world/home_helltaker_20261008/fire0010.png",
+        "res://assets/world/home_helltaker_20261008/fire0011.png",
+        "res://assets/world/home_helltaker_20261008/fire0012.png"
+      ],
+      "fps": 12
+    },
+    "door_closed": {
+      "path": "res://assets/world/home_helltaker_20261008/Home07.png",
+      "region": [
+        311,
+        45,
+        98,
+        149
+      ],
+      "pivot": [
+        49,
+        95
+      ],
+      "pixels_per_cell": 100,
+      "note": "Original wooden doorway in Home07 at source [360,140], world [-3,7]; region-relative origin [49,95]. Render region only if a separate door is needed."
+    },
+    "door_open": {
+      "path": "res://assets/world/home_helltaker_20261008/PORTAL0001.png",
+      "size": [
+        150,
+        150
+      ],
+      "pivot": [
+        75.0,
+        75.0
+      ],
+      "pixels_per_cell": 100,
+      "source_sprite_rect": [
+        26.07612,
+        22.07612,
+        106.89713,
+        119.89713
+      ],
+      "frames": [
+        "res://assets/world/home_helltaker_20261008/PORTAL0001.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0002.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0003.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0004.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0005.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0006.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0007.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0008.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0009.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0010.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0011.png",
+        "res://assets/world/home_helltaker_20261008/PORTAL0012.png"
+      ],
+      "fps": 12
+    }
+  },
+  "audio": {
+    "step": "res://assets/world/home_helltaker_20261008/audio/character_move_01_ready.wav",
+    "key": "res://assets/world/home_helltaker_20261008/audio/key_pick_up_01_ready.wav",
+    "stone_move": "res://assets/world/home_helltaker_20261008/audio/stone_move_01_ready.wav",
+    "stone_move_2": "res://assets/world/home_helltaker_20261008/audio/stone_move_02_ready.wav",
+    "stone_kick": "res://assets/world/home_helltaker_20261008/audio/stone_kick_01_ready.wav",
+    "stone_kick_2": "res://assets/world/home_helltaker_20261008/audio/stone_kick_02_ready.wav",
+    "enemy_kick": "res://assets/world/home_helltaker_20261008/audio/enemy_kick_01_ready.wav",
+    "enemy_kick_2": "res://assets/world/home_helltaker_20261008/audio/enemy_kick_02_ready.wav",
+    "enemy_die": "res://assets/world/home_helltaker_20261008/audio/enemy_die_01_ready.wav",
+    "door_open": "res://assets/world/home_helltaker_20261008/audio/door_opening_01_ready.wav",
+    "door_locked": "res://assets/world/home_helltaker_20261008/audio/door_closed_kick_01_ready.wav",
+    "spikes": "res://assets/world/home_helltaker_20261008/audio/spikes_damage_01_ready.wav",
+    "failure": "res://assets/world/home_helltaker_20261008/audio/player_death_01_ready.wav"
+  },
+  "source_files": {
+    "Home07.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/Home07.png",
+      "sha256": "72c2799c77c5101b0730e96775362cfd588553e27d0ef307f28b0f8958ffb18a"
+    },
+    "Home07B.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/Home07B.png",
+      "sha256": "3ee9f0095d22bdbd571f8b7fccdf3a3587d95f5610a598b2310c8613d6843bd6"
+    },
+    "chapterBG0001.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/chapterBG0001.png",
+      "sha256": "be9da6d11ca86bd09c2e5f68b7d32c4ea75edd9665b31c8435a59cbc0df30c22"
+    },
+    "chapterBG0002.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/chapterBG0002.png",
+      "sha256": "76b57457a99abb5a5661c0910b57081a2f4448155262315ce08e20c6bd078082"
+    },
+    "chapterBG0003.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/chapterBG0003.png",
+      "sha256": "996e3e151e1cf809505550eb6dec53c4cc12c4aa5483d34d44ad07eb55c529aa"
+    },
+    "boxExport0001.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/boxExport0001.png",
+      "sha256": "a5f3c44eddfb6b0d1d1f7611d17800ca4e7f42c1f07a0438b0bb3ffbc46a4dda"
+    },
+    "assets100V20104.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20104.png",
+      "sha256": "f6c38b01377fdee4340da7be7c645803573b635aaff85fdf60e6447ca49cad79"
+    },
+    "assets100V20120.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20120.png",
+      "sha256": "e7240f4583e23585ef7a80956a3062f7fcf2dfb4335b4026c0e465b318df6505"
+    },
+    "assets100V20116.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20116.png",
+      "sha256": "05042698f0b1d5478d57285e032b52ff0d8fb5b28e5a6abb02d4066318fe8606"
+    },
+    "FLAMEbase0001.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/FLAMEbase0001.png",
+      "sha256": "88ce58d4612696c8b362b0a076efc8bc3888c6f5594c7140d4cbb6ce08738550"
+    },
+    "FLAMEbase0002.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/FLAMEbase0002.png",
+      "sha256": "199f76a3501301637cc8659f50ac1538f0e5035807514e7e48227bebc92ab524"
+    },
+    "assets100V20225.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20225.png",
+      "sha256": "7f053215100fce3f28814c46122b25e5e60f04d08bdb7eddf8e9cdcf86e39076"
+    },
+    "assets100V20198.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20198.png",
+      "sha256": "d967c59dc122c29fef8c34bf619518c88f5a92e559903cac432085c74ef46bbd"
+    },
+    "PORTAL0001.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0001.png",
+      "sha256": "20fe924c16fc4ac3c5fb501fd96c8bd53458a52a27385415944fd76edb01e9dd"
+    },
+    "assets100V20226.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20226.png",
+      "sha256": "8e11bb62da27eadd455ea8e6247c5664a1f6c43a67391da70a23ef9d38313fb9"
+    },
+    "assets100V20227.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20227.png",
+      "sha256": "befddf7e3ffc047a011e8fd19308ab6abef19ae1ea30c7c3186026727f6d0986"
+    },
+    "assets100V20228.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20228.png",
+      "sha256": "ab6127d3f53198c457217154ab2acd35cb0750500c8ec76a6955e8a9c349ff14"
+    },
+    "assets100V20229.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20229.png",
+      "sha256": "28c9a111a3bd8b436e4e017cccd48ef8f12179aa154290f8ee5669a49f77a17b"
+    },
+    "assets100V20230.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20230.png",
+      "sha256": "5d60ae8d55091a58f5b6760441ffac1cdf9423e4b6d08fedd6efc5928ecb3765"
+    },
+    "assets100V20231.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20231.png",
+      "sha256": "7f053215100fce3f28814c46122b25e5e60f04d08bdb7eddf8e9cdcf86e39076"
+    },
+    "assets100V20232.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20232.png",
+      "sha256": "c38ffa75ed7622b221b03b3d00015661e812c23c4f1eb8cae5af45c8fbde8750"
+    },
+    "assets100V20233.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20233.png",
+      "sha256": "dbd5c5bc01151d89762101014471e73532180379fd6ad0059a8ab56ba31be24a"
+    },
+    "assets100V20234.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20234.png",
+      "sha256": "67ef991c94e6e2f35fccb96734d1356dcd46827e34adfa5586b7817b38a08ff5"
+    },
+    "assets100V20235.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20235.png",
+      "sha256": "f2d76656c328af4ac8c7085b6395b18582129af6b602d726dced06d2bc17b488"
+    },
+    "assets100V20236.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20236.png",
+      "sha256": "03b69b0d37175d8be62f55867ff4304c3b2712351706d3d2fbf902535e7dd87a"
+    },
+    "assets100V20199.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20199.png",
+      "sha256": "515b656c3f3b6bf70e50c217da3ab2cedd4435bd1f1d99d5816e9358453370c2"
+    },
+    "assets100V20200.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20200.png",
+      "sha256": "2285f360b8c8411085f3a68db0299d2e64b2dc587b163adaf996cbca762cabdd"
+    },
+    "assets100V20201.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20201.png",
+      "sha256": "7bfd6e3af75de08bc031a65d686f20a5fb7fe673d6b49ed869f77cc44c439323"
+    },
+    "assets100V20202.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20202.png",
+      "sha256": "390b1fbf9a365521511473f58e0fb7877fe0aedde71642877857579f66b5e558"
+    },
+    "assets100V20203.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20203.png",
+      "sha256": "d983f833b00e33b5a73c38c284500cfcd94c8b53e675238cfd68c975e9db93dd"
+    },
+    "assets100V20105.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20105.png",
+      "sha256": "1ef1054691dc420d75cffa06e72bf79750b0e1f82a70f099452c90e308f6c540"
+    },
+    "assets100V20106.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20106.png",
+      "sha256": "4eb0eb927d9b1699e7fe8d58e7110a767e24dfdfbcbcdd6a3193baa82ed352f3"
+    },
+    "assets100V20107.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20107.png",
+      "sha256": "44d940f72c490bfd7c4285ae89bca86f437db84320bb90f81631735d9aae097e"
+    },
+    "assets100V20108.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20108.png",
+      "sha256": "377cf5d9bef589d0ebccc96c7ee20c062d1f37f44a9d5b9f7f017c0b9a5c59ff"
+    },
+    "assets100V20109.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20109.png",
+      "sha256": "5fa62abd005a445eb729564d4e9a27755b84380acd075bdfe89e47907b17357e"
+    },
+    "assets100V20110.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20110.png",
+      "sha256": "8066664b31cd29e4b18771e4297902eac9cc2c025733774df87cd7b44abd345b"
+    },
+    "assets100V20111.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20111.png",
+      "sha256": "40f0baa4ceb15cba647d6c3c18d893f59802251be2982d093e043e22478bb89a"
+    },
+    "assets100V20112.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20112.png",
+      "sha256": "df9de488f6ac18220dfb760d4cf23f628f30a3ceb516d12278ac1e671ddb64c6"
+    },
+    "assets100V20113.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20113.png",
+      "sha256": "f693e45b0b082610de34bef2be13fe3cb96e4732b6be7a5301e00d29d7aa49e3"
+    },
+    "assets100V20114.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20114.png",
+      "sha256": "56ea8285b4cf80a9ff9248744c0514c9439d167b13d6754722268722d8e082fb"
+    },
+    "assets100V20115.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20115.png",
+      "sha256": "8902b03a5d565c9272b14aeecf9afa0fe58828267ec5b6e319712f67988aba33"
+    },
+    "assets100V20117.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20117.png",
+      "sha256": "c450b72673df53f9a64904993a35c579e0c00088a58dcc50e2239aed1beba115"
+    },
+    "assets100V20118.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20118.png",
+      "sha256": "3dc6374636e5cb274cc38177764da9ec85707cf2a50714364b5e745184c04dad"
+    },
+    "assets100V20119.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20119.png",
+      "sha256": "7de846a66f398a3c500c84ab20d8ec91104e8193747acf008a492d9de38dc7b6"
+    },
+    "assets100V20121.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20121.png",
+      "sha256": "7de846a66f398a3c500c84ab20d8ec91104e8193747acf008a492d9de38dc7b6"
+    },
+    "assets100V20122.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20122.png",
+      "sha256": "787c471911c028c1cc52c07c3849fd8f771184cc002b6c79d20874431edde65a"
+    },
+    "assets100V20123.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/assets100V20123.png",
+      "sha256": "219bba74dddecc04bdb6d8b8560050c440e5b6e9da5b1a54648123d32f51bfdc"
+    },
+    "PORTAL0002.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0002.png",
+      "sha256": "089ec36c5a091803f87d11b4a00ce089cd00a0838c94ea6c44fbbead725e7ea2"
+    },
+    "PORTAL0003.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0003.png",
+      "sha256": "006818785fe25f847c2ca5f8989ec3b416d61937ac6729f154c8256a3ada3d32"
+    },
+    "PORTAL0004.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0004.png",
+      "sha256": "eb8f15fff07e0e0b08371c3d67967341274a2608be357cc5c387026600633368"
+    },
+    "PORTAL0005.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0005.png",
+      "sha256": "4517b19a8610b4ee56322593130fe7f541a57c96858f890e3361c2254a82a0af"
+    },
+    "PORTAL0006.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0006.png",
+      "sha256": "b4487d556e5ee7644c10914d9697193192ba8894085235a2f6ca20593f2ee178"
+    },
+    "PORTAL0007.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0007.png",
+      "sha256": "78e443c3df8b6ad8c90d947cd43d84f4f4fff236aa4d9b0265457d6bdb301831"
+    },
+    "PORTAL0008.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0008.png",
+      "sha256": "864476a40d69f779ddc2656ae7e1042110b744ebab565cf4575db74f1d58b721"
+    },
+    "PORTAL0009.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0009.png",
+      "sha256": "cbdffa070ca068d7544c2328f7c0848d82fa2e0aa899e8ee447f269983a35746"
+    },
+    "PORTAL0010.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0010.png",
+      "sha256": "3d66e4bc63be78f43f1d84e7b0ec718eb021f799f6e8c4dcefbff8b38758a218"
+    },
+    "PORTAL0011.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0011.png",
+      "sha256": "357521a3b27f026a909e06a6537c5866df1e4e2ff5779eb6afc8b39008e85437"
+    },
+    "PORTAL0012.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/PORTAL0012.png",
+      "sha256": "a7d72d4417a20a98bc135456e04eb300b1131383cfe494eca14ea942148d44ee"
+    },
+    "fire0001.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0001.png",
+      "sha256": "042a2871262549f1964ff9a0f6c8e477b16ba452194017e309e3df25c61bd5ca"
+    },
+    "fire0002.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0002.png",
+      "sha256": "c1fb5effad9bd28352d2fe1c667ba06435f9451126ea8e92e0c57f1d45da9a82"
+    },
+    "fire0003.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0003.png",
+      "sha256": "3706d9a8b7a4164f7da74b370aeb7bc85356c14a8b10e1fe54a0629a6af6021e"
+    },
+    "fire0004.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0004.png",
+      "sha256": "0e304a6b1858f6e1f4914dd6929895fa59261d00ecdaa80ce7de066e80c48e52"
+    },
+    "fire0005.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0005.png",
+      "sha256": "2e3f71104ec01473ee3cfafdb0bd83dffd030da92b45e6e567cedff47fc1a224"
+    },
+    "fire0006.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0006.png",
+      "sha256": "ab055fb7972ce1df32ddcc1b7f8437c3697640e53970373d007e9b0e4487df81"
+    },
+    "fire0007.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0007.png",
+      "sha256": "cef31edb7ab3ef4de2e32e6dfa08713175a772bd58be41bb8e48178146736512"
+    },
+    "fire0008.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0008.png",
+      "sha256": "97b4ddc0d2d02e47bc83c62cecbe8f95baf574170d572e7503e8db404a175d89"
+    },
+    "fire0009.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0009.png",
+      "sha256": "de82cfbc87b5c87b46ae2285ffc991798f0105c1d203dc1d500d8400839fa0fd"
+    },
+    "fire0010.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0010.png",
+      "sha256": "68b8833c9acd945b1bca2bf026b6ec6dff4005d5a3c5819a4b41f64dd789fbbe"
+    },
+    "fire0011.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0011.png",
+      "sha256": "24a87f41894bf0c06a5ae30ba4c71f08ec961b956e7bc32afa45bc47ae7eb72c"
+    },
+    "fire0012.png": {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/fire0012.png",
+      "sha256": "9eba38cbfd47d3553d3a40e4e67a9808cd45b9f210c80986a73faf2d23b9075c"
+    },
+    "audio/character_move_01.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/character_move_01.wav",
+      "sha256": "718c5b5879a65baeda69fada62af449f1732a6eef5ef0aee5d1b7734f1fdfcce"
+    },
+    "audio/key_pick_up_01.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/key_pick_up_01.wav",
+      "sha256": "9794245a5342d0aa4480e566d7fe853d53b37d2deb141e0f5b98da4298bb8cd2"
+    },
+    "audio/stone_move_01.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/stone_move_01.wav",
+      "sha256": "22d6c49cb1af12dfcc1b5ab5d62c22ecf01bc35a73e654b548b9871f6aae9ab5"
+    },
+    "audio/stone_move_02.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/stone_move_02.wav",
+      "sha256": "86b831f4c124eab2a15a716c726b103a1967bdcb00f75e1f0cd16b6286fddfde"
+    },
+    "audio/stone_kick_01.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/stone_kick_01.wav",
+      "sha256": "1306d0c64da00730f13a05be55c8dff43352329ed664578af333c200e58717c5"
+    },
+    "audio/stone_kick_02.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/stone_kick_02.wav",
+      "sha256": "38233f413c55f3ce90a90c2f6c5c5aa972acaf6aa782f080c7e6c41cb024e288"
+    },
+    "audio/enemy_kick_01.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/enemy_kick_01.wav",
+      "sha256": "a0b789e32cf2af8ca8c47805600e2c95ec08591b4fc12cb6a002870cd598b87d"
+    },
+    "audio/enemy_kick_02.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/enemy_kick_02.wav",
+      "sha256": "eee30d49482c060758b4120ba71b90e3deddfc8e50ff05b9b5a00e2db954380c"
+    },
+    "audio/enemy_die_01.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/enemy_die_01.wav",
+      "sha256": "f247bfae7d9760ee9c60dd0d9b349c35451f5d8ea5eb46dfcb9640f5e3f3b556"
+    },
+    "audio/door_opening_01.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/door_opening_01.wav",
+      "sha256": "8265ca978cc8675f4343539eab0c8fc9de37a528061be77aed9c66b84fafb28f"
+    },
+    "audio/door_closed_kick_01.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/door_closed_kick_01.wav",
+      "sha256": "fdee4bb22b54aadc392b578285ad3799eaeaf49831ea54c100419908f3cc6b12"
+    },
+    "audio/spikes_damage_01.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/spikes_damage_01.wav",
+      "sha256": "86192c3b8e85d125dc9bd3dbbc42de8c52faad3b83b108d2a03890e14a2ee558"
+    },
+    "audio/player_death_01.wav": {
+      "source": "research/helltaker-reference/exported-primary/Assets/AudioClip/player_death_01.wav",
+      "sha256": "2a50f87aef5345dd355452099ed3c70fc1abc32dd6ffbfa5253d8c3bd2f6215e"
+    }
+  },
+  "processed_audio_files": {
+    "audio/character_move_01_ready.wav": {
+      "original": "audio/character_move_01.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "eacad0807b3e424c331b3ea2e113fb166d0569edefb1e90b5a3752f5600db0b2",
+      "pcm_sha256": "99239248eec6bf7f6a089e46fc3b2d96f9485c7259d26cbffdcb89a55183dab4"
+    },
+    "audio/key_pick_up_01_ready.wav": {
+      "original": "audio/key_pick_up_01.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "aa5f8e9cc0c813b8f078bda2ab3d9cfea2291a1bf2eb82b93c0b32d2c38faf93",
+      "pcm_sha256": "39f2c62e22d7a652cf8a206962dd92cb92ad73b40adeef3934f04e80babaf7e6"
+    },
+    "audio/stone_move_01_ready.wav": {
+      "original": "audio/stone_move_01.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "aaf7170a0df839965386baa255ae173c7c3096df4d8dcb9d90099056323ebf56",
+      "pcm_sha256": "91e2de585c618425f0c34b862d42197c693eea27980f570652944b26c83920bb"
+    },
+    "audio/stone_move_02_ready.wav": {
+      "original": "audio/stone_move_02.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "3aa12ae54f164281b9d2e400fcf40dddce0cf56fe3d392395e20a47fa4ce6ffe",
+      "pcm_sha256": "1da72dc460cf99bad19a0d7b8e1675de238baf2ae094ee739eed4ccb87461ac6"
+    },
+    "audio/stone_kick_01_ready.wav": {
+      "original": "audio/stone_kick_01.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "c1e2afad53b1266743ca9b3a78ded9f91e34189eead6b01782d1c6107b35e7ae",
+      "pcm_sha256": "061d0cfb8a9a4295c81efcf5babee9f287d5cd31700070372f2d8f8805c61d83"
+    },
+    "audio/stone_kick_02_ready.wav": {
+      "original": "audio/stone_kick_02.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "6c3ec28422bc80a20cd942cd54d0b2a8378867ac6dbbe28a3b41054849fe0495",
+      "pcm_sha256": "27007b627936d4842c1424d3c9f9734ad7d59d33ccd0c1823f73aa3ddb00970c"
+    },
+    "audio/enemy_kick_01_ready.wav": {
+      "original": "audio/enemy_kick_01.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "696e43c0e3ab8e0d51b471380965db5cc45c71894d8f8405d9c7bb3141d64462",
+      "pcm_sha256": "00c3bb873baab9d95abe1b2206db9547701e969cc530b826ffd0f6bdc87e5ced"
+    },
+    "audio/enemy_kick_02_ready.wav": {
+      "original": "audio/enemy_kick_02.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "d55a9111bd5227d9f879230372997b35421010962058f45adbb41f2f61778149",
+      "pcm_sha256": "d058890b46ff8144ec01e065655d105c4166a576d2d289db4180b7f7f1cb0a56"
+    },
+    "audio/enemy_die_01_ready.wav": {
+      "original": "audio/enemy_die_01.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "c831625047c81137c0a12d97818a980080f9357e6f979531d8b3b150dc1c6042",
+      "pcm_sha256": "e1e171c33ad09862f23dcce2f74bd1a37846bf293bb62eb2367a6aadf3bebcc7"
+    },
+    "audio/door_opening_01_ready.wav": {
+      "original": "audio/door_opening_01.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "309eaa1901bd3fe61b8b91aa29f7db826aceee6558c763f0a376cbce6e5f2aed",
+      "pcm_sha256": "95148ec9aeb092ebe783b7057fc07cdbeb8cf2927660ba68f0e797c1b9f88632"
+    },
+    "audio/door_closed_kick_01_ready.wav": {
+      "original": "audio/door_closed_kick_01.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "08d466316ad89366ac0dcaa438f2a6b519d62a79c02fd54878ec4f89054cc715",
+      "pcm_sha256": "10ae2d33e2e91d125e49556c01f3d62ee7806e9b36d7881c376d20e22e975029"
+    },
+    "audio/spikes_damage_01_ready.wav": {
+      "original": "audio/spikes_damage_01.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "91dd68d30159570707c249d9550674bd07aedd487f47d3d7adeee04c8c6e8a9f",
+      "pcm_sha256": "665a2accb4f387d86ed49310b5ce969719a803aa164a449d219a0e19c4646977"
+    },
+    "audio/player_death_01_ready.wav": {
+      "original": "audio/player_death_01.wav",
+      "processing": "Repair RIFF file length at byte 4 and data PCM byte length at byte 40; preserve all audio samples byte-for-byte.",
+      "sha256": "10de48766205c8d94765e9f6b7c6f30a8e45980df260cac02a7ace0c2f4aba3c",
+      "pcm_sha256": "39b7c651f9a2432547acf4e44907939accac737a90e62765c13531ae671e4a7b"
+    }
+  }
+}

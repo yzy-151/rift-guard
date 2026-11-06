@@ -25,7 +25,7 @@ const ENEMIES = {
 	"troop_cannon": {"name": "炮车", "hp": 620.0, "armor": 48.0, "speed": 35.0, "damage": 52.0, "rate": 0.75, "leak": 20, "color": "#d8a674", "size": 64.0},
 	"troop_melee": {"name": "近战兵", "hp": 158.0, "armor": 19.0, "speed": 35.0, "damage": 39.0, "rate": 1.16, "leak": 9, "color": "#d8aa8e", "size": 38.0},
 	"troop_ranged": {"name": "远程兵", "hp": 135.0, "armor": 10.0, "speed": 35.0, "damage": 34.0, "rate": 0.92, "leak": 9, "color": "#9caeee", "size": 38.0, "attack_range": 265.0, "projectile_style": "homing_orb"},
-	"hilichurl_brute": {"name": "丘丘暴徒", "hp": 1080.0, "armor": 66.0, "speed": 29.0, "damage": 105.0, "rate": 0.72, "leak": 29, "color": "#d87963", "size": 120.0},
+	"hilichurl_brute": {"name": "丘丘暴徒", "hp": 780.0, "armor": 66.0, "speed": 29.0, "damage": 105.0, "rate": 0.72, "leak": 29, "color": "#d87963", "size": 120.0},
 	"rift_bat": {"name": "小蝙蝠", "hp": 118.0, "armor": 5.0, "speed": 93.0, "damage": 23.0, "rate": 1.25, "leak": 8, "color": "#a593df", "size": 38.0, "flying": true},
 	"originium_bug": {"name": "源石虫", "hp": 210.0, "armor": 15.0, "speed": 71.0, "damage": 28.0, "rate": 1.18, "leak": 10, "color": "#9c82d8", "size": 38.0},
 	"boss_01": {"name": "裂隙统领", "hp": 5200.0, "armor": 130.0, "speed": 27.0, "damage": 375.0, "rate": 0.82, "leak": 100, "color": "#a36bff", "size": 104.0, "shield": 900.0, "boss_pulse": 6.6, "boss_style": "rift", "phase_minion": "charger"},

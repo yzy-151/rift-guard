@@ -33,15 +33,23 @@ static func start(sim,hero: Dictionary,ability: Dictionary,target: Vector2,power
  if key=="hydro_e": z.pos=source
  if key=="cryo_q": z.next=0.24
  if key=="geo_q":
+  var construct_id=int(sim.next_construct_id)
   sim.next_construct_id+=1
   var hp=1200.0+float(hero.damage)*6.0
-  sim.geo_constructs.append({"id":sim.next_construct_id,"pos":target,"hp":hp,"max_hp":hp})
-  if sim.geo_constructs.size()>3: sim.geo_constructs.pop_front()
+  sim.geo_constructs.append({"id":construct_id,"pos":target,"hp":hp,"max_hp":hp})
+  var stars=0
+  for construct: Dictionary in sim.geo_constructs:
+   if not bool(construct.get("device",false)): stars+=1
+  if stars>3:
+   for index in sim.geo_constructs.size():
+    if not bool(sim.geo_constructs[index].get("device",false)):
+     sim.geo_constructs.remove_at(index)
+     break
  if key=="geo_e":
   sim.crystal_shield+=power
   sim.events.append({"kind":"crystal_guard","pos":hero.pos,"value":ceili(power)})
  sim.skill_effects.append(z)
- sim.events.append({"kind":"traveler_fx_start","skill":key,"element":ability.element,"pos":target,"source":source,"radius":radius})
+ sim.events.append({"kind":"traveler_fx_start","skill":key,"element":ability.element,"pos":target,"source":source,"radius":radius,"vfx_revision":"white_core_20261005"})
 static func targets(sim,pos: Vector2,radius: float) -> Array[Dictionary]:
  var result: Array[Dictionary]=[]
  for e: Dictionary in sim.enemies:
@@ -51,7 +59,7 @@ static func hit(sim,z: Dictionary,pos: Vector2,radius: float,scale: float=1.0,fr
  for e: Dictionary in targets(sim,pos,radius):
   sim.apply_hit(e,float(z.power)*scale,str(z.element),int(z.hero_id))
   if freeze>0 and e.hp>0: e.frozen_timer=maxf(float(e.get("frozen_timer",0)),freeze)
- sim.events.append({"kind":"traveler_fx_hit","skill":z.kind,"element":z.element,"pos":pos,"source":z.source,"radius":radius,"step":z.step})
+ sim.events.append({"kind":"traveler_fx_hit","skill":z.kind,"element":z.element,"pos":pos,"source":z.source,"radius":radius,"step":z.step,"delay":0.48 if str(z.kind).ends_with("_e") else 0.36,"vfx_revision":"white_core_20261005"})
 static func heal(sim,z: Dictionary,pos: Vector2,amount: float,once: bool=false) -> void:
  for h: Dictionary in sim.heroes:
   if h.hp<=0 or not bool(h.deployed) or not sim.is_in_ability_area(pos,h.pos,float(z.radius)): continue
@@ -122,7 +130,7 @@ static func tick(sim,z: Dictionary,dt: float) -> bool:
     z.last=Vector2(best.pos)
     z.hit_ids.append(int(best.id))
     sim.apply_hit(best,float(z.power),"electro",int(z.hero_id))
-    sim.events.append({"kind":"traveler_fx_arc","skill":key,"element":"electro","pos":best.pos,"source":from,"radius":35.0})
+    sim.events.append({"kind":"traveler_fx_arc","skill":key,"element":"electro","pos":best.pos,"source":from,"radius":35.0,"delay":0.25,"vfx_revision":"white_core_20261005"})
     z.next=float(z.next)+0.12
   "hydro_q":
    if step<5:
@@ -136,7 +144,7 @@ static func tick(sim,z: Dictionary,dt: float) -> bool:
     for e: Dictionary in targets(sim,z.pos,float(z.radius)):
      sim.apply_hit(e,float(z.power),"electro",int(z.hero_id))
      if points.size()<8: points.append(e.pos)
-    sim.events.append({"kind":"traveler_fx_arc","skill":key,"element":"electro","pos":z.pos,"source":z.pos,"targets":points,"radius":z.radius,"step":step})
+    sim.events.append({"kind":"traveler_fx_arc","skill":key,"element":"electro","pos":z.pos,"source":z.pos,"targets":points,"radius":z.radius,"step":step,"delay":0.25,"vfx_revision":"white_core_20261005"})
     z.next=float(z.next)+0.75
    else: z.next=9999
   "geo_e":

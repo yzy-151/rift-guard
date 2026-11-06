@@ -5,6 +5,8 @@ const AchievementCatalog = preload("res://scripts/achievement_catalog.gd")
 
 var save_path: String
 var unlocked_characters: Dictionary = {"traveler": true}
+var story_recruits: Dictionary = {}
+var legacy_gwen_unlock := false
 var discovered_cards: Dictionary = {}
 var encountered_enemies: Dictionary = {}
 var cleared_stages: Dictionary = {}
@@ -21,13 +23,18 @@ var achievement_stats: Dictionary = {
 	"best_endless_time": 0.0,
 }
 
-func _init(path: String = "user://compendium.json") -> void:
+func _init(path: String = "user://compendium-story-v3.json") -> void:
 	save_path = path
 	load_progress()
 
 func observe(sim) -> void:
 	var changed := false
 	for hero: Dictionary in sim.heroes:
+		# A character being on the battlefield does not make a guest a recruit.
+		if bool(hero.get("temporary_assist", false)):
+			continue
+		if str(hero.get("character_id", "")) == "hero_13" and not has_gwen_recruitment():
+			continue
 		changed = _mark(unlocked_characters, str(hero.get("character_id", ""))) or changed
 	for id: Variant in sim.run_state.buff_levels:
 		changed = _mark(discovered_cards, str(id)) or changed
@@ -39,6 +46,8 @@ func observe(sim) -> void:
 func clear_stage(stage_id: String, unlocks: Array) -> void:
 	var changed := _mark(cleared_stages, stage_id)
 	for id: Variant in unlocks:
+		if str(id) == "hero_13" and not has_gwen_recruitment():
+			continue
 		changed = _mark(unlocked_characters, str(id)) or changed
 	if changed:
 		save_progress()
@@ -181,10 +190,49 @@ func achievement_progress(id: String, database) -> String:
 		_: return "未完成"
 
 func unlock_character(character_id: String) -> bool:
+	if character_id == "hero_13" and not has_gwen_recruitment():
+		return false
 	var changed := _mark(unlocked_characters, character_id)
 	if changed:
 		save_progress()
 	return changed
+
+func has_gwen_recruitment() -> bool:
+	return str(story_recruits.get("hero_13", "")) == "mode1_won"
+
+func can_select_character(character_id: String) -> bool:
+	return unlocked_characters.has(character_id) and (character_id != "hero_13" or has_gwen_recruitment())
+
+func reject_gwen_recruitment() -> void:
+	if has_gwen_recruitment():
+		return
+	legacy_gwen_unlock = false
+	unlocked_characters.erase("hero_13")
+	save_progress()
+
+func record_story_recruit(character_id: String, scene_key: String) -> bool:
+	if character_id.is_empty() or scene_key.is_empty():
+		return false
+	if character_id == "hero_13" and scene_key != "mode1_won":
+		return false
+	var changed := str(story_recruits.get(character_id, "")) != scene_key
+	story_recruits[character_id] = scene_key
+	changed = _mark(unlocked_characters, character_id) or changed
+	if changed:
+		save_progress()
+	return changed
+
+func restore_story_recruitment(snapshot: Dictionary) -> void:
+	var flags: Dictionary = snapshot.get("run", {}).get("story_flags", {})
+	var proven := bool(flags.get("gwen_recruited", false))
+	# Older builds did not store the receipt. They saved first-stage "cleared"
+	# only after the successful greeting; a first-stage battle is not evidence.
+	if legacy_gwen_unlock and not flags.has("gwen_recruited"):
+		var stage_id := str(snapshot.get("stage_id", ""))
+		proven = proven or (stage_id == "stage_01" and str(snapshot.get("phase", "")) == "cleared")
+		proven = proven or (stage_id.begins_with("stage_") and stage_id.trim_prefix("stage_").is_valid_int() and int(stage_id.trim_prefix("stage_")) >= 2)
+	if proven:
+		record_story_recruit("hero_13", "mode1_won")
 
 func _mark(collection: Dictionary, id: String) -> bool:
 	if id.is_empty() or collection.has(id):
@@ -208,6 +256,9 @@ func save_progress() -> void:
 	file.store_string(JSON.stringify({
 		"save_version": SaveMigrator.CURRENT_VERSION,
 		"unlocked_characters": unlocked_characters.keys(),
+		"story_recruit_revision": 1,
+		"story_recruits": story_recruits,
+		"legacy_gwen_unlock": legacy_gwen_unlock,
 		"discovered_cards": discovered_cards.keys(),
 		"encountered_enemies": encountered_enemies.keys(),
 		"cleared_stages": cleared_stages.keys(),
@@ -237,6 +288,18 @@ func load_progress() -> void:
 	if data.get("achievement_stats", {}) is Dictionary:
 		achievement_stats.merge(data.get("achievement_stats", {}), true)
 	unlocked_characters["traveler"] = true
+	if data.get("story_recruits", {}) is Dictionary:
+		story_recruits = data.get("story_recruits", {}).duplicate(true)
+	legacy_gwen_unlock = bool(data.get("legacy_gwen_unlock", false))
+	if not data.has("story_recruit_revision"):
+		legacy_gwen_unlock = unlocked_characters.has("hero_13")
+		# Preserve old completed recruitment, but repair the guest-only unlock.
+		if legacy_gwen_unlock and cleared_stages.has("stage_01"):
+			story_recruits["hero_13"] = "mode1_won"
+	if not has_gwen_recruitment():
+		unlocked_characters.erase("hero_13")
+	elif not unlocked_characters.has("hero_13"):
+		unlocked_characters["hero_13"] = true
 
 func _load_set(target: Dictionary, values: Array) -> void:
 	for value: Variant in values:

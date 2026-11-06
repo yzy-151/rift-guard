@@ -3,8 +3,10 @@ signal finished
 signal choice_committed(choice: Dictionary)
 signal animation_confirmed
 signal fatal_choice_confirmed
+signal story_audio_played(kind: String, stream_path: String, gain_db: float)
 const Backdrop = preload("res://scripts/dialogue_backdrop.gd")
 const PortraitCatalog = preload("res://scripts/dialogue_portrait_catalog.gd")
+const HistoryView = preload("res://scripts/dialogue_history_view.gd")
 const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 const UI_SKIN = preload("res://data/ui_skin_profile.tres")
 const PORTRAITS = {
@@ -24,8 +26,7 @@ var partner: TextureRect
 var name_label: Label
 var body: RichTextLabel
 var progress: Label
-var history_panel: Panel
-var history_text: RichTextLabel
+var history_panel: HistoryView
 var advance_button: Button
 var auto_button: Button
 var history_button: Button
@@ -61,18 +62,26 @@ var comic_playing := false
 var portrait_entrance_count := 0
 
 var last_portrait: String = "muelsyse"
-var cue_sound: AudioStreamPlayer
 var background_texture: TextureRect
 var transition_bar: ColorRect
 var transition_texture: TextureRect
 var success_texture: TextureRect
 var transition_time: float = 0.0
 var line_ended: bool = false
-var end_sound: AudioStreamPlayer
+var portrait_continue_sound: AudioStreamPlayer
+var comic_page_sound: AudioStreamPlayer
 var dialogue_highlight: AudioStreamPlayer
+var choice_highlight_sound: AudioStreamPlayer
+var suppress_choice_feedback := false
+var focused_choice := -1
 var dialogue_confirm: AudioStreamPlayer
 var death_sound: AudioStreamPlayer
 var success_sound: AudioStreamPlayer
+var page_click_sound: AudioStreamPlayer
+var comic_sound: AudioStreamPlayer
+var transition_sound: AudioStreamPlayer
+var ui_click_count := 0
+var ui_choice_click_count := 0
 var death_overlay: ColorRect
 var death_texture: TextureRect
 var death_reason_label: Label
@@ -194,7 +203,7 @@ func build(ui, story) -> void:
 		choice_button.move_child(choice_frame, 0)
 		choice_frames.append(choice_frame)
 		choice_button.focus_entered.connect(_set_choice_focus.bind(i))
-		choice_button.mouse_entered.connect(func(): choice_button.grab_focus())
+		choice_button.mouse_entered.connect(_on_choice_hover.bind(i))
 		choice_button.set_meta("home_position", choice_button.position)
 		choice_button.hide()
 		choice_button.disabled = true
@@ -202,10 +211,7 @@ func build(ui, story) -> void:
 		choice_buttons.append(choice_button)
 	advance_button = action(UI_LAYOUT.dialogue_advance_rect, "", advance)
 	advance_button.hide()
-	auto_button = action(Rect2(1178, 666, 34, 30), "A", func():
-		auto_mode = not auto_mode
-		auto_timer = 0.0
-		auto_button.text = "A+" if auto_mode else "A")
+	auto_button = action(Rect2(1178, 666, 34, 30), "A", toggle_auto)
 	history_button = action(Rect2(1138, 666, 34, 30), "≡", toggle_history)
 	skip_button = action(Rect2(1098, 666, 34, 30), "»", skip)
 	hud.bind(advance_button, "dialog_continue")
@@ -228,15 +234,10 @@ func build(ui, story) -> void:
 	for i in controls.size():
 		controls[i].focus_next = controls[(i + 1) % controls.size()].get_path()
 		controls[i].focus_previous = controls[(i + controls.size() - 1) % controls.size()].get_path()
-	history_panel = hud.panel(root, UI_LAYOUT.dialogue_history_panel_rect, Color("#241b25"), Color("#bb626b"))
-	hud.label(history_panel, Vector2(28, 20), Vector2(600, 35), "对话记录 · H / Esc 返回", 22, Color("#f0b4ae"))
-	history_text = RichTextLabel.new()
-	history_text.focus_mode = Control.FOCUS_ALL
-	history_text.position = Vector2(28, 70)
-	history_text.size = Vector2(844, 370)
-	history_text.add_theme_font_size_override("normal_font_size", 18)
-	history_panel.add_child(history_text)
-	history_panel.hide()
+	history_panel = HistoryView.new()
+	root.add_child(history_panel)
+	history_panel.build(hud, UI_LAYOUT)
+	history_panel.return_requested.connect(close_history)
 	transition_bar = ColorRect.new()
 	transition_bar.position = Vector2(-1280, 482)
 	transition_bar.size = Vector2(1280, 8)
@@ -290,35 +291,59 @@ func build(ui, story) -> void:
 	animation_click_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	animation_click_gate.hide()
 	root.hide()
-	cue_sound = AudioStreamPlayer.new()
-	cue_sound.stream = preload("res://assets/helltaker/audio/dialogue_start_01.wav")
-	cue_sound.bus = "SFX"
-	cue_sound.volume_db = -15.0
-	cue_sound.max_polyphony = 2
-	add_child(cue_sound)
-	end_sound = AudioStreamPlayer.new()
-	end_sound.stream = preload("res://assets/helltaker/audio/dialogue_text_end_01.wav")
-	end_sound.bus = "SFX"
-	end_sound.volume_db = -13.0
-	add_child(end_sound)
+	portrait_continue_sound = _story_sound(preload("res://assets/helltaker/audio/button_dialogue_confirm_01.wav"), 2.5)
+	comic_page_sound = _story_sound(preload("res://assets/helltaker/audio/dialogue_text_end_01.wav"), 7.0)
 	dialogue_highlight = AudioStreamPlayer.new()
 	dialogue_highlight.stream = preload("res://assets/helltaker/audio/button_dialogue_highlight_01.wav")
 	dialogue_highlight.bus = "SFX"
-	dialogue_highlight.volume_db = -11.0
+	dialogue_highlight.volume_db = -8.0
 	add_child(dialogue_highlight)
+	choice_highlight_sound = _story_sound(preload("res://assets/helltaker/audio/button_dialogue_highlight_01.wav"), 5.0)
 	dialogue_confirm = AudioStreamPlayer.new()
 	dialogue_confirm.stream = preload("res://assets/helltaker/audio/button_dialogue_confirm_01.wav")
 	dialogue_confirm.bus = "SFX"
-	dialogue_confirm.volume_db = -10.0
+	dialogue_confirm.volume_db = 2.5
 	add_child(dialogue_confirm)
 	death_sound = AudioStreamPlayer.new()
-	death_sound.stream = preload("res://assets/helltaker/audio/player_death_01.wav")
+	death_sound.stream = preload("res://assets/audio/story_ui/story_failure.wav")
 	death_sound.bus = "SFX"
 	add_child(death_sound)
 	success_sound = AudioStreamPlayer.new()
-	success_sound.stream = preload("res://assets/helltaker/audio/dialogue_success_01.wav")
+	success_sound.stream = preload("res://assets/audio/story_ui/story_success.wav")
 	success_sound.bus = "SFX"
 	add_child(success_sound)
+	page_click_sound = _story_sound(preload("res://assets/audio/story_ui/page_click.wav"), -1.5)
+	comic_sound = _story_sound(preload("res://assets/helltaker/audio/dialogue_start_01.wav"), -2.0)
+	transition_sound = _story_sound(preload("res://assets/helltaker/audio/dialogue_start_01.wav"), -2.0)
+
+func _story_sound(stream: AudioStream, db: float) -> AudioStreamPlayer:
+	var sound := AudioStreamPlayer.new()
+	sound.stream = stream
+	sound.bus = "SFX"
+	sound.volume_db = db
+	add_child(sound)
+	return sound
+
+func _play_click(choice: bool = false) -> void:
+	var sound: AudioStreamPlayer = dialogue_confirm if choice else page_click_sound
+	if choice: ui_choice_click_count += 1
+	else: ui_click_count += 1
+	_play_story_sound(sound, "choice_confirm" if choice else "ui_click")
+
+func _play_story_sound(sound: AudioStreamPlayer, kind: String) -> void:
+	if sound != null:
+		sound.stop()
+		sound.play()
+		story_audio_played.emit(kind, sound.stream.resource_path, sound.volume_db)
+
+func _play_portrait_continue() -> void:
+	ui_click_count += 1
+	_play_story_sound(portrait_continue_sound, "portrait_continue")
+
+func _play_comic_flip() -> void:
+	ui_click_count += 1
+	comic_sound.stop()
+	_play_story_sound(comic_page_sound, "comic_flip")
 
 func art(rect: Rect2) -> TextureRect:
 	var item := TextureRect.new()
@@ -335,13 +360,9 @@ func action(rect: Rect2, text: String, callback: Callable) -> Button:
 	item.set_meta("dialogue_sound", true)
 	item.pressed.connect(callback)
 	item.mouse_entered.connect(func():
-		if dialogue_highlight != null:
+		if dialogue_highlight != null and not choice_buttons.has(item):
 			dialogue_highlight.stop()
 			dialogue_highlight.play())
-	item.pressed.connect(func():
-		if dialogue_confirm != null:
-			dialogue_confirm.stop()
-			dialogue_confirm.play())
 	controls.append(item)
 	return item
 
@@ -429,9 +450,6 @@ func show_line() -> void:
 	displayed_portrait_key = portrait_key
 	_animate_line_entrance(highlight_mode, changed)
 	_reveal_choices_after_pop(director.index)
-	if cue_sound != null:
-		cue_sound.pitch_scale = 0.98 + float(director.index % 3) * 0.035
-		cue_sound.play()
 
 func _animate_line_entrance(highlight: String, changed: bool = true) -> void:
 	var art: TextureRect = partner if highlight == "partner" else portrait
@@ -460,8 +478,6 @@ func _animate_line_entrance(highlight: String, changed: bool = true) -> void:
 func _reveal_choices_after_pop(expected_index: int) -> void:
 	await get_tree().create_timer(0.16).timeout
 	if root != null and root.visible and director.active and director.index == expected_index:
-		if end_sound != null:
-			end_sound.play()
 		_reveal_choices()
 
 func _process(dt: float) -> void:
@@ -480,8 +496,9 @@ func _process(dt: float) -> void:
 	if line_ended and auto_mode and not director.has_choices():
 		auto_timer += dt
 		if auto_timer > 2.0:
-			advance()
+			advance(false)
 func _configure_choices(line: Dictionary) -> void:
+	focused_choice = -1
 	var options: Array = line.get("choices", [])
 	for i in choice_buttons.size():
 		var item: Button = choice_buttons[i]
@@ -495,7 +512,7 @@ func _configure_choices(line: Dictionary) -> void:
 	advance_button.visible = false
 	auto_button.disabled = has_choices
 	auto_button.visible = not has_choices
-	history_button.visible = not has_choices
+	history_button.visible = true
 	skip_button.visible = not has_choices and not director.key.begins_with("home_")
 	booper.visible = not has_choices
 func _reveal_choices() -> void:
@@ -525,15 +542,28 @@ func _reveal_choices() -> void:
 		reveal.tween_property(item, "position", home, 0.28).set_delay(i * 0.085)
 		reveal.tween_property(item, "modulate", Color.WHITE, 0.14).set_delay(i * 0.085)
 	if not options.is_empty():
+		suppress_choice_feedback = true
 		choice_buttons[0].grab_focus()
 		_set_choice_focus(0)
+		suppress_choice_feedback = false
 
 ## 选中：亮色描边 + 放大 + 字号更大；未选中：暗色描边 + 缩小 + 字号更小。
 func _choice_scale(selected: bool) -> Vector2:
 	var value := CHOICE_SELECTED_SCALE if selected else CHOICE_IDLE_SCALE
 	return Vector2(value, value)
 
+func _on_choice_hover(index: int) -> void:
+	if not choice_buttons[index].visible or choice_buttons[index].disabled:
+		return
+	suppress_choice_feedback = true
+	choice_buttons[index].grab_focus()
+	suppress_choice_feedback = false
+	_play_story_sound(choice_highlight_sound, "choice_hover")
+
 func _set_choice_focus(index: int) -> void:
+	if focused_choice != index and not suppress_choice_feedback and choice_buttons[index].visible:
+		_play_story_sound(choice_highlight_sound, "choice_hover")
+	focused_choice = index
 	for i in choice_frames.size():
 		var selected := i == index
 		choice_frames[i].texture = UI_SKIN.choice_frame_red if selected else UI_SKIN.choice_frame_gray
@@ -555,6 +585,7 @@ func choose_option(choice_index: int) -> void:
 	var options: Array = director.current().get("choices", [])
 	if choice_index < 0 or choice_index >= options.size():
 		return
+	_play_click(true)
 	var chosen: Dictionary = options[choice_index].duplicate(true)
 	var death_reason := str(chosen.get("death_reason", ""))
 	if not death_reason.is_empty():
@@ -562,7 +593,10 @@ func choose_option(choice_index: int) -> void:
 		return
 	if director.choose(choice_index):
 		choice_committed.emit(chosen)
-		show_line()
+		if director.active:
+			show_line()
+		else:
+			close()
 
 func _play_choice_death(reason: String) -> void:
 	death_playing = true
@@ -599,8 +633,6 @@ func activate_choice_at(point: Vector2) -> bool:
 		if item.visible and not item.disabled and item.get_global_rect().has_point(point):
 			choose_option(choice_buttons.find(item))
 			return true
-	if director.has_choices():
-		return true
 	if skip_button.visible and skip_button.get_global_rect().has_point(point):
 		skip()
 		return true
@@ -608,24 +640,25 @@ func activate_choice_at(point: Vector2) -> bool:
 		toggle_history()
 		return true
 	if auto_button.visible and auto_button.get_global_rect().has_point(point):
-		auto_mode = not auto_mode
-		auto_button.text = "A+" if auto_mode else "A"
+		toggle_auto()
+		return true
+	if director.has_choices():
 		return true
 	advance()
 	return true
 
-func advance() -> void:
+func advance(user_feedback: bool = true) -> void:
 	if not director.active or history_panel.visible or comic_playing:
 		return
+	if letters >= body.get_total_character_count() and director.has_choices():
+		_reveal_choices()
+		return
+	if user_feedback:
+		_play_portrait_continue()
 	if letters < body.get_total_character_count():
 		letters = body.get_total_character_count()
 		body.visible_characters = -1
-		if not line_ended:
-			line_ended = true
-			end_sound.play()
-		_reveal_choices()
-		return
-	if director.has_choices():
+		line_ended = true
 		_reveal_choices()
 		return
 	if director.advance():
@@ -640,8 +673,12 @@ func skip() -> void:
 		return
 	if director.key.begins_with("home_"):
 		return
+	_play_click()
 	director.skip()
-	close()
+	if director.active:
+		show_line()
+	else:
+		close()
 
 func close() -> void:
 	history_panel.hide()
@@ -654,24 +691,34 @@ func close() -> void:
 		finished.emit())
 
 func toggle_history() -> void:
-	history_panel.visible = not history_panel.visible
 	if history_panel.visible:
-		history_text.text = ""
-		for row in director.history:
-			history_text.text += row.speaker + "：\n" + row.text + "\n\n"
-		for item in controls:
-			item.disabled = item != history_button
-			item.focus_mode = Control.FOCUS_ALL if item == history_button else Control.FOCUS_NONE
-		history_button.grab_focus()
+		close_history()
 	else:
+		_play_click()
+		history_panel.show_history(director.history, portrait.texture)
+		history_panel.move_to_front()
 		for item in controls:
-			item.disabled = false
-			item.focus_mode = Control.FOCUS_ALL
-		_configure_choices(director.current())
-		if director.has_choices() and line_ended:
-			_reveal_choices()
-		else:
-			advance_button.grab_focus()
+			item.disabled = true
+			item.focus_mode = Control.FOCUS_NONE
+
+func close_history() -> void:
+	if not history_panel.visible: return
+	_play_click()
+	history_panel.hide()
+	for item in controls:
+		item.disabled = false
+		item.focus_mode = Control.FOCUS_ALL
+	_configure_choices(director.current())
+	if director.has_choices() and line_ended:
+		_reveal_choices()
+	else:
+		history_button.grab_focus()
+
+func toggle_auto() -> void:
+	_play_click()
+	auto_mode = not auto_mode
+	auto_timer = 0.0
+	auto_button.text = "A+" if auto_mode else "A"
 
 func handle_input(event: InputEvent) -> void:
 	if comic_playing:
@@ -816,6 +863,8 @@ func play_comic_panel(resource_path: String, caption_text: String = "") -> void:
 	backing.modulate.a = 0.0
 	# Let the image upload and the dark stage draw before the reveal tween starts.
 	await get_tree().process_frame
+	comic_page_sound.stop()
+	_play_story_sound(comic_sound, "comic_arrival")
 	var arrival := create_tween().set_parallel(true).set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	arrival.tween_property(comic, "scale", Vector2(1.12, 1.12), 0.31)
 	arrival.tween_property(comic, "rotation", deg_to_rad(2.5), 0.31)
@@ -860,9 +909,7 @@ func play_stage_transition() -> void:
 	transition_time = 0.0
 	root.show()
 	transition_texture.show()
-	if cue_sound != null:
-		cue_sound.stop()
-		cue_sound.play()
+	_play_story_sound(transition_sound, "stage_transition")
 	for frame_index in range(2, 31):
 		transition_texture.texture = load("res://assets/helltaker/transitions/transition%04d.png" % frame_index)
 		await get_tree().create_timer(0.018).timeout
@@ -895,6 +942,11 @@ func play_success_animation() -> void:
 
 func acknowledge_animation() -> void:
 	if animation_waiting:
+		animation_waiting = false
+		if comic_playing:
+			_play_comic_flip()
+		else:
+			_play_click()
 		animation_confirmed.emit()
 
 func _await_animation_click() -> void:

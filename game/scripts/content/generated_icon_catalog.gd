@@ -5,6 +5,7 @@ const CARD_DIRS := [
 	"res://assets/ui/card_icons_70_new/",
 ]
 const PLACEHOLDER_CARD_ICON := "res://assets/ui/icons/temporary/card_question.svg"
+const DEVICE_CARD_DIR := "res://assets/ui/device_card_icons_20261005/"
 const SKILL_DIR := "res://assets/ui/character_skills_26/"
 const SKILL_FILES := {
 	"hero_01": ["哥伦比亚_Q_潮汐环歌.png", "哥伦比亚_E_碧海赐福.png"],
@@ -23,6 +24,9 @@ const SKILL_FILES := {
 }
 
 static func card_path(card: Dictionary) -> String:
+	if str(card.get("family", "")) == "device":
+		var device_path := DEVICE_CARD_DIR + str(card.get("id", "")) + ".png"
+		return device_path if ResourceLoader.exists(device_path) else ""
 	var icon_name := "炽热火球" if str(card.get("id", "")) == "evolve_fireball" else str(card.get("name", ""))
 	for directory: String in CARD_DIRS:
 		var path := directory + icon_name + ".png"

@@ -85,7 +85,8 @@ func _initialize() -> void:
 	s.start()
 	var e = s.spawn_enemy(Vector2(900, 360))
 	s.apply_hit(e, 1, "water")
-	check(is_equal_approx(s.apply_hit(e, 20, "fire"), 35), "alchemy increases actual vaporize damage")
+	var vapor_damage: float = s.apply_hit(e, 20, "fire")
+	check(is_equal_approx(vapor_damage * (100.0 + maxf(0.0, e.armor)) / 100.0, 35.0), "alchemy increases raw vaporize damage to 35 before current enemy armor")
 	s = Sim.new(1)
 	grant(s, "burst")
 	s.state = "running"
@@ -98,7 +99,8 @@ func _initialize() -> void:
 	var distant = s.spawn_enemy(Vector2(800, 295))
 	s.projectiles.append({"pos": e.pos + Vector2(0, -12), "target_id": e.id, "damage": 20.0, "element": "fire", "source_id": 1, "splash": true, "slow": false})
 	s.tick(0.01)
-	check(is_equal_approx(neighbor.hp, neighbor.max_hp - 10) and distant.hp == distant.max_hp and neighbor.aura == "", "burst hits only nearby others and does not recursively attach fire")
+	var burst_damage: float = neighbor.max_hp - neighbor.hp
+	check(is_equal_approx(burst_damage * (100.0 + maxf(0.0, neighbor.armor)) / 100.0, 10.0) and distant.hp == distant.max_hp and neighbor.aura == "", "burst deals raw 10 only to nearby others and does not recursively attach fire")
 	s = Sim.new(1)
 	grant(s, "sweep")
 	s.state = "running"
@@ -110,7 +112,9 @@ func _initialize() -> void:
 	e = s.spawn_enemy(Vector2(555, 360))
 	neighbor = s.spawn_enemy(Vector2(575, 360))
 	s.tick(0.01)
-	check(neighbor.hp < neighbor.max_hp and e.hp < e.max_hp, "cleave changes melee into area damage")
+	check(not s.pending_impacts.is_empty() and e.hp == e.max_hp and neighbor.hp == neighbor.max_hp, "melee schedules its actual animation hit frame before cleave damage")
+	for frame in 45: s.tick(0.01)
+	check(neighbor.hp < neighbor.max_hp and e.hp < e.max_hp, "cleave changes melee into area damage at the actual hit frame")
 	s = Sim.new(1)
 	grant(s, "chill")
 	s.state = "running"

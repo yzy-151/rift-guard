@@ -3,13 +3,15 @@ extends CanvasLayer
 signal dismissed
 
 const AchievementCatalog = preload("res://scripts/achievement_catalog.gd")
-const WHITE := Color("#fff1e8")
-const MUTED := Color("#b79da6")
-const ACCENT := Color("#ff5068")
+const POSTER = preload("res://scripts/poster_surface.gd")
+const ROW_SURFACE = preload("res://scripts/compendium_surface.gd")
+const UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 
 var root: Control
 var list: VBoxContainer
 var heading: Label
+var scroll: ScrollContainer
+var close_button: Button
 var hud
 
 func build(owner_hud) -> void:
@@ -22,42 +24,48 @@ func build(owner_hud) -> void:
 	add_child(root)
 	var veil := ColorRect.new()
 	veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	veil.color = Color(0.012, 0.009, 0.025, 0.88)
+	veil.color = Color(0.015, 0.016, 0.022, 0.9)
 	root.add_child(veil)
-	var frame: Panel = owner_hud.panel(root, Rect2(260, 102, 760, 516), Color("#100b13"), Color("#d13a55"))
-	owner_hud.label(frame, Vector2(36, 24), Vector2(680, 20), "A C H I E V E M E N T   /   成 就 解 锁", 12, ACCENT)
-	heading = owner_hud.label(frame, Vector2(36, 52), Vector2(680, 46), "成就已完成", 30, WHITE)
-	var rule := ColorRect.new()
-	rule.position = Vector2(36, 108)
-	rule.size = Vector2(688, 2)
-	rule.color = ACCENT
-	frame.add_child(rule)
-	var scroll := ScrollContainer.new()
-	scroll.position = Vector2(36, 128)
-	scroll.size = Vector2(688, 290)
+	var frame := POSTER.new()
+	frame.position = UI_LAYOUT.stage_achievement_frame_rect.position
+	frame.size = UI_LAYOUT.stage_achievement_frame_rect.size
+	frame.title_rect = UI_LAYOUT.stage_achievement_header_rect
+	root.add_child(frame)
+	var header: Rect2 = UI_LAYOUT.stage_achievement_header_rect
+	heading = owner_hud.label(frame, header.position + Vector2(15, 2), Vector2(header.size.x - 30, 61), "成就解锁！", 43, POSTER.PAPER)
+	heading.add_theme_font_override("font", POSTER.TYPE)
+	heading.add_theme_constant_override("outline_size", 4)
+	heading.add_theme_color_override("font_outline_color", POSTER.INK)
+	var subtitle: Label = owner_hud.label(frame, header.position + Vector2(18, 66), Vector2(header.size.x - 36, 22), "ACHIEVEMENT / 新纪录已收入图鉴", 17, POSTER.PAPER)
+	subtitle.add_theme_font_override("font", POSTER.TYPE)
+	scroll = ScrollContainer.new()
+	scroll.position = UI_LAYOUT.stage_achievement_scroll_rect.position
+	scroll.size = UI_LAYOUT.stage_achievement_scroll_rect.size
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	frame.add_child(scroll)
 	list = VBoxContainer.new()
-	list.custom_minimum_size = Vector2(664, 0)
-	list.add_theme_constant_override("separation", 10)
+	list.custom_minimum_size = Vector2(UI_LAYOUT.stage_achievement_row_size.x, 0)
+	list.add_theme_constant_override("separation", 14)
 	scroll.add_child(list)
-	var close_button: Button = owner_hud.button(frame, Rect2(170, 444, 420, 48), "收下并继续", true)
+	close_button = owner_hud.button(frame, UI_LAYOUT.stage_achievement_continue_rect, "收下徽章，继续！ [Esc]", true)
+	POSTER.style_button(close_button, true, 22)
 	close_button.pressed.connect(close)
 	root.hide()
 
 func open(ids: Array[String]) -> void:
 	for child in list.get_children():
+		list.remove_child(child)
 		child.queue_free()
-	heading.text = "完成 %d 项新成就" % ids.size()
+	scroll.scroll_vertical = 0
+	heading.text = "成就解锁！  × %d" % ids.size()
 	for id: String in ids:
 		var item: Dictionary = AchievementCatalog.by_id(id)
-		if not item.is_empty():
-			_add_item(item)
+		if not item.is_empty(): _add_item(item)
 	root.show()
+	close_button.grab_focus()
 
 func close() -> void:
-	if root == null or not root.visible:
-		return
+	if root == null or not root.visible: return
 	root.hide()
 	dismissed.emit()
 
@@ -73,19 +81,24 @@ func handle_input(event: InputEvent) -> bool:
 func _add_item(item: Dictionary) -> void:
 	var tier := str(item.get("tier", "silver"))
 	var color := AchievementCatalog.tier_color(tier)
-	var row := Panel.new()
-	row.custom_minimum_size = Vector2(664, 78)
-	row.add_theme_stylebox_override("panel", hud.style(Color("#211620"), color.darkened(0.32)))
+	var row := Control.new()
+	row.custom_minimum_size = UI_LAYOUT.stage_achievement_row_size
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	list.add_child(row)
-	var accent := ColorRect.new()
-	accent.position = Vector2(0, 0)
-	accent.size = Vector2(6, 78)
-	accent.color = color
-	row.add_child(accent)
+	var paper := ROW_SURFACE.new()
+	paper.accent = color
+	paper.kind = "row"
+	paper.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	row.add_child(paper)
 	var icon_path := AchievementCatalog.icon_path(str(item.id))
 	if ResourceLoader.exists(icon_path):
-		hud.icon(row, icon_path, Rect2(13, 8, 62, 62), Color.WHITE)
-	hud.label(row, Vector2(84, 10), Vector2(350, 28), str(item.name), 20, color)
-	hud.label(row, Vector2(84, 41), Vector2(470, 24), str(item.description), 12, WHITE)
-	var badge: Label = hud.label(row, Vector2(548, 21), Vector2(94, 30), AchievementCatalog.tier_name(tier), 13, color)
+		var image: TextureRect = hud.icon(row, icon_path, Rect2(18, 16, 114, 110), Color.WHITE)
+		image.name = "AchievementIcon"
+	var name_label: Label = hud.label(row, Vector2(155, 12), Vector2(row.custom_minimum_size.x - 300, 37), str(item.name), 28, POSTER.INK)
+	name_label.add_theme_font_override("font", POSTER.TYPE)
+	name_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	var description: Label = hud.label(row, Vector2(155, 63), Vector2(row.custom_minimum_size.x - 183, 62), str(item.description), 19, POSTER.INK)
+	description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	description.add_theme_constant_override("line_spacing", 4)
+	var badge: Label = hud.label(row, Vector2(row.custom_minimum_size.x - 139, 18), Vector2(110, 29), "%s · %s" % [str(item.group), AchievementCatalog.tier_name(tier)], 18, POSTER.RED)
 	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT

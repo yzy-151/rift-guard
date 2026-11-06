@@ -1,0 +1,7 @@
+Peashooter idle: https://github.com/GeeeekExplorer/PVZ/blob/master/images/Peashooter.gif
+Original Plants vs Zombies character art by PopCap. 13 frames, 71x71, extracted without repainting.
+Retrieved 2026-10-05.
+Wall-nut: https://github.com/GeeeekExplorer/PVZ/blob/master/images/WallNut.gif
+Cracked states: WallNut1.gif and WallNut2.gif in the same repository.
+Original PopCap character art. 16 / 11 / 15 unmodified frames, 65x73 each.
+Retrieved 2026-10-05. Runtime displays cracks below 66% and 33% remaining HP.

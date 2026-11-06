@@ -1,0 +1,9 @@
+V91 audio sources: Arknights / Hypergryph b_char_dead; https://assets.closure.wiki/v3/audio/sound_beta_2/battle/b_char/b_char_dead.mp3
+Arknights / Hypergryph, original Japanese operation failure voice; https://closure.wiki/operators/amiya
+Arknights / Hypergryph, original Japanese operation failure voice; https://closure.wiki/operators/kaltsit
+Arknights / Hypergryph; Closure Wiki Amiya audio
+CC authored synthesis and arrangement
+Genshin Impact / HoYoverse, Hilichurl voice; https://huggingface.co/datasets/AquaV/genshin-voices-separated
+Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects
+Plants vs. Zombies / PopCap EA; https://www.sounds-resource.com/pc_computer/plantsvszombies/sheet/1430/
+Game recordings remain property of their respective owners; no redistribution license is asserted.

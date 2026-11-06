@@ -1,0 +1,20 @@
+[
+  {
+    "key": "projectile_pea",
+    "file": "projectile_pea.png",
+    "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/Pea.png",
+    "sha256": "24a9be5e2db62312ba359b15c367b8a8fb6d1764e4af3a221d178622bea7caa9"
+  },
+  {
+    "key": "projectile_snowpea",
+    "file": "projectile_snowpea.png",
+    "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/PeaSnow.png",
+    "sha256": "634822e425bdc2f71fdfc10f7914a5c841f3d32839242da31995ae149ddce547"
+  },
+  {
+    "key": "projectile_melon",
+    "file": "projectile_melon.png",
+    "source_url": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_melon.png",
+    "sha256": "1a90890a80fd3d82b17293869c5e5677ac2b2d2f4eef7284563f917612a0d4f9"
+  }
+]

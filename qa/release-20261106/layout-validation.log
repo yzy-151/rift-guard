@@ -1,0 +1,20 @@
+Godot Engine v4.4.1.stable.official.49a5bc7b6 - https://godotengine.org
+
+UI LAB PASS: profiles load
+UI LAB PASS: dialogue layout fields reflect automatically
+UI LAB PASS: campaign battle layout fields reflect automatically
+UI LAB PASS: endless battle layout fields reflect automatically
+UI LAB PASS: squad layout fields reflect automatically
+UI LAB PASS: reward layout fields reflect automatically
+UI LAB PASS: settings layout fields reflect automatically
+UI LAB PASS: all requested pages are listed
+UI LAB PASS: mode skin fields reflect automatically
+UI LAB PASS: production layout validates
+UI LAB PASS: production skin validates
+UI LAB PASS: production menu character binding survives a fresh load
+UI LAB PASS: negative rect is rejected
+UI LAB PASS: missing field is rejected
+UI LAB PASS: stale hash blocks overwrite
+UI LAB PASS: workspace rebuilds reflected dialogue page
+UI LAB PASS: workspace exposes field names and values
+UI LAB COMPLETE: 17 checks, 0 failures

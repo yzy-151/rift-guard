@@ -1,0 +1,1377 @@
+{
+  "format": 1,
+  "rooms": {
+    "hub": {
+      "id": "hub",
+      "kind": "hub",
+      "name": "裂隙客厅",
+      "subtitle": "厨房、沙发、还有三扇不太省心的门。",
+      "theme": "lobby",
+      "grid": [
+        "#################",
+        "##.###...########",
+        "#..........#....#",
+        "##.###.....##.###",
+        "#..#.#........###",
+        "#....#..........#",
+        "#....##..####..##",
+        "##.####..####..##"
+      ],
+      "spawn": [
+        8,
+        4
+      ],
+      "steps": 0,
+      "blocks": [],
+      "enemies": [],
+      "keys": [],
+      "spikes": [],
+      "portals": [
+        {
+          "id": "door_01",
+          "pos": [
+            2,
+            0
+          ],
+          "target": "puzzle_01",
+          "name": "搬家练习",
+          "baked": true
+        },
+        {
+          "id": "door_02",
+          "pos": [
+            6,
+            1
+          ],
+          "target": "puzzle_02",
+          "name": "扎脚舞池"
+        },
+        {
+          "id": "door_03",
+          "pos": [
+            8,
+            1
+          ],
+          "target": "puzzle_03",
+          "name": "邻居有意见"
+        }
+      ],
+      "resident_slots": [
+        [
+          1,
+          2
+        ],
+        [
+          13,
+          6
+        ],
+        [
+          15,
+          2
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          8,
+          7
+        ],
+        [
+          13,
+          7
+        ]
+      ],
+      "facilities": [
+        {
+          "id": "stages",
+          "pos": [
+            9,
+            6
+          ],
+          "name": "出门打架",
+          "action": "stages",
+          "baked": true
+        },
+        {
+          "id": "archive",
+          "pos": [
+            3,
+            4
+          ],
+          "name": "翻翻档案",
+          "action": "archive",
+          "baked": true
+        },
+        {
+          "id": "achievements",
+          "pos": [
+            14,
+            4
+          ],
+          "name": "荣誉柜",
+          "action": "achievements",
+          "baked": true
+        },
+        {
+          "id": "settings",
+          "pos": [
+            13,
+            1
+          ],
+          "name": "滑动变阻器",
+          "action": "settings",
+          "baked": true
+        }
+      ],
+      "solution": [],
+      "par": 0,
+      "source_origin": [
+        110,
+        90
+      ],
+      "source_cell": 100,
+      "source_view": [
+        180,
+        20,
+        1550,
+        900
+      ],
+      "original_level": "level16"
+    },
+    "puzzle_01": {
+      "id": "puzzle_01",
+      "kind": "puzzle",
+      "name": "搬家练习",
+      "subtitle": "箱子挡路？往前推，钥匙还得自己拿。",
+      "theme": "hell",
+      "grid": [
+        "####..#",
+        "#.....#",
+        "#....##",
+        "..#####",
+        "......#",
+        "......."
+      ],
+      "spawn": [
+        5,
+        0
+      ],
+      "steps": 20,
+      "blocks": [
+        [
+          1,
+          3
+        ]
+      ],
+      "enemies": [],
+      "keys": [
+        [
+          0,
+          5
+        ]
+      ],
+      "spikes": [],
+      "portals": [
+        {
+          "id": "exit",
+          "pos": [
+            5,
+            5
+          ],
+          "target": "hub",
+          "name": "回客厅",
+          "requires_key": true
+        }
+      ],
+      "resident_slots": [],
+      "facilities": [],
+      "solution": [
+        "down",
+        "left",
+        "down",
+        "left",
+        "left",
+        "left",
+        "down",
+        "down",
+        "left",
+        "down",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right"
+      ],
+      "par": 15,
+      "source_origin": [
+        610,
+        240
+      ],
+      "source_cell": 100,
+      "source_view": [
+        480,
+        110,
+        950,
+        800
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "background": "chapterBG0001",
+      "geometry_source": {
+        "level": "level1",
+        "walls": "original-layouts.json/wall_cells_world",
+        "floor": "original floor pixels plus spawn-connected component"
+      },
+      "next_room": "puzzle_04"
+    },
+    "puzzle_02": {
+      "id": "puzzle_02",
+      "kind": "puzzle",
+      "name": "扎脚舞池",
+      "subtitle": "红刺亮时别踩；空格等一拍，节奏就对了。",
+      "theme": "hell",
+      "grid": [
+        "#....##",
+        "#.#....",
+        "..##...",
+        "..##...",
+        "..##...",
+        "####..."
+      ],
+      "spawn": [
+        0,
+        4
+      ],
+      "steps": 17,
+      "blocks": [],
+      "enemies": [],
+      "keys": [
+        [
+          1,
+          0
+        ]
+      ],
+      "spikes": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          3
+        ]
+      ],
+      "portals": [
+        {
+          "id": "exit",
+          "pos": [
+            4,
+            4
+          ],
+          "target": "hub",
+          "name": "回客厅",
+          "requires_key": true
+        }
+      ],
+      "resident_slots": [],
+      "facilities": [],
+      "solution": [
+        "right",
+        "up",
+        "wait",
+        "up",
+        "up",
+        "up",
+        "right",
+        "right",
+        "right",
+        "down",
+        "down",
+        "down",
+        "down"
+      ],
+      "par": 13,
+      "source_origin": [
+        610,
+        240
+      ],
+      "source_cell": 100,
+      "source_view": [
+        470,
+        60,
+        1000,
+        870
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "background": "chapterBG0002",
+      "geometry_source": {
+        "level": "level2",
+        "walls": "original-layouts.json/wall_cells_world",
+        "floor": "original floor pixels plus spawn-connected component"
+      },
+      "next_room": "puzzle_05"
+    },
+    "puzzle_03": {
+      "id": "puzzle_03",
+      "kind": "puzzle",
+      "name": "邻居有意见",
+      "subtitle": "推箱、踢两下骷髅，再踩着节奏摸走钥匙。",
+      "theme": "hell",
+      "grid": [
+        "###....#",
+        "######.#",
+        "##......",
+        "##.#.#..",
+        "##.....#",
+        ".#.#.#.#",
+        ".......#"
+      ],
+      "spawn": [
+        7,
+        2
+      ],
+      "steps": 30,
+      "blocks": [
+        [
+          5,
+          0
+        ]
+      ],
+      "enemies": [
+        {
+          "pos": [
+            6,
+            1
+          ],
+          "hp": 2
+        },
+        {
+          "pos": [
+            1,
+            6
+          ],
+          "hp": 2
+        }
+      ],
+      "keys": [
+        [
+          4,
+          0
+        ]
+      ],
+      "spikes": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          4
+        ]
+      ],
+      "portals": [
+        {
+          "id": "exit",
+          "pos": [
+            0,
+            5
+          ],
+          "target": "hub",
+          "name": "回客厅",
+          "requires_key": true
+        }
+      ],
+      "resident_slots": [],
+      "facilities": [],
+      "solution": [
+        "left",
+        "up",
+        "up",
+        "up",
+        "up",
+        "left",
+        "left",
+        "right",
+        "right",
+        "down",
+        "down",
+        "left",
+        "left",
+        "down",
+        "down",
+        "down",
+        "down",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "left",
+        "up"
+      ],
+      "par": 24,
+      "source_origin": [
+        560,
+        190
+      ],
+      "source_cell": 100,
+      "source_view": [
+        470,
+        80,
+        1000,
+        880
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "background": "chapterBG0003",
+      "geometry_source": {
+        "level": "level3",
+        "walls": "original-layouts.json/wall_cells_world",
+        "floor": "original floor pixels plus spawn-connected component"
+      },
+      "next_room": "puzzle_06"
+    },
+    "puzzle_04": {
+      "id": "puzzle_04",
+      "kind": "puzzle",
+      "name": "茶歇搬运工",
+      "subtitle": "先拿钥匙，再把挡路的石头挪开。",
+      "theme": "hell",
+      "grid": [
+        ".#...###",
+        ".......#",
+        "........",
+        "........",
+        "#.....##"
+      ],
+      "spawn": [
+        0,
+        0
+      ],
+      "steps": 20,
+      "blocks": [
+        [
+          5,
+          3
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "enemies": [],
+      "keys": [
+        [
+          2,
+          0
+        ]
+      ],
+      "spikes": [
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "portals": [
+        {
+          "id": "exit",
+          "pos": [
+            6,
+            2
+          ],
+          "target": "hub",
+          "name": "回客厅",
+          "requires_key": true
+        }
+      ],
+      "resident_slots": [],
+      "facilities": [],
+      "source_origin": [
+        560,
+        290
+      ],
+      "source_cell": 100,
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "source_view": [
+        390,
+        40,
+        1140,
+        870
+      ],
+      "background": "chapterBG0004",
+      "background_path": "res://assets/world/home_expansion_20261009/chapterBG0004.png",
+      "geometry_source": {
+        "level": "level4",
+        "walls": "qa/home-expansion-20261009/original-layouts.json/wall_cells_world",
+        "floor": "original background source coordinates and original active wall colliders"
+      },
+      "encounter": {
+        "id": "hero_06",
+        "cell": [
+          7,
+          2
+        ],
+        "source": "original demon renderer logical foot"
+      },
+      "par": 15,
+      "solution": [
+        "down",
+        "down",
+        "right",
+        "right",
+        "wait",
+        "up",
+        "up",
+        "down",
+        "right",
+        "right",
+        "down",
+        "right",
+        "right"
+      ],
+      "next_room": "puzzle_07"
+    },
+    "puzzle_05": {
+      "id": "puzzle_05",
+      "kind": "puzzle",
+      "name": "潮汐绕行",
+      "subtitle": "钥匙在尽头，地刺会跟着脚步换拍。",
+      "theme": "hell",
+      "grid": [
+        "###..#",
+        "##....",
+        ".#....",
+        ".#....",
+        ".#....",
+        "......",
+        "#####."
+      ],
+      "spawn": [
+        0,
+        2
+      ],
+      "steps": 24,
+      "blocks": [
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "enemies": [],
+      "keys": [
+        [
+          5,
+          6
+        ]
+      ],
+      "spikes": [
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "portals": [
+        {
+          "id": "exit",
+          "pos": [
+            3,
+            0
+          ],
+          "target": "hub",
+          "name": "回客厅",
+          "requires_key": true
+        }
+      ],
+      "resident_slots": [],
+      "facilities": [],
+      "source_origin": [
+        660,
+        190
+      ],
+      "source_cell": 100,
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "source_view": [
+        490,
+        0,
+        940,
+        1010
+      ],
+      "background": "chapterBG0005",
+      "background_path": "res://assets/world/home_expansion_20261009/chapterBG0005.png",
+      "geometry_source": {
+        "level": "level5",
+        "walls": "qa/home-expansion-20261009/original-layouts.json/wall_cells_world",
+        "floor": "original background source coordinates and original active wall colliders"
+      },
+      "encounter": {
+        "id": "hero_03",
+        "cell": [
+          4,
+          0
+        ],
+        "source": "original demon renderer logical foot"
+      },
+      "par": 19,
+      "solution": [
+        "down",
+        "down",
+        "wait",
+        "down",
+        "right",
+        "right",
+        "right",
+        "right",
+        "wait",
+        "right",
+        "down",
+        "up",
+        "up",
+        "up",
+        "left",
+        "left",
+        "up",
+        "up",
+        "up"
+      ],
+      "next_room": "puzzle_08"
+    },
+    "puzzle_06": {
+      "id": "puzzle_06",
+      "kind": "puzzle",
+      "name": "剪刀与石头",
+      "subtitle": "出口在楼下，别把唯一的通路推死。",
+      "theme": "hell",
+      "grid": [
+        "#...###",
+        "#...###",
+        "....###",
+        "#....##",
+        "#.#....",
+        "#.....#",
+        "####...",
+        "####..#"
+      ],
+      "spawn": [
+        2,
+        0
+      ],
+      "steps": 18,
+      "blocks": [
+        [
+          3,
+          5
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "enemies": [],
+      "keys": [
+        [
+          3,
+          2
+        ]
+      ],
+      "spikes": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "portals": [
+        {
+          "id": "exit",
+          "pos": [
+            4,
+            7
+          ],
+          "target": "hub",
+          "name": "回客厅",
+          "requires_key": true
+        }
+      ],
+      "resident_slots": [],
+      "facilities": [],
+      "source_origin": [
+        610,
+        140
+      ],
+      "source_cell": 100,
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "source_view": [
+        440,
+        0,
+        1040,
+        1060
+      ],
+      "background": "chapterBG0006",
+      "background_path": "res://assets/world/home_expansion_20261009/chapterBG0006.png",
+      "geometry_source": {
+        "level": "level6",
+        "walls": "qa/home-expansion-20261009/original-layouts.json/wall_cells_world",
+        "floor": "original background source coordinates and original active wall colliders"
+      },
+      "encounter": {
+        "id": "hero_13",
+        "cell": [
+          5,
+          7
+        ],
+        "source": "original demon renderer logical foot"
+      },
+      "par": 13,
+      "solution": [
+        "left",
+        "down",
+        "down",
+        "right",
+        "right",
+        "down",
+        "right",
+        "down",
+        "right",
+        "down",
+        "down",
+        "left",
+        "down"
+      ],
+      "next_room": "puzzle_09"
+    },
+    "puzzle_07": {
+      "id": "puzzle_07",
+      "kind": "puzzle",
+      "name": "深夜值班",
+      "subtitle": "先绕一圈找钥匙，再来拜访值班的人。",
+      "theme": "hell",
+      "grid": [
+        "###..#",
+        "###...",
+        "..#...",
+        "......",
+        ".#....",
+        ".##.##",
+        "....##"
+      ],
+      "spawn": [
+        5,
+        4
+      ],
+      "steps": 18,
+      "blocks": [
+        [
+          4,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "enemies": [],
+      "keys": [
+        [
+          1,
+          2
+        ]
+      ],
+      "spikes": [
+        [
+          0,
+          6
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          6
+        ]
+      ],
+      "portals": [
+        {
+          "id": "exit",
+          "pos": [
+            4,
+            0
+          ],
+          "target": "hub",
+          "name": "回客厅",
+          "requires_key": true
+        }
+      ],
+      "resident_slots": [],
+      "facilities": [],
+      "source_origin": [
+        660,
+        190
+      ],
+      "source_cell": 100,
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "source_view": [
+        490,
+        0,
+        940,
+        1010
+      ],
+      "background": "chapterBG0007",
+      "background_path": "res://assets/world/home_expansion_20261009/chapterBG0007.png",
+      "geometry_source": {
+        "level": "level7",
+        "walls": "qa/home-expansion-20261009/original-layouts.json/wall_cells_world",
+        "floor": "original background source coordinates and original active wall colliders"
+      },
+      "encounter": {
+        "id": "hero_01",
+        "cell": [
+          3,
+          0
+        ],
+        "source": "original demon renderer logical foot"
+      },
+      "par": 13,
+      "solution": [
+        "left",
+        "left",
+        "left",
+        "up",
+        "left",
+        "up",
+        "down",
+        "right",
+        "right",
+        "up",
+        "up",
+        "right",
+        "up"
+      ],
+      "next_room": ""
+    },
+    "puzzle_08": {
+      "id": "puzzle_08",
+      "kind": "puzzle",
+      "name": "王座散步",
+      "subtitle": "先去左侧取钥匙，穿过地刺再上王座。",
+      "theme": "hell",
+      "grid": [
+        "#.......#",
+        "..#####..",
+        ".........",
+        ".........",
+        "..#...#..",
+        ".........",
+        "..#...#..",
+        ".........",
+        "#.#...#.#",
+        "#.......#",
+        "#.#...#.#",
+        "#.......#",
+        "###...###"
+      ],
+      "spawn": [
+        4,
+        11
+      ],
+      "steps": 20,
+      "blocks": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          1,
+          6
+        ]
+      ],
+      "enemies": [
+        {
+          "pos": [
+            4,
+            3
+          ],
+          "hp": 2
+        }
+      ],
+      "keys": [
+        [
+          1,
+          7
+        ]
+      ],
+      "spikes": [
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "portals": [
+        {
+          "id": "exit",
+          "pos": [
+            4,
+            2
+          ],
+          "target": "hub",
+          "name": "回客厅",
+          "requires_key": true
+        }
+      ],
+      "resident_slots": [],
+      "facilities": [],
+      "source_origin": [
+        510,
+        600
+      ],
+      "source_cell": 100,
+      "source_canvas": [
+        1920,
+        2000
+      ],
+      "source_view": [
+        340,
+        350,
+        1240,
+        1650
+      ],
+      "background": "chapterSketches_EXPORT_throne",
+      "background_path": "res://assets/world/home_expansion_20261009/chapterSketches_EXPORT_throne.png",
+      "geometry_source": {
+        "level": "level8",
+        "walls": "qa/home-expansion-20261009/original-layouts.json/wall_cells_world",
+        "floor": "original background source coordinates and original active wall colliders"
+      },
+      "encounter": {
+        "id": "hero_04",
+        "cell": [
+          4,
+          0
+        ],
+        "source": "original demon renderer logical foot"
+      },
+      "mechanic_adaptation": "Short key/box/spike branch and two-hit guard on the unchanged original throne floor; original player/goal/NPC positions retained.",
+      "par": 15,
+      "solution": [
+        "left",
+        "left",
+        "left",
+        "up",
+        "up",
+        "up",
+        "up",
+        "up",
+        "up",
+        "right",
+        "right",
+        "up",
+        "up",
+        "up",
+        "right"
+      ],
+      "next_room": "",
+      "scrolling": true
+    },
+    "puzzle_09": {
+      "id": "puzzle_09",
+      "kind": "puzzle",
+      "name": "最后一把钥匙",
+      "subtitle": "先把钥匙带回来，石头多也别慌。",
+      "theme": "hell",
+      "grid": [
+        "###...###",
+        "###...###",
+        "#.#...#.#",
+        ".........",
+        ".........",
+        "#.......#"
+      ],
+      "spawn": [
+        1,
+        5
+      ],
+      "steps": 31,
+      "blocks": [
+        [
+          3,
+          4
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          7,
+          4
+        ]
+      ],
+      "enemies": [],
+      "keys": [
+        [
+          8,
+          3
+        ]
+      ],
+      "spikes": [],
+      "portals": [
+        {
+          "id": "exit",
+          "pos": [
+            4,
+            0
+          ],
+          "target": "hub",
+          "name": "回客厅",
+          "requires_key": true
+        }
+      ],
+      "resident_slots": [],
+      "facilities": [],
+      "source_origin": [
+        510,
+        340
+      ],
+      "source_cell": 100,
+      "source_canvas": [
+        1920,
+        1080
+      ],
+      "source_view": [
+        340,
+        90,
+        1240,
+        970
+      ],
+      "background": "chapterBG0008",
+      "background_path": "res://assets/world/home_expansion_20261009/chapterBG0008.png",
+      "geometry_source": {
+        "level": "level9",
+        "walls": "qa/home-expansion-20261009/original-layouts.json/wall_cells_world",
+        "floor": "original background source coordinates and original active wall colliders"
+      },
+      "encounter": {
+        "id": "hero_08",
+        "cell": [
+          4,
+          0
+        ],
+        "source": "original goalSprite; demon renderer starts outside camera before scripted entrance"
+      },
+      "par": 24,
+      "solution": [
+        "right",
+        "up",
+        "right",
+        "right",
+        "down",
+        "right",
+        "right",
+        "left",
+        "left",
+        "up",
+        "up",
+        "right",
+        "right",
+        "down",
+        "right",
+        "up",
+        "right",
+        "left",
+        "left",
+        "left",
+        "up",
+        "up",
+        "left",
+        "up"
+      ],
+      "next_room": ""
+    }
+  }
+}

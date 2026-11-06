@@ -1,0 +1,35 @@
+[
+  {
+    "state": "idle",
+    "file": "wallnut_idle.png",
+    "frames": 16,
+    "cell": [
+      65,
+      73
+    ],
+    "url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/WallNut.gif",
+    "sha256": "18af5c1363371c86b0cfd2f433be1895b86ceb43543f33ab28448b21bc1ba57b"
+  },
+  {
+    "state": "cracked",
+    "file": "wallnut_cracked.png",
+    "frames": 11,
+    "cell": [
+      65,
+      73
+    ],
+    "url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/WallNut1.gif",
+    "sha256": "7de609503fe86de174e3bb19ddb08c83218e2d566a8ec710b3464ec2b67fd7b1"
+  },
+  {
+    "state": "broken",
+    "file": "wallnut_broken.png",
+    "frames": 15,
+    "cell": [
+      65,
+      73
+    ],
+    "url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/WallNut2.gif",
+    "sha256": "8b2f877ac117c030b6342e53a2ba9dc5a1d2c4d1d1c5e2383eec48b186e90305"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "generator": "image_gen",
+  "prompt": "Create a single polished 2D game sprite of the classic Plants vs Zombies Peashooter, recognizable green pea-shooting plant with spherical bright lime green head, tubular snout opening to the right, deep black oval muzzle, tiny oval black eyes on upper side of head, curved short thin green stem, two large pointed green leaf feet rooted on one horizontal baseline. Three-quarter side view looking RIGHT, head slightly tilted toward viewer. Match a comic anime crossover game using FLAT hand-drawn cell shading: confident thick clean dark navy outline, 2 or 3 vivid green shadow/highlight planes, one small cream shine on head, playful expressive face, strong clear silhouette that reads well at 64 pixels tall. Crisp clean illustrated sprite, not pixel art, not a 3D model or shiny rendering. Whole plant fully visible with generous 15 percent transparent margins, exact leaf feet visible and firmly on baseline. No environmental background, NO floor, NO painted drop shadow (the game will draw it), no text, no frame, no watermark, no visual effects, no projectiles, no extra plants, no face/arms/hands other than recognizable plant shape. Single plant only, not sprite sheet. Output genuinely TRANSPARENT background RGBA. This is a production sprite for an existing flat-shaded cartoon game.",
+  "generated_file": "exec-2f4fa729-3981-4fd9-9f31-4f0f11246403.png",
+  "sha256": "6BCAD2272043DF77A64CF9132D445E792C9B8D85640B50805A35C468EB452C2B",
+  "source_rect": [
+    106,
+    138,
+    1031,
+    1046
+  ],
+  "foot_pixel": [
+    615,
+    1183
+  ],
+  "mouth_pixel": [
+    999,
+    494
+  ],
+  "display_height": 62
+}

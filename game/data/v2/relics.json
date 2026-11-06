@@ -33,7 +33,7 @@
   {
     "id": "relic_orbit_foundry",
     "name": "环轨锻炉",
-    "description": "每个环绕物额外复制一枚，环绕半径提高25%。",
+    "description": "现有与之后的飞剑、法术环轨道额外增加一枚，半径提高20%。",
     "rule": "orbit_foundry",
     "value": 1.0,
     "tags": [

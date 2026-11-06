@@ -75,7 +75,7 @@
     "block": 0,
     "can_hit_air": true,
     "asset_key": "character.hero_01",
-    "unlocked_by_default": true,
+    "unlocked_by_default": false,
     "active_skill": {
       "name": "潮汐环歌",
       "kind": "columbia_tide_ring",
@@ -267,7 +267,7 @@
     "block": 0,
     "can_hit_air": true,
     "asset_key": "character.hero_04",
-    "unlocked_by_default": true,
+    "unlocked_by_default": false,
     "active_skill": {
       "name": "水脉疗愈",
       "kind": "healing_surge",
@@ -645,7 +645,7 @@
     "block": 0,
     "can_hit_air": true,
     "asset_key": "character.hero_10",
-    "unlocked_by_default": true,
+    "unlocked_by_default": false,
     "active_skill": {
       "name": "风刃切流",
       "kind": "wind_cut",
@@ -832,7 +832,7 @@
     "block": 2,
     "can_hit_air": true,
     "asset_key": "character.hero_13",
-    "unlocked_by_default": true,
+    "unlocked_by_default": false,
     "active_skill": {
       "name": "丝缕缠流",
       "kind": "thread_shelter",

@@ -11,17 +11,17 @@ func run():
 	var ex=sim.expedition
 	var task:Dictionary=ex.tasks[0]
 	sim.heroes[0].pos=task.pos
-	for i in 19:ex.tick(sim,1.0)
+	for i in 31:ex.tick(sim,1.0)
 	check(ex.completed==1 and ex.pending_rewards==1,"hold completion once")
-	ex.completion_notice=0;ex.open_reward(sim);check(sim.state=="reward" and ex.cards_remaining==3,"reward modal")
+	ex.completion_notice=0;ex.open_reward(sim);check(sim.state=="reward" and ex.cards_remaining==1,"reward modal")
 	var before:float=sim.elapsed;sim.tick(2.0);check(sim.elapsed==before,"reward pauses simulation")
 	check(not sim.choose_reward(5,0),"invalid choice rejected")
-	for i in 3:check(sim.choose_reward(0,0),"card accepted")
+	for i in 1:check(sim.choose_reward(0,0),"card accepted")
 	check(not sim.choose_reward(0,0),"double choice rejected")
-	var purge:Dictionary=ex.tasks[1];purge.active=true
-	for i in 16:ex.on_kill({"pos":purge.pos})
+	var purge:Dictionary=ex._task(sim,1,task.pos);ex.tasks.append(purge)
+	for i in 30:ex.on_kill({"pos":purge.pos,"kind":"grunt"})
 	check(purge.done,"purge done")
-	var collect:Dictionary=ex.tasks[2];collect.active=true
+	var collect:Dictionary=ex.tasks[1];collect.active=true
 	for shard:Dictionary in collect.shards:sim.heroes[0].pos=shard.pos;ex.tick(sim,0.1)
 	check(collect.done,"collection done")
 	# Flood-fill all open navigation cells: every passable cell must be connected.
@@ -54,7 +54,7 @@ func run():
 	var peak:=0;var timing:Array[float]=[]
 	for frame in 60*600:
 		if sim.state=="reward":sim.choose_reward(0,0)
-		for h:Dictionary in sim.heroes:h.hp=h.max_hp
+		for h:Dictionary in sim.heroes:h.hp=h.max_hp;h.invulnerable_timer=99999
 		var start:=Time.get_ticks_usec();sim.tick(1.0/60.0);timing.append((Time.get_ticks_usec()-start)/1000.0)
 		sim.drain_events();peak=maxi(peak,sim.enemies.size())
 	check(peak<=96,"enemy cap")

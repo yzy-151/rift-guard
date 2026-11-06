@@ -1,0 +1,231 @@
+{
+  "format_version": 1,
+  "pixels_per_cell": 100,
+  "backgrounds": {
+    "puzzle_04": {
+      "path": "res://assets/world/home_expansion_20261009/chapterBG0004.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "pivot": [
+        960.0,
+        540.0
+      ],
+      "pixels_per_cell": 100,
+      "world_center": [
+        3.0,
+        3.0
+      ],
+      "source_level": "level4",
+      "source_origin": [
+        560,
+        290
+      ],
+      "source_view": [
+        390,
+        40,
+        1140,
+        870
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ]
+    },
+    "puzzle_05": {
+      "path": "res://assets/world/home_expansion_20261009/chapterBG0005.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "pivot": [
+        960.0,
+        540.0
+      ],
+      "pixels_per_cell": 100,
+      "world_center": [
+        3.0,
+        3.0
+      ],
+      "source_level": "level5",
+      "source_origin": [
+        660,
+        190
+      ],
+      "source_view": [
+        490,
+        0,
+        940,
+        1010
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ]
+    },
+    "puzzle_06": {
+      "path": "res://assets/world/home_expansion_20261009/chapterBG0006.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "pivot": [
+        960.0,
+        540.0
+      ],
+      "pixels_per_cell": 100,
+      "world_center": [
+        3.0,
+        3.0
+      ],
+      "source_level": "level6",
+      "source_origin": [
+        610,
+        140
+      ],
+      "source_view": [
+        440,
+        0,
+        1040,
+        1060
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ]
+    },
+    "puzzle_07": {
+      "path": "res://assets/world/home_expansion_20261009/chapterBG0007.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "pivot": [
+        960.0,
+        540.0
+      ],
+      "pixels_per_cell": 100,
+      "world_center": [
+        3.0,
+        3.0
+      ],
+      "source_level": "level7",
+      "source_origin": [
+        660,
+        190
+      ],
+      "source_view": [
+        490,
+        0,
+        940,
+        1010
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ]
+    },
+    "puzzle_08": {
+      "path": "res://assets/world/home_expansion_20261009/chapterSketches_EXPORT_throne.png",
+      "size": [
+        1920,
+        2000
+      ],
+      "pivot": [
+        960.0,
+        1000.0
+      ],
+      "pixels_per_cell": 100,
+      "world_center": [
+        3.0,
+        -1.5
+      ],
+      "source_level": "level8",
+      "source_origin": [
+        510,
+        600
+      ],
+      "source_view": [
+        340,
+        350,
+        1240,
+        1650
+      ],
+      "source_canvas": [
+        1920,
+        2000
+      ]
+    },
+    "puzzle_09": {
+      "path": "res://assets/world/home_expansion_20261009/chapterBG0008.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "pivot": [
+        960.0,
+        540.0
+      ],
+      "pixels_per_cell": 100,
+      "world_center": [
+        3.0,
+        3.0
+      ],
+      "source_level": "level9",
+      "source_origin": [
+        510,
+        340
+      ],
+      "source_view": [
+        340,
+        90,
+        1240,
+        970
+      ],
+      "source_canvas": [
+        1920,
+        1080
+      ]
+    }
+  },
+  "source_files": [
+    {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/chapterBG0004.png",
+      "path": "res://assets/world/home_expansion_20261009/chapterBG0004.png",
+      "sha256": "9e95ec3799722bdc146afa13dbe8e37eda795544cb5c8182ed5a26c185bb180b",
+      "byte_identical": true
+    },
+    {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/chapterBG0005.png",
+      "path": "res://assets/world/home_expansion_20261009/chapterBG0005.png",
+      "sha256": "23807c620d6f751a28666c3c31ca01f8e394fa20c466498573f5d5931322a9c4",
+      "byte_identical": true
+    },
+    {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/chapterBG0006.png",
+      "path": "res://assets/world/home_expansion_20261009/chapterBG0006.png",
+      "sha256": "c0598103b5a49f6fffa3120a475c61b8b9a2a1da902e2c4e8203a5816e4c3b42",
+      "byte_identical": true
+    },
+    {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/chapterBG0007.png",
+      "path": "res://assets/world/home_expansion_20261009/chapterBG0007.png",
+      "sha256": "8be449482d1315c121a9252f4a596a1b57e5ca7a23ea99f70af04db24ae731a0",
+      "byte_identical": true
+    },
+    {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/chapterSketches_EXPORT_throne.png",
+      "path": "res://assets/world/home_expansion_20261009/chapterSketches_EXPORT_throne.png",
+      "sha256": "28d8454bcfe1db97c9bd0c1eff385c7355d0593ea598fbd9cccb653bd5c2c5d0",
+      "byte_identical": true
+    },
+    {
+      "source": "research/helltaker-reference/exported-primary/Assets/Texture2D/chapterBG0008.png",
+      "path": "res://assets/world/home_expansion_20261009/chapterBG0008.png",
+      "sha256": "eca59dfc0f5b20f4f2b4a65659c69df405e3520e28d6d1e13a205123793ff9f8",
+      "byte_identical": true
+    }
+  ],
+  "scope": "Original Helltaker scene levels 4 through 9; level10 is evidence only and excluded from runtime assets."
+}

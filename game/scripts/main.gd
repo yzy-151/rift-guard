@@ -1,7 +1,5 @@
 extends Node
 
-const HeroSignatureAudio = preload("res://scripts/hero_signature_audio.gd")
-const BossAudioProfile = preload("res://scripts/boss_audio_profile.gd")
 const Sim = preload("res://scripts/combat_simulation.gd")
 const View = preload("res://scripts/battle_view.gd")
 const Hud = preload("res://scripts/battle_hud.gd")
@@ -16,12 +14,15 @@ const SquadPanel = preload("res://scripts/squad_panel.gd")
 const StageSelectPanel = preload("res://scripts/stage_select_panel.gd")
 const ModeSelectPanel = preload("res://scripts/mode_select_panel.gd")
 const HomePanel = preload("res://scripts/home_panel.gd")
+const MobileControls = preload("res://scripts/mobile_controls.gd")
 const AudioDirector = preload("res://scripts/audio_director.gd")
+const WorkshopPanel = preload("res://scripts/workshop_panel.gd")
 const SettingsPanel = preload("res://scripts/settings_panel.gd")
 const CampaignMapPanel = preload("res://scripts/campaign_map_panel.gd")
 const CampaignEventPanel = preload("res://scripts/campaign_event_panel.gd")
 const CampaignNodeResolver = preload("res://scripts/campaign_node_resolver.gd")
 const CampaignCheckpoint = preload("res://scripts/campaign_checkpoint.gd")
+const ENDLESS_UI_LAYOUT = preload("res://data/ui_layout_profile.tres")
 var content = Content.new()
 var story = Story.new(content)
 var saved_story
@@ -36,17 +37,18 @@ var battle
 var hud
 var selected_id: int = 0
 var muted: bool = false
-var sound: AudioStreamPlayer
-var attack_sound: AudioStreamPlayer
 var stage_enter_sound: AudioStreamPlayer
-var boss_skill_sounds: Dictionary = {}
-var boss_sound_last_played: Dictionary = {}
 var audio_director
+var combat_audio
 var settings_panel
+var workshop
+var workshop_suspended: Array[Dictionary] = []
+var workshop_audio_suspended: Array[Dictionary] = []
+var workshop_audio_bus_db := 0.0
 var campaign_map_panel
 var campaign_event_panel
 var campaign_node_resolver = CampaignNodeResolver.new()
-var checkpoint_store = CampaignCheckpoint.new()
+var checkpoint_store = CampaignCheckpoint.new("user://campaign-story-v3-checkpoint")
 var checkpoint_phase := "battle"
 var checkpoint_active := false
 var checkpoint_testing := false
@@ -56,8 +58,7 @@ var checkpoint_overlay: CanvasLayer
 var qa_storage_path := ""
 var settings_from_menu := false
 var pending_endless_inheritance: Dictionary = {}
-var sound_timer: float = 0.0
-var attack_sound_timer: float = 0.0
+var stage_clear_choice: CanvasLayer
 var test_mode: bool = false
 var compendium = CompendiumState.new()
 var compendium_panel
@@ -67,6 +68,9 @@ var squad_panel
 var stage_select_panel
 var mode_select_panel
 var home_panel
+var mobile_controls
+var mobile_move_mode := false
+var mobile_move_all := false
 var home_facility_source := ""
 var pending_home_outcome: Dictionary = {}
 var pending_intro_outcome := ""
@@ -77,6 +81,7 @@ var campaign_recruit_reselect := false
 var last_home_scene: Dictionary = {}
 var pending_stage_id := ""
 var pending_stage_number := 0
+var pending_stage_intro_completed := false
 var stage_result_recorded := false
 var skill_aiming := false
 var ultimate_aiming := false
@@ -116,6 +121,7 @@ func _ready() -> void:
 	battle.sim = sim
 	add_child(battle)
 	battle.stage_exit_finished.connect(advance_stage)
+	battle.stage_exit_meet.connect(_stage_exit_meet)
 	fx = preload("res://scripts/sheet_effects.gd").new()
 	fx.battle_view = battle
 	battle.sheet_effects = fx
@@ -141,6 +147,10 @@ func _ready() -> void:
 	hud.formation_action.connect(set_formation_command)
 	hud.map_action.connect(open_campaign_map)
 	hud.debug_reward_action.connect(open_debug_reward)
+	hud.device_purchase_requested.connect(_select_device)
+	hud.device_placement_cancel_requested.connect(_cancel_device)
+	hud.device_drag_hover_requested.connect(_hover_dragged_device)
+	hud.device_drag_drop_requested.connect(_drop_dragged_device)
 	checkpoint_overlay = CanvasLayer.new()
 	checkpoint_overlay.layer = 100
 	add_child(checkpoint_overlay)
@@ -151,39 +161,19 @@ func _ready() -> void:
 	checkpoint_warning.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	checkpoint_warning.hide()
 	checkpoint_overlay.hide()
-	sound = AudioStreamPlayer.new()
-	sound.stream = preload("res://assets/sfx/combat_hit.wav")
-	sound.bus = "SFX"
-	sound.volume_db = -9
-	sound.max_polyphony = 6
-	add_child(sound)
-	attack_sound = AudioStreamPlayer.new()
-	attack_sound.stream = preload("res://assets/sfx/combat_attack.wav")
-	attack_sound.bus = "SFX"
-	attack_sound.volume_db = -7
-	attack_sound.max_polyphony = 8
-	add_child(attack_sound)
+	combat_audio = preload("res://scripts/combat_audio_director.gd").new()
+	combat_audio.audio_director = audio_director
+	add_child(combat_audio)
 	stage_enter_sound = AudioStreamPlayer.new()
 	stage_enter_sound.stream = preload("res://assets/helltaker/audio/button_chapter_confirm_01.wav")
 	stage_enter_sound.bus = "SFX"
 	stage_enter_sound.volume_db = -11
 	add_child(stage_enter_sound)
-	var boss_sound_sources := {"rift_laser":"rift_laser","rift_orbs":"rift_orbs","rift_overhead":"rift_overhead","rift_storm":"rift_storm","slime_attack":"slime_attack","slime_bounce":"slime_bounce","slime_burst":"slime_burst","slime_reflux":"slime_reflux","slime_court":"slime_court","kindred_dance":"kindred_dance","kindred_wolf":"kindred_wolf","kindred_dread":"kindred_dread","kindred_hunt":"kindred_hunt","kindred_respite":"kindred_respite","galio_entrance":"rift_storm","galio_punch":"rift_overhead","galio_winds":"rift_orbs","galio_durand":"kindred_respite"}
-	boss_sound_sources.merge(BossAudioProfile.sources(), true)
-	for skill_id: String in HeroSignatureAudio.SOUNDS:
-		boss_sound_sources[skill_id] = "../heroes/" + skill_id
-	for skill_id: String in boss_sound_sources:
-		var boss_sound := AudioStreamPlayer.new()
-		boss_sound.stream = load("res://assets/sfx/boss/%s.wav" % str(boss_sound_sources[skill_id]))
-		boss_sound.bus = "SFX"
-		boss_sound.volume_db = -1.5
-		boss_sound.max_polyphony = 2
-		add_child(boss_sound)
-		boss_skill_sounds[skill_id] = boss_sound
 	dialogue = preload("res://scripts/dialogue_panel.gd").new()
 	add_child(dialogue)
 	dialogue.config = content
 	dialogue.build(hud, story)
+	story.ending_resolved.connect(_authored_ending_resolved)
 	picker = preload("res://scripts/content_preview.gd").new()
 	add_child(picker)
 	picker.build(self)
@@ -211,12 +201,20 @@ func _ready() -> void:
 	mode_select_panel.settings_requested.connect(open_settings)
 	mode_select_panel.continue_requested.connect(resume_campaign)
 	mode_select_panel.home_requested.connect(enter_home)
+	mode_select_panel.archive_requested.connect(open_menu_archive)
+	mode_select_panel.quit_requested.connect(func(): get_tree().quit())
 	home_panel = HomePanel.new()
 	add_child(home_panel)
 	home_panel.build(hud, sim.database, compendium)
 	home_panel.interact_requested.connect(begin_home_interaction)
 	home_panel.facility_requested.connect(open_home_facility)
 	home_panel.exit_requested.connect(return_to_main_menu)
+	if OS.get_name() == "Android" or "--mobile-controls-test" in OS.get_cmdline_user_args():
+		mobile_controls = MobileControls.new()
+		add_child(mobile_controls)
+		mobile_controls.build(hud)
+		mobile_controls.interact_requested.connect(func(): home_panel.interact_active_target())
+		mobile_controls.move_mode_requested.connect(_set_mobile_move_mode)
 	var home_data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/home_stories.json"))
 	if home_data is Dictionary:
 		story.stories.merge(home_data, true)
@@ -234,6 +232,8 @@ func _ready() -> void:
 	settings_panel.build(hud)
 	settings_panel.setting_changed.connect(apply_setting)
 	settings_panel.closed.connect(settings_closed)
+	settings_panel.workshop_requested.connect(open_workshop)
+	settings_panel.quit_requested.connect(func(): get_tree().quit())
 	apply_setting("reduced_effects", bool(audio_director.values.reduced_effects))
 	dialogue.finished.connect(end_dialogue)
 	dialogue.choice_committed.connect(apply_dialogue_choice)
@@ -553,6 +553,7 @@ func _ready() -> void:
 		call_deferred("open_mode_menu")
 
 func _physics_process(dt: float) -> void:
+	if workshop != null: return
 	if story.active or campaign_prelude_active or recruitment_transition_active or picker.visible or effect_preview > 0 or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (home_panel != null and home_panel.is_open()) or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()) or (achievement_popup != null and achievement_popup.is_open()):
 		return
 	if sim.endless_mode:
@@ -574,27 +575,70 @@ func record_stage_result() -> void:
 		return
 	if sim.state == "won":
 		var stage: Dictionary = sim.database.stages.get(sim.current_stage_id, {})
-		compendium.clear_stage(sim.current_stage_id, stage.get("unlocks", []))
+		if sim.current_stage_id != "stage_01":
+			compendium.clear_stage(sim.current_stage_id, stage.get("unlocks", []))
 		if not sim.endless_mode:
 			var node: Dictionary = CampaignCheckpoint.nodes(sim.database).get(sim.run_state.current_node, {})
 			var boss: bool = str(node.get("type", "")) == "boss" or sim.current_stage_id in ["stage_03", "stage_08"]
 			sim.run_state.grant_stage_reward(sim.current_stage_id, sim.kills, sim.base_hp, boss)
-			save_campaign_checkpoint("cleared")
+			if sim.current_stage_id != "stage_01":
+				save_campaign_checkpoint("cleared")
 	compendium.record_result(sim.current_stage_id, sim.kills, sim.base_hp, sim.best_streak)
 	compendium.record_build(sim)
 	var unlocked_now: Array[String] = compendium.evaluate_achievements(sim, sim.database)
 	pending_achievement_ids.append_array(unlocked_now)
 	stage_result_recorded = true
 
+func _notification(what: int) -> void:
+	if OS.get_name() != "Android" or not is_instance_valid(hud):
+		return
+	if what == NOTIFICATION_APPLICATION_PAUSED:
+		if sim.state in ["running", "between"]:
+			sim.toggle_pause()
+			combat_audio.reset()
+			refresh()
+	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		_handle_mobile_back()
+
+func _handle_mobile_back() -> void:
+	if dialogue != null and dialogue.history_panel.visible:
+		dialogue.close_history()
+		return
+	if story.active or campaign_prelude_active or recruitment_transition_active:
+		return # Never choose or skip a story branch on the Android Back key.
+	if settings_panel.is_open():
+		settings_panel.close()
+		return
+	if compendium_panel.is_open():
+		compendium_panel.close()
+		refresh()
+		return
+	if skill_aiming or ultimate_aiming:
+		set_skill_aiming(false)
+		set_ultimate_aiming(false)
+		return
+	if sim.state in ["reward", "stage_exit"] or (stage_clear_choice != null and stage_clear_choice.is_open()):
+		return
+	if sim.state in ["running", "between", "paused"] and not mode_select_panel.is_open():
+		toggle_pause()
+	elif not mode_select_panel.is_open():
+		return_to_main_menu()
+
 func _process(dt: float) -> void:
+	if workshop != null: return
+	if mobile_controls != null:
+		var at_home: bool = home_panel.is_open() and not home_panel.busy and not story.active and not settings_panel.is_open() and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open()
+		var in_battle: bool = sim.state in ["running", "between", "stage_exit"] and not story.active and not settings_panel.is_open() and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open() and not picker.visible and not campaign_event_panel.is_open() and not campaign_map_panel.is_open() and not achievement_popup.is_open() and not at_home
+		if not in_battle or skill_aiming or ultimate_aiming:
+			mobile_move_mode = false
+		mobile_controls.update_modes(at_home, in_battle, mobile_move_mode, mobile_move_all)
+		home_panel.touch_axis = mobile_controls.movement_axis() if at_home else Vector2.ZERO
 	if effect_preview > 0:
 		effect_preview = maxf(0, effect_preview - dt)
 		fx.advance(dt)
 		if effect_preview <= 0:
 			hud.signature = ""
 			refresh()
-	sound_timer = maxf(0.0, sound_timer - dt)
-	attack_sound_timer = maxf(0.0, attack_sound_timer - dt)
 	if not story.active and not campaign_prelude_active and not picker.visible and not compendium_panel.is_open() and not squad_panel.is_open() and not stage_select_panel.is_open() and not mode_select_panel.is_open() and not (home_panel != null and home_panel.is_open()) and not settings_panel.is_open() and not (achievement_popup != null and achievement_popup.is_open()) and effect_preview <= 0 and sim.state not in ["paused", "reward"]:
 		sim.performance_budget.observe_render_frame(dt * 1000.0)
 		battle.advance(dt)
@@ -608,28 +652,11 @@ func process_events() -> void:
 	var batch: Array[Dictionary] = sim.drain_events()
 	battle.accept_events(batch)
 	fx.accept(batch)
+	combat_audio.enabled = not muted and not test_mode
+	combat_audio.accept(batch, sim, battle.visible_world_rect())
 	for event in batch:
-		var event_kind := str(event.get("kind", ""))
-		var audio_profile := HeroSignatureAudio.describe(event)
-		if audio_profile.is_empty(): audio_profile = BossAudioProfile.describe(event)
-		var audio_key := str(audio_profile.get("key", event_kind))
-		if boss_skill_sounds.has(audio_key) and not muted and not test_mode:
-			var now := Time.get_ticks_msec() * 0.001
-			if now - float(boss_sound_last_played.get(audio_key, -100.0)) >= float(audio_profile.get("min_interval", 0.05)):
-				var boss_sound: AudioStreamPlayer = boss_skill_sounds[audio_key]
-				boss_sound.volume_db = float(audio_profile.get("volume_db", -1.5))
-				boss_sound.pitch_scale = float(audio_profile.get("pitch", 0.92 if str(event_kind).begins_with("slime_") and int(event.get("phase", 1)) >= 2 else 1.0))
-				boss_sound.play()
-				boss_sound_last_played[audio_key] = now
-		if event.kind == "shot" and not muted and not test_mode and attack_sound_timer <= 0.0:
-			var attack_style := str(event.get("style", "standard"))
-			var style_pitch: float = float({"blade_wave":0.88,"frost_shard":1.12,"wind_seed":1.18,"hydro_salon":1.04,"tidal_orb":0.82,"music_note":1.26,"arcane_lance":0.94,"frost_bloom":0.90,"quantum_gate":1.16,"mon3tr":0.78,"ether_shot":1.22}.get(attack_style, 1.0))
-			attack_sound.pitch_scale = float(style_pitch) + float(int(event.get("hero_id", 0)) % 3) * 0.018
-			attack_sound.volume_db = -5.5 if attack_style in ["blade_wave","tidal_orb","arcane_lance","mon3tr"] else -7.0
-			attack_sound.play()
-			attack_sound_timer = 0.08 if sim.enemies.size() < 90 else 0.14
 		if event.kind == "regroup":
-			sound.stop()
+			combat_audio.reset()
 		if event.kind == "route_warning":
 			hud.announce_route_warning(event)
 		if event.kind == "deployment_unlocked":
@@ -647,16 +674,6 @@ func process_events() -> void:
 			hud.announce_arena_event(str(event.get("arena_type", "hazard")), float(event.get("duration", 6.0)))
 		if event.kind == "contract_complete":
 			hud.announce_contract(str(event.value), str(event.get("reward", "")))
-		if event.kind in ["critical", "shield_break", "terrain_break"] and not muted and not test_mode and sound_timer <= 0.0:
-			sound.volume_db = -9.0
-			sound.pitch_scale = 0.72 if event.kind == "shield_break" else 0.84
-			sound.play()
-			sound_timer = 0.12
-		if event.kind == "hit" and not muted and not test_mode and sound_timer <= 0.0:
-			sound.volume_db = -8.0
-			sound.pitch_scale = 0.94 + float(sim.shots_fired % 3) * 0.06
-			sound.play()
-			sound_timer = 0.065
 
 func refresh() -> void:
 	battle.selected_id = selected_id
@@ -668,6 +685,8 @@ func open_mode_menu() -> void:
 	audio_director.set_scene("menu")
 	hud.get_child(0).hide()
 	var checkpoint: Dictionary = checkpoint_store.load_checkpoint(sim.database)
+	if bool(checkpoint.get("ok", false)):
+		compendium.restore_story_recruitment(checkpoint.snapshot)
 	if not checkpoint_error.is_empty():
 		checkpoint["message"] = checkpoint_error
 	mode_select_panel.update_checkpoint(checkpoint, sim.database)
@@ -679,6 +698,11 @@ func enter_home() -> void:
 	hud.get_child(0).hide()
 	audio_director.set_scene("menu")
 	home_panel.open()
+
+func open_menu_archive() -> void:
+	home_facility_source = "menu_archive"
+	mode_select_panel.close()
+	compendium_panel.open("characters")
 
 func choose_mode(mode_id: String) -> void:
 	mode_select_panel.close()
@@ -692,6 +716,7 @@ func choose_mode(mode_id: String) -> void:
 		stage_select_panel.open()
 
 func return_to_main_menu() -> void:
+	if is_instance_valid(combat_audio): combat_audio.reset()
 	home_facility_source = ""
 	if home_panel != null:
 		home_panel.close()
@@ -743,6 +768,10 @@ func resume_campaign() -> bool:
 		mode_select_panel.update_checkpoint(loaded, sim.database)
 		return false
 	var snapshot: Dictionary = loaded.snapshot
+	compendium.restore_story_recruitment(snapshot)
+	snapshot = snapshot.duplicate(true)
+	if not compendium.has_gwen_recruitment():
+		snapshot.run.squad.erase("hero_13")
 	if not CampaignCheckpoint.restore(snapshot, sim):
 		return false
 	for id: String in snapshot.run.squad:
@@ -798,9 +827,7 @@ func primary() -> void:
 			if test_mode:
 				sim.start()
 			else:
-				var opening_key := "mode1_opening" if sim.v2_mode else "opening"
-				if not begin_dialogue(opening_key, "start"):
-					sim.start()
+				choose_stage(sim.current_stage_id)
 		"paused":
 			sim.toggle_pause()
 		"won", "lost":
@@ -827,10 +854,13 @@ func reroll_rewards() -> void:
 		refresh()
 
 func open_debug_reward() -> void:
-	if story.active:
-		return
-	if sim.begin_debug_reward():
-		refresh()
+	var help := AcceptDialog.new()
+	help.title = "操作说明"
+	help.dialog_text = "拖动下方角色卡到战场部署；点选角色后使用技能按钮。\n电脑：右键移动，Q 瞄准技能，E 释放大招，F11 全屏。\n手机：点‘移动’或‘全队移动’，再点目标位置；拖动卡片部署。\n击杀获得金币，点击植物商店购买后放到空格。\n红色预警出现时及时移动；守住水晶并击败首领即可通关。"
+	add_child(help)
+	help.confirmed.connect(help.queue_free)
+	help.canceled.connect(help.queue_free)
+	help.popup_centered(Vector2i(800,280))
 
 func restart(skip_death_animation: bool = false) -> void:
 	if not test_mode and not skip_death_animation and dialogue != null:
@@ -860,7 +890,7 @@ func restart(skip_death_animation: bool = false) -> void:
 	battle.hero_down_visuals.clear()
 	battle.projectile_trails.clear()
 	battle.base_flash = 0.0
-	sound.stop()
+	combat_audio.reset()
 	set_skill_aiming(false)
 	stage_result_recorded = false
 	loss_transition_shown = false
@@ -876,7 +906,7 @@ func toggle_pause() -> void:
 		return
 	sim.toggle_pause()
 	if sim.state == "paused":
-		sound.stop()
+		combat_audio.reset()
 	refresh()
 
 func select_hero(id: int) -> void:
@@ -909,10 +939,24 @@ func set_formation_command(mode: String) -> void:
 	refresh()
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F11:
+		apply_setting("fullscreen", not bool(audio_director.values.fullscreen))
+		get_viewport().set_input_as_handled()
+		return
+	if workshop != null: return
+	if stage_clear_choice != null and stage_clear_choice.is_open():return
 	# The achievement modal must receive input before the suspended stage transition.
 	# Pointer events continue to GUI dispatch; no underlying gameplay handles them.
 	if achievement_popup != null and achievement_popup.is_open():
 		if achievement_popup.handle_input(event):
+			get_viewport().set_input_as_handled()
+		return
+	if dialogue != null and dialogue.history_panel.visible:
+		if event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_H, KEY_ESCAPE, KEY_ENTER, KEY_SPACE]:
+			dialogue.close_history()
+			get_viewport().set_input_as_handled()
+		elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT and dialogue.history_panel.return_button.get_global_rect().has_point(event.position):
+			dialogue.close_history()
 			get_viewport().set_input_as_handled()
 		return
 	if dialogue != null and dialogue.animation_waiting:
@@ -956,7 +1000,7 @@ func _input(event: InputEvent) -> void:
 				hud.reward_panel._pick_target(event.keycode - KEY_1)
 			get_viewport().set_input_as_handled()
 		return
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10 and (mode_select_panel.is_open() or sim.state == "paused"):
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10 and (mode_select_panel.is_open() or sim.state == "paused" or (home_panel != null and home_panel.is_open() and not home_panel.busy and not story.active)):
 		open_settings()
 		get_viewport().set_input_as_handled()
 		return
@@ -979,8 +1023,9 @@ func _input(event: InputEvent) -> void:
 		return
 	if sim.state == "stage_exit" and not story.active and not squad_panel.is_open():
 		if event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_ENTER, KEY_SPACE]:
-			battle.reset_transients()
-			advance_stage()
+			if not battle.stage_exit_requires_dialogue:
+				battle.reset_transients()
+				advance_stage()
 			get_viewport().set_input_as_handled()
 			return
 	if home_panel != null and home_panel.is_open() and not story.active:
@@ -998,14 +1043,28 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F2 and not story.active:
+		if not sim.battle_devices.selected_kind.is_empty(): _cancel_device()
 		toggle_compendium()
 		get_viewport().set_input_as_handled()
 		return
+	if hud.device_shop_ui != null and hud.device_shop_ui.drawer.is_visible_in_tree() and not story.active:
+		var close_seeds: bool = event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE
+		close_seeds = close_seeds or (event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT)
+		if close_seeds:
+			hud.device_shop_ui.close_drawer()
+			get_viewport().set_input_as_handled()
+			return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE and not story.active and not sim.battle_devices.selected_kind.is_empty():
+		_cancel_device()
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3 and not story.active:
+		if not sim.battle_devices.selected_kind.is_empty(): _cancel_device()
 		open_current_squad()
 		get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F4 and not story.active:
+		if not sim.battle_devices.selected_kind.is_empty(): _cancel_device()
 		open_stage_select()
 		get_viewport().set_input_as_handled()
 		return
@@ -1031,7 +1090,7 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventKey and event.pressed and not story.active:
-		if event.keycode == KEY_F6:
+		if event.keycode == KEY_F6 and OS.has_feature("editor") and test_mode:
 			picker.open()
 			get_viewport().set_input_as_handled()
 			return
@@ -1039,7 +1098,7 @@ func _input(event: InputEvent) -> void:
 			open_campaign_map()
 			get_viewport().set_input_as_handled()
 			return
-		if event.keycode == KEY_F7 and sim.state in ["ready", "paused"]:
+		if event.keycode == KEY_F7 and OS.has_feature("editor") and test_mode and sim.state in ["ready", "paused"]:
 			preview_effects()
 			get_viewport().set_input_as_handled()
 			return
@@ -1092,9 +1151,32 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if workshop != null: return
+	if dialogue != null and dialogue.history_panel.visible: return
 	if story.active or picker.visible or effect_preview > 0 or squad_panel.is_open() or stage_select_panel.is_open() or mode_select_panel.is_open() or (campaign_map_panel != null and campaign_map_panel.is_open()) or (campaign_event_panel != null and campaign_event_panel.is_open()):
 		return
 	if sim.state not in ["running", "between", "stage_exit"]:
+		return
+	if sim.endless_mode and (event is InputEventMouseMotion or event is InputEventMouseButton):
+		var endless_screen: Vector2 = battle.get_global_transform().affine_inverse() * event.position
+		if not View.ENDLESS_PLAYFIELD_SCREEN.has_point(endless_screen) or ENDLESS_UI_LAYOUT.battle_expedition_tasks_rect.has_point(endless_screen) or ENDLESS_UI_LAYOUT.battle_expedition_minimap_rect.grow(6).has_point(endless_screen):
+			return
+		if sim.elapsed<9.0 and ENDLESS_UI_LAYOUT.battle_expedition_guide_rect.has_point(endless_screen): return
+	if not sim.battle_devices.selected_kind.is_empty():
+		if event is InputEventMouseMotion:
+			var device_screen: Vector2 = battle.get_global_transform().affine_inverse() * event.position
+			sim.battle_devices.hover(sim, battle.screen_to_world(device_screen))
+			hud.refresh(sim, selected_id)
+			battle.queue_redraw()
+		elif event is InputEventMouseButton and event.pressed:
+			if event.button_index == MOUSE_BUTTON_RIGHT:
+				_cancel_device()
+			elif event.button_index == MOUSE_BUTTON_LEFT:
+				var device_screen: Vector2 = battle.get_global_transform().affine_inverse() * event.position
+				sim.battle_devices.place(sim, battle.screen_to_world(device_screen))
+				process_events()
+				refresh()
+			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventMouseMotion and (skill_aiming or ultimate_aiming):
 		var hover_screen: Vector2 = battle.get_global_transform().affine_inverse() * event.position
@@ -1110,6 +1192,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		var point: Vector2 = battle.screen_to_world(screen_point)
 		var playable_area: Rect2 = Sim.ENDLESS_ARENA if sim.endless_mode else View.WORLD
 		if not playable_area.has_point(point):
+			return
+		if event.button_index == MOUSE_BUTTON_LEFT and mobile_move_mode and not skill_aiming and not ultimate_aiming:
+			if mobile_move_all and sim.state != "stage_exit":
+				sim.command_squad(point)
+			else:
+				var hero_id := 0 if sim.state == "stage_exit" or selected_id < 0 else selected_id
+				sim.command_move(hero_id, point)
+			mobile_move_mode = false
+			refresh()
+			get_viewport().set_input_as_handled()
 			return
 		if sim.state == "stage_exit" and event.button_index == MOUSE_BUTTON_RIGHT:
 			selected_id = 0
@@ -1149,6 +1241,44 @@ func _unhandled_input(event: InputEvent) -> void:
 				sim.command_move(selected_id, point)
 		refresh()
 
+func _set_mobile_move_mode(all_heroes: bool) -> void:
+	if mobile_move_mode and mobile_move_all == all_heroes:
+		mobile_move_mode = false
+	else:
+		mobile_move_mode = true
+		mobile_move_all = all_heroes
+		if skill_aiming or ultimate_aiming:
+			set_skill_aiming(false)
+
+func _select_device(kind: String) -> void:
+	if story.active or settings_panel.is_open() or sim.state not in ["running", "between", "ready"]: return
+	set_skill_aiming(false)
+	ultimate_aiming = false
+	mobile_move_mode = false
+	sim.battle_devices.select(sim, kind)
+	hud.refresh(sim, selected_id)
+	battle.queue_redraw()
+
+func _cancel_device() -> void:
+	sim.battle_devices.cancel()
+	hud.cancel_device_placement()
+	hud.refresh(sim, selected_id)
+	battle.queue_redraw()
+
+func _hover_dragged_device(screen_pos: Vector2) -> void:
+	if story.active or settings_panel.is_open() or sim.state not in ["running", "between", "ready"] or sim.battle_devices.selected_kind.is_empty(): return
+	var local: Vector2 = battle.get_global_transform().affine_inverse() * screen_pos
+	sim.battle_devices.hover(sim, battle.screen_to_world(local))
+	hud.refresh(sim, selected_id)
+	battle.queue_redraw()
+
+func _drop_dragged_device(kind: String, screen_pos: Vector2) -> void:
+	if story.active or settings_panel.is_open() or sim.state not in ["running", "between", "ready"] or sim.battle_devices.selected_kind != kind: return
+	var local: Vector2 = battle.get_global_transform().affine_inverse() * screen_pos
+	sim.battle_devices.place(sim, battle.screen_to_world(local))
+	process_events()
+	refresh()
+
 func run_smoke_test() -> void:
 	primary()
 	for frame in 150:
@@ -1163,10 +1293,10 @@ func run_ui_test() -> void:
 func begin_dialogue(key: String, resume_action: String = "") -> bool:
 	if not story.begin(key):
 		return false
-	if resume_action == "start":
+	if resume_action in ["start", "pre_stage"]:
 		pending_intro_outcome = ""
 	story_resume = resume_action
-	sound.stop()
+	combat_audio.reset()
 	if resume_action != "recruit":
 		audio_director.set_scene("dialogue")
 	hud.get_child(0).hide()
@@ -1220,6 +1350,10 @@ func _stage_select_cancelled() -> void:
 		mode_select_panel.open()
 
 func _home_archive_closed() -> void:
+	if home_facility_source == "menu_archive":
+		home_facility_source = ""
+		open_mode_menu()
+		return
 	if home_facility_source in ["archive", "achievements"]:
 		home_facility_source = ""
 		home_panel.open()
@@ -1238,30 +1372,36 @@ func begin_home_interaction(character_id: String) -> void:
 	if not begin_dialogue(scene_key, "home"):
 		home_panel.busy = false
 
+func _home_visitor_readonly() -> bool:
+	return story_resume == "home" and home_panel != null and bool(home_panel.get("visiting_encounter"))
+
 func apply_dialogue_choice(choice: Dictionary) -> void:
-	if choice.has("campaign_outcome"):
+	var visitor_readonly := _home_visitor_readonly()
+	if not visitor_readonly and choice.has("campaign_outcome"):
 		pending_campaign_outcome = str(choice.campaign_outcome)
-	if choice.has("intro_outcome"):
+	if not visitor_readonly and choice.has("intro_outcome"):
 		pending_intro_outcome = str(choice.intro_outcome)
 	if choice.has("home_success"):
 		pending_home_outcome = {"success": bool(choice.home_success), "reason": str(choice.get("home_reason", ""))}
-	if choice.has("recruit_success") and not pending_recruitment.is_empty():
+	if not visitor_readonly and choice.has("recruit_success") and not pending_recruitment.is_empty():
 		pending_recruitment.success = bool(choice.recruit_success)
 	var unlock_id := str(choice.get("unlock_character", ""))
-	if not unlock_id.is_empty() and sim.database.characters.has(unlock_id):
-		compendium.unlock_character(unlock_id)
-		if story_resume == "start" and not sim.run_state.squad.has(unlock_id) and not campaign_recruits.has(unlock_id):
+	if not visitor_readonly and not unlock_id.is_empty() and sim.database.characters.has(unlock_id):
+		var selectable := unlock_id != "hero_13" or compendium.has_gwen_recruitment()
+		if selectable: compendium.unlock_character(unlock_id)
+		if selectable and story_resume in ["start", "pre_stage"] and not sim.run_state.squad.has(unlock_id) and not campaign_recruits.has(unlock_id):
 			campaign_recruits.append(unlock_id)
 	var relationship: Dictionary = choice.get("relationship", {})
 	if not relationship.is_empty():
 		sim.run_state.add_relationship(str(relationship.get("character_id", "traveler")), int(relationship.get("value", 0)))
 	var flag := str(choice.get("story_flag", ""))
-	if not flag.is_empty():
+	if not visitor_readonly and not flag.is_empty():
 		sim.run_state.set_story_flag(flag)
 	var next_node := str(choice.get("campaign_node", ""))
-	if not next_node.is_empty():
+	if not visitor_readonly and not next_node.is_empty():
 		sim.run_state.select_campaign_node(next_node)
 	var effect: Dictionary = choice.get("effect", {})
+	if visitor_readonly: effect = {}
 	match str(effect.get("type", "")):
 		"luck":
 			sim.run_state.luck = clampf(sim.run_state.luck + float(effect.get("value", 0.0)), 0.0, 0.75)
@@ -1269,6 +1409,37 @@ func apply_dialogue_choice(choice: Dictionary) -> void:
 			pending_endless_inheritance = sim.export_run_snapshot()
 			story_resume = "inherit_endless"
 	hud.signature = ""
+
+func _authored_ending_resolved(ending: Dictionary) -> void:
+	var accepted := str(ending.get("status", "badend")) == "success"
+	if story_resume == "recruit":
+		if not pending_recruitment.is_empty(): pending_recruitment.success = accepted
+	elif story_resume == "home":
+		pending_home_outcome = {"success": accepted}
+	else:
+		pending_campaign_outcome = "success" if accepted else "failure"
+	if not accepted and not previewing and story_resume == "stage_recruit" and story.key == "mode1_won" and sim.current_stage_id == "stage_01" and not compendium.has_gwen_recruitment():
+		compendium.reject_gwen_recruitment()
+		sim.run_state.set_story_flag("gwen_recruited", false)
+	if accepted and not previewing and not _home_visitor_readonly():
+		if str(ending.get("unlock_character", "")) == "hero_13" and story_resume == "stage_recruit" and story.key == "mode1_won" and sim.current_stage_id == "stage_01" and sim.state in ["won", "stage_exit"]:
+			compendium.record_story_recruit("hero_13", "mode1_won")
+			sim.run_state.set_story_flag("gwen_recruited")
+		apply_dialogue_choice({"unlock_character": str(ending.get("unlock_character", ""))})
+
+func _play_authored_result() -> void:
+	if pending_campaign_outcome == "success":
+		await dialogue.play_success_animation()
+	else:
+		await dialogue.play_death_transition("")
+	for panel: Dictionary in story.last_ending.get("comics", []):
+		await dialogue.play_comic_panel(str(panel.get("image", "")), str(panel.get("text", "")))
+	await dialogue.play_stage_transition()
+
+func _stage_exit_meet() -> void:
+	story.seen.erase("mode1_won")
+	if not begin_dialogue("mode1_won", "stage_recruit"):
+		push_error("First-stage greeting scene is missing")
 
 func end_dialogue() -> void:
 	if previewing:
@@ -1279,11 +1450,42 @@ func end_dialogue() -> void:
 	hud.signature = ""
 	var action: String = story_resume
 	story_resume = ""
-	var campaign_result: bool = action in ["start", "stage_exit"] or (story.key == "mode1_final_won" and not previewing)
+	var campaign_result: bool = action in ["start", "pre_stage", "stage_exit", "stage_recruit"] or (story.key == "mode1_final_won" and not previewing)
 	if campaign_result:
 		campaign_prelude_active = true
-	if action != "home" and not pending_achievement_ids.is_empty():
+	if action not in ["home", "recruit", "stage_recruit"] and not pending_achievement_ids.is_empty():
 		await _show_pending_achievements()
+	if action == "pre_stage":
+		var scene_key: String = story.key
+		var accepted := pending_campaign_outcome != "failure"
+		if story.graph_mode:
+			accepted = pending_campaign_outcome == "success"
+			await _play_authored_result()
+		else:
+			await dialogue.play_stage_transition()
+		campaign_prelude_active = false
+		if not accepted:
+			story.seen.erase(scene_key)
+			begin_dialogue(scene_key, "pre_stage")
+			return
+		pending_stage_intro_completed = true
+		var available_squad: Array[String] = sim.run_state.squad.duplicate()
+		for id: String in campaign_recruits:
+			if not available_squad.has(id): available_squad.append(id)
+		squad_panel.open(pending_stage_id, available_squad, campaign_recruits)
+		return
+	if action == "stage_recruit":
+		await _play_authored_result()
+		if pending_campaign_outcome == "success":
+			compendium.clear_stage(sim.current_stage_id, ["hero_13"])
+			save_campaign_checkpoint("cleared")
+			await _show_pending_achievements()
+			campaign_prelude_active = false
+			battle.start_stage_departure()
+		else:
+			campaign_prelude_active = false
+			_stage_exit_meet()
+		return
 	if action == "home":
 		hud.get_child(0).hide()
 		if bool(pending_home_outcome.get("success", false)):
@@ -1338,6 +1540,7 @@ func end_dialogue() -> void:
 		await dialogue.play_stage_transition()
 	if campaign_result:
 		campaign_prelude_active = false
+		if sim.state == "won" and not has_next_stage():advance_stage()
 	refresh()
 
 func check_story() -> void:
@@ -1347,6 +1550,10 @@ func check_story() -> void:
 		return
 	if sim.v2_mode:
 		if sim.state == "won":
+			if sim.current_stage_id == "stage_01":
+				record_stage_result()
+				play_stage_exit()
+				return
 			if has_next_stage():
 				var stage_ids: Array = sim.database.modes.get(sim.run_state.mode_id, {}).get("stage_ids", [])
 				var stage_number := stage_ids.find(sim.current_stage_id) + 1
@@ -1381,22 +1588,36 @@ func play_stage_exit() -> void:
 	keyboard_moving = false
 	sim.begin_stage_exit()
 	selected_id = 0
-	battle.begin_stage_exit(character_id, character_name, element_id)
+	battle.begin_stage_exit(character_id, character_name, element_id, sim.current_stage_id == "stage_01")
 	refresh()
 
 func advance_stage() -> void:
+	if stage_clear_choice != null and stage_clear_choice.is_open():return
+	if stage_clear_choice != null:stage_clear_choice.queue_free()
+	stage_clear_choice=preload("res://scripts/stage_clear_choice.gd").new()
+	add_child(stage_clear_choice);stage_clear_choice.build(hud, not has_next_stage())
+	stage_clear_choice.continue_campaign.connect(_continue_campaign_stage)
+	stage_clear_choice.enter_endless.connect(func():
+		pending_endless_inheritance=sim.export_run_snapshot()
+		campaign_prelude_active=false
+		start_inherited_endless())
+
+func _continue_campaign_stage() -> void:
+	if not has_next_stage():
+		return_to_main_menu()
+		return
+	campaign_prelude_active=false
 	var mode: Dictionary = sim.database.modes.get(sim.run_state.mode_id, {})
 	var ids: Array = mode.get("stage_ids", [])
 	var index := ids.find(sim.current_stage_id)
 	if index < 0 or index + 1 >= ids.size():
+		stage_select_panel.open()
 		return
 	var completed: Dictionary = sim.database.stages.get(sim.current_stage_id, {})
 	var unlocks: Array = completed.get("unlocks", [])
 	compendium.clear_stage(sim.current_stage_id, unlocks)
-	pending_stage_id = str(ids[index + 1])
-	pending_stage_number = index + 2
-	squad_panel.open(pending_stage_id, sim.run_state.squad, unlocks)
-	sound.stop()
+	choose_stage(str(ids[index + 1]))
+	combat_audio.reset()
 
 func can_travel_campaign_route() -> bool:
 	if sim.endless_mode or sim.state not in ["ready", "paused", "won"]:
@@ -1407,7 +1628,7 @@ func open_campaign_map() -> void:
 	if story.active or campaign_map_panel.is_open() or not can_travel_campaign_route():
 		return
 	campaign_map_panel.open()
-	sound.stop()
+	combat_audio.reset()
 
 func choose_campaign_node(node_id: String) -> void:
 	if story.active or not can_travel_campaign_route():
@@ -1423,8 +1644,7 @@ func choose_campaign_node(node_id: String) -> void:
 			if not unlock_id.is_empty(): compendium.unlock_character(unlock_id)
 			var stage_id := str(node.get("stage_id", ""))
 			if not stage_id.is_empty():
-				pending_stage_id = stage_id
-				squad_panel.open(stage_id, sim.run_state.squad, [unlock_id] if not unlock_id.is_empty() else [])
+				choose_stage(stage_id)
 		"story":
 			if not begin_dialogue(str(node.get("story", "mode1_opening")), "campaign_route"):
 				begin_dialogue("mode1_opening", "campaign_route")
@@ -1455,6 +1675,9 @@ func _campaign_event_closed() -> void:
 func open_current_squad() -> void:
 	if story.active or compendium_panel.is_open() or squad_panel.is_open() or sim.state not in ["ready", "won", "paused"]:
 		return
+	if sim.state == "ready" and not sim.endless_mode:
+		choose_stage(sim.current_stage_id)
+		return
 	var mode: Dictionary = sim.database.modes.get(sim.run_state.mode_id, {})
 	var ids: Array = mode.get("stage_ids", [])
 	var index := ids.find(sim.current_stage_id)
@@ -1463,15 +1686,18 @@ func open_current_squad() -> void:
 	pending_stage_id = sim.current_stage_id
 	pending_stage_number = index + 1
 	squad_panel.open(pending_stage_id, sim.run_state.squad)
-	sound.stop()
+	combat_audio.reset()
 
 func open_stage_select() -> void:
+	if is_instance_valid(combat_audio): combat_audio.reset()
 	if story.active or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or sim.state not in ["ready", "won", "paused"]:
 		return
 	stage_select_panel.open()
-	sound.stop()
+	combat_audio.reset()
 
 func choose_stage(stage_id: String) -> void:
+	if not stage_select_panel._is_unlocked(stage_id):
+		return
 	mode_select_panel.close()
 	stage_select_panel.close()
 	var selected_mode := "endless_survival" if stage_id == "stage_endless" else "rift_watch"
@@ -1482,7 +1708,12 @@ func choose_stage(stage_id: String) -> void:
 	sim.run_state.mode_id = selected_mode
 	pending_stage_id = stage_id
 	pending_stage_number = index + 1
-	squad_panel.open(stage_id, sim.run_state.squad)
+	pending_stage_intro_completed = false
+	story.reset()
+	var opening_key := "mode1_opening" if index == 0 else "mode1_stage%d_opening" % (index + 1)
+	if stage_id == "stage_endless" or not begin_dialogue(opening_key, "pre_stage"):
+		pending_stage_intro_completed = true
+		squad_panel.open(stage_id, sim.run_state.squad)
 
 func _squad_selection_cancelled() -> void:
 	if campaign_recruit_reselect:
@@ -1504,12 +1735,17 @@ func _squad_selection_cancelled() -> void:
 func confirm_next_squad(squad: Array[String]) -> void:
 	if pending_stage_id.is_empty():
 		return
+	if not compendium.has_gwen_recruitment():
+		squad = squad.duplicate()
+		squad.erase("hero_13")
 	home_facility_source = ""
+	var intro_completed := pending_stage_intro_completed
+	pending_stage_intro_completed = false
 	story.reset()
 	if stage_enter_sound != null and not muted and not test_mode:
 		stage_enter_sound.stop()
 		stage_enter_sound.play()
-	sim.reset_stage(pending_stage_id, squad, sim.run_seed + 1)
+	sim.reset_stage(pending_stage_id, squad)
 	recruited_heroes.clear()
 	pending_recruitment.clear()
 	recruitment_transition_active = false
@@ -1537,7 +1773,7 @@ func confirm_next_squad(squad: Array[String]) -> void:
 	battle.projectile_trails.clear()
 	battle.reset_transients()
 	hud.get_child(0).show()
-	var dialogue_key := "" if sim.endless_mode or campaign_recruit_reselect else ("mode1_opening" if pending_stage_number == 1 else "mode1_stage%d_opening" % pending_stage_number)
+	var dialogue_key := "" if intro_completed or sim.endless_mode or campaign_recruit_reselect else ("mode1_opening" if pending_stage_number == 1 else "mode1_stage%d_opening" % pending_stage_number)
 	pending_stage_id = ""
 	pending_stage_number = 0
 	campaign_recruit_reselect = false
@@ -1567,6 +1803,8 @@ func apply_setting(key: String, value: Variant) -> void:
 		hud.reduced = bool(value)
 	elif key == "sfx":
 		muted = float(value) <= 0.001
+	elif key == "fullscreen" and settings_panel != null:
+		settings_panel.sync_fullscreen(bool(value))
 
 func settings_closed() -> void:
 	if home_facility_source == "settings":
@@ -1585,11 +1823,12 @@ func start_inherited_endless() -> void:
 	var squad: Array[String] = []
 	for id: Variant in snapshot.get("squad", ["traveler"]):
 		squad.append(str(id))
-	sim.reset_stage("stage_endless", squad, sim.run_seed + 1)
+	sim.reset_stage("stage_endless", squad)
 	sim.run_state.mode_id = "endless_survival"
 	sim.import_run_snapshot(snapshot)
-	battle.camera_center = sim.heroes[0].pos if not sim.heroes.is_empty() else Sim.ENDLESS_ARENA.get_center()
-	selected_id = 0
+	selected_id = sim._resolve_follow_leader_id()
+	sim.set_follow_leader(selected_id)
+	battle.camera_center = sim.heroes[selected_id].pos if selected_id >= 0 else Sim.ENDLESS_ARENA.get_center()
 	set_skill_aiming(false)
 	stage_result_recorded = false
 	loss_transition_shown = false
@@ -1663,7 +1902,7 @@ func toggle_compendium() -> void:
 	else:
 		compendium.observe(sim)
 		compendium_panel.open()
-		sound.stop()
+		combat_audio.reset()
 
 func toggle_skill_aiming() -> void:
 	if story.active or compendium_panel.is_open() or squad_panel.is_open() or stage_select_panel.is_open() or sim.state != "running":
@@ -1725,6 +1964,9 @@ func _sync_ability_aiming(preview_ultimate: bool) -> void:
 
 func _update_selected_hero_keyboard(dt: float) -> void:
 	keyboard_move_timer = maxf(0.0, keyboard_move_timer - dt)
+	if sim.endless_mode and sim.state == "running" and (selected_id == -1 or (selected_id >= 0 and selected_id < sim.heroes.size() and sim.heroes[selected_id].hp <= 0.0)):
+		selected_id = sim._resolve_follow_leader_id()
+		if sim.formation_mode == "follow": sim.set_follow_leader(selected_id)
 	if sim.state != "running" or selected_id < 0 or selected_id >= sim.heroes.size() or skill_aiming or ultimate_aiming:
 		keyboard_moving = false
 		return
@@ -1776,7 +2018,7 @@ func _update_deploy_preview(screen_pos: Vector2) -> void:
 	var local: Vector2 = battle.get_global_transform().affine_inverse() * screen_pos
 	battle.deploy_preview_point = battle.screen_to_world(local)
 	var playable: Rect2 = Sim.ENDLESS_ARENA if sim.endless_mode else Sim.MOVE_AREA
-	battle.deploy_preview_valid = playable.has_point(battle.deploy_preview_point)
+	battle.deploy_preview_valid = playable.has_point(battle.deploy_preview_point) and not sim.is_device_plant_cell(battle.deploy_preview_point)
 	battle.queue_redraw()
 
 func _finish_deploy_drag(screen_pos: Vector2) -> void:
@@ -1786,7 +2028,7 @@ func _finish_deploy_drag(screen_pos: Vector2) -> void:
 	var local: Vector2 = battle.get_global_transform().affine_inverse() * screen_pos
 	var point: Vector2 = battle.screen_to_world(local)
 	var playable: Rect2 = Sim.ENDLESS_ARENA if sim.endless_mode else Sim.MOVE_AREA
-	if playable.has_point(point) and hero_id > 0 and not test_mode and not sim.endless_mode and not recruited_heroes.has(hero_id):
+	if playable.has_point(point) and not sim.is_device_plant_cell(point) and hero_id > 0 and not test_mode and not sim.endless_mode and not recruited_heroes.has(hero_id):
 		_begin_recruitment(hero_id, point)
 		return
 	if playable.has_point(point) and sim.deploy_hero(hero_id, point):
@@ -2057,6 +2299,13 @@ func _begin_recruitment(hero_id: int, point: Vector2) -> void:
 	var authored: Array = preload("res://scripts/recruitment_dialogue.gd").for_character(story.stories,str(hero.character_id),randi_range(0,1))
 	if not authored.is_empty():
 		story.stories[scene_key] = authored
+	var variants: Array[String] = []
+	for graph_key: String in story.graph_scenes:
+		if graph_key.begins_with("deploy_%s_" % str(hero.character_id)):
+			variants.append(graph_key)
+	if not variants.is_empty():
+		scene_key = variants[randi_range(0, variants.size() - 1)]
+	story.seen.erase(scene_key)
 	pending_recruitment = {"hero_id":hero_id, "point":point, "success":false}
 	recruitment_transition_active = true
 	if not begin_dialogue(scene_key, "recruit"):
@@ -2073,6 +2322,8 @@ func _resolve_recruitment() -> void:
 	pending_recruitment.clear()
 	if accepted:
 		await dialogue.play_success_animation()
+		for panel: Dictionary in story.last_ending.get("comics", []):
+			await dialogue.play_comic_panel(str(panel.get("image", "")), str(panel.get("text", "")))
 		if sim.deploy_hero(hero_id, point, true):
 			recruited_heroes[hero_id] = true
 			selected_id = hero_id
@@ -2080,8 +2331,52 @@ func _resolve_recruitment() -> void:
 		else:
 			push_error("Recruitment accepted but hero deployment failed: %d, state=%s" % [hero_id, sim.state])
 	else:
+		await dialogue.play_death_transition("")
+		for panel: Dictionary in story.last_ending.get("comics", []):
+			await dialogue.play_comic_panel(str(panel.get("image", "")), str(panel.get("text", "")))
 		await battle.play_recruit_departure(str(sim.heroes[hero_id].character_id), point)
 		sim.rejected_recruits[hero_id] = true
 	recruitment_transition_active = false
 	hud.signature = ""
 	refresh()
+
+func open_workshop() -> void:
+	if workshop != null or settings_panel == null or not settings_panel.is_open(): return
+	workshop_suspended.clear()
+	workshop_audio_suspended.clear()
+	var battle_fx_bus := AudioServer.get_bus_index("BattleFX")
+	workshop_audio_bus_db = AudioServer.get_bus_volume_db(battle_fx_bus) if battle_fx_bus >= 0 else 0.0
+	_suspend_workshop_audio(self)
+	for child: Node in get_children():
+		var snapshot := {"node":child, "process_mode":child.process_mode}
+		if child is CanvasLayer or child is CanvasItem:
+			snapshot["visible"] = child.visible
+			child.hide()
+		workshop_suspended.append(snapshot)
+		child.process_mode = Node.PROCESS_MODE_DISABLED
+	workshop = WorkshopPanel.new()
+	add_child(workshop)
+	workshop.build(hud, bool(audio_director.values.reduced_effects))
+	workshop.closed.connect(_workshop_closed)
+
+func _suspend_workshop_audio(node: Node) -> void:
+	if node is AudioStreamPlayer or node is AudioStreamPlayer2D:
+		workshop_audio_suspended.append({"node":node, "paused":node.stream_paused})
+		node.stream_paused = true
+	for child: Node in node.get_children(): _suspend_workshop_audio(child)
+
+func _workshop_closed() -> void:
+	workshop = null
+	for snapshot: Dictionary in workshop_suspended:
+		var node: Node = snapshot.node
+		if not is_instance_valid(node): continue
+		node.process_mode = snapshot.process_mode
+		if snapshot.has("visible"): node.visible = snapshot.visible
+	for snapshot: Dictionary in workshop_audio_suspended:
+		if is_instance_valid(snapshot.node): snapshot.node.stream_paused = bool(snapshot.paused)
+	workshop_suspended.clear()
+	workshop_audio_suspended.clear()
+	var battle_fx_bus := AudioServer.get_bus_index("BattleFX")
+	if battle_fx_bus >= 0: AudioServer.set_bus_volume_db(battle_fx_bus, workshop_audio_bus_db)
+	settings_panel.workshop_button.grab_focus()
+

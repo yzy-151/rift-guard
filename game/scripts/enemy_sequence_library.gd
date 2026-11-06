@@ -12,6 +12,8 @@ const STATE_ALIASES := {
 var definitions: Dictionary = {}
 var textures: Dictionary = {}
 var load_errors: Array[String] = []
+var warm_queue: Array[String] = []
+var warm_loading: Dictionary = {}
 
 func _init() -> void:
 	reload_manifest()
@@ -28,6 +30,32 @@ func reload_manifest() -> void:
 		definitions = parsed
 	else:
 		load_errors.append("invalid enemy sequence manifest")
+
+func queue_prewarm(ids: Array) -> void:
+	for id in ids:
+		for state in definition(str(id)).get("states", {}):
+			var key := str(id)+":"+str(state)
+			if not textures.has(key) and not warm_queue.has(key) and not warm_loading.has(key):warm_queue.append(key)
+
+func poll_prewarm() -> void:
+	# One texture finalization per frame avoids a burst of atlas uploads.
+	for key in warm_loading.keys():
+		var path: String = warm_loading[key]
+		var status := ResourceLoader.load_threaded_get_status(path)
+		if status == ResourceLoader.THREAD_LOAD_LOADED:
+			var resource = ResourceLoader.load_threaded_get(path)
+			if resource is Texture2D:
+				textures[key]=resource
+				resource.get_rid()
+			warm_loading.erase(key)
+			return
+		elif status == ResourceLoader.THREAD_LOAD_FAILED or status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+			warm_loading.erase(key)
+	if warm_loading.size()<2 and not warm_queue.is_empty():
+		var key: String = warm_queue.pop_front()
+		var split := key.split(":")
+		var path := str(state_definition(split[0],split[1]).get("texture",""))
+		if ResourceLoader.load_threaded_request(path,"Texture2D")==OK:warm_loading[key]=path
 
 func has_enemy(enemy_id: String) -> bool:
 	return definitions.has(enemy_id)
@@ -60,6 +88,10 @@ func duration(enemy_id: String, state: String) -> float:
 func texture(enemy_id: String, state: String) -> Texture2D:
 	var key := enemy_id + ":" + state
 	if textures.has(key):
+		return textures[key]
+	if warm_loading.has(key):
+		if ResourceLoader.load_threaded_get_status(warm_loading[key]) != ResourceLoader.THREAD_LOAD_LOADED:return null
+		textures[key]=ResourceLoader.load_threaded_get(warm_loading[key]);warm_loading.erase(key)
 		return textures[key]
 	var path := str(state_definition(enemy_id, state).get("texture", ""))
 	if path.is_empty() or not ResourceLoader.exists(path):

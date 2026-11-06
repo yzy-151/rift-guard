@@ -1,11 +1,11 @@
 shader_type canvas_item;
 render_mode blend_mix;
 
-uniform float saturation : hint_range(0.0, 2.0) = 0.90;
-uniform float contrast : hint_range(0.5, 1.5) = 1.04;
-uniform float distant_haze : hint_range(0.0, 0.5) = 0.10;
-uniform vec3 ambient_tint = vec3(0.96, 1.0, 0.94);
-uniform vec3 haze_color = vec3(0.64, 0.75, 0.62);
+uniform float saturation : hint_range(0.0, 2.0) = 1.10;
+uniform float contrast : hint_range(0.5, 1.5) = 1.08;
+uniform float distant_haze : hint_range(0.0, 0.5) = 0.025;
+uniform vec3 ambient_tint = vec3(1.0, 1.0, 1.0);
+uniform vec3 haze_color = vec3(0.62, 0.69, 0.74);
 
 void fragment() {
     vec4 base = COLOR;

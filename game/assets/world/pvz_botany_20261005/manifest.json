@@ -1,0 +1,2202 @@
+{
+  "original_creator": "PopCap Games / Electronic Arts",
+  "retrieved": "2026-10-05",
+  "method": "Unmodified RGBA composited GIF frames, original duration timings, atlases bounded to 4096 pixels wide.",
+  "plants": {
+    "pea": {
+      "file": "pea.png",
+      "frames": 13,
+      "cell": [
+        71,
+        71
+      ],
+      "columns": 13,
+      "rows": 1,
+      "duration_ms": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "period": 1.17,
+      "foot": [
+        26.438,
+        69
+      ],
+      "height": 62,
+      "unit": 0.8732394366197183,
+      "shadow_radius": 24,
+      "mouths": [
+        [
+          [
+            58.281,
+            13.469
+          ]
+        ],
+        [
+          [
+            59.212,
+            13.5
+          ]
+        ],
+        [
+          [
+            61.493,
+            16.642
+          ]
+        ],
+        [
+          [
+            62.6,
+            19.24
+          ]
+        ],
+        [
+          [
+            60.386,
+            16.614
+          ]
+        ],
+        [
+          [
+            57.944,
+            13.861
+          ]
+        ],
+        [
+          [
+            56.303,
+            12.879
+          ]
+        ],
+        [
+          [
+            55.492,
+            13.869
+          ]
+        ],
+        [
+          [
+            54.86,
+            17.0
+          ]
+        ],
+        [
+          [
+            54.85,
+            19.5
+          ]
+        ],
+        [
+          [
+            55.149,
+            21.66
+          ]
+        ],
+        [
+          [
+            55.309,
+            14.127
+          ]
+        ],
+        [
+          [
+            55.612,
+            13.448
+          ]
+        ]
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/Peashooter.gif",
+      "source_sha256": "995201134e74963048653f6f329615f1bb55bcff6be792e71944cae3b03235de",
+      "atlas_sha256": "958960712c11d36d6d86242d2b545a84f408b456a216ce635c39ec4977009daa",
+      "alpha_bounds": [
+        0,
+        0,
+        70,
+        71
+      ]
+    },
+    "repeater": {
+      "file": "repeater.png",
+      "frames": 15,
+      "cell": [
+        73,
+        71
+      ],
+      "columns": 15,
+      "rows": 1,
+      "duration_ms": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "period": 1.35,
+      "foot": [
+        29.486,
+        69
+      ],
+      "height": 62,
+      "unit": 0.8732394366197183,
+      "shadow_radius": 24,
+      "mouths": [
+        [
+          [
+            64.889,
+            16.587
+          ]
+        ],
+        [
+          [
+            65.25,
+            17.717
+          ]
+        ],
+        [
+          [
+            65.18,
+            19.213
+          ]
+        ],
+        [
+          [
+            61.955,
+            14.343
+          ]
+        ],
+        [
+          [
+            60.262,
+            13.354
+          ]
+        ],
+        [
+          [
+            58.875,
+            12.417
+          ]
+        ],
+        [
+          [
+            58.456,
+            13.614
+          ]
+        ],
+        [
+          [
+            57.933,
+            15.289
+          ]
+        ],
+        [
+          [
+            57.784,
+            19.676
+          ]
+        ],
+        [
+          [
+            57.881,
+            21.81
+          ]
+        ],
+        [
+          [
+            58.189,
+            14.226
+          ]
+        ],
+        [
+          [
+            58.453,
+            13.484
+          ]
+        ],
+        [
+          [
+            59.183,
+            12.775
+          ]
+        ],
+        [
+          [
+            61.014,
+            13.464
+          ]
+        ],
+        [
+          [
+            62.941,
+            14.206
+          ]
+        ]
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/Repeater.gif",
+      "source_sha256": "48bf4722b2a98b4ed41fba92ad3f61b9072936ac1fd7ccfd0aee07d7796657ea",
+      "atlas_sha256": "9bc4dea181b358d79a745749d2b9a20d380d3725bd1c4eba9dc1de4e1a3df574",
+      "alpha_bounds": [
+        0,
+        0,
+        73,
+        71
+      ]
+    },
+    "snowpea": {
+      "file": "snowpea.png",
+      "frames": 15,
+      "cell": [
+        71,
+        71
+      ],
+      "columns": 15,
+      "rows": 1,
+      "duration_ms": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "period": 1.35,
+      "foot": [
+        29.668,
+        69
+      ],
+      "height": 62,
+      "unit": 0.8732394366197183,
+      "shadow_radius": 24,
+      "mouths": [
+        [
+          [
+            64.304,
+            15.043
+          ]
+        ],
+        [
+          [
+            55.708,
+            26.75
+          ]
+        ],
+        [
+          [
+            55.714,
+            26.857
+          ]
+        ],
+        [
+          [
+            62.133,
+            15.367
+          ]
+        ],
+        [
+          [
+            61.065,
+            14.71
+          ]
+        ],
+        [
+          [
+            59.065,
+            14.71
+          ]
+        ],
+        [
+          [
+            59.065,
+            14.71
+          ]
+        ],
+        [
+          [
+            58.069,
+            17.759
+          ]
+        ],
+        [
+          [
+            57.632,
+            20.263
+          ]
+        ],
+        [
+          [
+            58.273,
+            20.909
+          ]
+        ],
+        [
+          [
+            58.391,
+            17.522
+          ]
+        ],
+        [
+          [
+            58.619,
+            14.571
+          ]
+        ],
+        [
+          [
+            59.172,
+            14.138
+          ]
+        ],
+        [
+          [
+            61.389,
+            11.556
+          ]
+        ],
+        [
+          [
+            63.0,
+            14.438
+          ]
+        ]
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/SnowPea.gif",
+      "source_sha256": "e10d22e528a9f0559333b23c16f6c43fe97682dee4efaf967fc6344ccdc9ce91",
+      "atlas_sha256": "3777c31bc002a543905389396547f2576d41b132ca0a9b39b91328c8b51882fc",
+      "alpha_bounds": [
+        0,
+        0,
+        71,
+        71
+      ]
+    },
+    "threepeater": {
+      "file": "threepeater.png",
+      "frames": 16,
+      "cell": [
+        73,
+        80
+      ],
+      "columns": 16,
+      "rows": 1,
+      "duration_ms": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "period": 1.44,
+      "foot": [
+        28.417,
+        78
+      ],
+      "height": 68,
+      "unit": 0.85,
+      "shadow_radius": 24,
+      "mouths": [
+        [
+          [
+            33.889,
+            13.833
+          ],
+          [
+            40.455,
+            26.318
+          ],
+          [
+            65.744,
+            46.231
+          ]
+        ],
+        [
+          [
+            33.829,
+            12.78
+          ],
+          [
+            40.833,
+            25.292
+          ],
+          [
+            65.429,
+            45.786
+          ]
+        ],
+        [
+          [
+            34.556,
+            13.139
+          ],
+          [
+            41.231,
+            24.962
+          ],
+          [
+            64.953,
+            44.372
+          ]
+        ],
+        [
+          [
+            34.558,
+            14.419
+          ],
+          [
+            43.133,
+            26.978
+          ],
+          [
+            64.06,
+            43.62
+          ]
+        ],
+        [
+          [
+            34.0,
+            13.458
+          ],
+          [
+            43.286,
+            29.0
+          ],
+          [
+            63.698,
+            42.721
+          ]
+        ],
+        [
+          [
+            32.86,
+            11.86
+          ],
+          [
+            44.45,
+            30.85
+          ],
+          [
+            62.818,
+            44.545
+          ]
+        ],
+        [
+          [
+            30.892,
+            14.351
+          ],
+          [
+            45.068,
+            30.205
+          ],
+          [
+            63.093,
+            47.0
+          ]
+        ],
+        [
+          [
+            32.021,
+            13.104
+          ],
+          [
+            43.959,
+            28.796
+          ],
+          [
+            63.261,
+            47.304
+          ]
+        ],
+        [
+          [
+            33.062,
+            12.417
+          ],
+          [
+            43.047,
+            27.721
+          ],
+          [
+            64.0,
+            45.442
+          ]
+        ],
+        [
+          [
+            34.417,
+            13.25
+          ],
+          [
+            42.019,
+            25.774
+          ],
+          [
+            64.46,
+            43.84
+          ]
+        ],
+        [
+          [
+            35.24,
+            12.6
+          ],
+          [
+            40.894,
+            25.34
+          ],
+          [
+            64.667,
+            42.833
+          ]
+        ],
+        [
+          [
+            34.846,
+            13.949
+          ],
+          [
+            39.96,
+            27.66
+          ],
+          [
+            64.702,
+            43.255
+          ]
+        ],
+        [
+          [
+            33.683,
+            12.902
+          ],
+          [
+            38.9,
+            31.475
+          ],
+          [
+            65.087,
+            44.478
+          ]
+        ],
+        [
+          [
+            32.104,
+            12.542
+          ],
+          [
+            37.947,
+            34.579
+          ],
+          [
+            65.977,
+            46.75
+          ]
+        ],
+        [
+          [
+            30.763,
+            13.737
+          ],
+          [
+            38.837,
+            32.372
+          ],
+          [
+            67.0,
+            50.122
+          ]
+        ],
+        [
+          [
+            31.838,
+            13.73
+          ],
+          [
+            39.583,
+            30.104
+          ],
+          [
+            66.462,
+            49.026
+          ]
+        ]
+      ],
+      "source_url": "https://raw.githubusercontent.com/jiangnangame/New-Plants-vs-Zombies-JavaScript/master/images/Plants/Threepeater/Threepeater.gif",
+      "source_sha256": "a6f1352203f45b40e4f3de8f743f92e8aeffdde4c887987890001f948e78e149",
+      "atlas_sha256": "86988b3e81c2f02d594e891aff9322c07342a213b9edf33559e8a0fab13e6e28",
+      "alpha_bounds": [
+        1,
+        0,
+        73,
+        80
+      ]
+    },
+    "gatling": {
+      "file": "gatling.png",
+      "frames": 13,
+      "cell": [
+        88,
+        84
+      ],
+      "columns": 13,
+      "rows": 1,
+      "duration_ms": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "period": 1.17,
+      "foot": [
+        31.394,
+        81
+      ],
+      "height": 68,
+      "unit": 0.8192771084337349,
+      "shadow_radius": 24,
+      "mouths": [
+        [
+          [
+            75.909,
+            30.636
+          ]
+        ],
+        [
+          [
+            75.229,
+            24.354
+          ]
+        ],
+        [
+          [
+            74.283,
+            25.63
+          ]
+        ],
+        [
+          [
+            73.96,
+            30.0
+          ]
+        ],
+        [
+          [
+            73.52,
+            32.08
+          ]
+        ],
+        [
+          [
+            73.762,
+            32.619
+          ]
+        ],
+        [
+          [
+            74.217,
+            25.478
+          ]
+        ],
+        [
+          [
+            74.341,
+            25.023
+          ]
+        ],
+        [
+          [
+            74.736,
+            25.208
+          ]
+        ],
+        [
+          [
+            76.156,
+            25.234
+          ]
+        ],
+        [
+          [
+            77.258,
+            28.814
+          ]
+        ],
+        [
+          [
+            79.0,
+            33.718
+          ]
+        ],
+        [
+          [
+            78.51,
+            25.163
+          ]
+        ]
+      ],
+      "source_url": "https://raw.githubusercontent.com/jiangnangame/New-Plants-vs-Zombies-JavaScript/master/images/Plants/GatlingPea/GatlingPea.gif",
+      "source_sha256": "cd4aa4116de6d3c05ac3a4b6ca907ed7e21f10aef9cd052b3669732be1df800a",
+      "atlas_sha256": "f82708cd6254bf8efa23fa6830810fedf94b83a3d5257461d946262d7096ad01",
+      "alpha_bounds": [
+        2,
+        0,
+        86,
+        83
+      ]
+    },
+    "sunflower": {
+      "file": "sunflower.png",
+      "frames": 18,
+      "cell": [
+        73,
+        74
+      ],
+      "columns": 18,
+      "rows": 1,
+      "duration_ms": [
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110,
+        110
+      ],
+      "period": 1.98,
+      "foot": [
+        30.004,
+        72
+      ],
+      "height": 65,
+      "unit": 0.8783783783783784,
+      "shadow_radius": 24,
+      "mouths": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/SunFlower.gif",
+      "source_sha256": "58bc70796856ff17330ae64dc2e4eb6ffe6ac78baaa104e235163c5be480c332",
+      "atlas_sha256": "9a902fcc7fb283790dcc5b80cccc333be471eacb2909dc9d7cf25b352960ec6b",
+      "alpha_bounds": [
+        0,
+        0,
+        73,
+        74
+      ]
+    },
+    "potato_mine": {
+      "file": "potato_mine.png",
+      "frames": 8,
+      "cell": [
+        75,
+        55
+      ],
+      "columns": 8,
+      "rows": 1,
+      "duration_ms": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "period": 1.6,
+      "foot": [
+        39.094,
+        53
+      ],
+      "height": 44,
+      "unit": 0.8,
+      "shadow_radius": 27,
+      "mouths": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/PotatoMine.gif",
+      "source_sha256": "307657bfb07e810bd045dac839e8928b66b9a09df065a88589813a8b83553119",
+      "atlas_sha256": "2752eac5bcb77a5adcc5597100326a6e8c4a6abe6768b76564107741f090aa17",
+      "alpha_bounds": [
+        1,
+        0,
+        75,
+        55
+      ]
+    },
+    "potato_unarmed": {
+      "file": "potato_unarmed.png",
+      "frames": 1,
+      "cell": [
+        75,
+        55
+      ],
+      "columns": 1,
+      "rows": 1,
+      "duration_ms": [
+        100
+      ],
+      "period": 0.1,
+      "foot": [
+        39.094,
+        53
+      ],
+      "height": 44,
+      "unit": 0.8,
+      "shadow_radius": 27,
+      "mouths": [
+        []
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/PotatoMine1.gif",
+      "source_sha256": "5a9a120f6982e9db384ed3273a54ec5fdb686318fb7ed166e808c4afa6d0aaa8",
+      "atlas_sha256": "7c5fbe226e7b366aff4dbc1de89a11e52c6cd0b97ca894248eda523fe56b3dc4",
+      "alpha_bounds": [
+        20,
+        23,
+        56,
+        53
+      ]
+    },
+    "potato_blast": {
+      "file": "potato_blast.png",
+      "frames": 5,
+      "cell": [
+        132,
+        128
+      ],
+      "columns": 5,
+      "rows": 1,
+      "duration_ms": [
+        100,
+        200,
+        200,
+        200,
+        10
+      ],
+      "period": 0.71,
+      "foot": [
+        57.038,
+        126
+      ],
+      "height": 88,
+      "unit": 0.6875,
+      "shadow_radius": 24,
+      "mouths": [
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/PotatoMineBomb.gif",
+      "source_sha256": "49649fbbf6deaf9fdf1c075a4a5cc9bcb5d2e09607f7e286e7f1372d75a78f5e",
+      "atlas_sha256": "87e26289cfcdb364c6ef9843fdabcd2ec3f856ae9d66ba92960e2cfd57237553",
+      "alpha_bounds": [
+        0,
+        0,
+        131,
+        128
+      ]
+    },
+    "wallnut": {
+      "file": "wallnut.png",
+      "frames": 16,
+      "cell": [
+        65,
+        73
+      ],
+      "columns": 16,
+      "rows": 1,
+      "duration_ms": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "period": 1.44,
+      "foot": [
+        32.66,
+        70
+      ],
+      "height": 56,
+      "unit": 0.7777777777777778,
+      "shadow_radius": 24,
+      "mouths": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/WallNut.gif",
+      "source_sha256": "18af5c1363371c86b0cfd2f433be1895b86ceb43543f33ab28448b21bc1ba57b",
+      "atlas_sha256": "8dd388869ad4feda9ed7ff3494f86f0dedb3a37398eac4d15360c9b8d276854d",
+      "alpha_bounds": [
+        0,
+        0,
+        64,
+        72
+      ]
+    },
+    "wallnut_cracked": {
+      "file": "wallnut_cracked.png",
+      "frames": 11,
+      "cell": [
+        65,
+        73
+      ],
+      "columns": 11,
+      "rows": 1,
+      "duration_ms": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "period": 1.1,
+      "foot": [
+        32.717,
+        71
+      ],
+      "height": 56,
+      "unit": 0.7887323943661971,
+      "shadow_radius": 24,
+      "mouths": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/WallNut1.gif",
+      "source_sha256": "7de609503fe86de174e3bb19ddb08c83218e2d566a8ec710b3464ec2b67fd7b1",
+      "atlas_sha256": "2751398327e33e3645536216f21f47ee26409a423a308fdbefadfc5af64c22e0",
+      "alpha_bounds": [
+        0,
+        2,
+        64,
+        73
+      ]
+    },
+    "wallnut_broken": {
+      "file": "wallnut_broken.png",
+      "frames": 15,
+      "cell": [
+        65,
+        73
+      ],
+      "columns": 15,
+      "rows": 1,
+      "duration_ms": [
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100,
+        100
+      ],
+      "period": 1.5,
+      "foot": [
+        32.611,
+        71
+      ],
+      "height": 56,
+      "unit": 0.835820895522388,
+      "shadow_radius": 24,
+      "mouths": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/WallNut2.gif",
+      "source_sha256": "8b2f877ac117c030b6342e53a2ba9dc5a1d2c4d1d1c5e2383eec48b186e90305",
+      "atlas_sha256": "6004febc5a31321843e64f61c6f55ae514aff956bf4429fdcc18972290660bc6",
+      "alpha_bounds": [
+        0,
+        6,
+        64,
+        73
+      ]
+    },
+    "cherry": {
+      "file": "cherry.png",
+      "frames": 7,
+      "cell": [
+        112,
+        81
+      ],
+      "columns": 7,
+      "rows": 1,
+      "duration_ms": [
+        90,
+        90,
+        90,
+        90,
+        90,
+        90,
+        90
+      ],
+      "period": 0.63,
+      "foot": [
+        59.26,
+        79
+      ],
+      "height": 62,
+      "unit": 0.7654320987654321,
+      "shadow_radius": 24,
+      "mouths": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "source_url": "https://raw.githubusercontent.com/GeeeekExplorer/PVZ/master/images/CherryBomb.gif",
+      "source_sha256": "dd7af1d96ac6e19e0f8f6cabf4b1f03f62e2702f45b0595ddb250f17897455e9",
+      "atlas_sha256": "8c28605202275183e9be67118342128848acf19cbd5919b8ccea511b612b084d",
+      "alpha_bounds": [
+        0,
+        0,
+        112,
+        81
+      ]
+    },
+    "spikeweed": {
+      "file": "spikeweed.png",
+      "frames": 21,
+      "cell": [
+        85,
+        35
+      ],
+      "columns": 21,
+      "rows": 1,
+      "duration_ms": [
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40
+      ],
+      "period": 0.84,
+      "foot": [
+        41.97,
+        32
+      ],
+      "height": 26,
+      "unit": 0.7647058823529411,
+      "shadow_radius": 27,
+      "mouths": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "source_url": "https://raw.githubusercontent.com/jiangnangame/New-Plants-vs-Zombies-JavaScript/master/images/Plants/Spikeweed/Spikeweed.gif",
+      "source_sha256": "6ac2d9399d44844e5df2eb324f4fcedcb8c75e406baa45cc43a8a7c559a84ab7",
+      "atlas_sha256": "e93baab34d88635ff541b3e20e7b15502136aacf62364792c4520d29677254cf",
+      "alpha_bounds": [
+        1,
+        0,
+        84,
+        34
+      ]
+    },
+    "tallnut": {
+      "file": "tallnut.png",
+      "frames": 17,
+      "cell": [
+        83,
+        119
+      ],
+      "columns": 17,
+      "rows": 1,
+      "duration_ms": [
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40,
+        40
+      ],
+      "period": 0.68,
+      "foot": [
+        41.805,
+        117
+      ],
+      "height": 76,
+      "unit": 0.6440677966101694,
+      "shadow_radius": 24,
+      "mouths": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ],
+      "source_url": "https://raw.githubusercontent.com/jiangnangame/New-Plants-vs-Zombies-JavaScript/master/images/Plants/TallNut/TallNut.gif",
+      "source_sha256": "ac29737eeb848d80e791ce9b759904511bfa1d3cd66bbe360a2555c7854ebece",
+      "atlas_sha256": "b9f248e2e93a7bdf39651ad5de3406943bf6dfe6769df77d5d7dea0bf678cf57",
+      "alpha_bounds": [
+        1,
+        1,
+        82,
+        119
+      ]
+    },
+    "melon": {
+      "file": "melon.png",
+      "frames": 31,
+      "cell": [
+        234,
+        196
+      ],
+      "columns": 17,
+      "rows": 2,
+      "duration_ms": [
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333
+      ],
+      "period": 2.5833333333333335,
+      "foot": [
+        164.226,
+        194.0
+      ],
+      "height": 66,
+      "unit": 0.34196891191709844,
+      "shadow_radius": 24,
+      "mouths": [
+        [
+          [
+            71.0,
+            64.4
+          ]
+        ],
+        [
+          [
+            72.280739,
+            57.222293
+          ]
+        ],
+        [
+          [
+            73.941433,
+            49.940849
+          ]
+        ],
+        [
+          [
+            70.768001,
+            57.605746
+          ]
+        ],
+        [
+          [
+            68.099754,
+            65.103619
+          ]
+        ],
+        [
+          [
+            65.124927,
+            73.106322
+          ]
+        ],
+        [
+          [
+            62.629233,
+            80.903901
+          ]
+        ],
+        [
+          [
+            60.021037,
+            88.600427
+          ]
+        ],
+        [
+          [
+            59.1693,
+            90.029758
+          ]
+        ],
+        [
+          [
+            58.854339,
+            91.766662
+          ]
+        ],
+        [
+          [
+            60.495803,
+            86.987045
+          ]
+        ],
+        [
+          [
+            62.277122,
+            82.340619
+          ]
+        ],
+        [
+          [
+            64.129666,
+            77.636586
+          ]
+        ],
+        [
+          [
+            66.368195,
+            73.064227
+          ]
+        ],
+        [
+          [
+            68.440105,
+            68.883517
+          ]
+        ],
+        [
+          [
+            71.0,
+            64.4
+          ]
+        ],
+        [
+          [
+            72.280739,
+            57.222293
+          ]
+        ],
+        [
+          [
+            73.941433,
+            49.940849
+          ]
+        ],
+        [
+          [
+            70.794538,
+            57.836456
+          ]
+        ],
+        [
+          [
+            67.84331,
+            66.065606
+          ]
+        ],
+        [
+          [
+            65.308743,
+            74.553489
+          ]
+        ],
+        [
+          [
+            63.245296,
+            82.878555
+          ]
+        ],
+        [
+          [
+            61.261033,
+            91.779801
+          ]
+        ],
+        [
+          [
+            59.646025,
+            94.298945
+          ]
+        ],
+        [
+          [
+            57.854339,
+            96.766662
+          ]
+        ],
+        [
+          [
+            59.495803,
+            90.987045
+          ]
+        ],
+        [
+          [
+            61.677122,
+            85.540619
+          ]
+        ],
+        [
+          [
+            63.729666,
+            80.036586
+          ]
+        ],
+        [
+          [
+            65.968195,
+            74.864227
+          ]
+        ],
+        [
+          [
+            68.240105,
+            69.683517
+          ]
+        ],
+        [
+          [
+            71.0,
+            64.4
+          ]
+        ]
+      ],
+      "source_url": "https://github.com/FregD156/PvZ_Assets/tree/main/reanim",
+      "source_sha256": "7a39c874191e663212a4356bed3349987d4450df861d037d779b68ed4b4d9894",
+      "atlas_sha256": "9d707e2c46eb0598af5d13c5344ddc88f64013600a2843608b5b53e2e006a55a",
+      "alpha_bounds": [
+        3,
+        3,
+        234,
+        196
+      ],
+      "native_animation": "anim_idle 5..35; original 12 fps affine .reanim tracks",
+      "parts_provenance": {
+        "source": "https://github.com/FregD156/PvZ_Assets/tree/main/reanim",
+        "reanim": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult.reanim",
+        "fps": 12.0,
+        "animations": {
+          "anim_blink": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "anim_idle": [
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "anim_shooting": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73
+          ]
+        },
+        "parts": [
+          {
+            "id": "IMAGE_REANIM_MELONPULT_EYEBROW",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_eyebrow.png",
+            "local": "Melonpult_eyebrow.png"
+          },
+          {
+            "id": "IMAGE_REANIM_MELONPULT_STALK",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_stalk.png",
+            "local": "Melonpult_stalk.png"
+          },
+          {
+            "id": "IMAGE_REANIM_CABBAGEPULT_BASKET",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Cabbagepult_basket.png",
+            "local": "Cabbagepult_basket.png"
+          },
+          {
+            "id": "IMAGE_REANIM_PEASHOOTER_FRONTLEAF",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/PeaShooter_frontleaf.png",
+            "local": "PeaShooter_frontleaf.png"
+          },
+          {
+            "id": "IMAGE_REANIM_PEASHOOTER_FRONTLEAF_RIGHTTIP",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/PeaShooter_frontleaf_righttip.png",
+            "local": "PeaShooter_frontleaf_righttip.png"
+          },
+          {
+            "id": "IMAGE_REANIM_MELONPULT_BODY",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_body.png",
+            "local": "Melonpult_body.png"
+          },
+          {
+            "id": "IMAGE_REANIM_MELONPULT_MELON",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_melon.png",
+            "local": "Melonpult_melon.png"
+          },
+          {
+            "id": "IMAGE_REANIM_CABBAGEPULT_BASKET_OVERLAY",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Cabbagepult_basket_overlay.png",
+            "local": "Cabbagepult_basket_overlay.png"
+          },
+          {
+            "id": "IMAGE_REANIM_MELONPULT_BLINK2",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_blink2.png",
+            "local": "Melonpult_blink2.png"
+          },
+          {
+            "id": "IMAGE_REANIM_PEASHOOTER_FRONTLEAF_LEFTTIP",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/PeaShooter_frontleaf_lefttip.png",
+            "local": "PeaShooter_frontleaf_lefttip.png"
+          },
+          {
+            "id": "IMAGE_REANIM_MELONPULT_BLINK1",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_blink1.png",
+            "local": "Melonpult_blink1.png"
+          }
+        ],
+        "conversion": "Original affine transforms; no redrawn body or generated plant artwork."
+      },
+      "source_crop": [
+        6,
+        29,
+        240,
+        225
+      ],
+      "source_foot": [
+        170.226,
+        223.0
+      ],
+      "anchor_method": "Shared idle root in the original Reanim canvas, adjusted only by each animation crop origin."
+    },
+    "melon_shoot": {
+      "file": "melon_shoot.png",
+      "frames": 38,
+      "cell": [
+        243,
+        236
+      ],
+      "columns": 16,
+      "rows": 3,
+      "duration_ms": [
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333,
+        83.33333333333333
+      ],
+      "period": 3.166666666666668,
+      "foot": [
+        170.226,
+        223.0
+      ],
+      "height": 66,
+      "unit": 0.34196891191709844,
+      "shadow_radius": 24,
+      "mouths": [
+        [
+          [
+            77.0,
+            93.4
+          ]
+        ],
+        [
+          [
+            66.727454,
+            109.213544
+          ]
+        ],
+        [
+          [
+            57.200524,
+            125.56467
+          ]
+        ],
+        [
+          [
+            48.793885,
+            142.29662
+          ]
+        ],
+        [
+          [
+            41.183902,
+            158.807588
+          ]
+        ],
+        [
+          [
+            40.982538,
+            166.148393
+          ]
+        ],
+        [
+          [
+            40.628875,
+            172.903732
+          ]
+        ],
+        [
+          [
+            38.817257,
+            184.591683
+          ]
+        ],
+        [
+          [
+            39.970717,
+            136.126861
+          ]
+        ],
+        [
+          [
+            62.461151,
+            98.809441
+          ]
+        ],
+        [
+          [
+            91.641058,
+            61.712733
+          ]
+        ],
+        [
+          [
+            131.187527,
+            37.001825
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            196.675463,
+            20.079392
+          ]
+        ],
+        [
+          [
+            77.0,
+            93.4
+          ]
+        ]
+      ],
+      "source_url": "https://github.com/FregD156/PvZ_Assets/tree/main/reanim",
+      "source_sha256": "6aca2395d456e8a9216c8e2b69d336933e2e84e322d1c6751622c6b5b1323e71",
+      "atlas_sha256": "a1ba0177eb598fad4639fe8ca8a5e9bfd7b136c75507692e7db557021303fee0",
+      "alpha_bounds": [
+        0,
+        0,
+        240,
+        233
+      ],
+      "native_animation": "anim_idle 5..35; original 12 fps affine .reanim tracks",
+      "parts_provenance": {
+        "source": "https://github.com/FregD156/PvZ_Assets/tree/main/reanim",
+        "reanim": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult.reanim",
+        "fps": 12.0,
+        "animations": {
+          "anim_blink": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "anim_idle": [
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35
+          ],
+          "anim_shooting": [
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73
+          ]
+        },
+        "parts": [
+          {
+            "id": "IMAGE_REANIM_MELONPULT_EYEBROW",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_eyebrow.png",
+            "local": "Melonpult_eyebrow.png"
+          },
+          {
+            "id": "IMAGE_REANIM_MELONPULT_STALK",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_stalk.png",
+            "local": "Melonpult_stalk.png"
+          },
+          {
+            "id": "IMAGE_REANIM_CABBAGEPULT_BASKET",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Cabbagepult_basket.png",
+            "local": "Cabbagepult_basket.png"
+          },
+          {
+            "id": "IMAGE_REANIM_PEASHOOTER_FRONTLEAF",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/PeaShooter_frontleaf.png",
+            "local": "PeaShooter_frontleaf.png"
+          },
+          {
+            "id": "IMAGE_REANIM_PEASHOOTER_FRONTLEAF_RIGHTTIP",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/PeaShooter_frontleaf_righttip.png",
+            "local": "PeaShooter_frontleaf_righttip.png"
+          },
+          {
+            "id": "IMAGE_REANIM_MELONPULT_BODY",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_body.png",
+            "local": "Melonpult_body.png"
+          },
+          {
+            "id": "IMAGE_REANIM_MELONPULT_MELON",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_melon.png",
+            "local": "Melonpult_melon.png"
+          },
+          {
+            "id": "IMAGE_REANIM_CABBAGEPULT_BASKET_OVERLAY",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Cabbagepult_basket_overlay.png",
+            "local": "Cabbagepult_basket_overlay.png"
+          },
+          {
+            "id": "IMAGE_REANIM_MELONPULT_BLINK2",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_blink2.png",
+            "local": "Melonpult_blink2.png"
+          },
+          {
+            "id": "IMAGE_REANIM_PEASHOOTER_FRONTLEAF_LEFTTIP",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/PeaShooter_frontleaf_lefttip.png",
+            "local": "PeaShooter_frontleaf_lefttip.png"
+          },
+          {
+            "id": "IMAGE_REANIM_MELONPULT_BLINK1",
+            "source": "https://raw.githubusercontent.com/FregD156/PvZ_Assets/main/reanim/Melonpult_blink1.png",
+            "local": "Melonpult_blink1.png"
+          }
+        ],
+        "conversion": "Original affine transforms; no redrawn body or generated plant artwork."
+      },
+      "release_frame": 13,
+      "source_crop": [
+        0,
+        0,
+        243,
+        236
+      ],
+      "source_foot": [
+        170.226,
+        223.0
+      ],
+      "anchor_method": "Shared idle root in the original Reanim canvas, adjusted only by each animation crop origin."
+    }
+  }
+}

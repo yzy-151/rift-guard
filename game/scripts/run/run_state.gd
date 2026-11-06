@@ -4,7 +4,9 @@ const MAX_SQUAD_SIZE := 3
 
 var stage_id := ""
 var mode_id := "rift_watch"
+var device_cards_enabled := false
 var squad: Array[String] = ["traveler"]
+var temporary_assists: Array[String] = []
 var traveler_element := "none"
 var traveler_secondary_element := "none"
 var buff_levels: Dictionary = {}
@@ -54,6 +56,8 @@ func reset_run_meta() -> void:
 
 func reset_for_stage(next_stage_id: String) -> void:
 	stage_id = next_stage_id
+	device_cards_enabled = false
+	temporary_assists.clear()
 	traveler_element = "none"
 	traveler_secondary_element = "none"
 	buff_levels.clear()
@@ -116,6 +120,7 @@ func select_campaign_node(node_id: String) -> void:
 func export_build() -> Dictionary:
 	return {
 		"stage_id": stage_id, "mode_id": mode_id, "squad": squad.duplicate(),
+		"device_cards_enabled": device_cards_enabled,
 		"buff_levels": buff_levels.duplicate(true), "relics": equipped_relics.keys(),
 		"tag_counts": tag_counts.duplicate(true), "card_synergies": card_synergies.duplicate(true), "relationships": relationships.duplicate(true),
 		"story_flags": story_flags.duplicate(true), "node": current_node,

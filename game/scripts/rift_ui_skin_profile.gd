@@ -17,6 +17,7 @@ class_name RiftUISkinProfile
 
 @export_group("Mode and Mission")
 @export var mode_background: Texture2D
+@export var mode_portrait: Texture2D
 @export var mode_card_gray: Texture2D
 @export var mode_card_red: Texture2D
 @export var mission_background: Texture2D
@@ -62,6 +63,7 @@ class_name RiftUISkinProfile
 
 @export_group("Settings")
 @export var settings_background: Texture2D
+@export var settings_portrait: Texture2D
 
 @export_group("Battle HUD")
 @export var battle_menu_background: Texture2D
@@ -73,3 +75,6 @@ class_name RiftUISkinProfile
 @export var skill_frame_red: Texture2D
 @export var ultimate_frame_gray: Texture2D
 @export var ultimate_frame_red: Texture2D
+
+@export_group("Home Helltaker")
+@export var mode_home_portrait: Texture2D

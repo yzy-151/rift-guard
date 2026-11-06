@@ -1,6 +1,7 @@
 extends RefCounted
 
 signal choice_resolved(choice: Dictionary)
+signal ending_resolved(ending: Dictionary)
 
 var stories: Dictionary = {}
 var seen: Dictionary = {}
@@ -10,6 +11,11 @@ var choice_history: Array[Dictionary] = []
 var key: String = ""
 var index: int = 0
 var active: bool = false
+var graph_scenes: Dictionary = {}
+var graph_nodes: Dictionary = {}
+var graph_node_id := ""
+var graph_mode := false
+var last_ending: Dictionary = {}
 
 func _init(config = null) -> void:
 	var parsed = JSON.parse_string(FileAccess.get_file_as_string("res://data/story.json"))
@@ -22,11 +28,27 @@ func _init(config = null) -> void:
 			# but do not let stale rows replace the current cast and branching.
 			for scene_key: String in builtin:
 				stories[scene_key] = builtin[scene_key].duplicate(true)
+	if FileAccess.file_exists("res://data/authored_story.json"):
+		var authored: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/authored_story.json"))
+		if authored is Dictionary:
+			graph_scenes = authored
+			for scene_key: String in graph_scenes:
+				stories[scene_key] = []
 
 func begin(scene_key: String) -> bool:
 	if active or seen.has(scene_key) or not stories.has(scene_key):
 		return false
 	key = scene_key
+	last_ending.clear()
+	graph_mode = graph_scenes.has(key)
+	if graph_mode:
+		graph_nodes.clear()
+		for node: Dictionary in graph_scenes[key].get("nodes", []):
+			graph_nodes[str(node.id)] = node
+		lines = []
+		active = true
+		seen[key] = true
+		return _enter_graph_node(str(graph_scenes[key].get("start", "")))
 	lines = _npc_only_lines(stories[key])
 	if lines.is_empty():
 		return false
@@ -55,6 +77,10 @@ func choose(choice_index: int) -> bool:
 		return false
 	var option: Dictionary = options[choice_index].duplicate(true)
 	choice_history.append({"scene": key, "line": index, "choice": choice_index, "text": str(option.get("text", "")), "result": str(option.get("result", ""))})
+	if graph_mode:
+		history.append({"speaker": "你的选择", "text": str(option.get("text", "")), "player_choice": true})
+		_enter_graph_node(str(option.get("next", "")))
+		return true
 	history.append({"portrait": "", "speaker": "你的选择", "text": str(option.get("text", ""))})
 	choice_resolved.emit(option.duplicate(true))
 	var source: Dictionary = current()
@@ -83,6 +109,8 @@ func advance() -> bool:
 		return false
 	if has_choices():
 		return true
+	if graph_mode:
+		return _enter_graph_node(str(graph_nodes.get(graph_node_id, {}).get("next", "")))
 	index += 1
 	if index >= lines.size():
 		active = false
@@ -96,10 +124,45 @@ func _record() -> void:
 func skip() -> void:
 	if not active:
 		return
+	if graph_mode:
+		# Fast-forward dialogue, but never silently choose a branch for the player.
+		var remaining := 100
+		while active and not has_choices() and remaining > 0:
+			advance()
+			remaining -= 1
+		return
 	while index + 1 < lines.size():
 		index += 1
 		_record()
 	active = false
+	graph_mode = false
+	graph_nodes.clear()
+	graph_node_id = ""
+	last_ending.clear()
+
+func _enter_graph_node(node_id: String) -> bool:
+	graph_node_id = node_id
+	var node: Dictionary = graph_nodes.get(node_id, {})
+	if node.is_empty():
+		active = false
+		last_ending = {"status": "badend", "note": "剧情连接缺失"}
+		ending_resolved.emit(last_ending.duplicate(true))
+		return false
+	if str(node.get("type", "")) == "ending":
+		last_ending = node.duplicate(true)
+		active = false
+		ending_resolved.emit(last_ending.duplicate(true))
+		return false
+	var line := node.duplicate(true)
+	line["portrait_locked"] = true
+	line["partner"] = ""
+	line["highlight"] = "main"
+	if str(node.get("type", "")) == "choice":
+		line["choices"] = node.get("options", []).duplicate(true)
+	lines.append(line)
+	index = lines.size() - 1
+	_record()
+	return true
 
 func reset() -> void:
 	seen.clear()
@@ -109,6 +172,10 @@ func reset() -> void:
 	key = ""
 	index = 0
 	active = false
+	graph_mode = false
+	graph_nodes.clear()
+	graph_node_id = ""
+	last_ending.clear()
 
 func _is_player_line(line: Dictionary) -> bool:
 	return str(line.get("speaker", "")) in ["你", "旅行者", "旁白", "主角", "荧", "玩家", "Traveler", "Narrator"] or str(line.get("portrait", "")).contains("/traveler/")

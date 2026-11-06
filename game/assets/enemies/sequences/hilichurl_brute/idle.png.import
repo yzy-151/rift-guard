@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://b3k2ce564r2md"
 path.s3tc="res://.godot/imported/idle.png-16555b8d4b92f1615065c59e49b0225f.s3tc.ctex"
+path.etc2="res://.godot/imported/idle.png-16555b8d4b92f1615065c59e49b0225f.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/enemies/sequences/hilichurl_brute/idle.png"
-dest_files=["res://.godot/imported/idle.png-16555b8d4b92f1615065c59e49b0225f.s3tc.ctex"]
+dest_files=["res://.godot/imported/idle.png-16555b8d4b92f1615065c59e49b0225f.s3tc.ctex", "res://.godot/imported/idle.png-16555b8d4b92f1615065c59e49b0225f.etc2.ctex"]
 
 [params]
 

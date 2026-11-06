@@ -38,7 +38,7 @@ func tick(dt: float) -> Array[Dictionary]:
 			var warning_routes: Array = route_ids if not route_ids.is_empty() else [str(wave.get("route_id", "main"))]
 			var warning_count := ceili(float(count) / maxf(1.0, float(warning_routes.size())))
 			for route_value: Variant in warning_routes:
-				events.append({"kind": "route_warning", "route_id": str(route_value), "enemy_id": str(wave.get("enemy_id", "grunt")), "count": warning_count, "flying": str(wave.get("enemy_id", "")) == "flyer", "lead_time": maxf(0.25, wave_at - elapsed)})
+				events.append({"kind": "route_warning", "route_id": str(route_value), "enemy_id": str(wave.get("enemy_id", "grunt")), "count": warning_count, "flying": str(wave.get("enemy_id", "")) in ["flyer", "rift_bat", "slime_anemo"], "lead_time": maxf(0.25, wave_at - elapsed)})
 		while not resting and wave_cursors[i] < count and elapsed >= float(wave.get("at", 0.0)) + wave_cursors[i] * interval:
 			var spawn_route := str(route_ids[wave_cursors[i] % route_ids.size()]) if not route_ids.is_empty() else str(wave.get("route_id", "main"))
 			events.append({

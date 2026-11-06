@@ -1,0 +1,12 @@
+Use case: stylized-concept.
+Asset type: ONE isolated 2D game VFX sprite, transparent RGBA background, no sprite sheet.
+
+Create a single richly drawn TEAL WIND VORTEX / TORNADO, in a sharp flat-color manga game style that pairs well with Helltaker-style chibi characters. The view is from the side with a subtle overhead angle. The overall subject silhouette is taller than wide, with width about 0.8 times height; it must read clearly when displayed at only 122 x 154 pixels.
+
+The bottom tapers to a thin pointed tip touching an imaginary ground plane. Above it, a substantial twisting cone expands into a very wide round upper mouth. The wind is a SOLID-LOOKING VOLUME made of broad, thick, overlapping spiral CLOUD RIBBONS with turbulent sculpted cloud surfaces. The ribbons are closely packed and overlap, making a powerful cloudy funnel body rather than separate loops. Show a convincing three-dimensional spiral flow in a two-dimensional cel-shaded drawing, with a luminous mint-white inner energy core partly visible through the cloud body. Preserve a strong readable solid silhouette.
+
+Use 3 to 4 decisive flat cel-shading values: very deep dark teal shadows, saturated blue-green body, pale mint highlights, sparing bright white energy highlights. Refined hand-drawn dark ink outlines, expressive curved brush scratches along the flow, a few tiny curled chips and micro debris integrated close to the funnel. The broad cloud-like wind faces have weight, depth and energetic sword-wave force. Crisp edges, polished comic illustration, tightly controlled highlights.
+
+Composition: ONLY the one vortex, centered, entire tip and upper mouth inside the frame, modest clean transparent margins. The actual drawn vortex is approximately 0.8 width-to-height even if the canvas is square.
+
+Strict exclusions: no character, no person, no floor, no scene, no cast ground shadow, no backdrop, no text, no UI, no extra separate sprites, no sheet, no border. No thin wire tornado, no empty ring stack, no spring or slinky shape, no separated hollow elliptical loops, no minimalist scribble, no soft airbrush smoke, no realistic photographic render. The background must be truly transparent, not a painted checkerboard.

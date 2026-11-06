@@ -1,14 +1,14 @@
 extends RefCounted
 ## Recipes are checked only after acquiring a card, never in the frame loop.
 const RECIPES := [
- {"id":"immortal_heart","name":"不灭之心","scope":"hero","cards":["heartsteel","warmogs_armor"],"names":["心之钢","狂徒铠甲"],"description":"同一角色：心之钢每层成长 10→15；狂徒治疗 ×1.5。"},
- {"id":"battle_fervor","name":"战斗狂热","scope":"hero","cards":["lethal_tempo","conqueror"],"names":["致命节奏","征服者"],"description":"同一角色：征服者 4 次攻击即可启动，每次攻击每层回复 15 生命。"},
- {"id":"cross_barrage","name":"火力交织","scope":"team","cards":["support_red_moon","support_crossfire"],"names":["赤月炮击","交叉火力"],"description":"赤月炮击与交叉火力伤害 ×1.35；后续强化仍享受加成。"},
- {"id":"healing_tide","name":"生命潮汐","scope":"team","cards":["support_tidal_aid","warmogs_armor"],"names":["潮汐急救","狂徒铠甲"],"description":"潮汐急救的角色治疗与水晶修复 ×1.5。"},
- {"id":"twin_orbits","name":"双轨共振","scope":"team","cards":["orbit_arcane_blades","orbit_spell_rings"],"names":["星轨剑阵","术式环流"],"description":"飞剑、法术环及剑阵风暴伤害 ×1.35。"},
- {"id":"skyfire","name":"天火坠落","scope":"team","cards":["evolve_fireball","mechanic_blast_core"],"names":["天动万象","爆裂核心"],"description":"天动万象伤害 ×1.35，落点作用范围 ×1.2，画面与判定同步。"},
- {"id":"spell_overclock","name":"术式超频","scope":"team","cards":["v75_skill_overload","v75_time_compression"],"names":["技能超载","时间压缩"],"description":"额外提高全队技能伤害 35%，每局只激活一次。"},
- {"id":"giant_execution","name":"巨兽终结","scope":"team","cards":["mechanic_execution","mechanic_giant_slayer"],"names":["收集者","巨人杀手"],"description":"额外提高对精英与首领的伤害 35%，每局只激活一次。"}
+ {"id":"immortal_heart","name":"不灭之心","scope":"hero","cards":["heartsteel","warmogs_armor"],"names":["心之钢","狂徒铠甲"],"description":"同一角色：心之钢成长 4→6／级，上限 600→900；狂徒治疗 ×1.35。"},
+ {"id":"battle_fervor","name":"战斗狂热","scope":"hero","cards":["lethal_tempo","conqueror"],"names":["致命节奏","征服者"],"description":"同一角色：征服者 4 次攻击启动，每击每级回复 5 生命。"},
+ {"id":"cross_barrage","name":"火力交织","scope":"team","cards":["support_red_moon","support_crossfire"],"names":["赤月炮击","交叉火力"],"description":"赤月炮击与交叉火力伤害 ×1.45；后续强化仍享受加成。"},
+ {"id":"healing_tide","name":"生命潮汐","scope":"team","cards":["support_tidal_aid","warmogs_armor"],"names":["潮汐急救","狂徒铠甲"],"description":"潮汐急救的角色治疗与水晶修复 ×1.35。"},
+ {"id":"twin_orbits","name":"双轨共振","scope":"team","cards":["orbit_arcane_blades","orbit_spell_rings"],"names":["星轨剑阵","术式环流"],"description":"飞剑、法术环及剑阵风暴伤害 ×1.4。"},
+ {"id":"skyfire","name":"天火坠落","scope":"team","cards":["evolve_fireball","mechanic_blast_core"],"names":["天动万象","爆裂核心"],"description":"天动万象伤害 ×1.45、落点半径 ×1.25，画面与判定同步。"},
+ {"id":"spell_overclock","name":"术式超频","scope":"team","cards":["v75_skill_overload","v75_time_compression"],"names":["技能超载","时间压缩"],"description":"额外提高全队技能伤害 30%，每局只激活一次。"},
+ {"id":"giant_execution","name":"巨兽终结","scope":"team","cards":["mechanic_execution","mechanic_giant_slayer"],"names":["收集者","巨人杀手"],"description":"额外提高精英与首领伤害 25%，每局只激活一次。"}
 ]
 
 static func hero_has(hero: Dictionary, card_id: String) -> bool:
@@ -23,6 +23,7 @@ static func ready(recipe: Dictionary, sim, hero: Dictionary = {}) -> bool:
  return true
 
 static func refresh(sim) -> void:
+ var team_changed := false
  for recipe: Dictionary in RECIPES:
   if recipe.scope == "hero":
    for hero: Dictionary in sim.heroes:
@@ -32,17 +33,21 @@ static func refresh(sim) -> void:
     hero.card_synergies = activated
     _announce(sim, recipe, hero.pos, str(hero.name))
   elif not sim.run_state.card_synergies.has(recipe.id) and ready(recipe, sim):
+   team_changed = true
    sim.run_state.card_synergies[recipe.id] = true
    match str(recipe.id):
-    "spell_overclock": sim.skill_power_bonus += 0.35
-    "giant_execution": sim.elite_damage_bonus += 0.35
+    "spell_overclock": sim.skill_power_bonus += 0.30
+    "giant_execution": sim.elite_damage_bonus += 0.25
    _announce(sim, recipe, sim.heroes[0].pos if not sim.heroes.is_empty() else Vector2.ZERO, "全队")
+ if team_changed: sim._clamp_combat_card_stats()
 
 static func _announce(sim, recipe: Dictionary, point: Vector2, owner: String) -> void:
  sim.events.append({"kind":"tag_synergy","pos":point,"value":str(recipe.name)+" · "+owner,"level":1})
 
 static func team_multiplier(sim, id: String, amount: float) -> float:
- return amount if sim.run_state.card_synergies.has(id) else 1.0
+ if not sim.run_state.card_synergies.has(id): return 1.0
+ if id == "skyfire": return 1.25 if amount <= 1.15 else 1.45
+ return float({"cross_barrage":1.45,"healing_tide":1.35,"twin_orbits":1.40}.get(id,amount))
 
 static func hero_active(hero: Dictionary, id: String) -> bool:
  return bool(hero.get("card_synergies", {}).get(id, false))

@@ -1,6 +1,8 @@
-[gd_resource type="Resource" script_class="RiftUISkinProfile" load_steps=56 format=3]
+[gd_resource type="Resource" script_class="RiftUISkinProfile" load_steps=59 format=3]
 
 [ext_resource type="Script" path="res://scripts/rift_ui_skin_profile.gd" id="1_skin"]
+[ext_resource type="Texture2D" path="res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png" id="56_mode_portrait"]
+[ext_resource type="Texture2D" path="res://assets/ui/settings_kaltsit.png" id="57_settings_portrait"]
 [ext_resource type="Texture2D" path="res://assets/ui/custom/choice_frame_dim.png" id="2_choice_gray"]
 [ext_resource type="Texture2D" path="res://assets/ui/custom/choice_frame_bright.png" id="3_choice_red"]
 [ext_resource type="Texture2D" path="res://assets/ui/rift_v2/components/mode_card_gray.png" id="4_mode_gray"]
@@ -57,8 +59,11 @@
 [ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/15_explosion_rgba.png" id="54_reward_icon_explosion"]
 [ext_resource type="Texture2D" path="res://assets/ui/reward_pack_v1/04_skill_icons/individual/16_time_slow_rgba.png" id="55_reward_icon_time_slow"]
 
+[ext_resource type="Texture2D" path="res://assets/helltaker/dialogue_portraits/阿米娅_JK_微笑_大腿根以上.png" id="58_home_amiya"]
+
 [resource]
 script = ExtResource("1_skin")
+mode_portrait = ExtResource("56_mode_portrait")
 schema_version = 4
 common_button_normal = ExtResource("16_button")
 common_button_hover = ExtResource("17_button_hover")
@@ -108,6 +113,7 @@ reward_icon_summon_crystal = ExtResource("53_reward_icon_summon_crystal")
 reward_icon_explosion = ExtResource("54_reward_icon_explosion")
 reward_icon_time_slow = ExtResource("55_reward_icon_time_slow")
 settings_background = ExtResource("21_chapter_bg")
+settings_portrait = ExtResource("57_settings_portrait")
 battle_menu_background = ExtResource("21_chapter_bg")
 battle_topbar = ExtResource("28_battle_topbar")
 battle_logo = ExtResource("29_battle_logo")
@@ -117,3 +123,5 @@ skill_frame_gray = ExtResource("12_skill_gray")
 skill_frame_red = ExtResource("13_skill_red")
 ultimate_frame_gray = ExtResource("14_ultimate_gray")
 ultimate_frame_red = ExtResource("15_ultimate_red")
+
+mode_home_portrait = ExtResource("58_home_amiya")

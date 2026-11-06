@@ -2,105 +2,151 @@
   {
     "id": "single_attack_common",
     "name": "锋刃强化",
-    "description": "选定角色：攻击力提高50%。",
+    "description": "攻击 +24%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "character",
     "effect": "attack_multiplier",
-    "value": 0.5,
-    "max_stacks": 5,
+    "value": 0.24,
+    "max_stacks": 3,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "进攻"
+    ],
+    "summary": "攻击 +24%",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_health_common",
     "name": "生命训练",
-    "description": "选定角色：最大生命提高75%，并恢复等量生命。",
+    "description": "生命上限 +30%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "character",
     "effect": "health_multiplier",
-    "value": 0.75,
-    "max_stacks": 5,
+    "value": 0.3,
+    "max_stacks": 3,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "生命上限 +30%",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_speed_common",
     "name": "节奏训练",
-    "description": "选定角色：攻击速度提高20%。",
+    "description": "攻速 +16%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "character",
     "effect": "attack_rate_multiplier",
-    "value": 0.2,
-    "max_stacks": 5,
-    "requires": [],
-    "excludes": [],
-    "tags": [
-      "弹道"
-    ]
-  },
-  {
-    "id": "single_range_rare",
-    "name": "万用瞄准镜",
-    "description": "选定角色：攻击范围提高60。",
-    "rarity": "rare",
-    "weight": 28,
-    "target": "character",
-    "effect": "range_flat",
-    "value": 60,
+    "value": 0.16,
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "节奏"
+    ],
+    "summary": "攻速 +16%",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "single_range_rare",
+    "name": "万用瞄准镜",
+    "description": "射程 +35。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "character",
+    "effect": "range_flat",
+    "value": 35,
+    "max_stacks": 2,
+    "requires": [],
+    "excludes": [],
+    "tags": [
+      "瞄准"
+    ],
+    "summary": "射程 +35",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_armor_rare",
     "name": "战术装甲",
-    "description": "选定角色：防御提高120。",
+    "description": "防御 +24。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
     "effect": "armor_flat",
-    "value": 120,
+    "value": 24,
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "防御 +24",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_move_rare",
     "name": "迅捷步伐",
-    "description": "选定角色：移动速度提高120。",
+    "description": "移速 +30。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
     "effect": "move_speed_flat",
-    "value": 120,
-    "max_stacks": 3,
+    "value": 30,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "机动"
+    ],
+    "summary": "移速 +30",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "element_resonance_anemo",
     "name": "元素共鸣 风",
-    "description": "仅旅行者获得风元素；已有元素时不再出现元素共鸣。",
+    "description": "仅旅行者获得风元素；已有元素时不再出现元素共鸣。最高 1 级。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "global",
     "effect": "assign_traveler_element",
     "value": "anemo",
@@ -109,14 +155,20 @@
     "excludes": [],
     "tags": [
       "反应"
-    ]
+    ],
+    "summary": "仅旅行者获得风元素；已有元素时不再出现元素共鸣。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "element_resonance_electro",
     "name": "元素共鸣 雷",
-    "description": "仅旅行者获得雷元素；已有元素时不再出现元素共鸣。",
+    "description": "仅旅行者获得雷元素；已有元素时不再出现元素共鸣。最高 1 级。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "global",
     "effect": "assign_traveler_element",
     "value": "electro",
@@ -125,14 +177,20 @@
     "excludes": [],
     "tags": [
       "反应"
-    ]
+    ],
+    "summary": "仅旅行者获得雷元素；已有元素时不再出现元素共鸣。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "element_resonance_pyro",
     "name": "元素共鸣 火",
-    "description": "仅旅行者获得火元素；已有元素时不再出现元素共鸣。",
+    "description": "仅旅行者获得火元素；已有元素时不再出现元素共鸣。最高 1 级。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "global",
     "effect": "assign_traveler_element",
     "value": "pyro",
@@ -141,14 +199,20 @@
     "excludes": [],
     "tags": [
       "反应"
-    ]
+    ],
+    "summary": "仅旅行者获得火元素；已有元素时不再出现元素共鸣。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "element_resonance_hydro",
     "name": "元素共鸣 水",
-    "description": "仅旅行者获得水元素；已有元素时不再出现元素共鸣。",
+    "description": "仅旅行者获得水元素；已有元素时不再出现元素共鸣。最高 1 级。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "global",
     "effect": "assign_traveler_element",
     "value": "hydro",
@@ -157,14 +221,20 @@
     "excludes": [],
     "tags": [
       "反应"
-    ]
+    ],
+    "summary": "仅旅行者获得水元素；已有元素时不再出现元素共鸣。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "element_resonance_geo",
     "name": "元素共鸣 岩",
-    "description": "仅旅行者获得岩元素；已有元素时不再出现元素共鸣。",
+    "description": "仅旅行者获得岩元素；已有元素时不再出现元素共鸣。最高 1 级。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "global",
     "effect": "assign_traveler_element",
     "value": "geo",
@@ -173,14 +243,20 @@
     "excludes": [],
     "tags": [
       "反应"
-    ]
+    ],
+    "summary": "仅旅行者获得岩元素；已有元素时不再出现元素共鸣。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "element_resonance_cryo",
     "name": "元素共鸣 冰",
-    "description": "仅旅行者获得冰元素；已有元素时不再出现元素共鸣。",
+    "description": "仅旅行者获得冰元素；已有元素时不再出现元素共鸣。最高 1 级。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "global",
     "effect": "assign_traveler_element",
     "value": "cryo",
@@ -189,651 +265,962 @@
     "excludes": [],
     "tags": [
       "反应"
-    ]
+    ],
+    "summary": "仅旅行者获得冰元素；已有元素时不再出现元素共鸣。",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_attack_1",
     "name": "协同进攻",
-    "description": "全队：攻击力提高50%。",
+    "description": "全队攻击 +13%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "global",
     "effect": "squad_attack_multiplier",
-    "value": 0.5,
-    "max_stacks": 5,
+    "value": 0.13,
+    "max_stacks": 3,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "进攻"
+    ],
+    "summary": "全队攻击 +13%",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_health_1",
     "name": "极限剂量",
-    "description": "全队：最大生命提高75%，并恢复等量生命。",
+    "description": "全队生命上限 +18%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "global",
     "effect": "squad_health_multiplier",
-    "value": 0.75,
-    "max_stacks": 5,
+    "value": 0.18,
+    "max_stacks": 3,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "全队生命上限 +18%",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_speed_1",
     "name": "统一节奏",
-    "description": "全队：攻击速度提高20%。",
+    "description": "全队攻速 +10%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "global",
     "effect": "squad_rate_multiplier",
-    "value": 0.2,
-    "max_stacks": 5,
+    "value": 0.1,
+    "max_stacks": 3,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "节奏"
+    ],
+    "summary": "全队攻速 +10%",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "crystal_guard_1",
     "name": "水晶加固",
-    "description": "水晶最大生命提高60，并立即恢复60点生命。",
+    "description": "水晶生命上限与当前生命 +24。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 60,
+    "weight": 48,
     "target": "global",
     "effect": "crystal_health_flat",
-    "value": 60,
-    "max_stacks": 4,
+    "value": 24,
+    "max_stacks": 3,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "水晶生命上限与当前生命 +24",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_armor_1",
     "name": "协同防御",
-    "description": "全队：防御提高160。",
+    "description": "全队防御 +16。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "global",
     "effect": "squad_armor_flat",
-    "value": 160,
-    "max_stacks": 4,
+    "value": 16,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "全队防御 +16",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_range_1",
     "name": "共享视野",
-    "description": "全队：攻击范围提高75。",
+    "description": "全队射程 +25。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "global",
     "effect": "squad_range_flat",
-    "value": 75,
-    "max_stacks": 3,
+    "value": 25,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "瞄准"
+    ],
+    "summary": "全队射程 +25",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "crystal_repair_1",
     "name": "紧急修复",
-    "description": "立即恢复水晶120点生命。",
+    "description": "水晶回复 50 生命。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "global",
     "effect": "crystal_heal",
-    "value": 120,
+    "value": 50,
     "max_stacks": 3,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "水晶回复 50 生命",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_critical_1",
     "name": "弱点洞察",
-    "description": "全队：暴击率提高50%。",
+    "description": "全队暴击率 +12%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "global",
     "effect": "squad_crit_flat",
-    "value": 0.5,
+    "value": 0.12,
     "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
       "暴击"
-    ]
+    ],
+    "summary": "全队暴击率 +12%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_chain_1",
     "name": "战术连携",
-    "description": "全队攻击额外连锁5名附近敌人。",
+    "description": "连锁 +1。最高1级。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "global",
     "effect": "squad_chain",
-    "value": 5,
+    "value": 1,
     "max_stacks": 1,
     "requires": [],
     "excludes": [],
     "tags": [
-      "反应"
-    ]
+      "弹道"
+    ],
+    "summary": "连锁 +1",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_laststand_1",
     "name": "坚毅不倒",
-    "description": "角色生命低于30%时，该角色每层造成的伤害提高100%。",
-    "rarity": "legendary",
-    "weight": 2,
+    "description": "角色生命低于 30% 时伤害 +25%／级。最高 2 级。",
+    "rarity": "rare",
+    "weight": 28,
     "target": "global",
     "effect": "last_stand",
-    "value": 1.0,
-    "max_stacks": 5,
+    "value": 0.25,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "技巧"
+    ],
+    "summary": "角色生命低于 30% 时伤害 +25%／级",
+    "upgrade_scales": [
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_attack_rare",
     "name": "精钢锋芒",
-    "description": "选定角色：攻击力提高100%。",
+    "description": "攻击 +42%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
     "effect": "attack_multiplier",
-    "value": 1.0,
-    "max_stacks": 5,
+    "value": 0.42,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "进攻"
+    ],
+    "summary": "攻击 +42%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_attack_epic",
     "name": "破军锋刃",
-    "description": "选定角色：攻击力提高200%。",
+    "description": "攻击 +70%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "character",
     "effect": "attack_multiplier",
-    "value": 2.0,
-    "max_stacks": 5,
+    "value": 0.7,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "进攻"
+    ],
+    "summary": "攻击 +70%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_attack_legendary",
     "name": "灭界之刃",
-    "description": "选定角色：攻击力提高300%。",
+    "description": "攻击 +125%。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "character",
     "effect": "attack_multiplier",
-    "value": 3.0,
-    "max_stacks": 5,
+    "value": 1.25,
+    "max_stacks": 1,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "进攻"
+    ],
+    "summary": "攻击 +125%",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_speed_rare",
     "name": "疾风连击",
-    "description": "选定角色：攻击速度提高40%。",
+    "description": "攻速 +26%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
     "effect": "attack_rate_multiplier",
-    "value": 0.4,
-    "max_stacks": 5,
+    "value": 0.26,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "节奏"
+    ],
+    "summary": "攻速 +26%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_speed_epic",
     "name": "迅雷疾攻",
-    "description": "选定角色：攻击速度提高80%。",
+    "description": "攻速 +40%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "character",
     "effect": "attack_rate_multiplier",
-    "value": 0.8,
-    "max_stacks": 5,
+    "value": 0.4,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "节奏"
+    ],
+    "summary": "攻速 +40%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_speed_legendary",
     "name": "超频暴风",
-    "description": "选定角色：攻击速度提高120%。",
+    "description": "攻速 +70%。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "character",
     "effect": "attack_rate_multiplier",
-    "value": 1.2,
-    "max_stacks": 5,
+    "value": 0.7,
+    "max_stacks": 1,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "节奏"
+    ],
+    "summary": "攻速 +70%",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_range_epic",
     "name": "鹰眼领域",
-    "description": "选定角色：攻击范围提高125。",
+    "description": "射程 +65。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "character",
     "effect": "range_flat",
-    "value": 125,
-    "max_stacks": 5,
+    "value": 65,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "瞄准"
+    ],
+    "summary": "射程 +65",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_range_legendary",
     "name": "天穹瞄准",
-    "description": "选定角色：攻击范围提高200。",
+    "description": "射程 +95。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "character",
     "effect": "range_flat",
-    "value": 200,
-    "max_stacks": 5,
+    "value": 95,
+    "max_stacks": 1,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "瞄准"
+    ],
+    "summary": "射程 +95",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_attack_rare",
     "name": "攻势协议",
-    "description": "全队：攻击力提高100%。",
+    "description": "全队攻击 +26%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "global",
     "effect": "squad_attack_multiplier",
-    "value": 1.0,
-    "max_stacks": 5,
+    "value": 0.26,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "进攻"
+    ],
+    "summary": "全队攻击 +26%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_attack_epic",
     "name": "军势共振",
-    "description": "全队：攻击力提高200%。",
+    "description": "全队攻击 +42%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "global",
     "effect": "squad_attack_multiplier",
-    "value": 2.0,
-    "max_stacks": 5,
+    "value": 0.42,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "进攻"
+    ],
+    "summary": "全队攻击 +42%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_attack_legendary",
     "name": "终极武装",
-    "description": "全队：攻击力提高300%。",
+    "description": "全队攻击 +75%。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "global",
     "effect": "squad_attack_multiplier",
-    "value": 3.0,
-    "max_stacks": 5,
+    "value": 0.75,
+    "max_stacks": 1,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "进攻"
+    ],
+    "summary": "全队攻击 +75%",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_speed_rare",
     "name": "全军加速",
-    "description": "全队：攻击速度提高40%。",
+    "description": "全队攻速 +16%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "global",
     "effect": "squad_rate_multiplier",
-    "value": 0.4,
-    "max_stacks": 5,
+    "value": 0.16,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "节奏"
+    ],
+    "summary": "全队攻速 +16%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_speed_epic",
     "name": "风暴节拍",
-    "description": "全队：攻击速度提高80%。",
+    "description": "全队攻速 +26%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "global",
     "effect": "squad_rate_multiplier",
-    "value": 0.8,
-    "max_stacks": 5,
+    "value": 0.26,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "节奏"
+    ],
+    "summary": "全队攻速 +26%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_speed_legendary",
     "name": "时间洪流",
-    "description": "全队：攻击速度提高120%。",
+    "description": "全队攻速 +45%。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "global",
     "effect": "squad_rate_multiplier",
-    "value": 1.2,
-    "max_stacks": 5,
+    "value": 0.45,
+    "max_stacks": 1,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "节奏"
+    ],
+    "summary": "全队攻速 +45%",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_range_epic",
     "name": "全域索敌",
-    "description": "全队：攻击范围提高150。",
+    "description": "全队射程 +45。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "global",
     "effect": "squad_range_flat",
-    "value": 150,
-    "max_stacks": 5,
+    "value": 45,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "瞄准"
+    ],
+    "summary": "全队射程 +45",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_range_legendary",
     "name": "天眼矩阵",
-    "description": "全队：攻击范围提高225。",
+    "description": "全队射程 +75。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "global",
     "effect": "squad_range_flat",
-    "value": 225,
-    "max_stacks": 5,
+    "value": 75,
+    "max_stacks": 1,
     "requires": [],
     "excludes": [],
     "tags": [
-      "支援"
-    ]
+      "瞄准"
+    ],
+    "summary": "全队射程 +75",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_health_rare",
     "name": "强化体魄",
-    "description": "选定角色：最大生命提高150%，并恢复等量生命。",
+    "description": "生命上限 +50%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
     "weight": 28,
     "target": "character",
     "effect": "health_multiplier",
-    "value": 1.5,
-    "max_stacks": 5,
+    "value": 0.5,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "生命上限 +50%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_health_epic",
     "name": "不灭之躯",
-    "description": "选定角色：最大生命提高300%，并恢复等量生命。",
+    "description": "生命上限 +85%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "character",
     "effect": "health_multiplier",
-    "value": 3.0,
-    "max_stacks": 5,
+    "value": 0.85,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "生命上限 +85%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_armor_epic",
     "name": "重装壁垒",
-    "description": "选定角色：防御提高240。",
+    "description": "防御 +45。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "character",
     "effect": "armor_flat",
-    "value": 240,
-    "max_stacks": 5,
+    "value": 45,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "防御 +45",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_armor_legendary",
     "name": "绝对防线",
-    "description": "选定角色：防御提高400。",
+    "description": "防御 +80。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "character",
     "effect": "armor_flat",
-    "value": 400,
-    "max_stacks": 5,
+    "value": 80,
+    "max_stacks": 1,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "防御 +80",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_move_epic",
     "name": "疾影穿梭",
-    "description": "选定角色：移动速度提高240。",
+    "description": "移速 +45。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "character",
     "effect": "move_speed_flat",
-    "value": 240,
-    "max_stacks": 5,
+    "value": 45,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "机动"
+    ],
+    "summary": "移速 +45",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "single_move_legendary",
     "name": "光速奔袭",
-    "description": "选定角色：移动速度提高360。",
-    "rarity": "legendary",
-    "weight": 2,
+    "description": "移速 +65。最高1级。",
+    "rarity": "epic",
+    "weight": 13,
     "target": "character",
     "effect": "move_speed_flat",
-    "value": 360,
-    "max_stacks": 5,
+    "value": 65,
+    "max_stacks": 1,
     "requires": [],
     "excludes": [],
     "tags": [
-      "弹道"
-    ]
+      "机动"
+    ],
+    "summary": "移速 +65",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "global_health_epic",
     "name": "生命同调",
-    "description": "全队：最大生命提高300%，并恢复等量生命。",
+    "description": "全队生命上限 +60%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "global",
     "effect": "squad_health_multiplier",
-    "value": 3.0,
-    "max_stacks": 5,
+    "value": 0.6,
+    "max_stacks": 2,
     "requires": [],
     "excludes": [],
     "tags": [
       "护盾"
-    ]
+    ],
+    "summary": "全队生命上限 +60%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_tempered_edge",
     "name": "铁剑磨砺",
-    "description": "选定角色：攻击+25%，防御+30。重复获取时各项加成叠加。",
+    "description": "攻击 +18%；防御 +8。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 52,
+    "weight": 48,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "进攻",
+      "护盾"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_multiplier",
-        "value": 0.25
+        "value": 0.18
       },
       {
         "effect": "armor_flat",
-        "value": 30
+        "value": 8
       }
     ],
-    "summary": "攻击+25%，防御+30",
-    "mechanic": true
+    "summary": "攻击 +18%；防御 +8",
+    "mechanic": true,
+    "max_stacks": 3,
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_warhammer_calibration",
     "name": "战锤校准",
-    "description": "选定角色：攻击+100%，受击后下次普攻增伤50%。重复获取时各项加成叠加。",
+    "description": "攻击 +24%；受击后下一击伤害 +55%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 27,
+    "weight": 28,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "进攻",
+      "技巧"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_multiplier",
-        "value": 1
+        "value": 0.24
       },
       {
         "effect": "counter_ready",
         "value": 1
       }
     ],
-    "summary": "攻击+100%，受击反攻+50%",
-    "mechanic": true
+    "summary": "攻击 +24%；受击后下一击伤害 +55%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_masterwork_greatblade",
     "name": "精工巨刃",
-    "description": "选定角色：攻击+150%，普攻爆炸半径+60。重复获取时各项加成叠加。",
+    "description": "攻击 +42%；普攻爆炸半径 +35。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 12,
+    "weight": 13,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
+      "进攻",
       "弹道"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_multiplier",
-        "value": 1.5
+        "value": 0.42
       },
       {
         "effect": "blast_add",
-        "value": 60
+        "value": 35
       }
     ],
-    "summary": "攻击+150%，普攻爆炸半径+60",
-    "mechanic": true
+    "summary": "攻击 +42%；普攻爆炸半径 +35",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_godslayer_armament",
     "name": "弑神武装",
-    "description": "选定角色：攻击+200%，每第三次普攻额外增伤150%。重复获取时各项加成叠加。",
+    "description": "攻击 +85%；每第三击伤害 +100%。最高1级。",
     "rarity": "legendary",
-    "weight": 4,
+    "weight": 5,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "进攻",
+      "技巧"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_multiplier",
-        "value": 2
+        "value": 0.85
       },
       {
         "effect": "third_strike",
-        "value": 1
+        "value": 2
       }
     ],
-    "summary": "攻击+200%，每三击追加150%",
-    "mechanic": true
+    "summary": "攻击 +85%；每第三击伤害 +100%",
+    "mechanic": true,
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_vitality_drill",
     "name": "血性训练",
-    "description": "选定角色：生命+40%，每次普攻回复8生命。重复获取时各项加成叠加。",
+    "description": "生命上限 +24%；每击回复 2 生命。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 50,
+    "weight": 48,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "护盾"
+      "护盾",
+      "恢复"
+    ],
+    "placeholder_icon": true,
+    "components": [
+      {
+        "effect": "health_multiplier",
+        "value": 0.24
+      },
+      {
+        "effect": "attack_mend",
+        "value": 1
+      }
+    ],
+    "summary": "生命上限 +24%；每击回复 2 生命",
+    "mechanic": true,
+    "max_stacks": 3,
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
+  },
+  {
+    "id": "v75_dragon_bloodline",
+    "name": "巨龙血统",
+    "description": "生命上限 +40%；攻击 +20%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
+    "rarity": "rare",
+    "weight": 28,
+    "target": "character",
+    "effect": "card_bundle",
+    "value": 0,
+    "tags": [
+      "护盾",
+      "进攻"
     ],
     "placeholder_icon": true,
     "components": [
@@ -842,45 +1229,28 @@
         "value": 0.4
       },
       {
-        "effect": "attack_mend",
-        "value": 8
-      }
-    ],
-    "summary": "生命+40%，普攻回复8点",
-    "mechanic": true
-  },
-  {
-    "id": "v75_dragon_bloodline",
-    "name": "巨龙血统",
-    "description": "选定角色：生命+100%，攻击+100%。重复获取时各项加成叠加。",
-    "rarity": "rare",
-    "weight": 25,
-    "target": "character",
-    "effect": "card_bundle",
-    "value": 0,
-    "tags": [
-      "护盾"
-    ],
-    "placeholder_icon": true,
-    "components": [
-      {
-        "effect": "health_multiplier",
-        "value": 1
-      },
-      {
         "effect": "attack_multiplier",
-        "value": 1
+        "value": 0.2
       }
     ],
-    "summary": "生命+100%，攻击+100%",
-    "mechanic": true
+    "summary": "生命上限 +40%；攻击 +20%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_titan_vigor",
     "name": "泰坦活力",
-    "description": "选定角色：生命+200%，防御+100。重复获取时各项加成叠加。",
+    "description": "生命上限 +65%；防御 +28。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
@@ -891,41 +1261,59 @@
     "components": [
       {
         "effect": "health_multiplier",
-        "value": 2
+        "value": 0.65
       },
       {
         "effect": "armor_flat",
-        "value": 100
+        "value": 28
       }
     ],
-    "summary": "生命+200%，防御+100",
-    "mechanic": true
+    "summary": "生命上限 +65%；防御 +28",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_immortal_fortress",
     "name": "不朽要塞",
-    "description": "选定角色：最大生命提高450%，并恢复等量生命。",
+    "description": "生命上限 +140%。最高1级。",
     "rarity": "legendary",
-    "weight": 3,
+    "weight": 5,
     "target": "character",
     "effect": "health_multiplier",
-    "value": 4.5,
+    "value": 1.4,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 1,
+    "summary": "生命上限 +140%",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_trigger_prewarm",
     "name": "预热扳机",
-    "description": "选定角色：停攻3秒后，下次普攻伤害+80%。重复获取时各项加成叠加。",
+    "description": "停攻3秒后首击伤害 +65%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 52,
+    "weight": 48,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "技巧"
     ],
     "placeholder_icon": true,
     "components": [
@@ -934,20 +1322,30 @@
         "value": 1
       }
     ],
-    "summary": "停攻3秒，下一击增伤80%",
-    "mechanic": true
+    "summary": "停攻3秒后首击伤害 +65%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_phantom_cadence",
     "name": "幻影之舞",
-    "description": "选定角色：攻速+20%，移速+70。重复获取时各项加成叠加。",
+    "description": "攻速 +20%；移速 +20。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 27,
+    "weight": 28,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "节奏",
+      "机动"
     ],
     "placeholder_icon": true,
     "components": [
@@ -957,85 +1355,130 @@
       },
       {
         "effect": "move_speed_flat",
-        "value": 70
+        "value": 20
       }
     ],
-    "summary": "攻速+20%，移速+70",
-    "mechanic": true
+    "summary": "攻速 +20%；移速 +20",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_nashor_cadence",
     "name": "纳什之牙",
-    "description": "选定角色：攻速+30%，普攻追击伤害+40%。重复获取时各项加成叠加。",
+    "description": "攻速 +28%；普攻追加 15% 追击伤害。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 11,
+    "weight": 13,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
+      "节奏",
       "弹道"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "attack_rate_multiplier",
-        "value": 0.3
+        "value": 0.28
       },
       {
         "effect": "echo_add",
-        "value": 0.4
+        "value": 0.15
       }
     ],
-    "summary": "攻速+30%，普攻追击伤害+40%",
-    "mechanic": true
+    "summary": "攻速 +28%；普攻追加 15% 追击伤害",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_kraken_tempo",
     "name": "海妖杀手",
-    "description": "选定角色：每第三次普攻额外增伤150%。重复获取时各项加成叠加。",
+    "description": "每第三击伤害 +100%；攻速 +18%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "legendary",
-    "weight": 4,
+    "weight": 5,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "技巧",
+      "节奏"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "third_strike",
-        "value": 1
+        "value": 2
+      },
+      {
+        "effect": "attack_rate_multiplier",
+        "value": 0.18
       }
     ],
-    "summary": "每第三次普攻增伤150%",
-    "mechanic": true
+    "summary": "每第三击伤害 +100%；攻速 +18%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_close_focus_lens",
     "name": "近焦镜片",
-    "description": "选定角色：攻击范围提高30。",
+    "description": "射程 +22。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
     "weight": 48,
     "target": "character",
     "effect": "range_flat",
-    "value": 30,
+    "value": 22,
     "tags": [
-      "弹道"
+      "瞄准"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 3,
+    "summary": "射程 +22",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_cannon_calibration",
     "name": "火炮校准",
-    "description": "选定角色：射程+30，攻击+100%。重复获取时各项加成叠加。",
+    "description": "射程 +30；攻击 +24%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 24,
+    "weight": 28,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "瞄准",
+      "进攻"
     ],
     "placeholder_icon": true,
     "components": [
@@ -1045,110 +1488,159 @@
       },
       {
         "effect": "attack_multiplier",
-        "value": 1
+        "value": 0.24
       }
     ],
-    "summary": "射程+30，攻击+100%",
-    "mechanic": true
+    "summary": "射程 +30；攻击 +24%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_horizon_focus",
     "name": "视界专注",
-    "description": "选定角色：射程+50，目标距离超过250时普攻增伤80%。重复获取时各项加成叠加。",
+    "description": "射程 +45；250距离外伤害 +20%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "瞄准",
+      "技巧"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "range_flat",
-        "value": 50
+        "value": 45
       },
       {
         "effect": "distant_strike",
         "value": 1
       }
     ],
-    "summary": "射程+50，远距普攻增伤80%",
-    "mechanic": true
+    "summary": "射程 +45；250距离外伤害 +20%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_celestial_rangefinder",
     "name": "天界测距",
-    "description": "选定角色：射程+80，暴击率+25%。重复获取时各项加成叠加。",
+    "description": "射程 +75；暴击率 +18%。最高1级。",
     "rarity": "legendary",
-    "weight": 3,
+    "weight": 5,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "瞄准",
+      "暴击"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "range_flat",
-        "value": 80
+        "value": 75
       },
       {
         "effect": "crit_flat",
-        "value": 0.25
+        "value": 0.18
       }
     ],
-    "summary": "射程+80，暴击率+25%",
-    "mechanic": true
+    "summary": "射程 +75；暴击率 +18%",
+    "mechanic": true,
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_leather_padding",
     "name": "皮革衬甲",
-    "description": "选定角色：防御提高50。",
+    "description": "防御 +14。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
     "weight": 48,
     "target": "character",
     "effect": "armor_flat",
-    "value": 50,
+    "value": 14,
     "tags": [
       "护盾"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 3,
+    "summary": "防御 +14",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_bramble_vest",
     "name": "棘刺背心",
-    "description": "选定角色：防御+70，受击后下次普攻增伤50%。重复获取时各项加成叠加。",
+    "description": "防御 +22；受击后下一击伤害 +55%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 24,
+    "weight": 28,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "护盾"
+      "护盾",
+      "技巧"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "armor_flat",
-        "value": 70
+        "value": 22
       },
       {
         "effect": "counter_ready",
         "value": 1
       }
     ],
-    "summary": "防御+70，受击反攻+50%",
-    "mechanic": true
+    "summary": "防御 +22；受击后下一击伤害 +55%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_randuin_barrier",
     "name": "兰顿之兆",
-    "description": "选定角色：防御+150，生命+100%。重复获取时各项加成叠加。",
+    "description": "防御 +38；生命上限 +35%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 10,
+    "weight": 13,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
@@ -1159,22 +1651,31 @@
     "components": [
       {
         "effect": "armor_flat",
-        "value": 150
+        "value": 38
       },
       {
         "effect": "health_multiplier",
-        "value": 1
+        "value": 0.35
       }
     ],
-    "summary": "防御+150，生命+100%",
-    "mechanic": true
+    "summary": "防御 +38；生命上限 +35%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_gargoyle_plate",
     "name": "石像鬼石板甲",
-    "description": "选定角色：防御+240，生命低于30%时额外减伤15%。重复获取时各项加成叠加。减伤总上限75%。",
+    "description": "防御 +65；生命低于30%时减伤 15%。最高1级。",
     "rarity": "legendary",
-    "weight": 3,
+    "weight": 5,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
@@ -1185,170 +1686,258 @@
     "components": [
       {
         "effect": "armor_flat",
-        "value": 240
+        "value": 65
       },
       {
         "effect": "desperate_guard",
         "value": 1
       }
     ],
-    "summary": "防御+240，残血减伤15%",
-    "mechanic": true
+    "summary": "防御 +65；生命低于30%时减伤 15%",
+    "mechanic": true,
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_light_march",
     "name": "轻装行军",
-    "description": "选定角色：移动速度提高60。",
+    "description": "移速 +20。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 46,
+    "weight": 48,
     "target": "character",
     "effect": "move_speed_flat",
-    "value": 60,
+    "value": 20,
     "tags": [
-      "支援"
+      "机动"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 3,
+    "summary": "移速 +20",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_nimble_hunter",
     "name": "灵巧猎手",
-    "description": "选定角色：移速+70，暴击率+15%。重复获取时各项加成叠加。",
+    "description": "移速 +30；暴击率 +8%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 23,
+    "weight": 28,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "支援"
+      "机动",
+      "暴击"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "move_speed_flat",
-        "value": 70
+        "value": 30
       },
       {
         "effect": "crit_flat",
-        "value": 0.15
+        "value": 0.08
       }
     ],
-    "summary": "移速+70，暴击率+15%",
-    "mechanic": true
+    "summary": "移速 +30；暴击率 +8%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_phase_rush",
     "name": "相位猛冲",
-    "description": "选定角色：移速+100，停攻3秒后下次普攻增伤80%。重复获取时各项加成叠加。",
+    "description": "移速 +40；停攻3秒后首击伤害 +65%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 9,
+    "weight": 13,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "支援"
+      "机动",
+      "技巧"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "move_speed_flat",
-        "value": 100
+        "value": 40
       },
       {
         "effect": "opening_strike",
         "value": 1
       }
     ],
-    "summary": "移速+100，停攻后首击+80%",
-    "mechanic": true
+    "summary": "移速 +40；停攻3秒后首击伤害 +65%",
+    "mechanic": true,
+    "max_stacks": 2,
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_ghost_stride",
     "name": "幽灵疾步",
-    "description": "选定角色：移速+160，普攻追击伤害+60%。重复获取时各项加成叠加。",
+    "description": "移速 +60；普攻追加 22% 追击伤害。最高1级。",
     "rarity": "legendary",
-    "weight": 3,
+    "weight": 5,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "支援"
+      "机动",
+      "弹道"
     ],
     "placeholder_icon": true,
     "components": [
       {
         "effect": "move_speed_flat",
-        "value": 160
+        "value": 60
       },
       {
         "effect": "echo_add",
-        "value": 0.6
+        "value": 0.22
       }
     ],
-    "summary": "移速+160，普攻追击伤害+60%",
-    "mechanic": true
+    "summary": "移速 +60；普攻追加 22% 追击伤害",
+    "mechanic": true,
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_lethal_insight",
     "name": "致命洞察",
-    "description": "选定角色：暴击率提高15%。",
+    "description": "暴击率 +8%。最高3级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "common",
-    "weight": 43,
+    "weight": 48,
     "target": "character",
     "effect": "crit_flat",
-    "value": 0.15,
+    "value": 0.08,
     "tags": [
       "暴击"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 3,
+    "summary": "暴击率 +8%",
+    "upgrade_scales": [
+      1.0,
+      1.15,
+      1.3
+    ],
+    "min_crystal_level": 2,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_crimson_precision",
     "name": "赤红精准",
-    "description": "选定角色：暴击率提高30%。",
+    "description": "暴击率 +13%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "rare",
-    "weight": 21,
+    "weight": 28,
     "target": "character",
     "effect": "crit_flat",
-    "value": 0.3,
+    "value": 0.13,
     "tags": [
       "暴击"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 2,
+    "summary": "暴击率 +13%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_infinity_edge",
     "name": "无尽之刃",
-    "description": "选定角色：暴击率提高50%。",
+    "description": "暴击率 +20%。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 8,
+    "weight": 13,
     "target": "character",
     "effect": "crit_flat",
-    "value": 0.5,
+    "value": 0.2,
     "tags": [
       "暴击"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 2,
+    "summary": "暴击率 +20%",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_final_judgment",
     "name": "终末裁决",
-    "description": "选定角色：暴击率提高75%。",
+    "description": "暴击率 +32%。最高1级。",
     "rarity": "legendary",
-    "weight": 2,
+    "weight": 5,
     "target": "character",
     "effect": "crit_flat",
-    "value": 0.75,
+    "value": 0.32,
     "tags": [
       "暴击"
     ],
-    "placeholder_icon": true
+    "placeholder_icon": true,
+    "max_stacks": 1,
+    "summary": "暴击率 +32%",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_multishot_training",
     "name": "多重射击",
-    "description": "选定角色：每次攻击额外增加1条弹道。",
+    "description": "弹道 +1。最高2级。",
     "rarity": "rare",
-    "weight": 20,
+    "weight": 28,
     "target": "character",
     "effect": "projectile_count_add",
     "value": 1,
@@ -1356,14 +1945,24 @@
       "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "弹道 +1",
+    "upgrade_scales": [
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_armor_piercing_round",
     "name": "穿甲弹头",
-    "description": "选定角色：弹道贯穿数量增加1，近战斩击范围同步提升。",
+    "description": "贯穿 +1。最高2级。",
     "rarity": "rare",
-    "weight": 20,
+    "weight": 28,
     "target": "character",
     "effect": "pierce_add",
     "value": 1,
@@ -1371,64 +1970,105 @@
       "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "贯穿 +1",
+    "upgrade_scales": [
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 3,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_arc_enchantment",
     "name": "电弧附魔",
-    "description": "选定角色：攻击额外连锁3名附近敌人。",
+    "description": "连锁 +1。最高2级。",
     "rarity": "epic",
-    "weight": 9,
+    "weight": 13,
     "target": "character",
     "effect": "chain_add",
-    "value": 3,
+    "value": 1,
     "tags": [
-      "反应"
+      "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "连锁 +1",
+    "upgrade_scales": [
+      1.0,
+      1.0
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_shock_payload",
     "name": "震爆弹药",
-    "description": "选定角色：攻击爆炸半径提高120。",
+    "description": "普攻爆炸半径 +45。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 9,
+    "weight": 13,
     "target": "character",
     "effect": "blast_add",
-    "value": 120,
+    "value": 45,
     "tags": [
-      "反应"
+      "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "普攻爆炸半径 +45",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_duet_echo",
     "name": "二重奏鸣",
-    "description": "选定角色：攻击后追加一次100%伤害的追击。",
+    "description": "普攻追加 20% 追击伤害。最高2级；连续数值升级收益逐级＋15%，离散弹道／机制等级不乘倍率。",
     "rarity": "epic",
-    "weight": 9,
+    "weight": 13,
     "target": "character",
     "effect": "echo_add",
-    "value": 1.0,
+    "value": 0.2,
     "tags": [
-      "支援"
+      "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 2,
+    "summary": "普攻追加 20% 追击伤害",
+    "upgrade_scales": [
+      1.0,
+      1.15
+    ],
+    "min_crystal_level": 5,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_expanded_magazine",
     "name": "扩容弹仓",
-    "description": "选定角色：弹道+1，攻击+100%。重复获取时各项加成叠加。",
+    "description": "弹道 +1；攻击 +38%。最高1级。",
     "rarity": "legendary",
-    "weight": 3,
+    "weight": 5,
     "target": "character",
     "effect": "card_bundle",
     "value": 0,
     "tags": [
-      "弹道"
+      "弹道",
+      "进攻"
     ],
     "placeholder_icon": true,
     "mechanic": true,
@@ -1439,24 +2079,41 @@
       },
       {
         "effect": "attack_multiplier",
-        "value": 1
+        "value": 0.38
       }
     ],
-    "summary": "弹道+1，攻击+100%"
+    "summary": "弹道 +1；攻击 +38%",
+    "max_stacks": 1,
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   },
   {
     "id": "v75_aftershock_volley",
     "name": "余震弹幕",
-    "description": "选定角色：攻击后追加一次150%伤害的追击。",
+    "description": "普攻追加 32% 追击伤害。最高1级。",
     "rarity": "legendary",
-    "weight": 3,
+    "weight": 5,
     "target": "character",
     "effect": "echo_add",
-    "value": 1.5,
+    "value": 0.32,
     "tags": [
-      "支援"
+      "弹道"
     ],
     "placeholder_icon": true,
-    "mechanic": true
+    "mechanic": true,
+    "max_stacks": 1,
+    "summary": "普攻追加 32% 追击伤害",
+    "upgrade_scales": [
+      1.0
+    ],
+    "min_crystal_level": 7,
+    "requires": [],
+    "excludes": [],
+    "balance_version": "2026-10-05-finite-builds"
   }
 ]

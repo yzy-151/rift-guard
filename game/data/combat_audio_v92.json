@@ -1,0 +1,3405 @@
+{
+  "attack_traveler": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_traveler_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_traveler_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_traveler_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_traveler_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_traveler_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_traveler_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_traveler_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_01": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_01_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_01_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_01_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_01_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_01_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_01_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_01_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_02": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_02_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_02_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_02_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_02_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_02_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_02_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_02_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_03": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_03_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_03_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_03_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_03_q": {
+    "files": [
+      "res://assets/sfx/skills_20261005/skill_hero_03_q_0.ogg",
+      "res://assets/sfx/skills_20261005/skill_hero_03_q_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "skill_hero_03_e": {
+    "files": [
+      "res://assets/sfx/skills_20261005/skill_hero_03_e_0.ogg",
+      "res://assets/sfx/skills_20261005/skill_hero_03_e_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7,
+    "cooldown": 0.3,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "attack_hero_04": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_04_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_04_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_04_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_04_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_04_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_04_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_04_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_05": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_05_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_05_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_05_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_05_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_05_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_05_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_05_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_06": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_06_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_06_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_06_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_06_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_06_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_06_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_06_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_07": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_07_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_07_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_07_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_07_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_07_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_07_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_07_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_08": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_08_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_08_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_08_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_08_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_08_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_08_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_08_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_09": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_09_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_09_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_09_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_09_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_09_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_09_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_09_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_10": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_10_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_10_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_10_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_10_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_10_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_10_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_10_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_11": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_11_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_11_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_11_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_11_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_11_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_11_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_11_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_12": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_12_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_12_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_12_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_12_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_12_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_12_e": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/skill_hero_12_e_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "attack_hero_13": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/attack_hero_13_0.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_13_1.ogg",
+      "res://assets/sfx/punchy_20261005/attack_hero_13_2.ogg"
+    ],
+    "category": "attack",
+    "gain_db": -9.5,
+    "cooldown": 0.105,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "skill_hero_13_q": {
+    "files": [
+      "res://assets/sfx/skills_20261005/skill_hero_13_q_0.ogg",
+      "res://assets/sfx/skills_20261005/skill_hero_13_q_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "skill_hero_13_e": {
+    "files": [
+      "res://assets/sfx/skills_20261005/skill_hero_13_e_0.ogg",
+      "res://assets/sfx/skills_20261005/skill_hero_13_e_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9.5,
+    "cooldown": 0.3,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "traveler_none_q": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_none_q_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_none_q_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "Two airy golden cuts, tiny bright release, no metal scrape or blunt chop."
+  },
+  "traveler_none_e": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_none_e_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_none_e_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "A clear falling light stroke followed by a compact crystalline foot impact."
+  },
+  "traveler_anemo_q": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/traveler_anemo_q_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "cooldown": 0.3,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "traveler_anemo_e": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_anemo_e_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_anemo_e_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "A light airy inward sweep, rising white wind thread and quick soft lift, no roar."
+  },
+  "traveler_pyro_q": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_pyro_q_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_pyro_q_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "Three nimble hot flicks with rising pitch; dry ember texture under each white cut."
+  },
+  "traveler_pyro_e": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_pyro_e_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_pyro_e_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "A brief falling ember sweep and rounded ignition pop, no prolonged explosion rumble."
+  },
+  "traveler_hydro_q": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_hydro_q_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_hydro_q_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "A soft fountain droplet and two glassy water notes; clean, friendly healing pulse."
+  },
+  "traveler_hydro_e": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_hydro_e_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_hydro_e_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "A widening silky water rush with three droplets, low mass and quick release."
+  },
+  "traveler_cryo_q": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_cryo_q_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_cryo_q_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "Five fast glass flakes with clean icy release, no sustained piercing whistle."
+  },
+  "traveler_cryo_e": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_cryo_e_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_cryo_e_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "A short icy lattice builds from delicate glass taps and resolves with a rounded prism snap."
+  },
+  "traveler_electro_q": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_electro_q_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_electro_q_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "Quick staggered electric ticks, narrow zap and bright chain sparkle."
+  },
+  "traveler_electro_e": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_electro_e_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_electro_e_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "Three phased electric nodes light up, each crisp and small, ending in a smooth short charge."
+  },
+  "traveler_geo_q": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_geo_q_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_geo_q_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -8.5,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "A warm compact stone tap and a clean gold crystal ping, no heavy boulder boom."
+  },
+  "traveler_geo_e": {
+    "files": [
+      "res://assets/sfx/skills_20261005/traveler_geo_e_0.ogg",
+      "res://assets/sfx/skills_20261005/traveler_geo_e_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -7.0,
+    "priority": 3,
+    "fixed_pitch": true,
+    "cooldown": 0.28,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "source": "Kenney sci-fi/digital/impact samples plus CC0 RPG cloth",
+    "provenance": "short filtered and layered CC0 recordings; no audio extracted from reference videos",
+    "recipe": "Four rounded ascending earth pulses, small grit tucked below a gold shimmer."
+  },
+  "boss_warning_eva": {
+    "files": [
+      "res://assets/sfx/v91/boss_warning_eva.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -7.5,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "galio_durand": {
+    "files": [
+      "res://assets/sfx/reference_20261006/galio_durand.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -6.3,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_W_hit.ogg?6b9c6"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "stone shield opens with a broad dry crack and coarse grit, not a rushing punch"
+  },
+  "galio_durand_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/galio_durand_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_W_OnCast.ogg?6b9c6"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: stone shield friction coils inward at the end, distinct from the later shield blast"
+  },
+  "galio_entrance": {
+    "files": [
+      "res://assets/sfx/reference_20261006/galio_entrance.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -5.8,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_R_land.ogg?329ce"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "one stone colossus landing from existing attributed Galio landing sample; short fragments, no ongoing quake"
+  },
+  "galio_entrance_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/galio_entrance_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_R_Descent_buffactivate.ogg?08394"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: high-passed descending air closes at landing; no landing thump inside the warning"
+  },
+  "galio_punch": {
+    "files": [
+      "res://assets/sfx/reference_20261006/galio_punch.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -6.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_E_Move_buffactivate.ogg?ea227",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_E_hit.ogg?ea227"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "short forward shoulder rush followed by a hard stone punch"
+  },
+  "galio_punch_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/galio_punch_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_E_OnCast.ogg?d7c2d"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: stone foot scrape and compressed shoulder thrust before the punch"
+  },
+  "galio_winds": {
+    "files": [
+      "res://assets/sfx/reference_20261006/galio_winds.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_Q_OnMissileLaunch.ogg?a789a"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "two separate light stone-wind releases; convergence impacts play only when actual pulse hits"
+  },
+  "galio_winds_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/galio_winds_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_Q_OnCast.ogg?a789a"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: two wind masses collect inward; no stone impact during warning"
+  },
+  "kindred_arrow_hit": {
+    "files": [
+      "res://assets/sfx/v92/kindred_arrow_hit_recording.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -15,
+    "cooldown": 0.35,
+    "priority": 0,
+    "sources": [
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_E1.webm"
+    ],
+    "provenance": "original gameplay excerpt",
+    "fixed_pitch": true,
+    "source_interval": [
+      2.27,
+      2.67
+    ]
+  },
+  "kindred_dance": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_dance.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_Q1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "three dancing bow snaps"
+  },
+  "kindred_dance_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_dance_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_Q1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: drawn bow/mark shimmer closes into the arrow release, no repeated tooth impact"
+  },
+  "kindred_dread": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_dread.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Kindred_Original_Passive_Mark_Activate_SFX.ogg?bdc1e",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_E1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "marked target closes with a dark mark click and bow release; hits remain separate"
+  },
+  "kindred_dread_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_dread_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_Q1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: drawn bow/mark shimmer closes into the arrow release, no repeated tooth impact"
+  },
+  "kindred_hunt": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_hunt.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_Q1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "five short fan-volley bow snaps, no looping sustained barrage"
+  },
+  "kindred_hunt_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_hunt_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_Q1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: drawn bow/mark shimmer closes into the arrow release, no repeated tooth impact"
+  },
+  "kindred_respite": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_respite.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -8.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Kindred_Original_R_SFX.ogg?dd36e"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "protection appears: one clean hollow sanctuary opening/chime, no bite, rumble or five-second loop"
+  },
+  "kindred_respite_end": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_respite_end.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.5,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Kindred_Original_R_Heal_SFX.ogg?e8304"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "protection ends and actual healing happens: one lifting restoration chime with a tiny bright tail"
+  },
+  "kindred_wolf": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_wolf.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_W1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "short spectral wolf manifest; later actual target contacts use dry tooth/bite cue"
+  },
+  "kindred_wolf_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_wolf_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_W1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: short spectral wolf breath contracts, distinct from the later bite"
+  },
+  "kindred_wolf_strike": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_wolf_strike.wav"
+    ],
+    "category": "boss_hit",
+    "gain_db": -9.5,
+    "cooldown": 0.14,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_W1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "actual wolf bite: spectral snap with a compact tooth closure, no bow/stone impact"
+  },
+  "rift_laser": {
+    "files": [
+      "res://assets/sfx/reference_20261006/rift_laser.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "single crisp thunderbeam break plus a short bright ray, no alarm/drone"
+  },
+  "rift_orbs": {
+    "files": [
+      "res://assets/sfx/reference_20261006/rift_orbs.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "three thin electrical seed releases before independent orb contacts"
+  },
+  "rift_overhead": {
+    "files": [
+      "res://assets/sfx/reference_20261006/rift_overhead.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "one descending cut, one overhead ground impact, tiny stone scatter"
+  },
+  "rift_storm": {
+    "files": [
+      "res://assets/sfx/reference_20261006/rift_storm.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "storm opens once with a tearing wind front and one short pressure snap, no sustained rumble"
+  },
+  "slime_attack": {
+    "files": [
+      "res://assets/sfx/v91/slime_attack.ogg"
+    ],
+    "category": "boss",
+    "gain_db": -7.5,
+    "cooldown": 0.35,
+    "priority": 4,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "slime_bounce": {
+    "files": [
+      "res://assets/sfx/reference_20261006/slime_bounce.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "gel jump/compression release; heavy landing deferred to actual slime_bounce_hit"
+  },
+  "slime_burst": {
+    "files": [
+      "res://assets/sfx/reference_20261006/slime_burst.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "three wet radial splits, no generic stone explosion"
+  },
+  "slime_court": {
+    "files": [
+      "res://assets/sfx/reference_20261006/slime_court.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "three staggered gel summons; final royal landing uses separate actual impact"
+  },
+  "slime_reflux": {
+    "files": [
+      "res://assets/sfx/reference_20261006/slime_reflux.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "gel is drawn inward then snaps outward in one restitution pulse"
+  },
+  "kindred_lasers": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_lasers.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_Q1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "thin clean penetrating bow glint, distinct from Rift electrical thunderbeam"
+  },
+  "kindred_lasers_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/kindred_lasers_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://d28xe8vt774jo5.cloudfront.net/champion-abilities/0203/ability_0203_Q1.webm"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: drawn bow/mark shimmer closes into the arrow release, no repeated tooth impact"
+  },
+  "hit_metal": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_metal_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_metal_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_metal_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_water": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_water_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_water_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_water_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_ice": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_ice_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_ice_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_ice_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_fire": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_fire_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_fire_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_fire_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_earth": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_earth_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_earth_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_earth_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_electric": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_electric_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_electric_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_electric_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_wind": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_wind_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_wind_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_wind_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_dark": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_dark_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_dark_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_dark_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_machine": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_machine_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_machine_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_machine_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_music": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_music_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_music_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_music_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "shield_break": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/shield_break_0.ogg"
+    ],
+    "category": "impact",
+    "gain_db": -8.5,
+    "cooldown": 0.35,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "heal": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/heal_0.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -11,
+    "cooldown": 0.8,
+    "priority": 2,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "needle_volley": {
+    "files": [
+      "res://assets/sfx/skills_20261005/needle_volley_0.ogg",
+      "res://assets/sfx/skills_20261005/needle_volley_1.ogg"
+    ],
+    "category": "skill",
+    "gain_db": -9.5,
+    "cooldown": 0.24,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "cast_small": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/cast_small_0.ogg"
+    ],
+    "category": "cast",
+    "gain_db": -14,
+    "cooldown": 0.18,
+    "priority": 2,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "cast_big": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/cast_big_0.ogg"
+    ],
+    "category": "cast",
+    "gain_db": -12,
+    "cooldown": 0.28,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hero_down": {
+    "files": [
+      "res://assets/sfx/v91/hero_down.ogg"
+    ],
+    "category": "down",
+    "gain_db": -5,
+    "cooldown": 0.5,
+    "priority": 6,
+    "sources": [
+      "Arknights / Hypergryph b_char_dead; https://assets.closure.wiki/v3/audio/sound_beta_2/battle/b_char/b_char_dead.mp3"
+    ]
+  },
+  "voice_down_hero_06": {
+    "files": [
+      "res://assets/sfx/v91/voice_down_hero_06.ogg"
+    ],
+    "category": "voice",
+    "gain_db": -4,
+    "cooldown": 15,
+    "priority": 7,
+    "sources": [
+      "Arknights / Hypergryph, original Japanese operation failure voice; https://closure.wiki/operators/amiya"
+    ]
+  },
+  "voice_down_hero_11": {
+    "files": [
+      "res://assets/sfx/v91/voice_down_hero_11.ogg"
+    ],
+    "category": "voice",
+    "gain_db": -4,
+    "cooldown": 15,
+    "priority": 7,
+    "sources": [
+      "Arknights / Hypergryph, original Japanese operation failure voice; https://closure.wiki/operators/kaltsit"
+    ]
+  },
+  "spawn_hilichurl": {
+    "files": [
+      "res://assets/sfx/v91/hilichurl_0.ogg",
+      "res://assets/sfx/v91/hilichurl_1.ogg"
+    ],
+    "category": "spawn",
+    "gain_db": -13,
+    "cooldown": 5,
+    "priority": 2,
+    "sources": [
+      "Genshin Impact / HoYoverse, Hilichurl voice; https://huggingface.co/datasets/AquaV/genshin-voices-separated"
+    ]
+  },
+  "spawn_zombie": {
+    "files": [
+      "res://assets/sfx/v91/zombie_0.ogg",
+      "res://assets/sfx/v91/zombie_1.ogg",
+      "res://assets/sfx/v91/zombie_2.ogg"
+    ],
+    "category": "spawn",
+    "gain_db": -12,
+    "cooldown": 6,
+    "priority": 2,
+    "sources": [
+      "Plants vs. Zombies / PopCap EA; https://www.sounds-resource.com/pc_computer/plantsvszombies/sheet/1430/"
+    ]
+  },
+  "spawn_heavy": {
+    "files": [
+      "res://assets/sfx/v91/spawn_heavy.ogg"
+    ],
+    "category": "spawn",
+    "gain_db": -15,
+    "cooldown": 6,
+    "priority": 2,
+    "sources": [
+      "Kenney RPG Audio (CC0), https://opengameart.org/content/50-rpg-sound-effects",
+      "CC authored synthesis and arrangement"
+    ]
+  },
+  "galio_winds_pulse": {
+    "files": [
+      "res://assets/sfx/reference_20261006/galio_winds_pulse.wav"
+    ],
+    "category": "boss_hit",
+    "gain_db": -10.5,
+    "cooldown": 0.14,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_Q_hit_1.ogg?a789a"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "actual twin-wind convergence contact only, one short airy stone split"
+  },
+  "galio_guard": {
+    "category": "boss",
+    "gain_db": -7.5,
+    "cooldown": 0.35,
+    "priority": 4,
+    "files": [
+      "res://assets/sfx/v92/galio_guard_0.ogg",
+      "res://assets/sfx/v92/galio_guard_1.ogg",
+      "res://assets/sfx/v92/galio_guard_2.ogg"
+    ],
+    "sources": [
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_R_Shield_OnBuffCast_0.ogg?329ce",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_R_Shield_OnBuffCast_1.ogg?76d67",
+      "https://wiki.leagueoflegends.com/en-us/images/Galio_Original_SFX_R_Shield_OnBuffCast_2.ogg?76d67"
+    ],
+    "provenance": "original game SFX",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_03_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_03_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_03_q_1.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_03_q_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/f/ff/VO_JA_Furina_Elemental_Skill_1_01.ogg/revision/latest?cb=20231111062619",
+      "https://static.wikia.nocookie.net/gensin-impact/images/d/de/VO_JA_Furina_Elemental_Skill_1_02.ogg/revision/latest?cb=20231111062621",
+      "https://static.wikia.nocookie.net/gensin-impact/images/8/8e/VO_JA_Furina_Elemental_Skill_1_03.ogg/revision/latest?cb=20231111062622"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_03_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_03_e_0.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_03_e_1.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_03_e_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/6/63/VO_JA_Furina_Elemental_Burst_01.ogg/revision/latest?cb=20231111062615",
+      "https://static.wikia.nocookie.net/gensin-impact/images/c/c4/VO_JA_Furina_Elemental_Burst_02.ogg/revision/latest?cb=20231212140531",
+      "https://static.wikia.nocookie.net/gensin-impact/images/f/fe/VO_JA_Furina_Elemental_Burst_03.ogg/revision/latest?cb=20231111062617"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_down_hero_03": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 7,
+    "files": [
+      "res://assets/sfx/v92/voice_down_hero_03_0.ogg",
+      "res://assets/sfx/v92/voice_down_hero_03_1.ogg",
+      "res://assets/sfx/v92/voice_down_hero_03_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/5/54/VO_JA_Furina_Fallen_01.ogg/revision/latest?cb=20231111062630",
+      "https://static.wikia.nocookie.net/gensin-impact/images/5/52/VO_JA_Furina_Fallen_02.ogg/revision/latest?cb=20231111062631",
+      "https://static.wikia.nocookie.net/gensin-impact/images/0/08/VO_JA_Furina_Fallen_03.ogg/revision/latest?cb=20231111062633"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_01_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_01_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_01_q_1.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_01_q_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/a/a1/VO_JA_Columbina_Elemental_Skill_1_01.ogg/revision/latest?cb=20260117170400",
+      "https://static.wikia.nocookie.net/gensin-impact/images/b/b8/VO_JA_Columbina_Elemental_Skill_1_02.ogg/revision/latest?cb=20260117170402",
+      "https://static.wikia.nocookie.net/gensin-impact/images/0/09/VO_JA_Columbina_Elemental_Skill_1_03.ogg/revision/latest?cb=20260117170404"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_01_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_01_e_0.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_01_e_1.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_01_e_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/7/7f/VO_JA_Columbina_Elemental_Burst_01.ogg/revision/latest?cb=20260117170353",
+      "https://static.wikia.nocookie.net/gensin-impact/images/6/6f/VO_JA_Columbina_Elemental_Burst_02.ogg/revision/latest?cb=20260117170355",
+      "https://static.wikia.nocookie.net/gensin-impact/images/9/92/VO_JA_Columbina_Elemental_Burst_03.ogg/revision/latest?cb=20260117170358"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_down_hero_01": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 7,
+    "files": [
+      "res://assets/sfx/v92/voice_down_hero_01_0.ogg",
+      "res://assets/sfx/v92/voice_down_hero_01_1.ogg",
+      "res://assets/sfx/v92/voice_down_hero_01_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/a/a9/VO_JA_Columbina_Fallen_01.ogg/revision/latest?cb=20260117170406",
+      "https://static.wikia.nocookie.net/gensin-impact/images/f/f7/VO_JA_Columbina_Fallen_02.ogg/revision/latest?cb=20260117170408",
+      "https://static.wikia.nocookie.net/gensin-impact/images/5/53/VO_JA_Columbina_Fallen_03.ogg/revision/latest?cb=20260117170410"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_05_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_05_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_05_q_1.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/houkai-star-rail/images/9/95/VO_JA_Robin_Skill_01.ogg/revision/latest?cb=20240509004754",
+      "https://static.wikia.nocookie.net/houkai-star-rail/images/5/50/VO_JA_Robin_Skill_02.ogg/revision/latest?cb=20240509004800"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_05_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_05_e_0.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/houkai-star-rail/images/2/28/VO_JA_Robin_Ultimate_-_Unleash_01.ogg/revision/latest?cb=20240509004818"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_down_hero_05": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 7,
+    "files": [
+      "res://assets/sfx/v92/voice_down_hero_05_0.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/houkai-star-rail/images/c/c7/VO_JA_Robin_Downed_01.ogg/revision/latest?cb=20240508042016"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_10_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_10_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_10_q_1.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/houkai-star-rail/images/a/a4/VO_JA_Hyacine_Skill_01.ogg/revision/latest?cb=20250522033157",
+      "https://static.wikia.nocookie.net/houkai-star-rail/images/e/e1/VO_JA_Hyacine_Skill_02.ogg/revision/latest?cb=20250522033158"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_10_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_10_e_0.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/houkai-star-rail/images/a/a2/VO_JA_Hyacine_Ultimate_-_Unleash_01.ogg/revision/latest?cb=20250522033209"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_down_hero_10": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 7,
+    "files": [
+      "res://assets/sfx/v92/voice_down_hero_10_0.ogg",
+      "res://assets/sfx/v92/voice_down_hero_10_1.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/houkai-star-rail/images/e/ed/VO_JA_Hyacine_Downed_01.ogg/revision/latest?cb=20250522033144",
+      "https://static.wikia.nocookie.net/houkai-star-rail/images/a/aa/VO_JA_Hyacine_Downed_02.ogg/revision/latest?cb=20251114023410"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_down_traveler": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 7,
+    "files": [
+      "res://assets/sfx/v92/voice_down_traveler_0.ogg",
+      "res://assets/sfx/v92/voice_down_traveler_1.ogg",
+      "res://assets/sfx/v92/voice_down_traveler_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/4/44/VO_JA_Lumine_Fallen_01.ogg/revision/latest?cb=20221112233013",
+      "https://static.wikia.nocookie.net/gensin-impact/images/a/a7/VO_JA_Lumine_Fallen_02.ogg/revision/latest?cb=20221112233015",
+      "https://static.wikia.nocookie.net/gensin-impact/images/3/38/VO_JA_Lumine_Fallen_03.ogg/revision/latest?cb=20221112233017"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_anemo_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_anemo_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_anemo_q_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_anemo_q_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/9/97/VO_JA_Lumine_Elemental_Skill_1_Anemo_01.ogg/revision/latest?cb=20221112232945",
+      "https://static.wikia.nocookie.net/gensin-impact/images/9/9d/VO_JA_Lumine_Elemental_Skill_1_Anemo_02.ogg/revision/latest?cb=20221112232948",
+      "https://static.wikia.nocookie.net/gensin-impact/images/4/4d/VO_JA_Lumine_Elemental_Skill_1_Anemo_03.ogg/revision/latest?cb=20221112232950"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_anemo_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_anemo_e_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_anemo_e_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_anemo_e_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/8/89/VO_JA_Lumine_Elemental_Burst_Anemo_01.ogg/revision/latest?cb=20221112232919",
+      "https://static.wikia.nocookie.net/gensin-impact/images/5/54/VO_JA_Lumine_Elemental_Burst_Anemo_02.ogg/revision/latest?cb=20221112232921",
+      "https://static.wikia.nocookie.net/gensin-impact/images/6/6b/VO_JA_Lumine_Elemental_Burst_Anemo_03.ogg/revision/latest?cb=20221112232923"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_hydro_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_hydro_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_hydro_q_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_hydro_q_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/1/14/VO_JA_Lumine_Elemental_Skill_1_Hydro_01.ogg/revision/latest?cb=20230817195917",
+      "https://static.wikia.nocookie.net/gensin-impact/images/6/66/VO_JA_Lumine_Elemental_Skill_1_Hydro_02.ogg/revision/latest?cb=20230817195731",
+      "https://static.wikia.nocookie.net/gensin-impact/images/9/91/VO_JA_Lumine_Elemental_Skill_1_Hydro_03.ogg/revision/latest?cb=20230817195733"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_hydro_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_hydro_e_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_hydro_e_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_hydro_e_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/9/9d/VO_JA_Lumine_Elemental_Burst_Hydro_01.ogg/revision/latest?cb=20230817195912",
+      "https://static.wikia.nocookie.net/gensin-impact/images/1/12/VO_JA_Lumine_Elemental_Burst_Hydro_02.ogg/revision/latest?cb=20230817195914",
+      "https://static.wikia.nocookie.net/gensin-impact/images/3/31/VO_JA_Lumine_Elemental_Burst_Hydro_03.ogg/revision/latest?cb=20230817195916"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_pyro_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_pyro_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_pyro_q_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_pyro_q_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/8/87/VO_JA_Lumine_Elemental_Skill_1_Pyro_01.ogg/revision/latest?cb=20250101205711",
+      "https://static.wikia.nocookie.net/gensin-impact/images/e/e9/VO_JA_Lumine_Elemental_Skill_1_Pyro_02.ogg/revision/latest?cb=20250101205713",
+      "https://static.wikia.nocookie.net/gensin-impact/images/3/33/VO_JA_Lumine_Elemental_Skill_1_Pyro_03.ogg/revision/latest?cb=20250101205715"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_pyro_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_pyro_e_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_pyro_e_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_pyro_e_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/7/76/VO_JA_Lumine_Elemental_Burst_Pyro_01.ogg/revision/latest?cb=20250101205734",
+      "https://static.wikia.nocookie.net/gensin-impact/images/0/02/VO_JA_Lumine_Elemental_Burst_Pyro_02.ogg/revision/latest?cb=20250101205736",
+      "https://static.wikia.nocookie.net/gensin-impact/images/6/61/VO_JA_Lumine_Elemental_Burst_Pyro_03.ogg/revision/latest?cb=20250101205738"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_electro_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_electro_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_electro_q_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_electro_q_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/6/61/VO_JA_Lumine_Elemental_Skill_1_Electro_01.ogg/revision/latest?cb=20221112232959",
+      "https://static.wikia.nocookie.net/gensin-impact/images/8/86/VO_JA_Lumine_Elemental_Skill_1_Electro_02.ogg/revision/latest?cb=20221112233002",
+      "https://static.wikia.nocookie.net/gensin-impact/images/7/78/VO_JA_Lumine_Elemental_Skill_1_Electro_03.ogg/revision/latest?cb=20221112233004"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_electro_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_electro_e_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_electro_e_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_electro_e_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/8/8c/VO_JA_Lumine_Elemental_Burst_Electro_01.ogg/revision/latest?cb=20221112232932",
+      "https://static.wikia.nocookie.net/gensin-impact/images/1/1f/VO_JA_Lumine_Elemental_Burst_Electro_02.ogg/revision/latest?cb=20221112232934",
+      "https://static.wikia.nocookie.net/gensin-impact/images/4/42/VO_JA_Lumine_Elemental_Burst_Electro_03.ogg/revision/latest?cb=20221112232937"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_geo_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_geo_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_geo_q_1.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/9/99/VO_JA_Lumine_Elemental_Skill_1_Geo_01.ogg/revision/latest?cb=20221112233006",
+      "https://static.wikia.nocookie.net/gensin-impact/images/5/50/VO_JA_Lumine_Elemental_Skill_1_Geo_03.ogg/revision/latest?cb=20221112233011"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_geo_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_geo_e_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_geo_e_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_geo_e_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/3/31/VO_JA_Lumine_Elemental_Burst_Geo_01.ogg/revision/latest?cb=20221112232939",
+      "https://static.wikia.nocookie.net/gensin-impact/images/4/44/VO_JA_Lumine_Elemental_Burst_Geo_02.ogg/revision/latest?cb=20221112232941",
+      "https://static.wikia.nocookie.net/gensin-impact/images/2/2b/VO_JA_Lumine_Elemental_Burst_Geo_03.ogg/revision/latest?cb=20221112232943"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_cryo_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_cryo_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_cryo_q_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_cryo_q_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/1/17/VO_JA_Lumine_Elemental_Skill_1_Cryo_01.ogg/revision/latest?cb=20260823195302",
+      "https://static.wikia.nocookie.net/gensin-impact/images/e/ee/VO_JA_Lumine_Elemental_Skill_1_Cryo_02.ogg/revision/latest?cb=20260823195306",
+      "https://static.wikia.nocookie.net/gensin-impact/images/f/fa/VO_JA_Lumine_Elemental_Skill_1_Cryo_03.ogg/revision/latest?cb=20260823195310"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_traveler_cryo_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_traveler_cryo_e_0.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_cryo_e_1.ogg",
+      "res://assets/sfx/v92/voice_skill_traveler_cryo_e_2.ogg"
+    ],
+    "sources": [
+      "https://static.wikia.nocookie.net/gensin-impact/images/4/4d/VO_JA_Lumine_Elemental_Burst_Cryo_01.ogg/revision/latest?cb=20260823195251",
+      "https://static.wikia.nocookie.net/gensin-impact/images/b/ba/VO_JA_Lumine_Elemental_Burst_Cryo_02.ogg/revision/latest?cb=20260823195254",
+      "https://static.wikia.nocookie.net/gensin-impact/images/3/3b/VO_JA_Lumine_Elemental_Burst_Cryo_03.ogg/revision/latest?cb=20260823195259"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_down_hero_13": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 7,
+    "files": [
+      "res://assets/sfx/v92/voice_down_hero_13_0.ogg",
+      "res://assets/sfx/v92/voice_down_hero_13_1.ogg",
+      "res://assets/sfx/v92/voice_down_hero_13_2.ogg"
+    ],
+    "sources": [
+      "https://wiki.leagueoflegends.com/en-us/images/Gwen_Original_Death_0.ogg?a0cf7",
+      "https://wiki.leagueoflegends.com/en-us/images/Gwen_Original_Death_1.ogg?021d9",
+      "https://wiki.leagueoflegends.com/en-us/images/Gwen_Original_Death_2.ogg?2afdc"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_13_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_13_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_13_q_1.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_13_q_2.ogg"
+    ],
+    "sources": [
+      "https://wiki.leagueoflegends.com/en-us/images/Gwen_Original_W_0.ogg?65806",
+      "https://wiki.leagueoflegends.com/en-us/images/Gwen_Original_W_1.ogg?b92fc",
+      "https://wiki.leagueoflegends.com/en-us/images/Gwen_Original_W_2.ogg?54cfe"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_13_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_13_e_0.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_13_e_1.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_13_e_2.ogg"
+    ],
+    "sources": [
+      "https://wiki.leagueoflegends.com/en-us/images/Gwen_Original_R_0.ogg?c001d",
+      "https://wiki.leagueoflegends.com/en-us/images/Gwen_Original_R_1.ogg?c945a",
+      "https://wiki.leagueoflegends.com/en-us/images/Gwen_Original_R_2.ogg?5e6b8"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_06_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_06_q_0.ogg"
+    ],
+    "sources": [
+      "https://assets.closure.wiki/v3/audio/sound_beta_2/voice/char_002_amiya/cn_025.mp3"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_06_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_06_e_0.ogg"
+    ],
+    "sources": [
+      "https://assets.closure.wiki/v3/audio/sound_beta_2/voice/char_002_amiya/cn_026.mp3"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_11_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_11_q_0.ogg"
+    ],
+    "sources": [
+      "https://assets.closure.wiki/v3/audio/sound_beta_2/voice/char_003_kalts/cn_025.mp3"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_11_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_11_e_0.ogg"
+    ],
+    "sources": [
+      "https://assets.closure.wiki/v3/audio/sound_beta_2/voice/char_003_kalts/cn_026.mp3"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_down_hero_08": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 7,
+    "files": [
+      "res://assets/sfx/v92/voice_down_hero_08_0.ogg",
+      "res://assets/sfx/v92/voice_down_hero_08_1.ogg"
+    ],
+    "sources": [
+      "https://sounds.spriters-resource.com/mobile/rezerolostinmemories/asset/431368/#Emilia/Battle/vo_btl_emilia001#14 (vo_hp0).wav",
+      "https://sounds.spriters-resource.com/mobile/rezerolostinmemories/asset/431368/#Emilia/Battle/vo_btl_emilia001#15 (vo_hp0).wav"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_08_q": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_08_q_0.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_08_q_1.ogg"
+    ],
+    "sources": [
+      "https://sounds.spriters-resource.com/mobile/rezerolostinmemories/asset/431368/#Emilia/Battle/vo_btl_emilia001#22 (vo_atk_m).wav",
+      "https://sounds.spriters-resource.com/mobile/rezerolostinmemories/asset/431368/#Emilia/Battle/vo_btl_emilia001#23 (vo_atk_m).wav"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "voice_skill_hero_08_e": {
+    "category": "voice",
+    "gain_db": -8,
+    "cooldown": 12,
+    "priority": 5,
+    "files": [
+      "res://assets/sfx/v92/voice_skill_hero_08_e_0.ogg",
+      "res://assets/sfx/v92/voice_skill_hero_08_e_1.ogg"
+    ],
+    "sources": [
+      "https://sounds.spriters-resource.com/mobile/rezerolostinmemories/asset/431368/#Emilia/Battle/vo_btl_emilia001#10 (vo_cutin02a).wav",
+      "https://sounds.spriters-resource.com/mobile/rezerolostinmemories/asset/431368/#Emilia/Battle/vo_btl_emilia001#11 (vo_cutin02b).wav"
+    ],
+    "provenance": "original voice",
+    "fixed_pitch": true
+  },
+  "hit_traveler": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_metal_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_metal_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_metal_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_03": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_water_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_water_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_water_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_01": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_water_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_water_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_water_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_02": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_wind_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_wind_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_wind_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_04": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_ice_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_ice_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_ice_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_05": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_music_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_music_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_music_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_06": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_dark_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_dark_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_dark_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_07": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_music_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_music_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_music_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_08": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_ice_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_ice_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_ice_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_09": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_electric_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_electric_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_electric_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_10": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_wind_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_wind_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_wind_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_11": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_machine_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_machine_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_machine_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_12": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_machine_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_machine_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_machine_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hit_hero_13": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hit_metal_0.ogg",
+      "res://assets/sfx/punchy_20261005/hit_metal_1.ogg",
+      "res://assets/sfx/punchy_20261005/hit_metal_2.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -14.0,
+    "cooldown": 0.085,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "enemy_arrow": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/enemy_arrow_0.ogg",
+      "res://assets/sfx/punchy_20261005/enemy_arrow_1.ogg",
+      "res://assets/sfx/punchy_20261005/enemy_arrow_2.ogg"
+    ],
+    "category": "enemy_attack",
+    "gain_db": -10.0,
+    "cooldown": 0.14,
+    "priority": 2,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "enemy_bolt": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/enemy_bolt_0.ogg",
+      "res://assets/sfx/punchy_20261005/enemy_bolt_1.ogg",
+      "res://assets/sfx/punchy_20261005/enemy_bolt_2.ogg"
+    ],
+    "category": "enemy_attack",
+    "gain_db": -10.0,
+    "cooldown": 0.14,
+    "priority": 2,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "enemy_cannon": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/enemy_cannon_0.ogg",
+      "res://assets/sfx/punchy_20261005/enemy_cannon_1.ogg",
+      "res://assets/sfx/punchy_20261005/enemy_cannon_2.ogg"
+    ],
+    "category": "enemy_attack",
+    "gain_db": -10.0,
+    "cooldown": 0.14,
+    "priority": 2,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "critical_ping": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/critical_ping_0.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -11.5,
+    "cooldown": 0.2,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "hero_hurt": {
+    "files": [
+      "res://assets/sfx/punchy_20261005/hero_hurt_0.ogg"
+    ],
+    "category": "impact",
+    "gain_db": -11.5,
+    "cooldown": 0.28,
+    "priority": 2,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "trimmed and filtered Kenney sample design",
+    "recipe": "short recorded projectile attack, soft sample pop impact; no chop/knife, no generated oscillators, no long noisy loop"
+  },
+  "gwen_needle_hit": {
+    "files": [
+      "res://assets/sfx/skills_20261005/gwen_needle_hit_0.ogg",
+      "res://assets/sfx/skills_20261005/gwen_needle_hit_1.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -13.0,
+    "cooldown": 0.12,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "furina_salon_hit": {
+    "files": [
+      "res://assets/sfx/skills_20261005/furina_salon_hit_0.ogg",
+      "res://assets/sfx/skills_20261005/furina_salon_hit_1.ogg"
+    ],
+    "category": "hit",
+    "gain_db": -13.5,
+    "cooldown": 0.12,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "furina_heal_pulse": {
+    "files": [
+      "res://assets/sfx/skills_20261005/furina_heal_pulse_0.ogg",
+      "res://assets/sfx/skills_20261005/furina_heal_pulse_1.ogg"
+    ],
+    "category": "skill_pulse",
+    "gain_db": -14,
+    "cooldown": 0.8,
+    "priority": 2,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "device_place": {
+    "files": [
+      "res://assets/sfx/skills_20261005/device_place_0.ogg",
+      "res://assets/sfx/skills_20261005/device_place_1.ogg"
+    ],
+    "category": "impact",
+    "gain_db": -10,
+    "cooldown": 0.15,
+    "priority": 2,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "device_pea_cast": {
+    "files": [
+      "res://assets/sfx/skills_20261005/device_pea_cast_0.ogg",
+      "res://assets/sfx/skills_20261005/device_pea_cast_1.ogg"
+    ],
+    "category": "device_attack",
+    "gain_db": -13.5,
+    "cooldown": 0.12,
+    "priority": 1,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "device_pea_hit": {
+    "files": [
+      "res://assets/sfx/skills_20261005/device_pea_hit_0.ogg",
+      "res://assets/sfx/skills_20261005/device_pea_hit_1.ogg"
+    ],
+    "category": "device_hit",
+    "gain_db": -16,
+    "cooldown": 0.1,
+    "priority": 0,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "device_explosion": {
+    "files": [
+      "res://assets/sfx/skills_20261005/device_explosion_0.ogg",
+      "res://assets/sfx/skills_20261005/device_explosion_1.ogg"
+    ],
+    "category": "impact",
+    "gain_db": -7.5,
+    "cooldown": 0.4,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://kenney.nl/assets/digital-audio",
+      "https://kenney.nl/assets/impact-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "recipe": "compact layered water/silk/device feedback from edited Kenney grains; ordinary attacks untouched"
+  },
+  "rift_laser_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/rift_laser_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: small electrical crackle contracts into inward air before the thunderbeam/storm release"
+  },
+  "rift_orbs_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/rift_orbs_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: small electrical crackle contracts into inward air before the thunderbeam/storm release"
+  },
+  "rift_overhead_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/rift_overhead_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: small electrical crackle contracts into inward air before the thunderbeam/storm release"
+  },
+  "rift_storm_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/rift_storm_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: small electrical crackle contracts into inward air before the thunderbeam/storm release"
+  },
+  "slime_bounce_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/slime_bounce_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: gel compresses/sucks inward at the end; no stone, engine or bass explosion"
+  },
+  "slime_burst_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/slime_burst_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: gel compresses/sucks inward at the end; no stone, engine or bass explosion"
+  },
+  "slime_reflux_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/slime_reflux_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: gel compresses/sucks inward at the end; no stone, engine or bass explosion"
+  },
+  "slime_court_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/slime_court_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: gel compresses/sucks inward at the end; no stone, engine or bass explosion"
+  },
+  "boss_stone_hit": {
+    "files": [
+      "res://assets/sfx/reference_20261006/boss_stone_hit.wav"
+    ],
+    "category": "boss_hit",
+    "gain_db": -10.0,
+    "cooldown": 0.14,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "actual hit: one high-passed hard transient, 170ms dry tail; no low rumble"
+  },
+  "boss_slime_hit": {
+    "files": [
+      "res://assets/sfx/reference_20261006/boss_slime_hit.wav"
+    ],
+    "category": "boss_hit",
+    "gain_db": -10.0,
+    "cooldown": 0.14,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "actual hit: one high-passed hard transient, 170ms dry tail; no low rumble"
+  },
+  "boss_spectral_hit": {
+    "files": [
+      "res://assets/sfx/reference_20261006/boss_spectral_hit.wav"
+    ],
+    "category": "boss_hit",
+    "gain_db": -10.0,
+    "cooldown": 0.14,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "actual hit: one high-passed hard transient, 170ms dry tail; no low rumble"
+  },
+  "boss_rift_hit": {
+    "files": [
+      "res://assets/sfx/reference_20261006/boss_rift_hit.wav"
+    ],
+    "category": "boss_hit",
+    "gain_db": -10.0,
+    "cooldown": 0.14,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "actual hit: one high-passed hard transient, 170ms dry tail; no low rumble"
+  },
+  "crossfire": {
+    "files": [
+      "res://assets/sfx/reference_20261006/crossfire.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -7.0,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "three distinct short dry reports 70ms apart; no sustained cannon/engine bed"
+  },
+  "crossfire_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/crossfire_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: brief mechanical lock then inward air before short three-report crossfire"
+  },
+  "barrage": {
+    "files": [
+      "res://assets/sfx/reference_20261006/barrage.wav"
+    ],
+    "category": "boss_release",
+    "gain_db": -5.8,
+    "cooldown": 0.26,
+    "priority": 4,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "one hammer impact with 240ms low body and two tiny debris cuts; no explosion loop"
+  },
+  "barrage_charge": {
+    "files": [
+      "res://assets/sfx/reference_20261006/barrage_charge.wav"
+    ],
+    "category": "boss_charge",
+    "gain_db": -11.0,
+    "cooldown": 0.4,
+    "priority": 4,
+    "fixed_pitch": false,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "2s container, quiet middle, final anticipation: one falling weight gathers into a single hammer landing"
+  },
+  "boss_slime_slam_hit": {
+    "files": [
+      "res://assets/sfx/reference_20261006/boss_slime_slam_hit.wav"
+    ],
+    "category": "boss_hit",
+    "gain_db": -6.8,
+    "cooldown": 0.14,
+    "priority": 3,
+    "fixed_pitch": true,
+    "sources": [
+      "https://kenney.nl/assets/impact-sounds",
+      "https://kenney.nl/assets/sci-fi-sounds",
+      "https://opengameart.org/content/50-rpg-sound-effects"
+    ],
+    "provenance": "CC edited local recordings; Kenney CC0 sources and pre-existing attributed Riot ability excerpts retained per source cut; reference video audio is analysis-only",
+    "recipe": "actual royal slime floor contact: wet compression and one low body; never on jump launch"
+  }
+}

@@ -126,6 +126,7 @@
         "radius": 110,
         "moves": [
           "kindred_dance",
+          "kindred_lasers",
           "kindred_wolf",
           "kindred_dread",
           "kindred_hunt"
@@ -146,6 +147,7 @@
         "radius": 210,
         "moves": [
           "kindred_wolf",
+          "kindred_lasers",
           "kindred_dance",
           "kindred_hunt",
           "kindred_dread"
@@ -166,6 +168,7 @@
         "radius": 280,
         "moves": [
           "kindred_hunt",
+          "kindred_lasers",
           "kindred_dread",
           "kindred_dance",
           "kindred_wolf"
@@ -190,8 +193,19 @@
         "shape": "circle",
         "lead": 1.8,
         "radius": 265,
-        "moves": ["galio_entrance", "galio_punch", "galio_winds", "galio_durand"],
-        "arena_event": {"type": "petricite_impact", "duration": 6.0, "radius": 245, "intensity": 1, "color": "#b990ff"}
+        "moves": [
+          "galio_entrance",
+          "galio_punch",
+          "galio_winds",
+          "galio_durand"
+        ],
+        "arena_event": {
+          "type": "petricite_impact",
+          "duration": 6.0,
+          "radius": 245,
+          "intensity": 1,
+          "color": "#b990ff"
+        }
       },
       {
         "phase": 2,
@@ -199,8 +213,19 @@
         "shape": "line",
         "lead": 1.45,
         "radius": 300,
-        "moves": ["galio_punch", "galio_winds", "galio_durand", "galio_entrance"],
-        "arena_event": {"type": "petricite_gale", "duration": 7.5, "radius": 290, "intensity": 2, "color": "#d3b5ff"}
+        "moves": [
+          "galio_punch",
+          "galio_winds",
+          "galio_durand",
+          "galio_entrance"
+        ],
+        "arena_event": {
+          "type": "petricite_gale",
+          "duration": 7.5,
+          "radius": 290,
+          "intensity": 2,
+          "color": "#d3b5ff"
+        }
       },
       {
         "phase": 3,
@@ -208,8 +233,19 @@
         "shape": "circle",
         "lead": 1.15,
         "radius": 360,
-        "moves": ["galio_entrance", "galio_durand", "galio_punch", "galio_winds"],
-        "arena_event": {"type": "colossus_resonance", "duration": 9.0, "radius": 360, "intensity": 3, "color": "#f0d77a"}
+        "moves": [
+          "galio_entrance",
+          "galio_durand",
+          "galio_punch",
+          "galio_winds"
+        ],
+        "arena_event": {
+          "type": "colossus_resonance",
+          "duration": 9.0,
+          "radius": 360,
+          "intensity": 3,
+          "color": "#f0d77a"
+        }
       }
     ]
   },

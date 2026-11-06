@@ -126,7 +126,7 @@ func _is_character_ready(id:String)->bool:
 	return bool(data.get("content_ready",false))
 
 func _is_character_unlocked(id:String)->bool:
-	return _is_character_ready(id) and progress.unlocked_characters.has(id)
+	return _is_character_ready(id) and progress.can_select_character(id)
 
 func _open_detail(id:String)->void:
 	if not _is_character_unlocked(id): return
@@ -155,29 +155,34 @@ func _add_stat_bar(stat_name:String,value:float,maximum:float,color:Color)->void
 	var value_label: Label = hud.label(row,Vector2(510,1),Vector2(92,26),("%.2f"%value if stat_name=="攻速" else "%d"%roundi(value)),12,color); value_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT; value_label.vertical_alignment=VERTICAL_ALIGNMENT_CENTER; value_label.add_theme_font_override("font",LEIGAI_FONT)
 
 func _confirm_detail()->void:
-	if detail_id.is_empty() or detail_id=="traveler": return
+	if detail_id.is_empty() or detail_id=="traveler" or not _is_character_unlocked(detail_id): return
 	if detail_id in selected: selected.erase(detail_id)
-	elif selected.size()<3: selected.append(detail_id)
+	elif selected.size()<_selection_limit(detail_id): selected.append(detail_id)
 	_refresh(); detail_panel.hide()
+
+func _selection_limit(candidate: String = "") -> int:
+	return 2 if next_stage_id == "stage_01" and "hero_13" not in selected and candidate != "hero_13" else 3
 
 func open(stage_id:String,current_squad:Array[String],newly_unlocked:Array=[])->void:
 	next_stage_id=stage_id
 	for value in newly_unlocked:
 		var id:=str(value)
-		if not id.is_empty() and _is_character_ready(id): progress.unlocked_characters[id]=true
+		if not id.is_empty() and _is_character_ready(id): progress.unlock_character(id)
 	progress.save_progress(); selected=["traveler"]
 	for id in current_squad:
-		if id!="traveler" and _is_character_unlocked(id) and selected.size()<3: selected.append(id)
+		if id!="traveler" and _is_character_unlocked(id) and selected.size()<_selection_limit(id): selected.append(id)
 	var stage:Dictionary=database.stages.get(stage_id,{})
 	if stage_id=="stage_endless":
 		title.text="无尽生存：选择出战角色"
-		subtitle.text="旅行者固定出战 · 开局三名角色全部可登场 · 点击卡片查看详情"
+		subtitle.text="旅行者固定出战 · 已选成员立即同行，最多3名 · 点击卡片查看详情"
 	else:
 		title.text="下一关：%s"%stage.get("name",stage_id)
 		subtitle.text="旅行者固定出战 · 最多选择三名角色 · 点击卡片查看详情"
 	grid_scroll.scroll_vertical=0; detail_panel.hide(); _refresh(); root.show(); confirm_button.grab_focus()
 func confirm()->void:
-	if selected.is_empty() or selected.size()>3 or "traveler" not in selected:return
+	if selected.is_empty() or selected.size()>_selection_limit() or "traveler" not in selected:return
+	for id: String in selected:
+		if not _is_character_unlocked(id): return
 	root.hide(); confirmed.emit(selected.duplicate())
 func activate_at(point:Vector2)->bool:
 	if not is_open():return false
@@ -192,7 +197,11 @@ func activate_at(point:Vector2)->bool:
 	return false
 func is_open()->bool:return root!=null and root.visible
 func _refresh()->void:
-	count_label.text="出战  %d / 3"%selected.size(); confirm_button.disabled=selected.is_empty() or selected.size()>3
+	var limit := _selection_limit()
+	count_label.text="出战  %d / %d"%[selected.size(),limit]; confirm_button.disabled=selected.is_empty() or selected.size()>limit
+	if next_stage_id == "stage_01":
+		var guest_text := "格温本关已在场助战" if progress.has_gwen_recruitment() else "格温恰好在场助战，尚未加入队伍"
+		subtitle.text = guest_text + " · 可选两名队员 · 旅行者固定出战" if "hero_13" not in selected else "格温随队在场 · 最多三名角色 · 旅行者固定出战"
 	for id:String in buttons:
 		var known: bool = _is_character_unlocked(id); buttons[id].disabled=not known; var chosen:=id in selected
 		card_frames[id].texture=CARD_SKIN_RED if chosen else CARD_SKIN_GRAY; card_frames[id].modulate=Color.WHITE if chosen else (Color(0.82,0.82,0.84,0.78) if known else Color(0.32,0.31,0.33,0.20)); state_labels[id].text="◆ 出战中" if chosen else ("点击查看详情" if known else "LOCKED / 未解锁"); state_labels[id].add_theme_color_override("font_color",ACCENT if chosen else MUTED); previews[id].set_locked(not known); buttons[id].modulate=Color.WHITE if known else Color(0.38,0.35,0.37,1)

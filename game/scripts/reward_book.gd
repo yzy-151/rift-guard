@@ -18,13 +18,13 @@ const CARDS = [
 	{"id": "rally", "name": "协同火力", "target": -1, "max": 3, "tag": "全队", "desc": "全队攻击各增加自身初始攻击的 10%。"},
 	{"id": "march", "name": "迅捷部署", "target": -1, "max": 2, "tag": "移动", "desc": "全队移动速度增加 30，重新布防时更快回到射击状态。"},
 	{"id": "vitality", "name": "坚韧意志", "target": -1, "max": 2, "tag": "生命", "desc": "全队生命上限增加初始生命的 20%，同时回复等量生命。"},
-	{"id": "repair", "name": "紧急修复", "target": -1, "max": 99, "tag": "基地", "desc": "基地立即回复 30 点生命，最多恢复到 100。"},
+	{"id": "repair", "name": "紧急修复", "target": -1, "max": 4, "tag": "基地", "desc": "基地立即回复 30 点生命，最多恢复到 100；本局最多 4 次。"},
 	{"id": "recovery", "name": "战地整备", "target": -1, "max": 2, "tag": "恢复", "desc": "以后每个非终局节点结束，存活队员额外回复 15% 生命上限。"}
 ]
 const FALLBACKS = [
-	{"id": "reserve_attack", "name": "备用弹药", "target": -1, "max": 0, "tag": "补给", "desc": "全队攻击增加 3，可重复获得。"},
-	{"id": "reserve_health", "name": "应急护具", "target": -1, "max": 0, "tag": "补给", "desc": "全队生命上限与当前生命增加 15，可重复获得。"},
-	{"id": "reserve_armor", "name": "加固衬板", "target": -1, "max": 0, "tag": "补给", "desc": "全队防御增加 5，可重复获得。"}
+	{"id": "reserve_attack", "name": "备用弹药", "target": -1, "max": 8, "tag": "补给", "desc": "全队攻击增加 3，本局最多 8 级。"},
+	{"id": "reserve_health", "name": "应急护具", "target": -1, "max": 8, "tag": "补给", "desc": "全队生命上限与当前生命增加 15，本局最多 8 级。"},
+	{"id": "reserve_armor", "name": "加固衬板", "target": -1, "max": 8, "tag": "补给", "desc": "全队防御增加 5，本局最多 8 级。"}
 ]
 var rng := RandomNumberGenerator.new()
 var levels: Dictionary = {}
@@ -61,8 +61,8 @@ func draw(sim) -> void:
 	for card in FALLBACKS:
 		if pool.size() >= 3:
 			break
-		pool.append(card)
-	for i in 3:
+		if eligible(card, sim): pool.append(card)
+	for i in mini(3, pool.size()):
 		var index: int = rng.randi_range(0, pool.size() - 1)
 		offered.append(pool[index].duplicate(true))
 		pool.remove_at(index)

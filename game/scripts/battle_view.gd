@@ -1,13 +1,28 @@
 extends Node2D
+const FloatingDamageV3 = preload("res://scripts/floating_damage_v3.gd")
+const CombatFeedbackV3 = preload("res://scripts/combat_feedback_v3.gd")
 const DangerTelegraph = preload("res://scripts/danger_telegraph.gd")
+const BossVolumeVfx = preload("res://scripts/boss_skill_vfx_20261006.gd")
 const TravelerElementVfx = preload("res://scripts/traveler_element_vfx.gd")
+const WindSkillVfx20261005 = preload("res://scripts/wind_skill_vfx_20261005.gd")
+const HeroSkillVfx20261005 = preload("res://scripts/hero_skill_vfx_20261005.gd")
+const BattleDeviceVfx = preload("res://scripts/battle_device_vfx.gd")
+const Stage2MapArt20261005 = preload("res://scripts/stage2_map_art_20261005.gd")
+const StageStaticCanvasCache = preload("res://scripts/stage_static_canvas_cache.gd")
+const FilledExplosionVfx = preload("res://scripts/explosion_vfx_20261005.gd")
+const COMBAT_LABEL_FONT = preload("res://assets/fonts/TiejiliSC-Regular.ttf")
+const CombatGlowLayer = preload("res://scripts/combat_glow_layer.gd")
+var combat_glow_layer: Node2D
 
 const StormSwordVfx = preload("res://scripts/storm_sword_vfx.gd")
 const HeroSignatureVfx = preload("res://scripts/hero_signature_vfx.gd")
 signal stage_exit_finished
+signal stage_exit_meet
 ## All effects are cosmetic; gameplay remains in CombatSimulation.
 const Stage = preload("res://scripts/stage_projection.gd")
+const EndlessPresentation = preload("res://scripts/endless_presentation.gd")
 const SCENERY_PATHS := {
+ "stage_01": "res://assets/world/stage_scenery/stage_01_v3.svg",
  "stage_02": "res://assets/world/stage_scenery/stage_02_v1.svg",
  "stage_03": "res://assets/world/obsidian_nest/nest_stage_v1.svg",
  "stage_04": "res://assets/world/stage_scenery/stage_04_v1.svg",
@@ -15,6 +30,7 @@ const SCENERY_PATHS := {
  "stage_06": "res://assets/world/stage_scenery/stage_06_v1.svg",
 }
 # Only retain the current stage artwork, not every full-resolution backdrop.
+var boss_skill_captions: Dictionary = {}
 var stage_scenery: Texture2D
 
 const STAGE_VISUAL = preload("res://data/stage_visual_profile.tres")
@@ -81,6 +97,7 @@ var chapter1_blend_material: ShaderMaterial
 var selected_id: int = 0
 var reduced_effects: bool = false
 var effects: Array[Dictionary] = []
+var damage_numbers = FloatingDamageV3.new()
 var effect_pool = ReusableEffectPool.new()
 var clock: float = 0.0
 var shot_flashes: Dictionary = {}
@@ -89,6 +106,10 @@ var departing_recruit: Dictionary = {}
 var hero_down_visuals: Dictionary = {}
 var enemy_death_visuals: Array[Dictionary] = []
 var projectile_trails: Dictionary = {}
+var attack_warning_endpoints: Dictionary = {}
+var attack_warning_geometry_key := 0
+var attack_warning_cache_hits := 0
+var attack_warning_cache_misses := 0
 var redraw_accumulator: float = 0.0
 var stage_tile_cache: Array[Dictionary] = []
 var stage_tile_cache_id := ""
@@ -101,6 +122,8 @@ var enemy_sequences = EnemySequenceLibrary.new()
 var boss_sequence_visuals: Dictionary = {}
 var feedback_director = CombatFeedbackDirector.new()
 var surface_renderer = StageSurfaceRenderer.new()
+var stage2_map_art = Stage2MapArt20261005.new()
+var stage2_static_cache = null
 var debug_visual_matrix: Array[Dictionary] = []
 var debug_anchor_error_max := 0.0
 var debug_damage_shape_error_max := 0.0
@@ -111,6 +134,7 @@ var debug_stage_layer_order: Array[String] = []
 var route_previews: Dictionary = {}
 var spawn_portals: Dictionary = {}
 var current_actor_transform := Transform2D.IDENTITY
+var stage_exit_requires_dialogue := false
 var stage_exit_active := false
 var stage_exit_phase := ""
 var stage_exit_timer := 0.0
@@ -118,6 +142,7 @@ var stage_exit_character_id := ""
 var stage_exit_character_name := ""
 var stage_exit_element := ""
 var stage_exit_newcomer_pos := Vector2(1125, 360)
+var stage_exit_newcomer_origin := Vector2(1135, 360)
 const STAGE_EXIT_DOOR := Vector2(1135, 360)
 const STAGE_EXIT_MEET := Vector2(930, 360)
 var base_flash: float = 0.0
@@ -130,6 +155,11 @@ var deploy_preview_point: Vector2 = Vector2.ZERO
 var deploy_preview_valid := false
 var skill_point: Vector2 = Vector2(760, 360)
 var camera_center: Vector2 = Vector2(640, 360)
+var endless_camera_deadzone := Vector2(72.0, 36.0)
+var endless_camera_response := 6.0
+var endless_camera_follow := true
+var endless_label_exclusions: Array[Rect2] = [UI_LAYOUT.battle_expedition_tasks_rect.grow(4.0), UI_LAYOUT.battle_expedition_minimap_rect.grow(5.0)]
+var endless_party_label_style: StyleBoxFlat
 var atlas: Texture2D = preload("res://assets/tiny-dungeon.png")
 var stage_background_1: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0001.png")
 var stage_background_2: Texture2D = preload("res://assets/helltaker/backgrounds/chapterBG0002.png")
@@ -171,7 +201,16 @@ var muzzle_ion_frames: Array[Texture2D] = [
 	preload("res://assets/vfx/third_party/reactorcore_muzzle/files/RC Art - Muzzle Effects/Sprites/Muzzle Large Ion/Muzzle Large Ion_3.png")
 ]
 
+func _ensure_gallery_static_cache() -> void:
+	if _is_stage_two_gallery() and stage2_static_cache == null:
+		stage2_static_cache=StageStaticCanvasCache.new()
+		add_child(stage2_static_cache)
+		stage2_static_cache.setup(stage2_map_art)
+
 func _ready() -> void:
+	_ensure_gallery_static_cache()
+	combat_glow_layer = CombatGlowLayer.new()
+	add_child(combat_glow_layer)
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	chapter1_blend_material = ShaderMaterial.new()
 	chapter1_blend_material.shader = CHAPTER1_BLEND_SHADER
@@ -182,7 +221,8 @@ func _ready() -> void:
 	_build_visual_matrix()
 	font = SystemFont.new()
 	font.font_names = PackedStringArray(["Microsoft YaHei", "Noto Sans CJK SC"])
-	_build_stage_tile_cache(sim.current_stage_id if sim != null else "stage_01")
+	_build_stage_tile_cache(_visual_stage_id())
+	BossVolumeVfx.prewarm()
 
 func _update_chapter1_material() -> void:
 	if _is_chapter_one_stage():
@@ -202,13 +242,26 @@ func _load_enemy_visuals() -> void:
 			enemy_visual_textures[enemy_id] = texture
 
 func advance(dt: float) -> void:
+	_ensure_gallery_static_cache()
 	_update_chapter1_material()
 	clock += dt
+	damage_numbers.advance(dt)
+	if sim != null:
+		var prepare_twins: bool = sim.enemies.any(func(e):return str(e.kind)=="boss_03")
+		if sim.endless_mode:
+			prepare_twins = prepare_twins or (sim.endless_boss_index % 6 == 2 and sim.endless_next_boss_at-sim.elapsed < 45.0)
+		elif sim.current_stage_id=="stage_03":
+			prepare_twins = prepare_twins or float(sim.database.stages.get("stage_03",{}).get("boss_at_seconds",300))-sim.elapsed < 45.0
+		if prepare_twins:enemy_sequences.queue_prewarm(["boss_03","boss_galio"])
+	enemy_sequences.poll_prewarm()
+	_update_boss_skill_captions(dt)
 	_update_boss_sequence_visuals(dt)
 	_sync_unit_visuals(dt)
 	if sim != null and sim.endless_mode and not sim.heroes.is_empty():
 		var expedition_leader: Dictionary = sim.expedition.leader(sim)
-		if not expedition_leader.is_empty(): camera_center = camera_center.lerp(expedition_leader.pos, 1.0 - exp(-dt * 7.0))
+		camera_center = EndlessPresentation.clamp_camera(camera_center, Sim.ENDLESS_ARENA, ENDLESS_PLAYFIELD_SCREEN.size)
+		if endless_camera_follow and not expedition_leader.is_empty():
+			camera_center = EndlessPresentation.follow_camera(camera_center, expedition_leader.pos, dt, Sim.ENDLESS_ARENA, ENDLESS_PLAYFIELD_SCREEN.size, endless_camera_deadzone, endless_camera_response)
 	if stage_exit_active:
 		_advance_stage_exit(dt)
 	for id in shot_flashes:
@@ -233,6 +286,8 @@ func advance(dt: float) -> void:
 	base_flash = maxf(0.0, base_flash - dt)
 	shake_trauma = maxf(0.0, shake_trauma - dt * 3.8)
 	position = Vector2(sin(clock * 91.0), cos(clock * 73.0)) * shake_trauma * 5.0
+	if sim != null and sim.endless_mode:
+		position *= 0.4
 	if sim != null and sim.performance_budget != null:
 		var visual_effect_load: int = effects.size() + sim.enemy_hazards.size() + sim.skill_effects.size()
 		var visual_quality: float = sim.performance_budget.quality_for_load(sim.enemies.size(), sim.projectiles.size() + sim.enemy_projectiles.size(), visual_effect_load)
@@ -260,7 +315,7 @@ func advance(dt: float) -> void:
 func play_recruit_departure(character_id: String, start_point: Vector2) -> void:
 	if character_sequences.texture(character_id, "run") == null:
 		return
-	var target := Vector2(100, 365)
+	var target: Vector2 = sim.base_world_position()
 	var started_at := Time.get_ticks_msec()
 	departing_recruit = {"character_id": character_id, "pos": start_point, "frame": 0}
 	while true:
@@ -297,8 +352,15 @@ func _render_point_visible(point: Vector2, margin: float = 160.0) -> bool:
 	return sim == null or not sim.endless_mode or visible_world_rect().grow(margin).has_point(point)
 
 
+func _visual_stage_id() -> String:
+	if sim == null: return "stage_01"
+	return str(sim.database.stages.get(sim.current_stage_id, {}).get("visual_stage_id", sim.current_stage_id))
+
 func _is_chapter_one_stage() -> bool:
-	return sim != null and str(sim.current_stage_id) in CHAPTER1_STAGE_IDS
+	return sim != null and _visual_stage_id() in CHAPTER1_STAGE_IDS
+
+func _is_stage_two_gallery() -> bool:
+	return sim != null and not sim.endless_mode and _visual_stage_id() == "stage_02"
 
 func _build_visual_matrix() -> void:
 	debug_visual_matrix.clear()
@@ -324,7 +386,7 @@ func visual_sample(hero: Dictionary) -> Dictionary:
 	return unit_visual_actors[id].sample() if unit_visual_actors.has(id) else {"scale":Vector2.ONE,"offset":Vector2.ZERO}
 
 func _dense_vfx_group(kind: String) -> String:
-	if kind in ["hit", "critical", "slash", "splash", "chain", "pierce", "multishot", "orbit_hit"]:
+	if kind in ["hit", "critical", "slash", "splash", "chain", "pierce", "multishot", "orbit_hit", "projectile_impact", "device_pea_hit"]:
 		return "impact"
 	if kind in ["vaporize", "melt", "overloaded", "superconduct", "electro_charged", "swirl", "crystallize", "shatter", "swirl_spread"]:
 		return "reaction"
@@ -376,8 +438,22 @@ func _signature_visual(hero_index: int, ability_kind: String) -> String:
 	return ""
 
 func accept_events(batch: Array[Dictionary]) -> void:
+	damage_numbers.accept(self, batch)
 	for event in batch:
+		if event.kind == "shaman_land":
+			effects.append(effect_pool.acquire(event,0.30))
+			continue
+		if event.kind in ["device_place", "device_pea_hit", "device_explosion", "device_melon_hit", "device_sun"]:
+			if event.kind == "device_pea_hit":
+				if _try_merge_dense_vfx(event): continue
+				if sim != null and not sim.performance_budget.can_spawn_cosmetic("hit", effects.size()): continue
+			var visual := event.duplicate()
+			visual.merge_group = _dense_vfx_group(str(event.kind))
+			effects.append(effect_pool.acquire(visual, .6 if event.kind == "device_sun" else .48 if event.kind in ["device_explosion", "device_melon_hit"] else .28))
+			continue
 		_accept_boss_sequence_event(event)
+		if str(event.kind) == "kindred_respite":
+			boss_skill_captions[int(event.caster_id)] = {"text": "羊灵生息", "life": 2.0}
 		if bool(event.get("traveler_rework",false)): continue
 		if str(event.kind).begins_with("traveler_fx_"):
 			if event.kind != "traveler_fx_start": effects.append(effect_pool.acquire(event,float(event.get("delay",0.85))))
@@ -437,7 +513,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 					for ally: Dictionary in sim.heroes:
 						if bool(ally.get("deployed", false)) and ally.hp > 0.0:
 							fanfare_allies.append(int(ally.id))
-					effects.append(effect_pool.acquire({"kind":"furina_fanfare_allies","pos":dedicated_event.caster_pos,"ally_ids":fanfare_allies}, 3.4))
+					effects.append(effect_pool.acquire({"kind":"furina_fanfare_allies","pos":dedicated_event.caster_pos,"ally_ids":fanfare_allies,"hero_id":event.get("hero_id",-1),"radius":dedicated_event.get("radius",260)}, 3.4))
 				if impact_visual == "columbia_tidal_benediction":
 					var blessing: Dictionary = sim.skill_effects.back() if not sim.skill_effects.is_empty() else {}
 					if str(blessing.get("kind", "")) == "columbia_attack_blessing":
@@ -447,7 +523,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 					for ally: Dictionary in sim.heroes:
 						if bool(ally.get("deployed", false)) and ally.hp > 0.0 and sim.is_in_ability_area(Vector2(dedicated_event.caster_pos), Vector2(ally.pos), float(dedicated_event.radius)):
 							recipients.append(int(ally.id))
-					effects.append(effect_pool.acquire({"kind":"gwen_shelter_aura","pos":dedicated_event.caster_pos,"ally_ids":recipients}, 5.0))
+					effects.append(effect_pool.acquire({"kind":"gwen_shelter_aura","pos":dedicated_event.caster_pos,"ally_ids":recipients,"radius":dedicated_event.get("radius",220)}, 5.0))
 				continue
 		if event.kind == "vfx_cue" and (str(event.get("value", "")) == "heal_gust" or not _signature_visual(int(event.get("hero_id", -1)), str(event.get("value", ""))).is_empty()):
 			continue
@@ -528,7 +604,7 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				if active_fireballs.size() < 8 and (sim == null or sim.performance_budget.can_spawn_cosmetic(str(event.kind), effects.size())):
 					var lifetime := float(event.get("duration", 0.72)) if event.kind == "fireball_fall" else 2.2
 					effects.append(effect_pool.acquire(event.duplicate(true), lifetime))
-			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "arena_event", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "finale", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "goblin_spawn", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
+			"hit", "critical", "death", "move", "formation", "hurt", "down", "heal", "arena_event", "vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread", "slash", "splash", "multishot", "pierce", "chain", "echo", "death_burst", "frenzy", "kill_streak", "reinforcement", "finale", "shield_hit", "shield_break", "knockback", "crystal_guard", "enemy_heal", "enemy_guard", "goblin_spawn", "split", "enemy_duplicate", "enemy_blink", "enemy_volatile", "skill_suppressed", "boss_move", "contract_complete", "boss_phase", "weather_pulse", "trap_pulse", "boss_pulse", "boss_summon", "enemy_shot", "enemy_projectile_cast", "projectile_impact", "reward_taken", "element_attuned", "skill_none", "skill_anemo", "skill_electro", "skill_pyro", "skill_hydro", "skill_geo", "skill_cryo", "geo_hit", "geo_break", "mechanism_pulse", "terrain_hit", "terrain_break", "deploy", "recall", "dodge", "skill_cast", "skill_impact", "vfx_cue", "ultimate_cast", "ultimate_impact", "synced_impact", "orbit_hit", "orbit_storm", "tag_synergy", "relic_awaken", "revive":
 				if _try_merge_dense_vfx(event):
 					continue
 				if sim != null and not sim.performance_budget.can_spawn_cosmetic(str(event.kind), effects.size()):
@@ -541,10 +617,12 @@ func accept_events(batch: Array[Dictionary]) -> void:
 				visual_event.feedback_theme = feedback.theme
 				visual_event.feedback_theme_id = feedback.theme_id
 				var effect_duration := float(event.get("duration", 0.6))
+				if event.kind in ["hit", "critical", "hurt", "heal", "muzzle", "enemy_shot", "enemy_projectile_cast", "projectile_impact"]:
+					effect_duration = 0.24 if event.kind in ["critical", "heal"] else 0.18
 				if str(event.kind).begins_with("skill_"):
 					effect_duration = 1.05
 				elif event.kind == "slash":
-					effect_duration = 0.42
+					effect_duration = 0.22
 				effects.append(effect_pool.acquire(visual_event,effect_duration))
 				var effect_cap: int = sim.performance_budget.effect_cap() if sim != null and sim.performance_budget != null else 240
 				while effects.size() > effect_cap:
@@ -570,16 +648,27 @@ func accept_events(batch: Array[Dictionary]) -> void:
 func caption(point: Vector2, text: String, color: Color, size: int = 12) -> void:
 	draw_string(font, point, text, HORIZONTAL_ALIGNMENT_LEFT, -1, size, color)
 
+func combat_caption(point: Vector2, text: String, color: Color, size: int = 15) -> void:
+	draw_string_outline(COMBAT_LABEL_FONT, point, text, HORIZONTAL_ALIGNMENT_LEFT, -1, size, 3, Color(0.03,0.03,0.06,color.a))
+	draw_string(COMBAT_LABEL_FONT, point, text, HORIZONTAL_ALIGNMENT_LEFT, -1, size, color)
+
+func emit_glow(texture: Texture2D, point: Vector2, size: Vector2, color: Color, alpha: float) -> void:
+	if combat_glow_layer != null:
+		combat_glow_layer.emit(texture,point,size,color,alpha)
+
 func _draw() -> void:
 	if sim == null or font == null:
 		return
 	current_actor_transform = Transform2D.IDENTITY
+	if combat_glow_layer != null: combat_glow_layer.begin_frame()
 	draw_set_transform_matrix(current_actor_transform)
 	_draw_stage()
 	if sim.endless_mode: preload("res://scripts/endless_expedition_view.gd").ground(self)
 	_draw_arena_events()
+	BossVolumeVfx.draw_persistent_ground(self)
 	Sim.EnemyTactics.draw_ground(self)
 	_draw_enemy_telegraphs()
+	BattleDeviceVfx.ground(self)
 	if not sim.endless_mode:
 		_draw_base_projected()
 		_draw_spawn_portals()
@@ -594,8 +683,8 @@ func _draw() -> void:
 		if _render_point_visible(Vector2(zone.get("pos", Vector2.ZERO)), 180.0 + _skill_zone_radius(zone)):
 			_draw_skill_zone(zone)
 	for construct: Dictionary in sim.geo_constructs:
-		if _render_point_visible(Vector2(construct.get("pos", Vector2.ZERO)), 140.0):
-			_draw_geo_construct(construct)
+		if not bool(construct.get("device",false)) and _render_point_visible(Vector2(construct.get("pos", Vector2.ZERO)), 140.0):
+			TravelerElementVfx.construct(self,construct)
 	if skill_targeting:
 		_draw_skill_preview()
 	if selected_id >= 0:
@@ -606,16 +695,19 @@ func _draw() -> void:
 				_draw_range_indicator(hero)
 	for hero in sim.heroes:
 		if hero.hp > 0 and hero.pos.distance_to(hero.target) > 3.0:
+			if sim.endless_mode and int(hero.id) != selected_id:
+				continue
 			draw_dashed_line(world_to_screen(hero.pos), world_to_screen(hero.target), Color(hero.color, 0.6), 1.0, 7.0)
 			_ground_circle(hero.target, 13.0, Color(hero.color))
-	_draw_red_moon_warning()
-	_draw_crossfire_warning()
+	if not BossVolumeVfx.draw_support_warning(self,"barrage"):_draw_red_moon_warning()
+	if not BossVolumeVfx.draw_support_warning(self,"crossfire"):_draw_crossfire_warning()
 	_draw_tidal_warning()
 	# Combat effects and projectiles belong behind every unit silhouette.
 	if sheet_effects != null:
 		sheet_effects.draw_behind_units(self)
 	for hazard: Dictionary in sim.enemy_hazards:
 		if _render_point_visible(Vector2(hazard.get("pos", Vector2.ZERO)), 180.0):
+			if BossVolumeVfx.draw_hazard(self,hazard):continue
 			if str(hazard.get("kind", "")).begins_with("galio_"):
 				_draw_galio_hazard(hazard)
 			elif str(hazard.get("kind", "")).begins_with("kindred_"):
@@ -629,6 +721,7 @@ func _draw() -> void:
 		if float(projectile.get("delay", 0.0)) > 0.0:
 			continue
 		if _render_point_visible(Vector2(projectile.pos), 120.0):
+			if BossVolumeVfx.draw_projectile(self,projectile):continue
 			var projectile_kind := str(projectile.get("kind", ""))
 			if projectile_kind in ["slime_glob", "slime_image"]:
 				_draw_slime_projectile(projectile)
@@ -636,18 +729,18 @@ func _draw() -> void:
 			if projectile_kind in ["kindred_arrow", "kindred_dread_arrow"]:
 				_draw_kindred_projectile(projectile)
 				continue
-			var point := world_to_screen(Vector2(projectile.pos)) + Vector2(0, -17)
-			var orb: bool = projectile_kind == "rift_orb"
-			var enraged_orb := orb and bool(projectile.get("enraged", false))
-			var size := (19.0 if enraged_orb else (13.0 if orb else 8.0)) * world_depth_scale(Vector2(projectile.pos))
-			var outer := Color(0.72, 0.02, 0.08, 0.30) if enraged_orb else Color(0.35, 0.08, 0.65, 0.24 if orb else 0.12)
-			var middle := Color(0.92, 0.05, 0.12, 0.62) if enraged_orb else Color(0.40, 0.15, 0.75, 0.45)
-			var core := Color(1.0, 0.14, 0.20, 0.98) if enraged_orb else Color(0.67, 0.35, 1.0, 0.98)
-			draw_circle(point, size + 8.0, outer)
-			draw_circle(point, size + 4.0, middle)
-			draw_circle(point, size, core)
-			draw_circle(point + Vector2(-2, -2), size * 0.38, Color(0.96, 0.88, 1.0, 0.98))
+			CombatFeedbackV3.projectile(self, projectile, projectile_trails.get(-int(projectile.get("visual_id",0))-1, []), false)
 	for effect in effects:
+		if BossVolumeVfx.draw_effect(self,effect):continue
+		if str(effect.kind) == "shaman_land":
+			_draw_shaman_landing(effect)
+			continue
+		if BattleDeviceVfx.event(self,effect): continue
+		if FilledExplosionVfx.event(self,effect):
+			_draw_explosion_caption(effect)
+			continue
+		if HeroSkillVfx20261005.draw_event(self,effect): continue
+		if TravelerElementVfx.legacy_event(self,effect): continue
 		if str(effect.kind).begins_with("traveler_fx_"):
 			TravelerElementVfx.event(self,effect)
 			continue
@@ -727,11 +820,16 @@ func _draw() -> void:
 			visual.red_moon_radii = sim.support_barrage_screen_radii(Vector2(effect.pos), float(effect.get("radius", 105.0))) / scale_factor
 			visual.red_moon_scale = scale_factor
 		visual.pos = Vector2.ZERO
+		visual.screen_origin = point
+		visual.screen_scale = scale_factor
 		_draw_effect(visual)
 		draw_set_transform(Vector2.ZERO)
 	HeroSignatureVfx.draw_marks(self)
 	var actors: Array[Dictionary] = []
 	var render_world := visible_world_rect().grow(180.0) if sim.endless_mode else WORLD
+	for device: Dictionary in sim.battle_devices.placed:
+		if device.hp > 0 and device.kind not in ["power", "range"]:
+			actors.append({"device":true,"unit":device})
 	for enemy in sim.enemies:
 		if str(enemy.get("kind", "")) == "boss_galio" and (not bool(enemy.get("galio_revealed", true)) or (bool(enemy.get("special_pending", false)) and str(enemy.get("special_move", "")) == "galio_entrance")):
 			continue
@@ -741,10 +839,41 @@ func _draw() -> void:
 		if render_world.has_point(death_visual.pos):
 			actors.append({"unit": death_visual, "hero": false, "death": true})
 	for hero in sim.heroes:
+		if stage_exit_active and str(hero.get("character_id", "")) == stage_exit_character_id:
+			continue # The same teammate is represented by the walking departure actor.
 		if bool(hero.get("deployed", true)) and render_world.has_point(hero.pos):
 			actors.append({"unit": hero, "hero": true})
+	if sim.endless_mode:
+		for feature: Dictionary in sim.terrain_features:
+			if str(feature.get("type", "")) != "blocked": continue
+			var area: Rect2 = feature.area
+			var horizontal := area.size.x >= area.size.y
+			var length: float = area.size.x if horizontal else area.size.y
+			var count := maxi(1, ceili(length / 80.0))
+			for index in count:
+				var part := Rect2(area.position + Vector2(index * length / count, 0), Vector2(length / count, area.size.y)) if horizontal else Rect2(area.position + Vector2(0, index * length / count), Vector2(area.size.x, length / count))
+				actors.append({"wall": part, "wall_index": index, "unit": {"pos": Vector2(part.get_center().x, part.end.y)}})
+	elif _is_stage_two_gallery():
+		for feature: Dictionary in sim.terrain_features:
+			if str(feature.get("type", "")) != "blocked": continue
+			for part: Rect2 in stage2_map_art.wall_parts(feature):
+				actors.append({"gallery_wall": part, "unit": {"pos": Vector2(part.get_center().x, part.end.y)}})
 	actors.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.unit.pos.y < b.unit.pos.y)
 	for actor in actors:
+		if actor.has("gallery_wall"):
+			stage2_map_art.wall(self, actor.gallery_wall)
+			continue
+		if actor.has("device"):
+			BattleDeviceVfx.actor(self,actor.unit)
+			continue
+		if actor.has("wall"):
+			var opacity := 1.0
+			for hero: Dictionary in sim.heroes:
+				if bool(hero.get("deployed", true)) and EndlessPresentation.wall_obscures_hero(actor.wall, hero.pos, _endless_hero_height(hero)):
+					opacity = 0.55
+					break
+			preload("res://scripts/endless_map_art.gd").wall(self, _terrain_screen_rect(actor.wall), int(actor.wall_index), opacity)
+			continue
 		var unit: Dictionary = actor.unit
 		var point: Vector2 = world_to_screen(unit.pos)
 		if str(unit.get("kind", "")) == "boss_galio":
@@ -766,9 +895,20 @@ func _draw() -> void:
 		current_actor_transform = Transform2D(Vector2(scale_factor, 0.0), Vector2(0.0, scale_factor), point)
 		draw_set_transform_matrix(current_actor_transform)
 		var shadow_foot := Vector2(0.0, HERO_FOOT_OFFSET if actor.hero else ENEMY_FOOT_OFFSET)
-		var keep_shadow := bool(actor.hero) or not reduced_effects or str(unit.get("kind", "")).begins_with("boss_") or int(unit.get("id", 0)) % 2 == 0
-		if keep_shadow:
+		var keep_shadow := bool(actor.hero) or float(unit.get("spawn_timer",0.0)) > 0.0 or not reduced_effects or str(unit.get("kind", "")).begins_with("boss_") or int(unit.get("id", 0)) % 2 == 0
+		if sim.endless_mode:
+			var shadow_radius := 27.0 if actor.hero else clampf(float(unit.size) * 0.36, 12.0, 38.0)
+			draw_ellipse_shadow(shadow_foot - Vector2(0.0, 9.0), shadow_radius, Color(0, 0, 0, 0.24 if bool(unit.get("flying", false)) else 0.34))
+		elif keep_shadow:
 			draw_ellipse_shadow(shadow_foot - Vector2(0.0, 9.0), 28.0 if actor.hero else unit.size * 0.48, Color(0, 0, 0, 0.5))
+		if float(unit.get("spawn_timer",0.0)) > 0.0:
+			draw_set_transform(Vector2.ZERO)
+			_draw_shaman_drop_ground(unit)
+			point.y -= shaman_drop_offset(unit)
+			current_actor_transform = Transform2D(Vector2(scale_factor,0.0),Vector2(0.0,scale_factor),point)
+		if sim.endless_mode:
+			scale_factor = EndlessPresentation.actor_scale(unit, bool(actor.hero))
+			current_actor_transform = EndlessPresentation.actor_transform(point, scale_factor, shadow_foot.y)
 		draw_set_transform_matrix(current_actor_transform)
 		var visual: Dictionary = unit.duplicate()
 		visual.world_pos = unit.pos
@@ -783,25 +923,43 @@ func _draw() -> void:
 	current_actor_transform = Transform2D.IDENTITY
 	if not departing_recruit.is_empty():
 		_draw_departing_recruit()
+	BossVolumeVfx.draw_actor_overlays(self)
+	if _is_chapter_one_stage() and not reduced_effects:
+		_draw_chapter_one_wind_trails()
 	_draw_stage_foreground()
+	if sim.endless_mode:
+		_draw_endless_party_labels()
+	damage_numbers.draw(self)
+	_draw_boss_skill_captions()
 	if sim.endless_mode: preload("res://scripts/endless_expedition_view.gd").overlay(self)
 	if sim.state == "between":
 		caption(Vector2(548, 127), "队伍休整  %.1fs" % sim.wave_timer, TEAL, 16)
 
-func begin_stage_exit(character_id: String, character_name: String, element: String) -> void:
+func begin_stage_exit(character_id: String, character_name: String, element: String, requires_dialogue: bool = false) -> void:
+	stage_exit_requires_dialogue = requires_dialogue
 	stage_exit_active = true
 	stage_exit_phase = "opening"
 	stage_exit_timer = 0.0
 	stage_exit_character_id = character_id
 	stage_exit_character_name = character_name
 	stage_exit_element = element
-	stage_exit_newcomer_pos = STAGE_EXIT_DOOR
+	stage_exit_newcomer_origin = STAGE_EXIT_DOOR
+	for hero: Dictionary in sim.heroes:
+		if str(hero.get("character_id", "")) == character_id and bool(hero.get("deployed", false)):
+			stage_exit_newcomer_origin = Vector2(hero.pos)
+			break
+	stage_exit_newcomer_pos = stage_exit_newcomer_origin
 	spawn_portals["stage_exit"] = {"pos": STAGE_EXIT_DOOR, "life": 999.0, "total": 999.0}
 	queue_redraw()
 
 func reset_transients() -> void:
+	if combat_glow_layer != null: combat_glow_layer.begin_frame()
+	damage_numbers.clear()
+	projectile_trails.clear()
+	attack_warning_endpoints.clear(); attack_warning_geometry_key=0
 	route_previews.clear()
 	boss_sequence_visuals.clear()
+	boss_skill_captions.clear()
 	spawn_portals.clear()
 	stage_exit_active = false
 	stage_exit_phase = ""
@@ -811,7 +969,7 @@ func _advance_stage_exit(dt: float) -> void:
 	stage_exit_timer += dt
 	if stage_exit_phase == "opening":
 		var progress := clampf(stage_exit_timer / 1.0, 0.0, 1.0)
-		stage_exit_newcomer_pos = STAGE_EXIT_DOOR.lerp(STAGE_EXIT_MEET, progress)
+		stage_exit_newcomer_pos = stage_exit_newcomer_origin.lerp(STAGE_EXIT_MEET, progress)
 		if progress >= 1.0:
 			stage_exit_phase = "waiting"
 			stage_exit_timer = 0.0
@@ -819,9 +977,11 @@ func _advance_stage_exit(dt: float) -> void:
 				sim.heroes[0].target = STAGE_EXIT_MEET
 	elif stage_exit_phase == "waiting" and not sim.heroes.is_empty():
 		if sim.heroes[0].pos.distance_to(STAGE_EXIT_MEET) <= 78.0 or stage_exit_timer >= 8.0:
-			stage_exit_phase = "departing"
-			stage_exit_timer = 0.0
-			sim.heroes[0].target = STAGE_EXIT_DOOR + Vector2(-18, 0)
+			if stage_exit_requires_dialogue:
+				stage_exit_phase = "dialogue"
+				stage_exit_meet.emit()
+			else:
+				start_stage_departure()
 	elif stage_exit_phase == "departing":
 		stage_exit_newcomer_pos = STAGE_EXIT_MEET.lerp(STAGE_EXIT_DOOR, clampf(stage_exit_timer / 1.35, 0.0, 1.0))
 		if stage_exit_timer >= 1.35:
@@ -829,10 +989,18 @@ func _advance_stage_exit(dt: float) -> void:
 			spawn_portals.erase("stage_exit")
 			stage_exit_finished.emit()
 
+func start_stage_departure() -> void:
+	stage_exit_phase = "departing"
+	stage_exit_timer = 0.0
+	stage_exit_newcomer_pos = STAGE_EXIT_MEET
+	if not sim.heroes.is_empty():
+		sim.heroes[0].target = STAGE_EXIT_DOOR + Vector2(-18, 0)
+
 func _stage_exit_visual_sample() -> Dictionary:
 	var moving := stage_exit_phase == "opening" or stage_exit_phase == "departing"
 	var animation := "run" if moving else "idle"
-	var facing := 1.0 if stage_exit_phase == "departing" else -1.0
+	var facing := 1.0 if stage_exit_phase == "departing" else signf(STAGE_EXIT_MEET.x - stage_exit_newcomer_origin.x)
+	if is_zero_approx(facing): facing = -1.0
 	if not moving and not sim.heroes.is_empty():
 		var offset_x: float = sim.heroes[0].pos.x - stage_exit_newcomer_pos.x
 		if absf(offset_x) > 1.0:
@@ -873,17 +1041,49 @@ func _draw_stage_exit() -> void:
 		var tile := Vector2(atlas_index * 16, 112)
 		_draw_anchored_texture_region(atlas, actor + Vector2(0, 3), Vector2(54, 54), Vector2(16, 16), Vector2(8, 16), visual.facing, 1.0, Rect2(tile, Vector2(16, 16)), Color.WHITE)
 	caption(actor + Vector2(-27, -76), stage_exit_character_name, aura_color, 14)
-	var instruction := "%s已解锁，正在进入下一关" % stage_exit_character_name if stage_exit_phase == "departing" else "通关成功 · 正在迎接 %s · 按 Enter 继续" % stage_exit_character_name
+	var instruction := "%s已解锁，正在进入下一关" % stage_exit_character_name if stage_exit_phase == "departing" else "通关成功 · 正在迎接 %s" % stage_exit_character_name
 	caption(Vector2(410, 132), instruction, Color("#ffe5df"), 18)
 	if stage_exit_phase == "waiting" and not sim.heroes.is_empty():
 		draw_dashed_line(world_to_screen(sim.heroes[0].pos), actor, Color(1.0, 0.62, 0.67, 0.62), 2.0, 10.0, true)
+
+func cached_attack_warning_end(enemy: Dictionary) -> Vector2:
+	var source: Vector2=enemy.get("warning_origin",Vector2(enemy.pos)+Vector2(0,-12))
+	var direction: Vector2=enemy.get("warning_direction",Vector2.LEFT)
+	if direction.is_zero_approx(): direction=Vector2.LEFT
+	var arena: Rect2=sim.ENDLESS_ARENA if sim.endless_mode else sim.MOVE_AREA
+	# Locked warnings share the same world geometry until a real wall/door changes.
+	var geometry: Array=[sim.get_instance_id(),arena]
+	for feature: Dictionary in sim.terrain_features:
+		if sim._feature_blocks(feature): geometry.append([feature.get("area",Rect2()),feature.get("grid_cells",[]),feature.get("collision_shape","rect"),feature.get("collision_scale",[1,1]),feature.get("collision_offset",[0,0])])
+	var geometry_key := hash(geometry)
+	if geometry_key!=attack_warning_geometry_key:
+		attack_warning_endpoints.clear(); attack_warning_geometry_key=geometry_key
+	var identity: int=int(enemy.get("id",-1))
+	var cached: Dictionary=attack_warning_endpoints.get(identity,{})
+	if cached.get("source",Vector2.INF)==source and cached.get("direction",Vector2.INF)==direction:
+		attack_warning_cache_hits+=1
+		return cached.end
+	var end := source
+	for index in 90:
+		var next := source+direction*(float(index+1)*18.0)
+		if not arena.grow(8.0).has_point(next) or sim.terrain_line_blocked(source,next): break
+		end=next
+	attack_warning_cache_misses+=1
+	# Enemy IDs increase through a run; bound stale cosmetic rows without limiting live warnings.
+	if attack_warning_endpoints.size()>=256: attack_warning_endpoints.erase(attack_warning_endpoints.keys()[0])
+	attack_warning_endpoints[identity]={"source":source,"direction":direction,"end":end}
+	return end
 
 func _draw_enemy_telegraphs() -> void:
 	for enemy: Dictionary in sim.enemies:
 		var warning_world: Vector2 = enemy.get("warning_pos", enemy.pos)
 		if bool(enemy.get("attack_pending", false)) and float(enemy.get("attack_range", 0)) > 0.0 and _render_point_visible(warning_world,120):
-			DangerTelegraph.area(self,warning_world,float(enemy.get("warning_radius",52)),float(enemy.get("warning_timer",0)),float(enemy.get("warning_total",1.05)))
+			if str(enemy.get("kind", "")) in ["ranged", "buffer", "troop_ranged"]:
+				DangerTelegraph.attack_line(self, enemy)
+			else:
+				DangerTelegraph.area(self,warning_world,float(enemy.get("warning_radius",52)),float(enemy.get("warning_timer",0)),float(enemy.get("warning_total",1.05)))
 		if bool(enemy.get("special_pending", false)):
+			if BossVolumeVfx.draw_warning(self,enemy):continue
 			if str(enemy.get("kind", "")) == "boss_01" and str(enemy.get("special_move", "")).begins_with("rift_"):
 				_draw_rift_boss_warning(enemy)
 				continue
@@ -1270,6 +1470,12 @@ func _draw_kindred_boss_warning(enemy: Dictionary) -> void:
 	var source := world_to_screen(Vector2(enemy.pos))+Vector2(0,-28)
 	var pale := DangerTelegraph.RED
 	var violet := DangerTelegraph.RED
+	if move == "kindred_lasers":
+		var origin := world_to_screen(Vector2(enemy.get("kindred_laser_source", enemy.pos)))
+		for finish: Vector2 in points:
+			draw_line(origin, world_to_screen(finish), Color(pale, 0.18 + progress * 0.42), 4.0)
+			draw_dashed_line(origin, world_to_screen(finish), Color(pale, 0.85), 1.5, 12.0)
+		return
 	if move == "kindred_hunt":
 		_boss_vfx_arc(source,Vector2(74,98),PI*0.52,PI*0.96,9.0,pale,0.4+progress*0.6)
 		draw_line(source+Vector2(0,-98),source+Vector2(35*progress,0),Color(pale,0.8),2.0,true)
@@ -1344,6 +1550,14 @@ func _draw_kindred_boss_effect(effect: Dictionary) -> void:
 	var center := world_to_screen(center_world)+Vector2(0,8)
 	var pale := Color("#d9ffff")
 	var violet := Color("#b392ed")
+	if kind == "kindred_lasers":
+		var origin := world_to_screen(Vector2(effect.source))
+		for finish: Vector2 in effect.points:
+			var end := world_to_screen(finish)
+			draw_line(origin,end,Color(violet,alpha*0.18),15.0)
+			draw_line(origin,end,Color(violet,alpha),5.0)
+			draw_line(origin,end,Color(pale,alpha),2.0)
+		return
 	if kind == "kindred_respite":
 		var fade := minf(1.0,age/0.28)*minf(1.0,life/0.48)
 		var radii: Vector2 = sim.ability_area_screen_radii(center_world,float(effect.get("radius",285.0)))
@@ -1571,6 +1785,7 @@ func _draw_orbitals() -> void:
 		var hero: Dictionary = sim.heroes[hero_id]
 		if not bool(hero.get("deployed",false)) or hero.hp <= 0:
 			continue
+		if HeroSkillVfx20261005.draw_orbit(self,orbital,hero): continue
 		if orbital.has("source_card"):
 			OrbitalVfx.draw(self,orbital,hero)
 			continue
@@ -1606,40 +1821,32 @@ func _draw_vertical_orbit_blade(point: Vector2, color: Color, orbit_angle: float
 	draw_circle(point,22.0,Color(color,0.055*fade))
 
 func _draw_deploy_preview() -> void:
-	var point := world_to_screen(deploy_preview_point)
-	var allowed: bool = deploy_preview_valid
-	var color := Color("#69f0c2") if allowed else Color("#ff5267")
-	draw_circle(point,34.0,Color(color,0.16))
-	draw_arc(point,34.0,0,TAU,48,color,3.0,true)
-	draw_line(point-Vector2(18,0),point+Vector2(18,0),color,2.0,true)
-	draw_line(point-Vector2(0,18),point+Vector2(0,18),color,2.0,true)
-	caption(point+Vector2(-50,-54),"松开放置角色" if allowed else "不可部署",color,13)
+	preload("res://scripts/deployment_preview_v2.gd").draw(self)
 
-func _ability_ellipse_points(center: Vector2, radii: Vector2) -> PackedVector2Array:
+func _ability_ellipse_points(center: Vector2, radii: Vector2, segments: int = 48) -> PackedVector2Array:
 	var points := PackedVector2Array()
-	for index in 49:
-		var angle := float(index) * TAU / 48.0
+	for index in segments + 1:
+		var angle := float(index) * TAU / float(segments)
 		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
 	return points
 
 func _draw_skill_area_ellipse(center_world: Vector2, radius: float, color: Color, strength: float = 1.0, spread: float = 1.0) -> void:
 	var center := world_to_screen(center_world) + Vector2(0.0, 8.0)
 	var radii: Vector2 = sim.ability_area_screen_radii(center_world, radius) * spread
-	var points := _ability_ellipse_points(center, radii)
+	var points := Stage.ground_outline(center_world, radii, 48) if not sim.endless_mode else _ability_ellipse_points(center, radii)
 	var fill := points.duplicate()
 	fill.resize(48)
 	draw_colored_polygon(fill, Color(color, 0.085 * strength))
 	draw_polyline(points, Color(color, 0.76 * strength), 2.3, true)
+	var inner := Stage.ground_outline(center_world, radii * 0.89, 48) if not sim.endless_mode else _ability_ellipse_points(center, radii * 0.89)
 	for segment in 12:
-		var start := float(segment) * TAU / 12.0 + 0.03
 		var band := PackedVector2Array()
 		for step in 5:
-			var angle := start + float(step) * 0.092
-			band.append(center + Vector2(cos(angle) * radii.x * 0.89, sin(angle) * radii.y * 0.89))
+			band.append(inner[(segment * 4 + step) % 48])
 		draw_polyline(band, Color(color.lightened(0.29), 0.37 * strength), 1.3, true)
-	for angle in [0.0, PI * 0.5, PI, PI * 1.5]:
-		var edge := center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
-		var tangent := Vector2(-sin(angle), cos(angle) * radii.y / maxf(1.0, radii.x)).normalized()
+	for index in [0, 12, 24, 36]:
+		var edge: Vector2 = points[index]
+		var tangent: Vector2 = (points[(index + 1) % 48] - points[(index + 47) % 48]).normalized()
 		draw_line(edge - tangent * 4.0, edge + tangent * 4.0, Color(color.lightened(0.28), 0.74 * strength), 1.7, true)
 
 func _draw_skill_preview() -> void:
@@ -1648,6 +1855,7 @@ func _draw_skill_preview() -> void:
 	var hero: Dictionary = sim.heroes[selected_id]
 	var color: Color = element_color(str(hero.get("element", "none")))
 	var ability: Dictionary = sim.hero_ability(selected_id,skill_preview_ultimate)
+	if HeroSkillVfx20261005.draw_preview(self,hero,ability,skill_point): return
 	var radius: float = float(ability.get("radius", 170.0)) * (1.0 + sim.skill_area_bonus)
 	if str(hero.get("character_id", "")) == "traveler" and not skill_preview_ultimate:
 		radius = sim.traveler_skill_radius() * (1.0 + sim.skill_area_bonus)
@@ -1683,6 +1891,10 @@ func _skill_zone_radius(zone: Dictionary) -> float:
 	return base_radius * float(zone.get("area", 1.0))
 
 func _draw_skill_zone(zone: Dictionary) -> void:
+	if str(zone.get("kind", "")) == "anemo_tornado":
+		WindSkillVfx20261005.anemo_tornado(self, zone)
+		return
+	if HeroSkillVfx20261005.draw_zone(self,zone): return
 	if bool(zone.get("traveler_zone",false)):
 		TravelerElementVfx.zone(self,zone)
 		return
@@ -1765,31 +1977,24 @@ func _ground_circle(point: Vector2, radius: float, color: Color) -> void:
 
 func _draw_range_indicator(hero: Dictionary) -> void:
 	var center: Vector2 = world_to_screen(hero.pos) + Vector2(0, 8)
-	var color := Color(hero.color)
+	var color := Color("#a2d4c9") if not sim.terrain_feature_at(hero.pos, "attack_ground").is_empty() else Color("#a8bdc3")
 	var radii: Vector2 = sim.attack_range_screen_radii(hero)
-	var points := PackedVector2Array()
-	for i in 64:
-		var angle: float = float(i) * TAU / 64.0
-		points.append(center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y))
-	draw_colored_polygon(points, Color(color, 0.055))
-	points.append(points[0])
-	draw_polyline(points, Color(color, 0.58), 1.8, true)
+	var points := Stage.ground_outline(hero.pos, radii, 64) if not sim.endless_mode else _ability_ellipse_points(center, radii, 64)
+	var fill := points.duplicate()
+	fill.resize(points.size() - 1)
+	draw_colored_polygon(fill, Color(color, 0.025))
 	for segment in 16:
-		var start: float = float(segment) * TAU / 16.0 + 0.035
-		var finish: float = start + TAU / 16.0 * 0.46
 		var arc_points := PackedVector2Array()
-		for step in 5:
-			var angle: float = lerpf(start, finish, float(step) / 4.0)
-			arc_points.append(center + Vector2(cos(angle) * radii.x * 0.92, sin(angle) * radii.y * 0.92))
-		draw_polyline(arc_points, Color(color, 0.30), 1.0, true)
-	for angle in [0.0, PI * 0.5, PI, PI * 1.5]:
-		var edge := center + Vector2(cos(angle) * radii.x, sin(angle) * radii.y)
-		var tangent := Vector2(-sin(angle), cos(angle) * radii.y / radii.x).normalized()
-		draw_line(edge - tangent * 5.0, edge + tangent * 5.0, Color(color, 0.85), 2.0, true)
-	draw_arc(center, 12.0, 0, TAU, 32, Color(color, 0.28), 1.2, true)
+		for step in 4:
+			arc_points.append(points[(segment * 4 + step) % 64])
+		draw_polyline(arc_points, Color(color, 0.40), 1.5, true)
+	for index in [0, 16, 32, 48]:
+		var edge: Vector2 = points[index]
+		var tangent: Vector2 = (points[(index + 1) % 64] - points[(index + 63) % 64]).normalized()
+		draw_line(edge - tangent * 4.0, edge + tangent * 4.0, Color(color, 0.70), 1.8, true)
 
 func _build_stage_tile_cache(stage_id: String = "stage_01") -> void:
-	stage_scenery = load(SCENERY_PATHS[stage_id]) if SCENERY_PATHS.has(stage_id) else null
+	stage_scenery = load(SCENERY_PATHS[stage_id]) if SCENERY_PATHS.has(stage_id) and stage_id != "stage_02" else null
 	stage_tile_cache.clear()
 	stage_decal_cache.clear()
 	stage_tile_cache_id = stage_id
@@ -1818,10 +2023,10 @@ func _draw_stage() -> void:
 		_draw_stage_terrain({}, {})
 		_stage_layer("architecture")
 		return
-	if stage_tile_cache_id != sim.current_stage_id:
-		_build_stage_tile_cache(sim.current_stage_id)
-	var theme: Dictionary = surface_renderer.stage_theme(sim.current_stage_id)
-	var palette: Dictionary = STAGE_VISUAL.palette(sim.current_stage_id)
+	if stage_tile_cache_id != _visual_stage_id():
+		_build_stage_tile_cache(_visual_stage_id())
+	var theme: Dictionary = surface_renderer.stage_theme(_visual_stage_id())
+	var palette: Dictionary = STAGE_VISUAL.palette(_visual_stage_id())
 	_draw_stage_backdrop(theme, palette)
 	_draw_stage_atmosphere(theme, palette)
 	_draw_stage_ground(theme, palette)
@@ -1845,6 +2050,12 @@ func _stage_layer(name: String) -> void:
 
 func _draw_stage_backdrop(theme: Dictionary, palette: Dictionary) -> void:
 	_stage_layer("backdrop")
+	if _is_stage_two_gallery():
+		if stage2_static_cache != null and stage2_static_cache.complete:
+			draw_texture_rect(stage2_static_cache.get_texture(),Rect2(0,0,1280,720),false)
+		else:
+			stage2_map_art.backdrop(self)
+		return
 	if stage_scenery != null:
 		draw_texture_rect(stage_scenery, Rect2(0, 0, 1280, 720), false)
 		return
@@ -1856,14 +2067,18 @@ func _draw_stage_backdrop(theme: Dictionary, palette: Dictionary) -> void:
 		draw_rect(Rect2(0, 0, 1280, 84), Color("#090b0e"))
 		draw_rect(Rect2(0, 580, 1280, 140), Color("#080a0d"))
 		return
-	var background := _stage_background(sim.current_stage_id)
+	var background := _stage_background(_visual_stage_id())
 	var accent: Color = palette.get("accent", Color("#c45a68"))
 	draw_texture_rect(background, Rect2(0, 0, 1280, 720), false, STAGE_VISUAL.backdrop_tint.lerp(accent.lightened(0.46), 0.09))
 	draw_rect(Rect2(0, 0, 1280, 720), STAGE_VISUAL.stage_veil)
 	draw_rect(Rect2(0, 82, 1032, 622), STAGE_VISUAL.arena_overlay)
 func _draw_stage_atmosphere(theme: Dictionary, palette: Dictionary) -> void:
 	_stage_layer("atmosphere")
+	if _is_stage_two_gallery():
+		return # Keep all moving mist and overlay tint below the portrait-heavy stage.
 	if stage_scenery != null:
+		if _is_chapter_one_stage() and not reduced_effects:
+			_draw_chapter_one_window_light()
 		return
 	var accent: Color = palette.get("accent", Color("#c45a68"))
 	if _is_chapter_one_stage():
@@ -1884,8 +2099,31 @@ func _draw_stage_atmosphere(theme: Dictionary, palette: Dictionary) -> void:
 		draw_rect(Rect2(x, top, 66, 100), silhouette)
 		draw_colored_polygon(PackedVector2Array([Vector2(x - 7, top), Vector2(x + 33, top - 26), Vector2(x + 73, top)]), silhouette)
 
+func _draw_chapter_one_window_light() -> void:
+	# Window light sits below actors and route markings. The broad, translucent
+	# shapes suggest depth without adding a new obstacle to the court.
+	var breathe := 0.5 + 0.5 * sin(clock * 0.55)
+	for side in 2:
+		var edge := 0.0 if side == 0 else 1280.0
+		var direction := 1.0 if side == 0 else -1.0
+		var light := Color("#a4b8ca", 0.032 + breathe * 0.008)
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(edge + direction * 125.0, 210.0),
+			Vector2(edge + direction * 160.0, 210.0),
+			Vector2(edge + direction * 420.0, 385.0),
+			Vector2(edge + direction * 275.0, 385.0)
+		]), light)
+		for glint in 4:
+			var drift := fposmod(clock * (7.0 + glint) + float(glint * 47), 150.0)
+			var point := Vector2(edge + direction * (182.0 + float(glint * 36)), 238.0 + drift)
+			draw_circle(point, 1.0 + float(glint % 2) * 0.5, Color("#d1e4e6", 0.17 * (1.0 - drift / 150.0)))
+
 func _draw_stage_ground(theme: Dictionary, palette: Dictionary) -> void:
 	_stage_layer("ground")
+	if _is_stage_two_gallery():
+		if stage2_static_cache == null or not stage2_static_cache.complete:
+			stage2_map_art.ground(self)
+		return
 	if stage_scenery != null:
 		return # Ground is baked with the same projection; gameplay overlays remain live.
 	var floor_color: Color = palette.get("floor", Color("#302832"))
@@ -2003,6 +2241,8 @@ func _draw_stage_terrain(_theme: Dictionary, _palette: Dictionary) -> void:
 
 func _draw_stage_architecture(theme: Dictionary, palette: Dictionary) -> void:
 	_stage_layer("architecture")
+	if _is_stage_two_gallery():
+		return # Gallery masonry is outside the actual walkable footprint.
 	if stage_scenery != null:
 		return
 	var accent: Color = palette.get("accent", Color("#c45a68"))
@@ -2063,6 +2303,9 @@ func _draw_stage_motif(motif: String, accent: Color) -> void:
 func _draw_stage_foreground() -> void:
 	if debug_stage_layer_order.is_empty() or debug_stage_layer_order[-1] != "foreground":
 		_stage_layer("foreground")
+	if _is_stage_two_gallery():
+		stage2_map_art.foreground(self)
+		return
 	if sim.endless_mode:
 		for edge in 4:
 			draw_rect(Rect2(edge * 4, edge * 4, 1280 - edge * 8, 720 - edge * 8), Color(0.03, 0.008, 0.025, 0.08), false, 4.0)
@@ -2070,11 +2313,11 @@ func _draw_stage_foreground() -> void:
 	if stage_scenery != null:
 		return
 	if _is_chapter_one_stage():
-		var chapter_accent: Color = STAGE_VISUAL.palette(sim.current_stage_id).get("accent", Color("#72d8b7"))
+		var chapter_accent: Color = STAGE_VISUAL.palette(_visual_stage_id()).get("accent", Color("#72d8b7"))
 		draw_line(Vector2(16, 578), Vector2(1264, 578), Color(chapter_accent, 0.42), 2.0, true)
 		caption(Vector2(42, 571), "CHAPTER I  ·  蒙德城郊", Color(chapter_accent.lightened(0.18), 0.72), 9)
 		return
-	var palette := STAGE_VISUAL.palette(sim.current_stage_id)
+	var palette := STAGE_VISUAL.palette(_visual_stage_id())
 	var floor_color: Color = palette.get("floor", Color("#302832"))
 	var accent: Color = palette.get("accent", Color("#c45a68"))
 	var front := PackedVector2Array([world_to_screen(Vector2(40, 580)), world_to_screen(Vector2(1240, 580)), Vector2(1240, 718), Vector2(40, 718)])
@@ -2187,21 +2430,16 @@ func _grounded_feature_rect(screen_area: Rect2, scale: Vector2, ground_offset: f
 
 func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector2, feature: Dictionary) -> bool:
 	var screen_area := _terrain_screen_rect(area)
-	if kind == "high_ground":
-		var high_rect := _grounded_feature_rect(screen_area, Vector2(0.90, 1.0), 4.0)
-		draw_texture_rect(STAGE_VISUAL.chapter1_high_platform, high_rect, false, Color("#eef7d7"))
-		caption(Vector2(high_rect.position.x + 10, high_rect.end.y + 12), "高台 · 射程×2", Color("#f3f1c8"), 8)
-		return true
 	if kind == "moving_platform":
 		var moving_rect := Rect2(Vector2.ZERO, screen_area.size * Vector2(0.92, 1.15))
 		moving_rect.position = Vector2(screen_area.get_center().x - moving_rect.size.x * 0.5, screen_area.end.y - moving_rect.size.y)
 		draw_ellipse_shadow(Vector2(moving_rect.get_center().x, moving_rect.end.y - 9.0), moving_rect.size.x * 0.42, Color(0, 0, 0, 0.34))
-		draw_texture_rect(STAGE_VISUAL.chapter1_moving_platform, moving_rect, false, Color.WHITE)
+		draw_texture_rect(STAGE_VISUAL.chapter1_moving_platform, moving_rect, false, Color("#adc3bf"))
 		caption(Vector2(moving_rect.position.x + 8, moving_rect.end.y + 13), "载人移动 · 射程强化", Color("#a9f2d4"), 8)
 		return true
 	if kind == "low_ground":
 		var low_rect := screen_area.grow(5.0)
-		draw_texture_rect(STAGE_VISUAL.chapter1_lowland, low_rect, false, Color.WHITE)
+		draw_texture_rect(STAGE_VISUAL.chapter1_lowland, low_rect, false, Color("#a2b0ad"))
 		caption(Vector2(low_rect.position.x + 12, low_rect.get_center().y), "沼泽减速 70%", Color("#e4dfae"), 9)
 		return true
 	if kind == "conveyor":
@@ -2219,15 +2457,7 @@ func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector
 		var bush_rect := _grounded_feature_rect(screen_area, Vector2(1.06, 1.08), 3.0)
 		var bush_ground := Vector2(bush_rect.get_center().x, bush_rect.end.y - 5.0)
 		draw_ellipse_shadow(bush_ground - Vector2(0, 9), bush_rect.size.x * 0.31, Color(0, 0, 0, 0.31))
-		draw_texture_rect(STAGE_VISUAL.chapter1_bush, bush_rect, false, Color.WHITE)
-		return true
-	if kind == "mechanism":
-		var active: bool = sim.heroes.any(func(hero: Dictionary) -> bool: return bool(hero.get("deployed", false)) and hero.hp > 0.0 and area.grow(95.0).has_point(hero.pos))
-		var glow := Color("#8ff0cb") if active else Color("#719b89")
-		var mechanism_rect := Rect2(center + Vector2(-28, -76), Vector2(56, 100))
-		draw_circle(center + Vector2(0, -28), 28.0 + sin(clock * 4.0) * 3.0, Color(glow, 0.10 if active else 0.04))
-		draw_texture_rect(STAGE_VISUAL.chapter1_mechanism, mechanism_rect, false, Color.WHITE if active else Color(0.72, 0.76, 0.72, 1.0))
-		caption(center + Vector2(-47, 34), "超远程支援 · 5.5秒" if active else "角色靠近后启动", glow, 8)
+		draw_texture_rect(STAGE_VISUAL.chapter1_bush, bush_rect, false, Color("#83a99b"))
 		return true
 	if kind in ["shortcut", "door", "one_way"]:
 		var broken := kind != "one_way" and float(feature.get("hp", 0.0)) <= 0.0
@@ -2236,7 +2466,7 @@ func _draw_chapter_one_terrain_feature(kind: String, area: Rect2, center: Vector
 			caption(center + Vector2(-34, 4), "通道已开启", Color("#9af0b8"), 9)
 			return true
 		var barricade_rect := _grounded_feature_rect(screen_area, Vector2(1.12, 1.10), 4.0)
-		draw_texture_rect(STAGE_VISUAL.chapter1_barricade, barricade_rect, false, Color.WHITE)
+		draw_texture_rect(STAGE_VISUAL.chapter1_barricade, barricade_rect, false, Color("#a9aca4"))
 		if kind != "one_way":
 			var hp_ratio := clampf(float(feature.get("hp", 0.0)) / maxf(1.0, float(feature.get("max_hp", 1.0))), 0.0, 1.0)
 			draw_rect(Rect2(center + Vector2(-30, -38), Vector2(60, 4)), Color("#293020"))
@@ -2273,13 +2503,92 @@ func _draw_effect_tiles(texture: Texture2D, feature: Dictionary, buff_tile: bool
 			draw_arc(screen_cell.get_center(), glow_radius * 0.88, 0.0, TAU, 32, Color(1.0, 0.23, 0.28, 0.35 + pulse * 0.36), 2.5, true)
 		draw_texture_rect(texture, draw_rect, false, Color("#ff5966") if active else Color.WHITE)
 
-func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_features:
+func _draw_attack_pad(feature: Dictionary) -> void:
+	if _is_chapter_one_stage():
+		_draw_chapter_one_wind_seal(feature)
+		return
+	for cell: Rect2 in _terrain_cells(feature):
+		var surface := _terrain_polygon(cell.grow(-2.0))
+		var center := world_to_screen(cell.get_center())
+		var active := _terrain_tile_active(cell)
+		var tint := Color("#a7efdb") if active else Color("#8bbfb4")
+		draw_colored_polygon(surface, Color("#2e5c58", 0.56 if active else 0.42))
+		draw_polyline(PackedVector2Array([surface[0], surface[1], surface[2], surface[3], surface[0]]), Color(tint, 0.94 if active else 0.78), 2.4 if active else 1.9, true)
+		var diamond := PackedVector2Array([center + Vector2(0, -12), center + Vector2(11, 0), center + Vector2(0, 12), center + Vector2(-11, 0), center + Vector2(0, -12)])
+		draw_polyline(diamond, Color(tint, 0.94 if active else 0.68), 1.8, true)
+
+func _draw_chapter_one_wind_seal(feature: Dictionary) -> void:
+	var area: Rect2 = feature.get("area", Rect2())
+	var center_world := area.get_center()
+	var center := world_to_screen(center_world)
+	var occupied: bool = sim.heroes.any(func(hero: Dictionary) -> bool: return bool(hero.get("deployed", false)) and hero.hp > 0.0 and sim._feature_contains(feature, hero.pos))
+	var breath := 0.5 + 0.5 * sin(clock * 3.6)
+	var rim := Color("#b8f1dd") if occupied else Color("#8ba9a0")
+	var outer := PackedVector2Array()
+	var inner := PackedVector2Array()
+	var groove := PackedVector2Array()
+	for point_index in 48:
+		var angle := TAU * float(point_index) / 48.0
+		var offset := Vector2(cos(angle) * area.size.x * 0.5, sin(angle) * area.size.y * 0.5)
+		outer.append(world_to_screen(center_world + offset))
+		inner.append(world_to_screen(center_world + offset * 0.77))
+		groove.append(world_to_screen(center_world + offset * 0.61))
+	# The carved footprint is the same world-space ellipse used by terrain collision.
+	draw_colored_polygon(outer, Color("#0e1d27", 0.74))
+	draw_colored_polygon(inner, Color("#4a6868", 0.40 if occupied else 0.27))
+	var groove_loop := groove.duplicate()
+	groove_loop.append(groove[0])
+	draw_polyline(groove_loop, Color("#172e34", 0.86), 2.4, true)
+	var inner_loop := inner.duplicate()
+	inner_loop.append(inner[0])
+	draw_polyline(inner_loop, Color(rim, 0.66 if occupied else 0.33), 1.1, true)
+	for sector in 8:
+		var arc := PackedVector2Array()
+		for step in 5:
+			arc.append(outer[(sector * 6 + step) % 48])
+		draw_polyline(arc, Color(rim, (0.79 + breath * 0.20) if occupied else 0.58), 2.7 if occupied else 2.1, true)
+		var notch := outer[sector * 6].lerp(inner[sector * 6], 0.42)
+		draw_line(outer[sector * 6], notch, Color("#c2d5cb", 0.48 if occupied else 0.30), 1.5, true)
+	var radius_x := absf(world_to_screen(center_world + Vector2(area.size.x * 0.5, 0)).x - center.x)
+	var radius_y := absf(world_to_screen(center_world + Vector2(0, area.size.y * 0.5)).y - center.y)
+	for blade in 3:
+		var angle := float(blade) * TAU / 3.0 - PI * 0.5
+		var direction := Vector2(cos(angle) * radius_x, sin(angle) * radius_y)
+		var side := Vector2(-direction.y * 0.43, direction.x * 0.16)
+		var glyph := PackedVector2Array([center + direction * 0.12, center + direction * 0.58 + side * 0.48, center + direction * 0.43 - side * 0.35])
+		draw_colored_polygon(glyph, Color(rim, 0.92 if occupied else 0.62))
+	draw_circle(center, 2.8 if occupied else 2.1, Color(rim, 0.92 if occupied else 0.63))
+	if occupied and not reduced_effects:
+		for wisp in 3:
+			var angle := clock * 0.85 + float(wisp) * TAU / 3.0
+			var start := center + Vector2(cos(angle) * radius_x * 0.79, sin(angle) * radius_y * 0.79)
+			var finish := center + Vector2(cos(angle + 0.24) * radius_x * 0.90, sin(angle + 0.24) * radius_y * 0.90)
+			draw_line(start, finish, Color(rim, 0.28 + breath * 0.27), 1.7, true)
+	caption(center + Vector2(-18, radius_y + 15), "风脉", Color(rim, 0.90 if occupied else 0.70), 10)
+
+func _draw_chapter_one_wind_trails() -> void:
+	for hero: Dictionary in sim.heroes:
+		if not bool(hero.get("deployed", false)) or hero.hp <= 0.0 or sim.terrain_feature_at(hero.pos, "attack_ground").is_empty():
+			continue
+		var foot := world_to_screen(hero.pos) + Vector2(0, 8)
+		var scale_factor := world_depth_scale(hero.pos)
+		for strand in 3:
+			var age := fposmod(clock * 0.85 + float(strand) / 3.0, 1.0)
+			var side := sin(clock * 2.4 + float(strand) * 2.1) * (14.0 + float(strand) * 7.0) * scale_factor
+			var root := foot + Vector2(side, -age * 32.0 * scale_factor)
+			var opacity := sin(age * PI) * 0.46
+			draw_polyline(PackedVector2Array([root + Vector2(-7, 3), root, root + Vector2(8, -5)]), Color("#a5eddb", opacity), 1.5, true)
+
+func _draw_terrain_features() -> void:
+	for feature: Dictionary in sim.terrain_features:
 		var area: Rect2 = feature.get("area", Rect2())
 		if area.size == Vector2.ZERO:
 			continue
 		var kind := str(feature.get("type", ""))
 		var polygon := _terrain_polygon(area)
 		var center := world_to_screen(area.get_center())
+		if _is_stage_two_gallery() and stage2_map_art.terrain(self, feature):
+			continue
 		if _is_chapter_one_stage() and _draw_chapter_one_terrain_feature(kind, area, center, feature):
 			continue
 		if kind == "junction":
@@ -2303,9 +2612,9 @@ func _draw_terrain_features() -> void:	for feature: Dictionary in sim.terrain_fe
 		elif kind == "trap":
 			_draw_effect_tiles(TILE_HAZARD, feature)
 		elif kind == "attack_ground":
-			_draw_effect_tiles(TILE_ATTACK_GROUND, feature, true)
+			_draw_attack_pad(feature)
 		elif kind == "blocked":
-			if sim.endless_mode: _draw_endless_wall(_terrain_screen_rect(area))
+			if sim.endless_mode: pass # Solid walls join the actor depth pass below.
 			else: _draw_effect_tiles(TILE_BLOCKED, feature)
 		elif kind in ["shortcut", "door"] and sim.endless_mode:
 			if float(feature.get("hp", 0.0)) > 0.0: _draw_endless_gate(_terrain_screen_rect(area))
@@ -2314,7 +2623,7 @@ func _draw_endless_stage() -> void:
 	preload("res://scripts/endless_map_art.gd").draw(self)
 
 func _draw_base_projected() -> void:
-	var point: Vector2 = world_to_screen(Vector2(100, 365))
+	var point: Vector2 = world_to_screen(sim.base_world_position())
 	var chapter_ground := point + Vector2(0, 44)
 	if not _is_chapter_one_stage():
 		draw_ellipse_shadow(point + Vector2(0, 15), 52.0, Color(0, 0, 0, 0.40))
@@ -2324,8 +2633,8 @@ func _draw_base_projected() -> void:
 	draw_circle(point + Vector2(0, -38), 30.0 + glow * 5.0, Color(tint, 0.10))
 	draw_arc(point + Vector2(0, -38), 38.0, -clock * 0.7, TAU - clock * 0.7, 40, Color(tint, 0.42), 2.0, true)
 	if _is_chapter_one_stage():
-		var crystal_modulate := Color("#ff8f94") if base_flash > 0.0 and not reduced_effects else Color.WHITE
-		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(Vector2(point.x - 88.0, chapter_ground.y - 307.0), Vector2(176, 307)), false, crystal_modulate)
+		var crystal_modulate := Color("#ff8f94") if base_flash > 0.0 and not reduced_effects else Color("#b6c8c0")
+		draw_texture_rect(STAGE_VISUAL.chapter1_crystal, Rect2(Vector2(point.x - 76.0, chapter_ground.y - 266.0), Vector2(152, 266)), false, crystal_modulate)
 	else:
 		draw_texture_rect(crystal_texture, Rect2(point + Vector2(-38, -105), Vector2(76, 120)), false, tint)
 		draw_colored_polygon(PackedVector2Array([point + Vector2(-43, 17), point + Vector2(-29, 5), point + Vector2(29, 5), point + Vector2(43, 17), point + Vector2(31, 31), point + Vector2(-31, 31)]), Color("#382934"))
@@ -2334,6 +2643,9 @@ func _draw_base_projected() -> void:
 	draw_rect(Rect2(point + Vector2(-40, 46), Vector2(83 * sim.base_hp / maxf(1.0, sim.base_max_hp), 6)), tint)
 	caption(point + Vector2(-42, 72), "风神像核心" if _is_chapter_one_stage() else "基地核心", tint, 12)
 func _draw_route_bed(route: Array, route_id: String = "main") -> void:
+	if _is_stage_two_gallery():
+		stage2_map_art.route(self, route, route_id)
+		return
 	var material: Dictionary = surface_renderer.route_material(route_id)
 	var color: Color = material.color
 	for i in range(route.size() - 1):
@@ -2440,6 +2752,106 @@ func _draw_portal() -> void:
 		draw_arc(Vector2(1195, lane), 32 + sin(clock * 2) * 2, PI / 2, 3 * PI / 2, 24, Color("#50333f"), 1)
 	caption(Vector2(1113, 208), "裂隙 / RIFT", Color("#c27b85"), 13)
 
+func _endless_hero_height(hero: Dictionary) -> float:
+	var character_id := str(hero.get("character_id", ""))
+	var base_size := character_sequences.display_size(character_id) if character_sequences.has_character(character_id) else (132.0 if character_id == "traveler" else 58.0)
+	return base_size * EndlessPresentation.HERO_SCALE
+
+func _endless_party_label_layout() -> Array[Dictionary]:
+	var labels: Array[Dictionary] = []
+	var occupied: Array[Rect2] = endless_label_exclusions.duplicate()
+	var party: Array[Dictionary] = []
+	var leader: Dictionary = sim.expedition.leader(sim)
+	var leader_id := int(leader.get("id", -1))
+	for hero: Dictionary in sim.heroes:
+		if bool(hero.get("deployed", true)) and visible_world_rect().grow(80.0).has_point(hero.pos):
+			party.append(hero)
+	party.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		if (int(a.id) == selected_id) != (int(b.id) == selected_id):
+			return int(a.id) == selected_id
+		return int(a.id) < int(b.id))
+	for hero: Dictionary in party:
+		var point := world_to_screen(hero.pos)
+		var leader_label := int(hero.id) == leader_id
+		var element := str(hero.get("element", "")) if str(hero.get("character_id", "")) == "traveler" else ""
+		var statuses: Array = sim.Readability.statuses(sim, hero) if int(hero.id) == selected_id else []
+		var status: Array = statuses[0] if not statuses.is_empty() else []
+		var width := clampf(font.get_string_size(str(hero.name), HORIZONTAL_ALIGNMENT_LEFT, -1, 13).x + (62.0 if leader_label or float(hero.hp) <= 0.0 else 34.0) + (16.0 if element != "" else 0.0), 82.0, 180.0)
+		if not status.is_empty():
+			width = maxf(width, font.get_string_size(str(status[0]), HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x + 18.0)
+		var height := 34.0 if status.is_empty() else 46.0
+		var preferred := Rect2(point - Vector2(width * 0.5, _endless_hero_height(hero) + height - 9.0), Vector2(width, height))
+		var rect := EndlessPresentation.place_label(preferred, ENDLESS_PLAYFIELD_SCREEN.grow(-5.0), occupied)
+		occupied.append(rect)
+		labels.append({"hero": hero, "rect": rect, "leader": leader_label, "element": element, "status": status, "anchor": point - Vector2(0.0, _endless_hero_height(hero) - 12.0), "preferred": preferred})
+	return labels
+
+func _draw_endless_party_labels() -> void:
+	for label: Dictionary in _endless_party_label_layout():
+		var hero: Dictionary = label.hero
+		var rect: Rect2 = label.rect
+		var color := Color(hero.color)
+		var selected := int(hero.id) == selected_id
+		var down := float(hero.hp) <= 0.0
+		if rect.position.distance_to(label.preferred.position) > 18.0:
+			draw_line(rect.get_center() + Vector2(0, rect.size.y * 0.5), label.anchor, Color(color, 0.35), 1.0, true)
+		draw_style_box(_endless_label_box(Color("#1a2027"), 0.88), rect)
+		if selected:
+			draw_rect(rect, Color("#f2ce81"), false, 1.0)
+		draw_rect(Rect2(rect.position + Vector2(4, 5), Vector2(3, 14)), color)
+		caption(rect.position + Vector2(10, 16), "%d %s" % [int(hero.id) + 1, str(hero.name)], Color("#d6dae0") if down else Color("#f4f1e8"), 13)
+		if bool(label.leader):
+			caption(Vector2(rect.end.x - 29, rect.position.y + 15), "队长", Color("#f2ce81"), 10)
+		elif down:
+			caption(Vector2(rect.end.x - 25, rect.position.y + 15), "倒地", RED, 10)
+		if str(label.element) != "":
+			caption(Vector2(rect.end.x - (45 if bool(label.leader) or down else 16), rect.position.y + 15), element_glyph(str(label.element)), element_color(str(label.element)), 11)
+		var bar := Rect2(rect.position + Vector2(9, 22), Vector2(rect.size.x - 18, 4))
+		draw_rect(bar, Color("#343b42"))
+		var hp_ratio := clampf(float(hero.hp) / maxf(1.0, float(hero.max_hp)), 0.0, 1.0)
+		draw_rect(Rect2(bar.position, Vector2(bar.size.x * hp_ratio, bar.size.y)), RED if hp_ratio < 0.25 else color)
+		var energy_ratio := clampf(float(hero.get("energy", 0.0)) / maxf(1.0, float(hero.get("max_energy", 100.0))), 0.0, 1.0)
+		draw_rect(Rect2(bar.position + Vector2(0, 6), Vector2(bar.size.x, 2)), Color("#303948"))
+		draw_rect(Rect2(bar.position + Vector2(0, 6), Vector2(bar.size.x * energy_ratio, 2)), Color("#f2ce81") if energy_ratio >= 1.0 else Color("#79bada"))
+		if not label.status.is_empty():
+			caption(rect.position + Vector2(9, 43), str(label.status[0]), Color(label.status[1], float(label.status[2])), 10)
+
+func _endless_label_box(color: Color, alpha: float) -> StyleBoxFlat:
+	if endless_party_label_style == null:
+		endless_party_label_style = StyleBoxFlat.new()
+		endless_party_label_style.bg_color = Color(color, alpha)
+		endless_party_label_style.set_corner_radius_all(4)
+	return endless_party_label_style
+
+func _draw_endless_enemy_status(enemy: Dictionary, side: float) -> void:
+	caption(enemy.pos + Vector2(-17, -side - 11), "Lv.%d" % int(enemy.get("level", 1)), Color("#e6cbb4"), 10)
+	var ratio := clampf(float(enemy.hp) / maxf(1.0, float(enemy.max_hp)), 0.0, 1.0)
+	if ratio < 0.995 or float(enemy.get("flash", 0.0)) > 0.0:
+		draw_rect(Rect2(Vector2(-18, -side - 2), Vector2(36, 3)), Color("#302b32"))
+		draw_rect(Rect2(Vector2(-18, -side - 2), Vector2(36 * ratio, 3)), RED)
+	if float(enemy.get("shield", 0.0)) > 0.0:
+		var shield_ratio := clampf(float(enemy.shield) / maxf(1.0, float(enemy.get("max_shield", enemy.shield))), 0.0, 1.0)
+		draw_rect(Rect2(Vector2(-18, -side - 7), Vector2(36 * shield_ratio, 2)), Color("#66c8ff"))
+	var foot := Vector2(0.0, ENEMY_FOOT_OFFSET + 3.0)
+	if EndlessPresentation.is_elite(enemy):
+		draw_colored_polygon(PackedVector2Array([foot + Vector2(-5, 0), foot + Vector2(0, -3), foot + Vector2(5, 0), foot + Vector2(0, 3)]), Color("#e2b976"))
+	if EndlessPresentation.is_ranged(enemy):
+		if EndlessPresentation.is_elite(enemy):
+			foot.x += 13.0
+		draw_polyline(PackedVector2Array([foot + Vector2(-6, -2), foot + Vector2(0, 2), foot + Vector2(6, -2)]), Color("#d49ce3"), 2.0, true)
+	if float(enemy.get("frozen_timer", 0.0)) > 0.0:
+		var ice_alpha := minf(1.0, float(enemy.frozen_timer) / 0.25)
+		for shard in 3:
+			var center := Vector2((shard - 1) * 14, 2 + absi(shard - 1) * 3)
+			var tip := center + Vector2(-3, -14 - shard % 2 * 6)
+			draw_colored_polygon(PackedVector2Array([tip, center + Vector2(5, -4), center + Vector2(2, 4), center + Vector2(-5, 1)]), Color(0.46, 0.78, 0.94, ice_alpha * 0.6))
+	if str(enemy.get("aura", "")) != "":
+		draw_circle(Vector2(22, -side + 3), 3.0, element_color(sim.normalize_element(str(enemy.aura))))
+	if int(enemy.get("blocked_by", -1)) >= 0:
+		draw_line(Vector2(-16, 8), Vector2(16, 8), Color("#c5bd96"), 1.5)
+	elif float(enemy.get("slow_timer", 0.0)) > 0.0 and float(enemy.get("frozen_timer", 0.0)) <= 0.0:
+		draw_line(Vector2(-12, 8), Vector2(12, 8), Color("#83c7e8"), 1.5)
+
 func _draw_hero(hero: Dictionary) -> void:
 	var down: bool = hero.hp <= 0
 	var color := Color(hero.color)
@@ -2448,10 +2860,13 @@ func _draw_hero(hero: Dictionary) -> void:
 	var has_sequence := character_sequences.has_character(character_id)
 	var bob: float = 0.0 if down or is_traveler or has_sequence else sin(clock * (14.0 if hero.moving else 3.0)) * (3.0 if hero.moving else 1.0)
 	if selected_id == hero.id:
-		draw_arc(hero.pos + Vector2(0, 8), 31 if is_traveler else 29, 0, TAU, 36, color, 2)
+		if sim.endless_mode:
+			draw_polyline(_ability_ellipse_points(hero.pos + Vector2(0, HERO_FOOT_OFFSET), Vector2(29.0, 11.6), 36), Color("#f2ce81"), 2.0, true)
+		else:
+			draw_arc(hero.pos + Vector2(0, 8), 31 if is_traveler else 29, 0, TAU, 36, color, 2)
 	var tint := Color("#67717a") if down else Color.WHITE
 	var traveler_element: String = str(hero.get("element", "")) if is_traveler else ""
-	if traveler_element != "":
+	if traveler_element != "" and not sim.endless_mode:
 		var aura_color: Color = element_color(traveler_element)
 		draw_circle(hero.pos + Vector2(0, -20), 31.0 + sin(clock * 3.0) * 2.0, Color(aura_color, 0.11))
 		draw_arc(hero.pos + Vector2(0, 7), 31.0, clock * 0.7, clock * 0.7 + PI * 1.45, 30, Color(aura_color, 0.82), 2.2, true)
@@ -2468,7 +2883,7 @@ func _draw_hero(hero: Dictionary) -> void:
 		var motion_scale: Vector2 = sample.get("scale", Vector2.ONE)
 		var motion_offset: Vector2 = sample.get("offset", Vector2.ZERO)
 		_draw_anchored_texture_region(atlas, hero.pos + Vector2(0, HERO_FOOT_OFFSET + bob) + motion_offset, Vector2(58, 58) * motion_scale, Vector2(16, 16), Vector2(8, 16), facing, 1.0, Rect2(hero.tile, Vector2(16, 16)), tint)
-	if not down:
+	if not down and (not sim.endless_mode or not has_sequence):
 		if hero.block > 0 and not is_traveler:
 			draw_rect(Rect2(hero.pos + Vector2(17, -24), Vector2(16, 25)), Color("#a8a687"))
 			draw_rect(Rect2(hero.pos + Vector2(21, -21), Vector2(8, 18)), Color("#445b5e"))
@@ -2476,6 +2891,8 @@ func _draw_hero(hero: Dictionary) -> void:
 			draw_circle(hero.pos + Vector2(29, -16 + bob), 5, color)
 			if shot_flashes.get(hero.id, 0.0) > 0 and not reduced_effects:
 				draw_circle(hero.pos + Vector2(37, -16), 8, color)
+	if sim.endless_mode:
+		return # Fixed-size party labels are drawn after the wall/depth pass.
 	var tall_visual := has_sequence or is_traveler
 	var label_y: float = -146.0 if has_sequence else (-132.0 if is_traveler else -65.0)
 	var health_y: float = -134.0 if has_sequence else (-120.0 if is_traveler else -53.0)
@@ -2549,7 +2966,7 @@ func _draw_traveler(hero: Dictionary, tint: Color, down: bool) -> void:
 	var facing := float(hero.get("facing", 1.0))
 	var pivot := SpriteAnchor.pivot(sprite_pivots, pivot_profile, frame, Vector2(TRAVELER_CELL * 0.5, 270.0))
 	var source := Rect2((frame % 8) * TRAVELER_CELL, floori(frame / 8.0) * TRAVELER_CELL, TRAVELER_CELL, TRAVELER_CELL)
-	if not reduced_effects:
+	if not reduced_effects and not sim.endless_mode:
 		draw_circle(hero.pos + Vector2(0, -35), 36.0 + sin(clock * 2.2) * 2.0, Color(1.0, 0.76, 0.48, 0.055))
 	_draw_anchored_texture_region(texture, foot, Vector2(width, height), Vector2(TRAVELER_CELL, TRAVELER_CELL), pivot, facing, 1.0, source, tint)
 
@@ -2590,14 +3007,25 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	elif str(enemy.kind) != "boss_galio":
 		var facing := float(enemy.get("facing", -1.0))
 		_draw_anchored_texture_region(atlas, enemy.pos + Vector2(0, ENEMY_FOOT_OFFSET + bob), Vector2(side, side), Vector2(16, 16), Vector2(8, 16), facing, -1.0, Rect2(0, 144, 16, 16), tint)
+	if float(enemy.get("spawn_timer",0.0)) > 0.0: return
+	if sim.endless_mode and not str(enemy.kind).begins_with("boss_"):
+		_draw_endless_enemy_status(enemy, side)
+		return
 	if crowd_lod:
 		var hp_ratio:=clampf(float(enemy.hp)/maxf(1,float(enemy.max_hp)),0,1)
 		if hp_ratio<0.995 or float(enemy.flash)>0:
 			draw_rect(Rect2(Vector2(-22,-side-2),Vector2(44,4)),Color("302b32"))
 			draw_rect(Rect2(Vector2(-22,-side-2),Vector2(44*hp_ratio,4)),RED)
 		if float(enemy.get("shield",0))>0:draw_rect(Rect2(Vector2(-22,-side-7),Vector2(44,2)),Color("66c8ff"))
-		if int(enemy.id)%8==0:caption(Vector2(-20,-side-13),"Lv.%d" % int(enemy.get("level",1)),Color("f2c7ad"),9)
-		if float(enemy.get("frozen_timer",0))>0:draw_arc(Vector2(0,-18),30,0,TAU,8,Color("a5e4ff"),2)
+		caption(Vector2(-20,-side-13),"Lv.%d" % int(enemy.get("level",1)),Color("f2c7ad"),9)
+		if float(enemy.get("frozen_timer",0))>0:
+			var ice_alpha := minf(1.0,float(enemy.frozen_timer)/.25)
+			for shard in 3:
+				var center := Vector2((shard-1)*16,2+absi(shard-1)*3)
+				var tip := center+Vector2(-3,-14-shard%2*6)
+				var crystal := PackedVector2Array([tip,center+Vector2(5,-4),center+Vector2(2,4),center+Vector2(-5,1)])
+				draw_colored_polygon(crystal,Color(.46,.78,.94,ice_alpha*.6))
+				draw_line(tip,center+Vector2(-1,3),Color(.89,.98,1,ice_alpha),1.2,true)
 		return
 	if not str(enemy.kind).begins_with("boss_"):
 		var ratio: float = clampf(float(enemy.hp) / float(enemy.max_hp), 0, 1)
@@ -2674,130 +3102,69 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	if enemy.slow_timer > 0:
 		caption(enemy.pos + Vector2(19, 27), "缓", Color("#83c7e8"), 12)
 	if float(enemy.get("frozen_timer", 0.0)) > 0.0:
-		caption(enemy.pos + Vector2(-26, -side - 16), "冻结 %.1fs" % float(enemy.frozen_timer), Color(0.66, 0.93, 1.0, minf(1.0, float(enemy.frozen_timer) / 0.25)), 10)
-		draw_arc(enemy.pos + Vector2(0, -18), side * 0.58, 0, TAU, 8, Color(0.66, 0.93, 1.0, 0.86), 3.0, true)
+		combat_caption(enemy.pos + Vector2(-26, -side - 16), "冻结 %.1fs" % float(enemy.frozen_timer), Color(0.66, 0.93, 1.0, minf(1.0, float(enemy.frozen_timer) / 0.25)), 10)
+		for shard in 3:
+			var center: Vector2 = enemy.pos+Vector2((shard-1)*16,2+absi(shard-1)*3)
+			var tip := center+Vector2(-3,-14-shard%2*6)
+			draw_colored_polygon(PackedVector2Array([tip,center+Vector2(5,-4),center+Vector2(2,4),center+Vector2(-5,1)]),Color(.46,.78,.94,.6))
+			draw_line(tip,center+Vector2(-1,3),Color(.89,.98,1,.9),1.2,true)
 	if enemy.aura != "":
 		var aura_element: String = sim.normalize_element(str(enemy.aura))
 		var color := element_color(aura_element)
 		draw_circle(enemy.pos + Vector2(30, -side), 11, Color("#10202b"))
 		caption(enemy.pos + Vector2(24, -side + 5), element_glyph(aura_element), color, 12)
 
+static func shaman_drop_offset(enemy: Dictionary) -> float:
+	var progress := 1.0-clampf(float(enemy.get("spawn_timer",0.0))/maxf(.01,float(enemy.get("spawn_total",.55))),0.0,1.0)
+	return 320.0*(1.0-progress*progress)
+
+func _draw_shaman_drop_ground(enemy: Dictionary) -> void:
+	var point:=world_to_screen(Vector2(enemy.pos))+Vector2(0,ENEMY_FOOT_OFFSET-9)
+	var progress:=1.0-clampf(float(enemy.get("spawn_timer",0.0))/.55,0,1)
+	var radii:=Vector2(32,12)*world_depth_scale(enemy.pos)
+	var outline:=PackedVector2Array()
+	for index in 24:
+		outline.append(point+Vector2(cos(index*TAU/24)*radii.x,sin(index*TAU/24)*radii.y))
+	draw_colored_polygon(outline,Color(.64,.38,.83,.10+progress*.16))
+	outline.append(outline[0]);draw_polyline(outline,Color(.86,.65,1,.65),2.0,true)
+	for side in [-1,1]:
+		var x:=float(side)*(26-progress*7)
+		draw_colored_polygon(PackedVector2Array([point+Vector2(x,-7),point+Vector2(x+side*7,0),point+Vector2(x,7)]),Color(.86,.65,1,.7))
+
+func _draw_shaman_landing(effect: Dictionary) -> void:
+	var point:=world_to_screen(Vector2(effect.pos))+Vector2(0,ENEMY_FOOT_OFFSET-9)
+	var progress:=1.0-float(effect.life)/.30
+	var fade:=1.0-progress
+	for index in 5:
+		var direction:=Vector2.from_angle(float(index)*TAU/5)
+		var center:=point+direction*Vector2(24+progress*30,7+progress*10)
+		draw_circle(center,5.0+progress*5.0,Color(.72,.62,.78,fade*.30))
+	draw_circle(point-Vector2(0,4),7.0*(1.0-progress),Color(.98,.90,1,fade*.75))
+
 func _update_projectile_trails() -> void:
 	if sim == null:
 		projectile_trails.clear()
 		return
 	var active := {}
-	for projectile: Dictionary in sim.projectiles:
-		var key := int(projectile.get("visual_id", projectile.get("source_id", 0) * 100000 + projectile.get("target_id", 0)))
-		active[key] = true
-		var history: Array = projectile_trails.get(key, [])
-		var current := Vector2(projectile.pos)
-		if history.is_empty() or Vector2(history[-1]).distance_to(current) > 1.0:
-			history.append(current)
-		while history.size() > (7 if reduced_effects else 11):
-			history.pop_front()
-		projectile_trails[key] = history
+	for friendly in [true, false]:
+		var shots: Array = sim.projectiles if friendly else sim.enemy_projectiles
+		for projectile: Dictionary in shots:
+			if not friendly and not bool(projectile.get("ballistic", false)): continue
+			var key := int(projectile.get("visual_id", projectile.get("source_id", 0) * 100000 + projectile.get("target_id", 0)))
+			if not friendly: key = -key - 1
+			active[key] = true
+			var history: Array = projectile_trails.get(key, [])
+			var current := Vector2(projectile.pos)
+			if history.is_empty() or Vector2(history[-1]).distance_to(current) > 1.0:
+				history.append(current)
+			while history.size() > (4 if reduced_effects else 7): history.pop_front()
+			projectile_trails[key] = history
 	for key in projectile_trails.keys():
-		if not active.has(key):
-			projectile_trails.erase(key)
+		if not active.has(key): projectile_trails.erase(key)
 
 func _draw_projectile(projectile: Dictionary) -> void:
 	var key := int(projectile.get("visual_id", projectile.get("source_id", 0) * 100000 + projectile.get("target_id", 0)))
-	var history: Array = projectile_trails.get(key, [])
-	var point := world_to_screen(Vector2(projectile.pos)) + Vector2(0, -18)
-	var direction := Vector2.RIGHT
-	if history.size() >= 2:
-		direction = (world_to_screen(Vector2(history[-1])) - world_to_screen(Vector2(history[-2]))).normalized()
-	else:
-		var target: Dictionary = sim.find_enemy(int(projectile.get("target_id", -1)))
-		if not target.is_empty():
-			direction = (world_to_screen(target.pos) - point).normalized()
-	if direction.length_squared() < 0.1:
-		direction = Vector2.RIGHT
-	var element := str(projectile.get("element", ""))
-	var attack_style := str(projectile.get("style", "standard"))
-	var color := element_color(element)
-	if reduced_effects or sim.projectiles.size() > 90:
-		# Keep every projectile readable, but batch its trail into two polylines
-		# instead of three antialiased lines per history segment plus glow sprites.
-		var trail := PackedVector2Array()
-		for i in range(maxi(0,history.size()-4),history.size()):
-			trail.append(world_to_screen(Vector2(history[i]))+Vector2(0,-18))
-		if trail.size()>1:
-			draw_polyline(trail,Color(color,0.22),6.0,false)
-			draw_polyline(trail,Color(color.lightened(0.35),0.82),2.0,false)
-		draw_line(point-direction*7.0,point+direction*5.0,color.lightened(0.6),3.0,false)
-		return
-	var trail := PackedVector2Array()
-	for sample in history:
-		trail.append(world_to_screen(Vector2(sample))+Vector2(0,-18))
-	if trail.size()>1:
-		draw_polyline(trail,Color(color,0.20),5.0,true)
-		draw_polyline(trail,Color(color.lightened(0.4),0.75),1.6,true)
-	if not reduced_effects:
-		var flare_size := 16.0 if not bool(projectile.get("critical", false)) else 24.0
-		draw_texture_rect(VFX_FLARE, Rect2(point - Vector2.ONE * flare_size * 0.5, Vector2.ONE * flare_size), false, Color(color.lightened(0.35), 0.78))
-	draw_set_transform(point, direction.angle(), Vector2.ONE)
-	if not reduced_effects:
-		draw_texture_rect(VFX_TRACE, Rect2(-26, -4, 32, 8), false, Color(color, 0.52))
-	var critical_scale := 1.35 if bool(projectile.get("critical", false)) else 1.0
-	draw_circle(Vector2.ZERO, 8.0 * critical_scale, Color(color, 0.10))
-	draw_circle(Vector2.ZERO, 4.5 * critical_scale, Color(color, 0.42))
-	match element:
-		"pyro":
-			draw_colored_polygon(PackedVector2Array([Vector2(13, 0), Vector2(-7, -9), Vector2(-2, 0), Vector2(-10, 8)]), Color(color, 0.92))
-			draw_circle(Vector2(4, 0), 3.2, Color("#fff1b8"))
-		"hydro":
-			draw_circle(Vector2.ZERO, 7.2, Color(color, 0.72))
-			draw_arc(Vector2.ZERO, 10.0, -1.8, 1.8, 18, Color("#e7fbff"), 2.0, true)
-			draw_circle(Vector2(2, -3), 2.0, Color.WHITE)
-		"electro":
-			draw_polyline(PackedVector2Array([Vector2(-13, 4), Vector2(-5, -5), Vector2(0, 3), Vector2(7, -7), Vector2(14, 0)]), Color("#f7e8ff"), 3.6, true)
-			draw_polyline(PackedVector2Array([Vector2(-8, 8), Vector2(0, 1), Vector2(5, 8)]), color, 2.4, true)
-		"cryo":
-			var shard := PackedVector2Array([Vector2(14, 0), Vector2(-3, -7), Vector2(-10, 0), Vector2(-3, 7)])
-			draw_colored_polygon(shard, Color(color, 0.82))
-			draw_polyline(PackedVector2Array([shard[0], shard[1], shard[2], shard[3], shard[0]]), Color("#f2ffff"), 1.8, true)
-		"anemo":
-			for ring in 2:
-				draw_arc(Vector2(-2, 0), 7.0 + ring * 4.0, -1.35 + ring, 1.4 + ring, 18, Color(color, 0.92 - ring * 0.28), 2.5, true)
-			draw_line(Vector2(-9, 0), Vector2(14, 0), Color("#e9fff6"), 2.0, true)
-		"geo":
-			var crystal := PackedVector2Array([Vector2(13, 0), Vector2(2, -8), Vector2(-10, -4), Vector2(-8, 6), Vector2(3, 8)])
-			draw_colored_polygon(crystal, Color(color, 0.88))
-			draw_polyline(PackedVector2Array([crystal[0], crystal[1], crystal[2], crystal[3], crystal[4], crystal[0]]), Color("#fff0b0"), 1.8, true)
-		_:
-			var wave := PackedVector2Array()
-			for i in 9:
-				var angle := lerpf(-0.95, 0.95, float(i) / 8.0)
-				wave.append(Vector2(cos(angle) * 13.0, sin(angle) * 10.0))
-			draw_polyline(wave, Color("#fff3c6"), 4.0, true)
-			draw_polyline(wave, Color.WHITE, 1.3, true)
-	match attack_style:
-		"music_note":
-			draw_circle(Vector2(-2, 4), 5.0, Color(color.lightened(0.35), 0.95), false, 2.4, true)
-			draw_line(Vector2(2, 3), Vector2(2, -13), Color.WHITE, 2.6, true)
-			draw_line(Vector2(2, -13), Vector2(10, -10), Color(color.lightened(0.42), 0.95), 2.4, true)
-		"arcane_lance":
-			draw_colored_polygon(PackedVector2Array([Vector2(22, 0), Vector2(-9, -6), Vector2(-17, 0), Vector2(-9, 6)]), Color(color.lightened(0.32), 0.92))
-			draw_line(Vector2(-20, 0), Vector2(22, 0), Color.WHITE, 2.2, true)
-		"hydro_salon", "tidal_orb":
-			for orbit in 3:
-				var orbit_angle := clock * (2.4 + orbit * 0.35) + orbit * TAU / 3.0
-				draw_circle(Vector2.from_angle(orbit_angle) * (10.0 + orbit * 2.0), 2.8, Color(color.lightened(0.38), 0.88))
-		"wind_seed", "quantum_gate":
-			for ring in 2:
-				draw_arc(Vector2.ZERO, 10.0 + ring * 5.0, clock + ring * 1.4, clock + ring * 1.4 + PI * 1.35, 18, Color(color.lightened(0.25), 0.92 - ring * 0.22), 2.4, true)
-		"frost_shard", "frost_bloom":
-			for shard in 4:
-				var shard_dir := Vector2.from_angle(shard * PI * 0.5)
-				draw_line(shard_dir * 5.0, shard_dir * 15.0, Color("#f4ffff"), 2.0, true)
-		"mon3tr":
-			draw_rect(Rect2(-10, -7, 20, 14), Color(color.darkened(0.30), 0.82), true)
-			draw_rect(Rect2(-10, -7, 20, 14), Color.WHITE, false, 2.0)
-		"ether_shot":
-			draw_arc(Vector2.ZERO, 14.0, -1.2, 1.2, 18, Color("#f0d8ff"), 3.0, true)
-	draw_set_transform(Vector2.ZERO)
+	CombatFeedbackV3.projectile(self, projectile, projectile_trails.get(key, []), true)
 
 func _update_boss_sequence_visuals(dt: float) -> void:
 	if sim == null:
@@ -2819,7 +3186,7 @@ func _update_boss_sequence_visuals(dt: float) -> void:
 			boss_sequence_visuals.erase(id)
 
 func _accept_boss_sequence_event(event: Dictionary) -> void:
-	var mapping := {"galio_entrance":"landing", "galio_punch":"punch", "galio_winds":"winds", "galio_durand":"durand", "kindred_dance":"dance", "kindred_wolf":"spirit", "kindred_respite":"spirit", "kindred_dread":"attack", "kindred_hunt":"attack"}
+	var mapping := {"galio_entrance":"landing", "galio_punch":"punch", "galio_winds":"winds", "galio_durand":"durand", "kindred_dance":"dance", "kindred_wolf":"spirit", "kindred_respite":"spirit", "kindred_dread":"attack", "kindred_hunt":"attack", "kindred_lasers":"attack"}
 	var kind := str(event.get("kind", ""))
 	if not mapping.has(kind) or not event.has("caster_id"):
 		return
@@ -2844,7 +3211,7 @@ func _dual_boss_sequence_sample(enemy: Dictionary) -> Dictionary:
 	var facing := float(enemy.get("facing", -1.0))
 	var world_pos: Vector2 = enemy.get("world_pos", enemy.pos)
 	if bool(enemy.get("special_pending", false)):
-		state = {"galio_punch":"punch_charge", "galio_winds":"winds", "galio_durand":"durand", "kindred_dance":"dance_charge", "kindred_wolf":"spirit", "kindred_dread":"attack", "kindred_hunt":"attack"}.get(str(enemy.special_move), "idle")
+		state = {"galio_punch":"punch_charge", "galio_winds":"winds", "galio_durand":"durand", "kindred_dance":"dance_charge", "kindred_wolf":"spirit", "kindred_dread":"attack", "kindred_hunt":"attack", "kindred_lasers":"attack"}.get(str(enemy.special_move), "idle")
 		var phase := 1.0 - float(enemy.special_warning) / maxf(0.01, float(enemy.special_warning_total))
 		elapsed = phase * (0.75 if state == "spirit" else enemy_sequences.duration(id, state))
 		var points: Array = enemy.get("special_warning_positions", [])
@@ -2867,7 +3234,7 @@ func _draw_boss_clip(id: String, state: String, elapsed: float, foot: Vector2, f
 	var texture := enemy_sequences.texture(id, state)
 	if texture == null:
 		return
-	_draw_anchored_texture_region(texture, foot, Vector2.ONE * enemy_sequences.display_size(id), enemy_sequences.cell(id), enemy_sequences.pivot(id), facing, 1.0, enemy_sequences.source_rect(id, state, enemy_sequences.frame_at_time(id, state, elapsed)), Color.WHITE)
+	_draw_anchored_texture_region(texture, foot, Vector2.ONE * enemy_sequences.display_size(id), enemy_sequences.cell(id), enemy_sequences.pivot(id), facing, 1.0, enemy_sequences.source_rect(id, state, enemy_sequences.frame_at_time(id, state, elapsed)), Color.WHITE, 1.0, enemy_sequences.draw_bounds(id, state, enemy_sequences.frame_at_time(id, state, elapsed)))
 
 func _draw_sequence_enemy(enemy: Dictionary, bob: float) -> void:
 	var enemy_id := str(enemy.kind)
@@ -2887,6 +3254,7 @@ func _draw_sequence_enemy(enemy: Dictionary, bob: float) -> void:
 		frame = enemy_sequences.frame_at_phase(enemy_id, state, phase)
 	else:
 		frame = enemy_sequences.frame_at_time(enemy_id, state, clock + float(enemy.id) * 0.137)
+	if float(enemy.get("spawn_timer",0.0)) > 0.0: frame = 0
 	var facing := float(enemy.get("facing", -1.0))
 	if enemy_id in ["boss_03", "boss_galio"]:
 		var sample := _dual_boss_sequence_sample(enemy)
@@ -2923,7 +3291,7 @@ func _draw_enemy_death_visual(enemy: Dictionary) -> void:
 	var base_size := enemy_sequences.display_size(enemy_id)
 	var total := float(enemy.get("total", enemy_sequences.duration(enemy_id, "down")))
 	var fade := clampf((total - elapsed) / 0.16, 0.0, 1.0) if elapsed > total - 0.16 else 1.0
-	_draw_anchored_texture_region(texture, Vector2(enemy.pos) + Vector2(0.0, ENEMY_FOOT_OFFSET), Vector2.ONE * base_size, enemy_sequences.cell(enemy_id), enemy_sequences.pivot(enemy_id), float(enemy.get("facing", -1.0)), float(enemy_sequences.definition(enemy_id).get("native_facing", 1.0)), enemy_sequences.source_rect(enemy_id, "down", frame), Color(1.0, 1.0, 1.0, fade))
+	_draw_anchored_texture_region(texture, Vector2(enemy.pos) + Vector2(0.0, ENEMY_FOOT_OFFSET), Vector2.ONE * base_size, enemy_sequences.cell(enemy_id), enemy_sequences.pivot(enemy_id), float(enemy.get("facing", -1.0)), float(enemy_sequences.definition(enemy_id).get("native_facing", 1.0)), enemy_sequences.source_rect(enemy_id, "down", frame), Color(1.0, 1.0, 1.0, fade), 1.0, enemy_sequences.draw_bounds(enemy_id, "down", frame))
 
 func _draw_animated_enemy(enemy: Dictionary, tint: Color, bob: float) -> void:
 	var speed_scale := 1.28 if str(enemy.kind) in ["runner", "charger"] else 1.0
@@ -3658,6 +4026,7 @@ func _draw_furina_fanfare_zone(center: Vector2, radii: Vector2, alpha: float) ->
 		draw_circle(point + Vector2(0.0, sin(clock * 2.0 + light) * 4.0), 2.6, Color(0.90, 0.99, 1.0, alpha * 0.42))
 
 func _draw_traveler_ability(effect: Dictionary) -> void:
+	if TravelerElementVfx.legacy_event(self,effect): return
 	var kind := str(effect.kind)
 	var casting := kind.ends_with("_cast")
 	var element := kind.trim_prefix("traveler_").trim_suffix("_cast").trim_suffix("_impact")
@@ -3968,6 +4337,22 @@ func _draw_ability_impact(effect: Dictionary) -> void:
 			track.append(center + Vector2(lerpf(-radii.x * 0.68, radii.x * 0.68, t), offset + sin(t * TAU + progress * 7.0 + sweep) * radii.y * 0.08))
 		draw_polyline(track, Color(color.lightened(0.30), fade * 0.40), 1.7, true)
 
+func _draw_explosion_caption(effect: Dictionary) -> void:
+	if str(effect.kind) not in ["shield_hit","shield_break","overloaded","superconduct","shatter"]: return
+	var total := maxf(.01,float(effect.get("total",.6)))
+	var t := clampf(1.0-float(effect.life)/total,0.0,1.0)
+	var fade := clampf(float(effect.life)/minf(.18,total),0.0,1.0)
+	var depth := world_depth_scale(effect.pos)
+	draw_set_transform(world_to_screen(effect.pos),0,Vector2.ONE*depth)
+	if effect.kind=="shield_hit":
+		caption(Vector2(-18,-65-t*24),"护盾 -%d"%int(effect.get("value",0)),Color(.48,.82,1,fade),14)
+	elif effect.kind=="shield_break":
+		caption(Vector2(-38,-78-t*28),"BREAK",Color(.72,.94,1,fade),20)
+	else:
+		var labels := {"overloaded":"超载","superconduct":"超导","shatter":"碎冰"}
+		combat_caption(Vector2(-27,-76-t*22),labels[effect.kind],Color(element_color("pyro" if effect.kind=="overloaded" else "cryo"),fade),15)
+	draw_set_transform(Vector2.ZERO)
+
 func _draw_effect(effect: Dictionary) -> void:
 	if effect.kind == "barrage":
 		_draw_red_moon_impact(effect)
@@ -3975,34 +4360,31 @@ func _draw_effect(effect: Dictionary) -> void:
 	var total := maxf(0.01, float(effect.get("total", 0.6)))
 	var t: float = clampf(1.0 - float(effect.life) / total, 0.0, 1.0)
 	var fade: float = clampf(float(effect.life) / minf(0.18, total), 0.0, 1.0)
+	if effect.kind in ["hit", "critical", "hurt", "heal", "slash", "muzzle", "enemy_shot", "enemy_projectile_cast", "projectile_impact"]:
+		CombatFeedbackV3.local_event(self, effect, t)
+		return
+	if effect.kind == "knockback":
+		# Brief displaced dust replaces the old three expanding orange rings.
+		var dust_alpha := maxf(0.0, 1.0 - t * 2.5) * 0.55
+		for chip in (2 if reduced_effects else 4):
+			var direction := Vector2.from_angle(-0.65 + float(chip) * 0.48)
+			var center: Vector2 = effect.pos + direction * (9.0 + t * 25.0)
+			var side := direction.orthogonal() * 2.0
+			draw_colored_polygon(PackedVector2Array([center + direction * 4.0, center + side, center - direction * 3.0, center - side]), Color(0.67, 0.83, 0.78, dust_alpha))
+		return
 	if effect.has("feedback_theme") and not reduced_effects:
 		var theme: Dictionary = effect.feedback_theme
 		var theme_color := VfxPipeline.color_for(theme)
 		var accent_color := VfxPipeline.color_for(theme, true)
 		draw_arc(effect.pos, 8.0 + t * 34.0, 0.0, TAU, 24, Color(theme_color, fade * (1.0 - t) * 0.72), 3.0, true)
 		draw_circle(effect.pos, maxf(1.0, 7.0 * (1.0 - t)), Color(accent_color, fade * 0.82))
-	if effect.kind == "muzzle" and not reduced_effects:
-		var frames: Array[Texture2D] = muzzle_ion_frames if int(effect.value) == 1 else muzzle_fire_frames
-		var muzzle_t: float = 1.0 - effect.life / 0.16
-		var muzzle_index: int = clampi(floori(muzzle_t * frames.size()), 0, frames.size() - 1)
-		draw_texture_rect(frames[muzzle_index], Rect2(effect.pos + Vector2(-32, -32), Vector2(64, 64)), false, Color.WHITE)
-	elif effect.kind == "slash":
-		if reduced_effects:
-			var slash_color := element_color(str(effect.get("element", "")))
-			draw_polyline(_arc_polyline(effect.pos, 62.0, -1.05, 1.05, 0.70, float(effect.get("angle", 0.0))), Color(slash_color, fade), 5.0, true)
-		else:
-			_draw_melee_slash(effect, t, fade)
-	elif effect.kind in ["vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread"]:
+	if effect.kind in ["vaporize", "melt", "overloaded", "superconduct", "electro_charged", "frozen", "swirl", "crystallize", "element_burst", "shatter", "swirl_spread"]:
 		var reaction_names := {"vaporize": "蒸发", "melt": "融化", "overloaded": "超载", "superconduct": "超导", "electro_charged": "感电", "frozen": "冻结", "swirl": "扩散", "swirl_spread": "扩散传播", "crystallize": "结晶", "shatter": "碎冰", "element_burst": "元素爆发"}
 		var reaction_colors := {"vaporize": Color("#ffd082"), "melt": Color("#ffb28e"), "overloaded": Color("#ff7188"), "superconduct": Color("#b9a2ff"), "electro_charged": Color("#82bcff"), "frozen": Color("#b9f2ff"), "swirl": Color("#7ef0c5"), "swirl_spread": Color("#7ef0c5"), "crystallize": Color("#f3ca62"), "shatter": Color("#e8fbff"), "element_burst": Color("#ffffff")}
 		var reaction_color: Color = Color(reaction_colors.get(effect.kind, Color.WHITE), fade)
-		caption(effect.pos + Vector2(-27, -76 - t * 22), str(reaction_names.get(effect.kind, effect.kind)), reaction_color, 17)
+		combat_caption(effect.pos + Vector2(-27, -76 - t * 22), str(reaction_names.get(effect.kind, effect.kind)), reaction_color, 15)
 		if not reduced_effects:
 			draw_arc(effect.pos + Vector2(0, -17), 14 + t * 38, 0, TAU, 32, Color(reaction_color, fade * 0.7), 2.5)
-	elif effect.kind in ["heal", "hurt"]:
-		var healing: bool = effect.kind == "heal"
-		var color := Color(0.5, 0.95, 0.73, fade) if healing else Color(1, 0.5, 0.5, fade)
-		caption(effect.pos + Vector2(13, -35 - t * 30), ("+" if healing else "-") + str(effect.value), color, 15)
 	elif effect.kind == "splash":
 		if not reduced_effects:
 			draw_arc(effect.pos, 15 + t * 50, 0, TAU, 32, Color(1, 0.7, 0.4, fade * 0.5), 2)
@@ -4036,30 +4418,6 @@ func _draw_effect(effect: Dictionary) -> void:
 		if not reduced_effects:
 			for ring in 3:
 				draw_arc(effect.pos + Vector2(0, -18), 22.0 + ring * 15.0 + t * 58.0, 0, TAU, 36, Color(streak_color, fade * (0.8 - ring * 0.18)), 4.0 - ring, true)
-	elif effect.kind == "hit":
-		var impact_size := 19 if int(effect.value) >= 200 else 16
-		var impact_color := element_color(str(effect.get("element", "")))
-		var number_lane := float((int(effect.value) + int(effect.pos.x)) % 4) * 8.0
-		caption(effect.pos + Vector2(-20 + number_lane, -31 - t * 34 - number_lane * 0.45), str(effect.value), Color(impact_color.lightened(0.38), fade), impact_size)
-		var impact_fade := fade * (1.0 - t)
-		var tilt := -0.65 + float(int(effect.pos.x) % 5) * 0.12
-		for ray in (2 if reduced_effects else 4):
-			var direction := Vector2.from_angle(tilt + ray * PI * 0.5)
-			var start: Vector2 = effect.pos + direction * (3.0 + t * 12.0)
-			var finish: Vector2 = effect.pos + direction * (14.0 + t * 18.0)
-			draw_line(start, finish, Color(impact_color.lightened(0.35), impact_fade), 2.3, true)
-		draw_line(effect.pos + Vector2(-5, 7), effect.pos + Vector2(6, -9), Color(1, 0.97, 0.85, impact_fade), 2.0, true)
-	elif effect.kind == "critical":
-		var critical_color := Color(1.0, 0.46, 0.22, fade)
-		caption(effect.pos + Vector2(-54, -82 - t * 42), "CRITICAL  %d" % int(effect.value), critical_color, 23)
-		draw_circle(effect.pos, 22.0 * (1.0 - t), Color(1.0, 0.92, 0.66, fade * 0.25))
-		for ring in 2:
-			draw_arc(effect.pos, 18.0 + ring * 13.0 + t * 54.0, ring * 1.4, ring * 1.4 + PI * 1.55, 34, Color(critical_color, fade * (0.90 - ring * 0.25)), 5.0 - ring * 1.5, true)
-		for ray in 14:
-			var direction := Vector2.from_angle(ray * TAU / 14.0 + 0.12)
-			var side := direction.rotated(PI * 0.5)
-			var tip: Vector2 = effect.pos + direction * (42.0 + t * 62.0)
-			draw_colored_polygon(PackedVector2Array([effect.pos + direction * (8.0 + t * 18.0), tip + side * 2.4, tip - side * 2.4]), Color(critical_color, fade * 0.88))
 	elif effect.kind == "shield_hit":
 		caption(effect.pos + Vector2(-18, -65 - t * 24), "护盾 -%d" % int(effect.value), Color(0.48, 0.82, 1.0, fade), 14)
 		draw_arc(effect.pos + Vector2(0, -18), 20 + t * 42, -2.7, 0.35, 24, Color(0.48, 0.82, 1.0, fade), 3.0, true)
@@ -4073,37 +4431,11 @@ func _draw_effect(effect: Dictionary) -> void:
 		var status_color := Color(0.50, 0.95, 0.70, fade) if helpful else Color(0.55, 0.68, 1.0, fade)
 		var status_name: String = str({"crystal_guard": "结晶护盾", "enemy_guard": "敌方加盾", "enemy_heal": "敌方治疗", "goblin_spawn": "哥布林出击", "split": "分裂", "enemy_duplicate": "镜像增殖"}.get(effect.kind, effect.kind))
 		draw_arc(effect.pos + Vector2(0, -18), 18 + t * 48, 0, TAU, 24, status_color, 3.0, true)
-		caption(effect.pos + Vector2(-38, -70 - t * 20), status_name, status_color, 15)
+		combat_caption(effect.pos + Vector2(-38, -70 - t * 20), status_name, status_color, 15)
 	elif effect.kind == "boss_pulse":
 		for ring in 4:
 			draw_arc(effect.pos, 24.0 + ring * 22.0 + t * 95.0, 0, TAU, 48, Color(1.0, 0.20, 0.38, fade * (0.8 - ring * 0.14)), 4.0, true)
 		caption(effect.pos + Vector2(-48, -105 - t * 35), "裂隙震荡", Color(1.0, 0.55, 0.66, fade), 20)
-	elif effect.kind == "enemy_shot":
-		var travel: Vector2 = Vector2(effect.get("direction", Vector2.LEFT))
-		if travel.length_squared() < 0.1:
-			travel = Vector2.LEFT * 80.0
-		var start := Vector2(0, -22)
-		var landing := travel + Vector2(0, -12)
-		var arc_height := clampf(travel.length() * 0.16, 22.0, 58.0)
-		var projectile_point := start.lerp(landing, t) + Vector2(0, -sin(t * PI) * arc_height)
-		var tangent := (landing - start) + Vector2(0, -cos(t * PI) * arc_height * PI)
-		var direction := tangent.normalized()
-		var enemy_kind := str(effect.get("enemy_kind", ""))
-		draw_ellipse_shadow(landing + Vector2(0, 9), 12.0 * (1.0 - t * 0.4), Color(0, 0, 0, fade * 0.30))
-		if enemy_kind == "ranged":
-			var side := direction.orthogonal()
-			draw_line(projectile_point - direction * 16.0, projectile_point + direction * 12.0, Color(1.0, 0.86, 0.62, fade), 3.2, true)
-			draw_colored_polygon(PackedVector2Array([projectile_point + direction * 14.0, projectile_point + side * 5.0, projectile_point - side * 5.0]), Color(1.0, 0.52, 0.30, fade))
-		elif enemy_kind == "buffer":
-			for ring in 3:
-				draw_arc(projectile_point, 7.0 + ring * 4.0, clock * (1.0 + ring * 0.3), clock * (1.0 + ring * 0.3) + PI * 1.55, 18, Color(0.40, 1.0, 0.78, fade * (0.92 - ring * 0.22)), 2.5, true)
-			draw_circle(projectile_point, 5.0, Color(0.88, 1.0, 0.96, fade))
-		else:
-			draw_line(start, projectile_point, Color(1.0, 0.42, 0.30, fade * 0.25), 2.0, true)
-			draw_circle(projectile_point, 4.0, Color(1.0, 0.8, 0.55, fade))
-		if t > 0.88:
-			var impact_alpha := (t - 0.88) / 0.12
-			draw_arc(landing, 7.0 + impact_alpha * 18.0, 0, TAU, 22, Color(1.0, 0.48, 0.32, fade * (1.0 - impact_alpha)), 2.5, true)
 	elif effect.kind == "tag_synergy":
 		caption(effect.pos + Vector2(-95, -145 - t * 20), "联动激活 · " + str(effect.value), Color(0.45, 1.0, 0.82, fade), 19)
 	elif effect.kind == "reward_taken":
@@ -4128,7 +4460,7 @@ func _draw_effect(effect: Dictionary) -> void:
 		for shard in 7:
 			var direction := Vector2.from_angle(-2.8 + shard * 0.45)
 			draw_line(effect.pos + direction * 8.0, effect.pos + direction * (22.0 + t * 45.0), geo_color, 3.0, true)
-	elif effect.kind in ["mechanism_pulse", "weather_pulse", "trap_pulse", "terrain_hit", "terrain_break", "formation", "knockback"]:
+	elif effect.kind in ["mechanism_pulse", "weather_pulse", "trap_pulse", "terrain_hit", "terrain_break", "formation"]:
 		var terrain_color := Color(1.0, 0.69, 0.30, fade) if effect.kind != "formation" else Color(0.46, 0.95, 0.77, fade)
 		for ring in 3:
 			draw_arc(effect.pos, 14.0 + ring * 15.0 + t * 52.0, 0, TAU, 36, Color(terrain_color, fade * (0.75 - ring * 0.16)), 3.0, true)
@@ -4240,3 +4572,40 @@ func element_color(element: String) -> Color:
 
 func element_glyph(element: String) -> String:
 	return {"anemo": "风", "electro": "雷", "pyro": "火", "hydro": "水", "geo": "岩", "cryo": "冰"}.get(element, "")
+
+func _update_boss_skill_captions(dt: float) -> void:
+	var live: Dictionary = {}
+	for enemy: Dictionary in sim.enemies:
+		if not str(enemy.kind).begins_with("boss_") or float(enemy.hp) <= 0: continue
+		var id := int(enemy.id)
+		live[id] = true
+		if bool(enemy.get("special_pending", false)):
+			boss_skill_captions[id] = {"text": str(enemy.get("special_move_name", "")), "life": 1.2}
+		elif boss_skill_captions.has(id):
+			boss_skill_captions[id].life -= dt
+	for id in boss_skill_captions.keys():
+		if not live.has(id) or float(boss_skill_captions[id].life) <= 0:
+			boss_skill_captions.erase(id)
+
+func _draw_boss_skill_captions() -> void:
+	var occupied: Array[Rect2] = []
+	for enemy: Dictionary in sim.enemies:
+		var id := int(enemy.id)
+		if not boss_skill_captions.has(id): continue
+		var text: String = boss_skill_captions[id].text
+		if text.is_empty(): continue
+		var foot := world_to_screen(Vector2(enemy.pos))
+		if not Rect2(0, 70, 1280, 540).has_point(foot): continue
+		var size: int = UI_LAYOUT.battle_boss_skill_caption_font_size
+		var width := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size).x
+		var body: float = enemy_sequences.display_size(str(enemy.kind)) * world_depth_scale(enemy.pos)
+		var offset: Vector2 = UI_LAYOUT.battle_boss_skill_caption_offset
+		var pos := foot + Vector2(body * 0.25 + offset.x, -body * 0.22 + offset.y)
+		if pos.x + width > 1260: pos.x = foot.x - body * 0.25 - width - offset.x
+		pos.x = clampf(pos.x, 20, 1260-width)
+		pos.y = clampf(pos.y, 110, 560)
+		for rect in occupied:
+			if rect.intersects(Rect2(pos-Vector2(0,size),Vector2(width,size+6))): pos.y = rect.end.y + size + 8
+		occupied.append(Rect2(pos-Vector2(0,size),Vector2(width,size+6)))
+		draw_string_outline(font,pos,text,HORIZONTAL_ALIGNMENT_LEFT,-1,size,5,Color("1c1320"))
+		draw_string(font,pos,text,HORIZONTAL_ALIGNMENT_LEFT,-1,size,Color("ffcebc"))

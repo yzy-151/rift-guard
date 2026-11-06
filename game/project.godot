@@ -11,9 +11,12 @@ config_version=5
 [application]
 
 config/name="裂隙守望 · Rift Guard"
-config/description="V88: Endless Optimization / 1920x1080"
-config/version="88.0.0"
-run/main_scene="res://main.tscn"
+config/description="三章试玩版：角色构筑、守塔、家园与无尽生存"
+config/version="2026.11.6.1"
+config/quit_on_go_back=false
+config/icon="res://assets/ui/release_20261106/icon.png"
+config/windows_native_icon="res://assets/ui/release_20261106/icon.ico"
+run/main_scene="res://boot.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 
 [autoload]
@@ -32,6 +35,8 @@ window/size/viewport_height=720
 window/size/window_width_override=1920
 window/size/window_height_override=1080
 window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+window/handheld/orientation=0
 
 [editor_plugins]
 
@@ -41,4 +46,8 @@ enabled=PackedStringArray("res://addons/beckett/plugin.cfg", "res://addons/rift_
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0.047, 0.059, 0.075, 1)
+
+[input_devices]
+pointing/emulate_mouse_from_touch=true

@@ -2,8 +2,8 @@
   {
     "id": "stage_01",
     "name": "裂隙前哨",
-    "duration_seconds": 345,
-    "boss_at_seconds": 290,
+    "duration_seconds": 405,
+    "boss_at_seconds": 345,
     "boss_id": "boss_02",
     "enemy_health_multiplier": 1.3216,
     "enemy_damage_multiplier": 0.4256,
@@ -11,196 +11,67 @@
     "enemy_leak_multiplier": 0.36,
     "terrain": [
       {
-        "id": "stage_01_attack_route_2",
-        "type": "attack_ground",
-        "rect": [
-          850,
-          410,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_01_attack_route_3",
-        "type": "attack_ground",
-        "rect": [
-          760,
-          210,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_01_attack_route_4",
-        "type": "attack_ground",
-        "rect": [
-          790,
-          465,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_01_attack_extra_0",
-        "type": "attack_ground",
-        "rect": [
-          520,
-          420,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_01_attack_extra_1",
-        "type": "attack_ground",
-        "rect": [
-          820,
-          320,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "watch_high",
-        "type": "high_ground",
-        "rect": [
-          500,
-          230,
-          220,
-          100
-        ],
-        "label": "瞭望高台",
-        "attack_bonus": 0.22,
-        "range_bonus": 1.0
-      },
-      {
-        "id": "watch_low",
+        "id": "stage_05_low_ground_1",
         "type": "low_ground",
         "rect": [
-          645,
-          405,
-          240,
-          105
+          1000,
+          460,
+          180,
+          80
         ],
-        "label": "沉降区",
+        "label": "冷却熔槽",
         "speed_scale": 0.3
       },
       {
-        "id": "watch_block",
+        "id": "stage_05_blocked_2",
         "type": "blocked",
         "rect": [
-          340,
+          220,
           140,
-          120,
-          80
+          180,
+          40
         ],
-        "label": "灌木阻挡",
-        "collision_shape": "ellipse",
-        "collision_scale": [
-          0.76,
-          0.56
-        ],
-        "collision_offset": [
-          0,
-          9
-        ]
+        "label": "北侧炉墙"
       },
       {
-        "id": "watch_device",
-        "type": "mechanism",
-        "rect": [
-          515,
-          300,
-          76,
-          76
-        ],
-        "label": "风脉自动机关",
-        "power": 70,
-        "radius": 900,
-        "interval": 5.5
-      },
-      {
-        "id": "watch_shortcut",
-        "type": "shortcut",
-        "rect": [
-          700,
-          140,
-          120,
-          80
-        ],
-        "label": "裂隙封门",
-        "hp": 460,
-        "collision_scale": [
-          0.82,
-          0.72
-        ],
-        "collision_offset": [
-          0,
-          5
-        ]
-      },
-      {
-        "id": "wind_breakable_gate",
-        "type": "shortcut",
+        "id": "stage_05_one_way_5",
+        "type": "blocked",
         "rect": [
           220,
-          500,
+          540,
+          180,
+          40
+        ],
+        "label": "南侧炉墙"
+      },
+      {
+        "id": "stage_05_moving_platform_6",
+        "type": "blocked",
+        "rect": [
+          1120,
+          220,
           120,
           80
         ],
-        "label": "风蚀封门",
-        "hp": 420,
-        "collision_scale": [
-          0.82,
-          0.72
-        ],
-        "collision_offset": [
-          0,
-          5
-        ]
+        "label": "东侧炉墙"
       },
       {
-        "id": "conveyor",
-        "type": "conveyor",
-        "rect": [
-          720,
-          450,
-          210,
-          68
-        ],
-        "label": "裂隙流带",
-        "direction": [
-          -1,
-          0
-        ],
-        "force": 48
-      },
-      {
-        "id": "element_trap",
+        "id": "stage_05_trap_8",
         "type": "trap",
         "rect": [
-          850,
-          300,
-          100,
-          82
+          820,
+          500,
+          60,
+          40
         ],
-        "label": "元素陷阱",
+        "label": "熔火地砖",
         "element": "electro",
-        "power": 32,
-        "interval": 2.8
+        "power": 45,
+        "interval": 0.85,
+        "hero_power": 14.0
       },
       {
-        "id": "weather",
+        "id": "stage_05_weather_9",
         "type": "weather",
         "rect": [
           180,
@@ -209,7 +80,7 @@
           390
         ],
         "label": "元素乱流",
-        "element": "anemo",
+        "element": "pyro",
         "pulse_interval": 8.0
       }
     ],
@@ -234,159 +105,329 @@
       20000
     ],
     "unlocks": [
-      "hero_02"
+      "hero_13"
     ],
     "waves": [
       {
         "at": 4.0,
-        "enemy_id": "slime_pyro",
+        "enemy_id": "grunt",
         "count": 10,
         "interval": 2.0,
         "route_id": "main",
         "pacing_phase": "opening"
       },
       {
-        "at": 45.0,
-        "enemy_id": "grunt",
-        "count": 10,
-        "interval": 2.0,
-        "route_id": "upper",
-        "pacing_phase": "opening"
-      },
-      {
-        "at": 65.0,
-        "enemy_id": "grunt",
-        "count": 18,
-        "interval": 1.288235294117647,
-        "route_id": "lower",
-        "pacing_phase": "combination"
-      },
-      {
-        "at": 99,
-        "enemy_id": "slime_anemo",
-        "count": 7,
-        "interval": 2.5,
-        "route_id": "upper",
-        "pacing_phase": "combination"
-      },
-      {
-        "at": 115.0,
+        "at": 24.0,
         "enemy_id": "ranged",
-        "count": 7,
-        "interval": 3.2,
-        "route_id": "main",
-        "pacing_phase": "combination"
-      },
-      {
-        "at": 145.0,
-        "enemy_id": "runner",
-        "count": 7,
-        "interval": 3.2,
+        "count": 4,
+        "interval": 2.0800000000000005,
         "route_id": "lower",
-        "pacing_phase": "combination"
+        "pacing_phase": "opening"
       },
       {
-        "at": 175.0,
-        "enemy_id": "buffer",
+        "at": 44.0,
+        "enemy_id": "slime_cryo",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "upper",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 56.0,
+        "enemy_id": "originium_bug",
+        "count": 10,
+        "interval": 2.0,
+        "route_id": "main",
+        "pacing_phase": "opening"
+      },
+      {
+        "at": 64.0,
+        "enemy_id": "grunt",
         "count": 4,
         "interval": 3.0,
         "route_id": "main",
-        "pacing_phase": "combination"
+        "pacing_phase": "opening"
       },
       {
-        "at": 180.0,
+        "at": 84.0,
         "enemy_id": "slime_pyro",
-        "count": 60,
-        "interval": 0.5,
-        "route_id": "upper",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "lower",
         "pacing_phase": "combination"
       },
       {
-        "at": 196,
-        "enemy_id": "grunt",
-        "count": 60,
-        "interval": 0.5,
+        "at": 98.0,
+        "enemy_id": "slime_cryo",
+        "count": 5,
+        "interval": 1.475,
         "route_id": "main",
         "pacing_phase": "combination"
       },
       {
-        "at": 215.0,
-        "enemy_id": "runner",
-        "count": 60,
-        "interval": 0.5,
+        "at": 108,
+        "enemy_id": "rift_bat",
+        "count": 3,
+        "interval": 2.5,
+        "route_id": "upper"
+      },
+      {
+        "at": 116,
+        "enemy_id": "originium_bug",
+        "count": 7,
+        "interval": 3.0,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 124.0,
+        "enemy_id": "charger",
+        "count": 7,
+        "interval": 1.8,
         "route_id": "main",
-        "pacing_phase": "pressure"
+        "pacing_phase": "combination"
       },
       {
-        "at": 225.0,
-        "enemy_id": "slime_pyro",
-        "count": 60,
-        "interval": 0.5,
+        "at": 132.0,
+        "enemy_id": "originium_bug",
+        "count": 7,
+        "interval": 2.2,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 144.0,
+        "enemy_id": "slime_cryo",
+        "count": 7,
+        "interval": 1.8,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 150.0,
+        "enemy_id": "hilichurl_brute",
+        "count": 1,
+        "interval": 1.5,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 156.0,
+        "enemy_id": "originium_bug",
+        "count": 1,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 164.0,
+        "enemy_id": "slime_cryo",
+        "count": 7,
+        "interval": 1.8,
         "route_id": "upper",
-        "pacing_phase": "pressure"
+        "pacing_phase": "combination"
       },
       {
-        "at": 240.0,
+        "at": 184.0,
         "enemy_id": "grunt",
-        "count": 60,
-        "interval": 0.5,
+        "count": 11,
+        "interval": 1.944,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 189.0,
+        "enemy_id": "armored",
+        "count": 2,
+        "interval": 2.8,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 204.0,
+        "enemy_id": "slime_cryo",
+        "count": 18,
+        "interval": 1.15,
         "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 207,
+        "enemy_id": "grunt",
+        "count": 15,
+        "interval": 1.2,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
         "pacing_phase": "pressure"
       },
       {
-        "at": 255.0,
-        "enemy_id": "slime_pyro",
-        "count": 60,
-        "interval": 0.5,
-        "route_id": "lower",
+        "at": 212.0,
+        "enemy_id": "ranged",
+        "count": 3,
+        "interval": 2.8,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
         "pacing_phase": "pressure"
       },
       {
-        "at": 270.0,
-        "enemy_id": "slime_anemo",
-        "count": 60,
-        "interval": 0.5,
+        "at": 231,
+        "enemy_id": "originium_bug",
+        "count": 18,
+        "interval": 1.15,
         "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 231,
+        "enemy_id": "slime_pyro",
+        "count": 16,
+        "interval": 1.2,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
         "pacing_phase": "pressure"
       },
       {
-        "at": 290.0,
+        "at": 236.0,
         "enemy_id": "buffer",
+        "count": 1,
+        "interval": 2.8,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 238,
+        "enemy_id": "rift_bat",
+        "count": 3,
+        "interval": 2.5,
+        "route_id": "lower"
+      },
+      {
+        "at": 244.0,
+        "enemy_id": "ranged",
+        "count": 9,
+        "interval": 1.8,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 255,
+        "enemy_id": "slime_cryo",
+        "count": 16,
+        "interval": 1.2,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 260.0,
+        "enemy_id": "armored",
+        "count": 2,
+        "interval": 2.8,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 260.0,
+        "enemy_id": "hilichurl_brute",
+        "count": 1,
+        "interval": 1.5,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 264.0,
+        "enemy_id": "armored",
         "count": 4,
         "interval": 3.0,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 279,
+        "enemy_id": "originium_bug",
+        "count": 17,
+        "interval": 1.2,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 284.0,
+        "enemy_id": "slime_cryo",
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 289.0,
+        "enemy_id": "ranged",
+        "count": 3,
+        "interval": 2.8,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 304.0,
+        "enemy_id": "originium_bug",
+        "count": 18,
+        "interval": 1.15,
         "route_id": "main",
-        "pacing_phase": "boss"
+        "pacing_phase": "pressure"
       }
     ],
     "routes": {
       "upper": [
         [
-          980,
+          1120,
           145
         ],
         [
-          940,
-          230
+          1010,
+          260
         ],
         [
-          790,
-          230
+          900,
+          180
         ],
         [
-          720,
-          315
+          780,
+          360
+        ],
+        [
+          650,
+          260
         ],
         [
           520,
-          360
+          440
         ],
         [
-          430,
-          345
-        ],
-        [
-          300,
-          360
+          350,
+          300
         ],
         [
           115,
@@ -396,27 +437,27 @@
       "main": [
         [
           1195,
-          355
-        ],
-        [
-          1010,
-          355
-        ],
-        [
-          880,
-          430
-        ],
-        [
-          690,
-          430
-        ],
-        [
-          590,
           360
         ],
         [
-          390,
+          1050,
+          470
+        ],
+        [
+          900,
           360
+        ],
+        [
+          760,
+          480
+        ],
+        [
+          610,
+          350
+        ],
+        [
+          430,
+          430
         ],
         [
           115,
@@ -425,31 +466,27 @@
       ],
       "lower": [
         [
-          1040,
-          555
+          1120,
+          575
         ],
         [
-          980,
-          485
+          1000,
+          470
         ],
         [
-          820,
-          485
+          870,
+          550
         ],
         [
-          735,
-          405
+          740,
+          390
         ],
         [
-          520,
-          360
+          590,
+          500
         ],
         [
           430,
-          375
-        ],
-        [
-          300,
           360
         ],
         [
@@ -458,49 +495,49 @@
         ]
       ]
     },
-    "boss_health_multiplier": 0.78,
-    "template_id": "citadel_zigzag",
+    "boss_health_multiplier": 0.42,
+    "template_id": "crucible_spiral",
     "spawn_points": {
       "upper": [
         [
-          980,
+          1120,
           145
         ],
         [
-          962,
+          1102,
           111
         ],
         [
-          998,
+          1138,
           179
         ]
       ],
       "main": [
         [
           1195,
-          355
+          360
         ],
         [
           1177,
-          321
+          326
         ],
         [
           1213,
-          389
+          394
         ]
       ],
       "lower": [
         [
-          1040,
-          555
+          1120,
+          575
         ],
         [
-          1022,
-          521
+          1102,
+          541
         ],
         [
-          1058,
-          589
+          1138,
+          609
         ]
       ]
     },
@@ -511,32 +548,39 @@
     },
     "breather_windows": [
       [
-        87,
-        99
+        104,
+        116
       ],
       [
-        186,
-        196
+        221,
+        231
       ],
       [
-        278.0,
-        290.0
+        333.0,
+        345.0
       ]
     ],
     "pacing_xp_multiplier": 1.264,
     "pacing_health_multiplier": 1.0,
     "fodder_pool": [
       "grunt",
-      "runner",
       "slime_pyro",
-      "slime_anemo"
+      "slime_cryo",
+      "originium_bug"
     ],
     "opening_health_scale": 1.0,
     "deployment_levels": [
       1,
-      3,
+      1,
       6
-    ]
+    ],
+    "lanes": {
+      "upper": 235,
+      "main": 355,
+      "lower": 485
+    },
+    "visual_stage_id": "stage_05",
+    "boss_route_id": "main"
   },
   {
     "id": "stage_02",
@@ -550,79 +594,6 @@
     "enemy_speed_multiplier": 0.99,
     "enemy_leak_multiplier": 0.18,
     "terrain": [
-      {
-        "id": "stage_02_attack_route_2",
-        "type": "attack_ground",
-        "rect": [
-          820,
-          410,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_02_attack_route_3",
-        "type": "attack_ground",
-        "rect": [
-          760,
-          280,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_02_attack_route_4",
-        "type": "attack_ground",
-        "rect": [
-          870,
-          400,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_02_attack_extra_0",
-        "type": "attack_ground",
-        "rect": [
-          420,
-          300,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_02_attack_extra_1",
-        "type": "attack_ground",
-        "rect": [
-          700,
-          460,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "tide_high",
-        "type": "high_ground",
-        "rect": [
-          500,
-          220,
-          180,
-          80
-        ],
-        "label": "赤潮瞭望台",
-        "attack_bonus": 0.18,
-        "range_bonus": 1.0
-      },
       {
         "id": "tide_low",
         "type": "low_ground",
@@ -645,18 +616,6 @@
           80
         ],
         "label": "东侧回廊墙"
-      },
-      {
-        "id": "tide_device",
-        "type": "attack_ground",
-        "rect": [
-          460,
-          460,
-          60,
-          40
-        ],
-        "label": "赤潮增幅地砖",
-        "attack_bonus": 1.0
       },
       {
         "id": "one_way_gate",
@@ -786,6 +745,13 @@
         "pacing_phase": "combination"
       },
       {
+        "at": 116,
+        "enemy_id": "rift_bat",
+        "count": 4,
+        "interval": 2.5,
+        "route_id": "upper"
+      },
+      {
         "at": 125.0,
         "enemy_id": "grunt",
         "count": 7,
@@ -804,8 +770,8 @@
       {
         "at": 132,
         "enemy_id": "troop_cannon",
-        "count": 6,
-        "interval": 3.5,
+        "count": 3,
+        "interval": 5.5,
         "route_ids": [
           "upper",
           "main",
@@ -840,64 +806,103 @@
       {
         "at": 205.0,
         "enemy_id": "grunt",
-        "count": 24,
-        "interval": 0.7,
+        "count": 12,
+        "interval": 1.2,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 210.0,
+        "enemy_id": "armored",
+        "count": 2,
+        "interval": 2.8,
         "route_id": "lower",
         "pacing_phase": "combination"
       },
       {
         "at": 214.0,
         "enemy_id": "grunt",
-        "count": 24,
-        "interval": 0.7,
+        "count": 14,
+        "interval": 1.2,
         "route_id": "upper",
         "pacing_phase": "pressure"
       },
       {
         "at": 240.0,
         "enemy_id": "grunt",
-        "count": 48,
-        "interval": 0.7,
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 242,
+        "enemy_id": "rift_bat",
+        "count": 3,
+        "interval": 2.5,
+        "route_id": "lower"
+      },
+      {
+        "at": 245.0,
+        "enemy_id": "ranged",
+        "count": 3,
+        "interval": 2.8,
         "route_id": "main",
         "pacing_phase": "pressure"
       },
       {
         "at": 248.0,
         "enemy_id": "grunt",
-        "count": 24,
-        "interval": 0.7,
+        "count": 14,
+        "interval": 1.2,
         "route_id": "lower",
         "pacing_phase": "pressure"
       },
       {
         "at": 268.0,
         "enemy_id": "ranged",
-        "count": 48,
-        "interval": 0.7,
+        "count": 9,
+        "interval": 1.8,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 273.0,
+        "enemy_id": "buffer",
+        "count": 1,
+        "interval": 2.8,
         "route_id": "upper",
         "pacing_phase": "pressure"
       },
       {
         "at": 276.0,
         "enemy_id": "grunt",
-        "count": 24,
-        "interval": 0.7,
+        "count": 14,
+        "interval": 1.2,
         "route_id": "main",
         "pacing_phase": "pressure"
       },
       {
         "at": 285.0,
         "enemy_id": "grunt",
-        "count": 24,
-        "interval": 0.7,
+        "count": 12,
+        "interval": 1.2,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 290.0,
+        "enemy_id": "armored",
+        "count": 2,
+        "interval": 2.8,
         "route_id": "lower",
         "pacing_phase": "pressure"
       },
       {
         "at": 292.0,
         "enemy_id": "grunt",
-        "count": 24,
-        "interval": 0.7,
+        "count": 14,
+        "interval": 1.2,
         "route_id": "upper",
         "pacing_phase": "pressure"
       }
@@ -1096,79 +1101,6 @@
     "enemy_leak_multiplier": 0.16,
     "terrain": [
       {
-        "id": "stage_03_attack_route_2",
-        "type": "attack_ground",
-        "rect": [
-          890,
-          435,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_03_attack_route_3",
-        "type": "attack_ground",
-        "rect": [
-          820,
-          225,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_03_attack_route_4",
-        "type": "attack_ground",
-        "rect": [
-          870,
-          310,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_03_attack_extra_0",
-        "type": "attack_ground",
-        "rect": [
-          760,
-          380,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_03_attack_extra_1",
-        "type": "attack_ground",
-        "rect": [
-          700,
-          460,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "nest_high",
-        "type": "high_ground",
-        "rect": [
-          580,
-          180,
-          180,
-          80
-        ],
-        "label": "孵化瞭望台",
-        "attack_bonus": 0.18,
-        "range_bonus": 1.0
-      },
-      {
         "id": "nest_low",
         "type": "low_ground",
         "rect": [
@@ -1190,18 +1122,6 @@
           40
         ],
         "label": "西北巢壁"
-      },
-      {
-        "id": "nest_device",
-        "type": "attack_ground",
-        "rect": [
-          580,
-          460,
-          60,
-          40
-        ],
-        "label": "母巢增幅地砖",
-        "attack_bonus": 1.0
       },
       {
         "id": "one_way_gate",
@@ -1392,72 +1312,112 @@
       {
         "at": 190.0,
         "enemy_id": "grunt",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 195.0,
+        "enemy_id": "armored",
+        "count": 3,
+        "interval": 2.8,
         "route_id": "lower",
         "pacing_phase": "combination"
       },
       {
         "at": 218.0,
         "enemy_id": "originium_bug",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
         "route_id": "main",
         "pacing_phase": "combination"
       },
       {
         "at": 226.0,
         "enemy_id": "slime_anemo",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 231.0,
+        "enemy_id": "ranged",
+        "count": 4,
+        "interval": 2.8,
         "route_id": "upper",
         "pacing_phase": "pressure"
       },
       {
         "at": 252.0,
         "enemy_id": "grunt",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
         "route_id": "lower",
         "pacing_phase": "pressure"
       },
       {
         "at": 276.0,
         "enemy_id": "originium_bug",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 281.0,
+        "enemy_id": "buffer",
+        "count": 1,
+        "interval": 2.8,
         "route_id": "main",
         "pacing_phase": "pressure"
       },
       {
         "at": 292.0,
         "enemy_id": "slime_anemo",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
         "route_id": "lower",
         "pacing_phase": "pressure"
       },
       {
         "at": 300.0,
         "enemy_id": "grunt",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 305.0,
+        "enemy_id": "healer",
+        "count": 1,
+        "interval": 2.8,
         "route_id": "upper",
         "pacing_phase": "pressure"
       },
       {
         "at": 326.0,
         "enemy_id": "slime_anemo",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
         "route_id": "upper",
         "pacing_phase": "boss"
       },
       {
         "at": 334.0,
         "enemy_id": "slime_anemo",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "lower",
+        "pacing_phase": "boss"
+      },
+      {
+        "at": 339.0,
+        "enemy_id": "armored",
+        "count": 3,
+        "interval": 2.8,
         "route_id": "lower",
         "pacing_phase": "boss"
       }
@@ -1662,79 +1622,6 @@
     "enemy_leak_multiplier": 0.22,
     "terrain": [
       {
-        "id": "stage_04_attack_route_2",
-        "type": "attack_ground",
-        "rect": [
-          790,
-          190,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_04_attack_route_3",
-        "type": "attack_ground",
-        "rect": [
-          800,
-          310,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_04_attack_route_4",
-        "type": "attack_ground",
-        "rect": [
-          800,
-          370,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_04_attack_extra_0",
-        "type": "attack_ground",
-        "rect": [
-          420,
-          300,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_04_attack_extra_1",
-        "type": "attack_ground",
-        "rect": [
-          700,
-          460,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_04_high_ground_0",
-        "type": "high_ground",
-        "rect": [
-          520,
-          340,
-          180,
-          80
-        ],
-        "label": "风眼高台",
-        "attack_bonus": 0.18,
-        "range_bonus": 1.0
-      },
-      {
         "id": "stage_04_low_ground_1",
         "type": "low_ground",
         "rect": [
@@ -1756,18 +1643,6 @@
           40
         ],
         "label": "南侧风墙"
-      },
-      {
-        "id": "stage_04_mechanism_3",
-        "type": "attack_ground",
-        "rect": [
-          580,
-          220,
-          60,
-          40
-        ],
-        "label": "风压增幅地砖",
-        "attack_bonus": 1.0
       },
       {
         "id": "stage_04_one_way_5",
@@ -1967,8 +1842,20 @@
       {
         "at": 198,
         "enemy_id": "grunt",
-        "count": 30,
-        "interval": 0.6,
+        "count": 15,
+        "interval": 1.2,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 203.0,
+        "enemy_id": "armored",
+        "count": 3,
+        "interval": 2.8,
         "route_ids": [
           "upper",
           "main",
@@ -1979,16 +1866,16 @@
       {
         "at": 204.0,
         "enemy_id": "warder",
-        "count": 4,
-        "interval": 3.0,
+        "count": 2,
+        "interval": 4,
         "route_id": "main",
         "pacing_phase": "combination"
       },
       {
         "at": 222,
         "enemy_id": "slime_hydro",
-        "count": 30,
-        "interval": 0.6,
+        "count": 17,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
@@ -1999,24 +1886,44 @@
       {
         "at": 224.0,
         "enemy_id": "grunt",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "lower",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 229.0,
+        "enemy_id": "ranged",
+        "count": 4,
+        "interval": 2.8,
         "route_id": "lower",
         "pacing_phase": "combination"
       },
       {
         "at": 244.0,
         "enemy_id": "grunt",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
         "route_id": "upper",
         "pacing_phase": "pressure"
       },
       {
         "at": 246,
         "enemy_id": "grunt",
-        "count": 30,
-        "interval": 0.6,
+        "count": 16,
+        "interval": 1.2,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 251.0,
+        "enemy_id": "warder",
+        "count": 1,
+        "interval": 2.8,
         "route_ids": [
           "upper",
           "main",
@@ -2027,16 +1934,28 @@
       {
         "at": 264.0,
         "enemy_id": "flyer",
-        "count": 48,
-        "interval": 0.7,
+        "count": 14,
+        "interval": 1.15,
         "route_id": "main",
         "pacing_phase": "pressure"
       },
       {
         "at": 270,
         "enemy_id": "slime_hydro",
-        "count": 30,
-        "interval": 0.6,
+        "count": 15,
+        "interval": 1.2,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 275.0,
+        "enemy_id": "rift_bat",
+        "count": 3,
+        "interval": 2.8,
         "route_ids": [
           "upper",
           "main",
@@ -2047,16 +1966,24 @@
       {
         "at": 284.0,
         "enemy_id": "ranged",
-        "count": 48,
-        "interval": 0.7,
+        "count": 9,
+        "interval": 1.8,
         "route_id": "lower",
         "pacing_phase": "pressure"
       },
       {
         "at": 304.0,
         "enemy_id": "slime_hydro",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 309.0,
+        "enemy_id": "armored",
+        "count": 3,
+        "interval": 2.8,
         "route_id": "upper",
         "pacing_phase": "pressure"
       }
@@ -2230,162 +2157,16 @@
   {
     "id": "stage_05",
     "name": "熔炉回旋庭",
-    "duration_seconds": 405,
-    "boss_at_seconds": 345,
+    "duration_seconds": 345,
+    "boss_at_seconds": 290,
     "boss_id": "boss_05",
-    "boss_route_id": "main",
     "enemy_health_multiplier": 1.2744,
     "enemy_damage_multiplier": 0.3808,
     "enemy_speed_multiplier": 1.025,
     "enemy_leak_multiplier": 0.25,
     "terrain": [
       {
-        "id": "stage_05_attack_route_2",
-        "type": "attack_ground",
-        "rect": [
-          870,
-          340,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_05_attack_route_3",
-        "type": "attack_ground",
-        "rect": [
-          870,
-          160,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_05_attack_route_4",
-        "type": "attack_ground",
-        "rect": [
-          840,
-          530,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_05_attack_extra_0",
-        "type": "attack_ground",
-        "rect": [
-          760,
-          300,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_05_attack_extra_1",
-        "type": "attack_ground",
-        "rect": [
-          700,
-          460,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_05_high_ground_0",
-        "type": "high_ground",
-        "rect": [
-          580,
-          220,
-          180,
-          80
-        ],
-        "label": "熔炉观测台",
-        "attack_bonus": 0.18,
-        "range_bonus": 1.0
-      },
-      {
-        "id": "stage_05_low_ground_1",
-        "type": "low_ground",
-        "rect": [
-          1000,
-          460,
-          180,
-          80
-        ],
-        "label": "冷却熔槽",
-        "speed_scale": 0.3
-      },
-      {
-        "id": "stage_05_blocked_2",
-        "type": "blocked",
-        "rect": [
-          220,
-          140,
-          180,
-          40
-        ],
-        "label": "北侧炉墙"
-      },
-      {
-        "id": "stage_05_mechanism_3",
-        "type": "attack_ground",
-        "rect": [
-          640,
-          340,
-          60,
-          40
-        ],
-        "label": "炉心增幅地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_05_one_way_5",
-        "type": "blocked",
-        "rect": [
-          220,
-          540,
-          180,
-          40
-        ],
-        "label": "南侧炉墙"
-      },
-      {
-        "id": "stage_05_moving_platform_6",
-        "type": "blocked",
-        "rect": [
-          1120,
-          220,
-          120,
-          80
-        ],
-        "label": "东侧炉墙"
-      },
-      {
-        "id": "stage_05_trap_8",
-        "type": "trap",
-        "rect": [
-          820,
-          500,
-          60,
-          40
-        ],
-        "label": "熔火地砖",
-        "element": "electro",
-        "power": 45,
-        "interval": 0.85,
-        "hero_power": 14.0
-      },
-      {
-        "id": "stage_05_weather_9",
+        "id": "weather",
         "type": "weather",
         "rect": [
           180,
@@ -2394,15 +2175,10 @@
           390
         ],
         "label": "元素乱流",
-        "element": "pyro",
+        "element": "anemo",
         "pulse_interval": 8.0
       }
     ],
-    "lanes": {
-      "upper": 235,
-      "main": 355,
-      "lower": 485
-    },
     "starting_squad": [
       "traveler",
       "hero_02",
@@ -2431,352 +2207,300 @@
     "waves": [
       {
         "at": 4.0,
-        "enemy_id": "grunt",
-        "count": 10,
-        "interval": 2.0,
-        "route_id": "main",
-        "pacing_phase": "opening"
-      },
-      {
-        "at": 24.0,
-        "enemy_id": "ranged",
-        "count": 4,
-        "interval": 2.0800000000000005,
-        "route_id": "lower",
-        "pacing_phase": "opening"
-      },
-      {
-        "at": 44.0,
-        "enemy_id": "slime_cryo",
-        "count": 10,
-        "interval": 2.0,
-        "route_id": "upper",
-        "pacing_phase": "opening"
-      },
-      {
-        "at": 56.0,
-        "enemy_id": "originium_bug",
-        "count": 10,
-        "interval": 2.0,
-        "route_id": "main",
-        "pacing_phase": "opening"
-      },
-      {
-        "at": 64.0,
-        "enemy_id": "grunt",
-        "count": 4,
-        "interval": 3.0,
-        "route_id": "main",
-        "pacing_phase": "opening"
-      },
-      {
-        "at": 84.0,
         "enemy_id": "slime_pyro",
-        "count": 7,
-        "interval": 3.0,
-        "route_id": "lower",
-        "pacing_phase": "combination"
-      },
-      {
-        "at": 98.0,
-        "enemy_id": "slime_cryo",
-        "count": 5,
-        "interval": 1.475,
+        "count": 10,
+        "interval": 2.0,
         "route_id": "main",
-        "pacing_phase": "combination"
+        "pacing_phase": "opening"
       },
       {
-        "at": 116,
-        "enemy_id": "originium_bug",
-        "count": 7,
-        "interval": 3.0,
+        "at": 45.0,
+        "enemy_id": "grunt",
+        "count": 10,
+        "interval": 2.0,
         "route_id": "upper",
-        "pacing_phase": "combination"
+        "pacing_phase": "opening"
       },
       {
-        "at": 124.0,
-        "enemy_id": "charger",
-        "count": 7,
-        "interval": 1.8,
-        "route_id": "main",
-        "pacing_phase": "combination"
-      },
-      {
-        "at": 132.0,
-        "enemy_id": "originium_bug",
-        "count": 7,
-        "interval": 2.2,
-        "route_id": "main",
-        "pacing_phase": "combination"
-      },
-      {
-        "at": 144.0,
-        "enemy_id": "slime_cryo",
-        "count": 7,
-        "interval": 1.8,
-        "route_id": "lower",
-        "pacing_phase": "combination"
-      },
-      {
-        "at": 156.0,
-        "enemy_id": "originium_bug",
-        "count": 1,
-        "interval": 1.8,
-        "route_id": "main",
-        "pacing_phase": "combination"
-      },
-      {
-        "at": 164.0,
-        "enemy_id": "slime_cryo",
-        "count": 7,
-        "interval": 1.8,
-        "route_id": "upper",
-        "pacing_phase": "combination"
-      },
-      {
-        "at": 184.0,
+        "at": 65.0,
         "enemy_id": "grunt",
         "count": 18,
-        "interval": 1.8,
-        "route_id": "main",
-        "pacing_phase": "combination"
-      },
-      {
-        "at": 204.0,
-        "enemy_id": "slime_cryo",
-        "count": 60,
-        "interval": 0.5,
+        "interval": 1.288235294117647,
         "route_id": "lower",
         "pacing_phase": "combination"
       },
       {
-        "at": 207,
-        "enemy_id": "grunt",
-        "count": 30,
-        "interval": 0.6,
-        "route_ids": [
-          "upper",
-          "main",
-          "lower"
-        ],
-        "pacing_phase": "pressure"
-      },
-      {
-        "at": 231,
-        "enemy_id": "originium_bug",
-        "count": 60,
-        "interval": 0.5,
+        "at": 99,
+        "enemy_id": "slime_anemo",
+        "count": 7,
+        "interval": 2.5,
         "route_id": "upper",
         "pacing_phase": "combination"
       },
       {
-        "at": 231,
-        "enemy_id": "slime_pyro",
-        "count": 30,
-        "interval": 0.6,
-        "route_ids": [
-          "upper",
-          "main",
-          "lower"
-        ],
-        "pacing_phase": "pressure"
-      },
-      {
-        "at": 244.0,
+        "at": 115.0,
         "enemy_id": "ranged",
-        "count": 48,
-        "interval": 0.7,
+        "count": 7,
+        "interval": 3.2,
         "route_id": "main",
-        "pacing_phase": "pressure"
+        "pacing_phase": "combination"
       },
       {
-        "at": 255,
-        "enemy_id": "slime_cryo",
-        "count": 30,
-        "interval": 0.6,
-        "route_ids": [
-          "upper",
-          "main",
-          "lower"
-        ],
-        "pacing_phase": "pressure"
+        "at": 145.0,
+        "enemy_id": "runner",
+        "count": 7,
+        "interval": 3.2,
+        "route_id": "lower",
+        "pacing_phase": "combination"
       },
       {
-        "at": 264.0,
-        "enemy_id": "armored",
+        "at": 175.0,
+        "enemy_id": "buffer",
         "count": 4,
         "interval": 3.0,
-        "route_id": "lower",
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 180.0,
+        "enemy_id": "slime_pyro",
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 185.0,
+        "enemy_id": "charger",
+        "count": 3,
+        "interval": 2.8,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 196,
+        "enemy_id": "grunt",
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 215.0,
+        "enemy_id": "runner",
+        "count": 20,
+        "interval": 1.15,
+        "route_id": "main",
         "pacing_phase": "pressure"
       },
       {
-        "at": 279,
-        "enemy_id": "originium_bug",
-        "count": 30,
-        "interval": 0.6,
-        "route_ids": [
-          "upper",
-          "main",
-          "lower"
-        ],
+        "at": 220.0,
+        "enemy_id": "ranged",
+        "count": 4,
+        "interval": 2.8,
+        "route_id": "main",
         "pacing_phase": "pressure"
       },
       {
-        "at": 284.0,
-        "enemy_id": "slime_cryo",
-        "count": 60,
-        "interval": 0.5,
+        "at": 225.0,
+        "enemy_id": "slime_pyro",
+        "count": 18,
+        "interval": 1.15,
         "route_id": "upper",
         "pacing_phase": "pressure"
       },
       {
-        "at": 304.0,
-        "enemy_id": "originium_bug",
-        "count": 60,
-        "interval": 0.5,
-        "route_id": "main",
+        "at": 240.0,
+        "enemy_id": "grunt",
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "lower",
         "pacing_phase": "pressure"
+      },
+      {
+        "at": 245.0,
+        "enemy_id": "buffer",
+        "count": 1,
+        "interval": 2.8,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 255.0,
+        "enemy_id": "slime_pyro",
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 270.0,
+        "enemy_id": "slime_anemo",
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 275.0,
+        "enemy_id": "charger",
+        "count": 3,
+        "interval": 2.8,
+        "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 290.0,
+        "enemy_id": "buffer",
+        "count": 2,
+        "interval": 4,
+        "route_id": "main",
+        "pacing_phase": "boss"
       }
     ],
     "routes": {
       "upper": [
         [
-          1120,
+          980,
           145
         ],
         [
-          1010,
-          260
+          940,
+          230
         ],
         [
-          900,
-          180
+          790,
+          230
         ],
         [
-          780,
-          360
-        ],
-        [
-          650,
-          260
+          720,
+          315
         ],
         [
           520,
-          440
-        ],
-        [
-          350,
-          300
-        ],
-        [
-          115,
           360
+        ],
+        [
+          430,
+          345
+        ],
+        [
+          300,
+          360
+        ],
+        [
+          130,
+          395
         ]
       ],
       "main": [
         [
           1195,
-          360
+          355
         ],
         [
-          1050,
-          470
+          1010,
+          355
         ],
         [
-          900,
-          360
-        ],
-        [
-          760,
-          480
-        ],
-        [
-          610,
-          350
-        ],
-        [
-          430,
+          880,
           430
         ],
         [
-          115,
+          690,
+          430
+        ],
+        [
+          590,
           360
+        ],
+        [
+          390,
+          360
+        ],
+        [
+          130,
+          395
         ]
       ],
       "lower": [
         [
-          1120,
-          575
+          1040,
+          555
         ],
         [
-          1000,
-          470
+          980,
+          485
         ],
         [
-          870,
-          550
+          820,
+          485
         ],
         [
-          740,
-          390
+          735,
+          405
         ],
         [
-          590,
-          500
+          520,
+          360
         ],
         [
           430,
+          375
+        ],
+        [
+          300,
           360
         ],
         [
-          115,
-          360
+          130,
+          395
         ]
       ]
     },
     "boss_health_multiplier": 0.78,
-    "template_id": "crucible_spiral",
+    "template_id": "citadel_zigzag",
     "spawn_points": {
       "upper": [
         [
-          1120,
+          980,
           145
         ],
         [
-          1102,
+          962,
           111
         ],
         [
-          1138,
+          998,
           179
         ]
       ],
       "main": [
         [
           1195,
-          360
+          355
         ],
         [
           1177,
-          326
+          321
         ],
         [
           1213,
-          394
+          389
         ]
       ],
       "lower": [
         [
-          1120,
-          575
+          1040,
+          555
         ],
         [
-          1102,
-          541
+          1022,
+          521
         ],
         [
-          1138,
-          609
+          1058,
+          589
         ]
       ]
     },
@@ -2787,32 +2511,33 @@
     },
     "breather_windows": [
       [
-        104,
-        116
+        87,
+        99
       ],
       [
-        221,
-        231
+        186,
+        196
       ],
       [
-        333.0,
-        345.0
+        278.0,
+        290.0
       ]
     ],
     "pacing_xp_multiplier": 2.0,
     "pacing_health_multiplier": 1.0,
     "fodder_pool": [
       "grunt",
+      "runner",
       "slime_pyro",
-      "slime_cryo",
-      "originium_bug"
+      "slime_anemo"
     ],
     "opening_health_scale": 1.0,
     "deployment_levels": [
       1,
       1,
       3
-    ]
+    ],
+    "visual_stage_id": "stage_01"
   },
   {
     "id": "stage_06",
@@ -2826,79 +2551,6 @@
     "enemy_speed_multiplier": 1.05,
     "enemy_leak_multiplier": 0.28,
     "terrain": [
-      {
-        "id": "stage_06_attack_route_2",
-        "type": "attack_ground",
-        "rect": [
-          820,
-          450,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_06_attack_route_3",
-        "type": "attack_ground",
-        "rect": [
-          850,
-          280,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_06_attack_route_4",
-        "type": "attack_ground",
-        "rect": [
-          850,
-          400,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_06_attack_extra_0",
-        "type": "attack_ground",
-        "rect": [
-          420,
-          380,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_06_attack_extra_1",
-        "type": "attack_ground",
-        "rect": [
-          700,
-          460,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_06_high_ground_0",
-        "type": "high_ground",
-        "rect": [
-          460,
-          220,
-          180,
-          80
-        ],
-        "label": "上层钟台",
-        "attack_bonus": 0.18,
-        "range_bonus": 1.0
-      },
       {
         "id": "stage_06_low_ground_1",
         "type": "low_ground",
@@ -2921,18 +2573,6 @@
           40
         ],
         "label": "西侧钟墙"
-      },
-      {
-        "id": "stage_06_mechanism_3",
-        "type": "attack_ground",
-        "rect": [
-          700,
-          340,
-          60,
-          40
-        ],
-        "label": "时序增幅地砖",
-        "attack_bonus": 1.0
       },
       {
         "id": "stage_06_one_way_5",
@@ -3115,8 +2755,16 @@
       {
         "at": 164.0,
         "enemy_id": "runner",
-        "count": 18,
-        "interval": 1.8,
+        "count": 10,
+        "interval": 1.944,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 169.0,
+        "enemy_id": "armored",
+        "count": 3,
+        "interval": 2.8,
         "route_id": "main",
         "pacing_phase": "combination"
       },
@@ -3139,8 +2787,8 @@
       {
         "at": 216,
         "enemy_id": "grunt",
-        "count": 30,
-        "interval": 0.6,
+        "count": 17,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
@@ -3159,8 +2807,8 @@
       {
         "at": 240,
         "enemy_id": "runner",
-        "count": 30,
-        "interval": 0.6,
+        "count": 14,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
@@ -3171,24 +2819,36 @@
       {
         "at": 244.0,
         "enemy_id": "buffer",
-        "count": 4,
-        "interval": 3.0,
+        "count": 2,
+        "interval": 4,
         "route_id": "lower",
         "pacing_phase": "combination"
       },
       {
+        "at": 245.0,
+        "enemy_id": "ranged",
+        "count": 4,
+        "interval": 2.8,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
         "at": 264.0,
         "enemy_id": "healer",
-        "count": 4,
-        "interval": 3.0,
+        "count": 2,
+        "interval": 4,
         "route_id": "upper",
         "pacing_phase": "pressure"
       },
       {
         "at": 264,
         "enemy_id": "grunt",
-        "count": 30,
-        "interval": 0.6,
+        "count": 17,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
@@ -3199,16 +2859,28 @@
       {
         "at": 284.0,
         "enemy_id": "shielded",
-        "count": 4,
-        "interval": 3.0,
+        "count": 2,
+        "interval": 4,
         "route_id": "main",
         "pacing_phase": "pressure"
       },
       {
         "at": 288,
         "enemy_id": "runner",
-        "count": 30,
-        "interval": 0.6,
+        "count": 16,
+        "interval": 1.2,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 293.0,
+        "enemy_id": "buffer",
+        "count": 1,
+        "interval": 2.8,
         "route_ids": [
           "upper",
           "main",
@@ -3219,8 +2891,8 @@
       {
         "at": 304.0,
         "enemy_id": "runner",
-        "count": 60,
-        "interval": 0.5,
+        "count": 20,
+        "interval": 1.15,
         "route_id": "lower",
         "pacing_phase": "pressure"
       }
@@ -3408,79 +3080,6 @@
     "enemy_leak_multiplier": 0.31,
     "terrain": [
       {
-        "id": "stage_07_attack_route_2",
-        "type": "attack_ground",
-        "rect": [
-          810,
-          340,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_07_attack_route_3",
-        "type": "attack_ground",
-        "rect": [
-          790,
-          155,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_07_attack_route_4",
-        "type": "attack_ground",
-        "rect": [
-          790,
-          525,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_07_attack_extra_0",
-        "type": "attack_ground",
-        "rect": [
-          760,
-          300,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_07_attack_extra_1",
-        "type": "attack_ground",
-        "rect": [
-          700,
-          460,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_07_high_ground_0",
-        "type": "high_ground",
-        "rect": [
-          640,
-          300,
-          180,
-          80
-        ],
-        "label": "冻原高台",
-        "attack_bonus": 0.18,
-        "range_bonus": 1.0
-      },
-      {
         "id": "stage_07_low_ground_1",
         "type": "low_ground",
         "rect": [
@@ -3502,18 +3101,6 @@
           40
         ],
         "label": "西南冰墙"
-      },
-      {
-        "id": "stage_07_mechanism_3",
-        "type": "attack_ground",
-        "rect": [
-          520,
-          140,
-          60,
-          40
-        ],
-        "label": "寒霜增幅地砖",
-        "attack_bonus": 1.0
       },
       {
         "id": "stage_07_one_way_5",
@@ -3720,16 +3307,28 @@
       {
         "at": 224.0,
         "enemy_id": "healer",
-        "count": 4,
-        "interval": 3.0,
+        "count": 2,
+        "interval": 4,
         "route_id": "lower",
         "pacing_phase": "combination"
       },
       {
         "at": 225,
         "enemy_id": "grunt",
-        "count": 30,
-        "interval": 0.6,
+        "count": 16,
+        "interval": 1.2,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 230.0,
+        "enemy_id": "shielded",
+        "count": 2,
+        "interval": 2.8,
         "route_ids": [
           "upper",
           "main",
@@ -3740,8 +3339,8 @@
       {
         "at": 249,
         "enemy_id": "runner",
-        "count": 30,
-        "interval": 0.6,
+        "count": 17,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
@@ -3752,24 +3351,32 @@
       {
         "at": 250,
         "enemy_id": "shielded",
-        "count": 4,
-        "interval": 3.0,
+        "count": 2,
+        "interval": 4,
         "route_id": "upper",
         "pacing_phase": "combination"
       },
       {
         "at": 264.0,
         "enemy_id": "charger",
-        "count": 48,
-        "interval": 0.7,
+        "count": 10,
+        "interval": 1.15,
+        "route_id": "main",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 269.0,
+        "enemy_id": "ranged",
+        "count": 4,
+        "interval": 2.8,
         "route_id": "main",
         "pacing_phase": "pressure"
       },
       {
         "at": 273,
         "enemy_id": "grunt",
-        "count": 30,
-        "interval": 0.6,
+        "count": 17,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
@@ -3780,16 +3387,24 @@
       {
         "at": 284.0,
         "enemy_id": "grunt",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "lower",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 289.0,
+        "enemy_id": "charger",
+        "count": 3,
+        "interval": 2.8,
         "route_id": "lower",
         "pacing_phase": "pressure"
       },
       {
         "at": 297,
         "enemy_id": "runner",
-        "count": 30,
-        "interval": 0.6,
+        "count": 17,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
@@ -3800,8 +3415,8 @@
       {
         "at": 304.0,
         "enemy_id": "warder",
-        "count": 4,
-        "interval": 3.0,
+        "count": 2,
+        "interval": 4,
         "route_id": "upper",
         "pacing_phase": "pressure"
       }
@@ -3989,79 +3604,6 @@
     "enemy_leak_multiplier": 0.33999999999999997,
     "terrain": [
       {
-        "id": "stage_08_attack_route_2",
-        "type": "attack_ground",
-        "rect": [
-          820,
-          310,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_08_attack_route_3",
-        "type": "attack_ground",
-        "rect": [
-          850,
-          140,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_08_attack_route_4",
-        "type": "attack_ground",
-        "rect": [
-          850,
-          540,
-          60,
-          40
-        ],
-        "label": "路线强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_08_attack_extra_0",
-        "type": "attack_ground",
-        "rect": [
-          420,
-          300,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_08_attack_extra_1",
-        "type": "attack_ground",
-        "rect": [
-          700,
-          460,
-          60,
-          40
-        ],
-        "label": "攻击强化地砖",
-        "attack_bonus": 1.0
-      },
-      {
-        "id": "stage_08_high_ground_0",
-        "type": "high_ground",
-        "rect": [
-          580,
-          180,
-          180,
-          80
-        ],
-        "label": "黑曜北台",
-        "attack_bonus": 0.18,
-        "range_bonus": 1.0
-      },
-      {
         "id": "stage_08_low_ground_1",
         "type": "low_ground",
         "rect": [
@@ -4083,18 +3625,6 @@
           40
         ],
         "label": "北侧骨墙"
-      },
-      {
-        "id": "stage_08_mechanism_3",
-        "type": "attack_ground",
-        "rect": [
-          580,
-          340,
-          60,
-          40
-        ],
-        "label": "蚀日增幅地砖",
-        "attack_bonus": 1.0
       },
       {
         "id": "stage_08_one_way_5",
@@ -4293,24 +3823,32 @@
       {
         "at": 204.0,
         "enemy_id": "shielded",
-        "count": 7,
-        "interval": 3.0,
+        "count": 2,
+        "interval": 4,
         "route_id": "lower",
         "pacing_phase": "combination"
       },
       {
         "at": 224.0,
         "enemy_id": "charger",
-        "count": 27,
-        "interval": 0.9961538461538461,
+        "count": 14,
+        "interval": 1.2,
+        "route_id": "upper",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 229.0,
+        "enemy_id": "shielded",
+        "count": 2,
+        "interval": 2.8,
         "route_id": "upper",
         "pacing_phase": "combination"
       },
       {
         "at": 234,
         "enemy_id": "grunt",
-        "count": 30,
-        "interval": 0.6,
+        "count": 17,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
@@ -4321,16 +3859,24 @@
       {
         "at": 244.0,
         "enemy_id": "grunt",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
+        "route_id": "main",
+        "pacing_phase": "combination"
+      },
+      {
+        "at": 249.0,
+        "enemy_id": "ranged",
+        "count": 4,
+        "interval": 2.8,
         "route_id": "main",
         "pacing_phase": "combination"
       },
       {
         "at": 258,
         "enemy_id": "runner",
-        "count": 30,
-        "interval": 0.6,
+        "count": 17,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
@@ -4341,16 +3887,16 @@
       {
         "at": 264.0,
         "enemy_id": "warder",
-        "count": 4,
-        "interval": 3.0,
+        "count": 2,
+        "interval": 4,
         "route_id": "lower",
         "pacing_phase": "combination"
       },
       {
         "at": 282,
         "enemy_id": "grunt",
-        "count": 30,
-        "interval": 0.6,
+        "count": 16,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
@@ -4361,29 +3907,49 @@
       {
         "at": 284.0,
         "enemy_id": "grunt",
-        "count": 60,
-        "interval": 0.5,
+        "count": 18,
+        "interval": 1.15,
         "route_id": "upper",
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 287.0,
+        "enemy_id": "warder",
+        "count": 1,
+        "interval": 2.8,
+        "route_ids": [
+          "upper",
+          "main",
+          "lower"
+        ],
         "pacing_phase": "pressure"
       },
       {
         "at": 304.0,
         "enemy_id": "runner",
-        "count": 60,
-        "interval": 0.5,
+        "count": 20,
+        "interval": 1.15,
         "route_id": "main",
         "pacing_phase": "pressure"
       },
       {
         "at": 306,
         "enemy_id": "runner",
-        "count": 30,
-        "interval": 0.6,
+        "count": 17,
+        "interval": 1.2,
         "route_ids": [
           "upper",
           "main",
           "lower"
         ],
+        "pacing_phase": "pressure"
+      },
+      {
+        "at": 309.0,
+        "enemy_id": "healer",
+        "count": 1,
+        "interval": 2.8,
+        "route_id": "main",
         "pacing_phase": "pressure"
       }
     ],
@@ -4588,340 +4154,208 @@
     "routes": {
       "north": [
         [
-          660,
-          70
+          1360,
+          160
         ],
         [
-          660,
-          270
+          1360,
+          480
         ],
         [
-          830,
-          470
-        ],
-        [
-          1120,
-          520
-        ],
-        [
-          1280,
-          720
+          1360,
+          880
         ]
       ],
       "east": [
         [
-          2440,
-          410
+          2560,
+          880
         ],
         [
-          2100,
-          410
+          2040,
+          880
         ],
         [
-          2020,
-          590
-        ],
-        [
-          1760,
-          690
-        ],
-        [
-          1280,
-          720
+          1360,
+          880
         ]
       ],
       "south": [
         [
-          1750,
-          1335
+          1360,
+          1600
         ],
         [
-          1750,
-          1160
+          1360,
+          1280
         ],
         [
-          1640,
-          1000
-        ],
-        [
-          1430,
-          970
-        ],
-        [
-          1280,
-          720
+          1360,
+          880
         ]
       ],
       "west": [
         [
-          45,
-          750
+          160,
+          880
         ],
         [
-          360,
-          750
+          680,
+          880
         ],
         [
-          520,
-          850
-        ],
-        [
-          720,
-          970
-        ],
-        [
-          980,
-          900
-        ],
-        [
-          1280,
-          720
+          1360,
+          880
         ]
       ]
     },
     "spawn_points": {
       "north": [
         [
-          660,
-          70
+          680,
+          160
         ],
         [
-          960,
-          85
+          1360,
+          160
         ],
         [
-          1320,
-          80
+          2040,
+          160
         ]
       ],
       "east": [
         [
-          2440,
-          410
+          2560,
+          480
         ],
         [
-          2430,
-          700
+          2560,
+          880
         ],
         [
-          2445,
-          1040
+          2560,
+          1280
         ]
       ],
       "south": [
         [
-          660,
-          1340
+          680,
+          1600
         ],
         [
-          1120,
-          1350
+          1360,
+          1600
         ],
         [
-          1750,
-          1335
+          2040,
+          1600
         ]
       ],
       "west": [
         [
-          45,
-          410
+          160,
+          480
         ],
         [
-          55,
-          750
+          160,
+          880
         ],
         [
-          40,
-          1110
+          160,
+          1280
         ]
       ]
     },
     "template_id": "loop",
     "terrain": [
       {
-        "id": "exp_wall_0_0",
+        "id": "exp_cover_0",
         "type": "blocked",
         "rect": [
-          470,
-          330,
-          360,
-          65
+          440,
+          300,
+          180,
+          56
         ],
-        "label": "远征断墙"
+        "label": "据点外围掩体"
       },
       {
-        "id": "exp_wall_0_1",
+        "id": "exp_cover_1",
         "type": "blocked",
         "rect": [
-          880,
-          600,
-          65,
-          270
+          420,
+          550,
+          56,
+          160
         ],
-        "label": "远征断墙"
+        "label": "据点外围掩体"
       },
       {
-        "id": "exp_wall_0_2",
+        "id": "exp_cover_2",
         "type": "blocked",
         "rect": [
-          490,
-          810,
-          270,
-          65
+          2100,
+          300,
+          180,
+          56
         ],
-        "label": "远征断墙"
+        "label": "据点外围掩体"
       },
       {
-        "id": "exp_high_0_0",
-        "type": "high_ground",
-        "rect": [
-          630,
-          460,
-          160,
-          100
-        ],
-        "label": "观测高台",
-        "attack_bonus": 0.12,
-        "range_bonus": 1.0
-      },
-      {
-        "id": "exp_wall_1_0",
+        "id": "exp_cover_3",
         "type": "blocked",
         "rect": [
-          2110,
-          330,
-          360,
-          65
+          2244,
+          550,
+          56,
+          160
         ],
-        "label": "远征断墙"
+        "label": "据点外围掩体"
       },
       {
-        "id": "exp_wall_1_1",
+        "id": "exp_cover_4",
         "type": "blocked",
         "rect": [
-          2520,
-          600,
-          65,
-          270
+          440,
+          1404,
+          180,
+          56
         ],
-        "label": "远征断墙"
+        "label": "据点外围掩体"
       },
       {
-        "id": "exp_wall_1_2",
+        "id": "exp_cover_5",
         "type": "blocked",
         "rect": [
-          2130,
-          810,
-          270,
-          65
+          420,
+          1040,
+          56,
+          160
         ],
-        "label": "远征断墙"
+        "label": "据点外围掩体"
       },
       {
-        "id": "exp_high_1_0",
-        "type": "high_ground",
-        "rect": [
-          2270,
-          460,
-          160,
-          100
-        ],
-        "label": "观测高台",
-        "attack_bonus": 0.12,
-        "range_bonus": 1.0
-      },
-      {
-        "id": "exp_wall_2_0",
+        "id": "exp_cover_6",
         "type": "blocked",
         "rect": [
-          470,
-          1490,
-          360,
-          65
+          2100,
+          1404,
+          180,
+          56
         ],
-        "label": "远征断墙"
+        "label": "据点外围掩体"
       },
       {
-        "id": "exp_wall_2_1",
+        "id": "exp_cover_7",
         "type": "blocked",
         "rect": [
-          880,
-          1760,
-          65,
-          270
+          2244,
+          1040,
+          56,
+          160
         ],
-        "label": "远征断墙"
-      },
-      {
-        "id": "exp_wall_2_2",
-        "type": "blocked",
-        "rect": [
-          490,
-          1970,
-          270,
-          65
-        ],
-        "label": "远征断墙"
-      },
-      {
-        "id": "exp_high_2_0",
-        "type": "high_ground",
-        "rect": [
-          630,
-          1620,
-          160,
-          100
-        ],
-        "label": "观测高台",
-        "attack_bonus": 0.12,
-        "range_bonus": 1.0
-      },
-      {
-        "id": "exp_wall_3_0",
-        "type": "blocked",
-        "rect": [
-          2110,
-          1490,
-          360,
-          65
-        ],
-        "label": "远征断墙"
-      },
-      {
-        "id": "exp_wall_3_1",
-        "type": "blocked",
-        "rect": [
-          2520,
-          1760,
-          65,
-          270
-        ],
-        "label": "远征断墙"
-      },
-      {
-        "id": "exp_wall_3_2",
-        "type": "blocked",
-        "rect": [
-          2130,
-          1970,
-          270,
-          65
-        ],
-        "label": "远征断墙"
-      },
-      {
-        "id": "exp_high_3_0",
-        "type": "high_ground",
-        "rect": [
-          2270,
-          1620,
-          160,
-          100
-        ],
-        "label": "观测高台",
-        "attack_bonus": 0.12,
-        "range_bonus": 1.0
+        "label": "据点外围掩体"
       }
     ],
     "route_material": {
@@ -4929,6 +4363,7 @@
       "east": "crimson",
       "south": "violet",
       "west": "ash"
-    }
+    },
+    "arena_profile": "res://data/stage_profiles/endless_arena_profile.gd"
   }
 ]

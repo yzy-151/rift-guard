@@ -13,7 +13,7 @@ func _initialize() -> void:
 	var first: Array[Dictionary] = pool.draw_three(run)
 	assert(first.size() == 3)
 	assert(first.any(func(card): return card.effect == "assign_traveler_element"))
-	assert(first.all(func(card): return card.get("target", "global") == "global" or card.character_id == "traveler"))
+	assert(first.all(func(card): return card.get("target", "global") == "global" or str(card.get("character_id", "")) in ["", "traveler"]))
 	assert(pool.apply_card(first.filter(func(card): return card.effect == "assign_traveler_element")[0], run))
 	var chosen_element: String = run.traveler_element
 	assert(chosen_element in ["anemo", "electro", "pyro", "hydro", "geo", "cryo"])
@@ -26,13 +26,15 @@ func _initialize() -> void:
 			unique_ids[card.id] = true
 		assert(unique_ids.size() == 3)
 		assert(offer.all(func(card): return card.get("effect", "") != "assign_traveler_element"))
-		assert(offer.all(func(card): return card.get("target", "global") == "global" or card.character_id == "traveler"))
+		assert(offer.all(func(card): return card.get("target", "global") == "global" or str(card.get("character_id", "")) in ["", "traveler"]))
 		assert(offer.all(func(card): return card.get("requires_element", chosen_element) == chosen_element))
 	assert(not pool.apply_element(run, "geo" if chosen_element != "geo" else "pyro"))
 	var repeatable: Dictionary = db.cards.filter(func(card): return card.id == "mechanic_twin_arc")[0]
-	for layer in 25:
+	run.crystal_level = 3
+	for layer in int(repeatable.max_stacks):
 		assert(pool.apply_card(repeatable, run))
-	assert(run.buff_levels[repeatable.id] == 25)
+	assert(run.buff_levels[repeatable.id] == int(repeatable.max_stacks))
+	assert(not pool.apply_card(repeatable, run))
 	run.crystal_level = 3
 	pool.reseed(7)
 	assert(pool.draw_three(run).any(func(card): return bool(card.get("mechanic", false))))

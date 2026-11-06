@@ -1,0 +1,41 @@
+{
+  "dimensions": [
+    2172,
+    724
+  ],
+  "mode": "RGBA",
+  "cell_width": 724,
+  "transparent_pixel_ratio": 0.6467783085579398,
+  "regions": [
+    {
+      "index": 0,
+      "name": "Gentilhomme Usher",
+      "region": [
+        90,
+        91,
+        605,
+        583
+      ]
+    },
+    {
+      "index": 1,
+      "name": "Surintendante Chevalmarin",
+      "region": [
+        933,
+        77,
+        337,
+        598
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Mademoiselle Crabaletta",
+      "region": [
+        1486,
+        202,
+        601,
+        464
+      ]
+    }
+  ]
+}
