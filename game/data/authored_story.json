@@ -4,13 +4,13 @@
     "comics": [
       {
         "image": "res://assets/story_comics/master_delivery_20261004/image_2be0af89fdfcfb8c.png",
-        "text": "似乎传送到这里的不止你一人......还有...",
+        "text": "门不见了。好消息是，迷路的似乎不止你一个。",
         "width": 1774,
         "height": 887
       },
       {
         "image": "res://assets/story_comics/master_delivery_20261004/furina_kettle_20261005.png",
-        "text": "还有一位提着烧水壶自称水神的少女（或许）",
+        "text": "一位自称水神的少女提着烧水壶。\n出口还没找到，热水倒是有了。",
         "width": 1774,
         "height": 887
       }
@@ -22,7 +22,7 @@
         "speaker": "芙宁娜",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png",
-        "text": "嗯？这不是旅行者吗，你也是找厕所的时候进了奇怪的地方然后出不去了吗",
+        "text": "嗯？旅行者？你也是找厕所时推错了门，然后发现门没了吗？",
         "next": "n_mutxol0a_6894t"
       },
       {
@@ -31,7 +31,7 @@
         "speaker": "芙宁娜",
         "expression": "思考",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
-        "text": "说起来在附近只能找到一个水壶，反正闲着也是闲着，先烧了水",
+        "text": "我在附近只找到这把水壶。来都来了，先烧点水——总不能连热水都没有吧。",
         "next": "n_mutxph0w_obciu"
       },
       {
@@ -40,7 +40,7 @@
         "speaker": "芙宁娜",
         "expression": "思考",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
-        "text": "怎么样旅行者，来壶开水充充饥吧",
+        "text": "怎么样，来杯开水充充饥？水神亲自烧的。",
         "options": [
           {
             "text": "谢谢，芙宁娜可真爱干净",
@@ -58,7 +58,7 @@
         "speaker": "芙宁娜",
         "expression": "害羞",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
-        "text": "虽然是很爱干净，但总感觉旅行者说话很奇怪呢",
+        "text": "我当然爱干净……等等，你夸的是我，还是这壶水？",
         "next": "n_mutxwqwn_39ol7"
       },
       {
@@ -67,7 +67,7 @@
         "speaker": "芙宁娜",
         "expression": "害羞",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
-        "text": "也没什么事干，或许跟着旅行者能找到厕所",
+        "text": "算了，先一起找出口。那颗水晶像个路标，别让怪物拆了——还有，看到厕所记得叫我。",
         "next": "n_mutxy7ry_j9nqn"
       },
       {
@@ -84,7 +84,7 @@
         "speaker": "芙宁娜",
         "expression": "傲娇",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
-        "text": "居然拒绝水之魔神芙卡洛斯的水吗",
+        "text": "竟敢拒绝水神亲手烧的水！这段不算，重来！",
         "next": "n_mutxzoo7_d17k5"
       },
       {
@@ -103,13 +103,13 @@
     "comics": [
       {
         "image": "res://assets/story_comics/master_delivery_20261004/image_c8a78d3bcaf9f0ff.png",
-        "text": "终于，你战胜了黏糊糊的怪物，以免触发不妙的战败动画",
+        "text": "黏糊糊的怪物终于倒下。\n你检查了披风，决定把清洗问题留给明天的自己。",
         "width": 1774,
         "height": 887
       },
       {
         "image": "res://assets/story_comics/master_delivery_20261004/image_206d504c522c70e7.png",
-        "text": "但前方已经有人在攫取胜利的果实，你决定狠狠撅取撅走果实的家伙",
+        "text": "刚才在场上帮忙的裁缝，已经先一步等在出口。\n她看了看你的黄头发，似乎认错了人。",
         "width": 1774,
         "height": 887
       }
@@ -121,7 +121,7 @@
         "speaker": "格温",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
-        "text": "嗯？有黄毛",
+        "text": "嗯？黄毛。刚才忙着剪怪物，还没来得及问：你是哪条路的？",
         "next": "n_muty7h17_n5pa3"
       },
       {
@@ -130,7 +130,7 @@
         "speaker": "格温",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
-        "text": "我正好缺一个射手，你是伊泽瑞尔？伊？泽？瑞？尔？",
+        "text": "我正好缺个射手。你是伊泽瑞尔？伊？泽？瑞？尔？",
         "options": [
           {
             "text": "叽里咕噜说什么呢，跟我肘",
@@ -148,7 +148,7 @@
         "speaker": "格温",
         "expression": "害羞",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_害羞_原画风重绘.png",
-        "text": "走就走",
+        "text": "走就走。先说好，我刚才只是路过帮忙，现在才算入队。",
         "next": "n_mutye0z4_4nxvl"
       },
       {
@@ -165,7 +165,7 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "好的开拓者，我申请加入队伍",
+        "text": "好的，开拓者，我申请入队。名字以后再对，前面有个东西正拿炮瞄我们。",
         "next": "n_mutye0z4_4nxvl"
       }
     ],
@@ -239,7 +239,7 @@
         "speaker": "格温",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
-        "text": "前面写着「赤潮回廊」。地上这么红，是谁把番茄锅底打翻了？",
+        "text": "「赤潮回廊，禁止喧哗」。那个扛炮的识字吗？",
         "next": "l1"
       },
       {
@@ -248,7 +248,7 @@
         "speaker": "芙宁娜",
         "expression": "傲娇",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
-        "text": "咳，这是本导演特意安排的第二幕！第一幕负责认识队友，第二幕负责让队友认识危险。",
+        "text": "这是第二幕的开场礼炮。只要我们走得够快，它就算欢送。",
         "next": "l2"
       },
       {
@@ -257,23 +257,32 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "所以那个举着炮、还在往我们这边走的大家伙，也是演员？",
+        "text": "它转过来了。现在算追悼。",
+        "next": "l3"
+      },
+      {
+        "id": "l3",
+        "type": "line",
+        "speaker": "芙宁娜",
+        "expression": "思考",
+        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
+        "text": "先守住水晶。植物摆开，队伍散开……水壶放哪儿比较安全？",
         "next": "pick"
       },
       {
         "id": "pick",
         "type": "choice",
-        "speaker": "芙宁娜",
-        "expression": "惊讶",
-        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png",
-        "text": "它好像没有拿剧本。你有什么计划？",
+        "speaker": "格温",
+        "expression": "羞恼",
+        "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
+        "text": "你真打算一路拎着它？",
         "options": [
           {
-            "text": "先种植物，再让它认识一下我们的火力。",
+            "text": "当然。打完还得喝口热的。",
             "next": "reply0"
           },
           {
-            "text": "你负责鼓舞士气，我负责找掩体。",
+            "text": "放我身后，别让它抢前排。",
             "next": "reply1"
           }
         ]
@@ -281,26 +290,26 @@
       {
         "id": "reply0",
         "type": "line",
-        "speaker": "芙宁娜",
-        "expression": "惊讶",
-        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png",
-        "text": "很好！舞台布置、灯光和炮火，一次解决。记得把水晶留在舞台上。",
+        "speaker": "格温",
+        "expression": "羞恼",
+        "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
+        "text": "行，那就一起保住它。我们这支队伍，总得有一个真正的输出是热水。",
         "next": "done"
       },
       {
         "id": "reply1",
         "type": "line",
-        "speaker": "芙宁娜",
-        "expression": "惊讶",
-        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png",
-        "text": "批准。但掩体只能挡攻击，不能替你上班！带好格温，出发。",
+        "speaker": "格温",
+        "expression": "羞恼",
+        "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
+        "text": "好。坚果顶前面，水壶当后勤。别把这两个岗位弄反了。",
         "next": "done"
       },
       {
         "id": "done",
         "type": "ending",
         "status": "success",
-        "note": "三章试玩版剧情",
+        "note": "继续冒险",
         "comics": []
       }
     ]
@@ -314,7 +323,7 @@
         "speaker": "格温",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
-        "text": "炮停了。刚才那一串爆炸，是我们赢了，还是地图终于报废了？",
+        "text": "炮停了，水壶也还在。我们到底是在护送谁？",
         "next": "l1"
       },
       {
@@ -323,7 +332,7 @@
         "speaker": "芙宁娜",
         "expression": "傲娇",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
-        "text": "当然是谢幕烟花！另外，通往裂隙深处的路已经打开。",
+        "text": "当然是大家。只不过水壶从头到尾没有抱怨，是位优秀的队员。",
         "next": "l2"
       },
       {
@@ -332,23 +341,32 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "有个戴面具的家伙站在门口，还有一团非常大的影子。看起来不像发通关奖励的。",
+        "text": "那给它发工资。前面的路通了——怎么还有狼叫？",
+        "next": "l3"
+      },
+      {
+        "id": "l3",
+        "type": "line",
+        "speaker": "芙宁娜",
+        "expression": "思考",
+        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
+        "text": "一只羊、一只狼。旁边那尊石像刚才是不是动了一下？",
         "next": "pick"
       },
       {
         "id": "pick",
         "type": "choice",
-        "speaker": "芙宁娜",
-        "expression": "思考",
-        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
-        "text": "第三幕的节目单只有四个字：双倍麻烦。",
+        "speaker": "格温",
+        "expression": "惊讶",
+        "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+        "text": "出口就在它们后面。还走吗？",
         "options": [
           {
-            "text": "那就让它们见识一下三人小队。",
+            "text": "都把水烧开了，总得喝完这趟。",
             "next": "reply0"
           },
           {
-            "text": "先检查卡牌，麻烦也得排队。",
+            "text": "走。听见狼叫，总比听见催稿强。",
             "next": "reply1"
           }
         ]
@@ -356,26 +374,26 @@
       {
         "id": "reply0",
         "type": "line",
-        "speaker": "芙宁娜",
-        "expression": "思考",
-        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
-        "text": "气势不错！这次别站在同一个预警圈里，团结不是一起挨打。",
+        "speaker": "格温",
+        "expression": "惊讶",
+        "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+        "text": "有道理，但别烫得上头。下一关重新选卡，先把队伍配好。",
         "next": "done"
       },
       {
         "id": "reply1",
         "type": "line",
-        "speaker": "芙宁娜",
-        "expression": "思考",
-        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
-        "text": "严谨！下一关重新构筑，选好队伍再进门，别把好运当护甲。",
+        "speaker": "格温",
+        "expression": "惊讶",
+        "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
+        "text": "你负责看路，我负责剪挡路的。至于那尊石像……先别站它正下面。",
         "next": "done"
       },
       {
         "id": "done",
         "type": "ending",
         "status": "success",
-        "note": "三章试玩版剧情",
+        "note": "继续冒险",
         "comics": []
       }
     ]
@@ -389,7 +407,7 @@
         "speaker": "格温",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
-        "text": "羊、狼，还有一尊准备跳下来的石像。这是什么跨物种业主大会？",
+        "text": "那只羊身边跟着狼。这地方连宠物关系都很复杂。",
         "next": "l1"
       },
       {
@@ -398,7 +416,7 @@
         "speaker": "芙宁娜",
         "expression": "思考",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
-        "text": "我宣布会议主题是：不要让它们拆掉水晶。千珏的箭会贯穿，看到射线先让路。",
+        "text": "千珏。看见窄射线就让路，不要三个人排成一串给它练箭。",
         "next": "l2"
       },
       {
@@ -407,7 +425,7 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "那尊石像呢？",
+        "text": "你刚才说的石像呢？",
         "next": "l3"
       },
       {
@@ -416,7 +434,7 @@
         "speaker": "芙宁娜",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png",
-        "text": "加里奥。它的入场礼仪是从天上砸下来，声音还特别大。千珏残血时尤其要看预警！",
+        "text": "加里奥……在上面！它和千珏是一伙的。地上亮起大范围预警，就赶紧挪开！",
         "next": "pick"
       },
       {
@@ -425,14 +443,14 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "大范围的圈要躲，窄射线也要躲。你不会又准备靠脸接吧？",
+        "text": "还有什么贵重物品需要我照看？",
         "options": [
           {
-            "text": "分散站位，预警一亮就挪。",
+            "text": "我。活着的旅行者很贵。",
             "next": "reply0"
           },
           {
-            "text": "我的脸很贵，这次让它们空技能。",
+            "text": "水壶。它还没发过工资。",
             "next": "reply1"
           }
         ]
@@ -443,7 +461,7 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "听着像个能活着回去的人。你盯水晶，我找机会下剪刀。",
+        "text": "知道了。你先学会躲，我尽量不让你变成售后问题。",
         "next": "done"
       },
       {
@@ -452,14 +470,14 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "你总算给自己的脸找到了正确用途：待在安全的地方。走吧！",
+        "text": "行。你守水晶，我找机会剪它们，水壶继续保持情绪稳定。",
         "next": "done"
       },
       {
         "id": "done",
         "type": "ending",
         "status": "success",
-        "note": "三章试玩版剧情",
+        "note": "继续冒险",
         "comics": []
       }
     ]
@@ -473,16 +491,16 @@
         "speaker": "格温",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
-        "text": "它们终于不动了。我能把这场战斗写进裁缝的工伤申请吗？",
+        "text": "羊不射箭了，石像也落稳了。谁去问问它们让不让路？",
         "next": "l1"
       },
       {
         "id": "l1",
         "type": "line",
         "speaker": "芙宁娜",
-        "expression": "傲娇",
-        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
-        "text": "三幕演出，圆满落幕！感谢各位观众，感谢水晶，以及没有被踩坏的向日葵。",
+        "expression": "思考",
+        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
+        "text": "不用问。门上写着：「后续区域暂未开放」。下面还有小字。",
         "next": "l2"
       },
       {
@@ -491,16 +509,16 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "前面那扇门怎么贴着「施工中」？",
+        "text": "「请勿用剪刀提前解锁」。这告示是不是刚贴的？",
         "next": "l3"
       },
       {
         "id": "l3",
         "type": "line",
         "speaker": "芙宁娜",
-        "expression": "思考",
-        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
-        "text": "因为这次冒险先到这里。后续区域暂未开放——剧情可以留悬念，地板不能留窟窿。",
+        "expression": "傲娇",
+        "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
+        "text": "那就暂时谢幕！三个人、一颗水晶、一壶热水，全部安全撤场。",
         "next": "pick"
       },
       {
@@ -509,14 +527,14 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "回家休息，还是带着这身卡牌去无尽模式再闹一场？",
+        "text": "后面的路先记着。现在回去，还是去无尽模式再打一会儿？",
         "options": [
           {
-            "text": "先庆祝！我们真的守住了。",
+            "text": "回去喝茶。这壶水都等三关了。",
             "next": "reply0"
           },
           {
-            "text": "这一身构筑不能浪费，我还想打！",
+            "text": "牌都凑好了，我还没打够。",
             "next": "reply1"
           }
         ]
@@ -527,7 +545,7 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "好。我只剪庆祝用的彩带，不剪你的披风……今天先不剪。",
+        "text": "好。这回你找杯子，我看着门。别又一推就推到别的游戏里。",
         "next": "done"
       },
       {
@@ -536,14 +554,14 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "那就去无尽。怪物不会替你下班，记得在下一页选择携带构筑。",
+        "text": "那就去无尽。下一页选携带构筑，水壶也算加班——但别指望它替你输出。",
         "next": "done"
       },
       {
         "id": "done",
         "type": "ending",
         "status": "success",
-        "note": "三章试玩版剧情",
+        "note": "继续冒险",
         "comics": []
       }
     ]

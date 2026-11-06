@@ -10,7 +10,17 @@
     ],
     "max_squad_size": 3,
     "buff_stack_limit": 0,
-    "starting_stage_id": "stage_01"
+    "starting_stage_id": "stage_01",
+    "display_stage_ids": [
+      "stage_01",
+      "stage_02",
+      "stage_03",
+      "stage_04",
+      "stage_05",
+      "stage_06",
+      "stage_07",
+      "stage_08"
+    ]
   },
   {
     "id": "endless_survival",

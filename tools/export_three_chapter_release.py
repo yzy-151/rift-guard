@@ -10,7 +10,7 @@ env['GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD']=config['password']
 exe='C:/Users/23081/Desktop/codex/.tools/godot/Godot_v4.4.1-stable_win64_console.exe'
 for platform,out in [('Windows Desktop','RiftGuard.exe'),('Android','RiftGuard-Android.apk')]:
     if len(sys.argv)>1 and sys.argv[1]!=platform:continue
-    with (ROOT/'qa/release-20261106'/('export-'+platform.split()[0]+'.log')).open('w',encoding='utf8') as log:
-        result=subprocess.run([exe,'--headless','--path',str(ROOT/'game'),'--export-release',platform,str(ROOT/'builds/release-20261106'/out)],env=env,stdout=log,stderr=log)
+    with (ROOT/'qa/release-20261106-r2'/('export-'+platform.split()[0]+'.log')).open('w',encoding='utf8') as log:
+        result=subprocess.run([exe,'--headless','--path',str(ROOT/'game'),'--export-release',platform,str(ROOT/'builds/release-20261106-r2'/out)],env=env,stdout=log,stderr=log)
     print(platform,'exit',result.returncode,flush=True)
     if result.returncode:sys.exit(result.returncode)

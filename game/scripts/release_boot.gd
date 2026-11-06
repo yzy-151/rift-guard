@@ -30,7 +30,7 @@ func _ready() -> void:
 	add_child(art)
 	label_at(LAYOUT.mode_boot_title_rect, "裂隙守望", 82, Color("fff5e5"))
 	label_at(LAYOUT.mode_boot_subtitle_rect, "RIFT GUARD  /  三章试玩版", 25, Color("f9c957"))
-	label_at(LAYOUT.mode_boot_tagline_rect, "世界裂开了，队友倒是凑齐了。", 22, Color("e7dcd6"))
+	label_at(LAYOUT.mode_boot_tagline_rect, "门后是冒险，还是另一份加班？", 22, Color("e7dcd6"))
 	status = label_at(LAYOUT.mode_boot_status_rect, "正在准备舞台…", 21, Color("fff5e5"))
 	modulate.a = 0.0
 	create_tween().tween_property(self, "modulate:a", 1.0, 0.4)

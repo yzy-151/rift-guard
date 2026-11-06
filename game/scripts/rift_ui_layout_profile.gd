@@ -28,6 +28,9 @@ class_name RiftUILayoutProfile
 @export var mode_card_action_rect := Rect2(34, 274, 360, 40)
 
 @export_group("Mission Select")
+@export var mission_stage_grid_origin := Vector2(50, 164)
+@export var mission_stage_grid_step := Vector2(300, 248)
+@export var mission_stage_card_scale := Vector2(0.92, 0.92)
 @export var mission_release_notice_rect := Rect2(190, 550, 930, 68)
 @export var mission_header_rect := Rect2(30, 16, 760, 126)
 @export var mission_grid_origin := Vector2(100, 154)

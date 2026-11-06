@@ -10,17 +10,17 @@
     },
     {
       "image": "res://assets/story_comics/v85_rift.png",
-      "text": "你的房间里出现了一道裂隙。虽然预感不好，你还是决定去看看。\n就像明知有哥布林，还要继续深入巢穴的女骑士。"
+      "text": "你的房间里多了一道裂隙。\n你确认了一眼：这次不是房东装修。然后还是推开了门。"
     },
     {
       "image": "res://assets/story_comics/master_delivery_20261004/image_2be0af89fdfcfb8c.png",
-      "text": "似乎传送到这里的不止你一人......还有...",
+      "text": "门不见了。好消息是，迷路的似乎不止你一个。",
       "width": 1774,
       "height": 887
     },
     {
       "image": "res://assets/story_comics/master_delivery_20261004/furina_kettle_20261005.png",
-      "text": "还有一位提着烧水壶自称水神的少女（或许）",
+      "text": "一位自称水神的少女提着烧水壶。\n出口还没找到，热水倒是有了。",
       "width": 1774,
       "height": 887
     }
@@ -28,13 +28,13 @@
   "mode1_won": [
     {
       "image": "res://assets/story_comics/master_delivery_20261004/image_c8a78d3bcaf9f0ff.png",
-      "text": "终于，你战胜了黏糊糊的怪物，以免触发不妙的战败动画",
+      "text": "黏糊糊的怪物终于倒下。\n你检查了披风，决定把清洗问题留给明天的自己。",
       "width": 1774,
       "height": 887
     },
     {
       "image": "res://assets/story_comics/master_delivery_20261004/image_206d504c522c70e7.png",
-      "text": "但前方已经有人在攫取胜利的果实，你决定狠狠撅取撅走果实的家伙",
+      "text": "刚才在场上帮忙的裁缝，已经先一步等在出口。\n她看了看你的黄头发，似乎认错了人。",
       "width": 1774,
       "height": 887
     }
@@ -42,19 +42,19 @@
   "mode1_stage2_opening": [
     {
       "image": "res://assets/story_comics/illustrations_v2/stage_02_intro.png",
-      "text": "黏糊糊的第一幕结束了。\n格温加入小队，芙宁娜坚持把下一场战斗叫作「巡回演出」。"
+      "text": "格温正式入队，三个人终于凑齐。\n前面的牌子写着「禁止喧哗」，牌子后面有人架起了炮。"
     }
   ],
   "mode1_stage2_won": [
     {
       "image": "res://assets/story_comics/illustrations_v2/stage_02_outro.png",
-      "text": "炮声暂时停下。\n裂隙深处传来狼嚎，以及一尊石像非常不礼貌的落地声。"
+      "text": "炮声停下，通往深处的路露了出来。\n远处的狼嚎提醒你：安静只是换班，不是下班。"
     }
   ],
   "mode1_stage3_opening": [
     {
       "image": "res://assets/story_comics/illustrations_v2/stage_03_intro.png",
-      "text": "三章冒险的最后一道防线。\n羊与狼等在门口，天空中的影子却比它们加起来还大。"
+      "text": "出口前，一只羊和一只狼挡住了去路。\n头顶的影子越来越大，水壶里荡起一圈涟漪。"
     }
   ],
   "mode1_stage3_won": [
@@ -120,7 +120,7 @@
   "mode1_final_won": [
     {
       "image": "res://assets/story_comics/illustrations_v2/stage_03_outro.png",
-      "text": "水晶仍然亮着，三个人也都还在。\n第三章完成。下一次冒险，可以先从好好睡一觉开始。"
+      "text": "水晶还亮着，三个人也都还在。\n更深处的门暂时封闭。至少这次，门没有凭空消失。"
     }
   ]
 }

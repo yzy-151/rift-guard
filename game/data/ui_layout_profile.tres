@@ -28,7 +28,7 @@ mode_card_subtitle_rect = Rect2(34, 162, 475, 26)
 mode_card_description_rect = Rect2(34, 205, 475, 58)
 mode_card_action_rect = Rect2(34, 274, 360, 40)
 mission_header_rect = Rect2(30, 16, 760, 126)
-mission_release_notice_rect = Rect2(190, 550, 930, 68)
+mission_release_notice_rect = Rect2(62, 664, 1156, 50)
 mission_grid_origin = Vector2(100, 154)
 mission_card_size = Vector2(261, 222)
 mission_card_gap = Vector2(13, 16)
@@ -152,7 +152,7 @@ battle_boss_skill_caption_offset = Vector2(16, -24)
 battle_boss_skill_caption_font_size = 19
 
 stage_clear_choice_rect = Rect2(330, 210, 620, 270)
-mission_roster_rect = Rect2(190, 143, 930, 48)
+mission_roster_rect = Rect2(62, 112, 1156, 48)
 
 stage_compendium_frame_rect = Rect2(42, 26, 1196, 668)
 stage_compendium_header_rect = Rect2(22, 18, 1152, 90)

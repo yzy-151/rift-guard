@@ -18,10 +18,10 @@ if not sign.exists():
     sign.write_text(json.dumps(config),encoding='utf8')
 presets=(G/'export_presets.cfg').read_text(encoding='utf8')
 presets=presets.replace('res://assets/ui/rift_guard_emblem_v1.ico','res://assets/ui/release_20261106/icon.ico')
-presets=re.sub(r'application/(file_version|product_version)="[^"]+"',lambda m:'application/'+m[1]+'="2026.11.6.1"',presets)
+presets=re.sub(r'application/(file_version|product_version)="[^"]+"',lambda m:'application/'+m[1]+'="2026.11.6.2"',presets)
 presets=re.sub(r'application/file_description="[^"]+"','application/file_description="Rift Guard Three Chapter Demo"',presets)
-presets=re.sub(r'version/code=\d+','version/code=20261106',presets)
-presets=re.sub(r'version/name="[^"]+"','version/name="2026.11.6.1"',presets)
+presets=re.sub(r'version/code=\d+','version/code=20261107',presets)
+presets=re.sub(r'version/name="[^"]+"','version/name="2026.11.6.2"',presets)
 presets=presets.replace('package/unique_name="com.riftguard.game"','package/unique_name="com.riftguard.demo"').replace('package/name="Rift Guard"','package/name="裂隙守望"')
 presets=presets.replace('architectures/x86_64=false','architectures/x86_64=true')
 # Keep both platforms' exact data/asset inclusion and exclusion lists identical.
@@ -30,8 +30,8 @@ include=re.search(r'^include_filter=(.*)$',first,re.M)[1]
 exclude=re.search(r'^exclude_filter=(.*)$',first,re.M)[1]
 presets=re.sub(r'^include_filter=.*$',lambda m:'include_filter='+include,presets,flags=re.M)
 presets=re.sub(r'^exclude_filter=.*$',lambda m:'exclude_filter='+exclude,presets,flags=re.M)
-presets=presets.replace('../builds/rift-guard-v97-readable/RiftGuard-Windows.exe','../builds/release-20261106/RiftGuard.exe').replace('../builds/rift-guard-v97-readable/RiftGuard-Android.apk','../builds/release-20261106/RiftGuard-Android.apk')
+presets=presets.replace('../builds/rift-guard-v97-readable/RiftGuard-Windows.exe','../builds/release-20261106-r2/RiftGuard.exe').replace('../builds/rift-guard-v97-readable/RiftGuard-Android.apk','../builds/release-20261106-r2/RiftGuard-Android.apk')
 if 'launcher_icons/main_192x192' not in presets:presets+='\nlauncher_icons/main_192x192="res://assets/ui/release_20261106/icon.png"\nlauncher_icons/adaptive_foreground_432x432="res://assets/ui/release_20261106/icon.png"\n'
 (G/'export_presets.cfg').write_text(presets,encoding='utf8')
-(ROOT/'builds/release-20261106').mkdir(exist_ok=True,parents=True)
+(ROOT/'builds/release-20261106-r2').mkdir(exist_ok=True,parents=True)
 print('EXPORTS CONFIGURED; private signing material stays outside repository')

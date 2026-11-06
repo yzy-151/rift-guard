@@ -41,7 +41,8 @@ func build(owner_hud, game_database, state) -> void:
 	roster_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	back_button = _textured_button(Rect2(1030, 50, 196, 52), "←  返回", false)
 	back_button.pressed.connect(func(): _play(confirm_sound); close(); cancelled.emit())
-	var ids: Array = database.modes.get("rift_watch", {}).get("stage_ids", [])
+	var mode: Dictionary = database.modes.get("rift_watch", {})
+	var ids: Array = mode.get("display_stage_ids", mode.get("stage_ids", []))
 	for i in ids.size(): _build_stage_card(i, str(ids[i]), database.stages[str(ids[i])])
 	select_sound = AudioStreamPlayer.new(); select_sound.stream = preload("res://assets/helltaker/audio/button_chapter_highlight_01.wav"); select_sound.bus = "SFX"; select_sound.volume_db = -7; add_child(select_sound)
 	confirm_sound = AudioStreamPlayer.new(); confirm_sound.stream = preload("res://assets/helltaker/audio/button_chapter_confirm_01.wav"); confirm_sound.bus = "SFX"; confirm_sound.volume_db = -4; add_child(confirm_sound)
@@ -49,9 +50,9 @@ func build(owner_hud, game_database, state) -> void:
 
 func _build_stage_card(index: int, id: String, stage: Dictionary) -> void:
 	var col := index % 4; var row := int(index / 4)
-	var rect := Rect2(Vector2(150 + col * 335, 210 + row * 310), Vector2(278, 258))
+	var rect := Rect2(UI_LAYOUT.mission_stage_grid_origin + Vector2(col, row) * UI_LAYOUT.mission_stage_grid_step, Vector2(278, 258))
 	var item: Button = hud.button(root, rect, "", index == 0); item.name = "Stage_%02d" % (index + 1)
-	item.scale = Vector2(1.15, 1.15)
+	item.scale = UI_LAYOUT.mission_stage_card_scale
 	for state in ["normal", "hover", "pressed", "focus", "disabled"]: item.add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	buttons[id] = item
 	var panel := Panel.new(); panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); panel.mouse_filter = Control.MOUSE_FILTER_IGNORE; panel.add_theme_stylebox_override("panel", StyleBoxEmpty.new()); item.add_child(panel); card_panels[id] = panel
@@ -64,8 +65,8 @@ func _build_stage_card(index: int, id: String, stage: Dictionary) -> void:
 	var boss: Dictionary = Catalog.ENEMIES.get(str(stage.boss_id), {})
 	hud.label(panel, Vector2(34, 145), Vector2(210, 18), "◷ %d:%02d  ·  %s" % [int(stage.duration_seconds) / 60, int(stage.duration_seconds) % 60, boss.get("name", stage.boss_id)], 9, MUTED)
 	var status: Label = hud.label(panel, Vector2(34, 168), Vector2(210, 38), "", 9, WHITE); status_labels[id] = status
-	var action: Label = hud.label(panel, Vector2(34, 218), Vector2(210, 18), "出发剧情   →", 11, ACCENT); action.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	var lock: Label = hud.label(panel, Vector2(34, 72), Vector2(210, 44), "🔒  LOCKED", 18, ACCENT); lock.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; lock.vertical_alignment = VERTICAL_ALIGNMENT_CENTER; lock.hide(); lock_labels[id] = lock
+	var action: Label = hud.label(panel, Vector2(34, 218), Vector2(210, 18), "后续章节 · 敬请期待" if _is_release_locked(id) else "出发剧情   →", 11, ACCENT); action.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	var lock: Label = hud.label(panel, Vector2(34, 72), Vector2(210, 44), "暂未开放" if _is_release_locked(id) else "尚未解锁", 18, ACCENT); lock.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; lock.vertical_alignment = VERTICAL_ALIGNMENT_CENTER; lock.hide(); lock_labels[id] = lock
 	item.focus_entered.connect(_focus_stage.bind(id)); item.mouse_entered.connect(func(): item.grab_focus(); _play(select_sound)); item.pressed.connect(select.bind(id))
 
 func _build_endless() -> void:
@@ -126,7 +127,7 @@ func _focus_stage(id: String) -> void:
 	for stage_id: String in card_panels:
 		var unlocked := _is_unlocked(stage_id); var focused := stage_id == id and unlocked
 		card_frames[stage_id].texture = (ENDLESS_SKIN if stage_id == "stage_endless" else (BUFF_RED if focused else BUFF_GRAY))
-		buttons[stage_id].modulate = Color.WHITE if focused else (Color(0.82,0.79,0.82,1) if unlocked else Color(0.36,0.34,0.36,1))
+		buttons[stage_id].modulate = Color.WHITE if focused else (Color(0.82,0.79,0.82,1) if unlocked else Color(0.68,0.65,0.68,1))
 
 func activate_at(point: Vector2) -> bool:
 	if not is_open(): return false
@@ -144,18 +145,22 @@ func is_open() -> bool: return root != null and root.visible
 func select(id: String) -> void:
 	if not _is_unlocked(id): return
 	_play(confirm_sound); root.hide(); chosen.emit(id)
+func _is_release_locked(id: String) -> bool:
+	return id != "stage_endless" and id not in database.modes.get("rift_watch", {}).get("stage_ids", [])
+
 func _is_unlocked(id: String) -> bool:
 	if id == "stage_endless": return true
 	var ids: Array = database.modes.get("rift_watch", {}).get("stage_ids", []); var index := ids.find(id)
 	return index == 0 or (index > 0 and progress.cleared_stages.has(str(ids[index - 1])))
 func _refresh() -> void:
 	for id: String in buttons:
-		var unlocked := _is_unlocked(id); buttons[id].disabled = not unlocked; buttons[id].modulate = Color.WHITE if unlocked else Color(0.42,0.39,0.42,1)
+		var unlocked := _is_unlocked(id); buttons[id].disabled = not unlocked; buttons[id].modulate = Color.WHITE if unlocked else Color(0.68,0.65,0.68,1)
 		card_frames[id].texture = ENDLESS_SKIN if id == "stage_endless" else BUFF_GRAY
 		if lock_labels.has(id): lock_labels[id].visible = not unlocked
 		if not status_labels.has(id): continue
 		var record: Dictionary = progress.stage_records.get(id, {}); var status: Label = status_labels[id]
-		if not unlocked: status.text = "档案封锁 · 先通关前一区域"
+		if _is_release_locked(id): status.text = "试玩区域外 · 本版本不可解锁"
+		elif not unlocked: status.text = "档案封锁 · 先通关前一区域"
 		elif record.is_empty(): status.text = "尚未通关 · 最佳记录 --"
 		else: status.text = "已通关 · 击退 %d · 基地 %d%%" % [int(record.get("best_kills",0)),int(record.get("best_base_hp",0))]
 
