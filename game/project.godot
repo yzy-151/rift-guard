@@ -12,7 +12,7 @@ config_version=5
 
 config/name="裂隙守望 · Rift Guard"
 config/description="三章试玩版：角色构筑、守塔、家园与无尽生存"
-config/version="2026.11.6.2"
+config/version="2026.11.7.1"
 config/quit_on_go_back=false
 config/icon="res://assets/ui/release_20261106/icon.png"
 config/windows_native_icon="res://assets/ui/release_20261106/icon.ico"

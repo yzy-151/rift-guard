@@ -1,0 +1,12 @@
+[
+  {
+    "name": "RiftGuard.exe",
+    "bytes": 342107696,
+    "sha256": "b70b9050184519ef8016098816bbfb15e927032a0e0acbb5626751b0766f17c0"
+  },
+  {
+    "name": "RiftGuard-Android.apk",
+    "bytes": 294355611,
+    "sha256": "c58d21a2ff92dee7c8383905858a7979172fa38b899a41d77f94917916012a93"
+  }
+]

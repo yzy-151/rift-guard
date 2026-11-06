@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="432" height="432" viewBox="0 0 432 432">
+  <!-- Android themed icon: deliberate alpha cutouts, all detail in the safe zone. -->
+  <path fill="#fff" fill-rule="evenodd" d="M118 286 Q105 250 118 210 L130 187 123 102 Q124 83 138 76 L177 169 Q211 153 247 169 L286 76 Q302 83 303 102 L295 190 Q326 223 314 277 L326 308 299 299 Q287 323 263 337 L216 356 170 337 Q146 323 134 300 L109 309 Z
+    M139 108 L160 173 146 168 Z M286 108 L279 168 264 173 Z
+    M141 236 L146 244 Q159 257 182 253 L192 236 Q164 216 141 236 Z
+    M240 236 L249 253 Q268 257 286 245 L291 236 Q267 216 240 236 Z
+    M193 302 L201 311 Q224 320 240 298 Q215 312 193 302 Z
+    M152 198 L203 200 191 222 217 208 204 237 Q229 218 236 190 Q192 175 152 198 Z"/>
+  <ellipse cx="170" cy="238" rx="5" ry="10" fill="#fff"/>
+  <ellipse cx="264" cy="238" rx="5" ry="10" fill="#fff"/>
+</svg>

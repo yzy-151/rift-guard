@@ -2,9 +2,9 @@
 
 角色构筑、路线防守、分支剧情与无尽生存。Godot 4.4.1 制作。
 
-## 三章试玩版 · 2026.11.6.2
+## 三章试玩版 · 2026.11.7.1
 
-[下载 Windows 单文件版和 Android 安装包](https://github.com/yzy-151/rift-guard/releases/tag/demo-2026.11.6.2) · [版本内容与操作说明](docs/release-20261106-r2.md)
+[下载 Windows 单文件版和 Android 安装包](https://github.com/yzy-151/rift-guard/releases/tag/demo-2026.11.7.1) · [版本内容与操作说明](docs/release-20261107.md)
 
 ![启动画面](qa/release-20261106-r2/boot.png)
 
@@ -18,7 +18,7 @@
 
 - Windows：下载 RiftGuard.exe，双击运行；F11切换全屏。
 - Android：下载 RiftGuard-Android.apk 并安装，横屏触控；支持arm64-v8a和x86_64。
-- 完整快捷键、触控说明与测试范围见[发行说明](docs/release-20261106-r2.md)。
+- 完整快捷键、触控说明与测试范围见[发行说明](docs/release-20261107.md)。
 
 ## 开发
 
