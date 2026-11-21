@@ -41,23 +41,6 @@ replace('game/scripts/rift_ui_layout_profile.gd', '@export var mission_release_n
 replace('game/scripts/release_boot.gd', '世界裂开了，队友倒是凑齐了。', '门后是冒险，还是另一份加班？')
 
 stories = read('data/authored_story.json')
-# Keep the author's jokes, portraits, links, unlocks and bad ends intact.
-polish = {
- 'n_muqzf5le_zgmfr':'嗯？旅行者？你也是找厕所时推错了门，然后发现门没了吗？',
- 'n_mutxol0a_6894t':'我在附近只找到这把水壶。来都来了，先烧点水——总不能连热水都没有吧。',
- 'n_mutxph0w_obciu':'怎么样，来杯开水充充饥？水神亲自烧的。',
- 'n_mutxv2cs_bf6ya':'我当然爱干净……等等，你夸的是我，还是这壶水？',
- 'n_mutxwqwn_39ol7':'算了，先一起找出口。那颗水晶像个路标，别让怪物拆了——还有，看到厕所记得叫我。',
- 'n_mutxyjmv_doe21':'竟敢拒绝水神亲手烧的水！这段不算，重来！',
- 'n_mutx6u50_9jzk3':'嗯？黄毛。刚才忙着剪怪物，还没来得及问：你是哪条路的？',
- 'n_muty7h17_n5pa3':'我正好缺个射手。你是伊泽瑞尔？伊？泽？瑞？尔？',
- 'n_mutya5su_z2m2m':'走就走。先说好，我刚才只是路过帮忙，现在才算入队。',
- 'n_mutyeq1w_dfdvv':'好的，开拓者，我申请入队。名字以后再对，前面有个东西正拿炮瞄我们。'
-}
-for key in ['mode1_opening', 'mode1_won']:
-    for node in stories[key]['nodes']:
-        if node['id'] in polish: node['text'] = polish[node['id']]
-
 portraits = read('data/dialogue_portraits.json')['portraits']
 def scene(rows, question, options):
     def line(id, speaker, expression, text, next):
@@ -102,20 +85,10 @@ stories['mode1_final_won']=scene([
  ('牌都凑好了，我还没打够。','那就去无尽。下一页选携带构筑，水壶也算加班——但别指望它替你输出。')])
 save('data/authored_story.json', stories)
 comics=read('data/campaign_comics.json')
-comics['mode1_opening'][2]['text']='你的房间里多了一道裂隙。\n你确认了一眼：这次不是房东装修。然后还是推开了门。'
-comics['mode1_opening'][3]['text']='门不见了。好消息是，迷路的似乎不止你一个。'
-comics['mode1_opening'][4]['text']='一位自称水神的少女提着烧水壶。\n出口还没找到，热水倒是有了。'
-comics['mode1_won'][0]['text']='黏糊糊的怪物终于倒下。\n你检查了披风，决定把清洗问题留给明天的自己。'
-comics['mode1_won'][1]['text']='刚才在场上帮忙的裁缝，已经先一步等在出口。\n她看了看你的黄头发，似乎认错了人。'
 comics['mode1_stage2_opening'][0]['text']='格温正式入队，三个人终于凑齐。\n前面的牌子写着「禁止喧哗」，牌子后面有人架起了炮。'
 comics['mode1_stage2_won'][0]['text']='炮声停下，通往深处的路露了出来。\n远处的狼嚎提醒你：安静只是换班，不是下班。'
 comics['mode1_stage3_opening'][0]['text']='出口前，一只羊和一只狼挡住了去路。\n头顶的影子越来越大，水壶里荡起一圈涟漪。'
 comics['mode1_final_won'][0]['text']='水晶还亮着，三个人也都还在。\n更深处的门暂时封闭。至少这次，门没有凭空消失。'
-for key in ['mode1_opening','mode1_won']:
-    for original in stories[key].get('comics',[]):
-        for page in comics[key]:
-            if original['image']==page['image']: original['text']=page['text']
-save('data/authored_story.json',stories)
 save('data/campaign_comics.json',comics)
 replace('game/project.godot','2026.11.6.1','2026.11.6.2')
 replace('game/export_presets.cfg','2026.11.6.1','2026.11.6.2')

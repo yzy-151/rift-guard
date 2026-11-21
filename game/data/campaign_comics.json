@@ -10,17 +10,17 @@
     },
     {
       "image": "res://assets/story_comics/v85_rift.png",
-      "text": "你的房间里多了一道裂隙。\n你确认了一眼：这次不是房东装修。然后还是推开了门。"
+      "text": "你的房间里出现了一道裂隙。虽然预感不好，你还是决定去看看。\n就像明知有哥布林，还要继续深入巢穴的女骑士。"
     },
     {
       "image": "res://assets/story_comics/master_delivery_20261004/image_2be0af89fdfcfb8c.png",
-      "text": "门不见了。好消息是，迷路的似乎不止你一个。",
+      "text": "似乎传送到这里的不止你一人......还有...",
       "width": 1774,
       "height": 887
     },
     {
       "image": "res://assets/story_comics/master_delivery_20261004/furina_kettle_20261005.png",
-      "text": "一位自称水神的少女提着烧水壶。\n出口还没找到，热水倒是有了。",
+      "text": "还有一位提着烧水壶自称水神的少女（或许）",
       "width": 1774,
       "height": 887
     }
@@ -28,13 +28,13 @@
   "mode1_won": [
     {
       "image": "res://assets/story_comics/master_delivery_20261004/image_c8a78d3bcaf9f0ff.png",
-      "text": "黏糊糊的怪物终于倒下。\n你检查了披风，决定把清洗问题留给明天的自己。",
+      "text": "终于，你战胜了黏糊糊的怪物，以免触发不妙的战败动画",
       "width": 1774,
       "height": 887
     },
     {
       "image": "res://assets/story_comics/master_delivery_20261004/image_206d504c522c70e7.png",
-      "text": "刚才在场上帮忙的裁缝，已经先一步等在出口。\n她看了看你的黄头发，似乎认错了人。",
+      "text": "但前方已经有人在攫取胜利的果实，你决定狠狠撅取撅走果实的家伙",
       "width": 1774,
       "height": 887
     }

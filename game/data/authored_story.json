@@ -4,13 +4,13 @@
     "comics": [
       {
         "image": "res://assets/story_comics/master_delivery_20261004/image_2be0af89fdfcfb8c.png",
-        "text": "门不见了。好消息是，迷路的似乎不止你一个。",
+        "text": "似乎传送到这里的不止你一人......还有...",
         "width": 1774,
         "height": 887
       },
       {
         "image": "res://assets/story_comics/master_delivery_20261004/furina_kettle_20261005.png",
-        "text": "一位自称水神的少女提着烧水壶。\n出口还没找到，热水倒是有了。",
+        "text": "还有一位提着烧水壶自称水神的少女（或许）",
         "width": 1774,
         "height": 887
       }
@@ -22,7 +22,7 @@
         "speaker": "芙宁娜",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_惊讶_水滴瞳.png",
-        "text": "嗯？旅行者？你也是找厕所时推错了门，然后发现门没了吗？",
+        "text": "嗯？这不是旅行者吗，你也是找厕所的时候进了奇怪的地方然后出不去了吗",
         "next": "n_mutxol0a_6894t"
       },
       {
@@ -31,7 +31,7 @@
         "speaker": "芙宁娜",
         "expression": "思考",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
-        "text": "我在附近只找到这把水壶。来都来了，先烧点水——总不能连热水都没有吧。",
+        "text": "说起来在附近只能找到一个水壶，反正闲着也是闲着，先烧了水",
         "next": "n_mutxph0w_obciu"
       },
       {
@@ -40,7 +40,7 @@
         "speaker": "芙宁娜",
         "expression": "思考",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_思考_重绘_大腿根以上.png",
-        "text": "怎么样，来杯开水充充饥？水神亲自烧的。",
+        "text": "怎么样旅行者，来壶开水充充饥吧",
         "options": [
           {
             "text": "谢谢，芙宁娜可真爱干净",
@@ -58,7 +58,7 @@
         "speaker": "芙宁娜",
         "expression": "害羞",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
-        "text": "我当然爱干净……等等，你夸的是我，还是这壶水？",
+        "text": "虽然是很爱干净，但总感觉旅行者说话很奇怪呢",
         "next": "n_mutxwqwn_39ol7"
       },
       {
@@ -67,7 +67,7 @@
         "speaker": "芙宁娜",
         "expression": "害羞",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_害羞_重绘_大腿根以上.png",
-        "text": "算了，先一起找出口。那颗水晶像个路标，别让怪物拆了——还有，看到厕所记得叫我。",
+        "text": "也没什么事干，或许跟着旅行者能找到厕所",
         "next": "n_mutxy7ry_j9nqn"
       },
       {
@@ -84,7 +84,7 @@
         "speaker": "芙宁娜",
         "expression": "傲娇",
         "portrait": "res://assets/helltaker/dialogue_portraits/芙宁娜_傲娇_重绘_大腿根以上.png",
-        "text": "竟敢拒绝水神亲手烧的水！这段不算，重来！",
+        "text": "居然拒绝水之魔神芙卡洛斯的水吗",
         "next": "n_mutxzoo7_d17k5"
       },
       {
@@ -103,13 +103,13 @@
     "comics": [
       {
         "image": "res://assets/story_comics/master_delivery_20261004/image_c8a78d3bcaf9f0ff.png",
-        "text": "黏糊糊的怪物终于倒下。\n你检查了披风，决定把清洗问题留给明天的自己。",
+        "text": "终于，你战胜了黏糊糊的怪物，以免触发不妙的战败动画",
         "width": 1774,
         "height": 887
       },
       {
         "image": "res://assets/story_comics/master_delivery_20261004/image_206d504c522c70e7.png",
-        "text": "刚才在场上帮忙的裁缝，已经先一步等在出口。\n她看了看你的黄头发，似乎认错了人。",
+        "text": "但前方已经有人在攫取胜利的果实，你决定狠狠撅取撅走果实的家伙",
         "width": 1774,
         "height": 887
       }
@@ -121,7 +121,7 @@
         "speaker": "格温",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
-        "text": "嗯？黄毛。刚才忙着剪怪物，还没来得及问：你是哪条路的？",
+        "text": "嗯？有黄毛",
         "next": "n_muty7h17_n5pa3"
       },
       {
@@ -130,7 +130,7 @@
         "speaker": "格温",
         "expression": "惊讶",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_惊讶_统一服装.png",
-        "text": "我正好缺个射手。你是伊泽瑞尔？伊？泽？瑞？尔？",
+        "text": "我正好缺一个射手，你是伊泽瑞尔？伊？泽？瑞？尔？",
         "options": [
           {
             "text": "叽里咕噜说什么呢，跟我肘",
@@ -148,7 +148,7 @@
         "speaker": "格温",
         "expression": "害羞",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_害羞_原画风重绘.png",
-        "text": "走就走。先说好，我刚才只是路过帮忙，现在才算入队。",
+        "text": "走就走",
         "next": "n_mutye0z4_4nxvl"
       },
       {
@@ -165,7 +165,7 @@
         "speaker": "格温",
         "expression": "羞恼",
         "portrait": "res://assets/helltaker/dialogue_portraits/格温_羞恼_统一服装.png",
-        "text": "好的，开拓者，我申请入队。名字以后再对，前面有个东西正拿炮瞄我们。",
+        "text": "好的开拓者，我申请加入队伍",
         "next": "n_mutye0z4_4nxvl"
       }
     ],
